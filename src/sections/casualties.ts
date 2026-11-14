@@ -25,7 +25,7 @@ import {
   type SevRow,
 } from "../data/data.ts";
 import { byId, el } from "../core/dom.ts";
-import { fill, nf, t } from "../copy/i18n.ts";
+import { fill, nf, t } from "../copy";
 
 /* ----- cells ----- */
 

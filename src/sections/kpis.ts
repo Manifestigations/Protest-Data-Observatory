@@ -30,7 +30,7 @@ import {
   nf,
   t,
   type ChartCopy,
-} from "../copy/i18n.ts";
+} from "../copy";
 import { byId, el } from "../core/dom.ts";
 
 type SeriesCopyKey = keyof ChartCopy["series"];

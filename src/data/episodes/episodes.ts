@@ -43,7 +43,7 @@ import {
   nf,
   plural,
   t,
-} from "../../copy/i18n.ts";
+} from "../../copy";
 import {
   METRICS,
   bandOf,

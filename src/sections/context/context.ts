@@ -34,7 +34,7 @@ import {
   START,
 } from "../../data/data.ts";
 import { byId, el } from "../../core/dom.ts";
-import { fmtDate, getLocale } from "../../copy/i18n.ts";
+import { fmtDate, getLocale } from "../../copy";
 
 /* ----- copy */
 

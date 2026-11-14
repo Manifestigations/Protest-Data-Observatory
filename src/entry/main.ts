@@ -19,7 +19,7 @@ import {
   onLocaleChange,
   syncLangSwitch,
   t,
-} from "../copy/i18n.ts";
+} from "../copy";
 import { mountKpis } from "../sections/kpis.ts";
 import { applyUrlLang, mountLangSwitch } from "../core/lang.ts";
 import { renderChrome } from "../sections/chrome.ts";

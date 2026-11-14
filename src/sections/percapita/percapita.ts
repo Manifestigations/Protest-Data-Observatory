@@ -63,7 +63,7 @@ import {
   getLocale,
   nf,
   t,
-} from "../../copy/i18n.ts";
+} from "../../copy";
 import type { Episode } from "../../model/index.ts";
 import {
   KEY_2026,

@@ -9,7 +9,7 @@ import {
   setLang,
   syncLangSwitch,
   type Lang,
-} from "../copy/i18n.ts";
+} from "../copy";
 
 /**
  * Applies ?lang= before the first render. Does not persist — a shared link must

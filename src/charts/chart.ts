@@ -50,7 +50,7 @@ import {
   t,
   type ChartCardCopy,
   type ChartCopy,
-} from "../copy/i18n.ts";
+} from "../copy";
 import { type Band, type Flag, type NoteRef } from "../model/index.ts";
 import { noteText, suffixFor } from "../data/notes.ts";
 import { denominator, KEY_2026, population } from "../data/population.ts";

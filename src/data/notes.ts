@@ -18,7 +18,7 @@
    Nothing here needs to know which context it is in: both resolve through
    the same { k: "obs" } branch. */
 
-import { fill, fmtDayMonth, nf, t } from "../copy/i18n.ts";
+import { fill, fmtDayMonth, nf, t } from "../copy";
 import { RATE } from "./data.ts";
 import type { Flag, NoteRef } from "../model/index.ts";
 

@@ -24,7 +24,7 @@
  */
 
 import { el } from "../../core/dom.ts";
-import { bi, fmtDate, fmtDayMonth, type Bi } from "../../copy/i18n.ts";
+import { bi, fmtDate, fmtDayMonth, type Bi } from "../../copy";
 
 export type GroupId =
   | "official"

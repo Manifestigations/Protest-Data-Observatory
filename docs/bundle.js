@@ -1,6 +1,4 @@
-// src/copy/i18n.ts
-var UTC = { timeZone: "UTC" };
-var dates;
+// src/copy/en/meta.ts
 var EN_META = {
   tag: "en-GB",
   label: "English",
@@ -45,248 +43,8 @@ var EN_META = {
     }
   }
 };
-var FR_META = {
-  tag: "fr-FR",
-  label: "Fran\xE7ais",
-  meta: {
-    htmlLang: "fr",
-    title: "L\u2019activit\xE9 contestataire en France \u2014 septembre\u2013novembre 2026",
-    description: "Foules, interpellations, bless\xE9s et dommages du mouvement de l\u2019automne 2026, compar\xE9s \xE0 six mouvements fran\xE7ais ant\xE9rieurs."
-  },
-  sections: {
-    a: {
-      title: "A \xB7 D\xE9comptes quotidiens, 15 septembre \u2013 11 novembre 2026",
-      blurb: "Un marqueur par jour o\xF9 un chiffre a \xE9t\xE9 publi\xE9. Les jours sans chiffre restent vides plut\xF4t qu\u2019interpol\xE9s ; les lacunes d\u2019une courbe sont en pointill\xE9s. La courbe des blocages de lyc\xE9es est en pointill\xE9s pendant les vacances de la Toussaint, aucun lyc\xE9e n\u2019\xE9tant en cours. La s\xE9rie des personnes en gr\xE8ve est d\xE9riv\xE9e de taux de participation : aucune autorit\xE9 n\u2019a publi\xE9 de d\xE9compte national des gr\xE9vistes."
-    },
-    b: {
-      title: "B \xB7 Agr\xE9gats hebdomadaires",
-      blurb: "Les semaines vont du lundi au dimanche. Une foule de jour de pointe et un total hebdomadaire d\u2019interpellations ne sont pas la m\xEAme statistique \u2014 l\u2019infobulle pr\xE9cise laquelle. Le chiffre hebdomadaire des blocages est une pointe, jamais une somme : un m\xEAme lyc\xE9e est bloqu\xE9 plusieurs jours de suite. Les personnes en gr\xE8ve sont un niveau, non un flux : le chiffre hebdomadaire en est la pointe de la semaine, jamais une somme."
-    },
-    c: {
-      title: "C \xB7 Un panneau par mouvement",
-      blurb: "Chaque panneau conserve sa propre dur\xE9e sur un axe logarithmique commun : les formes sont comparables, les dur\xE9es non. L\u2019infobulle compare en outre chaque point \xE0 sa propre s\xE9rie \u2014 en pourcentage du chiffre le plus \xE9lev\xE9 du panneau, de la moyenne, de la m\xE9diane et du premier chiffre publi\xE9. Ce dernier peut atteindre des milliers de pour cent lorsqu\u2019un mouvement a commenc\xE9 avec une poign\xE9e de personnes, et c\u2019est pr\xE9cis\xE9ment pourquoi les trois autres sont donn\xE9s d\u2019abord.",
-      note: "Les marqueurs creux sont des chiffres r\xE9gionaux, parisiens, mod\xE9lis\xE9s ou des stocks. Les liaisons en pointill\xE9s traversent une semaine sans publication."
-    },
-    d: {
-      title: "D \xB7 Transpos\xE9 : un panneau par s\xE9rie",
-      blurb: "Les m\xEAmes donn\xE9es avec les mouvements superpos\xE9s, pour lire une m\xEAme mesure de 1968 \xE0 2026. L\u2019axe des x est le nombre de semaines \xE9coul\xE9es, arr\xEAt\xE9 \xE0 la derni\xE8re semaine de chiffres de maintien de l\u2019ordre. Les comparaisons de l\u2019infobulle fonctionnent comme en section C, mais sont calcul\xE9es sur les seules semaines trac\xE9es dans le panneau survol\xE9.",
-      note: "Survolez une mesure ou un mouvement pour l\u2019isoler. L\u2019ordre des panneaux suit celui de la l\xE9gende."
-    },
-    e: {
-      title: "E \xB7 M\xE9diane et pointe",
-      blurb: "Chaque panneau rassemble une mesure pour les mouvements qui l\u2019ont publi\xE9e. Le point est la m\xE9diane de la s\xE9rie \u2014 la semaine typique \u2014 et le triangle sa pointe, le plus grand chiffre publi\xE9. La barre claire derri\xE8re chaque paire couvre toute la s\xE9rie, de son plus petit chiffre \xE0 son plus grand : un mouvement r\xE9gulier se lit donc comme une barre courte, un mouvement ayant connu quelques semaines \xE9normes comme une barre longue. L\u2019axe est logarithmique, de sorte que quelques marches de masse et une semaine ordinaire peuvent partager un panneau.",
-      note: "Chaque chiffre est compt\xE9 une fois, au milieu de sa fourchette lorsqu\u2019une fourchette a \xE9t\xE9 publi\xE9e. Le nombre de chiffres publi\xE9s figure dans l\u2019infobulle : avec un seul chiffre, la m\xE9diane et la pointe sont le m\xEAme nombre."
-    }
-  },
-  groups: {
-    ongoing: {
-      title: "La r\xE9volte en cours",
-      blurb: "Les deux sections portent sur le mouvement de l\u2019automne 2026. A trace chaque chiffre quotidien publi\xE9 ; B agr\xE8ge ces m\xEAmes chiffres par semaine, de sorte qu\u2019une foule de jour de pointe et un total d\u2019interpellations ne partagent jamais un axe."
-    },
-    historical: {
-      title: "Comparaisons historiques",
-      blurb: "Les m\xEAmes mesures rapport\xE9es \xE0 six mouvements fran\xE7ais ant\xE9rieurs : 1968, 1986, 1995, 2006, 2010 et 2016. C garde un panneau par mouvement ; D un panneau par s\xE9rie."
-    }
-  }
-};
-var LOCALES = Object.freeze([
-  "fr",
-  "en"
-]);
-var LOCALE_META = {
-  en: EN_META,
-  fr: FR_META
-};
-function localeMeta(locale2 = current) {
-  return LOCALE_META[normalizeLocale(locale2) ?? DEFAULT_LANG];
-}
-var DEFAULT_LANG = "fr";
-var DEFAULT_LOCALE = FR_META.tag;
-var STORAGE_KEY = "lang";
-var hasDom = () => typeof window !== "undefined" && typeof document !== "undefined";
-function normalizeLocale(input) {
-  const low = String(input ?? "").toLowerCase().replace(/_/g, "-");
-  if (low === "fr" || low.startsWith("fr-") || low === "fran\xE7ais" || low === "francais")
-    return "fr";
-  if (low === "en" || low.startsWith("en-")) return "en";
-  return null;
-}
-function localeFromUrl(search) {
-  if (search === void 0 && !hasDom()) return null;
-  try {
-    const q = search ?? window.location.search;
-    return normalizeLocale(new URLSearchParams(q).get("lang"));
-  } catch {
-    return null;
-  }
-}
-function fromStorage() {
-  if (!hasDom()) return null;
-  try {
-    return normalizeLocale(window.localStorage.getItem(STORAGE_KEY));
-  } catch {
-    return null;
-  }
-}
-var current = localeFromUrl() ?? fromStorage() ?? DEFAULT_LANG;
-var version = 0;
-function getLocale() {
-  return current;
-}
-var listeners = /* @__PURE__ */ new Set();
-var emitting = false;
-function onLocaleChange(fn) {
-  listeners.add(fn);
-  return () => {
-    listeners.delete(fn);
-  };
-}
-function emit(next, previous) {
-  if (emitting) return;
-  emitting = true;
-  try {
-    for (const fn of [...listeners]) {
-      try {
-        fn(next, previous);
-      } catch (err) {
-        console.error("[i18n] locale listener threw", err);
-      }
-    }
-  } finally {
-    emitting = false;
-  }
-}
-function setLang(next, opts = {}) {
-  const { persist = true, notify = true } = opts;
-  const target = normalizeLocale(next);
-  if (!target) {
-    warnOnce(`locale:${String(next)}`, `unrecognised locale "${String(next)}"`);
-    return current;
-  }
-  const previous = current;
-  if (previous === target) return current;
-  current = target;
-  version += 1;
-  const locale2 = localeMeta(target);
-  buildFormats(locale2.tag);
-  if (hasDom()) {
-    if (persist) {
-      try {
-        window.localStorage.setItem(STORAGE_KEY, target);
-      } catch {
-      }
-    }
-    document.documentElement.lang = locale2.meta.htmlLang;
-    document.documentElement.dataset.lang = target;
-  }
-  if (notify) emit(target, previous);
-  return current;
-}
-var TOKEN = /\{(\w+)\}/g;
-function fill(template, params) {
-  if (!params) return template;
-  const p = typeof params.n === "number" && params.s === void 0 ? { ...params, s: params.n === 1 ? "" : "s" } : params;
-  return template.replace(
-    TOKEN,
-    (whole, name) => name in p ? String(p[name]) : whole
-  );
-}
-function plural(a, b, c) {
-  if (typeof a === "string") {
-    const n = typeof b === "number" ? b : 0;
-    return Math.abs(n) === 1 ? a : c ?? `${a}s`;
-  }
-  const isOne = Math.abs(a) === 1;
-  if (typeof b !== "string") return isOne ? "" : "s";
-  return isOne ? b : c ?? `${b}s`;
-}
-var numFmt;
-var cptFmt;
-var eurFmt;
-function buildFormats(tag3) {
-  numFmt = new Intl.NumberFormat(tag3, { maximumFractionDigits: 0 });
-  cptFmt = new Intl.NumberFormat(tag3, {
-    notation: "compact",
-    compactDisplay: "short",
-    maximumFractionDigits: 1
-  });
-  eurFmt = new Intl.NumberFormat(tag3, { maximumFractionDigits: 1 });
-  dates = {
-    long: new Intl.DateTimeFormat(tag3, {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-      ...UTC
-    }),
-    short: new Intl.DateTimeFormat(tag3, {
-      day: "numeric",
-      month: "short",
-      ...UTC
-    }),
-    day: new Intl.DateTimeFormat(tag3, { day: "numeric", ...UTC })
-  };
-}
-buildFormats(localeMeta(current).tag);
-var nf = () => numFmt;
-var compact = () => cptFmt;
-var eurM = () => eurFmt;
-function toDate(value2) {
-  if (value2 instanceof Date)
-    return Number.isNaN(value2.getTime()) ? null : value2;
-  if (typeof value2 === "number") {
-    const d2 = new Date(value2);
-    return Number.isNaN(d2.getTime()) ? null : d2;
-  }
-  if (typeof value2 !== "string" || value2.trim() === "") return null;
-  const d = new Date(value2);
-  return Number.isNaN(d.getTime()) ? null : d;
-}
-function firstOfMonth(s, d) {
-  return current === "fr" && d.getUTCDate() === 1 ? s.replace(/^1\b/, "1er") : s;
-}
-function fmtDate(value2) {
-  const d = toDate(value2);
-  return d ? firstOfMonth(dates.long.format(d), d) : "\u2014";
-}
-function fmtDayMonth(value2) {
-  const d = toDate(value2);
-  return d ? firstOfMonth(dates.short.format(d), d) : "\u2014";
-}
-function fmtWeek(start, end) {
-  const a = toDate(start);
-  if (!a) return "\u2014";
-  if (end === void 0) return firstOfMonth(dates.short.format(a), a);
-  const b = toDate(end);
-  if (!b) return firstOfMonth(dates.short.format(a), a);
-  const sameYear = a.getUTCFullYear() === b.getUTCFullYear();
-  const sameMonth = sameYear && a.getUTCMonth() === b.getUTCMonth();
-  if (sameMonth)
-    return `${firstOfMonth(dates.day.format(a), a)}\u2013${fmtDayMonth(b)}`;
-  if (sameYear) return `${fmtDayMonth(a)} \u2013 ${fmtDayMonth(b)}`;
-  return `${fmtDayMonth(a)} ${a.getUTCFullYear()} \u2013 ${fmtDayMonth(b)} ${b.getUTCFullYear()}`;
-}
-var ISO_ANY = /\d{4}-\d{2}-\d{2}/;
-var ISO_ALL = /\b(\d{4}-\d{2}-\d{2})\b/g;
-function fmtSpan(span, end) {
-  const sep = t("span.sep");
-  if (typeof span === "string") {
-    if (end !== void 0) return `${fmtDayMonth(span)}${sep}${fmtDate(end)}`;
-    return ISO_ANY.test(span) ? span.replace(ISO_ALL, (m) => fmtDayMonth(m)) : span;
-  }
-  if (typeof span === "number" || span instanceof Date) {
-    return end !== void 0 ? `${fmtDayMonth(span)}${sep}${fmtDate(end)}` : fmtDate(span);
-  }
-  if (span.label) return span.label;
-  if (span.start != null && span.end != null) {
-    return `${fmtDayMonth(span.start)}${sep}${fmtDate(span.end)}`;
-  }
-  if (span.start != null) return fmtDate(span.start);
-  if (span.end != null) return fmtDate(span.end);
-  return "\u2014";
-}
-var MINUTE = 6e4;
-var HOUR = 60 * MINUTE;
-var DAY = 24 * HOUR;
+
+// src/copy/en/chart.ts
 var CHART_EN = {
   axisDate: "Date",
   axisWeek: "Week",
@@ -579,6 +337,285 @@ var CHART_EN = {
     }
   }
 };
+
+// src/copy/en/episodes.ts
+var EPISODES_EN = {
+  may68: {
+    short: "May 68",
+    strip: "May 68",
+    banner: "General strike and factory occupations. Union and ministry crowd counts differ by a factor of ten, so both are plotted.",
+    weeks: [
+      { action: "1 May marches" },
+      {
+        action: "Night of the barricades, 10\u201311 May",
+        note: { i: "Injury figure published as a floor." }
+      },
+      { action: "General strike from 13 May" },
+      {
+        action: "24 May: de Gaulle\u2019s broadcast",
+        note: { a: "Arrest count published as a floor." }
+      },
+      { action: "Grenelle agreements, 27 May" },
+      { action: "Legislative campaign" },
+      void 0,
+      void 0,
+      void 0
+    ]
+  },
+  cpe: {
+    short: "CPE 2006",
+    strip: "CPE 2006",
+    banner: "First-employment contract: student and school movement, with two inter-union days. Enforcement figures exist for four weeks only.",
+    weeks: [
+      { action: "7 February: first national day" },
+      void 0,
+      void 0,
+      void 0,
+      { action: "Blockaded universities" },
+      { action: "14 March: national day" },
+      { action: "21 March: student day" },
+      { action: "28 March: national day" },
+      { action: "4 April: national day" },
+      { action: "Withdrawal announced" }
+    ]
+  },
+  gj: {
+    short: "Gilets jaunes",
+    strip: "Gilets jaunes",
+    banner: "Counted act by act, on Saturdays only. Enforcement figures were published for the first four acts and never as a series afterwards.",
+    weeks: []
+    // the act number in the tooltip title carries the chronology
+  },
+  nahel: {
+    short: "June 2023",
+    strip: "June 2023",
+    banner: "Five nights of rioting after the 27 June killing. Arrests and injuries are high relative to turnout because this was not a demonstration.",
+    weeks: [{ action: "27 June: riots begin" }, { action: "Return to calm" }]
+  },
+  pensions: {
+    short: "Pensions 2023",
+    strip: "Pensions 2023",
+    banner: "Movement against the rise in the statutory retirement age. Two anchor days carry most of the series; the inter-union band is wide.",
+    weeks: [
+      { action: "19 January: first national day" },
+      void 0,
+      { action: "31 January" },
+      { action: "7 February" },
+      { action: "16 February" },
+      void 0,
+      void 0,
+      { action: "7 March: schools and transport shut" },
+      { action: "11 March" },
+      { action: "15 March" },
+      { action: "23 March" },
+      { action: "28 March" },
+      { action: "6 April" },
+      void 0,
+      void 0,
+      void 0,
+      { action: "1 May" },
+      void 0,
+      void 0,
+      void 0,
+      { action: "6 June" }
+    ]
+  },
+  bt: {
+    short: "Bloquons tout",
+    strip: "Bloquons tout",
+    banner: "September 2025: blockades and marches, counted partially. Weeks without a published figure are left empty.",
+    weeks: [
+      { action: "10 September: blockades" },
+      { action: "18 September: national day" },
+      void 0,
+      { action: "1 October" }
+    ]
+  },
+  students26: {
+    short: "Autumn 2026",
+    strip: "Autumn 2026",
+    banner: "The movement this page was built for, traced from the first mainland high-school blockades on 15 September. Daily publication, so days with no figure stay empty rather than interpolated.",
+    weeks: [
+      { action: "15 September: the Caen and Villeneuve-d'Ascq blockades" },
+      { action: "25 September: Paris-area blockades" },
+      { action: "Act I on 29 September, Act II on 1 October" },
+      { action: "Act III on 6 October" },
+      { action: "17 October: the peak" },
+      { action: "24 October" },
+      { action: "31 October" },
+      { action: "5 and 7 November" },
+      { action: "9 November \u2014 window ends 11 November" }
+    ],
+    fallbackNote: {
+      p: "Weekly peak taken from the daily series \u2014 the peak day of the week.",
+      a: "Sum of the published daily figures for the week; a cumulative stock is shown as the stock, never added to it."
+    }
+  }
+};
+
+// src/copy/en/text.ts
+var TEXT_EN = {
+  panels: {
+    partialWeek: "Week of {label} (partial)",
+    act: "Act {n}",
+    withAction: "{when} \xB7 {action}",
+    seriesContinues: "{name} (cont.)",
+    obs: "observations {counts} over {weeks}",
+    valueRange: "{lo}\u2013{hi}",
+    itemMeta: "range {range} \xB7 up to week {n}",
+    median: "median",
+    peak: "peak",
+    range: "min\u2013max range",
+    figureCount: "{n} published figures",
+    singleFigure: "one published figure \u2014 the median and the peak are the same number",
+    summaryMeta: "median and peak \xB7 {n} movements"
+  },
+  kpi: {
+    heading: "Key figures",
+    largestDay: "Largest day",
+    largestWeek: "Largest week",
+    largestFigure: "Largest figure",
+    vsMean: "Highest vs mean",
+    vsMedian: "Highest vs median",
+    vsFirst: "Highest vs first figure",
+    againstMean: "{value} against a mean of {base}",
+    againstMedian: "{value} against a median of {base}",
+    againstFirst: "{value} against a first figure of {base}",
+    noteDaily: "Ratios are computed on the daily series: each published figure is divided by the mean, the median and the first published figure of its own series. Days with no published figure are left out, not counted as zero. The \u20AC1,000M damages total of 24 October carries no marker on the chart and is left out here too.",
+    noteWeekly: "Ratios are computed on the weekly series: each published figure is divided by the mean, the median and the first published figure of its own series. Weeks with no published figure are left out, not counted as zero.",
+    noteEpisodes: "Each movement is compared with its own series \u2014 its mean, its median and its first published figure \u2014 and the largest ratio across all seven movements is shown. A ratio of the first figure can run into the thousands when a movement began with a handful of people.",
+    noteEpisodesCapped: "As in section C, but over the weeks plotted in section D only, which stop at the last week with an enforcement figure.",
+    eurM: "\u20AC{v}M",
+    none: "no figure published"
+  },
+  casualties: {
+    headlineTitle: "How the injuries divide",
+    weeklyTitle: "What a week can establish",
+    colScope: "Population",
+    colTotal: "Declared total",
+    colSerious: "Serious",
+    colLight: "Light",
+    colLightShare: "Light share",
+    colOther: "Not classed light",
+    colSide: "Side",
+    colCircumstance: "Circumstance",
+    colCount: "Count",
+    colCases: "Documented cases",
+    colQuestion: "Question",
+    colWindow: "Smallest published window",
+    colWeekly: "Weekly figure",
+    scope: {
+      crsOctober: "CRS, October 2026",
+      forcesPeak: "All forces, running total at its peak",
+      protesters: "Protesters, since 30 September",
+      week12oct: "Week of 12 October",
+      week19oct: "Week of 19 October",
+      week26oct: "Week of 26 October",
+      week2nov: "Week of 2 November"
+    },
+    side: {
+      forces: "Police and gendarmerie",
+      protesters: "Protesters"
+    },
+    kind: {
+      accidental: "Accidental or self-inflicted",
+      conflictual: "Inflicted in the confrontation"
+    },
+    why: {
+      notPublished: "not published",
+      noDenominator: "no published total",
+      binaryFile: "file is light / not light only",
+      noTally: "no count, cases only",
+      noneDocumented: "none documented"
+    },
+    cases: {
+      givors: "Givors, 10 October: two officers on patrol outside a school burned on the hand and thigh when a grenade fired accidentally inside their own vehicle, setting it alight.",
+      crsWrist: "A CRS officer bruised his left wrist closing his own vehicle door.",
+      crsAnkle: "Another CRS officer sprained his ankle falling out of a van.",
+      helmet: "Paris, 31 October: a CRS officer struck on the helmet, found uninjured \u2014 a little paint removed from the shell.",
+      groin2023: "Sainte-Soline, March 2023, for comparison: of the 29 gendarmes counted, one had a groin haematoma, one respiratory trauma, the rest were examined for acoustic trauma.",
+      mael: "Tours, 30 September: a school student blinded in one eye by a rubber bullet, having thrown nothing.",
+      alaric: "Paris, 17 October: a 19-year-old student burned on the torso and arm by a tear-gas grenade fired flat at him; second-degree burns, unhealed ten days later.",
+      eyes: "Several other minors lost an eye in the same circumstances.",
+      sainteSoline: "The official claim was 29 gendarmes injured, two in absolute emergency. The two were later described as a groin haematoma and respiratory trauma."
+    },
+    casesCount: "{n} documented cases",
+    noCases: "none documented",
+    capLevels: "Severity, by the finest window each source publishes. Rows are different populations and different windows \u2014 they are never summed.",
+    capWeeks: "Severity, by week. The increment is the difference between the running total at the start and the end of the week.",
+    capCases: "Circumstance. No source counts this, so the column gives the number of documented cases, not a share.",
+    capResolution: "The smallest window at which each breakdown exists, and whether a weekly figure can be derived from it.",
+    noteLevels: "The 1,167 of 1,233 is the only published light share: 94.6%, the figure the file itself states. It covers CRS officers in October, so it cannot be extended to all forces or to the whole movement. The 7 serious injuries belong to the 1,144 consolidation of 17 October. No total for protester injuries has ever been published, so no share can be computed on that side \u2014 the serious cases are a register, not a rate. The four documented accidental injuries are four named people, not four per cent of anything.",
+    noteWeeks: "The ministry publishes a running total, not a weekly severity breakdown. Splitting the total into weeks is arithmetic, and it reconciles exactly to 1,580, but the only light/not-light split that exists is the October CRS file, which spans four of these weeks and cannot be attributed to any one of them. That is why section A carries the breakdown and section B carries the increments.",
+    headLight: "{light} of {total} declared injuries were classed light",
+    headLightNote: "CRS officers, October 2026",
+    headMissingNote: "No published total for protester injuries, so no share exists",
+    resolution: [
+      {
+        label: "Light / serious split",
+        window: "One month (October 2026), CRS only",
+        weekly: "no"
+      },
+      {
+        label: "Accidental / conflictual split",
+        window: "None \u2014 named cases only",
+        weekly: "no"
+      },
+      {
+        label: "Running total of injured forces",
+        window: "One day",
+        weekly: "yes"
+      },
+      {
+        label: "Daily increments",
+        window: "One day",
+        weekly: "yes"
+      }
+    ]
+  },
+  items: {
+    p: { label: "Protesters", short: "Protesters" },
+    a: { label: "Arrests", short: "Arrests" },
+    f: { label: "Injured \u2014 security forces", short: "Forces injured" },
+    i: { label: "Injured \u2014 protesters", short: "Protesters injured" }
+  },
+  units: { weeks: "week" },
+  flags: {
+    n: "",
+    r: "regional",
+    p: "partial",
+    e: "modelled",
+    f: "floor",
+    c: "stock",
+    w: "weekly",
+    x: "wider measure"
+  },
+  // en
+  tooltip: {
+    linePlain: "{value}",
+    lineWithFlag: "{value} \xB7 {flag}",
+    firstFigure: "first published figure: {n}",
+    shareOfFirst: "{pct} of the first figure ({n})",
+    shareComparisons: "Comparisons: {list}",
+    cmpHighest: "highest",
+    cmpMean: "mean",
+    cmpMedian: "median",
+    cmpFirst: "first figure",
+    listAnd: " and "
+  },
+  disclaimer: {
+    body: "Research and coding was performed using an LLM and figures have not been verified. Do not use them for serious analysis or decision-making without first double-checking the figures and the sources at the bottom."
+  }
+};
+
+// src/copy/en/index.ts
+var CATALOGUE_EN = {
+  chart: CHART_EN,
+  episodes: EPISODES_EN,
+  ...TEXT_EN
+};
+
+// src/copy/fr/chart.ts
 var CHART_FR = {
   axisDate: "Date",
   axisWeek: "Semaine",
@@ -861,119 +898,8 @@ var CHART_FR = {
     }
   }
 };
-var EPISODES_EN = {
-  may68: {
-    short: "May 68",
-    strip: "May 68",
-    banner: "General strike and factory occupations. Union and ministry crowd counts differ by a factor of ten, so both are plotted.",
-    weeks: [
-      { action: "1 May marches" },
-      {
-        action: "Night of the barricades, 10\u201311 May",
-        note: { i: "Injury figure published as a floor." }
-      },
-      { action: "General strike from 13 May" },
-      {
-        action: "24 May: de Gaulle\u2019s broadcast",
-        note: { a: "Arrest count published as a floor." }
-      },
-      { action: "Grenelle agreements, 27 May" },
-      { action: "Legislative campaign" },
-      void 0,
-      void 0,
-      void 0
-    ]
-  },
-  cpe: {
-    short: "CPE 2006",
-    strip: "CPE 2006",
-    banner: "First-employment contract: student and school movement, with two inter-union days. Enforcement figures exist for four weeks only.",
-    weeks: [
-      { action: "7 February: first national day" },
-      void 0,
-      void 0,
-      void 0,
-      { action: "Blockaded universities" },
-      { action: "14 March: national day" },
-      { action: "21 March: student day" },
-      { action: "28 March: national day" },
-      { action: "4 April: national day" },
-      { action: "Withdrawal announced" }
-    ]
-  },
-  gj: {
-    short: "Gilets jaunes",
-    strip: "Gilets jaunes",
-    banner: "Counted act by act, on Saturdays only. Enforcement figures were published for the first four acts and never as a series afterwards.",
-    weeks: []
-    // the act number in the tooltip title carries the chronology
-  },
-  nahel: {
-    short: "June 2023",
-    strip: "June 2023",
-    banner: "Five nights of rioting after the 27 June killing. Arrests and injuries are high relative to turnout because this was not a demonstration.",
-    weeks: [{ action: "27 June: riots begin" }, { action: "Return to calm" }]
-  },
-  pensions: {
-    short: "Pensions 2023",
-    strip: "Pensions 2023",
-    banner: "Movement against the rise in the statutory retirement age. Two anchor days carry most of the series; the inter-union band is wide.",
-    weeks: [
-      { action: "19 January: first national day" },
-      void 0,
-      { action: "31 January" },
-      { action: "7 February" },
-      { action: "16 February" },
-      void 0,
-      void 0,
-      { action: "7 March: schools and transport shut" },
-      { action: "11 March" },
-      { action: "15 March" },
-      { action: "23 March" },
-      { action: "28 March" },
-      { action: "6 April" },
-      void 0,
-      void 0,
-      void 0,
-      { action: "1 May" },
-      void 0,
-      void 0,
-      void 0,
-      { action: "6 June" }
-    ]
-  },
-  bt: {
-    short: "Bloquons tout",
-    strip: "Bloquons tout",
-    banner: "September 2025: blockades and marches, counted partially. Weeks without a published figure are left empty.",
-    weeks: [
-      { action: "10 September: blockades" },
-      { action: "18 September: national day" },
-      void 0,
-      { action: "1 October" }
-    ]
-  },
-  students26: {
-    short: "Autumn 2026",
-    strip: "Autumn 2026",
-    banner: "The movement this page was built for, traced from the first mainland high-school blockades on 15 September. Daily publication, so days with no figure stay empty rather than interpolated.",
-    weeks: [
-      { action: "15 September: the Caen and Villeneuve-d'Ascq blockades" },
-      { action: "25 September: Paris-area blockades" },
-      { action: "Act I on 29 September, Act II on 1 October" },
-      { action: "Act III on 6 October" },
-      { action: "17 October: the peak" },
-      { action: "24 October" },
-      { action: "31 October" },
-      { action: "5 and 7 November" },
-      { action: "9 November \u2014 window ends 11 November" }
-    ],
-    fallbackNote: {
-      p: "Weekly peak taken from the daily series \u2014 the peak day of the week.",
-      a: "Sum of the published daily figures for the week; a cumulative stock is shown as the stock, never added to it."
-    }
-  }
-};
+
+// src/copy/fr/episodes.ts
 var EPISODES_FR = {
   may68: {
     short: "Mai 68",
@@ -1089,319 +1015,197 @@ var EPISODES_FR = {
     }
   }
 };
-var SPAN_SEP = { en: " \u2013 ", fr: " \u2013 " };
-var CATALOGUE = {
-  en: {
-    chart: CHART_EN,
-    episodes: EPISODES_EN,
-    panels: {
-      partialWeek: "Week of {label} (partial)",
-      act: "Act {n}",
-      withAction: "{when} \xB7 {action}",
-      seriesContinues: "{name} (cont.)",
-      obs: "observations {counts} over {weeks}",
-      valueRange: "{lo}\u2013{hi}",
-      itemMeta: "range {range} \xB7 up to week {n}",
-      median: "median",
-      peak: "peak",
-      range: "min\u2013max range",
-      figureCount: "{n} published figures",
-      singleFigure: "one published figure \u2014 the median and the peak are the same number",
-      summaryMeta: "median and peak \xB7 {n} movements"
-    },
-    kpi: {
-      heading: "Key figures",
-      largestDay: "Largest day",
-      largestWeek: "Largest week",
-      largestFigure: "Largest figure",
-      vsMean: "Highest vs mean",
-      vsMedian: "Highest vs median",
-      vsFirst: "Highest vs first figure",
-      againstMean: "{value} against a mean of {base}",
-      againstMedian: "{value} against a median of {base}",
-      againstFirst: "{value} against a first figure of {base}",
-      noteDaily: "Ratios are computed on the daily series: each published figure is divided by the mean, the median and the first published figure of its own series. Days with no published figure are left out, not counted as zero. The \u20AC1,000M damages total of 24 October carries no marker on the chart and is left out here too.",
-      noteWeekly: "Ratios are computed on the weekly series: each published figure is divided by the mean, the median and the first published figure of its own series. Weeks with no published figure are left out, not counted as zero.",
-      noteEpisodes: "Each movement is compared with its own series \u2014 its mean, its median and its first published figure \u2014 and the largest ratio across all seven movements is shown. A ratio of the first figure can run into the thousands when a movement began with a handful of people.",
-      noteEpisodesCapped: "As in section C, but over the weeks plotted in section D only, which stop at the last week with an enforcement figure.",
-      eurM: "\u20AC{v}M",
-      none: "no figure published"
-    },
-    casualties: {
-      headlineTitle: "How the injuries divide",
-      weeklyTitle: "What a week can establish",
-      colScope: "Population",
-      colTotal: "Declared total",
-      colSerious: "Serious",
-      colLight: "Light",
-      colLightShare: "Light share",
-      colOther: "Not classed light",
-      colSide: "Side",
-      colCircumstance: "Circumstance",
-      colCount: "Count",
-      colCases: "Documented cases",
-      colQuestion: "Question",
-      colWindow: "Smallest published window",
-      colWeekly: "Weekly figure",
-      scope: {
-        crsOctober: "CRS, October 2026",
-        forcesPeak: "All forces, running total at its peak",
-        protesters: "Protesters, since 30 September",
-        week12oct: "Week of 12 October",
-        week19oct: "Week of 19 October",
-        week26oct: "Week of 26 October",
-        week2nov: "Week of 2 November"
-      },
-      side: {
-        forces: "Police and gendarmerie",
-        protesters: "Protesters"
-      },
-      kind: {
-        accidental: "Accidental or self-inflicted",
-        conflictual: "Inflicted in the confrontation"
-      },
-      why: {
-        notPublished: "not published",
-        noDenominator: "no published total",
-        binaryFile: "file is light / not light only",
-        noTally: "no count, cases only",
-        noneDocumented: "none documented"
-      },
-      cases: {
-        givors: "Givors, 10 October: two officers on patrol outside a school burned on the hand and thigh when a grenade fired accidentally inside their own vehicle, setting it alight.",
-        crsWrist: "A CRS officer bruised his left wrist closing his own vehicle door.",
-        crsAnkle: "Another CRS officer sprained his ankle falling out of a van.",
-        helmet: "Paris, 31 October: a CRS officer struck on the helmet, found uninjured \u2014 a little paint removed from the shell.",
-        groin2023: "Sainte-Soline, March 2023, for comparison: of the 29 gendarmes counted, one had a groin haematoma, one respiratory trauma, the rest were examined for acoustic trauma.",
-        mael: "Tours, 30 September: a school student blinded in one eye by a rubber bullet, having thrown nothing.",
-        alaric: "Paris, 17 October: a 19-year-old student burned on the torso and arm by a tear-gas grenade fired flat at him; second-degree burns, unhealed ten days later.",
-        eyes: "Several other minors lost an eye in the same circumstances.",
-        sainteSoline: "The official claim was 29 gendarmes injured, two in absolute emergency. The two were later described as a groin haematoma and respiratory trauma."
-      },
-      casesCount: "{n} documented cases",
-      noCases: "none documented",
-      capLevels: "Severity, by the finest window each source publishes. Rows are different populations and different windows \u2014 they are never summed.",
-      capWeeks: "Severity, by week. The increment is the difference between the running total at the start and the end of the week.",
-      capCases: "Circumstance. No source counts this, so the column gives the number of documented cases, not a share.",
-      capResolution: "The smallest window at which each breakdown exists, and whether a weekly figure can be derived from it.",
-      noteLevels: "The 1,167 of 1,233 is the only published light share: 94.6%, the figure the file itself states. It covers CRS officers in October, so it cannot be extended to all forces or to the whole movement. The 7 serious injuries belong to the 1,144 consolidation of 17 October. No total for protester injuries has ever been published, so no share can be computed on that side \u2014 the serious cases are a register, not a rate. The four documented accidental injuries are four named people, not four per cent of anything.",
-      noteWeeks: "The ministry publishes a running total, not a weekly severity breakdown. Splitting the total into weeks is arithmetic, and it reconciles exactly to 1,580, but the only light/not-light split that exists is the October CRS file, which spans four of these weeks and cannot be attributed to any one of them. That is why section A carries the breakdown and section B carries the increments.",
-      headLight: "{light} of {total} declared injuries were classed light",
-      headLightNote: "CRS officers, October 2026",
-      headMissingNote: "No published total for protester injuries, so no share exists",
-      resolution: [
-        {
-          label: "Light / serious split",
-          window: "One month (October 2026), CRS only",
-          weekly: "no"
-        },
-        {
-          label: "Accidental / conflictual split",
-          window: "None \u2014 named cases only",
-          weekly: "no"
-        },
-        {
-          label: "Running total of injured forces",
-          window: "One day",
-          weekly: "yes"
-        },
-        {
-          label: "Daily increments",
-          window: "One day",
-          weekly: "yes"
-        }
-      ]
-    },
-    items: {
-      p: { label: "Protesters", short: "Protesters" },
-      a: { label: "Arrests", short: "Arrests" },
-      f: { label: "Injured \u2014 security forces", short: "Forces injured" },
-      i: { label: "Injured \u2014 protesters", short: "Protesters injured" }
-    },
-    units: { weeks: "week" },
-    flags: {
-      n: "",
-      r: "regional",
-      p: "partial",
-      e: "modelled",
-      f: "floor",
-      c: "stock",
-      w: "weekly",
-      x: "wider measure"
-    },
-    // en
-    tooltip: {
-      linePlain: "{value}",
-      lineWithFlag: "{value} \xB7 {flag}",
-      firstFigure: "first published figure: {n}",
-      shareOfFirst: "{pct} of the first figure ({n})",
-      shareComparisons: "Comparisons: {list}",
-      cmpHighest: "highest",
-      cmpMean: "mean",
-      cmpMedian: "median",
-      cmpFirst: "first figure",
-      listAnd: " and "
-    },
-    disclaimer: {
-      body: "Research and coding was performed using an LLM and figures have not been verified. Do not use them for serious analysis or decision-making without first double-checking the figures and the sources at the bottom."
-    }
+
+// src/copy/fr/text.ts
+var TEXT_FR = {
+  panels: {
+    partialWeek: "Semaine du {label} (partielle)",
+    act: "Acte {n}",
+    withAction: "{when} \xB7 {action}",
+    seriesContinues: "{name} (suite)",
+    obs: "observations {counts} sur {weeks}",
+    valueRange: "{lo}\u2013{hi}",
+    itemMeta: "fourchette {range} \xB7 jusqu\u2019\xE0 la semaine {n}",
+    median: "m\xE9diane",
+    peak: "pointe",
+    range: "fourchette min\u2013max",
+    figureCount: "{n} chiffres publi\xE9s",
+    singleFigure: "un seul chiffre publi\xE9 \u2014 la m\xE9diane et la pointe sont le m\xEAme nombre",
+    summaryMeta: "m\xE9diane et pointe \xB7 {n} mouvements"
   },
-  fr: {
-    chart: CHART_FR,
-    episodes: EPISODES_FR,
-    panels: {
-      partialWeek: "Semaine du {label} (partielle)",
-      act: "Acte {n}",
-      withAction: "{when} \xB7 {action}",
-      seriesContinues: "{name} (suite)",
-      obs: "observations {counts} sur {weeks}",
-      valueRange: "{lo}\u2013{hi}",
-      itemMeta: "fourchette {range} \xB7 jusqu\u2019\xE0 la semaine {n}",
-      median: "m\xE9diane",
-      peak: "pointe",
-      range: "fourchette min\u2013max",
-      figureCount: "{n} chiffres publi\xE9s",
-      singleFigure: "un seul chiffre publi\xE9 \u2014 la m\xE9diane et la pointe sont le m\xEAme nombre",
-      summaryMeta: "m\xE9diane et pointe \xB7 {n} mouvements"
+  kpi: {
+    heading: "Chiffres cl\xE9s",
+    largestDay: "Plus grand jour",
+    largestWeek: "Plus grande semaine",
+    largestFigure: "Plus grand chiffre",
+    vsMean: "Max vs moyenne",
+    vsMedian: "Max vs m\xE9diane",
+    vsFirst: "Max vs premier chiffre",
+    againstMean: "{value} contre une moyenne de {base}",
+    againstMedian: "{value} contre une m\xE9diane de {base}",
+    againstFirst: "{value} contre un premier chiffre de {base}",
+    noteDaily: "Les rapports sont calcul\xE9s sur les s\xE9ries quotidiennes : chaque chiffre publi\xE9 est divis\xE9 par la moyenne, la m\xE9diane et le premier chiffre publi\xE9 de sa propre s\xE9rie. Les jours sans chiffre publi\xE9 sont \xE9cart\xE9s, non compt\xE9s comme z\xE9ro. Le total de dommages de 1 000 M\u20AC du 24 octobre n\u2019a pas de marqueur sur le graphique et en est donc \xE9cart\xE9 ici aussi.",
+    noteWeekly: "Les rapports sont calcul\xE9s sur les s\xE9ries hebdomadaires : chaque chiffre publi\xE9 est divis\xE9 par la moyenne, la m\xE9diane et le premier chiffre publi\xE9 de sa propre s\xE9rie. Les semaines sans chiffre publi\xE9 sont \xE9cart\xE9es, non compt\xE9es comme z\xE9ro.",
+    noteEpisodes: "Chaque mouvement est compar\xE9 \xE0 sa propre s\xE9rie \u2014 sa moyenne, sa m\xE9diane et son premier chiffre publi\xE9 \u2014 et le plus grand rapport sur les sept mouvements est affich\xE9. Un rapport au premier chiffre peut atteindre des milliers de pour cent lorsqu\u2019un mouvement a commenc\xE9 avec une poign\xE9e de personnes.",
+    noteEpisodesCapped: "Comme en section C, mais sur les seules semaines trac\xE9es en section D, qui s\u2019arr\xEAtent \xE0 la derni\xE8re semaine de chiffres de maintien de l\u2019ordre.",
+    eurM: "{v} M\u20AC",
+    none: "aucun chiffre publi\xE9"
+  },
+  casualties: {
+    headlineTitle: "Comment se r\xE9partissent les blessures",
+    weeklyTitle: "Ce qu\u2019une semaine peut \xE9tablir",
+    colScope: "Population",
+    colTotal: "Total d\xE9clar\xE9",
+    colSerious: "Graves",
+    colLight: "L\xE9g\xE8res",
+    colLightShare: "Part de l\xE9g\xE8res",
+    colOther: "Non class\xE9es l\xE9g\xE8res",
+    colSide: "Camp",
+    colCircumstance: "Circonstance",
+    colCount: "D\xE9compte",
+    colCases: "Cas document\xE9s",
+    colQuestion: "Question",
+    colWindow: "Plus petite fen\xEAtre publi\xE9e",
+    colWeekly: "Chiffre hebdomadaire",
+    scope: {
+      crsOctober: "CRS, octobre 2026",
+      forcesPeak: "Toutes forces, cumul \xE0 son pic",
+      protesters: "Manifestant\xB7es, depuis le 30 septembre",
+      week12oct: "Semaine du 12 octobre",
+      week19oct: "Semaine du 19 octobre",
+      week26oct: "Semaine du 26 octobre",
+      week2nov: "Semaine du 2 novembre"
     },
-    kpi: {
-      heading: "Chiffres cl\xE9s",
-      largestDay: "Plus grand jour",
-      largestWeek: "Plus grande semaine",
-      largestFigure: "Plus grand chiffre",
-      vsMean: "Max vs moyenne",
-      vsMedian: "Max vs m\xE9diane",
-      vsFirst: "Max vs premier chiffre",
-      againstMean: "{value} contre une moyenne de {base}",
-      againstMedian: "{value} contre une m\xE9diane de {base}",
-      againstFirst: "{value} contre un premier chiffre de {base}",
-      noteDaily: "Les rapports sont calcul\xE9s sur les s\xE9ries quotidiennes : chaque chiffre publi\xE9 est divis\xE9 par la moyenne, la m\xE9diane et le premier chiffre publi\xE9 de sa propre s\xE9rie. Les jours sans chiffre publi\xE9 sont \xE9cart\xE9s, non compt\xE9s comme z\xE9ro. Le total de dommages de 1 000 M\u20AC du 24 octobre n\u2019a pas de marqueur sur le graphique et en est donc \xE9cart\xE9 ici aussi.",
-      noteWeekly: "Les rapports sont calcul\xE9s sur les s\xE9ries hebdomadaires : chaque chiffre publi\xE9 est divis\xE9 par la moyenne, la m\xE9diane et le premier chiffre publi\xE9 de sa propre s\xE9rie. Les semaines sans chiffre publi\xE9 sont \xE9cart\xE9es, non compt\xE9es comme z\xE9ro.",
-      noteEpisodes: "Chaque mouvement est compar\xE9 \xE0 sa propre s\xE9rie \u2014 sa moyenne, sa m\xE9diane et son premier chiffre publi\xE9 \u2014 et le plus grand rapport sur les sept mouvements est affich\xE9. Un rapport au premier chiffre peut atteindre des milliers de pour cent lorsqu\u2019un mouvement a commenc\xE9 avec une poign\xE9e de personnes.",
-      noteEpisodesCapped: "Comme en section C, mais sur les seules semaines trac\xE9es en section D, qui s\u2019arr\xEAtent \xE0 la derni\xE8re semaine de chiffres de maintien de l\u2019ordre.",
-      eurM: "{v} M\u20AC",
-      none: "aucun chiffre publi\xE9"
+    side: {
+      forces: "Police et gendarmerie",
+      protesters: "Manifestant\xB7es"
     },
-    casualties: {
-      headlineTitle: "Comment se r\xE9partissent les blessures",
-      weeklyTitle: "Ce qu\u2019une semaine peut \xE9tablir",
-      colScope: "Population",
-      colTotal: "Total d\xE9clar\xE9",
-      colSerious: "Graves",
-      colLight: "L\xE9g\xE8res",
-      colLightShare: "Part de l\xE9g\xE8res",
-      colOther: "Non class\xE9es l\xE9g\xE8res",
-      colSide: "Camp",
-      colCircumstance: "Circonstance",
-      colCount: "D\xE9compte",
-      colCases: "Cas document\xE9s",
-      colQuestion: "Question",
-      colWindow: "Plus petite fen\xEAtre publi\xE9e",
-      colWeekly: "Chiffre hebdomadaire",
-      scope: {
-        crsOctober: "CRS, octobre 2026",
-        forcesPeak: "Toutes forces, cumul \xE0 son pic",
-        protesters: "Manifestant\xB7es, depuis le 30 septembre",
-        week12oct: "Semaine du 12 octobre",
-        week19oct: "Semaine du 19 octobre",
-        week26oct: "Semaine du 26 octobre",
-        week2nov: "Semaine du 2 novembre"
+    kind: {
+      accidental: "Accidentelle ou auto-inflig\xE9e",
+      conflictual: "Imput\xE9e \xE0 l\u2019affrontement"
+    },
+    why: {
+      notPublished: "non publi\xE9",
+      noDenominator: "aucun total publi\xE9",
+      binaryFile: "fichier binaire : l\xE9ger / non l\xE9ger",
+      noTally: "aucun d\xE9compte, des cas seulement",
+      noneDocumented: "aucun cas document\xE9"
+    },
+    cases: {
+      givors: "Givors, 10 octobre : deux policiers en faction devant un lyc\xE9e se br\xFBlent \xE0 la main et \xE0 la cuisse quand une grenade part accidentellement dans leur propre v\xE9hicule, qui prend feu.",
+      crsWrist: "Un CRS s\u2019est contusionn\xE9 le poignet gauche en fermant la porti\xE8re de son v\xE9hicule.",
+      crsAnkle: "Un autre CRS s\u2019est tordu la cheville en chutant du fourgon.",
+      helmet: "Paris, 31 octobre : un CRS touch\xE9 au casque, indemne \u2014 un peu de peinture \xF4t\xE9e de la coque.",
+      groin2023: "Sainte-Soline, mars 2023, pour comparaison : sur 29 gendarmes recens\xE9s, un h\xE9matome \xE0 l\u2019aine, un traumatisme respiratoire, les autres examin\xE9s pour traumatismes sonores.",
+      mael: "Tours, 30 septembre : un lyc\xE9en \xE9borgn\xE9 par une balle en caoutchouc, alors qu\u2019il ne lan\xE7ait rien.",
+      alaric: "Paris, 17 octobre : un \xE9tudiant de 19 ans br\xFBl\xE9 au torse et au bras par une grenade lacrymog\xE8ne tir\xE9e en tir tendu ; br\xFBlures au deuxi\xE8me degr\xE9, non cicatris\xE9es dix jours plus tard.",
+      eyes: "Plusieurs autres mineurs ont perdu un \u0153il dans les m\xEAmes circonstances.",
+      sainteSoline: "Le bilan officiel \xE9tait de 29 gendarmes bless\xE9s, dont deux en urgence absolue. Les deux ont ensuite \xE9t\xE9 d\xE9crits comme un h\xE9matome \xE0 l\u2019aine et un traumatisme respiratoire."
+    },
+    casesCount: "{n} cas document\xE9s",
+    noCases: "aucun cas document\xE9",
+    capLevels: "Gravit\xE9, \xE0 la plus fine fen\xEAtre publi\xE9e par chaque source. Les lignes sont des populations et des fen\xEAtres diff\xE9rentes \u2014 elles ne s\u2019additionnent jamais.",
+    capWeeks: "Gravit\xE9, par semaine. L\u2019incr\xE9ment est la diff\xE9rence entre le cumul en d\xE9but et en fin de semaine.",
+    capCases: "Circonstance. Aucune source ne la d\xE9nombre : la colonne donne le nombre de cas document\xE9s, non une part.",
+    capResolution: "La plus petite fen\xEAtre \xE0 laquelle chaque ventilation existe, et si un chiffre hebdomadaire peut en \xEAtre tir\xE9.",
+    noteLevels: "Les 1 167 sur 1 233 constituent la seule part de bless\xE9s l\xE9gers publi\xE9e : 94,6 %, le chiffre que le fichier \xE9nonce lui-m\xEAme. Il porte sur les CRS en octobre : il ne s\u2019\xE9tend ni \xE0 toutes les forces ni \xE0 tout le mouvement. Les 7 bless\xE9s graves rel\xE8vent de la consolidation de 1 144 du 17 octobre. Aucun total des blessures chez les manifestant\xB7es n\u2019a jamais \xE9t\xE9 publi\xE9 : aucune part ne peut donc \xEAtre calcul\xE9e de ce c\xF4t\xE9 \u2014 les cas graves forment un registre, non un taux. Les quatre blessures accidentelles document\xE9es sont quatre personnes nomm\xE9es, non quatre pour cent de quoi que ce soit.",
+    noteWeeks: "Le minist\xE8re publie un cumul, non une ventilation hebdomadaire de la gravit\xE9. D\xE9couper ce cumul en semaines est de l\u2019arithm\xE9tique, et le total se recoupe exactement \xE0 1 580, mais la seule ventilation l\xE9ger / non l\xE9ger existante est le fichier des CRS d\u2019octobre, qui couvre quatre de ces semaines sans pouvoir \xEAtre attribu\xE9 \xE0 l\u2019une d\u2019elles. C\u2019est pourquoi la section A porte la ventilation et la section B les incr\xE9ments.",
+    headLight: "{light} blessures d\xE9clar\xE9es sur {total} class\xE9es l\xE9g\xE8res",
+    headLightNote: "Agents des CRS, octobre 2026",
+    headMissingNote: "Aucun total publi\xE9 pour les blessures des manifestant\xB7es : aucune part n\u2019existe",
+    resolution: [
+      {
+        label: "Ventilation l\xE9ger / grave",
+        window: "Un mois (octobre 2026), CRS seulement",
+        weekly: "non"
       },
-      side: {
-        forces: "Police et gendarmerie",
-        protesters: "Manifestant\xB7es"
+      {
+        label: "Ventilation accidentelle / conflictuelle",
+        window: "Aucune \u2014 des cas nomm\xE9s seulement",
+        weekly: "non"
       },
-      kind: {
-        accidental: "Accidentelle ou auto-inflig\xE9e",
-        conflictual: "Imput\xE9e \xE0 l\u2019affrontement"
+      {
+        label: "Cumul des forces bless\xE9es",
+        window: "Un jour",
+        weekly: "oui"
       },
-      why: {
-        notPublished: "non publi\xE9",
-        noDenominator: "aucun total publi\xE9",
-        binaryFile: "fichier binaire : l\xE9ger / non l\xE9ger",
-        noTally: "aucun d\xE9compte, des cas seulement",
-        noneDocumented: "aucun cas document\xE9"
-      },
-      cases: {
-        givors: "Givors, 10 octobre : deux policiers en faction devant un lyc\xE9e se br\xFBlent \xE0 la main et \xE0 la cuisse quand une grenade part accidentellement dans leur propre v\xE9hicule, qui prend feu.",
-        crsWrist: "Un CRS s\u2019est contusionn\xE9 le poignet gauche en fermant la porti\xE8re de son v\xE9hicule.",
-        crsAnkle: "Un autre CRS s\u2019est tordu la cheville en chutant du fourgon.",
-        helmet: "Paris, 31 octobre : un CRS touch\xE9 au casque, indemne \u2014 un peu de peinture \xF4t\xE9e de la coque.",
-        groin2023: "Sainte-Soline, mars 2023, pour comparaison : sur 29 gendarmes recens\xE9s, un h\xE9matome \xE0 l\u2019aine, un traumatisme respiratoire, les autres examin\xE9s pour traumatismes sonores.",
-        mael: "Tours, 30 septembre : un lyc\xE9en \xE9borgn\xE9 par une balle en caoutchouc, alors qu\u2019il ne lan\xE7ait rien.",
-        alaric: "Paris, 17 octobre : un \xE9tudiant de 19 ans br\xFBl\xE9 au torse et au bras par une grenade lacrymog\xE8ne tir\xE9e en tir tendu ; br\xFBlures au deuxi\xE8me degr\xE9, non cicatris\xE9es dix jours plus tard.",
-        eyes: "Plusieurs autres mineurs ont perdu un \u0153il dans les m\xEAmes circonstances.",
-        sainteSoline: "Le bilan officiel \xE9tait de 29 gendarmes bless\xE9s, dont deux en urgence absolue. Les deux ont ensuite \xE9t\xE9 d\xE9crits comme un h\xE9matome \xE0 l\u2019aine et un traumatisme respiratoire."
-      },
-      casesCount: "{n} cas document\xE9s",
-      noCases: "aucun cas document\xE9",
-      capLevels: "Gravit\xE9, \xE0 la plus fine fen\xEAtre publi\xE9e par chaque source. Les lignes sont des populations et des fen\xEAtres diff\xE9rentes \u2014 elles ne s\u2019additionnent jamais.",
-      capWeeks: "Gravit\xE9, par semaine. L\u2019incr\xE9ment est la diff\xE9rence entre le cumul en d\xE9but et en fin de semaine.",
-      capCases: "Circonstance. Aucune source ne la d\xE9nombre : la colonne donne le nombre de cas document\xE9s, non une part.",
-      capResolution: "La plus petite fen\xEAtre \xE0 laquelle chaque ventilation existe, et si un chiffre hebdomadaire peut en \xEAtre tir\xE9.",
-      noteLevels: "Les 1 167 sur 1 233 constituent la seule part de bless\xE9s l\xE9gers publi\xE9e : 94,6 %, le chiffre que le fichier \xE9nonce lui-m\xEAme. Il porte sur les CRS en octobre : il ne s\u2019\xE9tend ni \xE0 toutes les forces ni \xE0 tout le mouvement. Les 7 bless\xE9s graves rel\xE8vent de la consolidation de 1 144 du 17 octobre. Aucun total des blessures chez les manifestant\xB7es n\u2019a jamais \xE9t\xE9 publi\xE9 : aucune part ne peut donc \xEAtre calcul\xE9e de ce c\xF4t\xE9 \u2014 les cas graves forment un registre, non un taux. Les quatre blessures accidentelles document\xE9es sont quatre personnes nomm\xE9es, non quatre pour cent de quoi que ce soit.",
-      noteWeeks: "Le minist\xE8re publie un cumul, non une ventilation hebdomadaire de la gravit\xE9. D\xE9couper ce cumul en semaines est de l\u2019arithm\xE9tique, et le total se recoupe exactement \xE0 1 580, mais la seule ventilation l\xE9ger / non l\xE9ger existante est le fichier des CRS d\u2019octobre, qui couvre quatre de ces semaines sans pouvoir \xEAtre attribu\xE9 \xE0 l\u2019une d\u2019elles. C\u2019est pourquoi la section A porte la ventilation et la section B les incr\xE9ments.",
-      headLight: "{light} blessures d\xE9clar\xE9es sur {total} class\xE9es l\xE9g\xE8res",
-      headLightNote: "Agents des CRS, octobre 2026",
-      headMissingNote: "Aucun total publi\xE9 pour les blessures des manifestant\xB7es : aucune part n\u2019existe",
-      resolution: [
-        {
-          label: "Ventilation l\xE9ger / grave",
-          window: "Un mois (octobre 2026), CRS seulement",
-          weekly: "non"
-        },
-        {
-          label: "Ventilation accidentelle / conflictuelle",
-          window: "Aucune \u2014 des cas nomm\xE9s seulement",
-          weekly: "non"
-        },
-        {
-          label: "Cumul des forces bless\xE9es",
-          window: "Un jour",
-          weekly: "oui"
-        },
-        {
-          label: "Incr\xE9ments quotidiens",
-          window: "Un jour",
-          weekly: "oui"
-        }
-      ]
-    },
-    items: {
-      p: { label: "Manifestants", short: "Manifestants" },
-      a: { label: "Interpellations", short: "Interpellations" },
-      f: { label: "Bless\xE9s \u2014 forces de l\u2019ordre", short: "Forces bless\xE9es" },
-      i: { label: "Bless\xE9s \u2014 manifestants", short: "Manifestants bless\xE9s" }
-    },
-    units: { weeks: "semaine" },
-    flags: {
-      n: "",
-      r: "r\xE9gional",
-      p: "partiel",
-      e: "mod\xE9lis\xE9",
-      f: "plancher",
-      c: "stock",
-      w: "hebdomadaire",
-      x: "mesure plus large"
-    },
-    // fr
-    tooltip: {
-      linePlain: "{value}",
-      lineWithFlag: "{value} \xB7 {flag}",
-      firstFigure: "premier chiffre publi\xE9 : {n}",
-      shareOfFirst: "{pct} du premier chiffre ({n})",
-      shareComparisons: "Comparaisons : {list}",
-      cmpHighest: "le plus \xE9lev\xE9",
-      cmpMean: "moyenne",
-      cmpMedian: "m\xE9diane",
-      cmpFirst: "premier chiffre",
-      listAnd: " et "
-    },
-    disclaimer: {
-      body: "La recherche et le code ont \xE9t\xE9 r\xE9alis\xE9s \xE0 l\u2019aide d\u2019un LLM et les chiffres n\u2019ont pas \xE9t\xE9 v\xE9rifi\xE9s. Ne les utilisez pas pour une analyse s\xE9rieuse ou pour prendre des d\xE9cisions sans avoir d\u2019abord v\xE9rifi\xE9 les chiffres et les sources en bas de page."
-    }
+      {
+        label: "Incr\xE9ments quotidiens",
+        window: "Un jour",
+        weekly: "oui"
+      }
+    ]
+  },
+  items: {
+    p: { label: "Manifestants", short: "Manifestants" },
+    a: { label: "Interpellations", short: "Interpellations" },
+    f: { label: "Bless\xE9s \u2014 forces de l\u2019ordre", short: "Forces bless\xE9es" },
+    i: { label: "Bless\xE9s \u2014 manifestants", short: "Manifestants bless\xE9s" }
+  },
+  units: { weeks: "semaine" },
+  flags: {
+    n: "",
+    r: "r\xE9gional",
+    p: "partiel",
+    e: "mod\xE9lis\xE9",
+    f: "plancher",
+    c: "stock",
+    w: "hebdomadaire",
+    x: "mesure plus large"
+  },
+  // fr
+  tooltip: {
+    linePlain: "{value}",
+    lineWithFlag: "{value} \xB7 {flag}",
+    firstFigure: "premier chiffre publi\xE9 : {n}",
+    shareOfFirst: "{pct} du premier chiffre ({n})",
+    shareComparisons: "Comparaisons : {list}",
+    cmpHighest: "le plus \xE9lev\xE9",
+    cmpMean: "moyenne",
+    cmpMedian: "m\xE9diane",
+    cmpFirst: "premier chiffre",
+    listAnd: " et "
+  },
+  disclaimer: {
+    body: "La recherche et le code ont \xE9t\xE9 r\xE9alis\xE9s \xE0 l\u2019aide d\u2019un LLM et les chiffres n\u2019ont pas \xE9t\xE9 v\xE9rifi\xE9s. Ne les utilisez pas pour une analyse s\xE9rieuse ou pour prendre des d\xE9cisions sans avoir d\u2019abord v\xE9rifi\xE9 les chiffres et les sources en bas de page."
   }
 };
+
+// src/copy/fr/index.ts
+var CATALOGUE_FR = {
+  chart: CHART_FR,
+  episodes: EPISODES_FR,
+  ...TEXT_FR
+};
+
+// src/copy/catalogue.ts
+var CATALOGUE = {
+  en: CATALOGUE_EN,
+  fr: CATALOGUE_FR
+};
+
+// src/copy/interpolate.ts
+var TOKEN = /\{(\w+)\}/g;
+function fill(template, params) {
+  if (!params) return template;
+  const p = typeof params.n === "number" && params.s === void 0 ? { ...params, s: params.n === 1 ? "" : "s" } : params;
+  return template.replace(
+    TOKEN,
+    (whole, name) => name in p ? String(p[name]) : whole
+  );
+}
+function plural(a, b, c) {
+  if (typeof a === "string") {
+    const n = typeof b === "number" ? b : 0;
+    return Math.abs(n) === 1 ? a : c ?? `${a}s`;
+  }
+  const isOne = Math.abs(a) === 1;
+  if (typeof b !== "string") return isOne ? "" : "s";
+  return isOne ? b : c ?? `${b}s`;
+}
+
+// src/copy/lookup.ts
+var SPAN_SEP = { en: " \u2013 ", fr: " \u2013 " };
 var DICT = {
   en: { "span.sep": SPAN_SEP.en },
   fr: { "span.sep": SPAN_SEP.fr }
@@ -1463,6 +1267,240 @@ function t(key, params) {
 function bi(value2) {
   return value2[current] ?? value2.en;
 }
+
+// src/copy/format.ts
+var UTC = { timeZone: "UTC" };
+var dates;
+var numFmt;
+var cptFmt;
+var eurFmt;
+function buildFormats(tag3) {
+  numFmt = new Intl.NumberFormat(tag3, { maximumFractionDigits: 0 });
+  cptFmt = new Intl.NumberFormat(tag3, {
+    notation: "compact",
+    compactDisplay: "short",
+    maximumFractionDigits: 1
+  });
+  eurFmt = new Intl.NumberFormat(tag3, { maximumFractionDigits: 1 });
+  dates = {
+    long: new Intl.DateTimeFormat(tag3, {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      ...UTC
+    }),
+    short: new Intl.DateTimeFormat(tag3, {
+      day: "numeric",
+      month: "short",
+      ...UTC
+    }),
+    day: new Intl.DateTimeFormat(tag3, { day: "numeric", ...UTC })
+  };
+}
+var nf = () => numFmt;
+var compact = () => cptFmt;
+var eurM = () => eurFmt;
+function toDate(value2) {
+  if (value2 instanceof Date)
+    return Number.isNaN(value2.getTime()) ? null : value2;
+  if (typeof value2 === "number") {
+    const d2 = new Date(value2);
+    return Number.isNaN(d2.getTime()) ? null : d2;
+  }
+  if (typeof value2 !== "string" || value2.trim() === "") return null;
+  const d = new Date(value2);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+function firstOfMonth(s, d) {
+  return current === "fr" && d.getUTCDate() === 1 ? s.replace(/^1\b/, "1er") : s;
+}
+function fmtDate(value2) {
+  const d = toDate(value2);
+  return d ? firstOfMonth(dates.long.format(d), d) : "\u2014";
+}
+function fmtDayMonth(value2) {
+  const d = toDate(value2);
+  return d ? firstOfMonth(dates.short.format(d), d) : "\u2014";
+}
+function fmtWeek(start, end) {
+  const a = toDate(start);
+  if (!a) return "\u2014";
+  if (end === void 0) return firstOfMonth(dates.short.format(a), a);
+  const b = toDate(end);
+  if (!b) return firstOfMonth(dates.short.format(a), a);
+  const sameYear = a.getUTCFullYear() === b.getUTCFullYear();
+  const sameMonth = sameYear && a.getUTCMonth() === b.getUTCMonth();
+  if (sameMonth)
+    return `${firstOfMonth(dates.day.format(a), a)}\u2013${fmtDayMonth(b)}`;
+  if (sameYear) return `${fmtDayMonth(a)} \u2013 ${fmtDayMonth(b)}`;
+  return `${fmtDayMonth(a)} ${a.getUTCFullYear()} \u2013 ${fmtDayMonth(b)} ${b.getUTCFullYear()}`;
+}
+var ISO_ANY = /\d{4}-\d{2}-\d{2}/;
+var ISO_ALL = /\b(\d{4}-\d{2}-\d{2})\b/g;
+function fmtSpan(span, end) {
+  const sep = t("span.sep");
+  if (typeof span === "string") {
+    if (end !== void 0) return `${fmtDayMonth(span)}${sep}${fmtDate(end)}`;
+    return ISO_ANY.test(span) ? span.replace(ISO_ALL, (m) => fmtDayMonth(m)) : span;
+  }
+  if (typeof span === "number" || span instanceof Date) {
+    return end !== void 0 ? `${fmtDayMonth(span)}${sep}${fmtDate(end)}` : fmtDate(span);
+  }
+  if (span.label) return span.label;
+  if (span.start != null && span.end != null) {
+    return `${fmtDayMonth(span.start)}${sep}${fmtDate(span.end)}`;
+  }
+  if (span.start != null) return fmtDate(span.start);
+  if (span.end != null) return fmtDate(span.end);
+  return "\u2014";
+}
+var MINUTE = 6e4;
+var HOUR = 60 * MINUTE;
+var DAY = 24 * HOUR;
+
+// src/copy/fr/meta.ts
+var FR_META = {
+  tag: "fr-FR",
+  label: "Fran\xE7ais",
+  meta: {
+    htmlLang: "fr",
+    title: "L\u2019activit\xE9 contestataire en France \u2014 septembre\u2013novembre 2026",
+    description: "Foules, interpellations, bless\xE9s et dommages du mouvement de l\u2019automne 2026, compar\xE9s \xE0 six mouvements fran\xE7ais ant\xE9rieurs."
+  },
+  sections: {
+    a: {
+      title: "A \xB7 D\xE9comptes quotidiens, 15 septembre \u2013 11 novembre 2026",
+      blurb: "Un marqueur par jour o\xF9 un chiffre a \xE9t\xE9 publi\xE9. Les jours sans chiffre restent vides plut\xF4t qu\u2019interpol\xE9s ; les lacunes d\u2019une courbe sont en pointill\xE9s. La courbe des blocages de lyc\xE9es est en pointill\xE9s pendant les vacances de la Toussaint, aucun lyc\xE9e n\u2019\xE9tant en cours. La s\xE9rie des personnes en gr\xE8ve est d\xE9riv\xE9e de taux de participation : aucune autorit\xE9 n\u2019a publi\xE9 de d\xE9compte national des gr\xE9vistes."
+    },
+    b: {
+      title: "B \xB7 Agr\xE9gats hebdomadaires",
+      blurb: "Les semaines vont du lundi au dimanche. Une foule de jour de pointe et un total hebdomadaire d\u2019interpellations ne sont pas la m\xEAme statistique \u2014 l\u2019infobulle pr\xE9cise laquelle. Le chiffre hebdomadaire des blocages est une pointe, jamais une somme : un m\xEAme lyc\xE9e est bloqu\xE9 plusieurs jours de suite. Les personnes en gr\xE8ve sont un niveau, non un flux : le chiffre hebdomadaire en est la pointe de la semaine, jamais une somme."
+    },
+    c: {
+      title: "C \xB7 Un panneau par mouvement",
+      blurb: "Chaque panneau conserve sa propre dur\xE9e sur un axe logarithmique commun : les formes sont comparables, les dur\xE9es non. L\u2019infobulle compare en outre chaque point \xE0 sa propre s\xE9rie \u2014 en pourcentage du chiffre le plus \xE9lev\xE9 du panneau, de la moyenne, de la m\xE9diane et du premier chiffre publi\xE9. Ce dernier peut atteindre des milliers de pour cent lorsqu\u2019un mouvement a commenc\xE9 avec une poign\xE9e de personnes, et c\u2019est pr\xE9cis\xE9ment pourquoi les trois autres sont donn\xE9s d\u2019abord.",
+      note: "Les marqueurs creux sont des chiffres r\xE9gionaux, parisiens, mod\xE9lis\xE9s ou des stocks. Les liaisons en pointill\xE9s traversent une semaine sans publication."
+    },
+    d: {
+      title: "D \xB7 Transpos\xE9 : un panneau par s\xE9rie",
+      blurb: "Les m\xEAmes donn\xE9es avec les mouvements superpos\xE9s, pour lire une m\xEAme mesure de 1968 \xE0 2026. L\u2019axe des x est le nombre de semaines \xE9coul\xE9es, arr\xEAt\xE9 \xE0 la derni\xE8re semaine de chiffres de maintien de l\u2019ordre. Les comparaisons de l\u2019infobulle fonctionnent comme en section C, mais sont calcul\xE9es sur les seules semaines trac\xE9es dans le panneau survol\xE9.",
+      note: "Survolez une mesure ou un mouvement pour l\u2019isoler. L\u2019ordre des panneaux suit celui de la l\xE9gende."
+    },
+    e: {
+      title: "E \xB7 M\xE9diane et pointe",
+      blurb: "Chaque panneau rassemble une mesure pour les mouvements qui l\u2019ont publi\xE9e. Le point est la m\xE9diane de la s\xE9rie \u2014 la semaine typique \u2014 et le triangle sa pointe, le plus grand chiffre publi\xE9. La barre claire derri\xE8re chaque paire couvre toute la s\xE9rie, de son plus petit chiffre \xE0 son plus grand : un mouvement r\xE9gulier se lit donc comme une barre courte, un mouvement ayant connu quelques semaines \xE9normes comme une barre longue. L\u2019axe est logarithmique, de sorte que quelques marches de masse et une semaine ordinaire peuvent partager un panneau.",
+      note: "Chaque chiffre est compt\xE9 une fois, au milieu de sa fourchette lorsqu\u2019une fourchette a \xE9t\xE9 publi\xE9e. Le nombre de chiffres publi\xE9s figure dans l\u2019infobulle : avec un seul chiffre, la m\xE9diane et la pointe sont le m\xEAme nombre."
+    }
+  },
+  groups: {
+    ongoing: {
+      title: "La r\xE9volte en cours",
+      blurb: "Les deux sections portent sur le mouvement de l\u2019automne 2026. A trace chaque chiffre quotidien publi\xE9 ; B agr\xE8ge ces m\xEAmes chiffres par semaine, de sorte qu\u2019une foule de jour de pointe et un total d\u2019interpellations ne partagent jamais un axe."
+    },
+    historical: {
+      title: "Comparaisons historiques",
+      blurb: "Les m\xEAmes mesures rapport\xE9es \xE0 six mouvements fran\xE7ais ant\xE9rieurs : 1968, 1986, 1995, 2006, 2010 et 2016. C garde un panneau par mouvement ; D un panneau par s\xE9rie."
+    }
+  }
+};
+
+// src/copy/state.ts
+var DEFAULT_LANG = "fr";
+var DEFAULT_LOCALE = FR_META.tag;
+var LOCALE_META = {
+  en: EN_META,
+  fr: FR_META
+};
+var STORAGE_KEY = "lang";
+var hasDom = () => typeof window !== "undefined" && typeof document !== "undefined";
+function normalizeLocale(input) {
+  const low = String(input ?? "").toLowerCase().replace(/_/g, "-");
+  if (low === "fr" || low.startsWith("fr-") || low === "fran\xE7ais" || low === "francais")
+    return "fr";
+  if (low === "en" || low.startsWith("en-")) return "en";
+  return null;
+}
+function localeFromUrl(search) {
+  if (search === void 0 && !hasDom()) return null;
+  try {
+    const q = search ?? window.location.search;
+    return normalizeLocale(new URLSearchParams(q).get("lang"));
+  } catch {
+    return null;
+  }
+}
+function fromStorage() {
+  if (!hasDom()) return null;
+  try {
+    return normalizeLocale(window.localStorage.getItem(STORAGE_KEY));
+  } catch {
+    return null;
+  }
+}
+var current = localeFromUrl() ?? fromStorage() ?? DEFAULT_LANG;
+buildFormats(localeMeta2(current).tag);
+var version = 0;
+function getLocale() {
+  return current;
+}
+var listeners = /* @__PURE__ */ new Set();
+var emitting = false;
+function onLocaleChange(fn) {
+  listeners.add(fn);
+  return () => {
+    listeners.delete(fn);
+  };
+}
+function emit(next, previous) {
+  if (emitting) return;
+  emitting = true;
+  try {
+    for (const fn of [...listeners]) {
+      try {
+        fn(next, previous);
+      } catch (err) {
+        console.error("[i18n] locale listener threw", err);
+      }
+    }
+  } finally {
+    emitting = false;
+  }
+}
+function setLang(next, opts = {}) {
+  const { persist = true, notify = true } = opts;
+  const target = normalizeLocale(next);
+  if (!target) {
+    warnOnce(`locale:${String(next)}`, `unrecognised locale "${String(next)}"`);
+    return current;
+  }
+  const previous = current;
+  if (previous === target) return current;
+  current = target;
+  version += 1;
+  const locale2 = localeMeta2(target);
+  buildFormats(locale2.tag);
+  if (hasDom()) {
+    if (persist) {
+      try {
+        window.localStorage.setItem(STORAGE_KEY, target);
+      } catch {
+      }
+    }
+    document.documentElement.lang = locale2.meta.htmlLang;
+    document.documentElement.dataset.lang = target;
+  }
+  if (notify) emit(target, previous);
+  return current;
+}
+var LOCALES = Object.freeze([
+  "fr",
+  "en"
+]);
+function localeMeta2(locale2 = current) {
+  return LOCALE_META[normalizeLocale(locale2) ?? DEFAULT_LANG];
+}
+
+// src/copy/chrome.ts
 var STATIC = {
   "hdr.kicker": {
     en: "15 Sep \u2013 11 Nov 2026",
@@ -1567,6 +1605,8 @@ function syncLangSwitch(root2 = document) {
     b.tabIndex = on ? 0 : -1;
   }
 }
+
+// src/copy/a11y.ts
 var A11Y = {
   en: {
     about: "Notes on this project",
@@ -17868,7 +17908,7 @@ function callout(lang) {
 }
 function renderAbout(host = document.getElementById("about")) {
   if (!host) return;
-  const lang = localeMeta().meta.htmlLang;
+  const lang = localeMeta2().meta.htmlLang;
   const open = /* @__PURE__ */ new Map();
   for (const el2 of host.querySelectorAll(
     "details[data-about]"
@@ -17910,7 +17950,7 @@ function disclaimer() {
   host.textContent = t().disclaimer.body;
 }
 function renderChrome() {
-  const m = localeMeta();
+  const m = localeMeta2();
   document.title = m.meta.title;
   disclaimer();
   renderAbout();
@@ -20901,7 +20941,7 @@ function boot() {
   initTheme();
   onLocaleChange((_next, _prev) => {
     scheduleRender();
-    announce(fill(t().a11y.switched, { lang: localeMeta().label }));
+    announce(fill(t().a11y.switched, { lang: localeMeta2().label }));
   });
   render2();
   window.addEventListener("pagehide", destroyAll, { once: true });
@@ -20935,3 +20975,4 @@ chart.js/dist/helpers.js:
    * Released under the MIT License
    *)
 */
+//# sourceMappingURL=bundle.js.map

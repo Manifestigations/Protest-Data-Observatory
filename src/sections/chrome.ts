@@ -7,12 +7,7 @@
  */
 
 import { renderAbout } from "./about/about.ts";
-import {
-  localeMeta,
-  onLocaleChange,
-  t,
-  type SectionCopy,
-} from "../copy/i18n.ts";
+import { localeMeta, onLocaleChange, t, type SectionCopy } from "../copy";
 
 const $ = (id: string): HTMLElement | null => document.getElementById(id);
 
