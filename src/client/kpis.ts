@@ -125,7 +125,7 @@ function dailyRows(weekly: boolean): Row[] {
   const specs = weekly ? WEEKLY_SPECS : DAILY_SPECS;
 
   return specs.map((spec) => {
-    const pts = visiblePoints(spec.data, weekly);
+    const pts = visiblePoints(spec.copy);
     const obs: Observation[] = pts.map((p) => ({
       v: p.v,
       where: weekly
