@@ -18,9 +18,9 @@
    Nothing here needs to know which context it is in: both resolve through
    the same { k: "obs" } branch. */
 
-import { fill, fmtDayMonth, nf, t } from "./i18n.ts";
+import { fill, fmtDayMonth, nf, t } from "../copy/i18n.ts";
 import { RATE } from "./data.ts";
-import type { Flag, NoteRef } from "./model.ts";
+import type { Flag, NoteRef } from "../model/index.ts";
 
 /** Resolve a stored note reference into copy, in the active locale. */
 export function noteText(ref: NoteRef | null | undefined): string {

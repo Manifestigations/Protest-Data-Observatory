@@ -23,9 +23,9 @@ import {
   type CaseRow,
   type Cell,
   type SevRow,
-} from "./data.ts";
-import { byId, el } from "./dom.ts";
-import { fill, nf, t } from "./i18n.ts";
+} from "../data/data.ts";
+import { byId, el } from "../core/dom.ts";
+import { fill, nf, t } from "../copy/i18n.ts";
 
 /* ----- cells ----- */
 

@@ -23,8 +23,8 @@
  * #sources in index.html, so it survives the replacement.
  */
 
-import { el } from "./dom.ts";
-import { bi, fmtDate, fmtDayMonth, type Bi } from "./i18n.ts";
+import { el } from "../../core/dom.ts";
+import { bi, fmtDate, fmtDayMonth, type Bi } from "../../copy/i18n.ts";
 
 export type GroupId =
   | "official"

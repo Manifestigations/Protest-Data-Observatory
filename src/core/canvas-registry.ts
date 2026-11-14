@@ -1,5 +1,5 @@
 import type { Chart } from "chart.js";
-import { scheduleRender } from "./main";
+import { scheduleRender } from "../entry/main";
 
 /* ── Theme ───────────────────────────────────────────────────────────────────
    Colours live in styles.css as light-dark(light, dark). getComputedStyle

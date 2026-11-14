@@ -3,7 +3,7 @@
    live announcements. No Chart.js internals beyond the public API.
    ═══════════════════════════════════════════════════════════════════ */
 import type { Chart } from "chart.js";
-import { nf } from "./i18n.ts";
+import { nf } from "../copy/i18n.ts";
 
 /* ---- live region (4.1.3) ---- */
 let live: HTMLElement | null = null;

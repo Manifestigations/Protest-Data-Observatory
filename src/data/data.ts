@@ -103,7 +103,7 @@ import {
   type MetricKey,
   type NoteRef,
   type WeekNoteParts,
-} from "./model.ts";
+} from "../model/index.ts";
 
 export interface Obs {
   low: number;

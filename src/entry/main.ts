@@ -1,17 +1,17 @@
 /* src/client/main.ts — boot: locale, chrome, charts, trellis.
    One render path: setLang emits once, scheduleRender coalesces to one frame. */
 
-import { announce } from "./a11y.ts";
-import { destroyAll } from "./canvas.ts";
-import { mountCasualties } from "./casualties.ts";
-import { CHARTS, mountCharts } from "./chart.ts";
-import { mountContext } from "./context.ts";
-import { byId } from "./dom.ts";
+import { announce } from "../core/a11y.ts";
+import { destroyAll } from "../core/canvas-registry.ts";
+import { mountCasualties } from "../sections/casualties.ts";
+import { CHARTS, mountCharts } from "../charts/chart.ts";
+import { mountContext } from "../sections/context/context.ts";
+import { byId } from "../core/dom.ts";
 import {
   mountCrossEpisode,
   mountSummary,
   type TrellisHosts,
-} from "./episodes.ts";
+} from "../data/episodes/episodes.ts";
 import {
   applyStaticCopy,
   fill,
@@ -19,13 +19,13 @@ import {
   onLocaleChange,
   syncLangSwitch,
   t,
-} from "./i18n.ts";
-import { mountKpis } from "./kpis.ts";
-import { applyUrlLang, mountLangSwitch } from "./lang.ts";
-import { renderChrome } from "./page.ts";
-import { mountPerCapita } from "./percapita.ts";
-import { renderSources } from "./sources.ts";
-import { initTheme } from "./theme.ts";
+} from "../copy/i18n.ts";
+import { mountKpis } from "../sections/kpis.ts";
+import { applyUrlLang, mountLangSwitch } from "../core/lang.ts";
+import { renderChrome } from "../sections/chrome.ts";
+import { mountPerCapita } from "../sections/percapita/percapita.ts";
+import { renderSources } from "../data/sources/sources.ts";
+import { initTheme } from "../core/theme.ts";
 
 function trellisHosts(): TrellisHosts | null {
   const episodeHost = byId("trellis-episodes");

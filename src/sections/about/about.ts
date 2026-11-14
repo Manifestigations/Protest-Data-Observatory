@@ -8,7 +8,7 @@
  * Copy lives here rather than in CATALOGUE because it is block-structured
  * (paragraphs, a list, a blockquote) and the catalogue is textContent-only.
  */
-import { localeMeta, type Lang } from "./i18n";
+import { localeMeta, type Lang } from "../../copy/i18n";
 
 /* ------------------------------------------------------------------ model */
 

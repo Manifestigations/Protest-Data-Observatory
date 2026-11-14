@@ -13,9 +13,14 @@
  *   - a day or week with no published figure is left out, not counted as zero.
  */
 
-import { DATES, WEEKS } from "./data.ts";
-import { visiblePoints } from "./chart.ts";
-import { ENFORCEMENT_LAST, EPISODES, seriesData, type Pt } from "./episodes.ts";
+import { DATES, WEEKS } from "../data/data.ts";
+import { visiblePoints } from "../charts/chart.ts";
+import {
+  ENFORCEMENT_LAST,
+  EPISODES,
+  seriesData,
+  type Pt,
+} from "../data/episodes/episodes.ts";
 import {
   compact,
   eurM,
@@ -25,8 +30,8 @@ import {
   nf,
   t,
   type ChartCopy,
-} from "./i18n.ts";
-import { byId, el } from "./dom.ts";
+} from "../copy/i18n.ts";
+import { byId, el } from "../core/dom.ts";
 
 type SeriesCopyKey = keyof ChartCopy["series"];
 

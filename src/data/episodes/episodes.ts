@@ -30,10 +30,10 @@ import {
   type InteractionModeFunction,
 } from "chart.js";
 import { getRelativePosition } from "chart.js/helpers";
-import { fromChart, keyboardChart } from "./a11y.ts";
-import { THEME, alpha, gapSegment, track } from "./canvas.ts";
-import { END, STUDENT_WEEKS, type StudentWeek } from "./data.ts";
-import { el } from "./dom.ts";
+import { fromChart, keyboardChart } from "../../core/a11y.ts";
+import { THEME, alpha, gapSegment, track } from "../../core/canvas-registry.ts";
+import { END, STUDENT_WEEKS, type StudentWeek } from "../data.ts";
+import { el } from "../../core/dom.ts";
 import {
   a11y,
   compact,
@@ -43,7 +43,7 @@ import {
   nf,
   plural,
   t,
-} from "./i18n.ts";
+} from "../../copy/i18n.ts";
 import {
   METRICS,
   bandOf,
@@ -54,9 +54,9 @@ import {
   type Flag,
   type Metric,
   type Row,
-} from "./model.ts";
-import { noteText } from "./notes.ts";
-import { wrapTooltipLines } from "./tooltip.ts";
+} from "../../model/index.ts";
+import { noteText } from "../notes.ts";
+import { wrapTooltipLines } from "../../charts/tooltip.ts";
 
 /* ------------------------------------------------------------------- types */
 

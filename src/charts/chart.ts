@@ -21,11 +21,22 @@ import {
   type PointStyle,
   type TooltipItem,
 } from "chart.js";
-import { fromChart, keyboardChart } from "./a11y.ts";
-import { THEME, track } from "./canvas.ts";
-import { contextBands, daySpans, weekSpans } from "./context.ts";
-import { DAILY, DATES, WEEKLY, WEEKS, type Pt, type Series } from "./data.ts";
-import { byId } from "./dom.ts";
+import { fromChart, keyboardChart } from "../core/a11y.ts";
+import { THEME, track } from "../core/canvas-registry.ts";
+import {
+  contextBands,
+  daySpans,
+  weekSpans,
+} from "../sections/context/context.ts";
+import {
+  DAILY,
+  DATES,
+  WEEKLY,
+  WEEKS,
+  type Pt,
+  type Series,
+} from "../data/data.ts";
+import { byId } from "../core/dom.ts";
 import {
   a11y,
   bi,
@@ -39,10 +50,10 @@ import {
   t,
   type ChartCardCopy,
   type ChartCopy,
-} from "./i18n.ts";
-import { type Band, type Flag, type NoteRef } from "./model.ts";
-import { noteText, suffixFor } from "./notes.ts";
-import { denominator, KEY_2026, population } from "./population.ts";
+} from "../copy/i18n.ts";
+import { type Band, type Flag, type NoteRef } from "../model/index.ts";
+import { noteText, suffixFor } from "../data/notes.ts";
+import { denominator, KEY_2026, population } from "../data/population.ts";
 import { wrapTooltipLines } from "./tooltip.ts";
 
 Chart.register(
@@ -237,9 +248,7 @@ const DEF = {
  * but drawn without a marker. The KPIs take the chart's own mask, so a figure
  * the reader cannot see as a marker is neither a "largest day" nor an item in
  * a mean. Delete the two mask lines below to count it like any other point.
- */
-
-/** Points that actually render: non-null value, non-zero mask entry.
+ * Points that actually render: non-null value, non-zero mask entry.
  *  The id names the series, so no daily/weekly switch and no DEF scan. */
 export function visiblePoints(id: SeriesId): { i: number; v: number }[] {
   const def = DEF[id];

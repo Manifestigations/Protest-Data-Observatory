@@ -35,14 +35,14 @@ import {
   type Scale,
   type TooltipItem,
 } from "chart.js";
-import { dataTable, keyboardChart } from "./a11y.ts";
-import { THEME, track } from "./canvas.ts";
+import { dataTable, keyboardChart } from "../../core/a11y.ts";
+import { THEME, track } from "../../core/canvas-registry.ts";
 import {
   contextBands,
   daySpans,
   weekSpans,
   type ChartSpan,
-} from "./context.ts";
+} from "../context/context.ts";
 import {
   DAILY,
   DATES,
@@ -51,9 +51,9 @@ import {
   WEEKLY,
   WEEKS,
   type Pt as DayPt,
-} from "./data.ts";
-import { byId, el } from "./dom.ts";
-import { EPISODES, seriesData } from "./episodes.ts";
+} from "../../data/data.ts";
+import { byId, el } from "../../core/dom.ts";
+import { EPISODES, seriesData } from "../../data/episodes/episodes.ts";
 import {
   a11y,
   fill,
@@ -63,8 +63,8 @@ import {
   getLocale,
   nf,
   t,
-} from "./i18n.ts";
-import type { Episode } from "./model.ts";
+} from "../../copy/i18n.ts";
+import type { Episode } from "../../model/index.ts";
 import {
   KEY_2026,
   basisOf,
@@ -72,8 +72,8 @@ import {
   pctOfValue,
   popKeyFor,
   population,
-} from "./population.ts";
-import { wrapTooltipLines } from "./tooltip.ts";
+} from "../../data/population.ts";
+import { wrapTooltipLines } from "../../charts/tooltip.ts";
 
 Chart.register(
   LineController,

@@ -2,8 +2,8 @@
    One writer: <html data-theme="light"|"dark">. Its absence means "follow the
    OS", which the stylesheet understands natively via color-scheme. */
 
-import { refreshTheme } from "./canvas.ts";
-import { scheduleRender } from "./main.ts";
+import { refreshTheme } from "./canvas-registry.ts";
+import { scheduleRender } from "../entry/main.ts";
 
 export type Theme = "light" | "dark";
 

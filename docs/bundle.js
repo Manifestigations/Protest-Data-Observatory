@@ -1,4 +1,4 @@
-// src/client/i18n.ts
+// src/copy/i18n.ts
 var UTC = { timeZone: "UTC" };
 var dates;
 var EN_META = {
@@ -1591,7 +1591,7 @@ var A11Y = {
 };
 var a11y = () => A11Y[current];
 
-// src/client/a11y.ts
+// src/core/a11y.ts
 var live = null;
 var timer = 0;
 function region() {
@@ -1758,7 +1758,7 @@ function keyboardChart(chart, opts) {
   canvas.addEventListener("blur", () => paint(null));
 }
 
-// src/client/canvas.ts
+// src/core/canvas-registry.ts
 var VARS = {
   ink: "--chart-ink",
   label: "--chart-label",
@@ -1927,7 +1927,7 @@ function destroyAll() {
   live2.clear();
 }
 
-// src/client/model.ts
+// src/model/index.ts
 var METRICS = ["p", "a", "f", "i"];
 var METRIC_OF = {
   p: "turnout",
@@ -1943,7 +1943,7 @@ var midOf = (b) => {
   return (lo + hi) / 2;
 };
 
-// src/client/data.ts
+// src/data/data.ts
 var NIL = { v: null, band: null, q: null, note: null, detach: false };
 var START = "2026-09-15";
 var END = "2026-11-11";
@@ -2716,7 +2716,7 @@ var CASES = [
   }
 ];
 
-// src/client/dom.ts
+// src/core/dom.ts
 var byId = (id) => document.getElementById(id);
 function el(name, cls, text) {
   const node = document.createElement(name);
@@ -2725,7 +2725,7 @@ function el(name, cls, text) {
   return node;
 }
 
-// src/client/casualties.ts
+// src/sections/casualties.ts
 function cellText(c) {
   switch (c.s) {
     case "n":
@@ -14621,7 +14621,7 @@ var TimeSeriesScale = class extends TimeScale {
   }
 };
 
-// src/client/context.ts
+// src/sections/context/context.ts
 var L = (o) => String(getLocale()).slice(0, 2) === "fr" ? o.fr : o.en;
 var LAYERS = [
   {
@@ -14877,7 +14877,7 @@ function mountContext() {
   }
 }
 
-// src/client/notes.ts
+// src/data/notes.ts
 function noteText(ref) {
   if (!ref) return "";
   const m = t().chart;
@@ -14923,7 +14923,7 @@ function suffixFor(q, detached) {
   return text ? fill(t().chart.suffixWrap, { text }) : "";
 }
 
-// src/client/population.ts
+// src/data/population.ts
 var POPULATION = {
   /* 1968 has one base only. INSEE, RP1968 in the 1 January 2026 geography:
      49 711 853. Not 49 723 072 — that is the older "sans doubles comptes"
@@ -14973,7 +14973,7 @@ function pctOfValue(v, pop) {
   return v / d * 100;
 }
 
-// src/client/tooltip.ts
+// src/charts/tooltip.ts
 var DEFAULT_SIZE = 12;
 var MAX_WIDTH = 360;
 var MIN_WIDTH = 80;
@@ -15052,7 +15052,7 @@ function wrapTooltipLines(text, item, part = "body") {
   return wrapText(text, textWidth(chart, tt), font);
 }
 
-// src/client/chart.ts
+// src/charts/chart.ts
 Chart.register(
   LineController,
   LineElement,
@@ -15872,7 +15872,7 @@ function mountCharts() {
   }
 }
 
-// src/client/episodes.ts
+// src/data/episodes/episodes.ts
 var DIM = THEME.dim;
 var SERIES2 = [
   { key: "p", color: "#1d4ed8" },
@@ -17141,7 +17141,7 @@ function mountSummary() {
   ]);
 }
 
-// src/client/kpis.ts
+// src/sections/kpis.ts
 var DAILY_SPECS = [
   { copy: "protestersDaily", data: "turnout", unit: "count" },
   { copy: "arrestsDaily", data: "arrests", unit: "count" },
@@ -17321,7 +17321,7 @@ function mountKpis() {
   }
 }
 
-// src/client/lang.ts
+// src/core/lang.ts
 function applyUrlLang(search) {
   const from2 = localeFromUrl(search);
   if (from2 && from2 !== getLocale())
@@ -17368,7 +17368,7 @@ function mountLangSwitch(host = document.querySelector(
   };
 }
 
-// src/client/about.ts
+// src/sections/about/about.ts
 var OPEN_ID = "";
 var FEATURED_ID = "analysis";
 var SECTION_LABEL = {
@@ -17884,7 +17884,7 @@ function renderAbout(host = document.getElementById("about")) {
   host.replaceChildren(frag);
 }
 
-// src/client/page.ts
+// src/sections/chrome.ts
 var $ = (id) => document.getElementById(id);
 function tag(name, className, text) {
   const el2 = document.createElement(name);
@@ -17926,7 +17926,7 @@ function renderChrome() {
   note("note-e", m.sections.e.note ?? "");
 }
 
-// src/client/percapita.ts
+// src/sections/percapita/percapita.ts
 Chart.register(
   LineController,
   LineElement,
@@ -18506,7 +18506,7 @@ function mountPerCapita() {
   }
 }
 
-// src/client/sources.ts
+// src/data/sources/sources.ts
 var BOX_TITLE = { en: "Sources and method", fr: "Sources et m\xE9thode" };
 var INTRO = {
   en: "Compiled by an LLM from the reports below; no figure here is a primary measurement made for this page. Where a movement has an official count, the interior ministry is the source of the arrest and officer-injury numbers and the unions publish the competing turnout figure. Counts that only ever existed as scattered daily press reports were summed by hand, which is where most of the error will be.",
@@ -20751,7 +20751,7 @@ function renderSources(host = document.getElementById("sources")) {
   host.replaceChildren(...kept, box);
 }
 
-// src/client/theme.ts
+// src/core/theme.ts
 var KEY = "fpc-theme";
 var QUERY = "(prefers-color-scheme: dark)";
 var TOGGLE = "[data-theme-toggle]";
@@ -20823,7 +20823,7 @@ function initTheme() {
   };
 }
 
-// src/client/main.ts
+// src/entry/main.ts
 function trellisHosts() {
   const episodeHost = byId("trellis-episodes");
   const itemHost = byId("trellis-items");
@@ -20935,4 +20935,3 @@ chart.js/dist/helpers.js:
    * Released under the MIT License
    *)
 */
-//# sourceMappingURL=bundle.js.map

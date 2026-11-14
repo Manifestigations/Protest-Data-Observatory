@@ -6,8 +6,9 @@
     "node": ">=22.18"
   },
   "scripts": {
-    "build": "esbuild src/client/main.ts --bundle --format=esm --target=es2022 --outfile=docs/bundle.js --sourcemap",
-    "start": "npm run build && node server.ts",
+    "build": "npm run build:css && npm run build:js -- --watch",
+    "build:js": "esbuild src/entry/main.ts --bundle --format=esm --target=es2022 --outfile=docs/bundle.js",
+    "build:css": "esbuild src/styles/index.css --bundle --outfile=docs/styles.css",
     "dev:client": "npm run build -- --watch",
     "dev:server": "node --watch server.ts",
     "typecheck": "tsc --noEmit"

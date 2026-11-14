@@ -25,10 +25,16 @@
  */
 
 import type { Plugin } from "chart.js";
-import { dataTable } from "./a11y.ts";
-import { DATES, END, HOLIDAY_END, HOLIDAY_START, START } from "./data.ts";
-import { byId, el } from "./dom.ts";
-import { fmtDate, getLocale } from "./i18n.ts";
+import { dataTable } from "../../core/a11y.ts";
+import {
+  DATES,
+  END,
+  HOLIDAY_END,
+  HOLIDAY_START,
+  START,
+} from "../../data/data.ts";
+import { byId, el } from "../../core/dom.ts";
+import { fmtDate, getLocale } from "../../copy/i18n.ts";
 
 /* ----- copy */
 
