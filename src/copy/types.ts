@@ -53,6 +53,7 @@ export interface ChartCopy {
   readonly weekOfPartial: string;
   /** Template for € millions: EN "€{v}M", FR "{v} M€". */
   readonly eurM: string;
+  /** Derived from `markers.ts`; never author this by hand. */
   readonly suffix: Readonly<Record<string, string>>;
   readonly suffixWrap: string;
   readonly dayNotes: Readonly<Record<string, string>>;

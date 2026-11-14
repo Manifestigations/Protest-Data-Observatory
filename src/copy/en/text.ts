@@ -1,3 +1,5 @@
+import { flagMap } from "../markers";
+
 export const TEXT_EN = {
   panels: {
     partialWeek: "Week of {label} (partial)",
@@ -147,16 +149,7 @@ export const TEXT_EN = {
     i: { label: "Injured — protesters", short: "Protesters injured" },
   },
   units: { weeks: "week" },
-  flags: {
-    n: "",
-    r: "regional",
-    p: "partial",
-    e: "modelled",
-    f: "floor",
-    c: "stock",
-    w: "weekly",
-    x: "wider measure",
-  }, // en
+  flags: flagMap("en"),
   tooltip: {
     linePlain: "{value}",
     lineWithFlag: "{value} · {flag}",

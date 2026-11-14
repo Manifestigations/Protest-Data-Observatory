@@ -1,3 +1,4 @@
+import { suffixMap } from "../markers";
 import type { ChartCopy } from "../types";
 
 export const CHART_EN: ChartCopy = {
@@ -7,17 +8,7 @@ export const CHART_EN: ChartCopy = {
   weekOf: "Week of {date}",
   weekOfPartial: "Week of {date} (partial)",
   eurM: "€{v}M",
-  suffix: {
-    c: "stock",
-    w: "",
-    e: "modelled",
-    f: "lower bound",
-    r: "regional",
-    p: "partial",
-    x: "wider measure",
-    n: "",
-    regional: "regional",
-  },
+  suffix: suffixMap("en"),
   suffixWrap: " · {text}",
   dayNotes: {
     "2026-09-25":

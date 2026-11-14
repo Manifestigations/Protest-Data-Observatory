@@ -24,8 +24,8 @@ import { mountKpis } from "../sections/kpis.ts";
 import { applyUrlLang, mountLangSwitch } from "../core/lang.ts";
 import { renderChrome } from "../sections/chrome.ts";
 import { mountPerCapita } from "../sections/percapita/percapita.ts";
-import { renderSources } from "../data/sources/sources.ts";
 import { initTheme } from "../core/theme.ts";
+import { renderSources } from "../sections/sources/index.ts";
 
 function trellisHosts(): TrellisHosts | null {
   const episodeHost = byId("trellis-episodes");
