@@ -13,12 +13,13 @@ import {
 } from "../charts/trellis/engine.ts";
 import { legend } from "../charts/trellis/legend.ts";
 import { DIM, SERIES } from "../charts/trellis/palette.ts";
-import { compact, fill, t } from "../copy";
+import { compact, fill, nf, t } from "../copy";
 import { alpha, THEME, track } from "../core/canvas-registry.ts";
 import { EPISODES } from "../data/episodes/index.ts";
 import type { Episode, Metric } from "../model/index.ts";
 import { wrapTooltipLines } from "../charts/tooltip.ts";
 import { columns, panelFigure } from "../charts/trellis/panel.ts";
+import { clipToArea } from "../charts/plugins/clip.ts";
 
 /* ----- types */
 
@@ -60,17 +61,6 @@ const RANGE_COLOR = "#64748b";
 
 const summaryPanels: Chart<"line">[] = [];
 let activeStat: Stat | null = null;
-
-/** clip.ts does not exist yet (charts/ is still chart.ts + tooltip.ts), so the
- *  clip helper lives here. Move it to charts/plugins/clip.ts with Move D. */
-function clipToArea(
-  ctx: CanvasRenderingContext2D,
-  area: { left: number; top: number; width: number; height: number },
-): void {
-  ctx.beginPath();
-  ctx.rect(area.left, area.top, area.width, area.height);
-  ctx.clip();
-}
 
 /* ----- cells */
 

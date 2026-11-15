@@ -1,3013 +1,3 @@
-// src/copy/en/meta.ts
-var EN_META = {
-  tag: "en-GB",
-  label: "English",
-  meta: {
-    htmlLang: "en",
-    title: "Protest activity in France \u2014 September\u2013November 2026",
-    description: "Turnout, arrests, injuries and damage in the autumn 2026 movement, set against six earlier French movements."
-  },
-  sections: {
-    a: {
-      title: "A \xB7 Daily counts, 15 September \u2013 11 November 2026",
-      blurb: "One marker per day on which something was published. Days with no figure stay empty rather than interpolated; gaps in a line are dashed. The school-blockade line is dotted across the Toussaint holiday, when no lyc\xE9e was in session. The strike series is derived from participation rates: no authority published a national headcount of strikers."
-    },
-    b: {
-      title: "B \xB7 Weekly aggregates",
-      blurb: "Weeks run Monday to Sunday. A peak-day crowd and a summed weekly arrest count are not the same statistic \u2014 the tooltip says which is which. The weekly blockade figure is a peak, never a sum: the same lyc\xE9e is blocked on several consecutive days. People on strike is a level, so the weekly figure is the peak of the week, never a sum."
-    },
-    c: {
-      title: "C \xB7 One panel per movement",
-      blurb: "Each panel keeps its own time span on a shared logarithmic axis, so the shapes are comparable but the durations are not. The tooltip also compares every point with its own series \u2014 as a percentage of the highest figure in that panel, of the mean, of the median and of the first published figure. The last of these can run to thousands of percent when a movement began with a handful of people, which is exactly why the other three are given first.",
-      note: "Hollow markers are regional, Paris-only, modelled or stock figures. Dashed connectors span a week with nothing published."
-    },
-    d: {
-      title: "D \xB7 Transposed: one panel per series",
-      blurb: "The same data with movements overlaid, so a single measure can be read across 1968 to 2026. The x axis is elapsed weeks, capped at the last week with enforcement figures. Tooltip comparisons work as in section C, but are computed over the weeks actually plotted in the hovered panel.",
-      note: "Hover a measure or a movement to isolate it. Panel order matches legend order."
-    },
-    e: {
-      title: "E \xB7 Median and peak",
-      blurb: "Each panel gathers one measure across the movements that published it. The dot is the median of the series \u2014 the typical week \u2014 and the triangle its peak, the largest single figure. The pale bar behind each pair spans the whole series, from its smallest figure to its largest, so a movement that was steady reads as a short bar and one that had a few enormous weeks as a long one. The axis is logarithmic, so a handful of mass marches and a routine week can share a panel.",
-      note: "Each figure is counted once, at the midpoint of its range where one was published. The count of published figures is in the tooltip: with a single figure the median and the peak are the same number."
-    }
-  },
-  groups: {
-    ongoing: {
-      title: "The Ongoing Revolt",
-      blurb: "Both sections cover the autumn 2026 movement. A plots every published daily figure; B aggregates those same figures by week, so a peak-day crowd and a summed arrest count never share an axis."
-    },
-    historical: {
-      title: "Historical Comparisons",
-      blurb: "The same measures set against six earlier French movements: 1968, 1986, 1995, 2006, 2010 and 2016. C keeps one panel per movement; D keeps one panel per series."
-    }
-  }
-};
-
-// src/copy/markers.ts
-var FLAGS = [
-  {
-    key: "n",
-    chip: { en: "", fr: "" },
-    suffix: null,
-    long: null
-  },
-  {
-    key: "r",
-    chip: { en: "regional", fr: "r\xE9gional" },
-    suffix: { en: "regional", fr: "r\xE9gional" },
-    long: {
-      en: "regional only \u2014 one d\xE9partement or one city, never extrapolated",
-      fr: "r\xE9gional seulement \u2014 un d\xE9partement ou une ville, jamais extrapol\xE9"
-    }
-  },
-  {
-    key: "p",
-    chip: { en: "partial", fr: "partiel" },
-    suffix: { en: "partial", fr: "partiel" },
-    long: {
-      en: "partial \u2014 a floor, or two publishers disagreeing; both bounds shown",
-      fr: "partiel \u2014 un plancher, ou deux \xE9diteurs en d\xE9saccord ; les deux bornes affich\xE9es"
-    }
-  },
-  {
-    key: "f",
-    chip: { en: "floor", fr: "plancher" },
-    suffix: { en: "lower bound", fr: "borne inf\xE9rieure" },
-    long: {
-      en: "lower bound \u2014 the true figure is at least this",
-      fr: "borne inf\xE9rieure \u2014 le chiffre r\xE9el est au moins celui-ci"
-    }
-  },
-  {
-    key: "e",
-    chip: { en: "modelled", fr: "mod\xE9lis\xE9" },
-    suffix: { en: "modelled", fr: "mod\xE9lis\xE9" },
-    long: {
-      en: "derived \u2014 modelled here, not published as such",
-      fr: "d\xE9riv\xE9 \u2014 mod\xE9lis\xE9 ici, non publi\xE9 tel quel"
-    }
-  },
-  {
-    key: "c",
-    chip: { en: "stock", fr: "stock" },
-    suffix: { en: "stock", fr: "stock" },
-    long: {
-      en: "stock or actions-total \u2014 a different basis; never sum it with the rest",
-      fr: "stock ou total d\u2019actions \u2014 autre base de mesure ; ne jamais l\u2019additionner au reste"
-    }
-  },
-  {
-    key: "w",
-    chip: { en: "weekly", fr: "hebdomadaire" },
-    suffix: null,
-    // the axis already says "Week"/"Semaine"
-    long: {
-      en: "weekly aggregate \u2014 a week, not a day",
-      fr: "agr\xE9gat hebdomadaire \u2014 une semaine, pas un jour"
-    }
-  },
-  {
-    key: "x",
-    chip: { en: "wider measure", fr: "mesure plus large" },
-    suffix: { en: "wider measure", fr: "mesure plus large" },
-    long: {
-      en: "wider measure \u2014 establishments perturbed, with classes suspended, or closed, rather than schools fully blocked",
-      fr: "mesure plus large \u2014 \xE9tablissements perturb\xE9s, cours suspendus ou ferm\xE9s, plut\xF4t que des lyc\xE9es enti\xE8rement bloqu\xE9s"
-    }
-  }
-];
-function suffixMap(lang) {
-  const out = {};
-  for (const f of FLAGS) out[f.key] = f.suffix ? f.suffix[lang] : "";
-  return out;
-}
-function flagMap(lang) {
-  const out = {};
-  for (const f of FLAGS) out[f.key] = f.chip[lang];
-  return out;
-}
-var MARKERS = FLAGS.filter((f) => f.long !== null).map(
-  (f) => ({
-    key: f.key,
-    text: f.long
-  })
-);
-
-// src/copy/en/chart.ts
-var CHART_EN = {
-  axisDate: "Date",
-  axisWeek: "Week",
-  edgeMark: "\u2020",
-  weekOf: "Week of {date}",
-  weekOfPartial: "Week of {date} (partial)",
-  eurM: "\u20AC{v}M",
-  suffix: suffixMap("en"),
-  suffixWrap: " \xB7 {text}",
-  dayNotes: {
-    "2026-09-25": "Paris-area figure only: 21 interpellations by midday, announced by the Pr\xE9fecture de Police.",
-    "2026-09-28": "The movement goes national \u2014 actions in Marseille, Lille, the Rh\xF4ne, the Var and the Alpes-Maritimes.",
-    "2026-09-29": "Act I. The crowd figure counts the public-service cort\xE8ge the school actions joined, not a student crowd. The strike series starts here: 250,000 state civil servants, derived from the government's 10% rate.",
-    "2026-09-30": "The second day of Act I: 625 interpellations and 83 security forces injured. The Education ministry counted 356 establishments concerned; no count of fully blocked schools was published that day.",
-    "2026-10-01": "Act II, the peak of the first week. Arrests and injuries published with no turnout figure for the day.",
-    "2026-10-02": "735 establishments still perturbed, and urban violence near 158 of them.",
-    "2026-10-03": "No weekend figure was published; the arrests for 3\u20134 October are derived by subtraction. 735 establishments perturbed \u2014 a wider measure than blockades, so the point is flagged as such.",
-    "2026-10-05": "The first national school day after the break, with the ministry's stock figures.",
-    "2026-10-06": "Act III \u2014 the first full national student demonstration of the movement.",
-    "2026-10-07": "The Interior Ministry suspended the use of stun grenades for the student mobilisations, after a lyc\xE9e student was injured at Lens.",
-    "2026-10-09": "Justice Ministry publishes its first judicial balance: 6,877 in garde \xE0 vue since mid-September.",
-    "2026-10-10": "CNEWS compiles a national damage bill of \u20AC30M \u2014 with no ministry tally behind it.",
-    "2026-10-13": "Turnout band spans a factor of three: ministry floor, organiser ceiling.",
-    "2026-10-16": "Last day of classes before the Toussaint holiday: from 17 October no lyc\xE9e is in session, so the blockade count stops.",
-    "2026-10-17": "The peak day. The damage band here is the 17\u201318 October IFRAP estimate, not a daily flow. Toussaint holiday \u2014 schools closed.",
-    "2026-10-19": "Toussaint holiday \u2014 students supported the lyc\xE9e movement from outside the schools.",
-    "2026-10-24": "Arrest figures include preventive stops; not all become custody placements. Toussaint holiday \u2014 the mobilisation was an inter-union day, not a school day.",
-    "2026-10-31": "No protester-injury figure was published for this day. Toussaint holiday \u2014 inter-union mobilisation.",
-    "2026-11-01": "Last day of the Toussaint holiday.",
-    "2026-11-04": "In the Rh\xF4ne, seven establishments ran in remote mode; no lyc\xE9e was reported blocked.",
-    "2026-11-05": "Turnout band runs from 575 000 to 1.6 million \u2014 the band is the disagreement, not an error bar. The strike point is derived from the government's rates: 9.89\u201311% of state civil servants.",
-    "2026-11-06": "In the Rh\xF4ne, 16 lyc\xE9es and two colleges saw incidents, and a lyc\xE9e in Lyon's 8th arrondissement was blocked when it was cleared.",
-    "2026-11-09": "In the Rh\xF4ne, no lyc\xE9e was blocked: 14 ran in remote mode and 11 were reported as affected. A zero cannot be plotted on a logarithmic axis, so it is recorded here rather than as a point.",
-    "2026-11-10": "In the Rh\xF4ne, about ten establishments were affected."
-  },
-  obsNotes: {
-    "2026-09-15": {
-      blockades: "The lyc\xE9e Victor-Hugo in Caen \u2014 the first mainland blockade. Villeneuve-d'Ascq was blocked on 14 September and Le Rheu on 7 September, both before the window opens."
-    },
-    "2026-09-19": {
-      blockades: "Lyc\xE9e Saint-Exup\xE9ry in Cr\xE9teil: students backed the teachers' strike with the school's first blockade \u2014 the origin of the national movement."
-    },
-    "2026-09-23": {
-      blockades: "\xCEle-de-France only: the Cr\xE9teil rectorate counted the blockades spreading to about ten lyc\xE9es."
-    },
-    "2026-09-25": {
-      arrests: "Paris area only \u2014 Pr\xE9fecture de Police figure, by midday."
-    },
-    "2026-09-28": {
-      protesterInjured: "One documented case: a 14-year-old hit by a police projectile. A floor, not a count.",
-      blockades: "Interior Ministry: 27 complete blockades, out of 180 establishments perturbed."
-    },
-    "2026-09-29": {
-      turnout: "Counts the public-service cort\xE8ge the school actions joined (206 000 ministry / 300 000 CGT), not a student crowd.",
-      strikers: "Derived, not counted. 10% of the 2,500,000 state civil servants on strike (government figure), giving 250,000. Education is the largest component, not an addend: 11.47% of education staff (ministry weighted average \u2014 12.74% second degree, 27.39% life-school staff; 13.71% of teachers) is 114,700 of the same civil service and is already inside the 250,000. Union claims (>40% of first-degree staff, >40% in Lyon and Cr\xE9teil) are regional and are not used as a national ceiling.",
-      protesterInjured: "Students and education staff injured that day, counted by the Education ministry.",
-      blockades: "Education ministry at the time of its balance: 45 schools blocked out of 338 concerned. Le Monde counted actions at nearly 410 establishments."
-    },
-    "2026-09-30": {
-      protesterInjured: "Cumulative since the first blockades \u2014 a stock, not a daily count.",
-      forcesInjuredStock: "The running total of injured security forces: 83 on 30 September, the first injury figures of the movement."
-    },
-    "2026-10-01": {
-      forcesInjured: "The day's own figure: 'some 300' injured in intervention on Thursday (Nu\xF1ez), 305 in Actu Forces' Beauvau tally. The running total that day was 383\u2013388.",
-      protesterInjured: "Cumulative level reached at the 1 October cut-off (170 students + 65 education staff) \u2014 a stock, not a daily count. Where a week ends on this cell, the level is the week\u2019s figure, never the sum of the week\u2019s flows.",
-      damagesCost: "Part of the 1\u20138 October \xCEle-de-France increment; the anchor of that run is 8 October.",
-      blockades: "Low end: 222 schools blocked (Le Monde live, out of 1,027 establishments concerned). High end: the Union \xE9tudiante's 640. The police counted 169 blockades in the morning, and 900 actions with 400 closures by the end of the day."
-    },
-    "2026-10-02": {
-      blockades: "'More than 400 schools blocked' (Le Monde live). The Interior Ministry's own tally for 2 October: 1,027 lyc\xE9es concerned, more than 560 perturbed, 400 closed."
-    },
-    "2026-10-03": {
-      arrests: "Derived by subtraction: the ministry's 6 059 since 28 September (published 5 October) less the published daily figures. Covers 3 and 4 October together.",
-      blockades: "Wider measure: the Education ministry counted 735 establishments perturbed, not schools fully blocked. The highest blocked count that week was 400+ on 2 October."
-    },
-    "2026-10-05": {
-      arrests: "984 interpellations that day. The ministry's 6 059 since 28 September is the stock that makes the weekend figure checkable.",
-      blockades: "Wider measure: 400 to 500 establishments closed (government spokeswoman), more than 400 to stay closed. The ministry's morning count was 413 establishments perturbed.",
-      forcesInjuredStock: "Running total since the start of the movement: 715 injured police and gendarmes (Matignon)."
-    },
-    "2026-10-06": {
-      damagesCost: "Part of the 1\u20138 October \xCEle-de-France increment; the anchor of that run is 8 October.",
-      blockades: "Wider measure: 891 of the 3,700 schools had their classes suspended, totally or partially, at midday (ministry). The USL counted 1,800 schools '\xE0 l'arr\xEAt' \u2014 a union figure that also includes administratively closed schools."
-    },
-    "2026-10-08": {
-      damagesCost: "Anchor of the 1\u20138 October \xCEle-de-France damage increment. The same \u20AC6M is published for 6 October and is not counted twice.",
-      strikers: "Derived, not counted. The Education ministry published a weighted participation rate of 0.82% for education staff; no function-wide rate was published that day, so the education rate stands in for the civil service on the same 2,500,000-agent base: 20,500. The proxy is known to run low \u2014 where both were published, education was 11.47% against about 10% for the civil service (29 Sept) and 12.77% against 10.46% (5 Nov).",
-      blockades: "Wider measure: 224 establishments closed (ministry); more than 150 still perturbed (franceinfo). The 224 figure is the benchmark the ministry quotes back on 13 October.",
-      forcesInjuredStock: "Running total: 761 injured (Nu\xF1ez). The published increments reconcile with it \u2014 715 on 5 October plus 43 on 6 October is 758."
-    },
-    "2026-10-09": {
-      arrests: "Justice Ministry judicial balance, cut off 8 Oct 17:00: 6,877 people placed in garde \xE0 vue since the start of the movement, 86% minors, 2,376 being prosecuted, 21 in detention. A different scope (since mid-September) and a different statistic (custodial placements, not interpellations) from the Interior Ministry's series \u2014 not reconcilable with it."
-    },
-    "2026-10-10": {
-      damagesCost: "National cumulative stock since mid-September, compiled by CNEWS from regional figures \u2014 no ministry published a national tally. Pannekoucke's parallel \u20AC25\u201330M estimate for Auvergne-Rh\xF4ne-Alpes is NOT included, so this is neither a floor nor additive with the regional figures.",
-      blockades: "'More than 40 schools blocked' (AFP/Reuters, 10 October)."
-    },
-    "2026-10-12": {
-      arrests: "13 interpellations reported independently by the Rh\xF4ne prefecture (27 \xE9tablissements touched) and the Bas-Rhin prefecture in Strasbourg. Two prefectures, the same number \u2014 so 13 is a floor for the day, not the day's regional total. Not Paris.",
-      protesterInjured: "\xCEle-de-France only: a proviseur, a parent d'\xE9l\xE8ve and a R\xE9gion employee injured. Counted as education and local-authority staff, on the same basis as the 29 September ministry figure.",
-      damagesCost: `Normandy \u2014 Herv\xE9 Morin, Conseil r\xE9gional de Normandie, at the regional assembly, 12 Oct: "1,5 million en Normandie" out of "d'ores et d\xE9j\xE0 30 millions d'euros" nationally. A cumulative regional stock, not a daily flow, and a component of the national stock \u2014 never added to it. \xCEle-de-France's own revised total the same day was \u20AC8.5M.`,
-      blockades: "Rh\xF4ne prefecture only: 19 of the 27 establishments affected were lyc\xE9es (six universities, two colleges). \xCEle-de-France counted nearly 80 lyc\xE9es perturbed the same day."
-    },
-    "2026-10-13": {
-      blockades: "Wider measure: 214 establishments closed, 94.2% of lyc\xE9es open \u2014 against 224 on 8 October. The ministry called the movement 'en recul'.",
-      strikers: "Derived, not counted. 3.71% weighted education participation (ministry), used as a proxy for the civil service on the 2,500,000-agent base: 92,750. Education's own rates that day: 4.52% of teachers, 10.31% of life-schools staff. The ministry's figure excludes Toulouse, La R\xE9union (school holidays since 10 October), Guadeloupe, Martinique and Guyana (time difference)."
-    },
-    "2026-10-14": {
-      forcesInjuredStock: "Running total: 937 injured (Nu\xF1ez)."
-    },
-    "2026-10-17": {
-      forcesInjured: "Derived: the ministry's running total rose from 937 (14 October) to 1,144 (17 October), so this is the three-day increment, not a single day.",
-      forcesInjuredStock: "The peak of the running total: 997 injured in the first bilan, 1,144 on consolidation, 7 of them serious. This is the total since the movement began, not that day's toll.",
-      protesterInjured: "Derived band: the floor is the serious-injury register, the ceiling is extrapolated from street-medics treatment counts. No official count exists.",
-      damagesCost: "IFRAP modelled estimate for the 17\u201318 October weekend; excludes lost turnover and order-maintenance costs. The Paris-only estimate published for 18 October is a subset of it and is excluded from the weekly sum."
-    },
-    "2026-10-18": {
-      arrests: "Prefecture of police of Paris figure only \u2014 curfew day.",
-      damagesCost: "Paris-only subset of the 17\u201318 October IFRAP total \u2014 never added to it."
-    },
-    "2026-10-20": {
-      arrests: "Guadeloupe prefecture figures only \u2014 regional."
-    },
-    "2026-10-24": {
-      damagesCost: "CCI France's national tally for 17\u201324 October \u2014 a superset of the 17 October cell, never added to it.",
-      forcesInjuredStock: "Derived: 1,144 (17 October) plus 267 injured that day gives 1,411."
-    },
-    "2026-10-31": {
-      damagesCost: "Local estimate \u2014 no national damage figure was published.",
-      forcesInjuredStock: "Derived: 1,411 plus 116\u2013159 injured that day gives 1,527\u20131,570. An internal CRS file obtained by Mediapart counts 1,233 CRS agents declared injured in October, of whom 1,167 were classified as light injuries \u2014 94.6%."
-    },
-    "2026-11-02": {
-      blockades: "Education ministry at 9.30: 41 lyc\xE9es blocked, about 1% of the country's 3,700, with no perturbation in three quarters of the departments."
-    },
-    "2026-11-03": {
-      blockades: "Education ministry: 48 schools blocked. The USL counted nearly 500."
-    },
-    "2026-11-05": {
-      strikers: "Derived, not counted. The government put 9.89% of state civil servants on strike at midday and 11% by the end of the day, on 2,500,000 agents: 247,250 to 275,000 \u2014 the band is the timing of the count, not an error bar. The Education ministry's own weighted rate was 12.77% (19.14% in the first degree, 25.65% for life-schools staff): a component of that total, never an addition to it.",
-      forcesInjured: "The day's own figure: 53 at 18:00, 112 on consolidation.",
-      forcesInjuredStock: "The ministry's final running total: 1,580 injured since the start of the movement. It reconciles exactly with the published daily increments \u2014 1,144 (17 October) + 267 (24 October) + 116 (31 October) + 53 (5 November) = 1,580.",
-      protesterInjured: 'Published as a floor: "at least this many".',
-      blockades: "Matignon at 10.00: 81 establishments blocked (2.2%). The USL counted 1,000 schools '\xE0 l'arr\xEAt' \u2014 blocked or administratively closed, so an upper bound. The Education ministry counted 33% of establishments perturbed."
-    },
-    "2026-11-09": {
-      arrests: "Regional prefecture figures only \u2014 Bordeaux, Lyon, Strasbourg."
-    },
-    "2026-11-10": {
-      strikers: "Derived, not counted. 1.55% weighted education participation (ministry), used as a proxy for the civil service on the 2,500,000-agent base: 38,750. Education's own rates: 1.60% of teachers, 7.01% of life-schools staff. The ministry's figure covers the metropolitan academies only."
-    }
-  },
-  deployNotes: {
-    "2026-09-28": "deployment estimated",
-    "2026-09-29": "deployment estimated",
-    "2026-09-30": "deployment estimated",
-    "2026-10-01": "deployment estimated",
-    "2026-10-02": "deployment estimated",
-    "2026-10-05": "deployment estimated",
-    "2026-10-06": "deployment estimated",
-    "2026-10-08": "deployment estimated",
-    "2026-10-12": "estim\xE9 \u2014 \xCEle-de-France, Lyon et Strasbourg",
-    "2026-10-13": "deployment estimated",
-    "2026-10-17": "deployment published",
-    "2026-10-18": "estimated \u2014 Paris curfew",
-    "2026-10-24": "deployment published",
-    "2026-10-31": "deployment published",
-    "2026-11-05": "deployment published",
-    "2026-11-07": "deployment published"
-  },
-  policingDay: "{head} officers \xD7 {low}\u2013{high} per officer-day \xB7 {note}",
-  policingDayPlain: "{head} officers \xD7 {low}\u2013{high} per officer-day",
-  cumulativeAdded: "deployment counted this day \u2014 {days} so far",
-  cumulativeCarried: "no deployment published \u2014 cumulative carried forward",
-  weekNational: "{n} day{s} counted",
-  weekRegionalOnly: "{n} day{s}, regional only",
-  weekPeak: "peak {date}",
-  weekNoNational: "no national figure this week",
-  weekExcluded: "{n} point{s} excluded (regional or subset)",
-  weekFloored: "includes a floor \u2014 not a sum",
-  weekClipped: "week clipped by the window",
-  weekJoin: " \xB7 ",
-  tooltipRange: "{label}: {mid} (band {low}\u2013{high})",
-  tooltipPoint: "{label}: {value}",
-  tooltipNote: "{base}\n{note}",
-  footerMark: "\u24D8 {note}",
-  weekVacation: "partly inside the Toussaint holiday (17 Oct \u2013 1 Nov)",
-  holidayLine: "Dotted line: the Toussaint holiday, 17 October \u2013 1 November 2026. No lyc\xE9e was in session, so no school could be blocked \u2014 the count did not exist, it was not zero.",
-  metricNote: "Schools blocked or closed: establishments where pupils could not attend normally. The band runs from the official count to the union count, and the union's figure also includes administratively closed schools.",
-  blockerNote: "A wider measure than blockades \u2014 establishments perturbed, with classes suspended, or closed \u2014 used where it is the only figure published that day.",
-  series: {
-    protestersDaily: {
-      label: "Protesters",
-      detached: "Protesters (detached figure)"
-    },
-    strikersDaily: {
-      label: "People on strike",
-      detached: "People on strike (modelled)"
-    },
-    blockadesDaily: {
-      label: "Schools blocked",
-      detached: "Schools blocked (regional count)"
-    },
-    arrestsDaily: { label: "Arrests", detached: "Arrests (detached figure)" },
-    forcesDaily: {
-      label: "Injured \u2014 security forces",
-      detached: "Injured forces (detached figure)"
-    },
-    forcesInjuredStock: {
-      label: "Injured forces (running total)",
-      detached: "Injured forces, running total (stock)"
-    },
-    protestersInjuredDaily: {
-      label: "Injured \u2014 protesters",
-      detached: "Injured protesters (detached figure)"
-    },
-    damagesDaily: {
-      label: "Material damage",
-      detached: "Damage (stock or modelled figure)"
-    },
-    policingDaily: {
-      label: "Policing cost, per day",
-      detached: "Policing cost, per day (modelled)"
-    },
-    policingCumulative: {
-      label: "Policing cost, cumulative",
-      detached: "Policing cost, cumulative (modelled)"
-    },
-    protestersWeekly: {
-      label: "Protesters (weekly peak)",
-      detached: "Protesters (regional week)"
-    },
-    strikersWeekly: {
-      label: "People on strike (weekly peak)",
-      detached: "People on strike (modelled)"
-    },
-    blockadesWeekly: {
-      label: "Schools blocked (weekly peak)",
-      detached: "Schools blocked (regional week)"
-    },
-    arrestsWeekly: {
-      label: "Arrests (weekly total)",
-      detached: "Arrests (regional week)"
-    },
-    forcesWeekly: {
-      label: "Forces injured (weekly total)",
-      detached: "Forces injured (regional week)"
-    },
-    protestersInjuredWeekly: {
-      label: "Protesters injured (weekly total)",
-      detached: "Protesters injured (regional week)"
-    }
-  },
-  charts: {
-    protestersDaily: {
-      title: "Protesters, people on strike and blocked schools, daily",
-      subtitle: "Crowd counts and people on strike on the left axis, school blockades on the right. People on strike is derived from published participation rates \u2014 no authority published a headcount. The dotted line is the Toussaint holiday. Three of the five strike points are derived.",
-      y: "People in the street or on strike",
-      yRight: "Schools blocked or closed"
-    },
-    enforcementDaily: {
-      title: "Arrests and injuries, daily",
-      subtitle: "Arrests are not custody placements; injuries are counted per side",
-      y: "People"
-    },
-    cost: {
-      title: "Damage and the cost of policing",
-      subtitle: "",
-      y: "\u20AC millions"
-    },
-    protestersWeekly: {
-      title: "Protesters, people on strike and blocked schools, weekly peak",
-      subtitle: "Peak day of each week, not a weekly sum \u2014 the same lyc\xE9e is blocked on several consecutive days, and a person on strike for three days is still one person",
-      y: "People (peak day)",
-      yRight: "Schools blocked or closed (peak)"
-    },
-    enforcementWeekly: {
-      title: "Enforcement, weekly totals",
-      subtitle: "Weekly sums; a stock or a floor is not additive",
-      y: "People (weekly total)"
-    }
-  }
-};
-
-// src/copy/en/episodes.ts
-var EPISODES_EN = {
-  may68: {
-    short: "May 68",
-    strip: "May 68",
-    banner: "General strike and factory occupations. Union and ministry crowd counts differ by a factor of ten, so both are plotted.",
-    weeks: [
-      { action: "1 May marches" },
-      {
-        action: "Night of the barricades, 10\u201311 May",
-        note: { i: "Injury figure published as a floor." }
-      },
-      { action: "General strike from 13 May" },
-      {
-        action: "24 May: de Gaulle\u2019s broadcast",
-        note: { a: "Arrest count published as a floor." }
-      },
-      { action: "Grenelle agreements, 27 May" },
-      { action: "Legislative campaign" },
-      void 0,
-      void 0,
-      void 0
-    ]
-  },
-  cpe: {
-    short: "CPE 2006",
-    strip: "CPE 2006",
-    banner: "First-employment contract: student and school movement, with two inter-union days. Enforcement figures exist for four weeks only.",
-    weeks: [
-      { action: "7 February: first national day" },
-      void 0,
-      void 0,
-      void 0,
-      { action: "Blockaded universities" },
-      { action: "14 March: national day" },
-      { action: "21 March: student day" },
-      { action: "28 March: national day" },
-      { action: "4 April: national day" },
-      { action: "Withdrawal announced" }
-    ]
-  },
-  gj: {
-    short: "Gilets jaunes",
-    strip: "Gilets jaunes",
-    banner: "Counted act by act, on Saturdays only. Enforcement figures were published for the first four acts and never as a series afterwards.",
-    weeks: []
-    // the act number in the tooltip title carries the chronology
-  },
-  nahel: {
-    short: "June 2023",
-    strip: "June 2023",
-    banner: "Five nights of rioting after the 27 June killing. Arrests and injuries are high relative to turnout because this was not a demonstration.",
-    weeks: [{ action: "27 June: riots begin" }, { action: "Return to calm" }]
-  },
-  pensions: {
-    short: "Pensions 2023",
-    strip: "Pensions 2023",
-    banner: "Movement against the rise in the statutory retirement age. Two anchor days carry most of the series; the inter-union band is wide.",
-    weeks: [
-      { action: "19 January: first national day" },
-      void 0,
-      { action: "31 January" },
-      { action: "7 February" },
-      { action: "16 February" },
-      void 0,
-      void 0,
-      { action: "7 March: schools and transport shut" },
-      { action: "11 March" },
-      { action: "15 March" },
-      { action: "23 March" },
-      { action: "28 March" },
-      { action: "6 April" },
-      void 0,
-      void 0,
-      void 0,
-      { action: "1 May" },
-      void 0,
-      void 0,
-      void 0,
-      { action: "6 June" }
-    ]
-  },
-  bt: {
-    short: "Bloquons tout",
-    strip: "Bloquons tout",
-    banner: "September 2025: blockades and marches, counted partially. Weeks without a published figure are left empty.",
-    weeks: [
-      { action: "10 September: blockades" },
-      { action: "18 September: national day" },
-      void 0,
-      { action: "1 October" }
-    ]
-  },
-  students26: {
-    short: "Autumn 2026",
-    strip: "Autumn 2026",
-    banner: "The movement this page was built for, traced from the first mainland high-school blockades on 15 September. Daily publication, so days with no figure stay empty rather than interpolated.",
-    weeks: [
-      { action: "15 September: the Caen and Villeneuve-d'Ascq blockades" },
-      { action: "25 September: Paris-area blockades" },
-      { action: "Act I on 29 September, Act II on 1 October" },
-      { action: "Act III on 6 October" },
-      { action: "17 October: the peak" },
-      { action: "24 October" },
-      { action: "31 October" },
-      { action: "5 and 7 November" },
-      { action: "9 November \u2014 window ends 11 November" }
-    ],
-    fallbackNote: {
-      p: "Weekly peak taken from the daily series \u2014 the peak day of the week.",
-      a: "Sum of the published daily figures for the week; a cumulative stock is shown as the stock, never added to it."
-    }
-  }
-};
-
-// src/copy/en/text.ts
-var TEXT_EN = {
-  panels: {
-    partialWeek: "Week of {label} (partial)",
-    act: "Act {n}",
-    withAction: "{when} \xB7 {action}",
-    seriesContinues: "{name} (cont.)",
-    obs: "observations {counts} over {weeks}",
-    valueRange: "{lo}\u2013{hi}",
-    itemMeta: "range {range} \xB7 up to week {n}",
-    median: "median",
-    peak: "peak",
-    range: "min\u2013max range",
-    figureCount: "{n} published figures",
-    singleFigure: "one published figure \u2014 the median and the peak are the same number",
-    summaryMeta: "median and peak \xB7 {n} movements"
-  },
-  kpi: {
-    heading: "Key figures",
-    largestDay: "Largest day",
-    largestWeek: "Largest week",
-    largestFigure: "Largest figure",
-    vsMean: "Highest vs mean",
-    vsMedian: "Highest vs median",
-    vsFirst: "Highest vs first figure",
-    againstMean: "{value} against a mean of {base}",
-    againstMedian: "{value} against a median of {base}",
-    againstFirst: "{value} against a first figure of {base}",
-    noteDaily: "Ratios are computed on the daily series: each published figure is divided by the mean, the median and the first published figure of its own series. Days with no published figure are left out, not counted as zero. The \u20AC1,000M damages total of 24 October carries no marker on the chart and is left out here too.",
-    noteWeekly: "Ratios are computed on the weekly series: each published figure is divided by the mean, the median and the first published figure of its own series. Weeks with no published figure are left out, not counted as zero.",
-    noteEpisodes: "Each movement is compared with its own series \u2014 its mean, its median and its first published figure \u2014 and the largest ratio across all seven movements is shown. A ratio of the first figure can run into the thousands when a movement began with a handful of people.",
-    noteEpisodesCapped: "As in section C, but over the weeks plotted in section D only, which stop at the last week with an enforcement figure.",
-    eurM: "\u20AC{v}M",
-    none: "no figure published"
-  },
-  casualties: {
-    headlineTitle: "How the injuries divide",
-    weeklyTitle: "What a week can establish",
-    colScope: "Population",
-    colTotal: "Declared total",
-    colSerious: "Serious",
-    colLight: "Light",
-    colLightShare: "Light share",
-    colOther: "Not classed light",
-    colSide: "Side",
-    colCircumstance: "Circumstance",
-    colCount: "Count",
-    colCases: "Documented cases",
-    colQuestion: "Question",
-    colWindow: "Smallest published window",
-    colWeekly: "Weekly figure",
-    scope: {
-      crsOctober: "CRS, October 2026",
-      forcesPeak: "All forces, running total at its peak",
-      protesters: "Protesters, since 30 September",
-      week12oct: "Week of 12 October",
-      week19oct: "Week of 19 October",
-      week26oct: "Week of 26 October",
-      week2nov: "Week of 2 November"
-    },
-    side: {
-      forces: "Police and gendarmerie",
-      protesters: "Protesters"
-    },
-    kind: {
-      accidental: "Accidental or self-inflicted",
-      conflictual: "Inflicted in the confrontation"
-    },
-    why: {
-      notPublished: "not published",
-      noDenominator: "no published total",
-      binaryFile: "file is light / not light only",
-      noTally: "no count, cases only",
-      noneDocumented: "none documented"
-    },
-    cases: {
-      givors: "Givors, 10 October: two officers on patrol outside a school burned on the hand and thigh when a grenade fired accidentally inside their own vehicle, setting it alight.",
-      crsWrist: "A CRS officer bruised his left wrist closing his own vehicle door.",
-      crsAnkle: "Another CRS officer sprained his ankle falling out of a van.",
-      helmet: "Paris, 31 October: a CRS officer struck on the helmet, found uninjured \u2014 a little paint removed from the shell.",
-      groin2023: "Sainte-Soline, March 2023, for comparison: of the 29 gendarmes counted, one had a groin haematoma, one respiratory trauma, the rest were examined for acoustic trauma.",
-      mael: "Tours, 30 September: a school student blinded in one eye by a rubber bullet, having thrown nothing.",
-      alaric: "Paris, 17 October: a 19-year-old student burned on the torso and arm by a tear-gas grenade fired flat at him; second-degree burns, unhealed ten days later.",
-      eyes: "Several other minors lost an eye in the same circumstances.",
-      sainteSoline: "The official claim was 29 gendarmes injured, two in absolute emergency. The two were later described as a groin haematoma and respiratory trauma."
-    },
-    casesCount: "{n} documented cases",
-    noCases: "none documented",
-    capLevels: "Severity, by the finest window each source publishes. Rows are different populations and different windows \u2014 they are never summed.",
-    capWeeks: "Severity, by week. The increment is the difference between the running total at the start and the end of the week.",
-    capCases: "Circumstance. No source counts this, so the column gives the number of documented cases, not a share.",
-    capResolution: "The smallest window at which each breakdown exists, and whether a weekly figure can be derived from it.",
-    noteLevels: "The 1,167 of 1,233 is the only published light share: 94.6%, the figure the file itself states. It covers CRS officers in October, so it cannot be extended to all forces or to the whole movement. The 7 serious injuries belong to the 1,144 consolidation of 17 October. No total for protester injuries has ever been published, so no share can be computed on that side \u2014 the serious cases are a register, not a rate. The four documented accidental injuries are four named people, not four per cent of anything.",
-    noteWeeks: "The ministry publishes a running total, not a weekly severity breakdown. Splitting the total into weeks is arithmetic, and it reconciles exactly to 1,580, but the only light/not-light split that exists is the October CRS file, which spans four of these weeks and cannot be attributed to any one of them. That is why section A carries the breakdown and section B carries the increments.",
-    headLight: "{light} of {total} declared injuries were classed light",
-    headLightNote: "CRS officers, October 2026",
-    headMissingNote: "No published total for protester injuries, so no share exists",
-    resolution: [
-      {
-        label: "Light / serious split",
-        window: "One month (October 2026), CRS only",
-        weekly: "no"
-      },
-      {
-        label: "Accidental / conflictual split",
-        window: "None \u2014 named cases only",
-        weekly: "no"
-      },
-      {
-        label: "Running total of injured forces",
-        window: "One day",
-        weekly: "yes"
-      },
-      {
-        label: "Daily increments",
-        window: "One day",
-        weekly: "yes"
-      }
-    ]
-  },
-  items: {
-    p: { label: "Protesters", short: "Protesters" },
-    a: { label: "Arrests", short: "Arrests" },
-    f: { label: "Injured \u2014 security forces", short: "Forces injured" },
-    i: { label: "Injured \u2014 protesters", short: "Protesters injured" }
-  },
-  units: { weeks: "week" },
-  flags: flagMap("en"),
-  tooltip: {
-    linePlain: "{value}",
-    lineWithFlag: "{value} \xB7 {flag}",
-    firstFigure: "first published figure: {n}",
-    shareOfFirst: "{pct} of the first figure ({n})",
-    shareComparisons: "Comparisons: {list}",
-    cmpHighest: "highest",
-    cmpMean: "mean",
-    cmpMedian: "median",
-    cmpFirst: "first figure",
-    listAnd: " and "
-  },
-  disclaimer: {
-    body: "Research and coding was performed using an LLM and figures have not been verified. Do not use them for serious analysis or decision-making without first double-checking the figures and the sources at the bottom."
-  }
-};
-
-// src/copy/en/index.ts
-var CATALOGUE_EN = {
-  chart: CHART_EN,
-  episodes: EPISODES_EN,
-  ...TEXT_EN
-};
-
-// src/copy/fr/chart.ts
-var CHART_FR = {
-  axisDate: "Date",
-  axisWeek: "Semaine",
-  edgeMark: "\u2020",
-  weekOf: "Semaine du {date}",
-  weekOfPartial: "Semaine du {date} (partielle)",
-  eurM: "{v} M\u20AC",
-  suffix: suffixMap("fr"),
-  suffixWrap: " \xB7 {text}",
-  dayNotes: {
-    "2026-09-25": "Chiffre de la r\xE9gion parisienne uniquement : 21 interpellations \xE0 midi, annonc\xE9es par la pr\xE9fecture de police.",
-    "2026-09-28": "Le mouvement prend une dimension nationale \u2014 actions \xE0 Marseille, Lille, dans le Rh\xF4ne, le Var et les Alpes-Maritimes.",
-    "2026-09-29": "Acte I. Le chiffre de foule compte le cort\xE8ge de la fonction publique rejoint par les actions lyc\xE9e, pas une foule \xE9tudiante. La s\xE9rie des personnes en gr\xE8ve commence ici : 250 000 agents de la fonction publique d\u2019\xC9tat, d\xE9riv\xE9s du taux de 10 % annonc\xE9 par le gouvernement.",
-    "2026-09-30": "Deuxi\xE8me jour de l\u2019acte I : 625 interpellations et 83 bless\xE9s des forces de l\u2019ordre. Le minist\xE8re de l\u2019\xC9ducation compte 356 \xE9tablissements concern\xE9s ; aucun d\xE9compte de lyc\xE9es enti\xE8rement bloqu\xE9s n\u2019a \xE9t\xE9 publi\xE9 ce jour-l\xE0.",
-    "2026-10-01": "Acte II, la pointe de la premi\xE8re semaine. Interpellations et bless\xE9s publi\xE9s sans chiffre de foule pour la journ\xE9e.",
-    "2026-10-02": "735 \xE9tablissements encore perturb\xE9s, et des violences urbaines pr\xE8s de 158 d\u2019entre eux.",
-    "2026-10-03": "Aucun chiffre de week-end n\u2019a \xE9t\xE9 publi\xE9 ; les interpellations des 3\u20134 octobre sont d\xE9riv\xE9es par soustraction. 735 \xE9tablissements perturb\xE9s \u2014 une mesure plus large que les blocages ; le point est signal\xE9 comme tel.",
-    "2026-10-05": "Premi\xE8re journ\xE9e nationale scolaire apr\xE8s les vacances, avec les stocks minist\xE9riels.",
-    "2026-10-06": "Acte III \u2014 premi\xE8re manifestation \xE9tudiante nationale de plein exercice.",
-    "2026-10-13": "La fourchette de foule va du simple au triple : plancher minist\xE9riel, plafond syndical.",
-    "2026-10-16": "Dernier jour de cours avant les vacances de la Toussaint : \xE0 partir du 17 octobre aucun lyc\xE9e n\u2019est en cours, le d\xE9compte des blocages s\u2019interrompt.",
-    "2026-10-17": "La journ\xE9e de pointe. La fourchette de dommages ici est l\u2019estimation IFRAP des 17\u201318 octobre, non un flux quotidien. Vacances de la Toussaint \u2014 \xE9tablissements ferm\xE9s. ",
-    "2026-10-19": "Vacances de la Toussaint \u2014 les \xE9tudiants soutiennent le mouvement lyc\xE9een depuis l\u2019ext\xE9rieur des \xE9tablissements.",
-    "2026-10-24": "Les interpellations incluent les contr\xF4les pr\xE9ventifs ; toutes ne deviennent pas des gardes \xE0 vue. Vacances de la Toussaint \u2014 la mobilisation \xE9tait une journ\xE9e interprofessionnelle, pas une journ\xE9e scolaire.",
-    "2026-10-31": "Aucun chiffre de bless\xE9s parmi les manifestants n\u2019a \xE9t\xE9 publi\xE9 ce jour-l\xE0. Vacances de la Toussaint \u2014 mobilisation interprofessionnelle.",
-    "2026-11-01": "Dernier jour des vacances de la Toussaint.",
-    "2026-11-04": "Dans le Rh\xF4ne, sept \xE9tablissements ont fait cours \xE0 distance ; aucun lyc\xE9e n\u2019est signal\xE9 comme bloqu\xE9.",
-    "2026-11-05": "La fourchette de foule va de 575 000 \xE0 1,6 million \u2014 la fourchette est la divergence, pas une barre d\u2019erreur. Le point de gr\xE8ve est d\xE9riv\xE9 des taux gouvernementaux : 9,89\u201311 % des agents de la fonction publique d\u2019\xC9tat.",
-    "2026-11-06": "Dans le Rh\xF4ne, incidents dans 16 lyc\xE9es et deux coll\xE8ges, et un lyc\xE9e du 8e arrondissement de Lyon bloqu\xE9 lors de son \xE9vacuation.",
-    "2026-11-09": "Dans le Rh\xF4ne, aucun lyc\xE9e n\u2019est bloqu\xE9 : 14 fonctionnent \xE0 distance et 11 sont signal\xE9s comme touch\xE9s. Un z\xE9ro ne peut pas \xEAtre port\xE9 sur un axe logarithmique, il est donc consign\xE9 ici et non comme point.",
-    "2026-11-10": "Dans le Rh\xF4ne, une dizaine d\u2019\xE9tablissements sont touch\xE9s."
-  },
-  obsNotes: {
-    "2026-09-15": {
-      blockades: "Le lyc\xE9e Victor-Hugo de Caen \u2014 le premier blocus en m\xE9tropole. Villeneuve-d\u2019Ascq avait \xE9t\xE9 bloqu\xE9 le 14 septembre et Le Rheu le 7 septembre, avant l\u2019ouverture de la fen\xEAtre."
-    },
-    "2026-09-19": {
-      blockades: "Lyc\xE9e Saint-Exup\xE9ry de Cr\xE9teil : les \xE9l\xE8ves soutiennent la gr\xE8ve des enseignants par le premier blocus de l\u2019\xE9tablissement \u2014 l\u2019origine du mouvement national."
-    },
-    "2026-09-23": {
-      blockades: "\xCEle-de-France uniquement : selon le rectorat de Cr\xE9teil, les blocus s\u2019\xE9tendent rapidement \xE0 une dizaine de lyc\xE9es."
-    },
-    "2026-09-25": {
-      arrests: "R\xE9gion parisienne uniquement \u2014 chiffres de la pr\xE9fecture de police, \xE0 midi."
-    },
-    "2026-09-28": {
-      protesterInjured: "Un cas document\xE9 : un gar\xE7on de 14 ans touch\xE9 par un projectile de police. Un plancher, pas un d\xE9compte.",
-      blockades: "Minist\xE8re de l\u2019Int\xE9rieur : 27 blocages totaux, sur 180 \xE9tablissements perturb\xE9s."
-    },
-    "2026-09-29": {
-      turnout: "Compte le cort\xE8ge de la fonction publique rejoint par les actions lyc\xE9e (206 000 minist\xE8re / 300 000 CGT), pas une foule \xE9tudiante.",
-      strikers: "Chiffre d\xE9riv\xE9, non compt\xE9. 10 % des 2 500 000 agents de la fonction publique d\u2019\xC9tat en gr\xE8ve (chiffre gouvernemental), soit 250 000. L\u2019\xC9ducation en est la principale composante, non un suppl\xE9ment : 11,47 % des personnels de l\u2019\xC9ducation (moyenne pond\xE9r\xE9e du minist\xE8re \u2014 12,74 % dans le second degr\xE9, 27,39 % pour la vie scolaire ; 13,71 % des enseignants) repr\xE9sentent 114 700 agents de la m\xEAme fonction publique d\u2019\xC9tat, d\xE9j\xE0 compris dans ces 250 000. Les revendications syndicales (plus de 40 % des personnels du premier degr\xE9, plus de 40 % \xE0 Lyon et \xE0 Cr\xE9teil) sont r\xE9gionales et ne servent pas de plafond national.",
-      protesterInjured: "\xC9l\xE8ves et personnels de l\u2019\xE9ducation bless\xE9s ce jour-l\xE0, compt\xE9s par le minist\xE8re de l\u2019\xC9ducation.",
-      blockades: "Minist\xE8re de l\u2019\xC9ducation au moment de son bilan : 45 lyc\xE9es bloqu\xE9s sur 338 concern\xE9s. Le Monde recense des actions dans pr\xE8s de 410 \xE9tablissements."
-    },
-    "2026-09-30": {
-      protesterInjured: "Cumul depuis les premiers blocages \u2014 un stock, pas un d\xE9compte quotidien.",
-      forcesInjuredStock: "Cumul des bless\xE9s parmi les forces : 83 le 30 septembre, premiers chiffres de blessures du mouvement."
-    },
-    "2026-10-01": {
-      forcesInjured: "Le compte du jour : \xAB quelque 300 \xBB bless\xE9s en intervention le jeudi (Nu\xF1ez), 305 dans le d\xE9compte Beauvau d\u2019Actu Forces. Le cumul de ce jour-l\xE0 : 383\u2013388.",
-      protesterInjured: "Niveau cumul\xE9 atteint \xE0 l\u2019arr\xEAt du 1er octobre (170 \xE9l\xE8ves + 65 personnels de l\u2019\xE9ducation) \u2014 un stock, pas un d\xE9compte quotidien. Lorsqu\u2019une semaine se termine sur cette cellule, le niveau est le chiffre de la semaine, jamais la somme des flux de la semaine.",
-      damagesCost: "Une part de l\u2019incr\xE9ment francilien du 1er au 8 octobre ; l\u2019ancrage de cette s\xE9rie est le 8 octobre.",
-      blockades: "Borne basse : 222 lyc\xE9es bloqu\xE9s (Le Monde en direct, sur 1 027 \xE9tablissements concern\xE9s). Borne haute : les 640 de l\u2019Union \xE9tudiante. La police comptait 169 blocages le matin, et 900 actions avec 400 fermetures en fin de journ\xE9e."
-    },
-    "2026-10-02": {
-      blockades: "\xAB Plus de 400 lyc\xE9es bloqu\xE9s \xBB (Le Monde en direct). Le d\xE9compte du minist\xE8re de l\u2019Int\xE9rieur pour le 2 octobre : 1 027 lyc\xE9es concern\xE9s, plus de 560 perturb\xE9s, 400 ferm\xE9s."
-    },
-    "2026-10-03": {
-      arrests: "D\xE9riv\xE9 par soustraction : les 6 059 interpellations depuis le 28 septembre (publi\xE9s le 5 octobre) moins les chiffres journaliers publi\xE9s. Couvre les 3 et 4 octobre ensemble.",
-      blockades: "Mesure plus large : le minist\xE8re de l\u2019\xC9ducation compte 735 \xE9tablissements perturb\xE9s, et non des lyc\xE9es enti\xE8rement bloqu\xE9s. Le plus haut d\xE9compte de blocages de la semaine est de 400+ le 2 octobre."
-    },
-    "2026-10-05": {
-      arrests: "984 interpellations ce jour-l\xE0. Le stock minist\xE9riel de 6 059 depuis le 28 septembre est ce qui rend v\xE9rifiable le chiffre du week-end.",
-      blockades: "Mesure plus large : 400 \xE0 500 \xE9tablissements ferm\xE9s (porte-parole du gouvernement), plus de 400 doivent le rester. Le comptage de mi-matin du minist\xE8re est de 413 \xE9tablissements perturb\xE9s.",
-      forcesInjuredStock: "Cumul depuis le d\xE9but du mouvement : 715 policiers et gendarmes bless\xE9s (Matignon)."
-    },
-    "2026-10-06": {
-      damagesCost: "Une part de l\u2019incr\xE9ment francilien du 1er au 8 octobre ; l\u2019ancrage de cette s\xE9rie est le 8 octobre.",
-      blockades: "Mesure plus large : 891 \xE9tablissements sur 3 700 ont eu leurs cours suspendus, totalement ou partiellement, \xE0 la mi-journ\xE9e (minist\xE8re). L\u2019USL compte 1 800 lyc\xE9es \xAB \xE0 l\u2019arr\xEAt \xBB \u2014 un d\xE9compte syndical qui inclut aussi les lyc\xE9es ferm\xE9s administrativement."
-    },
-    "2026-10-08": {
-      damagesCost: "Ancrage de l\u2019incr\xE9ment de dommages francilien du 1er au 8 octobre. Les m\xEAmes 6 M\u20AC sont publi\xE9s au 6 octobre et ne sont pas compt\xE9s deux fois.",
-      blockades: "Mesure plus large : 224 \xE9tablissements ferm\xE9s (minist\xE8re) ; plus de 150 encore perturb\xE9s (franceinfo). Le chiffre de 224 est celui que le minist\xE8re rappellera le 13 octobre.",
-      forcesInjuredStock: "Cumul : 761 bless\xE9s (Nu\xF1ez). Les incr\xE9ments publi\xE9s se recoupent \u2014 715 le 5 octobre plus 43 le 6 octobre font 758."
-    },
-    "2026-10-10": {
-      blockades: "\xAB Plus de 40 lyc\xE9es bloqu\xE9s \xBB (AFP/Reuters, 10 octobre)."
-    },
-    "2026-10-12": {
-      arrests: "13 interpellations rapport\xE9es ind\xE9pendamment par la pr\xE9fecture du Rh\xF4ne (27 \xE9tablissements touch\xE9s) et par celle du Bas-Rhin \xE0 Strasbourg. Deux pr\xE9fectures, le m\xEAme nombre : 13 est donc un plancher pour la journ\xE9e, pas le total r\xE9gional du jour. Ce n\u2019est pas Paris.",
-      protesterInjured: "\xCEle-de-France uniquement : un proviseur, un parent d\u2019\xE9l\xE8ve et un agent de la R\xE9gion bless\xE9s. Compt\xE9s comme personnels de l\u2019\xE9ducation et des collectivit\xE9s, sur la m\xEAme base que le chiffre minist\xE9riel du 29 septembre.",
-      damagesCost: "Normandie \u2014 Herv\xE9 Morin, Conseil r\xE9gional de Normandie, \xE0 l\u2019assembl\xE9e r\xE9gionale le 12 oct. : \xAB 1,5 million en Normandie \xBB sur \xAB d\u2019ores et d\xE9j\xE0 30 millions d\u2019euros \xBB au niveau national. Un stock r\xE9gional cumul\xE9, pas un flux quotidien, et une composante du stock national \u2014 jamais additionn\xE9. Le total francilien r\xE9vis\xE9 le m\xEAme jour \xE9tait de 8,5 M\u20AC.",
-      blockades: "Pr\xE9fecture du Rh\xF4ne uniquement : 19 des 27 \xE9tablissements touch\xE9s \xE9taient des lyc\xE9es (six universit\xE9s, deux coll\xE8ges). L\u2019\xCEle-de-France comptait pr\xE8s de 80 lyc\xE9es perturb\xE9s le m\xEAme jour."
-    },
-    "2026-10-13": {
-      blockades: "Mesure plus large : 214 \xE9tablissements ferm\xE9s, 94,2 % de lyc\xE9es ouverts \u2014 contre 224 le 8 octobre. Le minist\xE8re parle d\u2019un mouvement \xAB en recul \xBB."
-    },
-    "2026-10-14": {
-      forcesInjuredStock: "Cumul : 937 bless\xE9s (Nu\xF1ez)."
-    },
-    "2026-10-17": {
-      protesterInjured: "Fourchette d\xE9riv\xE9e : le plancher est le registre des blessures graves, le plafond est extrapol\xE9 \xE0 partir des soins dispens\xE9s par les street-medics. Aucun d\xE9compte officiel n\u2019existe.",
-      damagesCost: "Estimation mod\xE9lis\xE9e de l\u2019IFRAP pour le week-end des 17\u201318 octobre ; hors chiffre d\u2019affaires perdu et co\xFBts de maintien de l\u2019ordre. L\u2019estimation parisienne publi\xE9e le 18 octobre en est un sous-ensemble, exclue de la somme hebdomadaire.",
-      forcesInjured: "D\xE9riv\xE9 : le cumul minist\xE9riel passe de 937 (14 octobre) \xE0 1 144 (17 octobre) ; c\u2019est donc l\u2019incr\xE9ment de trois jours, pas celui d\u2019une journ\xE9e.",
-      forcesInjuredStock: "Pic du cumul : 997 bless\xE9s au premier bilan, 1 144 apr\xE8s consolidation, dont 7 graves. C\u2019est le total depuis le d\xE9but du mouvement, pas le compte du jour."
-    },
-    "2026-10-18": {
-      arrests: "Chiffre de la pr\xE9fecture de police de Paris uniquement \u2014 journ\xE9e de couvre-feu.",
-      damagesCost: "Sous-ensemble parisien du total IFRAP des 17\u201318 octobre \u2014 jamais additionn\xE9."
-    },
-    "2026-10-20": {
-      arrests: "Chiffres des pr\xE9fectures de Guadeloupe uniquement \u2014 r\xE9gional."
-    },
-    "2026-10-24": {
-      damagesCost: "Bilan national de CCI France pour le 17\u201324 octobre \u2014 un surensemble de la cellule du 17 octobre, jamais additionn\xE9."
-    },
-    "2026-10-31": {
-      damagesCost: "Estimation locale \u2014 aucun chiffre national de dommages n\u2019a \xE9t\xE9 publi\xE9.",
-      forcesInjuredStock: "D\xE9riv\xE9 : 1 411 (17 octobre) plus 116\u2013159 bless\xE9s le jour m\xEAme font 1 527\u20131 570. Un fichier interne des CRS obtenu par Mediapart d\xE9nombre 1 233 agents d\xE9clar\xE9s bless\xE9s en octobre, dont 1 167 class\xE9s \xAB l\xE9g\xE8rement \xBB bless\xE9s \u2014 94,6 %."
-    },
-    "2026-11-02": {
-      blockades: "Minist\xE8re de l\u2019\xC9ducation \xE0 9 h 30 : 41 lyc\xE9es bloqu\xE9s, environ 1 % des 3 700 du pays, et aucune perturbation dans les trois quarts des d\xE9partements."
-    },
-    "2026-11-03": {
-      blockades: "Minist\xE8re de l\u2019\xC9ducation : 48 lyc\xE9es bloqu\xE9s. L\u2019USL en compte pr\xE8s de 500."
-    },
-    "2026-11-05": {
-      strikers: "Chiffre d\xE9riv\xE9, non compt\xE9. 9,89 % des agents de la fonction publique d\u2019\xC9tat \xE0 la mi-journ\xE9e, puis 11 % plus tard, sur 2 500 000 agents : de 247 250 \xE0 275 000 \u2014 la fourchette est celle de l\u2019heure du comptage, non une barre d\u2019erreur. \xC9ducation : 12,77 % des personnels (minist\xE8re, hors acad\xE9mie de Toulouse) = 127 700, une composante de ce total. Exclus : collectivit\xE9s territoriales 4,60 % et h\xF4pitaux publics 3,93 % (aucun effectif publi\xE9), les 52 % de la SNES-FSU (p\xE9rim\xE8tre plus \xE9troit), et le \xAB pr\xE8s d\u20191,6 million en gr\xE8ve et dans les manifestations \xBB de la CGT, qui recouvre deux populations et borne d\xE9j\xE0 la fourchette de foule ci-dessus.",
-      protesterInjured: "Publi\xE9 comme plancher : \xAB au moins \xBB. ",
-      blockades: "Matignon \xE0 10 h : 81 \xE9tablissements bloqu\xE9s (2,2 %). L\u2019USL compte 1 000 lyc\xE9es \xAB \xE0 l\u2019arr\xEAt \xBB \u2014 bloqu\xE9s ou ferm\xE9s administrativement, donc une borne haute. Le minist\xE8re de l\u2019\xC9ducation compte 33 % d\u2019\xE9tablissements perturb\xE9s.",
-      forcesInjured: "Le compte du jour : 53 \xE0 18 h, 112 apr\xE8s consolidation.",
-      forcesInjuredStock: "Cumul final du minist\xE8re : 1 580 bless\xE9s depuis le d\xE9but du mouvement. Il se recoupe exactement avec les incr\xE9ments publi\xE9s \u2014 1 144 (17 octobre) + 267 (24 octobre) + 116 (31 octobre) + 53 (5 novembre) = 1 580."
-    },
-    "2026-11-09": {
-      arrests: "Chiffres de pr\xE9fectures r\xE9gionales uniquement \u2014 Bordeaux, Lyon, Strasbourg."
-    }
-  },
-  deployNotes: {
-    "2026-09-28": "dispositif estim\xE9",
-    "2026-09-29": "dispositif estim\xE9",
-    "2026-09-30": "dispositif estim\xE9",
-    "2026-10-01": "dispositif estim\xE9",
-    "2026-10-02": "dispositif estim\xE9",
-    "2026-10-05": "dispositif estim\xE9",
-    "2026-10-06": "dispositif estim\xE9",
-    "2026-10-08": "dispositif estim\xE9",
-    "2026-10-12": "estimated \u2014 \xCEle-de-France, Lyon and Strasbourg",
-    "2026-10-13": "dispositif estim\xE9",
-    "2026-10-17": "dispositif publi\xE9",
-    "2026-10-18": "estim\xE9 \u2014 couvre-feu parisien",
-    "2026-10-24": "dispositif publi\xE9",
-    "2026-10-31": "dispositif publi\xE9",
-    "2026-11-05": "dispositif publi\xE9",
-    "2026-11-07": "dispositif publi\xE9"
-  },
-  policingDay: "{head} agents \xD7 {low}\u2013{high} \u20AC par agent-jour \xB7 {note}",
-  policingDayPlain: "{head} agents \xD7 {low}\u2013{high} \u20AC par agent-jour",
-  cumulativeAdded: "dispositif compt\xE9 ce jour \u2014 {days} \xE0 ce stade",
-  cumulativeCarried: "aucun dispositif publi\xE9 \u2014 cumul report\xE9",
-  weekNational: "{n} jour{s} compt\xE9{s}",
-  weekRegionalOnly: "{n} jour{s}, r\xE9gional seulement",
-  weekPeak: "pointe le {date}",
-  weekNoNational: "aucun chiffre national cette semaine",
-  weekExcluded: "{n} point{s} exclu(s) (r\xE9gional ou sous-ensemble)",
-  weekFloored: "comprend un plancher \u2014 pas une somme",
-  weekClipped: "semaine tronqu\xE9e par la fen\xEAtre",
-  weekJoin: " \xB7 ",
-  tooltipRange: "{label} : {mid} (fourchette {low}\u2013{high})",
-  tooltipPoint: "{label} : {value}",
-  tooltipNote: "{base}\n{note}",
-  footerMark: "\u24D8 {note}",
-  weekVacation: "en partie pendant les vacances de la Toussaint (17 oct. \u2013 1 nov.)",
-  holidayLine: "Ligne en pointill\xE9s : les vacances de la Toussaint, du 17 octobre au 1er novembre 2026. Aucun lyc\xE9e n\u2019\xE9tait en cours, aucun ne pouvait \xEAtre bloqu\xE9 \u2014 le d\xE9compte n\u2019existait pas, il n\u2019\xE9tait pas nul.",
-  metricNote: "Lyc\xE9es bloqu\xE9s ou ferm\xE9s : les \xE9tablissements o\xF9 les \xE9l\xE8ves ne pouvaient pas suivre normalement. La fourchette va du d\xE9compte officiel au d\xE9compte syndical, et ce dernier inclut les lyc\xE9es ferm\xE9s administrativement.",
-  blockerNote: "Mesure plus large que les blocages \u2014 \xE9tablissements perturb\xE9s, cours suspendus ou ferm\xE9s \u2014 utilis\xE9e lorsque c\u2019est le seul chiffre publi\xE9 ce jour-l\xE0.",
-  series: {
-    protestersDaily: {
-      label: "Manifestants",
-      detached: "Manifestants (chiffre \xE9cart\xE9 de la courbe)"
-    },
-    strikersDaily: {
-      label: "Personnes en gr\xE8ve",
-      detached: "Personnes en gr\xE8ve (chiffre mod\xE9lis\xE9)"
-    },
-    blockadesDaily: {
-      label: "Lyc\xE9es bloqu\xE9s",
-      detached: "Lyc\xE9es bloqu\xE9s (d\xE9compte r\xE9gional)"
-    },
-    arrestsDaily: {
-      label: "Interpellations",
-      detached: "Interpellations (chiffre \xE9cart\xE9)"
-    },
-    forcesDaily: {
-      label: "Bless\xE9s \u2014 forces de l\u2019ordre",
-      detached: "Forces bless\xE9es (chiffre \xE9cart\xE9)"
-    },
-    forcesInjuredStock: {
-      label: "Forces bless\xE9es (cumul)",
-      detached: "Forces bless\xE9es, cumul (stock)"
-    },
-    protestersInjuredDaily: {
-      label: "Bless\xE9s \u2014 manifestants",
-      detached: "Manifestants bless\xE9s (chiffre \xE9cart\xE9)"
-    },
-    damagesDaily: {
-      label: "Dommages mat\xE9riels",
-      detached: "Dommages (stock ou chiffre mod\xE9lis\xE9)"
-    },
-    policingDaily: {
-      label: "Co\xFBt du maintien de l\u2019ordre, par jour",
-      detached: "Co\xFBt par jour (mod\xE9lis\xE9)"
-    },
-    policingCumulative: {
-      label: "Co\xFBt du maintien de l\u2019ordre, cumul\xE9",
-      detached: "Co\xFBt cumul\xE9 (mod\xE9lis\xE9)"
-    },
-    protestersWeekly: {
-      label: "Manifestants (pointe hebdomadaire)",
-      detached: "Manifestants (semaine r\xE9gionale)"
-    },
-    strikersWeekly: {
-      label: "Personnes en gr\xE8ve (pointe hebdomadaire)",
-      detached: "Personnes en gr\xE8ve (chiffre mod\xE9lis\xE9)"
-    },
-    blockadesWeekly: {
-      label: "Lyc\xE9es bloqu\xE9s (pointe hebdomadaire)",
-      detached: "Lyc\xE9es bloqu\xE9s (semaine r\xE9gionale)"
-    },
-    arrestsWeekly: {
-      label: "Interpellations (total hebdomadaire)",
-      detached: "Interpellations (semaine r\xE9gionale)"
-    },
-    forcesWeekly: {
-      label: "Forces bless\xE9es (total hebdomadaire)",
-      detached: "Forces bless\xE9es (semaine r\xE9gionale)"
-    },
-    protestersInjuredWeekly: {
-      label: "Manifestants bless\xE9s (total hebdomadaire)",
-      detached: "Manifestants bless\xE9s (semaine r\xE9gionale)"
-    }
-  },
-  charts: {
-    protestersDaily: {
-      title: "Manifestants, personnes en gr\xE8ve et lyc\xE9es bloqu\xE9s, par jour",
-      subtitle: "Foules et personnes en gr\xE8ve sur l\u2019axe de gauche, blocages de lyc\xE9es sur l\u2019axe de droite. Les personnes en gr\xE8ve sont d\xE9riv\xE9es de taux de participation publi\xE9s \u2014 aucune autorit\xE9 n\u2019a publi\xE9 de d\xE9compte. La ligne en pointill\xE9s correspond aux vacances de la Toussaint",
-      y: "Personnes dans la rue ou en gr\xE8ve",
-      yRight: "Lyc\xE9es bloqu\xE9s ou ferm\xE9s"
-    },
-    enforcementDaily: {
-      title: "Interpellations et bless\xE9s, par jour",
-      subtitle: "Une interpellation n\u2019est pas une garde \xE0 vue ; les bless\xE9s sont compt\xE9s par camp",
-      y: "Personnes"
-    },
-    cost: {
-      title: "Dommages et co\xFBt du maintien de l\u2019ordre",
-      subtitle: "",
-      y: "Millions d\u2019\u20AC"
-    },
-    protestersWeekly: {
-      title: "Manifestants, personnes en gr\xE8ve et lyc\xE9es bloqu\xE9s, pointe hebdomadaire",
-      subtitle: "Jour de pointe de chaque semaine, non une somme hebdomadaire \u2014 un m\xEAme lyc\xE9e est bloqu\xE9 plusieurs jours de suite, et une personne en gr\xE8ve trois jours reste une personne",
-      y: "Personnes (jour de pointe)",
-      yRight: "Lyc\xE9es bloqu\xE9s ou ferm\xE9s (pointe)"
-    },
-    enforcementWeekly: {
-      title: "Maintien de l\u2019ordre, totaux hebdomadaires",
-      subtitle: "Sommes hebdomadaires ; un stock ou un plancher ne s\u2019additionne pas",
-      y: "Personnes (total hebdomadaire)"
-    }
-  }
-};
-
-// src/copy/fr/episodes.ts
-var EPISODES_FR = {
-  may68: {
-    short: "Mai 68",
-    strip: "Mai 68",
-    banner: "Gr\xE8ve g\xE9n\xE9rale et occupations d\u2019usines. Les foules syndicales et les d\xE9comptes minist\xE9riels diff\xE8rent d\u2019un facteur dix : les deux sont trac\xE9s.",
-    weeks: [
-      { action: "Manifestations du 1er mai" },
-      {
-        action: "Nuit des barricades, 10\u201311 mai",
-        note: { i: "Chiffre publi\xE9 comme plancher." }
-      },
-      { action: "Gr\xE8ve g\xE9n\xE9rale \xE0 partir du 13 mai" },
-      {
-        action: "24 mai : allocution du g\xE9n\xE9ral de Gaulle",
-        note: { a: "Bilan d\u2019interpellations publi\xE9 comme plancher." }
-      },
-      { action: "Accords de Grenelle, 27 mai" },
-      { action: "Campagne des l\xE9gislatives" },
-      void 0,
-      void 0,
-      void 0
-    ]
-  },
-  cpe: {
-    short: "CPE 2006",
-    strip: "CPE 2006",
-    banner: "Contrat premi\xE8re embauche : mouvement lyc\xE9en et \xE9tudiant, avec deux journ\xE9es interprofessionnelles. Les chiffres de maintien de l\u2019ordre n\u2019existent que pour quatre semaines.",
-    weeks: [
-      { action: "7 f\xE9vrier : premi\xE8re journ\xE9e nationale" },
-      void 0,
-      void 0,
-      void 0,
-      { action: "Universit\xE9s bloqu\xE9es" },
-      { action: "14 mars : journ\xE9e nationale" },
-      { action: "21 mars : journ\xE9e \xE9tudiante" },
-      { action: "28 mars : journ\xE9e nationale" },
-      { action: "4 avril : journ\xE9e nationale" },
-      { action: "Retrait annonc\xE9" }
-    ]
-  },
-  gj: {
-    short: "Gilets jaunes",
-    strip: "Gilets jaunes",
-    banner: "Compt\xE9 acte par acte, le samedi uniquement. Les chiffres de maintien de l\u2019ordre n\u2019ont \xE9t\xE9 publi\xE9s que pour les quatre premiers actes, jamais en s\xE9rie.",
-    weeks: []
-  },
-  nahel: {
-    short: "Juin 2023",
-    strip: "Juin 2023",
-    banner: "Cinq nuits d\u2019\xE9meutes apr\xE8s la mort du 27 juin. Les interpellations et bless\xE9s sont \xE9lev\xE9s rapport\xE9s \xE0 la foule parce qu\u2019il ne s\u2019agissait pas de manifestations.",
-    weeks: [
-      { action: "27 juin : d\xE9but des \xE9meutes" },
-      { action: "Retour au calme" }
-    ]
-  },
-  pensions: {
-    short: "Retraites 2023",
-    strip: "Retraites 2023",
-    banner: "Mouvement contre le report de l\u2019\xE2ge l\xE9gal. Deux journ\xE9es portent l\u2019essentiel de la s\xE9rie ; la fourchette intersyndicale est large.",
-    weeks: [
-      { action: "19 janvier : premi\xE8re journ\xE9e nationale" },
-      void 0,
-      { action: "31 janvier" },
-      { action: "7 f\xE9vrier" },
-      { action: "16 f\xE9vrier" },
-      void 0,
-      void 0,
-      { action: "7 mars : \xE9coles et transports bloqu\xE9s" },
-      { action: "11 mars" },
-      { action: "15 mars" },
-      { action: "23 mars" },
-      { action: "28 mars" },
-      { action: "6 avril" },
-      void 0,
-      void 0,
-      void 0,
-      { action: "1er mai" },
-      void 0,
-      void 0,
-      void 0,
-      { action: "6 juin" }
-    ]
-  },
-  bt: {
-    short: "Bloquons tout",
-    strip: "Bloquons tout",
-    banner: "Septembre 2025 : blocages et d\xE9fil\xE9s, d\xE9comptes partiels. Les semaines sans chiffre publi\xE9 restent vides.",
-    weeks: [
-      { action: "10 septembre : blocages" },
-      { action: "18 septembre : journ\xE9e nationale" },
-      void 0,
-      { action: "1er octobre" }
-    ]
-  },
-  students26: {
-    short: "Automne 2026",
-    strip: "Automne 2026",
-    banner: "Le mouvement pour lequel cette page a \xE9t\xE9 construite, suivi depuis les premiers blocages de lyc\xE9es en m\xE9tropole le 15 septembre. Publication quotidienne : les jours sans chiffre restent vides plut\xF4t qu\u2019interpol\xE9s.",
-    weeks: [
-      { action: "15 septembre : blocages de Caen et de Villeneuve-d\u2019Ascq" },
-      { action: "25 septembre : blocages dans l\u2019agglom\xE9ration parisienne" },
-      { action: "Acte I le 29 septembre, acte II le 1er octobre" },
-      { action: "Acte III le 6 octobre" },
-      { action: "17 octobre : la pointe" },
-      { action: "24 octobre" },
-      { action: "31 octobre" },
-      { action: "5 et 7 novembre" },
-      { action: "9 novembre \u2014 fen\xEAtre arr\xEAt\xE9e au 11 novembre" }
-    ],
-    fallbackNote: {
-      p: "Pointe hebdomadaire issue de la s\xE9rie quotidienne \u2014 le jour de pointe de la semaine.",
-      a: "Somme des chiffres journaliers publi\xE9s de la semaine ; un stock cumul\xE9 est montr\xE9 comme le stock, jamais additionn\xE9."
-    }
-  }
-};
-
-// src/copy/fr/text.ts
-var TEXT_FR = {
-  panels: {
-    partialWeek: "Semaine du {label} (partielle)",
-    act: "Acte {n}",
-    withAction: "{when} \xB7 {action}",
-    seriesContinues: "{name} (suite)",
-    obs: "observations {counts} sur {weeks}",
-    valueRange: "{lo}\u2013{hi}",
-    itemMeta: "fourchette {range} \xB7 jusqu\u2019\xE0 la semaine {n}",
-    median: "m\xE9diane",
-    peak: "pointe",
-    range: "fourchette min\u2013max",
-    figureCount: "{n} chiffres publi\xE9s",
-    singleFigure: "un seul chiffre publi\xE9 \u2014 la m\xE9diane et la pointe sont le m\xEAme nombre",
-    summaryMeta: "m\xE9diane et pointe \xB7 {n} mouvements"
-  },
-  kpi: {
-    heading: "Chiffres cl\xE9s",
-    largestDay: "Plus grand jour",
-    largestWeek: "Plus grande semaine",
-    largestFigure: "Plus grand chiffre",
-    vsMean: "Max vs moyenne",
-    vsMedian: "Max vs m\xE9diane",
-    vsFirst: "Max vs premier chiffre",
-    againstMean: "{value} contre une moyenne de {base}",
-    againstMedian: "{value} contre une m\xE9diane de {base}",
-    againstFirst: "{value} contre un premier chiffre de {base}",
-    noteDaily: "Les rapports sont calcul\xE9s sur les s\xE9ries quotidiennes : chaque chiffre publi\xE9 est divis\xE9 par la moyenne, la m\xE9diane et le premier chiffre publi\xE9 de sa propre s\xE9rie. Les jours sans chiffre publi\xE9 sont \xE9cart\xE9s, non compt\xE9s comme z\xE9ro. Le total de dommages de 1 000 M\u20AC du 24 octobre n\u2019a pas de marqueur sur le graphique et en est donc \xE9cart\xE9 ici aussi.",
-    noteWeekly: "Les rapports sont calcul\xE9s sur les s\xE9ries hebdomadaires : chaque chiffre publi\xE9 est divis\xE9 par la moyenne, la m\xE9diane et le premier chiffre publi\xE9 de sa propre s\xE9rie. Les semaines sans chiffre publi\xE9 sont \xE9cart\xE9es, non compt\xE9es comme z\xE9ro.",
-    noteEpisodes: "Chaque mouvement est compar\xE9 \xE0 sa propre s\xE9rie \u2014 sa moyenne, sa m\xE9diane et son premier chiffre publi\xE9 \u2014 et le plus grand rapport sur les sept mouvements est affich\xE9. Un rapport au premier chiffre peut atteindre des milliers de pour cent lorsqu\u2019un mouvement a commenc\xE9 avec une poign\xE9e de personnes.",
-    noteEpisodesCapped: "Comme en section C, mais sur les seules semaines trac\xE9es en section D, qui s\u2019arr\xEAtent \xE0 la derni\xE8re semaine de chiffres de maintien de l\u2019ordre.",
-    eurM: "{v} M\u20AC",
-    none: "aucun chiffre publi\xE9"
-  },
-  casualties: {
-    headlineTitle: "Comment se r\xE9partissent les blessures",
-    weeklyTitle: "Ce qu\u2019une semaine peut \xE9tablir",
-    colScope: "Population",
-    colTotal: "Total d\xE9clar\xE9",
-    colSerious: "Graves",
-    colLight: "L\xE9g\xE8res",
-    colLightShare: "Part de l\xE9g\xE8res",
-    colOther: "Non class\xE9es l\xE9g\xE8res",
-    colSide: "Camp",
-    colCircumstance: "Circonstance",
-    colCount: "D\xE9compte",
-    colCases: "Cas document\xE9s",
-    colQuestion: "Question",
-    colWindow: "Plus petite fen\xEAtre publi\xE9e",
-    colWeekly: "Chiffre hebdomadaire",
-    scope: {
-      crsOctober: "CRS, octobre 2026",
-      forcesPeak: "Toutes forces, cumul \xE0 son pic",
-      protesters: "Manifestant\xB7es, depuis le 30 septembre",
-      week12oct: "Semaine du 12 octobre",
-      week19oct: "Semaine du 19 octobre",
-      week26oct: "Semaine du 26 octobre",
-      week2nov: "Semaine du 2 novembre"
-    },
-    side: {
-      forces: "Police et gendarmerie",
-      protesters: "Manifestant\xB7es"
-    },
-    kind: {
-      accidental: "Accidentelle ou auto-inflig\xE9e",
-      conflictual: "Imput\xE9e \xE0 l\u2019affrontement"
-    },
-    why: {
-      notPublished: "non publi\xE9",
-      noDenominator: "aucun total publi\xE9",
-      binaryFile: "fichier binaire : l\xE9ger / non l\xE9ger",
-      noTally: "aucun d\xE9compte, des cas seulement",
-      noneDocumented: "aucun cas document\xE9"
-    },
-    cases: {
-      givors: "Givors, 10 octobre : deux policiers en faction devant un lyc\xE9e se br\xFBlent \xE0 la main et \xE0 la cuisse quand une grenade part accidentellement dans leur propre v\xE9hicule, qui prend feu.",
-      crsWrist: "Un CRS s\u2019est contusionn\xE9 le poignet gauche en fermant la porti\xE8re de son v\xE9hicule.",
-      crsAnkle: "Un autre CRS s\u2019est tordu la cheville en chutant du fourgon.",
-      helmet: "Paris, 31 octobre : un CRS touch\xE9 au casque, indemne \u2014 un peu de peinture \xF4t\xE9e de la coque.",
-      groin2023: "Sainte-Soline, mars 2023, pour comparaison : sur 29 gendarmes recens\xE9s, un h\xE9matome \xE0 l\u2019aine, un traumatisme respiratoire, les autres examin\xE9s pour traumatismes sonores.",
-      mael: "Tours, 30 septembre : un lyc\xE9en \xE9borgn\xE9 par une balle en caoutchouc, alors qu\u2019il ne lan\xE7ait rien.",
-      alaric: "Paris, 17 octobre : un \xE9tudiant de 19 ans br\xFBl\xE9 au torse et au bras par une grenade lacrymog\xE8ne tir\xE9e en tir tendu ; br\xFBlures au deuxi\xE8me degr\xE9, non cicatris\xE9es dix jours plus tard.",
-      eyes: "Plusieurs autres mineurs ont perdu un \u0153il dans les m\xEAmes circonstances.",
-      sainteSoline: "Le bilan officiel \xE9tait de 29 gendarmes bless\xE9s, dont deux en urgence absolue. Les deux ont ensuite \xE9t\xE9 d\xE9crits comme un h\xE9matome \xE0 l\u2019aine et un traumatisme respiratoire."
-    },
-    casesCount: "{n} cas document\xE9s",
-    noCases: "aucun cas document\xE9",
-    capLevels: "Gravit\xE9, \xE0 la plus fine fen\xEAtre publi\xE9e par chaque source. Les lignes sont des populations et des fen\xEAtres diff\xE9rentes \u2014 elles ne s\u2019additionnent jamais.",
-    capWeeks: "Gravit\xE9, par semaine. L\u2019incr\xE9ment est la diff\xE9rence entre le cumul en d\xE9but et en fin de semaine.",
-    capCases: "Circonstance. Aucune source ne la d\xE9nombre : la colonne donne le nombre de cas document\xE9s, non une part.",
-    capResolution: "La plus petite fen\xEAtre \xE0 laquelle chaque ventilation existe, et si un chiffre hebdomadaire peut en \xEAtre tir\xE9.",
-    noteLevels: "Les 1 167 sur 1 233 constituent la seule part de bless\xE9s l\xE9gers publi\xE9e : 94,6 %, le chiffre que le fichier \xE9nonce lui-m\xEAme. Il porte sur les CRS en octobre : il ne s\u2019\xE9tend ni \xE0 toutes les forces ni \xE0 tout le mouvement. Les 7 bless\xE9s graves rel\xE8vent de la consolidation de 1 144 du 17 octobre. Aucun total des blessures chez les manifestant\xB7es n\u2019a jamais \xE9t\xE9 publi\xE9 : aucune part ne peut donc \xEAtre calcul\xE9e de ce c\xF4t\xE9 \u2014 les cas graves forment un registre, non un taux. Les quatre blessures accidentelles document\xE9es sont quatre personnes nomm\xE9es, non quatre pour cent de quoi que ce soit.",
-    noteWeeks: "Le minist\xE8re publie un cumul, non une ventilation hebdomadaire de la gravit\xE9. D\xE9couper ce cumul en semaines est de l\u2019arithm\xE9tique, et le total se recoupe exactement \xE0 1 580, mais la seule ventilation l\xE9ger / non l\xE9ger existante est le fichier des CRS d\u2019octobre, qui couvre quatre de ces semaines sans pouvoir \xEAtre attribu\xE9 \xE0 l\u2019une d\u2019elles. C\u2019est pourquoi la section A porte la ventilation et la section B les incr\xE9ments.",
-    headLight: "{light} blessures d\xE9clar\xE9es sur {total} class\xE9es l\xE9g\xE8res",
-    headLightNote: "Agents des CRS, octobre 2026",
-    headMissingNote: "Aucun total publi\xE9 pour les blessures des manifestant\xB7es : aucune part n\u2019existe",
-    resolution: [
-      {
-        label: "Ventilation l\xE9ger / grave",
-        window: "Un mois (octobre 2026), CRS seulement",
-        weekly: "non"
-      },
-      {
-        label: "Ventilation accidentelle / conflictuelle",
-        window: "Aucune \u2014 des cas nomm\xE9s seulement",
-        weekly: "non"
-      },
-      {
-        label: "Cumul des forces bless\xE9es",
-        window: "Un jour",
-        weekly: "oui"
-      },
-      {
-        label: "Incr\xE9ments quotidiens",
-        window: "Un jour",
-        weekly: "oui"
-      }
-    ]
-  },
-  items: {
-    p: { label: "Manifestants", short: "Manifestants" },
-    a: { label: "Interpellations", short: "Interpellations" },
-    f: { label: "Bless\xE9s \u2014 forces de l\u2019ordre", short: "Forces bless\xE9es" },
-    i: { label: "Bless\xE9s \u2014 manifestants", short: "Manifestants bless\xE9s" }
-  },
-  units: { weeks: "semaine" },
-  flags: flagMap("fr"),
-  tooltip: {
-    linePlain: "{value}",
-    lineWithFlag: "{value} \xB7 {flag}",
-    firstFigure: "premier chiffre publi\xE9 : {n}",
-    shareOfFirst: "{pct} du premier chiffre ({n})",
-    shareComparisons: "Comparaisons : {list}",
-    cmpHighest: "le plus \xE9lev\xE9",
-    cmpMean: "moyenne",
-    cmpMedian: "m\xE9diane",
-    cmpFirst: "premier chiffre",
-    listAnd: " et "
-  },
-  disclaimer: {
-    body: "La recherche et le code ont \xE9t\xE9 r\xE9alis\xE9s \xE0 l\u2019aide d\u2019un LLM et les chiffres n\u2019ont pas \xE9t\xE9 v\xE9rifi\xE9s. Ne les utilisez pas pour une analyse s\xE9rieuse ou pour prendre des d\xE9cisions sans avoir d\u2019abord v\xE9rifi\xE9 les chiffres et les sources en bas de page."
-  }
-};
-
-// src/copy/fr/index.ts
-var CATALOGUE_FR = {
-  chart: CHART_FR,
-  episodes: EPISODES_FR,
-  ...TEXT_FR
-};
-
-// src/copy/catalogue.ts
-var CATALOGUE = {
-  en: CATALOGUE_EN,
-  fr: CATALOGUE_FR
-};
-
-// src/copy/interpolate.ts
-var TOKEN = /\{(\w+)\}/g;
-function fill(template, params) {
-  if (!params) return template;
-  const p = typeof params.n === "number" && params.s === void 0 ? { ...params, s: params.n === 1 ? "" : "s" } : params;
-  return template.replace(
-    TOKEN,
-    (whole, name) => name in p ? String(p[name]) : whole
-  );
-}
-function plural(a, b, c) {
-  if (typeof a === "string") {
-    const n = typeof b === "number" ? b : 0;
-    return Math.abs(n) === 1 ? a : c ?? `${a}s`;
-  }
-  const isOne = Math.abs(a) === 1;
-  if (typeof b !== "string") return isOne ? "" : "s";
-  return isOne ? b : c ?? `${b}s`;
-}
-
-// src/copy/lookup.ts
-var SPAN_SEP = { en: " \u2013 ", fr: " \u2013 " };
-var DICT = {
-  en: { "span.sep": SPAN_SEP.en },
-  fr: { "span.sep": SPAN_SEP.fr }
-};
-var warned = /* @__PURE__ */ new Set();
-function warnOnce(key, message) {
-  if (warned.has(key)) return;
-  warned.add(key);
-  console.warn(`[i18n] ${message}`);
-}
-var PASSTHROUGH = /* @__PURE__ */ new Set([
-  "then",
-  "toJSON",
-  "constructor",
-  "length",
-  "name",
-  "toString",
-  "valueOf",
-  "hasOwnProperty",
-  "inspect",
-  "nodeType",
-  "$$typeof",
-  "prototype"
-]);
-var tolerant = /* @__PURE__ */ new Map();
-function catalogueFor(forLang) {
-  const cached = tolerant.get(forLang);
-  if (cached) return cached;
-  const proxy = new Proxy(CATALOGUE[forLang], {
-    get(target, prop, receiver) {
-      if (typeof prop !== "string" || prop in target || PASSTHROUGH.has(prop)) {
-        return Reflect.get(target, prop, receiver);
-      }
-      const tag3 = `${forLang}:${prop}`;
-      if (!warned.has(tag3)) {
-        warned.add(tag3);
-        console.warn(
-          `[i18n] catalogue branch "${prop}" is missing (${forLang})`
-        );
-      }
-      return new Proxy({}, { get: () => "" });
-    }
-  });
-  tolerant.set(forLang, proxy);
-  return proxy;
-}
-function t(key, params) {
-  if (key === void 0) return catalogueFor(current);
-  const template = DICT[current][key] ?? DICT.en[key];
-  if (template === void 0) {
-    if (!warned.has(key)) {
-      warned.add(key);
-      console.warn(`[i18n] missing key "${key}" (${current})`);
-    }
-    return key;
-  }
-  return params === void 0 ? template : fill(template, params);
-}
-function bi(value2) {
-  return value2[current] ?? value2.en;
-}
-
-// src/copy/format.ts
-var UTC = { timeZone: "UTC" };
-var dates;
-var numFmt;
-var cptFmt;
-var eurFmt;
-function buildFormats(tag3) {
-  numFmt = new Intl.NumberFormat(tag3, { maximumFractionDigits: 0 });
-  cptFmt = new Intl.NumberFormat(tag3, {
-    notation: "compact",
-    compactDisplay: "short",
-    maximumFractionDigits: 1
-  });
-  eurFmt = new Intl.NumberFormat(tag3, { maximumFractionDigits: 1 });
-  dates = {
-    long: new Intl.DateTimeFormat(tag3, {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-      ...UTC
-    }),
-    short: new Intl.DateTimeFormat(tag3, {
-      day: "numeric",
-      month: "short",
-      ...UTC
-    }),
-    day: new Intl.DateTimeFormat(tag3, { day: "numeric", ...UTC })
-  };
-}
-var nf2 = () => numFmt;
-var compact = () => cptFmt;
-var eurM = () => eurFmt;
-function toDate(value2) {
-  if (value2 instanceof Date)
-    return Number.isNaN(value2.getTime()) ? null : value2;
-  if (typeof value2 === "number") {
-    const d2 = new Date(value2);
-    return Number.isNaN(d2.getTime()) ? null : d2;
-  }
-  if (typeof value2 !== "string" || value2.trim() === "") return null;
-  const d = new Date(value2);
-  return Number.isNaN(d.getTime()) ? null : d;
-}
-function firstOfMonth(s, d) {
-  return current === "fr" && d.getUTCDate() === 1 ? s.replace(/^1\b/, "1er") : s;
-}
-function fmtDate(value2) {
-  const d = toDate(value2);
-  return d ? firstOfMonth(dates.long.format(d), d) : "\u2014";
-}
-function fmtDayMonth(value2) {
-  const d = toDate(value2);
-  return d ? firstOfMonth(dates.short.format(d), d) : "\u2014";
-}
-function fmtWeek(start, end) {
-  const a = toDate(start);
-  if (!a) return "\u2014";
-  if (end === void 0) return firstOfMonth(dates.short.format(a), a);
-  const b = toDate(end);
-  if (!b) return firstOfMonth(dates.short.format(a), a);
-  const sameYear = a.getUTCFullYear() === b.getUTCFullYear();
-  const sameMonth = sameYear && a.getUTCMonth() === b.getUTCMonth();
-  if (sameMonth)
-    return `${firstOfMonth(dates.day.format(a), a)}\u2013${fmtDayMonth(b)}`;
-  if (sameYear) return `${fmtDayMonth(a)} \u2013 ${fmtDayMonth(b)}`;
-  return `${fmtDayMonth(a)} ${a.getUTCFullYear()} \u2013 ${fmtDayMonth(b)} ${b.getUTCFullYear()}`;
-}
-var ISO_ANY = /\d{4}-\d{2}-\d{2}/;
-var ISO_ALL = /\b(\d{4}-\d{2}-\d{2})\b/g;
-function fmtSpan(span, end) {
-  const sep = t("span.sep");
-  if (typeof span === "string") {
-    if (end !== void 0) return `${fmtDayMonth(span)}${sep}${fmtDate(end)}`;
-    return ISO_ANY.test(span) ? span.replace(ISO_ALL, (m) => fmtDayMonth(m)) : span;
-  }
-  if (typeof span === "number" || span instanceof Date) {
-    return end !== void 0 ? `${fmtDayMonth(span)}${sep}${fmtDate(end)}` : fmtDate(span);
-  }
-  if (span.label) return span.label;
-  if (span.start != null && span.end != null) {
-    return `${fmtDayMonth(span.start)}${sep}${fmtDate(span.end)}`;
-  }
-  if (span.start != null) return fmtDate(span.start);
-  if (span.end != null) return fmtDate(span.end);
-  return "\u2014";
-}
-var MINUTE = 6e4;
-var HOUR = 60 * MINUTE;
-var DAY = 24 * HOUR;
-function pctOf(v, base) {
-  const r = 100 * v / base;
-  return r >= 10 ? `${Math.round(r)}%` : `${Number(r.toFixed(1))}%`;
-}
-
-// src/copy/fr/meta.ts
-var FR_META = {
-  tag: "fr-FR",
-  label: "Fran\xE7ais",
-  meta: {
-    htmlLang: "fr",
-    title: "L\u2019activit\xE9 contestataire en France \u2014 septembre\u2013novembre 2026",
-    description: "Foules, interpellations, bless\xE9s et dommages du mouvement de l\u2019automne 2026, compar\xE9s \xE0 six mouvements fran\xE7ais ant\xE9rieurs."
-  },
-  sections: {
-    a: {
-      title: "A \xB7 D\xE9comptes quotidiens, 15 septembre \u2013 11 novembre 2026",
-      blurb: "Un marqueur par jour o\xF9 un chiffre a \xE9t\xE9 publi\xE9. Les jours sans chiffre restent vides plut\xF4t qu\u2019interpol\xE9s ; les lacunes d\u2019une courbe sont en pointill\xE9s. La courbe des blocages de lyc\xE9es est en pointill\xE9s pendant les vacances de la Toussaint, aucun lyc\xE9e n\u2019\xE9tant en cours. La s\xE9rie des personnes en gr\xE8ve est d\xE9riv\xE9e de taux de participation : aucune autorit\xE9 n\u2019a publi\xE9 de d\xE9compte national des gr\xE9vistes."
-    },
-    b: {
-      title: "B \xB7 Agr\xE9gats hebdomadaires",
-      blurb: "Les semaines vont du lundi au dimanche. Une foule de jour de pointe et un total hebdomadaire d\u2019interpellations ne sont pas la m\xEAme statistique \u2014 l\u2019infobulle pr\xE9cise laquelle. Le chiffre hebdomadaire des blocages est une pointe, jamais une somme : un m\xEAme lyc\xE9e est bloqu\xE9 plusieurs jours de suite. Les personnes en gr\xE8ve sont un niveau, non un flux : le chiffre hebdomadaire en est la pointe de la semaine, jamais une somme."
-    },
-    c: {
-      title: "C \xB7 Un panneau par mouvement",
-      blurb: "Chaque panneau conserve sa propre dur\xE9e sur un axe logarithmique commun : les formes sont comparables, les dur\xE9es non. L\u2019infobulle compare en outre chaque point \xE0 sa propre s\xE9rie \u2014 en pourcentage du chiffre le plus \xE9lev\xE9 du panneau, de la moyenne, de la m\xE9diane et du premier chiffre publi\xE9. Ce dernier peut atteindre des milliers de pour cent lorsqu\u2019un mouvement a commenc\xE9 avec une poign\xE9e de personnes, et c\u2019est pr\xE9cis\xE9ment pourquoi les trois autres sont donn\xE9s d\u2019abord.",
-      note: "Les marqueurs creux sont des chiffres r\xE9gionaux, parisiens, mod\xE9lis\xE9s ou des stocks. Les liaisons en pointill\xE9s traversent une semaine sans publication."
-    },
-    d: {
-      title: "D \xB7 Transpos\xE9 : un panneau par s\xE9rie",
-      blurb: "Les m\xEAmes donn\xE9es avec les mouvements superpos\xE9s, pour lire une m\xEAme mesure de 1968 \xE0 2026. L\u2019axe des x est le nombre de semaines \xE9coul\xE9es, arr\xEAt\xE9 \xE0 la derni\xE8re semaine de chiffres de maintien de l\u2019ordre. Les comparaisons de l\u2019infobulle fonctionnent comme en section C, mais sont calcul\xE9es sur les seules semaines trac\xE9es dans le panneau survol\xE9.",
-      note: "Survolez une mesure ou un mouvement pour l\u2019isoler. L\u2019ordre des panneaux suit celui de la l\xE9gende."
-    },
-    e: {
-      title: "E \xB7 M\xE9diane et pointe",
-      blurb: "Chaque panneau rassemble une mesure pour les mouvements qui l\u2019ont publi\xE9e. Le point est la m\xE9diane de la s\xE9rie \u2014 la semaine typique \u2014 et le triangle sa pointe, le plus grand chiffre publi\xE9. La barre claire derri\xE8re chaque paire couvre toute la s\xE9rie, de son plus petit chiffre \xE0 son plus grand : un mouvement r\xE9gulier se lit donc comme une barre courte, un mouvement ayant connu quelques semaines \xE9normes comme une barre longue. L\u2019axe est logarithmique, de sorte que quelques marches de masse et une semaine ordinaire peuvent partager un panneau.",
-      note: "Chaque chiffre est compt\xE9 une fois, au milieu de sa fourchette lorsqu\u2019une fourchette a \xE9t\xE9 publi\xE9e. Le nombre de chiffres publi\xE9s figure dans l\u2019infobulle : avec un seul chiffre, la m\xE9diane et la pointe sont le m\xEAme nombre."
-    }
-  },
-  groups: {
-    ongoing: {
-      title: "La r\xE9volte en cours",
-      blurb: "Les deux sections portent sur le mouvement de l\u2019automne 2026. A trace chaque chiffre quotidien publi\xE9 ; B agr\xE8ge ces m\xEAmes chiffres par semaine, de sorte qu\u2019une foule de jour de pointe et un total d\u2019interpellations ne partagent jamais un axe."
-    },
-    historical: {
-      title: "Comparaisons historiques",
-      blurb: "Les m\xEAmes mesures rapport\xE9es \xE0 six mouvements fran\xE7ais ant\xE9rieurs : 1968, 1986, 1995, 2006, 2010 et 2016. C garde un panneau par mouvement ; D un panneau par s\xE9rie."
-    }
-  }
-};
-
-// src/copy/state.ts
-var DEFAULT_LANG = "fr";
-var DEFAULT_LOCALE = FR_META.tag;
-var LOCALE_META = {
-  en: EN_META,
-  fr: FR_META
-};
-var STORAGE_KEY = "lang";
-var hasDom = () => typeof window !== "undefined" && typeof document !== "undefined";
-function normalizeLocale(input) {
-  const low = String(input ?? "").toLowerCase().replace(/_/g, "-");
-  if (low === "fr" || low.startsWith("fr-") || low === "fran\xE7ais" || low === "francais")
-    return "fr";
-  if (low === "en" || low.startsWith("en-")) return "en";
-  return null;
-}
-function localeFromUrl(search) {
-  if (search === void 0 && !hasDom()) return null;
-  try {
-    const q = search ?? window.location.search;
-    return normalizeLocale(new URLSearchParams(q).get("lang"));
-  } catch {
-    return null;
-  }
-}
-function fromStorage() {
-  if (!hasDom()) return null;
-  try {
-    return normalizeLocale(window.localStorage.getItem(STORAGE_KEY));
-  } catch {
-    return null;
-  }
-}
-var current = localeFromUrl() ?? fromStorage() ?? DEFAULT_LANG;
-buildFormats(localeMeta2(current).tag);
-var version = 0;
-function getLocale() {
-  return current;
-}
-var listeners = /* @__PURE__ */ new Set();
-var emitting = false;
-function onLocaleChange(fn) {
-  listeners.add(fn);
-  return () => {
-    listeners.delete(fn);
-  };
-}
-function emit(next, previous) {
-  if (emitting) return;
-  emitting = true;
-  try {
-    for (const fn of [...listeners]) {
-      try {
-        fn(next, previous);
-      } catch (err) {
-        console.error("[i18n] locale listener threw", err);
-      }
-    }
-  } finally {
-    emitting = false;
-  }
-}
-function setLang(next, opts = {}) {
-  const { persist = true, notify = true } = opts;
-  const target = normalizeLocale(next);
-  if (!target) {
-    warnOnce(`locale:${String(next)}`, `unrecognised locale "${String(next)}"`);
-    return current;
-  }
-  const previous = current;
-  if (previous === target) return current;
-  current = target;
-  version += 1;
-  const locale2 = localeMeta2(target);
-  buildFormats(locale2.tag);
-  if (hasDom()) {
-    if (persist) {
-      try {
-        window.localStorage.setItem(STORAGE_KEY, target);
-      } catch {
-      }
-    }
-    document.documentElement.lang = locale2.meta.htmlLang;
-    document.documentElement.dataset.lang = target;
-  }
-  if (notify) emit(target, previous);
-  return current;
-}
-var LOCALES = Object.freeze([
-  "fr",
-  "en"
-]);
-function localeMeta2(locale2 = current) {
-  return LOCALE_META[normalizeLocale(locale2) ?? DEFAULT_LANG];
-}
-
-// src/copy/chrome.ts
-var STATIC = {
-  "hdr.kicker": {
-    en: "15 Sep \u2013 11 Nov 2026",
-    fr: "15 sept. \u2013 11 nov. 2026"
-  },
-  "hdr.title": {
-    en: "Protest activity in France, autumn 2026",
-    fr: "L\u2019activit\xE9 contestataire en France, automne 2026"
-  },
-  "hdr.lede": {
-    en: "Turnout, arrests, injuries and damage, set against six earlier French movements. Every point is a range where the publishers disagree. The series starts on 15 September 2026, with the first mainland high-school blockades.",
-    fr: "Foules, interpellations, bless\xE9s et dommages, compar\xE9s \xE0 six mouvements fran\xE7ais ant\xE9rieurs. Chaque point est une fourchette l\xE0 o\xF9 les \xE9diteurs divergent. La s\xE9rie commence le 15 septembre 2026, avec les premiers blocages de lyc\xE9es en m\xE9tropole."
-  },
-  "ui.lang": { en: "Language", fr: "Langue" },
-  "ui.lang.fr": {
-    en: "Afficher la page en fran\xE7ais",
-    fr: "Afficher la page en fran\xE7ais"
-  },
-  "ui.lang.en": {
-    en: "Show this page in English",
-    fr: "Afficher la page en anglais"
-  },
-  "ui.theme": { en: "Dark mode", fr: "Mode sombre" },
-  "card.prot.title": { en: "Protesters", fr: "Manifestants" },
-  "card.prot.sub": {
-    en: "Ministry and organiser counts",
-    fr: "Comptages minist\xE9riels et syndicaux"
-  },
-  "card.enf.title": {
-    en: "Arrests and injuries",
-    fr: "Interpellations et bless\xE9s"
-  },
-  "card.enf.sub": {
-    en: "Custody is not the same as arrest",
-    fr: "La garde \xE0 vue n\u2019est pas l\u2019interpellation"
-  },
-  "card.cost.title": {
-    en: "Damage and the cost of policing",
-    fr: "Dommages et co\xFBt du maintien de l\u2019ordre"
-  },
-  "card.pw.title": {
-    en: "Protesters, weekly peak",
-    fr: "Manifestants, pointe hebdomadaire"
-  },
-  "card.ew.title": {
-    en: "Enforcement, weekly totals",
-    fr: "Maintien de l\u2019ordre, totaux hebdomadaires"
-  },
-  "leg.holiday.title": {
-    en: "Dotted line = the Toussaint school holiday",
-    fr: "Ligne en pointill\xE9s = les vacances de la Toussaint"
-  },
-  "leg.items.title": {
-    en: "Highlight a measure",
-    fr: "Mettre en avant une mesure"
-  },
-  "leg.movements.title": {
-    en: "Highlight a movement",
-    fr: "Mettre en avant un mouvement"
-  },
-  "hdr.skip": { en: "Skip to content", fr: "Aller au contenu" },
-  "leg.summary.title": {
-    en: "Highlight a statistic",
-    fr: "Mettre en avant une statistique"
-  }
-};
-for (const id of ["a", "b", "c", "d", "e"]) {
-  STATIC[`sec.${id}.title`] = {
-    en: EN_META.sections[id].title,
-    fr: FR_META.sections[id].title
-  };
-  STATIC[`sec.${id}.lede`] = {
-    en: EN_META.sections[id].blurb,
-    fr: FR_META.sections[id].blurb
-  };
-}
-STATIC["doc.title"] = { en: EN_META.meta.title, fr: FR_META.meta.title };
-var STATIC_KEYS = new Set(Object.keys(STATIC));
-function applyStaticCopy(root2 = document) {
-  const L3 = current;
-  for (const node of root2.querySelectorAll("[data-i18n]")) {
-    const key = node.dataset.i18n;
-    if (!key) continue;
-    const entry = STATIC[key];
-    if (!entry) {
-      if (!warned.has(key)) {
-        warned.add(key);
-        console.warn(`[i18n] no static copy for "${key}"`);
-      }
-      continue;
-    }
-    const text = entry[L3] ?? entry.en;
-    const attr = node.dataset.i18nAttr;
-    if (!attr || attr === "text") node.textContent = text;
-    else node.setAttribute(attr, text);
-  }
-}
-function syncLangSwitch(root2 = document) {
-  for (const b of root2.querySelectorAll("[data-set-lang]")) {
-    const on = b.dataset.setLang === current;
-    b.setAttribute("aria-pressed", String(on));
-    b.tabIndex = on ? 0 : -1;
-  }
-}
-
-// src/copy/a11y.ts
-var A11Y = {
-  en: {
-    about: "Notes on this project",
-    chart: "Chart",
-    chartRole: "chart",
-    chartHint: "Interactive chart. Use the left and right arrow keys to step through data points, Home and End for the ends, Escape to clear. A table of the same data follows the chart.",
-    tableCaption: "Data for \u201C{title}\u201D",
-    dateHeader: "Date",
-    weekHeader: "Week",
-    switched: "Page language: {lang}. Charts redrawn."
-  },
-  fr: {
-    about: "Notes sur ce projet",
-    chart: "Graphique",
-    chartRole: "graphique",
-    chartHint: "Graphique interactif. Utilisez les fl\xE8ches gauche et droite pour parcourir les points, D\xE9but et Fin pour les extr\xE9mit\xE9s, \xC9chap pour quitter. Un tableau des m\xEAmes donn\xE9es suit le graphique.",
-    tableCaption: "Donn\xE9es de \xAB {title} \xBB",
-    dateHeader: "Date",
-    weekHeader: "Semaine",
-    switched: "Langue de la page : {lang}. Graphiques redessin\xE9s."
-  }
-};
-var a11y = () => A11Y[current];
-
-// src/core/a11y.ts
-var live = null;
-var timer = 0;
-function region() {
-  if (live?.isConnected) return live;
-  live = document.getElementById("a11y-live");
-  if (!live) {
-    live = document.createElement("p");
-    live.id = "a11y-live";
-    live.className = "sr-only";
-    live.setAttribute("role", "status");
-    live.setAttribute("aria-live", "polite");
-    live.setAttribute("aria-atomic", "true");
-    document.body.append(live);
-  }
-  return live;
-}
-function announce(text) {
-  const r = region();
-  r.textContent = "";
-  window.clearTimeout(timer);
-  timer = window.setTimeout(() => r.textContent = text, 120);
-}
-var txt = (v) => {
-  if (v == null) return "\u2014";
-  if (typeof v === "number") return nf2().format(Math.round(v));
-  if (typeof v === "object") {
-    const p = v;
-    if (typeof p.low === "number" && typeof p.high === "number")
-      return p.low === p.high ? nf2().format(Math.round(p.low)) : `${nf2().format(Math.round(p.low))} \u2013 ${nf2().format(Math.round(p.high))}`;
-    for (const n of [p.v, p.y])
-      if (typeof n === "number") return nf2().format(Math.round(n));
-  }
-  return String(v);
-};
-function dataTable(spec) {
-  const details = document.createElement("details");
-  details.className = "data-table";
-  const summary = document.createElement("summary");
-  summary.textContent = spec.caption;
-  const table = document.createElement("table");
-  const cap = document.createElement("caption");
-  cap.className = "sr-only";
-  cap.textContent = spec.caption;
-  const head = table.createTHead().insertRow();
-  for (const h of [spec.indexHeader, ...spec.columns.map((c) => c.header)]) {
-    const th = document.createElement("th");
-    th.scope = "col";
-    th.textContent = h;
-    head.append(th);
-  }
-  const body = table.createTBody();
-  spec.index.forEach((label, i) => {
-    const tr = body.insertRow();
-    const th = document.createElement("th");
-    th.scope = "row";
-    th.textContent = label;
-    tr.append(th);
-    for (const c of spec.columns)
-      tr.insertCell().textContent = c.values[i] ?? "\u2014";
-  });
-  table.append();
-  details.append(summary, table);
-  return details;
-}
-function fromChart(chart, opts) {
-  const data = chart.data;
-  const sets = data.datasets.filter(
-    (d) => opts.include?.(d) ?? true
-  );
-  const labels = (data.labels ?? []).map(String);
-  const n = labels.length || Math.max(
-    0,
-    ...sets.map((d) => (d.data ?? []).length)
-  );
-  return dataTable({
-    caption: opts.caption,
-    indexHeader: opts.indexHeader,
-    index: Array.from(
-      { length: n },
-      (_, i) => opts.indexOf?.(sets[0], i) ?? labels[i] ?? String(i + 1)
-    ),
-    columns: sets.map((d) => {
-      const ds = d;
-      return {
-        header: String(ds.label ?? ""),
-        values: Array.from({ length: n }, (_, i) => txt(ds.data?.[i]))
-      };
-    })
-  });
-}
-function readout(chart, i) {
-  const label = chart.data.labels?.[i] ?? "";
-  const parts = chart.data.datasets.filter((d) => !d.detachedOnly).map((d) => {
-    const ds = d;
-    return `${ds.label}: ${txt(ds.data?.[i])}`;
-  });
-  return [label, ...parts].join(". ");
-}
-var seq = 0;
-function keyboardChart(chart, opts) {
-  const canvas = chart.canvas;
-  const n = chart.data.labels?.length ?? 0;
-  if (!n) return;
-  const hintId = canvas.id ? `kbd-${canvas.id}` : `kbd-chart-${++seq}`;
-  if (!document.getElementById(hintId)) {
-    const hint = document.createElement("p");
-    hint.id = hintId;
-    hint.className = "sr-only";
-    hint.textContent = opts.hint;
-    canvas.after(hint);
-  }
-  canvas.tabIndex = 0;
-  canvas.setAttribute("aria-roledescription", opts.roledescription);
-  const ids = new Set(
-    (canvas.getAttribute("aria-describedby") ?? "").split(/\s+/).filter(Boolean)
-  );
-  ids.add(hintId);
-  canvas.setAttribute("aria-describedby", [...ids].join(" "));
-  const speak = opts.readout ?? ((i) => readout(chart, i));
-  let at = -1;
-  const paint = (next) => {
-    if (next === null || next < 0 || next >= n) {
-      at = -1;
-      chart.setActiveElements([]);
-      chart.tooltip.setActiveElements([], { x: 0, y: 0 });
-      chart.update("none");
-      return;
-    }
-    at = next;
-    const els = chart.data.datasets.map((_, datasetIndex) => ({
-      datasetIndex,
-      index: at
-    }));
-    const pt = chart.getDatasetMeta(0).data[at];
-    chart.setActiveElements(els);
-    chart.tooltip.setActiveElements(els, { x: pt?.x ?? 0, y: pt?.y ?? 0 });
-    chart.update("none");
-    announce(speak(at));
-  };
-  canvas.addEventListener("keydown", (ev) => {
-    switch (ev.key) {
-      case "ArrowRight":
-      case "ArrowUp":
-        paint(at < 0 ? 0 : Math.min(n - 1, at + 1));
-        break;
-      case "ArrowLeft":
-      case "ArrowDown":
-        paint(at < 0 ? n - 1 : Math.max(0, at - 1));
-        break;
-      case "Home":
-        paint(0);
-        break;
-      case "End":
-        paint(n - 1);
-        break;
-      case "Escape":
-        paint(null);
-        break;
-      default:
-        return;
-    }
-    ev.preventDefault();
-  });
-  canvas.addEventListener("blur", () => paint(null));
-}
-
-// src/core/canvas-registry.ts
-var VARS = {
-  ink: "--chart-ink",
-  label: "--chart-label",
-  muted: "--chart-muted",
-  grid: "--chart-grid",
-  axisGrid: "--chart-axis-grid",
-  hollow: "--chart-hollow",
-  tooltipBg: "--chart-tooltip-bg",
-  tooltipInk: "--chart-tooltip-ink",
-  series1: "--chart-series-1",
-  series2: "--chart-series-2",
-  series3: "--chart-series-3",
-  series4: "--chart-series-4",
-  series5: "--chart-series-5",
-  series6: "--chart-series-6",
-  series7: "--chart-series-7"
-};
-var FALLBACK = {
-  ink: "#111827",
-  label: "#4b5563",
-  muted: "#6b7280",
-  grid: "#e5e5e5",
-  axisGrid: "rgba(17, 24, 39, 0.06)",
-  hollow: "#ffffff",
-  tooltipBg: "rgba(17, 24, 39, 0.92)",
-  tooltipInk: "#ffffff",
-  series1: "#5C97C5",
-  series2: "#357AB0",
-  series3: "#2A6B9C",
-  series4: "#1B5C92",
-  series5: "#124A78",
-  series6: "#0A3A63",
-  series7: "#062844"
-};
-var ctx2d = document.createElement("canvas").getContext("2d");
-function normalise(css, fallback) {
-  if (!ctx2d) return fallback;
-  ctx2d.fillStyle = fallback;
-  ctx2d.fillStyle = css;
-  return typeof ctx2d.fillStyle === "string" ? ctx2d.fillStyle : fallback;
-}
-var cache = null;
-function read() {
-  const out = {};
-  const probe2 = document.createElement("span");
-  probe2.setAttribute("aria-hidden", "true");
-  probe2.style.cssText = "position:absolute;width:0;height:0;visibility:hidden";
-  (document.body ?? document.documentElement).append(probe2);
-  for (const key of Object.keys(VARS)) {
-    probe2.style.color = `var(${VARS[key]})`;
-    out[key] = normalise(getComputedStyle(probe2).color, FALLBACK[key]);
-  }
-  probe2.remove();
-  return out;
-}
-var value = (key) => (cache ??= read(), cache[key]);
-var SERIES = [
-  "series1",
-  "series2",
-  "series3",
-  "series4",
-  "series5",
-  "series6",
-  "series7"
-].map((k) => value(k));
-function refreshTheme() {
-  cache = null;
-}
-var THEME = {
-  get ink() {
-    return value("ink");
-  },
-  get label() {
-    return value("label");
-  },
-  get muted() {
-    return value("muted");
-  },
-  get grid() {
-    return value("grid");
-  },
-  get axisGrid() {
-    return value("axisGrid");
-  },
-  get hollow() {
-    return value("hollow");
-  },
-  get tooltipBg() {
-    return value("tooltipBg");
-  },
-  get tooltipInk() {
-    return value("tooltipInk");
-  },
-  dim: 0.45
-  // was 0.18 — ≈1.3:1 against both modes (WCAG 1.4.1)
-};
-var SERIES_KEYS = [
-  "series1",
-  "series2",
-  "series3",
-  "series4",
-  "series5",
-  "series6",
-  "series7"
-];
-function seriesColor(i) {
-  const last = SERIES_KEYS.length - 1;
-  return value(SERIES_KEYS[Math.min(Math.max(i, 0), last)]);
-}
-var DASHES = [
-  [],
-  [6, 3],
-  [2, 3],
-  [8, 3, 2, 3],
-  [1.5, 3],
-  [10, 4],
-  [4, 3]
-];
-var RAMP = DASHES.map((dash, i) => ({
-  get color() {
-    return seriesColor(i);
-  },
-  dash
-}));
-function alpha(hex2, a) {
-  const m = /^#([0-9a-f]{6})$/i.exec(hex2);
-  if (!m) throw new Error(`alpha() expects #rrggbb, got "${hex2}"`);
-  const n = Number.parseInt(m[1], 16);
-  return `rgba(${n >> 16 & 255}, ${n >> 8 & 255}, ${n & 255}, ${a})`;
-}
-function segIndex(ctx, which) {
-  const given = which === 0 ? ctx.p0DataIndex : ctx.p1DataIndex;
-  if (typeof given === "number" && Number.isFinite(given)) {
-    return Math.round(given);
-  }
-  const pt = which === 0 ? ctx.p0 : ctx.p1;
-  const parsed = pt?.parsed?.x;
-  if (typeof parsed === "number" && Number.isInteger(parsed)) return parsed;
-  const px = pt?.x;
-  const axis = ctx.chart?.options?.indexAxis === "y" ? "y" : "x";
-  const scale = ctx.chart?.scales?.[axis];
-  if (typeof px === "number" && typeof scale?.getValueForPixel === "function") {
-    const v = scale.getValueForPixel(px);
-    if (typeof v === "number" && Number.isFinite(v)) return Math.round(v);
-  }
-  return void 0;
-}
-var gapSegment = (slots = 1, dash = [6, 4]) => ({
-  borderDash: (ctx) => {
-    const i0 = segIndex(ctx, 0);
-    const i1 = segIndex(ctx, 1);
-    if (i0 === void 0 || i1 === void 0) return void 0;
-    return Math.abs(i1 - i0) > slots + 0.01 ? dash : void 0;
-  }
-});
-var live2 = /* @__PURE__ */ new Set();
-var track = (chart) => (live2.add(chart), chart);
-function destroyAll() {
-  for (const chart of live2) {
-    try {
-      chart.destroy();
-    } catch (err) {
-      console.error("[chart] destroy failed", err);
-    }
-  }
-  live2.clear();
-}
-
-// src/model/index.ts
-var METRICS = ["p", "a", "f", "i"];
-var METRIC_OF = {
-  p: "turnout",
-  a: "arrests",
-  f: "forcesInjured",
-  i: "protesterInjured"
-};
-var DETACHED = /* @__PURE__ */ new Set(["r", "p", "e", "c"]);
-var isDetached = (q) => q != null && q !== "n" && DETACHED.has(q);
-var bandOf = (b) => typeof b === "number" ? [b, b] : b;
-var midOf = (b) => {
-  const [lo, hi] = bandOf(b);
-  return (lo + hi) / 2;
-};
-
-// src/data/data.ts
-var NIL = { v: null, band: null, q: null, note: null, detach: false };
-var START = "2026-09-15";
-var END = "2026-11-11";
-var utc = (s) => /* @__PURE__ */ new Date(`${s}T00:00:00Z`);
-var iso = (d) => d.toISOString().slice(0, 10);
-var addDays = (isoDate, n) => {
-  const d = /* @__PURE__ */ new Date(`${isoDate}T00:00:00Z`);
-  d.setUTCDate(d.getUTCDate() + n);
-  return d.toISOString().slice(0, 10);
-};
-var mondayOf = (isoDate) => {
-  const d = /* @__PURE__ */ new Date(`${isoDate}T00:00:00Z`);
-  d.setUTCDate(d.getUTCDate() - (d.getUTCDay() + 6) % 7);
-  return d.toISOString().slice(0, 10);
-};
-function eachDay(start, end) {
-  const out = [];
-  const stop = utc(end);
-  for (const d = utc(start); d <= stop; d.setUTCDate(d.getUTCDate() + 1))
-    out.push(iso(d));
-  return out;
-}
-var DATES = eachDay(START, END);
-var WEEKS = (() => {
-  const byKey = /* @__PURE__ */ new Map();
-  for (const d of DATES) {
-    const k = mondayOf(d);
-    const list = byKey.get(k);
-    if (list) list.push(d);
-    else byKey.set(k, [d]);
-  }
-  return [...byKey].sort(([a], [b]) => a.localeCompare(b)).map(([key, dates2]) => {
-    const end = addDays(key, 6);
-    return { key, end, dates: dates2, touchesEdge: key < START || end > END };
-  });
-})();
-var HOLIDAY_START = "2026-10-18";
-var HOLIDAY_END = "2026-11-01";
-var weekTouchesHoliday = (weekStart) => weekStart <= HOLIDAY_END && addDays(weekStart, 6) >= HOLIDAY_START;
-var FACTS = {
-  /* ── School blockades ─────────────────────────────────────────────────
-         Metric: establishments where pupils could not attend normally —
-         blocked, or closed by decision. Band = official count (floor) to
-         union count (ceiling); the union's "à l'arrêt" also counts
-         administratively closed schools, so the ceiling is an upper bound.
-  
-         "x" = a wider measure than blockades (établissements perturbés,
-         cours suspendus, établissements fermés) — the only figure published
-         that day. "r" = regional count. "f" = publisher said "more than".
-  
-         Days with no published count stay empty. During the Toussaint
-         holiday (17 Oct – 1 Nov) no lycée was in session, so the metric did
-         not exist: those days are empty and the connector is dotted.       */
-  /* ── The movement's first fortnight ─────────────────────────────────────
-         The wave began after the rentrée: teachers and parents had been on
-         strike in Mayotte since 31 August (lycée Nord d'Acoua, blocked for
-         five weeks); in mainland France the lycée Théodore-Monod at Le Rheu
-         was blocked on 7 September, the lycée Queneau at Villeneuve-d'Ascq on
-         14 September and the lycée Victor-Hugo at Caen on 15 September. The
-         window opens on 15 September at the user's request, so the 7 and 14
-         September blockades fall outside it.
-  
-         NONE of 15–27 September carries a published turnout, arrest, injury or
-         damage figure, so the week of 14–20 September is empty rather than
-         estimated. The one exception is the Paris area on 25 September. */
-  "2026-09-15": { blockades: { low: 1, high: 1 } },
-  "2026-09-19": { blockades: { low: 1, high: 1 } },
-  "2026-09-23": { blockades: { low: 10, high: 10, q: "r" } },
-  /* Fri 25 Sep — the Île-de-France centre of gravity: ~60 franciliens
-     lycées disrupted over 24–25 Sep, mainly Seine-Saint-Denis and
-     Val-de-Marne (Saint-Denis, Sarcelles, Gonesse, Stains, Saint-Ouen,
-     Rosny-sous-Bois, La Courneuve); the Créteil rectorat counted a
-     "grosse dizaine" of new blockades that day.
-     21 interpellations by noon by the Préfecture de Police, in connection
-     with the Paris-area mobilisations — PARIS ONLY, hence "r". The
-     rectorat noted gatherings, crowd movements and material damage
-     without quantifying them. */
-  "2026-09-25": {
-    arrests: { low: 21, high: 21, q: "r" }
-  },
-  /* Mon 28 Sep — the movement goes national: actions in Marseille, Lille,
-     the Rhône, the Var and the Alpes-Maritimes. Interior Ministry: 180
-     establishments perturbed, 27 of them totally blocked, 164
-     interpellations that day.
-     First serious injury of the movement: a 14-year-old hit in the face
-     by a police projectile at the lycée professionnel Château-d'Epluches,
-     Saint-Ouen-l'Aumône (Val-d'Oise); the IGPN was seized. Flagged "f":
-     one documented casualty is a minimum, not a count. */
-  "2026-09-28": {
-    arrests: { low: 164, high: 164 },
-    protesterInjured: { low: 1, high: 1, q: "f" },
-    blockades: { low: 27, high: 27 }
-  },
-  /* Tue 29 Sep — national public-service mobilisation day, which the USL
-     called students to join; it is the movement's Act I.
-     Education ministry, end of day: 416 establishments touched since the
-     morning, 338 still affected, 45 blocked; Le Monde counted actions at
-     nearly 410 establishments; the USL claimed 400 blocked out of ~3,700
-     in France. 440 interpellations, two thirds of them leading to a garde
-     à vue, "essentially for degradations and attacks on officers"
-     (Nuñez, BFM-TV).
-     Turnout: the intersyndicale demonstration drew 206,000 (ministry) /
-     300,000 (CGT) nationwide and 30,000 / 70,000 in Paris, across 170+
-     demonstrations. The students marched with it, so the figure is
-     carried here — but it counts the public-service cortèges, not a
-     student crowd, for which no national count exists. Flagged "p".
-     The Education ministry counted 31 injured students and staff that
-     day. Strike rate: 11.47% weighted (12.74% second degree, 27.39%
-     life-schools staff; 13.71% of teachers). */
-  "2026-09-29": {
-    turnout: { low: 206e3, high: 3e5, q: "p" },
-    strikers: { low: 25e4, high: 25e4, q: "e" },
-    arrests: { low: 440, high: 440 },
-    protesterInjured: { low: 31, high: 31, q: "p" },
-    blockades: { low: 45, high: 45 }
-  },
-  /* Wed 30 Sep — 356 establishments perturbed; 625 interpellations that
-     day, which with 440 on the 29th makes the two-day total 1,065.
-     83 police and gendarmes injured.
-     The Education ministry's stock since the start of the blockades
-     reaches 119 injured students and staff (85 students, 34 staff) — a
-     cumulative level, hence "c". */
-  "2026-09-30": {
-    arrests: { low: 625, high: 625 },
-    protesterInjured: { low: 119, high: 119, q: "c" }
-  },
-  /* Thu 1 Oct — Acte II. More than 900 actions and blockages; AFP's police
-         returns counted 340 actions in the morning and 169 blockades, ending
-         the day at 900 actions including 400 closures; the Union étudiante
-         claimed 640 lycées and ~30 campuses blocked, a figure the authorities
-         do not confirm. Marseille: 18 high schools totally blocked, 3
-         partially, ~40 in Bouches-du-Rhône; Aix-en-Provence ~600 students;
-         Metz 6; Brest most; Épinal 2; Perpignan 11 interpellations and one
-         student injured. No national turnout figure was published.
-  
-         FIX 5: arrests 1,949 are THAT DAY ("1 949 interpellations ce jeudi"),
-         not a stock; the only stock is 6,059 "depuis le 28 septembre" on
-         5 Oct. The day was the peak of the first week.
-  
-         FIX 7: forces injured are bracketed [83, 300] — 83 is the
-         government level at the Wednesday cut-off (it is the same 83 that
-         appears in the 318-injury total of 1 Oct) and ~300 is Nuñez's
-         Thursday figure ("quelque 300 policiers et gendarmes blessés en
-         intervention jeudi"). The band spans a cumulative level and a daily
-         flow, so it is flagged "e" and the 83 is not counted twice.
-  
-         FIX 6: 235 = 170 students + 65 education staff, cumulative at the
-         1 Oct cut-off; the previous 119–235 band was two vintages of this
-         same series. Flagged "c".
-  
-         Damage: the hall of the lycée Nelson-Mandela in Nantes was destroyed
-         by a fire (several classrooms unusable for weeks), as was the main
-         entrance and a 35-classroom block at the lycée Henri-Moissan in
-         Meaux; the façade of the lycée Lumière in Lyon was burnt; in
-         Seine-Maritime two headteachers were hurt (Petit-Quevilly, Rouen) and
-         the prefecture counted eight injured and several intrusions. The €1M
-         cell is a local estimate from the original research and is a subset
-         of the larger Île-de-France and IFRAP totals, hence "c". */
-  "2026-10-01": {
-    arrests: { low: 1949, high: 1949 },
-    forcesInjured: { low: 300, high: 305, q: "e" },
-    protesterInjured: { low: 235, high: 235, q: "c" },
-    damagesCost: { low: 1, high: 1, q: "c" },
-    blockades: { low: 222, high: 640 }
-  },
-  /* Fri 2 Oct — 1,747 interpellations that day and "more than 5,000 since
-     Monday" (the daily series gives 4,925); 735 establishments perturbed,
-     30% fewer than the day before, with urban violence near 158 of them
-     (projectiles, attacks on officers, teachers, journalists and
-     passers-by). A young police lieutenant was assaulted in Paris's 20th
-     arrondissement. Geffray: 65 education staff injured since the start
-     of the movement, 40 of them headteachers. */
-  "2026-10-02": {
-    arrests: { low: 1747, high: 1747 },
-    blockades: { low: 400, high: 400, q: "f" }
-  },
-  /* Sat 3 Oct — the ministry's stock "6,059 interpellations since
-     28 September" (5 Oct) minus 984 on Monday 5 Oct leaves 5,075 through
-     Sunday 4 Oct; the daily figures for 28 Sep–2 Oct sum to 4,925. The
-     difference, 150, is the weekend of 3–4 October. It is a two-day total
-     derived by subtraction, not a Saturday figure — flagged "e" and
-     carried on the Saturday, with the derivation in this comment. */
-  "2026-10-03": {
-    arrests: { low: 150, high: 150, q: "e" },
-    blockades: { low: 735, high: 735, q: "x" }
-  },
-  /* Mon 5 Oct — 984 interpellations and 65 forces injured that day.
-     Stocks published the same day: 6,059 interpellations since 28 Sep;
-     715 police and gendarmes injured since the start of the movement;
-     Matignon: 215 students and 85 education staff injured since the
-     start, 34 of them headteachers. */
-  "2026-10-05": {
-    arrests: { low: 984, high: 984 },
-    forcesInjured: { low: 65, high: 65 },
-    blockades: { low: 400, high: 500, q: "x" }
-  },
-  /* Tue 6 Oct — "Acte III", first national school/student day.
-     256,000 ministry / 450,000 organisers; Paris 56,000 / 100,000.
-     488 interpellations and 43 forces injured that day; 215 students
-     injured since mid-September. The €6M is the Île-de-France damage
-     increment for the 1–8 Oct run and is therefore a subset, not an
-     increment unique to 6 Oct. Flagged "c"; the anchor of the run is
-     8 Oct. */
-  "2026-10-06": {
-    turnout: { low: 256e3, high: 45e4 },
-    arrests: { low: 488, high: 488 },
-    forcesInjured: { low: 43, high: 43 },
-    damagesCost: { low: 6, high: 6, q: "c" },
-    blockades: { low: 891, high: 1800, q: "x" }
-  },
-  /* Thu 8 Oct — Act IV. Education ministry: 0.82% weighted all staff
-     (teachers 0.99%, 1st degree 0.10%, 2nd degree 1.67%, vie scolaire
-     2.33%, other staff 0.45%), excluding Toulouse, Nantes and Corse.
-     The lowest rate of the whole sequence, in the middle of the
-     mobilisation — the school action had drained by 8 Oct. */
-  "2026-10-08": {
-    turnout: { low: 71500, high: 13e4 },
-    /* Education ministry 0.82% weighted; no function-wide rate that day,
-       so the education rate stands in for the civil service on the same
-       2,500,000-agent base: 20,500. Flagged "e" — the proxy runs low. */
-    strikers: { low: 20500, high: 20500, q: "e" },
-    damagesCost: { low: 6, high: 6, q: "e" },
-    blockades: { low: 224, high: 224, q: "x" }
-  },
-  /* Sat 10 Oct — national cumulative damage stock: "déjà estimées à
-     30 millions d'euros en France" since mid-September (CNEWS's own
-     compilation of regional figures — no ministry published a national
-     tally). Pannekoucke's parallel AURA estimate of €25–30M is NOT
-     included, so this is neither a floor nor additive with the regional
-     figures. Flagged "c": a stock, never summed with flows. */
-  "2026-10-10": {
-    damagesCost: { low: 30, high: 30, q: "c" },
-    blockades: { low: 40, high: 40, q: "f" }
-  },
-  /* Mon 12 Oct — three regional prefecture figures, all regional:
-       · Rhône: 27 établissements touchés (19 lycées, 6 universités,
-         2 collèges), 13 interpellations.
-       · Bas-Rhin/Strasbourg: 13 interpellations (préfecture), incl. 4
-         for preparing incendiary devices, 3 for mortar fire.
-     Two prefectures published 13 independently, so 13 is a FLOOR for the
-     day, not the day's regional total. NOT Paris — the old note was
-     wrong.
-     FIX 13 (third pass): the €1.5M moved here from 13 Oct. It is
-     NORMANDY (Hervé Morin, Conseil régional de Normandie, 12 Oct) and
-     it is a CUMULATIVE stock since mid-September — "atteint d'ores et
-     déjà 30 millions d'euros, dont 1,5 million en Normandie" — so the
-     flag moves from "e" to "c". Île-de-France's own revised total the
-     same day was €8.5M (110+ lycées, ~120 portails/sas out of service).
-     Both regional stocks are components of the €30M national stock and
-     must never be added to it.
-     The 3 injured are an Île-de-France figure and count education and
-     local-authority staff, not protesters: 1 proviseur, 1 parent
-     d'élève, 1 agent de la Région. */
-  "2026-10-12": {
-    arrests: { low: 13, high: 13, q: "r" },
-    protesterInjured: { low: 3, high: 3, q: "r" },
-    damagesCost: { low: 1.5, high: 1.5, q: "c" },
-    blockades: { low: 19, high: 19, q: "r" }
-  },
-  /* Tue 13 Oct — "Acte V": 214 high schools closed (94.2% open), 161,500
-     ministry / 480,000 youth intersyndicate (41,500 Paris), 40 police
-     and gendarmes injured.
-     FIX 13 (third pass): the €1.5M cell is GONE from this date — it
-     was Normandy, and it was published on 12 October. */
-  "2026-10-13": {
-    turnout: { low: 161500, high: 48e4 },
-    /* 3.71% weighted education rate as proxy: 3.71% x 2,500,000 = 92,750. */
-    strikers: { low: 92750, high: 92750, q: "e" },
-    forcesInjured: { low: 40, high: 40 },
-    blockades: { low: 214, high: 214, q: "x" }
-  },
-  /* Sat 17 Oct — the peak of the episode.
-         110 → 430 → 441 actions; ~60,000 officers deployed.
-         550,000 ministry / 800,000 organisers; Paris 110,000.
-         Arrests 2,397 initial → 2,628 consolidated (2,513 gardes à vue;
-         108 in Paris). Forces injured 997 initial → 1,144 consolidated,
-         7 serious. One civilian death: Christophe M., 59, Paris.
-  
-         FIX 2 (first pass): no official protester-injury count exists. The
-         low bound is Laurent Thines's serious-injury register (54 seriously
-         injured — 5 eye, 5 cranio-facial, 2 amputations, 42 other — plus the
-         1 death, i.e. 55); the high bound is a reasoned ceiling from
-         Toulouse's 130+ street-medics treatments (~13 treated per serious
-         case) against 54 serious cases nationally. Wikipedia's "400+ civilians"
-         is an uncited infobox line and sits below the partial nine-city sum
-         (~204 across Bordeaux, Clermont-Ferrand, Dijon, Metz, Nancy, Rouen,
-         Strasbourg, Avignon, Toulouse), so it is a floor, not a ceiling.
-         Flagged "e": derived, drawn hollow.
-  
-         Damages: IFRAP conditional estimate for the 17–18 Oct weekend,
-         €244M low / €463M central / €866M high for MATERIAL damage; the
-         €294M–€1.1bn variant includes lost turnover and is a different measure.
-         IFRAP excludes marginal order-maintenance and curfew costs. */
-  "2026-10-17": {
-    turnout: { low: 55e4, high: 8e5 },
-    arrests: { low: 2397, high: 2628 },
-    forcesInjured: { low: 207, high: 207, q: "e" },
-    protesterInjured: { low: 55, high: 1e3, q: "e" },
-    damagesCost: { low: 244, high: 866, q: "e" }
-  },
-  /* Sun 18 Oct — Paris curfew only, 108 interpellations.
-     FIX 3 (first pass): the €1.8–5M damage figure is a subset of the
-     17–18 Oct IFRAP weekend total, so it is flagged "c" and cannot be
-     added to it.
-     FIX 11 (third pass): "r", not "p" — the figure is Paris-only, and
-     "p" now means partial coverage. */
-  "2026-10-18": {
-    arrests: { low: 108, high: 108, q: "r" },
-    damagesCost: { low: 1.8, high: 5, q: "c" }
-  },
-  /* Tue 20 Oct — regional only: 13 interpellations overnight in Guadeloupe
-     (Basse-Terre, Saint-François, Goyave, Vieux-Habitants, Gosier). */
-  "2026-10-20": { arrests: { low: 13, high: 13, q: "r" } },
-  /* Sat 24 Oct — 289 actions, 70,000 officers, Centaure AFVs, water cannons,
-     14 aerial cameras in Paris. 410,000 ministry / 800,000+ CGT;
-     Paris 110,000 (préfecture) / 250,000 (CGT).
-     Arrests 1,314 initial → 1,435 final (142 Paris, 126 GàV).
-     Forces injured 53 at 7:30 a.m. — the ministry's own communiqué calls
-     this "provisoire" — then 267 on consolidation (Nuñez, 26 Oct), with
-     150 civilians injured, 3 seriously. 75 fire interventions.
-     La Réunion: ~80 Saint-Denis, 300 Saint-Pierre. Mayotte: Tsingoni.
-     FIX 4 (first pass): the national damage cell below replaces the earlier
-     local derivation. CCI France's 27 Oct tally — 2,488 shops hit after the
-     17th plus 50 after the 24th, 1,161 heavily damaged, 643 still shut —
-     puts the cost of the degradations at over €1bn on the IFRAP estimate,
-     for the 17–24 Oct period as a whole. That is a SUPERSET of the 17 Oct
-     cell, so it is flagged "c" and is never added to it. */
-  "2026-10-24": {
-    turnout: { low: 41e4, high: 8e5 },
-    arrests: { low: 1314, high: 1435 },
-    forcesInjured: { low: 267, high: 267 },
-    protesterInjured: { low: 150, high: 150 },
-    damagesCost: { low: 1e3, high: 1e3, q: "c" }
-  },
-  /* Sat 31 Oct — 291 actions → 227 consolidated.
-     320,000 ministry / ~500,000 youth organisations; Paris 70,000.
-     Arrests 565 at 21h → 779 cumulative (incl. 214 on the Halloween night).
-     Forces injured 116 by 21h + 43 that night = 159.
-     515 fires handled; 36 shops degraded, 3 pillaged — no cost figure. */
-  "2026-10-31": {
-    turnout: { low: 32e4, high: 5e5 },
-    arrests: { low: 565, high: 779 },
-    forcesInjured: { low: 116, high: 159 },
-    damagesCost: { low: 0.4, high: 3.3, q: "e" }
-  },
-  "2026-11-02": { blockades: { low: 41, high: 41 } },
-  "2026-11-03": { blockades: { low: 48, high: 500 } },
-  /* Thu 5 Nov — national strike day, 193 actions.
-     575,000 ministry (definitive) / 1.6M CGT; Paris 65,000 / 350,000.
-     Arrests 448 at 18h → 642 updated. Forces injured 53 at 18h → 112.
-     86 fire interventions. Marseille: 17 schools blocked, ~40 interpellations,
-     13 police wounded.
-     Protester injuries = 18, a FLOOR: the 18 who instructed lawyers to sue
-     Nuñez. Not a ministry count. */
-  "2026-11-05": {
-    turnout: { low: 575e3, high: 16e5 },
-    strikers: { low: 247250, high: 275e3, q: "e" },
-    arrests: { low: 448, high: 642 },
-    forcesInjured: { low: 53, high: 112 },
-    protesterInjured: { low: 18, high: 18, q: "f" },
-    blockades: { low: 81, high: 1e3 }
-  },
-  /* Sat 7 Nov — 141 actions; ~70,000 officers, 25 blindés, 15 water-cannon
-     trucks; ~40,000 preventive checks; Caen campus dispersed by 50 CRS.
-     146,000 ministry / 250,000 youth intersyndicate; Paris 46,000 / 75,000.
-     Arrests 232 at 18h → 360+ at 19h.
-     Security-force casualties acknowledged but no number published. */
-  "2026-11-07": {
-    turnout: { low: 146e3, high: 25e4 },
-    arrests: { low: 350, high: 360 }
-  },
-  /* Mon 9 Nov — regional only: Bègles 4, Lyon 8, Strasbourg 5 = 17.
-     ~50 Île-de-France schools disrupted with mortar fire; Rennes 2
-     evacuated; Brest rally; Guadeloupe: lycée blocked at Baie-Mahault. */
-  "2026-11-09": { arrests: { low: 17, high: 17, q: "r" } },
-  "2026-11-10": {
-    /* Education strike + student march. 1.55% weighted rate as proxy:
-       1.55% x 2,500,000 = 38,750. */
-    strikers: { low: 38750, high: 38750, q: "e" }
-  }
-};
-var DEPLOYMENT = {
-  /* September deployment is an ASSUMPTION, on the same basis as the early
-     October cells: no official headcount exists for these days. The band
-     spans the marginal cost of one CRS company-day to the Sainte-Soline
-     all-in benchmark. It is an order-of-magnitude placeholder for the
-     policing-cost series, not a measurement. */
-  "2026-09-28": { low: 5e3, high: 2e4, q: "e" },
-  "2026-09-29": { low: 5e3, high: 2e4, q: "e" },
-  "2026-09-30": { low: 5e3, high: 2e4, q: "e" },
-  "2026-10-01": { low: 5e3, high: 2e4, q: "e" },
-  "2026-10-02": { low: 1e4, high: 3e4, q: "e" },
-  "2026-10-05": { low: 1e4, high: 3e4, q: "e" },
-  "2026-10-06": { low: 5e3, high: 2e4, q: "e" },
-  "2026-10-08": { low: 5e3, high: 2e4, q: "e" },
-  /* 12 Oct: three cities at once — Île-de-France (~80 lycées perturbed),
-     Lyon/Rhône (27 établissements), Strasbourg. No headcount published:
-     the only concrete data is "une dizaine de camions de gendarmes
-     mobiles" at the Strasbourg schools and several CRS/police vans at
-     porte Dorée, Paris. */
-  "2026-10-12": { low: 2e3, high: 8e3, q: "e" },
-  "2026-10-13": { low: 5e3, high: 2e4, q: "e" },
-  "2026-10-17": {
-    low: 6e4,
-    high: 6e4
-  },
-  "2026-10-18": { low: 2e3, high: 8e3, q: "e" },
-  "2026-10-24": { low: 7e4, high: 7e4 },
-  "2026-10-31": { low: 7e4, high: 7e4 },
-  "2026-11-05": { low: 7e4, high: 7e4 },
-  "2026-11-07": { low: 7e4, high: 7e4 }
-};
-var FORCES_STOCK = {
-  "2026-09-30": { low: 83, high: 83 },
-  "2026-10-05": { low: 715, high: 715 },
-  "2026-10-08": { low: 761, high: 761 },
-  "2026-10-14": { low: 937, high: 937 },
-  "2026-10-17": { low: 997, high: 1144 },
-  "2026-11-05": { low: 1580, high: 1580 }
-};
-var FORCES_STOCK_DERIVED = {
-  "2026-10-01": { low: 383, high: 388 },
-  // 83 (30 Sep) + 300–305 (1 Oct)
-  "2026-10-24": { low: 1411, high: 1411 },
-  // 1,144 (17 Oct) + 267
-  "2026-10-31": { low: 1527, high: 1570 }
-  // + 116–159
-};
-var RATE = { low: 136, high: 1133 };
-var round2 = (v) => Number.isInteger(v) ? v : Math.round(v * 100) / 100;
-var costBand = (dep) => [
-  dep.low * RATE.low / 1e6,
-  dep.high * RATE.high / 1e6
-];
-function projectDaily(key) {
-  return DATES.map((date) => {
-    const obs = FACTS[date]?.[key];
-    if (!obs) return NIL;
-    const q = obs.q ?? "n";
-    return {
-      v: round2((obs.low + obs.high) / 2),
-      band: [obs.low, obs.high],
-      q,
-      note: { k: "obs", date, metric: key },
-      detach: isDetached(q)
-    };
-  });
-}
-var strikers = projectDaily("strikers").map(
-  (p) => ({ ...p, detach: false })
-);
-function projectPolicingDaily() {
-  return DATES.map((date) => {
-    const dep = DEPLOYMENT[date];
-    if (!dep) return NIL;
-    const [lo, hi] = costBand(dep);
-    const q = dep.q ?? "n";
-    return {
-      v: round2((lo + hi) / 2),
-      band: [round2(lo), round2(hi)],
-      q,
-      note: { k: "policing", low: dep.low, high: dep.high, date },
-      detach: isDetached(q)
-    };
-  });
-}
-function projectPolicingCumulative() {
-  let lo = 0;
-  let hi = 0;
-  let days = 0;
-  let started = false;
-  return DATES.map((date) => {
-    const dep = DEPLOYMENT[date];
-    if (dep) {
-      const [a, b] = costBand(dep);
-      lo += a;
-      hi += b;
-      days++;
-      started = true;
-    }
-    if (!started) return NIL;
-    return {
-      v: round2((lo + hi) / 2),
-      band: [round2(lo), round2(hi)],
-      q: "e",
-      note: { k: "cumulative", days, added: Boolean(dep) },
-      detach: false
-      // always a line; its band is shaded, not barred
-    };
-  });
-}
-function projectForcesStock() {
-  return DATES.map((date) => {
-    const pub = FORCES_STOCK[date];
-    if (pub) {
-      return {
-        v: round2((pub.low + pub.high) / 2),
-        band: [pub.low, pub.high],
-        q: "c",
-        note: { k: "obs", date, metric: "forcesInjuredStock" },
-        detach: false
-      };
-    }
-    const der = FORCES_STOCK_DERIVED[date];
-    if (der) {
-      return {
-        v: round2((der.low + der.high) / 2),
-        band: [der.low, der.high],
-        q: "e",
-        note: { k: "obs", date, metric: "forcesInjuredStock" },
-        detach: false
-      };
-    }
-    return NIL;
-  });
-}
-function aggregate(key, op) {
-  return WEEKS.map((week) => {
-    const cells = [];
-    for (const d of week.dates) {
-      const obs = FACTS[d]?.[key];
-      if (!obs) continue;
-      cells.push({ date: d, obs, q: obs.q ?? "n" });
-    }
-    if (!cells.length) return NIL;
-    const last = cells[cells.length - 1];
-    const othersHigh = Math.max(
-      ...cells.filter((c) => c !== last).map((c) => c.obs.high),
-      Number.NEGATIVE_INFINITY
-    );
-    if (last.q === "c" && last.obs.high >= othersHigh) {
-      return {
-        v: round2((last.obs.low + last.obs.high) / 2),
-        band: [round2(last.obs.low), round2(last.obs.high)],
-        q: "c",
-        note: { k: "obs", date: last.date, metric: key },
-        detach: isDetached("c")
-      };
-    }
-    const regional = cells.filter((c) => c.q === "r");
-    const subsets = cells.filter((c) => c.q === "c");
-    const flows = cells.filter((c) => c.q !== "c" && c.q !== "r");
-    const regionalOnly = flows.length === 0 && regional.length > 0;
-    let pool = regionalOnly ? regional : flows;
-    if (!pool.length) {
-      if (!subsets.length) return NIL;
-      pool = [
-        subsets.reduce((best, x) => x.obs.high > best.obs.high ? x : best)
-      ];
-    }
-    let low;
-    let high;
-    let value2;
-    let peak;
-    if (op === "sum") {
-      low = pool.reduce((a, x) => a + x.obs.low, 0);
-      high = pool.reduce((a, x) => a + x.obs.high, 0);
-      value2 = (low + high) / 2;
-    } else {
-      low = Math.max(...pool.map((x) => x.obs.low));
-      high = Math.max(...pool.map((x) => x.obs.high));
-      const top = pool.reduce(
-        (best, x) => (x.obs.low + x.obs.high) / 2 > (best.obs.low + best.obs.high) / 2 ? x : best
-      );
-      value2 = (top.obs.low + top.obs.high) / 2;
-      peak = top.date;
-    }
-    const derived = pool.filter((x) => x.q === "e").sort((a, b) => b.obs.high - a.obs.high)[0];
-    const excluded = cells.length - pool.length;
-    const partial = pool.some((x) => x.q === "p");
-    const parts = {
-      days: new Set(pool.map((x) => x.date)).size,
-      kind: regionalOnly ? "regional" : "national",
-      peak,
-      noNational: regionalOnly || void 0,
-      excluded: excluded > 0 ? excluded : void 0,
-      floored: pool.some((x) => x.q === "f") || void 0,
-      clipped: week.touchesEdge || void 0
-    };
-    return {
-      v: round2(value2),
-      band: [round2(low), round2(high)],
-      q: regionalOnly ? "r" : parts.floored ? "f" : partial ? "p" : "w",
-      note: derived ? { k: "obs", date: derived.date, metric: key } : { k: "week", p: parts },
-      detach: regionalOnly
-    };
-  });
-}
-function aggregateBlockades() {
-  return WEEKS.map((week) => {
-    const cells = [];
-    for (const date of week.dates) {
-      const obs = FACTS[date]?.blockades;
-      if (!obs) continue;
-      cells.push({ date, obs, q: obs.q ?? "n" });
-    }
-    if (!cells.length) return NIL;
-    const national = cells.filter((c) => c.q !== "r");
-    const pool = national.length ? national : cells;
-    const regionalOnly = national.length === 0;
-    const top = pool.reduce((best, c) => {
-      const mid = (c.obs.low + c.obs.high) / 2;
-      const bestMid = (best.obs.low + best.obs.high) / 2;
-      if (c.q === "c" && best.q !== "c") return c;
-      if (best.q === "c" && c.q !== "c") return best;
-      return mid > bestMid ? c : best;
-    });
-    const wide = top.q === "x";
-    const parts = {
-      days: new Set(pool.map((c) => c.date)).size,
-      kind: regionalOnly ? "regional" : "national",
-      peak: top.date,
-      noNational: regionalOnly || void 0,
-      excluded: cells.length - pool.length || void 0,
-      floored: pool.some((c) => c.q === "f") || void 0,
-      clipped: week.touchesEdge || void 0,
-      vacation: weekTouchesHoliday(week.key) || void 0
-    };
-    return {
-      v: round2((top.obs.low + top.obs.high) / 2),
-      band: [round2(top.obs.low), round2(top.obs.high)],
-      q: regionalOnly ? "r" : wide ? "x" : top.q === "f" ? "f" : "w",
-      note: wide ? { k: "obs", date: top.date, metric: "blockades" } : { k: "week", p: parts },
-      detach: regionalOnly
-    };
-  });
-}
-var DAILY = {
-  turnout: projectDaily("turnout"),
-  strikers,
-  arrests: projectDaily("arrests"),
-  forcesInjured: projectDaily("forcesInjured"),
-  forcesInjuredStock: projectForcesStock(),
-  protesterInjured: projectDaily("protesterInjured"),
-  damagesCost: projectDaily("damagesCost"),
-  blockades: projectDaily("blockades"),
-  policing: projectPolicingDaily(),
-  policingCumulative: projectPolicingCumulative()
-};
-var WEEKLY = {
-  turnout: aggregate("turnout", "max"),
-  strikers: aggregate("strikers", "max").map(
-    (p) => p.q === "w" ? { ...p, q: "e" } : p
-  ),
-  arrests: aggregate("arrests", "sum"),
-  forcesInjured: aggregate("forcesInjured", "sum"),
-  protesterInjured: aggregate("protesterInjured", "sum"),
-  blockades: aggregateBlockades()
-};
-var STUDENT_WEEKS = WEEKS.map((week, idx) => {
-  const out = {
-    key: week.key,
-    end: week.end,
-    touchesEdge: week.touchesEdge,
-    p: null,
-    a: null,
-    f: null,
-    i: null,
-    flags: {},
-    notes: {}
-  };
-  for (const m of METRICS) {
-    const pt = WEEKLY[METRIC_OF[m]][idx];
-    if (pt.band) out[m] = pt.band;
-    if (pt.band && pt.q && pt.q !== "n") out.flags[m] = pt.q;
-    if (pt.note) out.notes[m] = pt.note;
-  }
-  return out;
-});
-var SEVERITY_LEVELS = [
-  {
-    /* 1,167 / 1,233 = 94.65% → the 94.6% the file itself states. */
-    id: "crsOctober",
-    total: { s: "n", v: 1233 },
-    serious: { s: "x", why: "binaryFile" },
-    light: { s: "n", v: 1167 },
-    other: { s: "n", v: 66, d: true }
-  },
-  {
-    /* All forces, running total at the peak, consolidated. */
-    id: "forcesPeak",
-    total: { s: "n", v: 1144 },
-    serious: { s: "n", v: 7 },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" }
-  },
-  {
-    /* No total has ever been published, so no share can exist. */
-    id: "protesters",
-    total: { s: "x", why: "noDenominator" },
-    serious: { s: "x", why: "noTally" },
-    light: { s: "x", why: "noDenominator" },
-    other: { s: "x", why: "noDenominator" }
-  }
-];
-var SEVERITY_WEEKS = [
-  {
-    id: "week12oct",
-    total: { s: "n", v: 207, d: true },
-    serious: { s: "n", v: 7 },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" }
-  },
-  {
-    id: "week19oct",
-    total: { s: "n", v: 267, d: true },
-    serious: { s: "x", why: "notPublished" },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" }
-  },
-  {
-    id: "week26oct",
-    total: { s: "n", v: 116, d: true },
-    serious: { s: "x", why: "notPublished" },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" }
-  },
-  {
-    id: "week2nov",
-    total: { s: "n", v: 53 },
-    serious: { s: "x", why: "notPublished" },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" }
-  },
-  {
-    /* The month is the smallest window at which a split exists at all. */
-    id: "crsOctober",
-    total: { s: "n", v: 1233 },
-    serious: { s: "x", why: "binaryFile" },
-    light: { s: "n", v: 1167 },
-    other: { s: "n", v: 66, d: true }
-  }
-];
-var CASES = [
-  {
-    id: "forcesAccidental",
-    side: "forces",
-    kind: "accidental",
-    count: { s: "c", n: 4 },
-    cases: ["givors", "crsWrist", "crsAnkle"]
-  },
-  {
-    id: "forcesConflictual",
-    side: "forces",
-    kind: "conflictual",
-    count: { s: "x", why: "noTally" },
-    cases: ["helmet", "groin2023"]
-  },
-  {
-    id: "protesterConflictual",
-    side: "protesters",
-    kind: "conflictual",
-    count: { s: "x", why: "noTally" },
-    cases: ["mael", "alaric", "eyes"]
-  },
-  {
-    id: "protesterAccidental",
-    side: "protesters",
-    kind: "accidental",
-    count: { s: "x", why: "noneDocumented" },
-    cases: []
-  },
-  {
-    id: "sainteSoline",
-    side: "forces",
-    kind: "accidental",
-    count: { s: "c", n: 29 },
-    cases: ["sainteSoline"],
-    reference: true
-  }
-];
-
-// src/core/dom.ts
-var byId = (id) => document.getElementById(id);
-function el(name, cls, text) {
-  const node = document.createElement(name);
-  if (cls) node.className = cls;
-  if (text !== void 0) node.textContent = text;
-  return node;
-}
-
-// src/sections/casualties.ts
-function cellText(c) {
-  switch (c.s) {
-    case "n":
-      return {
-        text: `${c.d ? "\u2248 " : ""}${nf2().format(c.v)}`,
-        cls: c.d ? "cas-num cas-derived" : "cas-num"
-      };
-    case "r":
-      return {
-        text: `\u2248 ${nf2().format(c.lo)}\u2013${nf2().format(c.hi)}`,
-        cls: "cas-num cas-derived"
-      };
-    case "c":
-      return {
-        text: fill(t().casualties.casesCount, { n: c.n }),
-        cls: "cas-num cas-cases"
-      };
-    default:
-      return { text: t().casualties.why[c.why], cls: "cas-absent" };
-  }
-}
-function cell(c, extra = "") {
-  const { text, cls } = cellText(c);
-  return el("td", extra ? `${cls} ${extra}` : cls, text);
-}
-function share2(light, total) {
-  if (light.s !== "n" || total.s !== "n" || total.v <= 0) return null;
-  return light.v / total.v;
-}
-function bar(p) {
-  const wrap = el("span", "cas-bar");
-  const run = el("span", "cas-bar-fill");
-  run.style.width = `${Math.max(0, Math.min(1, p)) * 100}%`;
-  wrap.append(run);
-  return wrap;
-}
-function severityTable(rows, caption) {
-  const c = t().casualties;
-  const table = el("table", "cas-table");
-  table.append(el("caption", "cas-caption", caption));
-  const thead = el("thead");
-  const head = el("tr");
-  const labels = [
-    c.colScope,
-    c.colTotal,
-    c.colSerious,
-    c.colLight,
-    c.colLightShare,
-    c.colOther
-  ];
-  labels.forEach((label, i) => {
-    const th = el("th", i === 0 ? "cas-scope-head" : "cas-num-head", label);
-    th.scope = "col";
-    head.append(th);
-  });
-  thead.append(head);
-  table.append(thead);
-  const tbody = el("tbody");
-  for (const row of rows) {
-    const tr = el("tr");
-    const th = el("th", "cas-scope", c.scope[row.id] ?? row.id);
-    th.scope = "row";
-    tr.append(th);
-    tr.append(cell(row.total));
-    tr.append(cell(row.serious));
-    tr.append(cell(row.light));
-    const p = share2(row.light, row.total);
-    const td = el("td", "cas-share");
-    if (p === null) {
-      td.append(el("span", "cas-absent", "\u2014"));
-    } else {
-      td.append(el("span", "cas-pct", `${(p * 100).toFixed(1)}%`), bar(p));
-    }
-    tr.append(td);
-    tr.append(cell(row.other));
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
-}
-function headline() {
-  const c = t().casualties;
-  const top = SEVERITY_LEVELS[0];
-  const p = share2(top.light, top.total);
-  const wrap = el("div", "cas-headline");
-  const left = el("div", "cas-head-stat");
-  left.append(
-    el("span", "cas-head-num", p === null ? "\u2014" : `${(p * 100).toFixed(1)}%`),
-    el(
-      "span",
-      "cas-head-label",
-      p === null || top.light.s !== "n" || top.total.s !== "n" ? c.headLightNote : fill(c.headLight, {
-        light: nf2().format(top.light.v),
-        total: nf2().format(top.total.v)
-      })
-    )
-  );
-  const right = el("div", "cas-head-stat cas-head-missing");
-  right.append(
-    el("span", "cas-head-num", "\u2014"),
-    el("span", "cas-head-label", c.headMissingNote)
-  );
-  wrap.append(left, right);
-  return wrap;
-}
-function causeTable(rows, caption) {
-  const c = t().casualties;
-  const table = el("table", "cas-table cas-cause");
-  table.append(el("caption", "cas-caption", caption));
-  const thead = el("thead");
-  const head = el("tr");
-  [c.colSide, c.colCircumstance, c.colCount, c.colCases].forEach((label, i) => {
-    const th = el("th", i < 2 ? "cas-scope-head" : "cas-num-head", label);
-    th.scope = "col";
-    head.append(th);
-  });
-  thead.append(head);
-  table.append(thead);
-  const tbody = el("tbody");
-  for (const row of rows) {
-    const tr = el("tr", row.reference ? "cas-reference" : "");
-    const th = el("th", "cas-scope", c.side[row.side]);
-    th.scope = "row";
-    tr.append(th);
-    tr.append(el("td", "cas-kind", c.kind[row.kind]));
-    tr.append(cell(row.count));
-    const td = el("td", "cas-cases-cell");
-    if (!row.cases.length) {
-      td.append(el("span", "cas-absent", t().casualties.noCases));
-    } else {
-      const list = el("ul", "cas-case-list");
-      for (const key of row.cases) list.append(el("li", "", c.cases[key]));
-      td.append(list);
-    }
-    tr.append(td);
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
-}
-function resolutionTable() {
-  const c = t().casualties;
-  const table = el("table", "cas-table cas-resolution");
-  table.append(el("caption", "cas-caption", c.capResolution));
-  const thead = el("thead");
-  const head = el("tr");
-  [c.colQuestion, c.colWindow, c.colWeekly].forEach((label, i) => {
-    const th = el("th", i === 2 ? "cas-num-head" : "cas-scope-head", label);
-    th.scope = "col";
-    head.append(th);
-  });
-  thead.append(head);
-  table.append(thead);
-  const tbody = el("tbody");
-  for (const row of c.resolution) {
-    const tr = el("tr");
-    const th = el("th", "cas-scope", row.label);
-    th.scope = "row";
-    tr.append(th, el("td", "", row.window));
-    tr.append(el("td", "cas-num", row.weekly));
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
-}
-function mountCasualties() {
-  const c = t().casualties;
-  const a = byId("cas-a");
-  if (a) {
-    a.replaceChildren(
-      el("h4", "cas-title", c.headlineTitle),
-      headline(),
-      severityTable(SEVERITY_LEVELS, c.capLevels),
-      causeTable(CASES, c.capCases),
-      el("p", "cas-note", c.noteLevels)
-    );
-  }
-  const b = byId("cas-b");
-  if (b) {
-    b.replaceChildren(
-      el("h4", "cas-title", c.weeklyTitle),
-      severityTable(SEVERITY_WEEKS, c.capWeeks),
-      resolutionTable(),
-      el("p", "cas-note", c.noteWeeks)
-    );
-  }
-}
-
 // node_modules/@kurkle/color/dist/color.esm.js
 function round(v) {
   return v + 0.5 | 0;
@@ -3053,10 +43,10 @@ function hexParse(str) {
   }
   return ret;
 }
-var alpha2 = (a, f) => a < 255 ? f(a) : "";
+var alpha = (a, f) => a < 255 ? f(a) : "";
 function hexString(v) {
   var f = isShort(v) ? h1 : h2;
-  return v ? "#" + f(v.r) + f(v.g) + f(v.b) + alpha2(v.a, f) : void 0;
+  return v ? "#" + f(v.r) + f(v.g) + f(v.b) + alpha(v.a, f) : void 0;
 }
 var HUE_RE = /^(hsla?|hwb|hsv)\(\s*([-+.e\d]+)(?:deg)?[\s,]+([-+.e\d]+)%[\s,]+([-+.e\d]+)%(?:[\s,]+([-+.e\d]+)(%)?)?\s*\)$/;
 function hsl2rgbn(h, s, l) {
@@ -10179,7 +7169,7 @@ function needContext(proxy, names2) {
   }
   return false;
 }
-var version2 = "4.6.1";
+var version = "4.6.1";
 var KNOWN_POSITIONS = [
   "top",
   "bottom",
@@ -10253,7 +7243,7 @@ var Chart = class {
   static instances = instances;
   static overrides = overrides;
   static registry = registry;
-  static version = version2;
+  static version = version;
   static getChart = getChart;
   static register(...items) {
     registry.add(...items);
@@ -14715,6 +11705,2827 @@ var TimeSeriesScale = class extends TimeScale {
   }
 };
 
+// src/copy/en/meta.ts
+var EN_META = {
+  tag: "en-GB",
+  label: "English",
+  meta: {
+    htmlLang: "en",
+    title: "Protest activity in France \u2014 September\u2013November 2026",
+    description: "Turnout, arrests, injuries and damage in the autumn 2026 movement, set against six earlier French movements."
+  },
+  sections: {
+    a: {
+      title: "A \xB7 Daily counts, 15 September \u2013 11 November 2026",
+      blurb: "One marker per day on which something was published. Days with no figure stay empty rather than interpolated; gaps in a line are dashed. The school-blockade line is dotted across the Toussaint holiday, when no lyc\xE9e was in session. The strike series is derived from participation rates: no authority published a national headcount of strikers."
+    },
+    b: {
+      title: "B \xB7 Weekly aggregates",
+      blurb: "Weeks run Monday to Sunday. A peak-day crowd and a summed weekly arrest count are not the same statistic \u2014 the tooltip says which is which. The weekly blockade figure is a peak, never a sum: the same lyc\xE9e is blocked on several consecutive days. People on strike is a level, so the weekly figure is the peak of the week, never a sum."
+    },
+    c: {
+      title: "C \xB7 One panel per movement",
+      blurb: "Each panel keeps its own time span on a shared logarithmic axis, so the shapes are comparable but the durations are not. The tooltip also compares every point with its own series \u2014 as a percentage of the highest figure in that panel, of the mean, of the median and of the first published figure. The last of these can run to thousands of percent when a movement began with a handful of people, which is exactly why the other three are given first.",
+      note: "Hollow markers are regional, Paris-only, modelled or stock figures. Dashed connectors span a week with nothing published."
+    },
+    d: {
+      title: "D \xB7 Transposed: one panel per series",
+      blurb: "The same data with movements overlaid, so a single measure can be read across 1968 to 2026. The x axis is elapsed weeks, capped at the last week with enforcement figures. Tooltip comparisons work as in section C, but are computed over the weeks actually plotted in the hovered panel.",
+      note: "Hover a measure or a movement to isolate it. Panel order matches legend order."
+    },
+    e: {
+      title: "E \xB7 Median and peak",
+      blurb: "Each panel gathers one measure across the movements that published it. The dot is the median of the series \u2014 the typical week \u2014 and the triangle its peak, the largest single figure. The pale bar behind each pair spans the whole series, from its smallest figure to its largest, so a movement that was steady reads as a short bar and one that had a few enormous weeks as a long one. The axis is logarithmic, so a handful of mass marches and a routine week can share a panel.",
+      note: "Each figure is counted once, at the midpoint of its range where one was published. The count of published figures is in the tooltip: with a single figure the median and the peak are the same number."
+    }
+  },
+  groups: {
+    ongoing: {
+      title: "The Ongoing Revolt",
+      blurb: "Both sections cover the autumn 2026 movement. A plots every published daily figure; B aggregates those same figures by week, so a peak-day crowd and a summed arrest count never share an axis."
+    },
+    historical: {
+      title: "Historical Comparisons",
+      blurb: "The same measures set against six earlier French movements: 1968, 1986, 1995, 2006, 2010 and 2016. C keeps one panel per movement; D keeps one panel per series."
+    }
+  }
+};
+
+// src/copy/markers.ts
+var FLAGS = [
+  {
+    key: "n",
+    chip: { en: "", fr: "" },
+    suffix: null,
+    long: null
+  },
+  {
+    key: "r",
+    chip: { en: "regional", fr: "r\xE9gional" },
+    suffix: { en: "regional", fr: "r\xE9gional" },
+    long: {
+      en: "regional only \u2014 one d\xE9partement or one city, never extrapolated",
+      fr: "r\xE9gional seulement \u2014 un d\xE9partement ou une ville, jamais extrapol\xE9"
+    }
+  },
+  {
+    key: "p",
+    chip: { en: "partial", fr: "partiel" },
+    suffix: { en: "partial", fr: "partiel" },
+    long: {
+      en: "partial \u2014 a floor, or two publishers disagreeing; both bounds shown",
+      fr: "partiel \u2014 un plancher, ou deux \xE9diteurs en d\xE9saccord ; les deux bornes affich\xE9es"
+    }
+  },
+  {
+    key: "f",
+    chip: { en: "floor", fr: "plancher" },
+    suffix: { en: "lower bound", fr: "borne inf\xE9rieure" },
+    long: {
+      en: "lower bound \u2014 the true figure is at least this",
+      fr: "borne inf\xE9rieure \u2014 le chiffre r\xE9el est au moins celui-ci"
+    }
+  },
+  {
+    key: "e",
+    chip: { en: "modelled", fr: "mod\xE9lis\xE9" },
+    suffix: { en: "modelled", fr: "mod\xE9lis\xE9" },
+    long: {
+      en: "derived \u2014 modelled here, not published as such",
+      fr: "d\xE9riv\xE9 \u2014 mod\xE9lis\xE9 ici, non publi\xE9 tel quel"
+    }
+  },
+  {
+    key: "c",
+    chip: { en: "stock", fr: "stock" },
+    suffix: { en: "stock", fr: "stock" },
+    long: {
+      en: "stock or actions-total \u2014 a different basis; never sum it with the rest",
+      fr: "stock ou total d\u2019actions \u2014 autre base de mesure ; ne jamais l\u2019additionner au reste"
+    }
+  },
+  {
+    key: "w",
+    chip: { en: "weekly", fr: "hebdomadaire" },
+    suffix: null,
+    // the axis already says "Week"/"Semaine"
+    long: {
+      en: "weekly aggregate \u2014 a week, not a day",
+      fr: "agr\xE9gat hebdomadaire \u2014 une semaine, pas un jour"
+    }
+  },
+  {
+    key: "x",
+    chip: { en: "wider measure", fr: "mesure plus large" },
+    suffix: { en: "wider measure", fr: "mesure plus large" },
+    long: {
+      en: "wider measure \u2014 establishments perturbed, with classes suspended, or closed, rather than schools fully blocked",
+      fr: "mesure plus large \u2014 \xE9tablissements perturb\xE9s, cours suspendus ou ferm\xE9s, plut\xF4t que des lyc\xE9es enti\xE8rement bloqu\xE9s"
+    }
+  }
+];
+function suffixMap(lang) {
+  const out = {};
+  for (const f of FLAGS) out[f.key] = f.suffix ? f.suffix[lang] : "";
+  return out;
+}
+function flagMap(lang) {
+  const out = {};
+  for (const f of FLAGS) out[f.key] = f.chip[lang];
+  return out;
+}
+var MARKERS = FLAGS.filter((f) => f.long !== null).map(
+  (f) => ({
+    key: f.key,
+    text: f.long
+  })
+);
+
+// src/copy/en/chart.ts
+var CHART_EN = {
+  axisDate: "Date",
+  axisWeek: "Week",
+  edgeMark: "\u2020",
+  weekOf: "Week of {date}",
+  weekOfPartial: "Week of {date} (partial)",
+  eurM: "\u20AC{v}M",
+  suffix: suffixMap("en"),
+  suffixWrap: " \xB7 {text}",
+  dayNotes: {
+    "2026-09-25": "Paris-area figure only: 21 interpellations by midday, announced by the Pr\xE9fecture de Police.",
+    "2026-09-28": "The movement goes national \u2014 actions in Marseille, Lille, the Rh\xF4ne, the Var and the Alpes-Maritimes.",
+    "2026-09-29": "Act I. The crowd figure counts the public-service cort\xE8ge the school actions joined, not a student crowd. The strike series starts here: 250,000 state civil servants, derived from the government's 10% rate.",
+    "2026-09-30": "The second day of Act I: 625 interpellations and 83 security forces injured. The Education ministry counted 356 establishments concerned; no count of fully blocked schools was published that day.",
+    "2026-10-01": "Act II, the peak of the first week. Arrests and injuries published with no turnout figure for the day.",
+    "2026-10-02": "735 establishments still perturbed, and urban violence near 158 of them.",
+    "2026-10-03": "No weekend figure was published; the arrests for 3\u20134 October are derived by subtraction. 735 establishments perturbed \u2014 a wider measure than blockades, so the point is flagged as such.",
+    "2026-10-05": "The first national school day after the break, with the ministry's stock figures.",
+    "2026-10-06": "Act III \u2014 the first full national student demonstration of the movement.",
+    "2026-10-07": "The Interior Ministry suspended the use of stun grenades for the student mobilisations, after a lyc\xE9e student was injured at Lens.",
+    "2026-10-09": "Justice Ministry publishes its first judicial balance: 6,877 in garde \xE0 vue since mid-September.",
+    "2026-10-10": "CNEWS compiles a national damage bill of \u20AC30M \u2014 with no ministry tally behind it.",
+    "2026-10-13": "Turnout band spans a factor of three: ministry floor, organiser ceiling.",
+    "2026-10-16": "Last day of classes before the Toussaint holiday: from 17 October no lyc\xE9e is in session, so the blockade count stops.",
+    "2026-10-17": "The peak day. The damage band here is the 17\u201318 October IFRAP estimate, not a daily flow. Toussaint holiday \u2014 schools closed.",
+    "2026-10-19": "Toussaint holiday \u2014 students supported the lyc\xE9e movement from outside the schools.",
+    "2026-10-24": "Arrest figures include preventive stops; not all become custody placements. Toussaint holiday \u2014 the mobilisation was an inter-union day, not a school day.",
+    "2026-10-31": "No protester-injury figure was published for this day. Toussaint holiday \u2014 inter-union mobilisation.",
+    "2026-11-01": "Last day of the Toussaint holiday.",
+    "2026-11-04": "In the Rh\xF4ne, seven establishments ran in remote mode; no lyc\xE9e was reported blocked.",
+    "2026-11-05": "Turnout band runs from 575 000 to 1.6 million \u2014 the band is the disagreement, not an error bar. The strike point is derived from the government's rates: 9.89\u201311% of state civil servants.",
+    "2026-11-06": "In the Rh\xF4ne, 16 lyc\xE9es and two colleges saw incidents, and a lyc\xE9e in Lyon's 8th arrondissement was blocked when it was cleared.",
+    "2026-11-09": "In the Rh\xF4ne, no lyc\xE9e was blocked: 14 ran in remote mode and 11 were reported as affected. A zero cannot be plotted on a logarithmic axis, so it is recorded here rather than as a point.",
+    "2026-11-10": "In the Rh\xF4ne, about ten establishments were affected."
+  },
+  obsNotes: {
+    "2026-09-15": {
+      blockades: "The lyc\xE9e Victor-Hugo in Caen \u2014 the first mainland blockade. Villeneuve-d'Ascq was blocked on 14 September and Le Rheu on 7 September, both before the window opens."
+    },
+    "2026-09-19": {
+      blockades: "Lyc\xE9e Saint-Exup\xE9ry in Cr\xE9teil: students backed the teachers' strike with the school's first blockade \u2014 the origin of the national movement."
+    },
+    "2026-09-23": {
+      blockades: "\xCEle-de-France only: the Cr\xE9teil rectorate counted the blockades spreading to about ten lyc\xE9es."
+    },
+    "2026-09-25": {
+      arrests: "Paris area only \u2014 Pr\xE9fecture de Police figure, by midday."
+    },
+    "2026-09-28": {
+      protesterInjured: "One documented case: a 14-year-old hit by a police projectile. A floor, not a count.",
+      blockades: "Interior Ministry: 27 complete blockades, out of 180 establishments perturbed."
+    },
+    "2026-09-29": {
+      turnout: "Counts the public-service cort\xE8ge the school actions joined (206 000 ministry / 300 000 CGT), not a student crowd.",
+      strikers: "Derived, not counted. 10% of the 2,500,000 state civil servants on strike (government figure), giving 250,000. Education is the largest component, not an addend: 11.47% of education staff (ministry weighted average \u2014 12.74% second degree, 27.39% life-school staff; 13.71% of teachers) is 114,700 of the same civil service and is already inside the 250,000. Union claims (>40% of first-degree staff, >40% in Lyon and Cr\xE9teil) are regional and are not used as a national ceiling.",
+      protesterInjured: "Students and education staff injured that day, counted by the Education ministry.",
+      blockades: "Education ministry at the time of its balance: 45 schools blocked out of 338 concerned. Le Monde counted actions at nearly 410 establishments."
+    },
+    "2026-09-30": {
+      protesterInjured: "Cumulative since the first blockades \u2014 a stock, not a daily count.",
+      forcesInjuredStock: "The running total of injured security forces: 83 on 30 September, the first injury figures of the movement."
+    },
+    "2026-10-01": {
+      forcesInjured: "The day's own figure: 'some 300' injured in intervention on Thursday (Nu\xF1ez), 305 in Actu Forces' Beauvau tally. The running total that day was 383\u2013388.",
+      protesterInjured: "Cumulative level reached at the 1 October cut-off (170 students + 65 education staff) \u2014 a stock, not a daily count. Where a week ends on this cell, the level is the week\u2019s figure, never the sum of the week\u2019s flows.",
+      damagesCost: "Part of the 1\u20138 October \xCEle-de-France increment; the anchor of that run is 8 October.",
+      blockades: "Low end: 222 schools blocked (Le Monde live, out of 1,027 establishments concerned). High end: the Union \xE9tudiante's 640. The police counted 169 blockades in the morning, and 900 actions with 400 closures by the end of the day."
+    },
+    "2026-10-02": {
+      blockades: "'More than 400 schools blocked' (Le Monde live). The Interior Ministry's own tally for 2 October: 1,027 lyc\xE9es concerned, more than 560 perturbed, 400 closed."
+    },
+    "2026-10-03": {
+      arrests: "Derived by subtraction: the ministry's 6 059 since 28 September (published 5 October) less the published daily figures. Covers 3 and 4 October together.",
+      blockades: "Wider measure: the Education ministry counted 735 establishments perturbed, not schools fully blocked. The highest blocked count that week was 400+ on 2 October."
+    },
+    "2026-10-05": {
+      arrests: "984 interpellations that day. The ministry's 6 059 since 28 September is the stock that makes the weekend figure checkable.",
+      blockades: "Wider measure: 400 to 500 establishments closed (government spokeswoman), more than 400 to stay closed. The ministry's morning count was 413 establishments perturbed.",
+      forcesInjuredStock: "Running total since the start of the movement: 715 injured police and gendarmes (Matignon)."
+    },
+    "2026-10-06": {
+      damagesCost: "Part of the 1\u20138 October \xCEle-de-France increment; the anchor of that run is 8 October.",
+      blockades: "Wider measure: 891 of the 3,700 schools had their classes suspended, totally or partially, at midday (ministry). The USL counted 1,800 schools '\xE0 l'arr\xEAt' \u2014 a union figure that also includes administratively closed schools."
+    },
+    "2026-10-08": {
+      damagesCost: "Anchor of the 1\u20138 October \xCEle-de-France damage increment. The same \u20AC6M is published for 6 October and is not counted twice.",
+      strikers: "Derived, not counted. The Education ministry published a weighted participation rate of 0.82% for education staff; no function-wide rate was published that day, so the education rate stands in for the civil service on the same 2,500,000-agent base: 20,500. The proxy is known to run low \u2014 where both were published, education was 11.47% against about 10% for the civil service (29 Sept) and 12.77% against 10.46% (5 Nov).",
+      blockades: "Wider measure: 224 establishments closed (ministry); more than 150 still perturbed (franceinfo). The 224 figure is the benchmark the ministry quotes back on 13 October.",
+      forcesInjuredStock: "Running total: 761 injured (Nu\xF1ez). The published increments reconcile with it \u2014 715 on 5 October plus 43 on 6 October is 758."
+    },
+    "2026-10-09": {
+      arrests: "Justice Ministry judicial balance, cut off 8 Oct 17:00: 6,877 people placed in garde \xE0 vue since the start of the movement, 86% minors, 2,376 being prosecuted, 21 in detention. A different scope (since mid-September) and a different statistic (custodial placements, not interpellations) from the Interior Ministry's series \u2014 not reconcilable with it."
+    },
+    "2026-10-10": {
+      damagesCost: "National cumulative stock since mid-September, compiled by CNEWS from regional figures \u2014 no ministry published a national tally. Pannekoucke's parallel \u20AC25\u201330M estimate for Auvergne-Rh\xF4ne-Alpes is NOT included, so this is neither a floor nor additive with the regional figures.",
+      blockades: "'More than 40 schools blocked' (AFP/Reuters, 10 October)."
+    },
+    "2026-10-12": {
+      arrests: "13 interpellations reported independently by the Rh\xF4ne prefecture (27 \xE9tablissements touched) and the Bas-Rhin prefecture in Strasbourg. Two prefectures, the same number \u2014 so 13 is a floor for the day, not the day's regional total. Not Paris.",
+      protesterInjured: "\xCEle-de-France only: a proviseur, a parent d'\xE9l\xE8ve and a R\xE9gion employee injured. Counted as education and local-authority staff, on the same basis as the 29 September ministry figure.",
+      damagesCost: `Normandy \u2014 Herv\xE9 Morin, Conseil r\xE9gional de Normandie, at the regional assembly, 12 Oct: "1,5 million en Normandie" out of "d'ores et d\xE9j\xE0 30 millions d'euros" nationally. A cumulative regional stock, not a daily flow, and a component of the national stock \u2014 never added to it. \xCEle-de-France's own revised total the same day was \u20AC8.5M.`,
+      blockades: "Rh\xF4ne prefecture only: 19 of the 27 establishments affected were lyc\xE9es (six universities, two colleges). \xCEle-de-France counted nearly 80 lyc\xE9es perturbed the same day."
+    },
+    "2026-10-13": {
+      blockades: "Wider measure: 214 establishments closed, 94.2% of lyc\xE9es open \u2014 against 224 on 8 October. The ministry called the movement 'en recul'.",
+      strikers: "Derived, not counted. 3.71% weighted education participation (ministry), used as a proxy for the civil service on the 2,500,000-agent base: 92,750. Education's own rates that day: 4.52% of teachers, 10.31% of life-schools staff. The ministry's figure excludes Toulouse, La R\xE9union (school holidays since 10 October), Guadeloupe, Martinique and Guyana (time difference)."
+    },
+    "2026-10-14": {
+      forcesInjuredStock: "Running total: 937 injured (Nu\xF1ez)."
+    },
+    "2026-10-17": {
+      forcesInjured: "Derived: the ministry's running total rose from 937 (14 October) to 1,144 (17 October), so this is the three-day increment, not a single day.",
+      forcesInjuredStock: "The peak of the running total: 997 injured in the first bilan, 1,144 on consolidation, 7 of them serious. This is the total since the movement began, not that day's toll.",
+      protesterInjured: "Derived band: the floor is the serious-injury register, the ceiling is extrapolated from street-medics treatment counts. No official count exists.",
+      damagesCost: "IFRAP modelled estimate for the 17\u201318 October weekend; excludes lost turnover and order-maintenance costs. The Paris-only estimate published for 18 October is a subset of it and is excluded from the weekly sum."
+    },
+    "2026-10-18": {
+      arrests: "Prefecture of police of Paris figure only \u2014 curfew day.",
+      damagesCost: "Paris-only subset of the 17\u201318 October IFRAP total \u2014 never added to it."
+    },
+    "2026-10-20": {
+      arrests: "Guadeloupe prefecture figures only \u2014 regional."
+    },
+    "2026-10-24": {
+      damagesCost: "CCI France's national tally for 17\u201324 October \u2014 a superset of the 17 October cell, never added to it.",
+      forcesInjuredStock: "Derived: 1,144 (17 October) plus 267 injured that day gives 1,411."
+    },
+    "2026-10-31": {
+      damagesCost: "Local estimate \u2014 no national damage figure was published.",
+      forcesInjuredStock: "Derived: 1,411 plus 116\u2013159 injured that day gives 1,527\u20131,570. An internal CRS file obtained by Mediapart counts 1,233 CRS agents declared injured in October, of whom 1,167 were classified as light injuries \u2014 94.6%."
+    },
+    "2026-11-02": {
+      blockades: "Education ministry at 9.30: 41 lyc\xE9es blocked, about 1% of the country's 3,700, with no perturbation in three quarters of the departments."
+    },
+    "2026-11-03": {
+      blockades: "Education ministry: 48 schools blocked. The USL counted nearly 500."
+    },
+    "2026-11-05": {
+      strikers: "Derived, not counted. The government put 9.89% of state civil servants on strike at midday and 11% by the end of the day, on 2,500,000 agents: 247,250 to 275,000 \u2014 the band is the timing of the count, not an error bar. The Education ministry's own weighted rate was 12.77% (19.14% in the first degree, 25.65% for life-schools staff): a component of that total, never an addition to it.",
+      forcesInjured: "The day's own figure: 53 at 18:00, 112 on consolidation.",
+      forcesInjuredStock: "The ministry's final running total: 1,580 injured since the start of the movement. It reconciles exactly with the published daily increments \u2014 1,144 (17 October) + 267 (24 October) + 116 (31 October) + 53 (5 November) = 1,580.",
+      protesterInjured: 'Published as a floor: "at least this many".',
+      blockades: "Matignon at 10.00: 81 establishments blocked (2.2%). The USL counted 1,000 schools '\xE0 l'arr\xEAt' \u2014 blocked or administratively closed, so an upper bound. The Education ministry counted 33% of establishments perturbed."
+    },
+    "2026-11-09": {
+      arrests: "Regional prefecture figures only \u2014 Bordeaux, Lyon, Strasbourg."
+    },
+    "2026-11-10": {
+      strikers: "Derived, not counted. 1.55% weighted education participation (ministry), used as a proxy for the civil service on the 2,500,000-agent base: 38,750. Education's own rates: 1.60% of teachers, 7.01% of life-schools staff. The ministry's figure covers the metropolitan academies only."
+    }
+  },
+  deployNotes: {
+    "2026-09-28": "deployment estimated",
+    "2026-09-29": "deployment estimated",
+    "2026-09-30": "deployment estimated",
+    "2026-10-01": "deployment estimated",
+    "2026-10-02": "deployment estimated",
+    "2026-10-05": "deployment estimated",
+    "2026-10-06": "deployment estimated",
+    "2026-10-08": "deployment estimated",
+    "2026-10-12": "estim\xE9 \u2014 \xCEle-de-France, Lyon et Strasbourg",
+    "2026-10-13": "deployment estimated",
+    "2026-10-17": "deployment published",
+    "2026-10-18": "estimated \u2014 Paris curfew",
+    "2026-10-24": "deployment published",
+    "2026-10-31": "deployment published",
+    "2026-11-05": "deployment published",
+    "2026-11-07": "deployment published"
+  },
+  policingDay: "{head} officers \xD7 {low}\u2013{high} per officer-day \xB7 {note}",
+  policingDayPlain: "{head} officers \xD7 {low}\u2013{high} per officer-day",
+  cumulativeAdded: "deployment counted this day \u2014 {days} so far",
+  cumulativeCarried: "no deployment published \u2014 cumulative carried forward",
+  weekNational: "{n} day{s} counted",
+  weekRegionalOnly: "{n} day{s}, regional only",
+  weekPeak: "peak {date}",
+  weekNoNational: "no national figure this week",
+  weekExcluded: "{n} point{s} excluded (regional or subset)",
+  weekFloored: "includes a floor \u2014 not a sum",
+  weekClipped: "week clipped by the window",
+  weekJoin: " \xB7 ",
+  tooltipRange: "{label}: {mid} (band {low}\u2013{high})",
+  tooltipPoint: "{label}: {value}",
+  tooltipNote: "{base}\n{note}",
+  footerMark: "\u24D8 {note}",
+  weekVacation: "partly inside the Toussaint holiday (17 Oct \u2013 1 Nov)",
+  holidayLine: "Dotted line: the Toussaint holiday, 17 October \u2013 1 November 2026. No lyc\xE9e was in session, so no school could be blocked \u2014 the count did not exist, it was not zero.",
+  metricNote: "Schools blocked or closed: establishments where pupils could not attend normally. The band runs from the official count to the union count, and the union's figure also includes administratively closed schools.",
+  blockerNote: "A wider measure than blockades \u2014 establishments perturbed, with classes suspended, or closed \u2014 used where it is the only figure published that day.",
+  series: {
+    protestersDaily: {
+      label: "Protesters",
+      detached: "Protesters (detached figure)"
+    },
+    strikersDaily: {
+      label: "People on strike",
+      detached: "People on strike (modelled)"
+    },
+    blockadesDaily: {
+      label: "Schools blocked",
+      detached: "Schools blocked (regional count)"
+    },
+    arrestsDaily: { label: "Arrests", detached: "Arrests (detached figure)" },
+    forcesDaily: {
+      label: "Injured \u2014 security forces",
+      detached: "Injured forces (detached figure)"
+    },
+    forcesInjuredStock: {
+      label: "Injured forces (running total)",
+      detached: "Injured forces, running total (stock)"
+    },
+    protestersInjuredDaily: {
+      label: "Injured \u2014 protesters",
+      detached: "Injured protesters (detached figure)"
+    },
+    damagesDaily: {
+      label: "Material damage",
+      detached: "Damage (stock or modelled figure)"
+    },
+    policingDaily: {
+      label: "Policing cost, per day",
+      detached: "Policing cost, per day (modelled)"
+    },
+    policingCumulative: {
+      label: "Policing cost, cumulative",
+      detached: "Policing cost, cumulative (modelled)"
+    },
+    protestersWeekly: {
+      label: "Protesters (weekly peak)",
+      detached: "Protesters (regional week)"
+    },
+    strikersWeekly: {
+      label: "People on strike (weekly peak)",
+      detached: "People on strike (modelled)"
+    },
+    blockadesWeekly: {
+      label: "Schools blocked (weekly peak)",
+      detached: "Schools blocked (regional week)"
+    },
+    arrestsWeekly: {
+      label: "Arrests (weekly total)",
+      detached: "Arrests (regional week)"
+    },
+    forcesWeekly: {
+      label: "Forces injured (weekly total)",
+      detached: "Forces injured (regional week)"
+    },
+    protestersInjuredWeekly: {
+      label: "Protesters injured (weekly total)",
+      detached: "Protesters injured (regional week)"
+    }
+  },
+  charts: {
+    protestersDaily: {
+      title: "Protesters, people on strike and blocked schools, daily",
+      subtitle: "Crowd counts and people on strike on the left axis, school blockades on the right. People on strike is derived from published participation rates \u2014 no authority published a headcount. The dotted line is the Toussaint holiday. Three of the five strike points are derived.",
+      y: "People in the street or on strike",
+      yRight: "Schools blocked or closed"
+    },
+    enforcementDaily: {
+      title: "Arrests and injuries, daily",
+      subtitle: "Arrests are not custody placements; injuries are counted per side",
+      y: "People"
+    },
+    cost: {
+      title: "Damage and the cost of policing",
+      subtitle: "",
+      y: "\u20AC millions"
+    },
+    protestersWeekly: {
+      title: "Protesters, people on strike and blocked schools, weekly peak",
+      subtitle: "Peak day of each week, not a weekly sum \u2014 the same lyc\xE9e is blocked on several consecutive days, and a person on strike for three days is still one person",
+      y: "People (peak day)",
+      yRight: "Schools blocked or closed (peak)"
+    },
+    enforcementWeekly: {
+      title: "Enforcement, weekly totals",
+      subtitle: "Weekly sums; a stock or a floor is not additive",
+      y: "People (weekly total)"
+    }
+  }
+};
+
+// src/copy/en/episodes.ts
+var EPISODES_EN = {
+  may68: {
+    short: "May 68",
+    strip: "May 68",
+    banner: "General strike and factory occupations. Union and ministry crowd counts differ by a factor of ten, so both are plotted.",
+    weeks: [
+      { action: "1 May marches" },
+      {
+        action: "Night of the barricades, 10\u201311 May",
+        note: { i: "Injury figure published as a floor." }
+      },
+      { action: "General strike from 13 May" },
+      {
+        action: "24 May: de Gaulle\u2019s broadcast",
+        note: { a: "Arrest count published as a floor." }
+      },
+      { action: "Grenelle agreements, 27 May" },
+      { action: "Legislative campaign" },
+      void 0,
+      void 0,
+      void 0
+    ]
+  },
+  cpe: {
+    short: "CPE 2006",
+    strip: "CPE 2006",
+    banner: "First-employment contract: student and school movement, with two inter-union days. Enforcement figures exist for four weeks only.",
+    weeks: [
+      { action: "7 February: first national day" },
+      void 0,
+      void 0,
+      void 0,
+      { action: "Blockaded universities" },
+      { action: "14 March: national day" },
+      { action: "21 March: student day" },
+      { action: "28 March: national day" },
+      { action: "4 April: national day" },
+      { action: "Withdrawal announced" }
+    ]
+  },
+  gj: {
+    short: "Gilets jaunes",
+    strip: "Gilets jaunes",
+    banner: "Counted act by act, on Saturdays only. Enforcement figures were published for the first four acts and never as a series afterwards.",
+    weeks: []
+    // the act number in the tooltip title carries the chronology
+  },
+  nahel: {
+    short: "June 2023",
+    strip: "June 2023",
+    banner: "Five nights of rioting after the 27 June killing. Arrests and injuries are high relative to turnout because this was not a demonstration.",
+    weeks: [{ action: "27 June: riots begin" }, { action: "Return to calm" }]
+  },
+  pensions: {
+    short: "Pensions 2023",
+    strip: "Pensions 2023",
+    banner: "Movement against the rise in the statutory retirement age. Two anchor days carry most of the series; the inter-union band is wide.",
+    weeks: [
+      { action: "19 January: first national day" },
+      void 0,
+      { action: "31 January" },
+      { action: "7 February" },
+      { action: "16 February" },
+      void 0,
+      void 0,
+      { action: "7 March: schools and transport shut" },
+      { action: "11 March" },
+      { action: "15 March" },
+      { action: "23 March" },
+      { action: "28 March" },
+      { action: "6 April" },
+      void 0,
+      void 0,
+      void 0,
+      { action: "1 May" },
+      void 0,
+      void 0,
+      void 0,
+      { action: "6 June" }
+    ]
+  },
+  bt: {
+    short: "Bloquons tout",
+    strip: "Bloquons tout",
+    banner: "September 2025: blockades and marches, counted partially. Weeks without a published figure are left empty.",
+    weeks: [
+      { action: "10 September: blockades" },
+      { action: "18 September: national day" },
+      void 0,
+      { action: "1 October" }
+    ]
+  },
+  students26: {
+    short: "Autumn 2026",
+    strip: "Autumn 2026",
+    banner: "The movement this page was built for, traced from the first mainland high-school blockades on 15 September. Daily publication, so days with no figure stay empty rather than interpolated.",
+    weeks: [
+      { action: "15 September: the Caen and Villeneuve-d'Ascq blockades" },
+      { action: "25 September: Paris-area blockades" },
+      { action: "Act I on 29 September, Act II on 1 October" },
+      { action: "Act III on 6 October" },
+      { action: "17 October: the peak" },
+      { action: "24 October" },
+      { action: "31 October" },
+      { action: "5 and 7 November" },
+      { action: "9 November \u2014 window ends 11 November" }
+    ],
+    fallbackNote: {
+      p: "Weekly peak taken from the daily series \u2014 the peak day of the week.",
+      a: "Sum of the published daily figures for the week; a cumulative stock is shown as the stock, never added to it."
+    }
+  }
+};
+
+// src/copy/en/text.ts
+var TEXT_EN = {
+  panels: {
+    partialWeek: "Week of {label} (partial)",
+    act: "Act {n}",
+    withAction: "{when} \xB7 {action}",
+    seriesContinues: "{name} (cont.)",
+    obs: "observations {counts} over {weeks}",
+    valueRange: "{lo}\u2013{hi}",
+    itemMeta: "range {range} \xB7 up to week {n}",
+    median: "median",
+    peak: "peak",
+    range: "min\u2013max range",
+    figureCount: "{n} published figures",
+    singleFigure: "one published figure \u2014 the median and the peak are the same number",
+    summaryMeta: "median and peak \xB7 {n} movements"
+  },
+  kpi: {
+    heading: "Key figures",
+    largestDay: "Largest day",
+    largestWeek: "Largest week",
+    largestFigure: "Largest figure",
+    vsMean: "Highest vs mean",
+    vsMedian: "Highest vs median",
+    vsFirst: "Highest vs first figure",
+    againstMean: "{value} against a mean of {base}",
+    againstMedian: "{value} against a median of {base}",
+    againstFirst: "{value} against a first figure of {base}",
+    noteDaily: "Ratios are computed on the daily series: each published figure is divided by the mean, the median and the first published figure of its own series. Days with no published figure are left out, not counted as zero. The \u20AC1,000M damages total of 24 October carries no marker on the chart and is left out here too.",
+    noteWeekly: "Ratios are computed on the weekly series: each published figure is divided by the mean, the median and the first published figure of its own series. Weeks with no published figure are left out, not counted as zero.",
+    noteEpisodes: "Each movement is compared with its own series \u2014 its mean, its median and its first published figure \u2014 and the largest ratio across all seven movements is shown. A ratio of the first figure can run into the thousands when a movement began with a handful of people.",
+    noteEpisodesCapped: "As in section C, but over the weeks plotted in section D only, which stop at the last week with an enforcement figure.",
+    eurM: "\u20AC{v}M",
+    none: "no figure published"
+  },
+  casualties: {
+    headlineTitle: "How the injuries divide",
+    weeklyTitle: "What a week can establish",
+    colScope: "Population",
+    colTotal: "Declared total",
+    colSerious: "Serious",
+    colLight: "Light",
+    colLightShare: "Light share",
+    colOther: "Not classed light",
+    colSide: "Side",
+    colCircumstance: "Circumstance",
+    colCount: "Count",
+    colCases: "Documented cases",
+    colQuestion: "Question",
+    colWindow: "Smallest published window",
+    colWeekly: "Weekly figure",
+    scope: {
+      crsOctober: "CRS, October 2026",
+      forcesPeak: "All forces, running total at its peak",
+      protesters: "Protesters, since 30 September",
+      week12oct: "Week of 12 October",
+      week19oct: "Week of 19 October",
+      week26oct: "Week of 26 October",
+      week2nov: "Week of 2 November"
+    },
+    side: {
+      forces: "Police and gendarmerie",
+      protesters: "Protesters"
+    },
+    kind: {
+      accidental: "Accidental or self-inflicted",
+      conflictual: "Inflicted in the confrontation"
+    },
+    why: {
+      notPublished: "not published",
+      noDenominator: "no published total",
+      binaryFile: "file is light / not light only",
+      noTally: "no count, cases only",
+      noneDocumented: "none documented"
+    },
+    cases: {
+      givors: "Givors, 10 October: two officers on patrol outside a school burned on the hand and thigh when a grenade fired accidentally inside their own vehicle, setting it alight.",
+      crsWrist: "A CRS officer bruised his left wrist closing his own vehicle door.",
+      crsAnkle: "Another CRS officer sprained his ankle falling out of a van.",
+      helmet: "Paris, 31 October: a CRS officer struck on the helmet, found uninjured \u2014 a little paint removed from the shell.",
+      groin2023: "Sainte-Soline, March 2023, for comparison: of the 29 gendarmes counted, one had a groin haematoma, one respiratory trauma, the rest were examined for acoustic trauma.",
+      mael: "Tours, 30 September: a school student blinded in one eye by a rubber bullet, having thrown nothing.",
+      alaric: "Paris, 17 October: a 19-year-old student burned on the torso and arm by a tear-gas grenade fired flat at him; second-degree burns, unhealed ten days later.",
+      eyes: "Several other minors lost an eye in the same circumstances.",
+      sainteSoline: "The official claim was 29 gendarmes injured, two in absolute emergency. The two were later described as a groin haematoma and respiratory trauma."
+    },
+    casesCount: "{n} documented cases",
+    noCases: "none documented",
+    capLevels: "Severity, by the finest window each source publishes. Rows are different populations and different windows \u2014 they are never summed.",
+    capWeeks: "Severity, by week. The increment is the difference between the running total at the start and the end of the week.",
+    capCases: "Circumstance. No source counts this, so the column gives the number of documented cases, not a share.",
+    capResolution: "The smallest window at which each breakdown exists, and whether a weekly figure can be derived from it.",
+    noteLevels: "The 1,167 of 1,233 is the only published light share: 94.6%, the figure the file itself states. It covers CRS officers in October, so it cannot be extended to all forces or to the whole movement. The 7 serious injuries belong to the 1,144 consolidation of 17 October. No total for protester injuries has ever been published, so no share can be computed on that side \u2014 the serious cases are a register, not a rate. The four documented accidental injuries are four named people, not four per cent of anything.",
+    noteWeeks: "The ministry publishes a running total, not a weekly severity breakdown. Splitting the total into weeks is arithmetic, and it reconciles exactly to 1,580, but the only light/not-light split that exists is the October CRS file, which spans four of these weeks and cannot be attributed to any one of them. That is why section A carries the breakdown and section B carries the increments.",
+    headLight: "{light} of {total} declared injuries were classed light",
+    headLightNote: "CRS officers, October 2026",
+    headMissingNote: "No published total for protester injuries, so no share exists",
+    resolution: [
+      {
+        label: "Light / serious split",
+        window: "One month (October 2026), CRS only",
+        weekly: "no"
+      },
+      {
+        label: "Accidental / conflictual split",
+        window: "None \u2014 named cases only",
+        weekly: "no"
+      },
+      {
+        label: "Running total of injured forces",
+        window: "One day",
+        weekly: "yes"
+      },
+      {
+        label: "Daily increments",
+        window: "One day",
+        weekly: "yes"
+      }
+    ]
+  },
+  items: {
+    p: { label: "Protesters", short: "Protesters" },
+    a: { label: "Arrests", short: "Arrests" },
+    f: { label: "Injured \u2014 security forces", short: "Forces injured" },
+    i: { label: "Injured \u2014 protesters", short: "Protesters injured" }
+  },
+  units: { weeks: "week" },
+  flags: flagMap("en"),
+  tooltip: {
+    linePlain: "{value}",
+    lineWithFlag: "{value} \xB7 {flag}",
+    firstFigure: "first published figure: {n}",
+    shareOfFirst: "{pct} of the first figure ({n})",
+    shareComparisons: "Comparisons: {list}",
+    cmpHighest: "highest",
+    cmpMean: "mean",
+    cmpMedian: "median",
+    cmpFirst: "first figure",
+    listAnd: " and "
+  },
+  disclaimer: {
+    body: "Research and coding was performed using an LLM and figures have not been verified. Do not use them for serious analysis or decision-making without first double-checking the figures and the sources at the bottom."
+  }
+};
+
+// src/copy/en/index.ts
+var CATALOGUE_EN = {
+  chart: CHART_EN,
+  episodes: EPISODES_EN,
+  ...TEXT_EN
+};
+
+// src/copy/fr/chart.ts
+var CHART_FR = {
+  axisDate: "Date",
+  axisWeek: "Semaine",
+  edgeMark: "\u2020",
+  weekOf: "Semaine du {date}",
+  weekOfPartial: "Semaine du {date} (partielle)",
+  eurM: "{v} M\u20AC",
+  suffix: suffixMap("fr"),
+  suffixWrap: " \xB7 {text}",
+  dayNotes: {
+    "2026-09-25": "Chiffre de la r\xE9gion parisienne uniquement : 21 interpellations \xE0 midi, annonc\xE9es par la pr\xE9fecture de police.",
+    "2026-09-28": "Le mouvement prend une dimension nationale \u2014 actions \xE0 Marseille, Lille, dans le Rh\xF4ne, le Var et les Alpes-Maritimes.",
+    "2026-09-29": "Acte I. Le chiffre de foule compte le cort\xE8ge de la fonction publique rejoint par les actions lyc\xE9e, pas une foule \xE9tudiante. La s\xE9rie des personnes en gr\xE8ve commence ici : 250 000 agents de la fonction publique d\u2019\xC9tat, d\xE9riv\xE9s du taux de 10 % annonc\xE9 par le gouvernement.",
+    "2026-09-30": "Deuxi\xE8me jour de l\u2019acte I : 625 interpellations et 83 bless\xE9s des forces de l\u2019ordre. Le minist\xE8re de l\u2019\xC9ducation compte 356 \xE9tablissements concern\xE9s ; aucun d\xE9compte de lyc\xE9es enti\xE8rement bloqu\xE9s n\u2019a \xE9t\xE9 publi\xE9 ce jour-l\xE0.",
+    "2026-10-01": "Acte II, la pointe de la premi\xE8re semaine. Interpellations et bless\xE9s publi\xE9s sans chiffre de foule pour la journ\xE9e.",
+    "2026-10-02": "735 \xE9tablissements encore perturb\xE9s, et des violences urbaines pr\xE8s de 158 d\u2019entre eux.",
+    "2026-10-03": "Aucun chiffre de week-end n\u2019a \xE9t\xE9 publi\xE9 ; les interpellations des 3\u20134 octobre sont d\xE9riv\xE9es par soustraction. 735 \xE9tablissements perturb\xE9s \u2014 une mesure plus large que les blocages ; le point est signal\xE9 comme tel.",
+    "2026-10-05": "Premi\xE8re journ\xE9e nationale scolaire apr\xE8s les vacances, avec les stocks minist\xE9riels.",
+    "2026-10-06": "Acte III \u2014 premi\xE8re manifestation \xE9tudiante nationale de plein exercice.",
+    "2026-10-13": "La fourchette de foule va du simple au triple : plancher minist\xE9riel, plafond syndical.",
+    "2026-10-16": "Dernier jour de cours avant les vacances de la Toussaint : \xE0 partir du 17 octobre aucun lyc\xE9e n\u2019est en cours, le d\xE9compte des blocages s\u2019interrompt.",
+    "2026-10-17": "La journ\xE9e de pointe. La fourchette de dommages ici est l\u2019estimation IFRAP des 17\u201318 octobre, non un flux quotidien. Vacances de la Toussaint \u2014 \xE9tablissements ferm\xE9s. ",
+    "2026-10-19": "Vacances de la Toussaint \u2014 les \xE9tudiants soutiennent le mouvement lyc\xE9een depuis l\u2019ext\xE9rieur des \xE9tablissements.",
+    "2026-10-24": "Les interpellations incluent les contr\xF4les pr\xE9ventifs ; toutes ne deviennent pas des gardes \xE0 vue. Vacances de la Toussaint \u2014 la mobilisation \xE9tait une journ\xE9e interprofessionnelle, pas une journ\xE9e scolaire.",
+    "2026-10-31": "Aucun chiffre de bless\xE9s parmi les manifestants n\u2019a \xE9t\xE9 publi\xE9 ce jour-l\xE0. Vacances de la Toussaint \u2014 mobilisation interprofessionnelle.",
+    "2026-11-01": "Dernier jour des vacances de la Toussaint.",
+    "2026-11-04": "Dans le Rh\xF4ne, sept \xE9tablissements ont fait cours \xE0 distance ; aucun lyc\xE9e n\u2019est signal\xE9 comme bloqu\xE9.",
+    "2026-11-05": "La fourchette de foule va de 575 000 \xE0 1,6 million \u2014 la fourchette est la divergence, pas une barre d\u2019erreur. Le point de gr\xE8ve est d\xE9riv\xE9 des taux gouvernementaux : 9,89\u201311 % des agents de la fonction publique d\u2019\xC9tat.",
+    "2026-11-06": "Dans le Rh\xF4ne, incidents dans 16 lyc\xE9es et deux coll\xE8ges, et un lyc\xE9e du 8e arrondissement de Lyon bloqu\xE9 lors de son \xE9vacuation.",
+    "2026-11-09": "Dans le Rh\xF4ne, aucun lyc\xE9e n\u2019est bloqu\xE9 : 14 fonctionnent \xE0 distance et 11 sont signal\xE9s comme touch\xE9s. Un z\xE9ro ne peut pas \xEAtre port\xE9 sur un axe logarithmique, il est donc consign\xE9 ici et non comme point.",
+    "2026-11-10": "Dans le Rh\xF4ne, une dizaine d\u2019\xE9tablissements sont touch\xE9s."
+  },
+  obsNotes: {
+    "2026-09-15": {
+      blockades: "Le lyc\xE9e Victor-Hugo de Caen \u2014 le premier blocus en m\xE9tropole. Villeneuve-d\u2019Ascq avait \xE9t\xE9 bloqu\xE9 le 14 septembre et Le Rheu le 7 septembre, avant l\u2019ouverture de la fen\xEAtre."
+    },
+    "2026-09-19": {
+      blockades: "Lyc\xE9e Saint-Exup\xE9ry de Cr\xE9teil : les \xE9l\xE8ves soutiennent la gr\xE8ve des enseignants par le premier blocus de l\u2019\xE9tablissement \u2014 l\u2019origine du mouvement national."
+    },
+    "2026-09-23": {
+      blockades: "\xCEle-de-France uniquement : selon le rectorat de Cr\xE9teil, les blocus s\u2019\xE9tendent rapidement \xE0 une dizaine de lyc\xE9es."
+    },
+    "2026-09-25": {
+      arrests: "R\xE9gion parisienne uniquement \u2014 chiffres de la pr\xE9fecture de police, \xE0 midi."
+    },
+    "2026-09-28": {
+      protesterInjured: "Un cas document\xE9 : un gar\xE7on de 14 ans touch\xE9 par un projectile de police. Un plancher, pas un d\xE9compte.",
+      blockades: "Minist\xE8re de l\u2019Int\xE9rieur : 27 blocages totaux, sur 180 \xE9tablissements perturb\xE9s."
+    },
+    "2026-09-29": {
+      turnout: "Compte le cort\xE8ge de la fonction publique rejoint par les actions lyc\xE9e (206 000 minist\xE8re / 300 000 CGT), pas une foule \xE9tudiante.",
+      strikers: "Chiffre d\xE9riv\xE9, non compt\xE9. 10 % des 2 500 000 agents de la fonction publique d\u2019\xC9tat en gr\xE8ve (chiffre gouvernemental), soit 250 000. L\u2019\xC9ducation en est la principale composante, non un suppl\xE9ment : 11,47 % des personnels de l\u2019\xC9ducation (moyenne pond\xE9r\xE9e du minist\xE8re \u2014 12,74 % dans le second degr\xE9, 27,39 % pour la vie scolaire ; 13,71 % des enseignants) repr\xE9sentent 114 700 agents de la m\xEAme fonction publique d\u2019\xC9tat, d\xE9j\xE0 compris dans ces 250 000. Les revendications syndicales (plus de 40 % des personnels du premier degr\xE9, plus de 40 % \xE0 Lyon et \xE0 Cr\xE9teil) sont r\xE9gionales et ne servent pas de plafond national.",
+      protesterInjured: "\xC9l\xE8ves et personnels de l\u2019\xE9ducation bless\xE9s ce jour-l\xE0, compt\xE9s par le minist\xE8re de l\u2019\xC9ducation.",
+      blockades: "Minist\xE8re de l\u2019\xC9ducation au moment de son bilan : 45 lyc\xE9es bloqu\xE9s sur 338 concern\xE9s. Le Monde recense des actions dans pr\xE8s de 410 \xE9tablissements."
+    },
+    "2026-09-30": {
+      protesterInjured: "Cumul depuis les premiers blocages \u2014 un stock, pas un d\xE9compte quotidien.",
+      forcesInjuredStock: "Cumul des bless\xE9s parmi les forces : 83 le 30 septembre, premiers chiffres de blessures du mouvement."
+    },
+    "2026-10-01": {
+      forcesInjured: "Le compte du jour : \xAB quelque 300 \xBB bless\xE9s en intervention le jeudi (Nu\xF1ez), 305 dans le d\xE9compte Beauvau d\u2019Actu Forces. Le cumul de ce jour-l\xE0 : 383\u2013388.",
+      protesterInjured: "Niveau cumul\xE9 atteint \xE0 l\u2019arr\xEAt du 1er octobre (170 \xE9l\xE8ves + 65 personnels de l\u2019\xE9ducation) \u2014 un stock, pas un d\xE9compte quotidien. Lorsqu\u2019une semaine se termine sur cette cellule, le niveau est le chiffre de la semaine, jamais la somme des flux de la semaine.",
+      damagesCost: "Une part de l\u2019incr\xE9ment francilien du 1er au 8 octobre ; l\u2019ancrage de cette s\xE9rie est le 8 octobre.",
+      blockades: "Borne basse : 222 lyc\xE9es bloqu\xE9s (Le Monde en direct, sur 1 027 \xE9tablissements concern\xE9s). Borne haute : les 640 de l\u2019Union \xE9tudiante. La police comptait 169 blocages le matin, et 900 actions avec 400 fermetures en fin de journ\xE9e."
+    },
+    "2026-10-02": {
+      blockades: "\xAB Plus de 400 lyc\xE9es bloqu\xE9s \xBB (Le Monde en direct). Le d\xE9compte du minist\xE8re de l\u2019Int\xE9rieur pour le 2 octobre : 1 027 lyc\xE9es concern\xE9s, plus de 560 perturb\xE9s, 400 ferm\xE9s."
+    },
+    "2026-10-03": {
+      arrests: "D\xE9riv\xE9 par soustraction : les 6 059 interpellations depuis le 28 septembre (publi\xE9s le 5 octobre) moins les chiffres journaliers publi\xE9s. Couvre les 3 et 4 octobre ensemble.",
+      blockades: "Mesure plus large : le minist\xE8re de l\u2019\xC9ducation compte 735 \xE9tablissements perturb\xE9s, et non des lyc\xE9es enti\xE8rement bloqu\xE9s. Le plus haut d\xE9compte de blocages de la semaine est de 400+ le 2 octobre."
+    },
+    "2026-10-05": {
+      arrests: "984 interpellations ce jour-l\xE0. Le stock minist\xE9riel de 6 059 depuis le 28 septembre est ce qui rend v\xE9rifiable le chiffre du week-end.",
+      blockades: "Mesure plus large : 400 \xE0 500 \xE9tablissements ferm\xE9s (porte-parole du gouvernement), plus de 400 doivent le rester. Le comptage de mi-matin du minist\xE8re est de 413 \xE9tablissements perturb\xE9s.",
+      forcesInjuredStock: "Cumul depuis le d\xE9but du mouvement : 715 policiers et gendarmes bless\xE9s (Matignon)."
+    },
+    "2026-10-06": {
+      damagesCost: "Une part de l\u2019incr\xE9ment francilien du 1er au 8 octobre ; l\u2019ancrage de cette s\xE9rie est le 8 octobre.",
+      blockades: "Mesure plus large : 891 \xE9tablissements sur 3 700 ont eu leurs cours suspendus, totalement ou partiellement, \xE0 la mi-journ\xE9e (minist\xE8re). L\u2019USL compte 1 800 lyc\xE9es \xAB \xE0 l\u2019arr\xEAt \xBB \u2014 un d\xE9compte syndical qui inclut aussi les lyc\xE9es ferm\xE9s administrativement."
+    },
+    "2026-10-08": {
+      damagesCost: "Ancrage de l\u2019incr\xE9ment de dommages francilien du 1er au 8 octobre. Les m\xEAmes 6 M\u20AC sont publi\xE9s au 6 octobre et ne sont pas compt\xE9s deux fois.",
+      blockades: "Mesure plus large : 224 \xE9tablissements ferm\xE9s (minist\xE8re) ; plus de 150 encore perturb\xE9s (franceinfo). Le chiffre de 224 est celui que le minist\xE8re rappellera le 13 octobre.",
+      forcesInjuredStock: "Cumul : 761 bless\xE9s (Nu\xF1ez). Les incr\xE9ments publi\xE9s se recoupent \u2014 715 le 5 octobre plus 43 le 6 octobre font 758."
+    },
+    "2026-10-10": {
+      blockades: "\xAB Plus de 40 lyc\xE9es bloqu\xE9s \xBB (AFP/Reuters, 10 octobre)."
+    },
+    "2026-10-12": {
+      arrests: "13 interpellations rapport\xE9es ind\xE9pendamment par la pr\xE9fecture du Rh\xF4ne (27 \xE9tablissements touch\xE9s) et par celle du Bas-Rhin \xE0 Strasbourg. Deux pr\xE9fectures, le m\xEAme nombre : 13 est donc un plancher pour la journ\xE9e, pas le total r\xE9gional du jour. Ce n\u2019est pas Paris.",
+      protesterInjured: "\xCEle-de-France uniquement : un proviseur, un parent d\u2019\xE9l\xE8ve et un agent de la R\xE9gion bless\xE9s. Compt\xE9s comme personnels de l\u2019\xE9ducation et des collectivit\xE9s, sur la m\xEAme base que le chiffre minist\xE9riel du 29 septembre.",
+      damagesCost: "Normandie \u2014 Herv\xE9 Morin, Conseil r\xE9gional de Normandie, \xE0 l\u2019assembl\xE9e r\xE9gionale le 12 oct. : \xAB 1,5 million en Normandie \xBB sur \xAB d\u2019ores et d\xE9j\xE0 30 millions d\u2019euros \xBB au niveau national. Un stock r\xE9gional cumul\xE9, pas un flux quotidien, et une composante du stock national \u2014 jamais additionn\xE9. Le total francilien r\xE9vis\xE9 le m\xEAme jour \xE9tait de 8,5 M\u20AC.",
+      blockades: "Pr\xE9fecture du Rh\xF4ne uniquement : 19 des 27 \xE9tablissements touch\xE9s \xE9taient des lyc\xE9es (six universit\xE9s, deux coll\xE8ges). L\u2019\xCEle-de-France comptait pr\xE8s de 80 lyc\xE9es perturb\xE9s le m\xEAme jour."
+    },
+    "2026-10-13": {
+      blockades: "Mesure plus large : 214 \xE9tablissements ferm\xE9s, 94,2 % de lyc\xE9es ouverts \u2014 contre 224 le 8 octobre. Le minist\xE8re parle d\u2019un mouvement \xAB en recul \xBB."
+    },
+    "2026-10-14": {
+      forcesInjuredStock: "Cumul : 937 bless\xE9s (Nu\xF1ez)."
+    },
+    "2026-10-17": {
+      protesterInjured: "Fourchette d\xE9riv\xE9e : le plancher est le registre des blessures graves, le plafond est extrapol\xE9 \xE0 partir des soins dispens\xE9s par les street-medics. Aucun d\xE9compte officiel n\u2019existe.",
+      damagesCost: "Estimation mod\xE9lis\xE9e de l\u2019IFRAP pour le week-end des 17\u201318 octobre ; hors chiffre d\u2019affaires perdu et co\xFBts de maintien de l\u2019ordre. L\u2019estimation parisienne publi\xE9e le 18 octobre en est un sous-ensemble, exclue de la somme hebdomadaire.",
+      forcesInjured: "D\xE9riv\xE9 : le cumul minist\xE9riel passe de 937 (14 octobre) \xE0 1 144 (17 octobre) ; c\u2019est donc l\u2019incr\xE9ment de trois jours, pas celui d\u2019une journ\xE9e.",
+      forcesInjuredStock: "Pic du cumul : 997 bless\xE9s au premier bilan, 1 144 apr\xE8s consolidation, dont 7 graves. C\u2019est le total depuis le d\xE9but du mouvement, pas le compte du jour."
+    },
+    "2026-10-18": {
+      arrests: "Chiffre de la pr\xE9fecture de police de Paris uniquement \u2014 journ\xE9e de couvre-feu.",
+      damagesCost: "Sous-ensemble parisien du total IFRAP des 17\u201318 octobre \u2014 jamais additionn\xE9."
+    },
+    "2026-10-20": {
+      arrests: "Chiffres des pr\xE9fectures de Guadeloupe uniquement \u2014 r\xE9gional."
+    },
+    "2026-10-24": {
+      damagesCost: "Bilan national de CCI France pour le 17\u201324 octobre \u2014 un surensemble de la cellule du 17 octobre, jamais additionn\xE9."
+    },
+    "2026-10-31": {
+      damagesCost: "Estimation locale \u2014 aucun chiffre national de dommages n\u2019a \xE9t\xE9 publi\xE9.",
+      forcesInjuredStock: "D\xE9riv\xE9 : 1 411 (17 octobre) plus 116\u2013159 bless\xE9s le jour m\xEAme font 1 527\u20131 570. Un fichier interne des CRS obtenu par Mediapart d\xE9nombre 1 233 agents d\xE9clar\xE9s bless\xE9s en octobre, dont 1 167 class\xE9s \xAB l\xE9g\xE8rement \xBB bless\xE9s \u2014 94,6 %."
+    },
+    "2026-11-02": {
+      blockades: "Minist\xE8re de l\u2019\xC9ducation \xE0 9 h 30 : 41 lyc\xE9es bloqu\xE9s, environ 1 % des 3 700 du pays, et aucune perturbation dans les trois quarts des d\xE9partements."
+    },
+    "2026-11-03": {
+      blockades: "Minist\xE8re de l\u2019\xC9ducation : 48 lyc\xE9es bloqu\xE9s. L\u2019USL en compte pr\xE8s de 500."
+    },
+    "2026-11-05": {
+      strikers: "Chiffre d\xE9riv\xE9, non compt\xE9. 9,89 % des agents de la fonction publique d\u2019\xC9tat \xE0 la mi-journ\xE9e, puis 11 % plus tard, sur 2 500 000 agents : de 247 250 \xE0 275 000 \u2014 la fourchette est celle de l\u2019heure du comptage, non une barre d\u2019erreur. \xC9ducation : 12,77 % des personnels (minist\xE8re, hors acad\xE9mie de Toulouse) = 127 700, une composante de ce total. Exclus : collectivit\xE9s territoriales 4,60 % et h\xF4pitaux publics 3,93 % (aucun effectif publi\xE9), les 52 % de la SNES-FSU (p\xE9rim\xE8tre plus \xE9troit), et le \xAB pr\xE8s d\u20191,6 million en gr\xE8ve et dans les manifestations \xBB de la CGT, qui recouvre deux populations et borne d\xE9j\xE0 la fourchette de foule ci-dessus.",
+      protesterInjured: "Publi\xE9 comme plancher : \xAB au moins \xBB. ",
+      blockades: "Matignon \xE0 10 h : 81 \xE9tablissements bloqu\xE9s (2,2 %). L\u2019USL compte 1 000 lyc\xE9es \xAB \xE0 l\u2019arr\xEAt \xBB \u2014 bloqu\xE9s ou ferm\xE9s administrativement, donc une borne haute. Le minist\xE8re de l\u2019\xC9ducation compte 33 % d\u2019\xE9tablissements perturb\xE9s.",
+      forcesInjured: "Le compte du jour : 53 \xE0 18 h, 112 apr\xE8s consolidation.",
+      forcesInjuredStock: "Cumul final du minist\xE8re : 1 580 bless\xE9s depuis le d\xE9but du mouvement. Il se recoupe exactement avec les incr\xE9ments publi\xE9s \u2014 1 144 (17 octobre) + 267 (24 octobre) + 116 (31 octobre) + 53 (5 novembre) = 1 580."
+    },
+    "2026-11-09": {
+      arrests: "Chiffres de pr\xE9fectures r\xE9gionales uniquement \u2014 Bordeaux, Lyon, Strasbourg."
+    }
+  },
+  deployNotes: {
+    "2026-09-28": "dispositif estim\xE9",
+    "2026-09-29": "dispositif estim\xE9",
+    "2026-09-30": "dispositif estim\xE9",
+    "2026-10-01": "dispositif estim\xE9",
+    "2026-10-02": "dispositif estim\xE9",
+    "2026-10-05": "dispositif estim\xE9",
+    "2026-10-06": "dispositif estim\xE9",
+    "2026-10-08": "dispositif estim\xE9",
+    "2026-10-12": "estimated \u2014 \xCEle-de-France, Lyon and Strasbourg",
+    "2026-10-13": "dispositif estim\xE9",
+    "2026-10-17": "dispositif publi\xE9",
+    "2026-10-18": "estim\xE9 \u2014 couvre-feu parisien",
+    "2026-10-24": "dispositif publi\xE9",
+    "2026-10-31": "dispositif publi\xE9",
+    "2026-11-05": "dispositif publi\xE9",
+    "2026-11-07": "dispositif publi\xE9"
+  },
+  policingDay: "{head} agents \xD7 {low}\u2013{high} \u20AC par agent-jour \xB7 {note}",
+  policingDayPlain: "{head} agents \xD7 {low}\u2013{high} \u20AC par agent-jour",
+  cumulativeAdded: "dispositif compt\xE9 ce jour \u2014 {days} \xE0 ce stade",
+  cumulativeCarried: "aucun dispositif publi\xE9 \u2014 cumul report\xE9",
+  weekNational: "{n} jour{s} compt\xE9{s}",
+  weekRegionalOnly: "{n} jour{s}, r\xE9gional seulement",
+  weekPeak: "pointe le {date}",
+  weekNoNational: "aucun chiffre national cette semaine",
+  weekExcluded: "{n} point{s} exclu(s) (r\xE9gional ou sous-ensemble)",
+  weekFloored: "comprend un plancher \u2014 pas une somme",
+  weekClipped: "semaine tronqu\xE9e par la fen\xEAtre",
+  weekJoin: " \xB7 ",
+  tooltipRange: "{label} : {mid} (fourchette {low}\u2013{high})",
+  tooltipPoint: "{label} : {value}",
+  tooltipNote: "{base}\n{note}",
+  footerMark: "\u24D8 {note}",
+  weekVacation: "en partie pendant les vacances de la Toussaint (17 oct. \u2013 1 nov.)",
+  holidayLine: "Ligne en pointill\xE9s : les vacances de la Toussaint, du 17 octobre au 1er novembre 2026. Aucun lyc\xE9e n\u2019\xE9tait en cours, aucun ne pouvait \xEAtre bloqu\xE9 \u2014 le d\xE9compte n\u2019existait pas, il n\u2019\xE9tait pas nul.",
+  metricNote: "Lyc\xE9es bloqu\xE9s ou ferm\xE9s : les \xE9tablissements o\xF9 les \xE9l\xE8ves ne pouvaient pas suivre normalement. La fourchette va du d\xE9compte officiel au d\xE9compte syndical, et ce dernier inclut les lyc\xE9es ferm\xE9s administrativement.",
+  blockerNote: "Mesure plus large que les blocages \u2014 \xE9tablissements perturb\xE9s, cours suspendus ou ferm\xE9s \u2014 utilis\xE9e lorsque c\u2019est le seul chiffre publi\xE9 ce jour-l\xE0.",
+  series: {
+    protestersDaily: {
+      label: "Manifestants",
+      detached: "Manifestants (chiffre \xE9cart\xE9 de la courbe)"
+    },
+    strikersDaily: {
+      label: "Personnes en gr\xE8ve",
+      detached: "Personnes en gr\xE8ve (chiffre mod\xE9lis\xE9)"
+    },
+    blockadesDaily: {
+      label: "Lyc\xE9es bloqu\xE9s",
+      detached: "Lyc\xE9es bloqu\xE9s (d\xE9compte r\xE9gional)"
+    },
+    arrestsDaily: {
+      label: "Interpellations",
+      detached: "Interpellations (chiffre \xE9cart\xE9)"
+    },
+    forcesDaily: {
+      label: "Bless\xE9s \u2014 forces de l\u2019ordre",
+      detached: "Forces bless\xE9es (chiffre \xE9cart\xE9)"
+    },
+    forcesInjuredStock: {
+      label: "Forces bless\xE9es (cumul)",
+      detached: "Forces bless\xE9es, cumul (stock)"
+    },
+    protestersInjuredDaily: {
+      label: "Bless\xE9s \u2014 manifestants",
+      detached: "Manifestants bless\xE9s (chiffre \xE9cart\xE9)"
+    },
+    damagesDaily: {
+      label: "Dommages mat\xE9riels",
+      detached: "Dommages (stock ou chiffre mod\xE9lis\xE9)"
+    },
+    policingDaily: {
+      label: "Co\xFBt du maintien de l\u2019ordre, par jour",
+      detached: "Co\xFBt par jour (mod\xE9lis\xE9)"
+    },
+    policingCumulative: {
+      label: "Co\xFBt du maintien de l\u2019ordre, cumul\xE9",
+      detached: "Co\xFBt cumul\xE9 (mod\xE9lis\xE9)"
+    },
+    protestersWeekly: {
+      label: "Manifestants (pointe hebdomadaire)",
+      detached: "Manifestants (semaine r\xE9gionale)"
+    },
+    strikersWeekly: {
+      label: "Personnes en gr\xE8ve (pointe hebdomadaire)",
+      detached: "Personnes en gr\xE8ve (chiffre mod\xE9lis\xE9)"
+    },
+    blockadesWeekly: {
+      label: "Lyc\xE9es bloqu\xE9s (pointe hebdomadaire)",
+      detached: "Lyc\xE9es bloqu\xE9s (semaine r\xE9gionale)"
+    },
+    arrestsWeekly: {
+      label: "Interpellations (total hebdomadaire)",
+      detached: "Interpellations (semaine r\xE9gionale)"
+    },
+    forcesWeekly: {
+      label: "Forces bless\xE9es (total hebdomadaire)",
+      detached: "Forces bless\xE9es (semaine r\xE9gionale)"
+    },
+    protestersInjuredWeekly: {
+      label: "Manifestants bless\xE9s (total hebdomadaire)",
+      detached: "Manifestants bless\xE9s (semaine r\xE9gionale)"
+    }
+  },
+  charts: {
+    protestersDaily: {
+      title: "Manifestants, personnes en gr\xE8ve et lyc\xE9es bloqu\xE9s, par jour",
+      subtitle: "Foules et personnes en gr\xE8ve sur l\u2019axe de gauche, blocages de lyc\xE9es sur l\u2019axe de droite. Les personnes en gr\xE8ve sont d\xE9riv\xE9es de taux de participation publi\xE9s \u2014 aucune autorit\xE9 n\u2019a publi\xE9 de d\xE9compte. La ligne en pointill\xE9s correspond aux vacances de la Toussaint",
+      y: "Personnes dans la rue ou en gr\xE8ve",
+      yRight: "Lyc\xE9es bloqu\xE9s ou ferm\xE9s"
+    },
+    enforcementDaily: {
+      title: "Interpellations et bless\xE9s, par jour",
+      subtitle: "Une interpellation n\u2019est pas une garde \xE0 vue ; les bless\xE9s sont compt\xE9s par camp",
+      y: "Personnes"
+    },
+    cost: {
+      title: "Dommages et co\xFBt du maintien de l\u2019ordre",
+      subtitle: "",
+      y: "Millions d\u2019\u20AC"
+    },
+    protestersWeekly: {
+      title: "Manifestants, personnes en gr\xE8ve et lyc\xE9es bloqu\xE9s, pointe hebdomadaire",
+      subtitle: "Jour de pointe de chaque semaine, non une somme hebdomadaire \u2014 un m\xEAme lyc\xE9e est bloqu\xE9 plusieurs jours de suite, et une personne en gr\xE8ve trois jours reste une personne",
+      y: "Personnes (jour de pointe)",
+      yRight: "Lyc\xE9es bloqu\xE9s ou ferm\xE9s (pointe)"
+    },
+    enforcementWeekly: {
+      title: "Maintien de l\u2019ordre, totaux hebdomadaires",
+      subtitle: "Sommes hebdomadaires ; un stock ou un plancher ne s\u2019additionne pas",
+      y: "Personnes (total hebdomadaire)"
+    }
+  }
+};
+
+// src/copy/fr/episodes.ts
+var EPISODES_FR = {
+  may68: {
+    short: "Mai 68",
+    strip: "Mai 68",
+    banner: "Gr\xE8ve g\xE9n\xE9rale et occupations d\u2019usines. Les foules syndicales et les d\xE9comptes minist\xE9riels diff\xE8rent d\u2019un facteur dix : les deux sont trac\xE9s.",
+    weeks: [
+      { action: "Manifestations du 1er mai" },
+      {
+        action: "Nuit des barricades, 10\u201311 mai",
+        note: { i: "Chiffre publi\xE9 comme plancher." }
+      },
+      { action: "Gr\xE8ve g\xE9n\xE9rale \xE0 partir du 13 mai" },
+      {
+        action: "24 mai : allocution du g\xE9n\xE9ral de Gaulle",
+        note: { a: "Bilan d\u2019interpellations publi\xE9 comme plancher." }
+      },
+      { action: "Accords de Grenelle, 27 mai" },
+      { action: "Campagne des l\xE9gislatives" },
+      void 0,
+      void 0,
+      void 0
+    ]
+  },
+  cpe: {
+    short: "CPE 2006",
+    strip: "CPE 2006",
+    banner: "Contrat premi\xE8re embauche : mouvement lyc\xE9en et \xE9tudiant, avec deux journ\xE9es interprofessionnelles. Les chiffres de maintien de l\u2019ordre n\u2019existent que pour quatre semaines.",
+    weeks: [
+      { action: "7 f\xE9vrier : premi\xE8re journ\xE9e nationale" },
+      void 0,
+      void 0,
+      void 0,
+      { action: "Universit\xE9s bloqu\xE9es" },
+      { action: "14 mars : journ\xE9e nationale" },
+      { action: "21 mars : journ\xE9e \xE9tudiante" },
+      { action: "28 mars : journ\xE9e nationale" },
+      { action: "4 avril : journ\xE9e nationale" },
+      { action: "Retrait annonc\xE9" }
+    ]
+  },
+  gj: {
+    short: "Gilets jaunes",
+    strip: "Gilets jaunes",
+    banner: "Compt\xE9 acte par acte, le samedi uniquement. Les chiffres de maintien de l\u2019ordre n\u2019ont \xE9t\xE9 publi\xE9s que pour les quatre premiers actes, jamais en s\xE9rie.",
+    weeks: []
+  },
+  nahel: {
+    short: "Juin 2023",
+    strip: "Juin 2023",
+    banner: "Cinq nuits d\u2019\xE9meutes apr\xE8s la mort du 27 juin. Les interpellations et bless\xE9s sont \xE9lev\xE9s rapport\xE9s \xE0 la foule parce qu\u2019il ne s\u2019agissait pas de manifestations.",
+    weeks: [
+      { action: "27 juin : d\xE9but des \xE9meutes" },
+      { action: "Retour au calme" }
+    ]
+  },
+  pensions: {
+    short: "Retraites 2023",
+    strip: "Retraites 2023",
+    banner: "Mouvement contre le report de l\u2019\xE2ge l\xE9gal. Deux journ\xE9es portent l\u2019essentiel de la s\xE9rie ; la fourchette intersyndicale est large.",
+    weeks: [
+      { action: "19 janvier : premi\xE8re journ\xE9e nationale" },
+      void 0,
+      { action: "31 janvier" },
+      { action: "7 f\xE9vrier" },
+      { action: "16 f\xE9vrier" },
+      void 0,
+      void 0,
+      { action: "7 mars : \xE9coles et transports bloqu\xE9s" },
+      { action: "11 mars" },
+      { action: "15 mars" },
+      { action: "23 mars" },
+      { action: "28 mars" },
+      { action: "6 avril" },
+      void 0,
+      void 0,
+      void 0,
+      { action: "1er mai" },
+      void 0,
+      void 0,
+      void 0,
+      { action: "6 juin" }
+    ]
+  },
+  bt: {
+    short: "Bloquons tout",
+    strip: "Bloquons tout",
+    banner: "Septembre 2025 : blocages et d\xE9fil\xE9s, d\xE9comptes partiels. Les semaines sans chiffre publi\xE9 restent vides.",
+    weeks: [
+      { action: "10 septembre : blocages" },
+      { action: "18 septembre : journ\xE9e nationale" },
+      void 0,
+      { action: "1er octobre" }
+    ]
+  },
+  students26: {
+    short: "Automne 2026",
+    strip: "Automne 2026",
+    banner: "Le mouvement pour lequel cette page a \xE9t\xE9 construite, suivi depuis les premiers blocages de lyc\xE9es en m\xE9tropole le 15 septembre. Publication quotidienne : les jours sans chiffre restent vides plut\xF4t qu\u2019interpol\xE9s.",
+    weeks: [
+      { action: "15 septembre : blocages de Caen et de Villeneuve-d\u2019Ascq" },
+      { action: "25 septembre : blocages dans l\u2019agglom\xE9ration parisienne" },
+      { action: "Acte I le 29 septembre, acte II le 1er octobre" },
+      { action: "Acte III le 6 octobre" },
+      { action: "17 octobre : la pointe" },
+      { action: "24 octobre" },
+      { action: "31 octobre" },
+      { action: "5 et 7 novembre" },
+      { action: "9 novembre \u2014 fen\xEAtre arr\xEAt\xE9e au 11 novembre" }
+    ],
+    fallbackNote: {
+      p: "Pointe hebdomadaire issue de la s\xE9rie quotidienne \u2014 le jour de pointe de la semaine.",
+      a: "Somme des chiffres journaliers publi\xE9s de la semaine ; un stock cumul\xE9 est montr\xE9 comme le stock, jamais additionn\xE9."
+    }
+  }
+};
+
+// src/copy/fr/text.ts
+var TEXT_FR = {
+  panels: {
+    partialWeek: "Semaine du {label} (partielle)",
+    act: "Acte {n}",
+    withAction: "{when} \xB7 {action}",
+    seriesContinues: "{name} (suite)",
+    obs: "observations {counts} sur {weeks}",
+    valueRange: "{lo}\u2013{hi}",
+    itemMeta: "fourchette {range} \xB7 jusqu\u2019\xE0 la semaine {n}",
+    median: "m\xE9diane",
+    peak: "pointe",
+    range: "fourchette min\u2013max",
+    figureCount: "{n} chiffres publi\xE9s",
+    singleFigure: "un seul chiffre publi\xE9 \u2014 la m\xE9diane et la pointe sont le m\xEAme nombre",
+    summaryMeta: "m\xE9diane et pointe \xB7 {n} mouvements"
+  },
+  kpi: {
+    heading: "Chiffres cl\xE9s",
+    largestDay: "Plus grand jour",
+    largestWeek: "Plus grande semaine",
+    largestFigure: "Plus grand chiffre",
+    vsMean: "Max vs moyenne",
+    vsMedian: "Max vs m\xE9diane",
+    vsFirst: "Max vs premier chiffre",
+    againstMean: "{value} contre une moyenne de {base}",
+    againstMedian: "{value} contre une m\xE9diane de {base}",
+    againstFirst: "{value} contre un premier chiffre de {base}",
+    noteDaily: "Les rapports sont calcul\xE9s sur les s\xE9ries quotidiennes : chaque chiffre publi\xE9 est divis\xE9 par la moyenne, la m\xE9diane et le premier chiffre publi\xE9 de sa propre s\xE9rie. Les jours sans chiffre publi\xE9 sont \xE9cart\xE9s, non compt\xE9s comme z\xE9ro. Le total de dommages de 1 000 M\u20AC du 24 octobre n\u2019a pas de marqueur sur le graphique et en est donc \xE9cart\xE9 ici aussi.",
+    noteWeekly: "Les rapports sont calcul\xE9s sur les s\xE9ries hebdomadaires : chaque chiffre publi\xE9 est divis\xE9 par la moyenne, la m\xE9diane et le premier chiffre publi\xE9 de sa propre s\xE9rie. Les semaines sans chiffre publi\xE9 sont \xE9cart\xE9es, non compt\xE9es comme z\xE9ro.",
+    noteEpisodes: "Chaque mouvement est compar\xE9 \xE0 sa propre s\xE9rie \u2014 sa moyenne, sa m\xE9diane et son premier chiffre publi\xE9 \u2014 et le plus grand rapport sur les sept mouvements est affich\xE9. Un rapport au premier chiffre peut atteindre des milliers de pour cent lorsqu\u2019un mouvement a commenc\xE9 avec une poign\xE9e de personnes.",
+    noteEpisodesCapped: "Comme en section C, mais sur les seules semaines trac\xE9es en section D, qui s\u2019arr\xEAtent \xE0 la derni\xE8re semaine de chiffres de maintien de l\u2019ordre.",
+    eurM: "{v} M\u20AC",
+    none: "aucun chiffre publi\xE9"
+  },
+  casualties: {
+    headlineTitle: "Comment se r\xE9partissent les blessures",
+    weeklyTitle: "Ce qu\u2019une semaine peut \xE9tablir",
+    colScope: "Population",
+    colTotal: "Total d\xE9clar\xE9",
+    colSerious: "Graves",
+    colLight: "L\xE9g\xE8res",
+    colLightShare: "Part de l\xE9g\xE8res",
+    colOther: "Non class\xE9es l\xE9g\xE8res",
+    colSide: "Camp",
+    colCircumstance: "Circonstance",
+    colCount: "D\xE9compte",
+    colCases: "Cas document\xE9s",
+    colQuestion: "Question",
+    colWindow: "Plus petite fen\xEAtre publi\xE9e",
+    colWeekly: "Chiffre hebdomadaire",
+    scope: {
+      crsOctober: "CRS, octobre 2026",
+      forcesPeak: "Toutes forces, cumul \xE0 son pic",
+      protesters: "Manifestant\xB7es, depuis le 30 septembre",
+      week12oct: "Semaine du 12 octobre",
+      week19oct: "Semaine du 19 octobre",
+      week26oct: "Semaine du 26 octobre",
+      week2nov: "Semaine du 2 novembre"
+    },
+    side: {
+      forces: "Police et gendarmerie",
+      protesters: "Manifestant\xB7es"
+    },
+    kind: {
+      accidental: "Accidentelle ou auto-inflig\xE9e",
+      conflictual: "Imput\xE9e \xE0 l\u2019affrontement"
+    },
+    why: {
+      notPublished: "non publi\xE9",
+      noDenominator: "aucun total publi\xE9",
+      binaryFile: "fichier binaire : l\xE9ger / non l\xE9ger",
+      noTally: "aucun d\xE9compte, des cas seulement",
+      noneDocumented: "aucun cas document\xE9"
+    },
+    cases: {
+      givors: "Givors, 10 octobre : deux policiers en faction devant un lyc\xE9e se br\xFBlent \xE0 la main et \xE0 la cuisse quand une grenade part accidentellement dans leur propre v\xE9hicule, qui prend feu.",
+      crsWrist: "Un CRS s\u2019est contusionn\xE9 le poignet gauche en fermant la porti\xE8re de son v\xE9hicule.",
+      crsAnkle: "Un autre CRS s\u2019est tordu la cheville en chutant du fourgon.",
+      helmet: "Paris, 31 octobre : un CRS touch\xE9 au casque, indemne \u2014 un peu de peinture \xF4t\xE9e de la coque.",
+      groin2023: "Sainte-Soline, mars 2023, pour comparaison : sur 29 gendarmes recens\xE9s, un h\xE9matome \xE0 l\u2019aine, un traumatisme respiratoire, les autres examin\xE9s pour traumatismes sonores.",
+      mael: "Tours, 30 septembre : un lyc\xE9en \xE9borgn\xE9 par une balle en caoutchouc, alors qu\u2019il ne lan\xE7ait rien.",
+      alaric: "Paris, 17 octobre : un \xE9tudiant de 19 ans br\xFBl\xE9 au torse et au bras par une grenade lacrymog\xE8ne tir\xE9e en tir tendu ; br\xFBlures au deuxi\xE8me degr\xE9, non cicatris\xE9es dix jours plus tard.",
+      eyes: "Plusieurs autres mineurs ont perdu un \u0153il dans les m\xEAmes circonstances.",
+      sainteSoline: "Le bilan officiel \xE9tait de 29 gendarmes bless\xE9s, dont deux en urgence absolue. Les deux ont ensuite \xE9t\xE9 d\xE9crits comme un h\xE9matome \xE0 l\u2019aine et un traumatisme respiratoire."
+    },
+    casesCount: "{n} cas document\xE9s",
+    noCases: "aucun cas document\xE9",
+    capLevels: "Gravit\xE9, \xE0 la plus fine fen\xEAtre publi\xE9e par chaque source. Les lignes sont des populations et des fen\xEAtres diff\xE9rentes \u2014 elles ne s\u2019additionnent jamais.",
+    capWeeks: "Gravit\xE9, par semaine. L\u2019incr\xE9ment est la diff\xE9rence entre le cumul en d\xE9but et en fin de semaine.",
+    capCases: "Circonstance. Aucune source ne la d\xE9nombre : la colonne donne le nombre de cas document\xE9s, non une part.",
+    capResolution: "La plus petite fen\xEAtre \xE0 laquelle chaque ventilation existe, et si un chiffre hebdomadaire peut en \xEAtre tir\xE9.",
+    noteLevels: "Les 1 167 sur 1 233 constituent la seule part de bless\xE9s l\xE9gers publi\xE9e : 94,6 %, le chiffre que le fichier \xE9nonce lui-m\xEAme. Il porte sur les CRS en octobre : il ne s\u2019\xE9tend ni \xE0 toutes les forces ni \xE0 tout le mouvement. Les 7 bless\xE9s graves rel\xE8vent de la consolidation de 1 144 du 17 octobre. Aucun total des blessures chez les manifestant\xB7es n\u2019a jamais \xE9t\xE9 publi\xE9 : aucune part ne peut donc \xEAtre calcul\xE9e de ce c\xF4t\xE9 \u2014 les cas graves forment un registre, non un taux. Les quatre blessures accidentelles document\xE9es sont quatre personnes nomm\xE9es, non quatre pour cent de quoi que ce soit.",
+    noteWeeks: "Le minist\xE8re publie un cumul, non une ventilation hebdomadaire de la gravit\xE9. D\xE9couper ce cumul en semaines est de l\u2019arithm\xE9tique, et le total se recoupe exactement \xE0 1 580, mais la seule ventilation l\xE9ger / non l\xE9ger existante est le fichier des CRS d\u2019octobre, qui couvre quatre de ces semaines sans pouvoir \xEAtre attribu\xE9 \xE0 l\u2019une d\u2019elles. C\u2019est pourquoi la section A porte la ventilation et la section B les incr\xE9ments.",
+    headLight: "{light} blessures d\xE9clar\xE9es sur {total} class\xE9es l\xE9g\xE8res",
+    headLightNote: "Agents des CRS, octobre 2026",
+    headMissingNote: "Aucun total publi\xE9 pour les blessures des manifestant\xB7es : aucune part n\u2019existe",
+    resolution: [
+      {
+        label: "Ventilation l\xE9ger / grave",
+        window: "Un mois (octobre 2026), CRS seulement",
+        weekly: "non"
+      },
+      {
+        label: "Ventilation accidentelle / conflictuelle",
+        window: "Aucune \u2014 des cas nomm\xE9s seulement",
+        weekly: "non"
+      },
+      {
+        label: "Cumul des forces bless\xE9es",
+        window: "Un jour",
+        weekly: "oui"
+      },
+      {
+        label: "Incr\xE9ments quotidiens",
+        window: "Un jour",
+        weekly: "oui"
+      }
+    ]
+  },
+  items: {
+    p: { label: "Manifestants", short: "Manifestants" },
+    a: { label: "Interpellations", short: "Interpellations" },
+    f: { label: "Bless\xE9s \u2014 forces de l\u2019ordre", short: "Forces bless\xE9es" },
+    i: { label: "Bless\xE9s \u2014 manifestants", short: "Manifestants bless\xE9s" }
+  },
+  units: { weeks: "semaine" },
+  flags: flagMap("fr"),
+  tooltip: {
+    linePlain: "{value}",
+    lineWithFlag: "{value} \xB7 {flag}",
+    firstFigure: "premier chiffre publi\xE9 : {n}",
+    shareOfFirst: "{pct} du premier chiffre ({n})",
+    shareComparisons: "Comparaisons : {list}",
+    cmpHighest: "le plus \xE9lev\xE9",
+    cmpMean: "moyenne",
+    cmpMedian: "m\xE9diane",
+    cmpFirst: "premier chiffre",
+    listAnd: " et "
+  },
+  disclaimer: {
+    body: "La recherche et le code ont \xE9t\xE9 r\xE9alis\xE9s \xE0 l\u2019aide d\u2019un LLM et les chiffres n\u2019ont pas \xE9t\xE9 v\xE9rifi\xE9s. Ne les utilisez pas pour une analyse s\xE9rieuse ou pour prendre des d\xE9cisions sans avoir d\u2019abord v\xE9rifi\xE9 les chiffres et les sources en bas de page."
+  }
+};
+
+// src/copy/fr/index.ts
+var CATALOGUE_FR = {
+  chart: CHART_FR,
+  episodes: EPISODES_FR,
+  ...TEXT_FR
+};
+
+// src/copy/catalogue.ts
+var CATALOGUE = {
+  en: CATALOGUE_EN,
+  fr: CATALOGUE_FR
+};
+
+// src/copy/interpolate.ts
+var TOKEN = /\{(\w+)\}/g;
+function fill(template, params) {
+  if (!params) return template;
+  const p = typeof params.n === "number" && params.s === void 0 ? { ...params, s: params.n === 1 ? "" : "s" } : params;
+  return template.replace(
+    TOKEN,
+    (whole, name) => name in p ? String(p[name]) : whole
+  );
+}
+function plural(a, b, c) {
+  if (typeof a === "string") {
+    const n = typeof b === "number" ? b : 0;
+    return Math.abs(n) === 1 ? a : c ?? `${a}s`;
+  }
+  const isOne = Math.abs(a) === 1;
+  if (typeof b !== "string") return isOne ? "" : "s";
+  return isOne ? b : c ?? `${b}s`;
+}
+
+// src/copy/lookup.ts
+var SPAN_SEP = { en: " \u2013 ", fr: " \u2013 " };
+var DICT = {
+  en: { "span.sep": SPAN_SEP.en },
+  fr: { "span.sep": SPAN_SEP.fr }
+};
+var warned = /* @__PURE__ */ new Set();
+function warnOnce(key, message) {
+  if (warned.has(key)) return;
+  warned.add(key);
+  console.warn(`[i18n] ${message}`);
+}
+var PASSTHROUGH = /* @__PURE__ */ new Set([
+  "then",
+  "toJSON",
+  "constructor",
+  "length",
+  "name",
+  "toString",
+  "valueOf",
+  "hasOwnProperty",
+  "inspect",
+  "nodeType",
+  "$$typeof",
+  "prototype"
+]);
+var tolerant = /* @__PURE__ */ new Map();
+function catalogueFor(forLang) {
+  const cached = tolerant.get(forLang);
+  if (cached) return cached;
+  const proxy = new Proxy(CATALOGUE[forLang], {
+    get(target, prop, receiver) {
+      if (typeof prop !== "string" || prop in target || PASSTHROUGH.has(prop)) {
+        return Reflect.get(target, prop, receiver);
+      }
+      const tag3 = `${forLang}:${prop}`;
+      if (!warned.has(tag3)) {
+        warned.add(tag3);
+        console.warn(
+          `[i18n] catalogue branch "${prop}" is missing (${forLang})`
+        );
+      }
+      return new Proxy({}, { get: () => "" });
+    }
+  });
+  tolerant.set(forLang, proxy);
+  return proxy;
+}
+function t(key, params) {
+  if (key === void 0) return catalogueFor(current);
+  const template = DICT[current][key] ?? DICT.en[key];
+  if (template === void 0) {
+    if (!warned.has(key)) {
+      warned.add(key);
+      console.warn(`[i18n] missing key "${key}" (${current})`);
+    }
+    return key;
+  }
+  return params === void 0 ? template : fill(template, params);
+}
+function bi(value2) {
+  return value2[current] ?? value2.en;
+}
+
+// src/copy/format.ts
+var UTC = { timeZone: "UTC" };
+var dates;
+var numFmt;
+var cptFmt;
+var eurFmt;
+function buildFormats(tag3) {
+  numFmt = new Intl.NumberFormat(tag3, { maximumFractionDigits: 0 });
+  cptFmt = new Intl.NumberFormat(tag3, {
+    notation: "compact",
+    compactDisplay: "short",
+    maximumFractionDigits: 1
+  });
+  eurFmt = new Intl.NumberFormat(tag3, { maximumFractionDigits: 1 });
+  dates = {
+    long: new Intl.DateTimeFormat(tag3, {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      ...UTC
+    }),
+    short: new Intl.DateTimeFormat(tag3, {
+      day: "numeric",
+      month: "short",
+      ...UTC
+    }),
+    day: new Intl.DateTimeFormat(tag3, { day: "numeric", ...UTC })
+  };
+}
+var nf = () => numFmt;
+var compact = () => cptFmt;
+var eurM = () => eurFmt;
+function toDate(value2) {
+  if (value2 instanceof Date)
+    return Number.isNaN(value2.getTime()) ? null : value2;
+  if (typeof value2 === "number") {
+    const d2 = new Date(value2);
+    return Number.isNaN(d2.getTime()) ? null : d2;
+  }
+  if (typeof value2 !== "string" || value2.trim() === "") return null;
+  const d = new Date(value2);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+function firstOfMonth(s, d) {
+  return current === "fr" && d.getUTCDate() === 1 ? s.replace(/^1\b/, "1er") : s;
+}
+function fmtDate(value2) {
+  const d = toDate(value2);
+  return d ? firstOfMonth(dates.long.format(d), d) : "\u2014";
+}
+function fmtDayMonth(value2) {
+  const d = toDate(value2);
+  return d ? firstOfMonth(dates.short.format(d), d) : "\u2014";
+}
+function fmtWeek(start, end) {
+  const a = toDate(start);
+  if (!a) return "\u2014";
+  if (end === void 0) return firstOfMonth(dates.short.format(a), a);
+  const b = toDate(end);
+  if (!b) return firstOfMonth(dates.short.format(a), a);
+  const sameYear = a.getUTCFullYear() === b.getUTCFullYear();
+  const sameMonth = sameYear && a.getUTCMonth() === b.getUTCMonth();
+  if (sameMonth)
+    return `${firstOfMonth(dates.day.format(a), a)}\u2013${fmtDayMonth(b)}`;
+  if (sameYear) return `${fmtDayMonth(a)} \u2013 ${fmtDayMonth(b)}`;
+  return `${fmtDayMonth(a)} ${a.getUTCFullYear()} \u2013 ${fmtDayMonth(b)} ${b.getUTCFullYear()}`;
+}
+var ISO_ANY = /\d{4}-\d{2}-\d{2}/;
+var ISO_ALL = /\b(\d{4}-\d{2}-\d{2})\b/g;
+function fmtSpan(span, end) {
+  const sep = t("span.sep");
+  if (typeof span === "string") {
+    if (end !== void 0) return `${fmtDayMonth(span)}${sep}${fmtDate(end)}`;
+    return ISO_ANY.test(span) ? span.replace(ISO_ALL, (m) => fmtDayMonth(m)) : span;
+  }
+  if (typeof span === "number" || span instanceof Date) {
+    return end !== void 0 ? `${fmtDayMonth(span)}${sep}${fmtDate(end)}` : fmtDate(span);
+  }
+  if (span.label) return span.label;
+  if (span.start != null && span.end != null) {
+    return `${fmtDayMonth(span.start)}${sep}${fmtDate(span.end)}`;
+  }
+  if (span.start != null) return fmtDate(span.start);
+  if (span.end != null) return fmtDate(span.end);
+  return "\u2014";
+}
+var MINUTE = 6e4;
+var HOUR = 60 * MINUTE;
+var DAY = 24 * HOUR;
+function pctOf(v, base) {
+  const r = 100 * v / base;
+  return r >= 10 ? `${Math.round(r)}%` : `${Number(r.toFixed(1))}%`;
+}
+
+// src/copy/fr/meta.ts
+var FR_META = {
+  tag: "fr-FR",
+  label: "Fran\xE7ais",
+  meta: {
+    htmlLang: "fr",
+    title: "L\u2019activit\xE9 contestataire en France \u2014 septembre\u2013novembre 2026",
+    description: "Foules, interpellations, bless\xE9s et dommages du mouvement de l\u2019automne 2026, compar\xE9s \xE0 six mouvements fran\xE7ais ant\xE9rieurs."
+  },
+  sections: {
+    a: {
+      title: "A \xB7 D\xE9comptes quotidiens, 15 septembre \u2013 11 novembre 2026",
+      blurb: "Un marqueur par jour o\xF9 un chiffre a \xE9t\xE9 publi\xE9. Les jours sans chiffre restent vides plut\xF4t qu\u2019interpol\xE9s ; les lacunes d\u2019une courbe sont en pointill\xE9s. La courbe des blocages de lyc\xE9es est en pointill\xE9s pendant les vacances de la Toussaint, aucun lyc\xE9e n\u2019\xE9tant en cours. La s\xE9rie des personnes en gr\xE8ve est d\xE9riv\xE9e de taux de participation : aucune autorit\xE9 n\u2019a publi\xE9 de d\xE9compte national des gr\xE9vistes."
+    },
+    b: {
+      title: "B \xB7 Agr\xE9gats hebdomadaires",
+      blurb: "Les semaines vont du lundi au dimanche. Une foule de jour de pointe et un total hebdomadaire d\u2019interpellations ne sont pas la m\xEAme statistique \u2014 l\u2019infobulle pr\xE9cise laquelle. Le chiffre hebdomadaire des blocages est une pointe, jamais une somme : un m\xEAme lyc\xE9e est bloqu\xE9 plusieurs jours de suite. Les personnes en gr\xE8ve sont un niveau, non un flux : le chiffre hebdomadaire en est la pointe de la semaine, jamais une somme."
+    },
+    c: {
+      title: "C \xB7 Un panneau par mouvement",
+      blurb: "Chaque panneau conserve sa propre dur\xE9e sur un axe logarithmique commun : les formes sont comparables, les dur\xE9es non. L\u2019infobulle compare en outre chaque point \xE0 sa propre s\xE9rie \u2014 en pourcentage du chiffre le plus \xE9lev\xE9 du panneau, de la moyenne, de la m\xE9diane et du premier chiffre publi\xE9. Ce dernier peut atteindre des milliers de pour cent lorsqu\u2019un mouvement a commenc\xE9 avec une poign\xE9e de personnes, et c\u2019est pr\xE9cis\xE9ment pourquoi les trois autres sont donn\xE9s d\u2019abord.",
+      note: "Les marqueurs creux sont des chiffres r\xE9gionaux, parisiens, mod\xE9lis\xE9s ou des stocks. Les liaisons en pointill\xE9s traversent une semaine sans publication."
+    },
+    d: {
+      title: "D \xB7 Transpos\xE9 : un panneau par s\xE9rie",
+      blurb: "Les m\xEAmes donn\xE9es avec les mouvements superpos\xE9s, pour lire une m\xEAme mesure de 1968 \xE0 2026. L\u2019axe des x est le nombre de semaines \xE9coul\xE9es, arr\xEAt\xE9 \xE0 la derni\xE8re semaine de chiffres de maintien de l\u2019ordre. Les comparaisons de l\u2019infobulle fonctionnent comme en section C, mais sont calcul\xE9es sur les seules semaines trac\xE9es dans le panneau survol\xE9.",
+      note: "Survolez une mesure ou un mouvement pour l\u2019isoler. L\u2019ordre des panneaux suit celui de la l\xE9gende."
+    },
+    e: {
+      title: "E \xB7 M\xE9diane et pointe",
+      blurb: "Chaque panneau rassemble une mesure pour les mouvements qui l\u2019ont publi\xE9e. Le point est la m\xE9diane de la s\xE9rie \u2014 la semaine typique \u2014 et le triangle sa pointe, le plus grand chiffre publi\xE9. La barre claire derri\xE8re chaque paire couvre toute la s\xE9rie, de son plus petit chiffre \xE0 son plus grand : un mouvement r\xE9gulier se lit donc comme une barre courte, un mouvement ayant connu quelques semaines \xE9normes comme une barre longue. L\u2019axe est logarithmique, de sorte que quelques marches de masse et une semaine ordinaire peuvent partager un panneau.",
+      note: "Chaque chiffre est compt\xE9 une fois, au milieu de sa fourchette lorsqu\u2019une fourchette a \xE9t\xE9 publi\xE9e. Le nombre de chiffres publi\xE9s figure dans l\u2019infobulle : avec un seul chiffre, la m\xE9diane et la pointe sont le m\xEAme nombre."
+    }
+  },
+  groups: {
+    ongoing: {
+      title: "La r\xE9volte en cours",
+      blurb: "Les deux sections portent sur le mouvement de l\u2019automne 2026. A trace chaque chiffre quotidien publi\xE9 ; B agr\xE8ge ces m\xEAmes chiffres par semaine, de sorte qu\u2019une foule de jour de pointe et un total d\u2019interpellations ne partagent jamais un axe."
+    },
+    historical: {
+      title: "Comparaisons historiques",
+      blurb: "Les m\xEAmes mesures rapport\xE9es \xE0 six mouvements fran\xE7ais ant\xE9rieurs : 1968, 1986, 1995, 2006, 2010 et 2016. C garde un panneau par mouvement ; D un panneau par s\xE9rie."
+    }
+  }
+};
+
+// src/copy/state.ts
+var DEFAULT_LANG = "fr";
+var DEFAULT_LOCALE = FR_META.tag;
+var LOCALE_META = {
+  en: EN_META,
+  fr: FR_META
+};
+var STORAGE_KEY = "lang";
+var hasDom = () => typeof window !== "undefined" && typeof document !== "undefined";
+function normalizeLocale(input) {
+  const low = String(input ?? "").toLowerCase().replace(/_/g, "-");
+  if (low === "fr" || low.startsWith("fr-") || low === "fran\xE7ais" || low === "francais")
+    return "fr";
+  if (low === "en" || low.startsWith("en-")) return "en";
+  return null;
+}
+function localeFromUrl(search) {
+  if (search === void 0 && !hasDom()) return null;
+  try {
+    const q = search ?? window.location.search;
+    return normalizeLocale(new URLSearchParams(q).get("lang"));
+  } catch {
+    return null;
+  }
+}
+function fromStorage() {
+  if (!hasDom()) return null;
+  try {
+    return normalizeLocale(window.localStorage.getItem(STORAGE_KEY));
+  } catch {
+    return null;
+  }
+}
+var current = localeFromUrl() ?? fromStorage() ?? DEFAULT_LANG;
+buildFormats(localeMeta2(current).tag);
+var version2 = 0;
+function getLocale() {
+  return current;
+}
+var listeners = /* @__PURE__ */ new Set();
+var emitting = false;
+function onLocaleChange(fn) {
+  listeners.add(fn);
+  return () => {
+    listeners.delete(fn);
+  };
+}
+function emit(next, previous) {
+  if (emitting) return;
+  emitting = true;
+  try {
+    for (const fn of [...listeners]) {
+      try {
+        fn(next, previous);
+      } catch (err) {
+        console.error("[i18n] locale listener threw", err);
+      }
+    }
+  } finally {
+    emitting = false;
+  }
+}
+function setLang(next, opts = {}) {
+  const { persist = true, notify = true } = opts;
+  const target = normalizeLocale(next);
+  if (!target) {
+    warnOnce(`locale:${String(next)}`, `unrecognised locale "${String(next)}"`);
+    return current;
+  }
+  const previous = current;
+  if (previous === target) return current;
+  current = target;
+  version2 += 1;
+  const locale2 = localeMeta2(target);
+  buildFormats(locale2.tag);
+  if (hasDom()) {
+    if (persist) {
+      try {
+        window.localStorage.setItem(STORAGE_KEY, target);
+      } catch {
+      }
+    }
+    document.documentElement.lang = locale2.meta.htmlLang;
+    document.documentElement.dataset.lang = target;
+  }
+  if (notify) emit(target, previous);
+  return current;
+}
+var LOCALES = Object.freeze([
+  "fr",
+  "en"
+]);
+function localeMeta2(locale2 = current) {
+  return LOCALE_META[normalizeLocale(locale2) ?? DEFAULT_LANG];
+}
+
+// src/copy/chrome.ts
+var STATIC = {
+  "hdr.kicker": {
+    en: "15 Sep \u2013 11 Nov 2026",
+    fr: "15 sept. \u2013 11 nov. 2026"
+  },
+  "hdr.title": {
+    en: "Protest activity in France, autumn 2026",
+    fr: "L\u2019activit\xE9 contestataire en France, automne 2026"
+  },
+  "hdr.lede": {
+    en: "Turnout, arrests, injuries and damage, set against six earlier French movements. Every point is a range where the publishers disagree. The series starts on 15 September 2026, with the first mainland high-school blockades.",
+    fr: "Foules, interpellations, bless\xE9s et dommages, compar\xE9s \xE0 six mouvements fran\xE7ais ant\xE9rieurs. Chaque point est une fourchette l\xE0 o\xF9 les \xE9diteurs divergent. La s\xE9rie commence le 15 septembre 2026, avec les premiers blocages de lyc\xE9es en m\xE9tropole."
+  },
+  "ui.lang": { en: "Language", fr: "Langue" },
+  "ui.lang.fr": {
+    en: "Afficher la page en fran\xE7ais",
+    fr: "Afficher la page en fran\xE7ais"
+  },
+  "ui.lang.en": {
+    en: "Show this page in English",
+    fr: "Afficher la page en anglais"
+  },
+  "ui.theme": { en: "Dark mode", fr: "Mode sombre" },
+  "card.prot.title": { en: "Protesters", fr: "Manifestants" },
+  "card.prot.sub": {
+    en: "Ministry and organiser counts",
+    fr: "Comptages minist\xE9riels et syndicaux"
+  },
+  "card.enf.title": {
+    en: "Arrests and injuries",
+    fr: "Interpellations et bless\xE9s"
+  },
+  "card.enf.sub": {
+    en: "Custody is not the same as arrest",
+    fr: "La garde \xE0 vue n\u2019est pas l\u2019interpellation"
+  },
+  "card.cost.title": {
+    en: "Damage and the cost of policing",
+    fr: "Dommages et co\xFBt du maintien de l\u2019ordre"
+  },
+  "card.pw.title": {
+    en: "Protesters, weekly peak",
+    fr: "Manifestants, pointe hebdomadaire"
+  },
+  "card.ew.title": {
+    en: "Enforcement, weekly totals",
+    fr: "Maintien de l\u2019ordre, totaux hebdomadaires"
+  },
+  "leg.holiday.title": {
+    en: "Dotted line = the Toussaint school holiday",
+    fr: "Ligne en pointill\xE9s = les vacances de la Toussaint"
+  },
+  "leg.items.title": {
+    en: "Highlight a measure",
+    fr: "Mettre en avant une mesure"
+  },
+  "leg.movements.title": {
+    en: "Highlight a movement",
+    fr: "Mettre en avant un mouvement"
+  },
+  "hdr.skip": { en: "Skip to content", fr: "Aller au contenu" },
+  "leg.summary.title": {
+    en: "Highlight a statistic",
+    fr: "Mettre en avant une statistique"
+  }
+};
+for (const id of ["a", "b", "c", "d", "e"]) {
+  STATIC[`sec.${id}.title`] = {
+    en: EN_META.sections[id].title,
+    fr: FR_META.sections[id].title
+  };
+  STATIC[`sec.${id}.lede`] = {
+    en: EN_META.sections[id].blurb,
+    fr: FR_META.sections[id].blurb
+  };
+}
+STATIC["doc.title"] = { en: EN_META.meta.title, fr: FR_META.meta.title };
+var STATIC_KEYS = new Set(Object.keys(STATIC));
+function applyStaticCopy(root2 = document) {
+  const L3 = current;
+  for (const node of root2.querySelectorAll("[data-i18n]")) {
+    const key = node.dataset.i18n;
+    if (!key) continue;
+    const entry = STATIC[key];
+    if (!entry) {
+      if (!warned.has(key)) {
+        warned.add(key);
+        console.warn(`[i18n] no static copy for "${key}"`);
+      }
+      continue;
+    }
+    const text = entry[L3] ?? entry.en;
+    const attr = node.dataset.i18nAttr;
+    if (!attr || attr === "text") node.textContent = text;
+    else node.setAttribute(attr, text);
+  }
+}
+function syncLangSwitch(root2 = document) {
+  for (const b of root2.querySelectorAll("[data-set-lang]")) {
+    const on = b.dataset.setLang === current;
+    b.setAttribute("aria-pressed", String(on));
+    b.tabIndex = on ? 0 : -1;
+  }
+}
+
+// src/copy/a11y.ts
+var A11Y = {
+  en: {
+    about: "Notes on this project",
+    chart: "Chart",
+    chartRole: "chart",
+    chartHint: "Interactive chart. Use the left and right arrow keys to step through data points, Home and End for the ends, Escape to clear. A table of the same data follows the chart.",
+    tableCaption: "Data for \u201C{title}\u201D",
+    dateHeader: "Date",
+    weekHeader: "Week",
+    switched: "Page language: {lang}. Charts redrawn."
+  },
+  fr: {
+    about: "Notes sur ce projet",
+    chart: "Graphique",
+    chartRole: "graphique",
+    chartHint: "Graphique interactif. Utilisez les fl\xE8ches gauche et droite pour parcourir les points, D\xE9but et Fin pour les extr\xE9mit\xE9s, \xC9chap pour quitter. Un tableau des m\xEAmes donn\xE9es suit le graphique.",
+    tableCaption: "Donn\xE9es de \xAB {title} \xBB",
+    dateHeader: "Date",
+    weekHeader: "Semaine",
+    switched: "Langue de la page : {lang}. Graphiques redessin\xE9s."
+  }
+};
+var a11y = () => A11Y[current];
+
+// src/core/a11y.ts
+var live = null;
+var timer = 0;
+function region() {
+  if (live?.isConnected) return live;
+  live = document.getElementById("a11y-live");
+  if (!live) {
+    live = document.createElement("p");
+    live.id = "a11y-live";
+    live.className = "sr-only";
+    live.setAttribute("role", "status");
+    live.setAttribute("aria-live", "polite");
+    live.setAttribute("aria-atomic", "true");
+    document.body.append(live);
+  }
+  return live;
+}
+function announce(text) {
+  const r = region();
+  r.textContent = "";
+  window.clearTimeout(timer);
+  timer = window.setTimeout(() => r.textContent = text, 120);
+}
+var txt = (v) => {
+  if (v == null) return "\u2014";
+  if (typeof v === "number") return nf().format(Math.round(v));
+  if (typeof v === "object") {
+    const p = v;
+    if (typeof p.low === "number" && typeof p.high === "number")
+      return p.low === p.high ? nf().format(Math.round(p.low)) : `${nf().format(Math.round(p.low))} \u2013 ${nf().format(Math.round(p.high))}`;
+    for (const n of [p.v, p.y])
+      if (typeof n === "number") return nf().format(Math.round(n));
+  }
+  return String(v);
+};
+function dataTable(spec) {
+  const details = document.createElement("details");
+  details.className = "data-table";
+  const summary = document.createElement("summary");
+  summary.textContent = spec.caption;
+  const table = document.createElement("table");
+  const cap = document.createElement("caption");
+  cap.className = "sr-only";
+  cap.textContent = spec.caption;
+  const head = table.createTHead().insertRow();
+  for (const h of [spec.indexHeader, ...spec.columns.map((c) => c.header)]) {
+    const th = document.createElement("th");
+    th.scope = "col";
+    th.textContent = h;
+    head.append(th);
+  }
+  const body = table.createTBody();
+  spec.index.forEach((label, i) => {
+    const tr = body.insertRow();
+    const th = document.createElement("th");
+    th.scope = "row";
+    th.textContent = label;
+    tr.append(th);
+    for (const c of spec.columns)
+      tr.insertCell().textContent = c.values[i] ?? "\u2014";
+  });
+  table.append();
+  details.append(summary, table);
+  return details;
+}
+function fromChart(chart, opts) {
+  const data = chart.data;
+  const sets = data.datasets.filter(
+    (d) => opts.include?.(d) ?? true
+  );
+  const labels = (data.labels ?? []).map(String);
+  const n = labels.length || Math.max(
+    0,
+    ...sets.map((d) => (d.data ?? []).length)
+  );
+  return dataTable({
+    caption: opts.caption,
+    indexHeader: opts.indexHeader,
+    index: Array.from(
+      { length: n },
+      (_, i) => opts.indexOf?.(sets[0], i) ?? labels[i] ?? String(i + 1)
+    ),
+    columns: sets.map((d) => {
+      const ds = d;
+      return {
+        header: String(ds.label ?? ""),
+        values: Array.from({ length: n }, (_, i) => txt(ds.data?.[i]))
+      };
+    })
+  });
+}
+function readout(chart, i) {
+  const label = chart.data.labels?.[i] ?? "";
+  const parts = chart.data.datasets.filter((d) => !d.detachedOnly).map((d) => {
+    const ds = d;
+    return `${ds.label}: ${txt(ds.data?.[i])}`;
+  });
+  return [label, ...parts].join(". ");
+}
+var seq = 0;
+function keyboardChart(chart, opts) {
+  const canvas = chart.canvas;
+  const n = chart.data.labels?.length ?? 0;
+  if (!n) return;
+  const hintId = canvas.id ? `kbd-${canvas.id}` : `kbd-chart-${++seq}`;
+  if (!document.getElementById(hintId)) {
+    const hint = document.createElement("p");
+    hint.id = hintId;
+    hint.className = "sr-only";
+    hint.textContent = opts.hint;
+    canvas.after(hint);
+  }
+  canvas.tabIndex = 0;
+  canvas.setAttribute("aria-roledescription", opts.roledescription);
+  const ids = new Set(
+    (canvas.getAttribute("aria-describedby") ?? "").split(/\s+/).filter(Boolean)
+  );
+  ids.add(hintId);
+  canvas.setAttribute("aria-describedby", [...ids].join(" "));
+  const speak = opts.readout ?? ((i) => readout(chart, i));
+  let at = -1;
+  const paint = (next) => {
+    if (next === null || next < 0 || next >= n) {
+      at = -1;
+      chart.setActiveElements([]);
+      chart.tooltip.setActiveElements([], { x: 0, y: 0 });
+      chart.update("none");
+      return;
+    }
+    at = next;
+    const els = chart.data.datasets.map((_, datasetIndex) => ({
+      datasetIndex,
+      index: at
+    }));
+    const pt = chart.getDatasetMeta(0).data[at];
+    chart.setActiveElements(els);
+    chart.tooltip.setActiveElements(els, { x: pt?.x ?? 0, y: pt?.y ?? 0 });
+    chart.update("none");
+    announce(speak(at));
+  };
+  canvas.addEventListener("keydown", (ev) => {
+    switch (ev.key) {
+      case "ArrowRight":
+      case "ArrowUp":
+        paint(at < 0 ? 0 : Math.min(n - 1, at + 1));
+        break;
+      case "ArrowLeft":
+      case "ArrowDown":
+        paint(at < 0 ? n - 1 : Math.max(0, at - 1));
+        break;
+      case "Home":
+        paint(0);
+        break;
+      case "End":
+        paint(n - 1);
+        break;
+      case "Escape":
+        paint(null);
+        break;
+      default:
+        return;
+    }
+    ev.preventDefault();
+  });
+  canvas.addEventListener("blur", () => paint(null));
+}
+
+// src/core/canvas-registry.ts
+var VARS = {
+  ink: "--chart-ink",
+  label: "--chart-label",
+  muted: "--chart-muted",
+  grid: "--chart-grid",
+  axisGrid: "--chart-axis-grid",
+  hollow: "--chart-hollow",
+  tooltipBg: "--chart-tooltip-bg",
+  tooltipInk: "--chart-tooltip-ink",
+  series1: "--chart-series-1",
+  series2: "--chart-series-2",
+  series3: "--chart-series-3",
+  series4: "--chart-series-4",
+  series5: "--chart-series-5",
+  series6: "--chart-series-6",
+  series7: "--chart-series-7"
+};
+var FALLBACK = {
+  ink: "#111827",
+  label: "#4b5563",
+  muted: "#6b7280",
+  grid: "#e5e5e5",
+  axisGrid: "rgba(17, 24, 39, 0.06)",
+  hollow: "#ffffff",
+  tooltipBg: "rgba(17, 24, 39, 0.92)",
+  tooltipInk: "#ffffff",
+  series1: "#5C97C5",
+  series2: "#357AB0",
+  series3: "#2A6B9C",
+  series4: "#1B5C92",
+  series5: "#124A78",
+  series6: "#0A3A63",
+  series7: "#062844"
+};
+var ctx2d = document.createElement("canvas").getContext("2d");
+function normalise(css, fallback) {
+  if (!ctx2d) return fallback;
+  ctx2d.fillStyle = fallback;
+  ctx2d.fillStyle = css;
+  return typeof ctx2d.fillStyle === "string" ? ctx2d.fillStyle : fallback;
+}
+var cache = null;
+function read() {
+  const out = {};
+  const probe2 = document.createElement("span");
+  probe2.setAttribute("aria-hidden", "true");
+  probe2.style.cssText = "position:absolute;width:0;height:0;visibility:hidden";
+  (document.body ?? document.documentElement).append(probe2);
+  for (const key of Object.keys(VARS)) {
+    probe2.style.color = `var(${VARS[key]})`;
+    out[key] = normalise(getComputedStyle(probe2).color, FALLBACK[key]);
+  }
+  probe2.remove();
+  return out;
+}
+var value = (key) => (cache ??= read(), cache[key]);
+var SERIES = [
+  "series1",
+  "series2",
+  "series3",
+  "series4",
+  "series5",
+  "series6",
+  "series7"
+].map((k) => value(k));
+function refreshTheme() {
+  cache = null;
+}
+var THEME = {
+  get ink() {
+    return value("ink");
+  },
+  get label() {
+    return value("label");
+  },
+  get muted() {
+    return value("muted");
+  },
+  get grid() {
+    return value("grid");
+  },
+  get axisGrid() {
+    return value("axisGrid");
+  },
+  get hollow() {
+    return value("hollow");
+  },
+  get tooltipBg() {
+    return value("tooltipBg");
+  },
+  get tooltipInk() {
+    return value("tooltipInk");
+  },
+  dim: 0.45
+  // was 0.18 — ≈1.3:1 against both modes (WCAG 1.4.1)
+};
+var SERIES_KEYS = [
+  "series1",
+  "series2",
+  "series3",
+  "series4",
+  "series5",
+  "series6",
+  "series7"
+];
+function seriesColor(i) {
+  const last = SERIES_KEYS.length - 1;
+  return value(SERIES_KEYS[Math.min(Math.max(i, 0), last)]);
+}
+var DASHES = [
+  [],
+  [6, 3],
+  [2, 3],
+  [8, 3, 2, 3],
+  [1.5, 3],
+  [10, 4],
+  [4, 3]
+];
+var RAMP = DASHES.map((dash, i) => ({
+  get color() {
+    return seriesColor(i);
+  },
+  dash
+}));
+function alpha2(hex2, a) {
+  const m = /^#([0-9a-f]{6})$/i.exec(hex2);
+  if (!m) throw new Error(`alpha() expects #rrggbb, got "${hex2}"`);
+  const n = Number.parseInt(m[1], 16);
+  return `rgba(${n >> 16 & 255}, ${n >> 8 & 255}, ${n & 255}, ${a})`;
+}
+function segIndex(ctx, which) {
+  const given = which === 0 ? ctx.p0DataIndex : ctx.p1DataIndex;
+  if (typeof given === "number" && Number.isFinite(given)) {
+    return Math.round(given);
+  }
+  const pt = which === 0 ? ctx.p0 : ctx.p1;
+  const parsed = pt?.parsed?.x;
+  if (typeof parsed === "number" && Number.isInteger(parsed)) return parsed;
+  const px = pt?.x;
+  const axis = ctx.chart?.options?.indexAxis === "y" ? "y" : "x";
+  const scale = ctx.chart?.scales?.[axis];
+  if (typeof px === "number" && typeof scale?.getValueForPixel === "function") {
+    const v = scale.getValueForPixel(px);
+    if (typeof v === "number" && Number.isFinite(v)) return Math.round(v);
+  }
+  return void 0;
+}
+var gapSegment = (slots = 1, dash = [6, 4]) => ({
+  borderDash: (ctx) => {
+    const i0 = segIndex(ctx, 0);
+    const i1 = segIndex(ctx, 1);
+    if (i0 === void 0 || i1 === void 0) return void 0;
+    return Math.abs(i1 - i0) > slots + 0.01 ? dash : void 0;
+  }
+});
+var live2 = /* @__PURE__ */ new Set();
+var track = (chart) => (live2.add(chart), chart);
+function destroyAll() {
+  for (const chart of live2) {
+    try {
+      chart.destroy();
+    } catch (err) {
+      console.error("[chart] destroy failed", err);
+    }
+  }
+  live2.clear();
+}
+
+// src/model/index.ts
+var METRICS = ["p", "a", "f", "i"];
+var METRIC_OF = {
+  p: "turnout",
+  a: "arrests",
+  f: "forcesInjured",
+  i: "protesterInjured"
+};
+var DETACHED = /* @__PURE__ */ new Set(["r", "p", "e", "c"]);
+var isDetached = (q) => q != null && q !== "n" && DETACHED.has(q);
+var bandOf = (b) => typeof b === "number" ? [b, b] : b;
+var midOf = (b) => {
+  const [lo, hi] = bandOf(b);
+  return (lo + hi) / 2;
+};
+
+// src/data/data.ts
+var NIL = { v: null, band: null, q: null, note: null, detach: false };
+var START = "2026-09-15";
+var END = "2026-11-11";
+var utc = (s) => /* @__PURE__ */ new Date(`${s}T00:00:00Z`);
+var iso = (d) => d.toISOString().slice(0, 10);
+var addDays = (isoDate, n) => {
+  const d = /* @__PURE__ */ new Date(`${isoDate}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+};
+var mondayOf = (isoDate) => {
+  const d = /* @__PURE__ */ new Date(`${isoDate}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() - (d.getUTCDay() + 6) % 7);
+  return d.toISOString().slice(0, 10);
+};
+function eachDay(start, end) {
+  const out = [];
+  const stop = utc(end);
+  for (const d = utc(start); d <= stop; d.setUTCDate(d.getUTCDate() + 1))
+    out.push(iso(d));
+  return out;
+}
+var DATES = eachDay(START, END);
+var WEEKS = (() => {
+  const byKey = /* @__PURE__ */ new Map();
+  for (const d of DATES) {
+    const k = mondayOf(d);
+    const list = byKey.get(k);
+    if (list) list.push(d);
+    else byKey.set(k, [d]);
+  }
+  return [...byKey].sort(([a], [b]) => a.localeCompare(b)).map(([key, dates2]) => {
+    const end = addDays(key, 6);
+    return { key, end, dates: dates2, touchesEdge: key < START || end > END };
+  });
+})();
+var HOLIDAY_START = "2026-10-18";
+var HOLIDAY_END = "2026-11-01";
+var weekTouchesHoliday = (weekStart) => weekStart <= HOLIDAY_END && addDays(weekStart, 6) >= HOLIDAY_START;
+var FACTS = {
+  /* ── School blockades ─────────────────────────────────────────────────
+         Metric: establishments where pupils could not attend normally —
+         blocked, or closed by decision. Band = official count (floor) to
+         union count (ceiling); the union's "à l'arrêt" also counts
+         administratively closed schools, so the ceiling is an upper bound.
+  
+         "x" = a wider measure than blockades (établissements perturbés,
+         cours suspendus, établissements fermés) — the only figure published
+         that day. "r" = regional count. "f" = publisher said "more than".
+  
+         Days with no published count stay empty. During the Toussaint
+         holiday (17 Oct – 1 Nov) no lycée was in session, so the metric did
+         not exist: those days are empty and the connector is dotted.       */
+  /* ── The movement's first fortnight ─────────────────────────────────────
+         The wave began after the rentrée: teachers and parents had been on
+         strike in Mayotte since 31 August (lycée Nord d'Acoua, blocked for
+         five weeks); in mainland France the lycée Théodore-Monod at Le Rheu
+         was blocked on 7 September, the lycée Queneau at Villeneuve-d'Ascq on
+         14 September and the lycée Victor-Hugo at Caen on 15 September. The
+         window opens on 15 September at the user's request, so the 7 and 14
+         September blockades fall outside it.
+  
+         NONE of 15–27 September carries a published turnout, arrest, injury or
+         damage figure, so the week of 14–20 September is empty rather than
+         estimated. The one exception is the Paris area on 25 September. */
+  "2026-09-15": { blockades: { low: 1, high: 1 } },
+  "2026-09-19": { blockades: { low: 1, high: 1 } },
+  "2026-09-23": { blockades: { low: 10, high: 10, q: "r" } },
+  /* Fri 25 Sep — the Île-de-France centre of gravity: ~60 franciliens
+     lycées disrupted over 24–25 Sep, mainly Seine-Saint-Denis and
+     Val-de-Marne (Saint-Denis, Sarcelles, Gonesse, Stains, Saint-Ouen,
+     Rosny-sous-Bois, La Courneuve); the Créteil rectorat counted a
+     "grosse dizaine" of new blockades that day.
+     21 interpellations by noon by the Préfecture de Police, in connection
+     with the Paris-area mobilisations — PARIS ONLY, hence "r". The
+     rectorat noted gatherings, crowd movements and material damage
+     without quantifying them. */
+  "2026-09-25": {
+    arrests: { low: 21, high: 21, q: "r" }
+  },
+  /* Mon 28 Sep — the movement goes national: actions in Marseille, Lille,
+     the Rhône, the Var and the Alpes-Maritimes. Interior Ministry: 180
+     establishments perturbed, 27 of them totally blocked, 164
+     interpellations that day.
+     First serious injury of the movement: a 14-year-old hit in the face
+     by a police projectile at the lycée professionnel Château-d'Epluches,
+     Saint-Ouen-l'Aumône (Val-d'Oise); the IGPN was seized. Flagged "f":
+     one documented casualty is a minimum, not a count. */
+  "2026-09-28": {
+    arrests: { low: 164, high: 164 },
+    protesterInjured: { low: 1, high: 1, q: "f" },
+    blockades: { low: 27, high: 27 }
+  },
+  /* Tue 29 Sep — national public-service mobilisation day, which the USL
+     called students to join; it is the movement's Act I.
+     Education ministry, end of day: 416 establishments touched since the
+     morning, 338 still affected, 45 blocked; Le Monde counted actions at
+     nearly 410 establishments; the USL claimed 400 blocked out of ~3,700
+     in France. 440 interpellations, two thirds of them leading to a garde
+     à vue, "essentially for degradations and attacks on officers"
+     (Nuñez, BFM-TV).
+     Turnout: the intersyndicale demonstration drew 206,000 (ministry) /
+     300,000 (CGT) nationwide and 30,000 / 70,000 in Paris, across 170+
+     demonstrations. The students marched with it, so the figure is
+     carried here — but it counts the public-service cortèges, not a
+     student crowd, for which no national count exists. Flagged "p".
+     The Education ministry counted 31 injured students and staff that
+     day. Strike rate: 11.47% weighted (12.74% second degree, 27.39%
+     life-schools staff; 13.71% of teachers). */
+  "2026-09-29": {
+    turnout: { low: 206e3, high: 3e5, q: "p" },
+    strikers: { low: 25e4, high: 25e4, q: "e" },
+    arrests: { low: 440, high: 440 },
+    protesterInjured: { low: 31, high: 31, q: "p" },
+    blockades: { low: 45, high: 45 }
+  },
+  /* Wed 30 Sep — 356 establishments perturbed; 625 interpellations that
+     day, which with 440 on the 29th makes the two-day total 1,065.
+     83 police and gendarmes injured.
+     The Education ministry's stock since the start of the blockades
+     reaches 119 injured students and staff (85 students, 34 staff) — a
+     cumulative level, hence "c". */
+  "2026-09-30": {
+    arrests: { low: 625, high: 625 },
+    protesterInjured: { low: 119, high: 119, q: "c" }
+  },
+  /* Thu 1 Oct — Acte II. More than 900 actions and blockages; AFP's police
+         returns counted 340 actions in the morning and 169 blockades, ending
+         the day at 900 actions including 400 closures; the Union étudiante
+         claimed 640 lycées and ~30 campuses blocked, a figure the authorities
+         do not confirm. Marseille: 18 high schools totally blocked, 3
+         partially, ~40 in Bouches-du-Rhône; Aix-en-Provence ~600 students;
+         Metz 6; Brest most; Épinal 2; Perpignan 11 interpellations and one
+         student injured. No national turnout figure was published.
+  
+         FIX 5: arrests 1,949 are THAT DAY ("1 949 interpellations ce jeudi"),
+         not a stock; the only stock is 6,059 "depuis le 28 septembre" on
+         5 Oct. The day was the peak of the first week.
+  
+         FIX 7: forces injured are bracketed [83, 300] — 83 is the
+         government level at the Wednesday cut-off (it is the same 83 that
+         appears in the 318-injury total of 1 Oct) and ~300 is Nuñez's
+         Thursday figure ("quelque 300 policiers et gendarmes blessés en
+         intervention jeudi"). The band spans a cumulative level and a daily
+         flow, so it is flagged "e" and the 83 is not counted twice.
+  
+         FIX 6: 235 = 170 students + 65 education staff, cumulative at the
+         1 Oct cut-off; the previous 119–235 band was two vintages of this
+         same series. Flagged "c".
+  
+         Damage: the hall of the lycée Nelson-Mandela in Nantes was destroyed
+         by a fire (several classrooms unusable for weeks), as was the main
+         entrance and a 35-classroom block at the lycée Henri-Moissan in
+         Meaux; the façade of the lycée Lumière in Lyon was burnt; in
+         Seine-Maritime two headteachers were hurt (Petit-Quevilly, Rouen) and
+         the prefecture counted eight injured and several intrusions. The €1M
+         cell is a local estimate from the original research and is a subset
+         of the larger Île-de-France and IFRAP totals, hence "c". */
+  "2026-10-01": {
+    arrests: { low: 1949, high: 1949 },
+    forcesInjured: { low: 300, high: 305, q: "e" },
+    protesterInjured: { low: 235, high: 235, q: "c" },
+    damagesCost: { low: 1, high: 1, q: "c" },
+    blockades: { low: 222, high: 640 }
+  },
+  /* Fri 2 Oct — 1,747 interpellations that day and "more than 5,000 since
+     Monday" (the daily series gives 4,925); 735 establishments perturbed,
+     30% fewer than the day before, with urban violence near 158 of them
+     (projectiles, attacks on officers, teachers, journalists and
+     passers-by). A young police lieutenant was assaulted in Paris's 20th
+     arrondissement. Geffray: 65 education staff injured since the start
+     of the movement, 40 of them headteachers. */
+  "2026-10-02": {
+    arrests: { low: 1747, high: 1747 },
+    blockades: { low: 400, high: 400, q: "f" }
+  },
+  /* Sat 3 Oct — the ministry's stock "6,059 interpellations since
+     28 September" (5 Oct) minus 984 on Monday 5 Oct leaves 5,075 through
+     Sunday 4 Oct; the daily figures for 28 Sep–2 Oct sum to 4,925. The
+     difference, 150, is the weekend of 3–4 October. It is a two-day total
+     derived by subtraction, not a Saturday figure — flagged "e" and
+     carried on the Saturday, with the derivation in this comment. */
+  "2026-10-03": {
+    arrests: { low: 150, high: 150, q: "e" },
+    blockades: { low: 735, high: 735, q: "x" }
+  },
+  /* Mon 5 Oct — 984 interpellations and 65 forces injured that day.
+     Stocks published the same day: 6,059 interpellations since 28 Sep;
+     715 police and gendarmes injured since the start of the movement;
+     Matignon: 215 students and 85 education staff injured since the
+     start, 34 of them headteachers. */
+  "2026-10-05": {
+    arrests: { low: 984, high: 984 },
+    forcesInjured: { low: 65, high: 65 },
+    blockades: { low: 400, high: 500, q: "x" }
+  },
+  /* Tue 6 Oct — "Acte III", first national school/student day.
+     256,000 ministry / 450,000 organisers; Paris 56,000 / 100,000.
+     488 interpellations and 43 forces injured that day; 215 students
+     injured since mid-September. The €6M is the Île-de-France damage
+     increment for the 1–8 Oct run and is therefore a subset, not an
+     increment unique to 6 Oct. Flagged "c"; the anchor of the run is
+     8 Oct. */
+  "2026-10-06": {
+    turnout: { low: 256e3, high: 45e4 },
+    arrests: { low: 488, high: 488 },
+    forcesInjured: { low: 43, high: 43 },
+    damagesCost: { low: 6, high: 6, q: "c" },
+    blockades: { low: 891, high: 1800, q: "x" }
+  },
+  /* Thu 8 Oct — Act IV. Education ministry: 0.82% weighted all staff
+     (teachers 0.99%, 1st degree 0.10%, 2nd degree 1.67%, vie scolaire
+     2.33%, other staff 0.45%), excluding Toulouse, Nantes and Corse.
+     The lowest rate of the whole sequence, in the middle of the
+     mobilisation — the school action had drained by 8 Oct. */
+  "2026-10-08": {
+    turnout: { low: 71500, high: 13e4 },
+    /* Education ministry 0.82% weighted; no function-wide rate that day,
+       so the education rate stands in for the civil service on the same
+       2,500,000-agent base: 20,500. Flagged "e" — the proxy runs low. */
+    strikers: { low: 20500, high: 20500, q: "e" },
+    damagesCost: { low: 6, high: 6, q: "e" },
+    blockades: { low: 224, high: 224, q: "x" }
+  },
+  /* Sat 10 Oct — national cumulative damage stock: "déjà estimées à
+     30 millions d'euros en France" since mid-September (CNEWS's own
+     compilation of regional figures — no ministry published a national
+     tally). Pannekoucke's parallel AURA estimate of €25–30M is NOT
+     included, so this is neither a floor nor additive with the regional
+     figures. Flagged "c": a stock, never summed with flows. */
+  "2026-10-10": {
+    damagesCost: { low: 30, high: 30, q: "c" },
+    blockades: { low: 40, high: 40, q: "f" }
+  },
+  /* Mon 12 Oct — three regional prefecture figures, all regional:
+       · Rhône: 27 établissements touchés (19 lycées, 6 universités,
+         2 collèges), 13 interpellations.
+       · Bas-Rhin/Strasbourg: 13 interpellations (préfecture), incl. 4
+         for preparing incendiary devices, 3 for mortar fire.
+     Two prefectures published 13 independently, so 13 is a FLOOR for the
+     day, not the day's regional total. NOT Paris — the old note was
+     wrong.
+     FIX 13 (third pass): the €1.5M moved here from 13 Oct. It is
+     NORMANDY (Hervé Morin, Conseil régional de Normandie, 12 Oct) and
+     it is a CUMULATIVE stock since mid-September — "atteint d'ores et
+     déjà 30 millions d'euros, dont 1,5 million en Normandie" — so the
+     flag moves from "e" to "c". Île-de-France's own revised total the
+     same day was €8.5M (110+ lycées, ~120 portails/sas out of service).
+     Both regional stocks are components of the €30M national stock and
+     must never be added to it.
+     The 3 injured are an Île-de-France figure and count education and
+     local-authority staff, not protesters: 1 proviseur, 1 parent
+     d'élève, 1 agent de la Région. */
+  "2026-10-12": {
+    arrests: { low: 13, high: 13, q: "r" },
+    protesterInjured: { low: 3, high: 3, q: "r" },
+    damagesCost: { low: 1.5, high: 1.5, q: "c" },
+    blockades: { low: 19, high: 19, q: "r" }
+  },
+  /* Tue 13 Oct — "Acte V": 214 high schools closed (94.2% open), 161,500
+     ministry / 480,000 youth intersyndicate (41,500 Paris), 40 police
+     and gendarmes injured.
+     FIX 13 (third pass): the €1.5M cell is GONE from this date — it
+     was Normandy, and it was published on 12 October. */
+  "2026-10-13": {
+    turnout: { low: 161500, high: 48e4 },
+    /* 3.71% weighted education rate as proxy: 3.71% x 2,500,000 = 92,750. */
+    strikers: { low: 92750, high: 92750, q: "e" },
+    forcesInjured: { low: 40, high: 40 },
+    blockades: { low: 214, high: 214, q: "x" }
+  },
+  /* Sat 17 Oct — the peak of the episode.
+         110 → 430 → 441 actions; ~60,000 officers deployed.
+         550,000 ministry / 800,000 organisers; Paris 110,000.
+         Arrests 2,397 initial → 2,628 consolidated (2,513 gardes à vue;
+         108 in Paris). Forces injured 997 initial → 1,144 consolidated,
+         7 serious. One civilian death: Christophe M., 59, Paris.
+  
+         FIX 2 (first pass): no official protester-injury count exists. The
+         low bound is Laurent Thines's serious-injury register (54 seriously
+         injured — 5 eye, 5 cranio-facial, 2 amputations, 42 other — plus the
+         1 death, i.e. 55); the high bound is a reasoned ceiling from
+         Toulouse's 130+ street-medics treatments (~13 treated per serious
+         case) against 54 serious cases nationally. Wikipedia's "400+ civilians"
+         is an uncited infobox line and sits below the partial nine-city sum
+         (~204 across Bordeaux, Clermont-Ferrand, Dijon, Metz, Nancy, Rouen,
+         Strasbourg, Avignon, Toulouse), so it is a floor, not a ceiling.
+         Flagged "e": derived, drawn hollow.
+  
+         Damages: IFRAP conditional estimate for the 17–18 Oct weekend,
+         €244M low / €463M central / €866M high for MATERIAL damage; the
+         €294M–€1.1bn variant includes lost turnover and is a different measure.
+         IFRAP excludes marginal order-maintenance and curfew costs. */
+  "2026-10-17": {
+    turnout: { low: 55e4, high: 8e5 },
+    arrests: { low: 2397, high: 2628 },
+    forcesInjured: { low: 207, high: 207, q: "e" },
+    protesterInjured: { low: 55, high: 1e3, q: "e" },
+    damagesCost: { low: 244, high: 866, q: "e" }
+  },
+  /* Sun 18 Oct — Paris curfew only, 108 interpellations.
+     FIX 3 (first pass): the €1.8–5M damage figure is a subset of the
+     17–18 Oct IFRAP weekend total, so it is flagged "c" and cannot be
+     added to it.
+     FIX 11 (third pass): "r", not "p" — the figure is Paris-only, and
+     "p" now means partial coverage. */
+  "2026-10-18": {
+    arrests: { low: 108, high: 108, q: "r" },
+    damagesCost: { low: 1.8, high: 5, q: "c" }
+  },
+  /* Tue 20 Oct — regional only: 13 interpellations overnight in Guadeloupe
+     (Basse-Terre, Saint-François, Goyave, Vieux-Habitants, Gosier). */
+  "2026-10-20": { arrests: { low: 13, high: 13, q: "r" } },
+  /* Sat 24 Oct — 289 actions, 70,000 officers, Centaure AFVs, water cannons,
+     14 aerial cameras in Paris. 410,000 ministry / 800,000+ CGT;
+     Paris 110,000 (préfecture) / 250,000 (CGT).
+     Arrests 1,314 initial → 1,435 final (142 Paris, 126 GàV).
+     Forces injured 53 at 7:30 a.m. — the ministry's own communiqué calls
+     this "provisoire" — then 267 on consolidation (Nuñez, 26 Oct), with
+     150 civilians injured, 3 seriously. 75 fire interventions.
+     La Réunion: ~80 Saint-Denis, 300 Saint-Pierre. Mayotte: Tsingoni.
+     FIX 4 (first pass): the national damage cell below replaces the earlier
+     local derivation. CCI France's 27 Oct tally — 2,488 shops hit after the
+     17th plus 50 after the 24th, 1,161 heavily damaged, 643 still shut —
+     puts the cost of the degradations at over €1bn on the IFRAP estimate,
+     for the 17–24 Oct period as a whole. That is a SUPERSET of the 17 Oct
+     cell, so it is flagged "c" and is never added to it. */
+  "2026-10-24": {
+    turnout: { low: 41e4, high: 8e5 },
+    arrests: { low: 1314, high: 1435 },
+    forcesInjured: { low: 267, high: 267 },
+    protesterInjured: { low: 150, high: 150 },
+    damagesCost: { low: 1e3, high: 1e3, q: "c" }
+  },
+  /* Sat 31 Oct — 291 actions → 227 consolidated.
+     320,000 ministry / ~500,000 youth organisations; Paris 70,000.
+     Arrests 565 at 21h → 779 cumulative (incl. 214 on the Halloween night).
+     Forces injured 116 by 21h + 43 that night = 159.
+     515 fires handled; 36 shops degraded, 3 pillaged — no cost figure. */
+  "2026-10-31": {
+    turnout: { low: 32e4, high: 5e5 },
+    arrests: { low: 565, high: 779 },
+    forcesInjured: { low: 116, high: 159 },
+    damagesCost: { low: 0.4, high: 3.3, q: "e" }
+  },
+  "2026-11-02": { blockades: { low: 41, high: 41 } },
+  "2026-11-03": { blockades: { low: 48, high: 500 } },
+  /* Thu 5 Nov — national strike day, 193 actions.
+     575,000 ministry (definitive) / 1.6M CGT; Paris 65,000 / 350,000.
+     Arrests 448 at 18h → 642 updated. Forces injured 53 at 18h → 112.
+     86 fire interventions. Marseille: 17 schools blocked, ~40 interpellations,
+     13 police wounded.
+     Protester injuries = 18, a FLOOR: the 18 who instructed lawyers to sue
+     Nuñez. Not a ministry count. */
+  "2026-11-05": {
+    turnout: { low: 575e3, high: 16e5 },
+    strikers: { low: 247250, high: 275e3, q: "e" },
+    arrests: { low: 448, high: 642 },
+    forcesInjured: { low: 53, high: 112 },
+    protesterInjured: { low: 18, high: 18, q: "f" },
+    blockades: { low: 81, high: 1e3 }
+  },
+  /* Sat 7 Nov — 141 actions; ~70,000 officers, 25 blindés, 15 water-cannon
+     trucks; ~40,000 preventive checks; Caen campus dispersed by 50 CRS.
+     146,000 ministry / 250,000 youth intersyndicate; Paris 46,000 / 75,000.
+     Arrests 232 at 18h → 360+ at 19h.
+     Security-force casualties acknowledged but no number published. */
+  "2026-11-07": {
+    turnout: { low: 146e3, high: 25e4 },
+    arrests: { low: 350, high: 360 }
+  },
+  /* Mon 9 Nov — regional only: Bègles 4, Lyon 8, Strasbourg 5 = 17.
+     ~50 Île-de-France schools disrupted with mortar fire; Rennes 2
+     evacuated; Brest rally; Guadeloupe: lycée blocked at Baie-Mahault. */
+  "2026-11-09": { arrests: { low: 17, high: 17, q: "r" } },
+  "2026-11-10": {
+    /* Education strike + student march. 1.55% weighted rate as proxy:
+       1.55% x 2,500,000 = 38,750. */
+    strikers: { low: 38750, high: 38750, q: "e" }
+  }
+};
+var DEPLOYMENT = {
+  /* September deployment is an ASSUMPTION, on the same basis as the early
+     October cells: no official headcount exists for these days. The band
+     spans the marginal cost of one CRS company-day to the Sainte-Soline
+     all-in benchmark. It is an order-of-magnitude placeholder for the
+     policing-cost series, not a measurement. */
+  "2026-09-28": { low: 5e3, high: 2e4, q: "e" },
+  "2026-09-29": { low: 5e3, high: 2e4, q: "e" },
+  "2026-09-30": { low: 5e3, high: 2e4, q: "e" },
+  "2026-10-01": { low: 5e3, high: 2e4, q: "e" },
+  "2026-10-02": { low: 1e4, high: 3e4, q: "e" },
+  "2026-10-05": { low: 1e4, high: 3e4, q: "e" },
+  "2026-10-06": { low: 5e3, high: 2e4, q: "e" },
+  "2026-10-08": { low: 5e3, high: 2e4, q: "e" },
+  /* 12 Oct: three cities at once — Île-de-France (~80 lycées perturbed),
+     Lyon/Rhône (27 établissements), Strasbourg. No headcount published:
+     the only concrete data is "une dizaine de camions de gendarmes
+     mobiles" at the Strasbourg schools and several CRS/police vans at
+     porte Dorée, Paris. */
+  "2026-10-12": { low: 2e3, high: 8e3, q: "e" },
+  "2026-10-13": { low: 5e3, high: 2e4, q: "e" },
+  "2026-10-17": {
+    low: 6e4,
+    high: 6e4
+  },
+  "2026-10-18": { low: 2e3, high: 8e3, q: "e" },
+  "2026-10-24": { low: 7e4, high: 7e4 },
+  "2026-10-31": { low: 7e4, high: 7e4 },
+  "2026-11-05": { low: 7e4, high: 7e4 },
+  "2026-11-07": { low: 7e4, high: 7e4 }
+};
+var FORCES_STOCK = {
+  "2026-09-30": { low: 83, high: 83 },
+  "2026-10-05": { low: 715, high: 715 },
+  "2026-10-08": { low: 761, high: 761 },
+  "2026-10-14": { low: 937, high: 937 },
+  "2026-10-17": { low: 997, high: 1144 },
+  "2026-11-05": { low: 1580, high: 1580 }
+};
+var FORCES_STOCK_DERIVED = {
+  "2026-10-01": { low: 383, high: 388 },
+  // 83 (30 Sep) + 300–305 (1 Oct)
+  "2026-10-24": { low: 1411, high: 1411 },
+  // 1,144 (17 Oct) + 267
+  "2026-10-31": { low: 1527, high: 1570 }
+  // + 116–159
+};
+var RATE = { low: 136, high: 1133 };
+var round2 = (v) => Number.isInteger(v) ? v : Math.round(v * 100) / 100;
+var costBand = (dep) => [
+  dep.low * RATE.low / 1e6,
+  dep.high * RATE.high / 1e6
+];
+function projectDaily(key) {
+  return DATES.map((date) => {
+    const obs = FACTS[date]?.[key];
+    if (!obs) return NIL;
+    const q = obs.q ?? "n";
+    return {
+      v: round2((obs.low + obs.high) / 2),
+      band: [obs.low, obs.high],
+      q,
+      note: { k: "obs", date, metric: key },
+      detach: isDetached(q)
+    };
+  });
+}
+var strikers = projectDaily("strikers").map(
+  (p) => ({ ...p, detach: false })
+);
+function projectPolicingDaily() {
+  return DATES.map((date) => {
+    const dep = DEPLOYMENT[date];
+    if (!dep) return NIL;
+    const [lo, hi] = costBand(dep);
+    const q = dep.q ?? "n";
+    return {
+      v: round2((lo + hi) / 2),
+      band: [round2(lo), round2(hi)],
+      q,
+      note: { k: "policing", low: dep.low, high: dep.high, date },
+      detach: isDetached(q)
+    };
+  });
+}
+function projectPolicingCumulative() {
+  let lo = 0;
+  let hi = 0;
+  let days = 0;
+  let started = false;
+  return DATES.map((date) => {
+    const dep = DEPLOYMENT[date];
+    if (dep) {
+      const [a, b] = costBand(dep);
+      lo += a;
+      hi += b;
+      days++;
+      started = true;
+    }
+    if (!started) return NIL;
+    return {
+      v: round2((lo + hi) / 2),
+      band: [round2(lo), round2(hi)],
+      q: "e",
+      note: { k: "cumulative", days, added: Boolean(dep) },
+      detach: false
+      // always a line; its band is shaded, not barred
+    };
+  });
+}
+function projectForcesStock() {
+  return DATES.map((date) => {
+    const pub = FORCES_STOCK[date];
+    if (pub) {
+      return {
+        v: round2((pub.low + pub.high) / 2),
+        band: [pub.low, pub.high],
+        q: "c",
+        note: { k: "obs", date, metric: "forcesInjuredStock" },
+        detach: false
+      };
+    }
+    const der = FORCES_STOCK_DERIVED[date];
+    if (der) {
+      return {
+        v: round2((der.low + der.high) / 2),
+        band: [der.low, der.high],
+        q: "e",
+        note: { k: "obs", date, metric: "forcesInjuredStock" },
+        detach: false
+      };
+    }
+    return NIL;
+  });
+}
+function aggregate(key, op) {
+  return WEEKS.map((week) => {
+    const cells = [];
+    for (const d of week.dates) {
+      const obs = FACTS[d]?.[key];
+      if (!obs) continue;
+      cells.push({ date: d, obs, q: obs.q ?? "n" });
+    }
+    if (!cells.length) return NIL;
+    const last = cells[cells.length - 1];
+    const othersHigh = Math.max(
+      ...cells.filter((c) => c !== last).map((c) => c.obs.high),
+      Number.NEGATIVE_INFINITY
+    );
+    if (last.q === "c" && last.obs.high >= othersHigh) {
+      return {
+        v: round2((last.obs.low + last.obs.high) / 2),
+        band: [round2(last.obs.low), round2(last.obs.high)],
+        q: "c",
+        note: { k: "obs", date: last.date, metric: key },
+        detach: isDetached("c")
+      };
+    }
+    const regional = cells.filter((c) => c.q === "r");
+    const subsets = cells.filter((c) => c.q === "c");
+    const flows = cells.filter((c) => c.q !== "c" && c.q !== "r");
+    const regionalOnly = flows.length === 0 && regional.length > 0;
+    let pool = regionalOnly ? regional : flows;
+    if (!pool.length) {
+      if (!subsets.length) return NIL;
+      pool = [
+        subsets.reduce((best, x) => x.obs.high > best.obs.high ? x : best)
+      ];
+    }
+    let low;
+    let high;
+    let value2;
+    let peak;
+    if (op === "sum") {
+      low = pool.reduce((a, x) => a + x.obs.low, 0);
+      high = pool.reduce((a, x) => a + x.obs.high, 0);
+      value2 = (low + high) / 2;
+    } else {
+      low = Math.max(...pool.map((x) => x.obs.low));
+      high = Math.max(...pool.map((x) => x.obs.high));
+      const top = pool.reduce(
+        (best, x) => (x.obs.low + x.obs.high) / 2 > (best.obs.low + best.obs.high) / 2 ? x : best
+      );
+      value2 = (top.obs.low + top.obs.high) / 2;
+      peak = top.date;
+    }
+    const derived = pool.filter((x) => x.q === "e").sort((a, b) => b.obs.high - a.obs.high)[0];
+    const excluded = cells.length - pool.length;
+    const partial = pool.some((x) => x.q === "p");
+    const parts = {
+      days: new Set(pool.map((x) => x.date)).size,
+      kind: regionalOnly ? "regional" : "national",
+      peak,
+      noNational: regionalOnly || void 0,
+      excluded: excluded > 0 ? excluded : void 0,
+      floored: pool.some((x) => x.q === "f") || void 0,
+      clipped: week.touchesEdge || void 0
+    };
+    return {
+      v: round2(value2),
+      band: [round2(low), round2(high)],
+      q: regionalOnly ? "r" : parts.floored ? "f" : partial ? "p" : "w",
+      note: derived ? { k: "obs", date: derived.date, metric: key } : { k: "week", p: parts },
+      detach: regionalOnly
+    };
+  });
+}
+function aggregateBlockades() {
+  return WEEKS.map((week) => {
+    const cells = [];
+    for (const date of week.dates) {
+      const obs = FACTS[date]?.blockades;
+      if (!obs) continue;
+      cells.push({ date, obs, q: obs.q ?? "n" });
+    }
+    if (!cells.length) return NIL;
+    const national = cells.filter((c) => c.q !== "r");
+    const pool = national.length ? national : cells;
+    const regionalOnly = national.length === 0;
+    const top = pool.reduce((best, c) => {
+      const mid = (c.obs.low + c.obs.high) / 2;
+      const bestMid = (best.obs.low + best.obs.high) / 2;
+      if (c.q === "c" && best.q !== "c") return c;
+      if (best.q === "c" && c.q !== "c") return best;
+      return mid > bestMid ? c : best;
+    });
+    const wide = top.q === "x";
+    const parts = {
+      days: new Set(pool.map((c) => c.date)).size,
+      kind: regionalOnly ? "regional" : "national",
+      peak: top.date,
+      noNational: regionalOnly || void 0,
+      excluded: cells.length - pool.length || void 0,
+      floored: pool.some((c) => c.q === "f") || void 0,
+      clipped: week.touchesEdge || void 0,
+      vacation: weekTouchesHoliday(week.key) || void 0
+    };
+    return {
+      v: round2((top.obs.low + top.obs.high) / 2),
+      band: [round2(top.obs.low), round2(top.obs.high)],
+      q: regionalOnly ? "r" : wide ? "x" : top.q === "f" ? "f" : "w",
+      note: wide ? { k: "obs", date: top.date, metric: "blockades" } : { k: "week", p: parts },
+      detach: regionalOnly
+    };
+  });
+}
+var DAILY = {
+  turnout: projectDaily("turnout"),
+  strikers,
+  arrests: projectDaily("arrests"),
+  forcesInjured: projectDaily("forcesInjured"),
+  forcesInjuredStock: projectForcesStock(),
+  protesterInjured: projectDaily("protesterInjured"),
+  damagesCost: projectDaily("damagesCost"),
+  blockades: projectDaily("blockades"),
+  policing: projectPolicingDaily(),
+  policingCumulative: projectPolicingCumulative()
+};
+var WEEKLY = {
+  turnout: aggregate("turnout", "max"),
+  strikers: aggregate("strikers", "max").map(
+    (p) => p.q === "w" ? { ...p, q: "e" } : p
+  ),
+  arrests: aggregate("arrests", "sum"),
+  forcesInjured: aggregate("forcesInjured", "sum"),
+  protesterInjured: aggregate("protesterInjured", "sum"),
+  blockades: aggregateBlockades()
+};
+var STUDENT_WEEKS = WEEKS.map((week, idx) => {
+  const out = {
+    key: week.key,
+    end: week.end,
+    touchesEdge: week.touchesEdge,
+    p: null,
+    a: null,
+    f: null,
+    i: null,
+    flags: {},
+    notes: {}
+  };
+  for (const m of METRICS) {
+    const pt = WEEKLY[METRIC_OF[m]][idx];
+    if (pt.band) out[m] = pt.band;
+    if (pt.band && pt.q && pt.q !== "n") out.flags[m] = pt.q;
+    if (pt.note) out.notes[m] = pt.note;
+  }
+  return out;
+});
+var SEVERITY_LEVELS = [
+  {
+    /* 1,167 / 1,233 = 94.65% → the 94.6% the file itself states. */
+    id: "crsOctober",
+    total: { s: "n", v: 1233 },
+    serious: { s: "x", why: "binaryFile" },
+    light: { s: "n", v: 1167 },
+    other: { s: "n", v: 66, d: true }
+  },
+  {
+    /* All forces, running total at the peak, consolidated. */
+    id: "forcesPeak",
+    total: { s: "n", v: 1144 },
+    serious: { s: "n", v: 7 },
+    light: { s: "x", why: "notPublished" },
+    other: { s: "x", why: "notPublished" }
+  },
+  {
+    /* No total has ever been published, so no share can exist. */
+    id: "protesters",
+    total: { s: "x", why: "noDenominator" },
+    serious: { s: "x", why: "noTally" },
+    light: { s: "x", why: "noDenominator" },
+    other: { s: "x", why: "noDenominator" }
+  }
+];
+var SEVERITY_WEEKS = [
+  {
+    id: "week12oct",
+    total: { s: "n", v: 207, d: true },
+    serious: { s: "n", v: 7 },
+    light: { s: "x", why: "notPublished" },
+    other: { s: "x", why: "notPublished" }
+  },
+  {
+    id: "week19oct",
+    total: { s: "n", v: 267, d: true },
+    serious: { s: "x", why: "notPublished" },
+    light: { s: "x", why: "notPublished" },
+    other: { s: "x", why: "notPublished" }
+  },
+  {
+    id: "week26oct",
+    total: { s: "n", v: 116, d: true },
+    serious: { s: "x", why: "notPublished" },
+    light: { s: "x", why: "notPublished" },
+    other: { s: "x", why: "notPublished" }
+  },
+  {
+    id: "week2nov",
+    total: { s: "n", v: 53 },
+    serious: { s: "x", why: "notPublished" },
+    light: { s: "x", why: "notPublished" },
+    other: { s: "x", why: "notPublished" }
+  },
+  {
+    /* The month is the smallest window at which a split exists at all. */
+    id: "crsOctober",
+    total: { s: "n", v: 1233 },
+    serious: { s: "x", why: "binaryFile" },
+    light: { s: "n", v: 1167 },
+    other: { s: "n", v: 66, d: true }
+  }
+];
+var CASES = [
+  {
+    id: "forcesAccidental",
+    side: "forces",
+    kind: "accidental",
+    count: { s: "c", n: 4 },
+    cases: ["givors", "crsWrist", "crsAnkle"]
+  },
+  {
+    id: "forcesConflictual",
+    side: "forces",
+    kind: "conflictual",
+    count: { s: "x", why: "noTally" },
+    cases: ["helmet", "groin2023"]
+  },
+  {
+    id: "protesterConflictual",
+    side: "protesters",
+    kind: "conflictual",
+    count: { s: "x", why: "noTally" },
+    cases: ["mael", "alaric", "eyes"]
+  },
+  {
+    id: "protesterAccidental",
+    side: "protesters",
+    kind: "accidental",
+    count: { s: "x", why: "noneDocumented" },
+    cases: []
+  },
+  {
+    id: "sainteSoline",
+    side: "forces",
+    kind: "accidental",
+    count: { s: "c", n: 29 },
+    cases: ["sainteSoline"],
+    reference: true
+  }
+];
+
+// src/core/dom.ts
+var byId = (id) => document.getElementById(id);
+function el(name, cls, text) {
+  const node = document.createElement(name);
+  if (cls) node.className = cls;
+  if (text !== void 0) node.textContent = text;
+  return node;
+}
+
 // src/sections/context/context.ts
 var L = (o) => String(getLocale()).slice(0, 2) === "fr" ? o.fr : o.en;
 var fillL = (o, params) => fill(L(o), params);
@@ -15031,12 +14842,12 @@ function noteText(ref) {
     case "obs":
       return m.obsNotes[ref.date]?.[ref.metric] ?? "";
     case "policing": {
-      const head = ref.low === ref.high ? nf2().format(ref.low) : `${nf2().format(ref.low)}\u2013${nf2().format(ref.high)}`;
+      const head = ref.low === ref.high ? nf().format(ref.low) : `${nf().format(ref.low)}\u2013${nf().format(ref.high)}`;
       const note2 = m.deployNotes[ref.date];
       return fill(note2 ? m.policingDay : m.policingDayPlain, {
         head,
-        low: nf2().format(RATE.low),
-        high: nf2().format(RATE.high),
+        low: nf().format(RATE.low),
+        high: nf().format(RATE.high),
         note: note2 ?? ""
       });
     }
@@ -15710,7 +15521,7 @@ var spanMark = {
   }
 };
 function fmt(v, unit) {
-  return unit === "eurM" ? fill(t().chart.eurM, { v: eurM().format(v) }) : nf2().format(Math.round(v));
+  return unit === "eurM" ? fill(t().chart.eurM, { v: eurM().format(v) }) : nf().format(Math.round(v));
 }
 var RATE2 = {
   en: "= {pct} of the population ({pop} residents)",
@@ -15724,10 +15535,10 @@ function rateLine(band, v) {
   const pct = hi - lo < 1e-9 ? fmtPct(lo) : `${fmtPct(lo)} \u2013 ${fmtPct(hi)}`;
   return fill(bi(RATE2), {
     pct,
-    pop: nf2().format(denominator(pop) ?? 0)
+    pop: nf().format(denominator(pop) ?? 0)
   });
 }
-var tickFormat = (unit) => (v) => unit === "eurM" ? fill(t().chart.eurM, { v: nf2().format(v) }) : compact().format(v);
+var tickFormat = (unit) => (v) => unit === "eurM" ? fill(t().chart.eurM, { v: nf().format(v) }) : compact().format(v);
 function tooltipCallbacks(v) {
   const m = t().chart;
   return {
@@ -16018,255 +15829,43 @@ function mountCharts() {
   }
 }
 
-// src/charts/trellis/engine.ts
-var datasetsOf = (chart) => chart.data.datasets;
-function rowTitle(ep, r) {
-  const m = t();
-  if (ep.id === "students26") {
-    const base = fmtWeek(r.from, r.to);
-    return r.partial ? fill(m.panels.partialWeek, { label: base }) : base;
+// src/charts/specs.ts
+var CHARTS2 = [
+  {
+    id: "chart-protesters",
+    copy: "protestersDaily",
+    weekly: false,
+    series: ["protestersDaily", "strikersDaily", "blockadesDaily"]
+  },
+  {
+    id: "chart-enforcement",
+    copy: "enforcementDaily",
+    weekly: false,
+    series: [
+      "arrestsDaily",
+      "forcesDaily",
+      "forcesInjuredStock",
+      "protestersInjuredDaily"
+    ]
+  },
+  {
+    id: "chart-costs",
+    copy: "cost",
+    weekly: false,
+    series: ["damagesDaily", "policingDaily", "policingCumulative"]
+  },
+  {
+    id: "chart-protesters-weekly",
+    copy: "protestersWeekly",
+    weekly: true,
+    series: ["protestersWeekly", "strikersWeekly", "blockadesWeekly"]
+  },
+  {
+    id: "chart-enforcement-weekly",
+    copy: "enforcementWeekly",
+    weekly: true,
+    series: ["arrestsWeekly", "forcesWeekly", "protestersInjuredWeekly"]
   }
-  const when = r.act !== void 0 ? fill(m.panels.act, { n: r.act }) : fmtWeek(r.from, r.to);
-  const action = m.episodes[ep.id].weeks[r.w]?.action;
-  return action ? fill(m.panels.withAction, { when, action }) : when;
-}
-function noteFor(id, r, m) {
-  if (id === "students26") {
-    return noteText(r.noteRef?.[m]) || t().episodes.students26.fallbackNote?.[m];
-  }
-  return t().episodes[id].weeks[r.w]?.note?.[m];
-}
-var seriesCache = /* @__PURE__ */ new Map();
-function resetSeriesCache() {
-  seriesCache.clear();
-}
-function seriesData(ep, key) {
-  const id = `${ep.id}:${key}`;
-  const hit = seriesCache.get(id);
-  if (hit !== void 0) return hit;
-  const rows = ep.weeks.filter((r) => r[key] !== void 0).sort((a, b) => a.w - b.w);
-  if (rows.length === 0) {
-    seriesCache.set(id, null);
-    return null;
-  }
-  const flagOf = (r) => r.flag?.[key] ?? "n";
-  const baseRow = rows.find((r) => flagOf(r) !== "c") ?? rows[0];
-  const base = midOf(baseRow[key]);
-  const out = rows.map((r) => {
-    const [low, high] = bandOf(r[key]);
-    return {
-      x: r.w,
-      y: (low + high) / 2,
-      low,
-      high,
-      flag: flagOf(r),
-      note: noteFor(ep.id, r, key),
-      base,
-      t: rowTitle(ep, r)
-    };
-  });
-  seriesCache.set(id, out);
-  return out;
-}
-function buildDataset(ep, epIndex, key, color2, maxX) {
-  const all = seriesData(ep, key);
-  if (!all) return null;
-  const points = all.filter((p) => p.x <= maxX);
-  if (!points.length) return null;
-  return {
-    label: t().items[key].label,
-    data: points,
-    borderColor: color2,
-    backgroundColor: color2,
-    borderWidth: 1.75,
-    pointRadius: points.map((p) => p.flag === "c" ? 3 : 2.75),
-    pointBackgroundColor: points.map(
-      (p) => isDetached(p.flag) ? THEME.hollow : color2
-    ),
-    pointBorderColor: color2,
-    pointBorderWidth: 1.5,
-    pointHoverRadius: 4.5,
-    pointHitRadius: 12,
-    tension: 0,
-    spanGaps: true,
-    segment: gapSegment(1, [5, 4]),
-    __item: key,
-    __ep: epIndex,
-    __color: color2
-  };
-}
-function rawExtent(eps, keys, maxX) {
-  let lo = Number.POSITIVE_INFINITY;
-  let hi = Number.NEGATIVE_INFINITY;
-  for (const ep of eps) {
-    for (const k of keys) {
-      const pts = seriesData(ep, k);
-      if (!pts) continue;
-      for (const p of pts) {
-        if (p.x > maxX) continue;
-        if (p.low > 0) lo = Math.min(lo, p.low);
-        hi = Math.max(hi, p.high);
-      }
-    }
-  }
-  if (!Number.isFinite(lo) || !Number.isFinite(hi) || lo <= 0 || hi <= lo)
-    return [1, 1e6];
-  return [lo, hi];
-}
-function logBounds(lo, hi) {
-  const l = Math.log10(Math.max(lo, 1e-6));
-  const h = Math.log10(Math.max(hi, l + 0.1));
-  const pad = Math.max(0.06, (h - l) * 0.05);
-  return [10 ** (l - pad), 10 ** (h + pad)];
-}
-function decades(lo, hi) {
-  const out = [];
-  const from2 = Math.floor(Math.log10(Math.max(lo, 1e-6)));
-  const to2 = Math.ceil(Math.log10(Math.max(hi, 1)));
-  for (let e = from2; e <= to2; e++) {
-    const v = 10 ** e;
-    if (v >= lo * 1.0001 && v <= hi * 0.9999) out.push(v);
-  }
-  return out;
-}
-var statsCache = /* @__PURE__ */ new WeakMap();
-function statsOf(points) {
-  const cached = statsCache.get(points);
-  if (cached) return cached;
-  const vs = [];
-  for (const p of points) if (Number.isFinite(p.y)) vs.push(p.y);
-  if (vs.length === 0) return null;
-  const sorted = [...vs].sort((a, b) => a - b);
-  const n = sorted.length;
-  const mid = n >> 1;
-  const median = n % 2 === 1 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
-  let sum = 0;
-  for (const v of vs) sum += v;
-  const stats = {
-    low: sorted[0],
-    high: sorted[n - 1],
-    mean: sum / n,
-    median,
-    count: n
-  };
-  statsCache.set(points, stats);
-  return stats;
-}
-
-// src/charts/trellis/legend.ts
-var legendHidden = /* @__PURE__ */ new Map();
-var legendButtons = /* @__PURE__ */ new Map();
-function legendState(key, n) {
-  const s = legendHidden.get(key) ?? [];
-  while (s.length < n) s.push(false);
-  s.length = n;
-  legendHidden.set(key, s);
-  return s;
-}
-function legendMark(key, idx) {
-  legendButtons.get(key)?.forEach((b, i) => {
-    b.classList.toggle("is-active", i === idx);
-  });
-}
-function legend(host, key, entries) {
-  const hidden = legendState(key, entries.length);
-  const buttons = entries.map((entry, idx) => {
-    const button = el("button");
-    button.type = "button";
-    button.setAttribute("aria-pressed", String(hidden[idx]));
-    button.classList.toggle("is-off", hidden[idx]);
-    const swatch = el("span", "swatch");
-    swatch.style.background = entry.dash?.length ? `repeating-linear-gradient(90deg, ${entry.color} 0 3px, transparent 3px 6px)` : entry.color;
-    button.append(swatch, document.createTextNode(entry.text));
-    if (entry.hide) {
-      button.addEventListener("click", () => {
-        hidden[idx] = !hidden[idx];
-        button.setAttribute("aria-pressed", String(hidden[idx]));
-        button.classList.toggle("is-off", hidden[idx]);
-        entry.hide?.(hidden[idx]);
-      });
-    } else {
-      let pinned = false;
-      button.addEventListener("click", () => {
-        pinned = !pinned;
-        button.setAttribute("aria-pressed", String(pinned));
-        pinned ? entry.on() : entry.off();
-      });
-    }
-    for (const ev of ["mouseenter", "focus", "pointerdown"])
-      button.addEventListener(ev, () => {
-        entry.on();
-        legendMark(key, idx);
-      });
-    for (const ev of ["mouseleave", "blur"])
-      button.addEventListener(ev, () => {
-        if (!entry.hide && button.getAttribute("aria-pressed") === "true")
-          return;
-        entry.off();
-        legendMark(key, null);
-      });
-    return button;
-  });
-  legendButtons.set(key, buttons);
-  host.replaceChildren(...buttons);
-  entries.forEach((entry, idx) => {
-    if (hidden[idx]) entry.hide?.(true);
-  });
-}
-function chartsIn(host) {
-  const out = [];
-  for (const c of host?.querySelectorAll("canvas") ?? []) {
-    const chart = Chart.getChart(c);
-    if (chart) out.push(chart);
-  }
-  return out;
-}
-function toggleDatasets(host, field, key, hidden) {
-  for (const chart of chartsIn(host)) {
-    let touched = false;
-    datasetsOf(chart).forEach((d, i) => {
-      if (d[field] !== key) return;
-      chart.setDatasetVisibility(i, !hidden);
-      touched = true;
-    });
-    if (touched) chart.update("none");
-  }
-}
-function wireLegendSync(host, key, indexOf) {
-  for (const canvas of host?.querySelectorAll("canvas") ?? []) {
-    const chart = Chart.getChart(canvas);
-    if (!chart) continue;
-    canvas.addEventListener("pointermove", (ev) => {
-      const mode = chart.options.interaction?.mode ?? "nearest";
-      const els = chart.getElementsAtEventForMode(
-        ev,
-        mode,
-        { intersect: !!chart.options.interaction?.intersect },
-        true
-      );
-      const d = els.length ? datasetsOf(chart)[els[0].datasetIndex] : void 0;
-      legendMark(key, d ? indexOf(d) : null);
-    });
-    canvas.addEventListener("pointerleave", () => legendMark(key, null));
-  }
-}
-
-// src/charts/trellis/palette.ts
-var DIM = 0.18;
-var SERIES2 = [
-  { key: "p", color: "#1d4ed8" },
-  { key: "a", color: "#b91c1c" },
-  { key: "f", color: "#047857" },
-  { key: "i", color: "#b45309" }
-];
-var RAMP2 = [
-  "#D6E6F2",
-  "#B0CFE6",
-  "#86B4D7",
-  "#5C97C5",
-  "#357AB0",
-  "#1B5C92",
-  "#0A3A63"
 ];
 
 // src/data/episodes/mai68.ts
@@ -16561,6 +16160,141 @@ var ENFORCEMENT_LAST = EPISODES.reduce(
   0
 );
 
+// src/charts/trellis/engine.ts
+var datasetsOf = (chart) => chart.data.datasets;
+function rowTitle(ep, r) {
+  const m = t();
+  if (ep.id === "students26") {
+    const base = fmtWeek(r.from, r.to);
+    return r.partial ? fill(m.panels.partialWeek, { label: base }) : base;
+  }
+  const when = r.act !== void 0 ? fill(m.panels.act, { n: r.act }) : fmtWeek(r.from, r.to);
+  const action = m.episodes[ep.id].weeks[r.w]?.action;
+  return action ? fill(m.panels.withAction, { when, action }) : when;
+}
+function noteFor(id, r, m) {
+  if (id === "students26") {
+    return noteText(r.noteRef?.[m]) || t().episodes.students26.fallbackNote?.[m];
+  }
+  return t().episodes[id].weeks[r.w]?.note?.[m];
+}
+var seriesCache = /* @__PURE__ */ new Map();
+function resetSeriesCache() {
+  seriesCache.clear();
+}
+function seriesData(ep, key) {
+  const id = `${ep.id}:${key}`;
+  const hit = seriesCache.get(id);
+  if (hit !== void 0) return hit;
+  const rows = ep.weeks.filter((r) => r[key] !== void 0).sort((a, b) => a.w - b.w);
+  if (rows.length === 0) {
+    seriesCache.set(id, null);
+    return null;
+  }
+  const flagOf = (r) => r.flag?.[key] ?? "n";
+  const baseRow = rows.find((r) => flagOf(r) !== "c") ?? rows[0];
+  const base = midOf(baseRow[key]);
+  const out = rows.map((r) => {
+    const [low, high] = bandOf(r[key]);
+    return {
+      x: r.w,
+      y: (low + high) / 2,
+      low,
+      high,
+      flag: flagOf(r),
+      note: noteFor(ep.id, r, key),
+      base,
+      t: rowTitle(ep, r)
+    };
+  });
+  seriesCache.set(id, out);
+  return out;
+}
+function buildDataset(ep, epIndex, key, color2, maxX) {
+  const all = seriesData(ep, key);
+  if (!all) return null;
+  const points = all.filter((p) => p.x <= maxX);
+  if (!points.length) return null;
+  return {
+    label: t().items[key].label,
+    data: points,
+    borderColor: color2,
+    backgroundColor: color2,
+    borderWidth: 1.75,
+    pointRadius: points.map((p) => p.flag === "c" ? 3 : 2.75),
+    pointBackgroundColor: points.map(
+      (p) => isDetached(p.flag) ? THEME.hollow : color2
+    ),
+    pointBorderColor: color2,
+    pointBorderWidth: 1.5,
+    pointHoverRadius: 4.5,
+    pointHitRadius: 12,
+    tension: 0,
+    spanGaps: true,
+    segment: gapSegment(1, [5, 4]),
+    __item: key,
+    __ep: epIndex,
+    __color: color2
+  };
+}
+function rawExtent(eps, keys, maxX) {
+  let lo = Number.POSITIVE_INFINITY;
+  let hi = Number.NEGATIVE_INFINITY;
+  for (const ep of eps) {
+    for (const k of keys) {
+      const pts = seriesData(ep, k);
+      if (!pts) continue;
+      for (const p of pts) {
+        if (p.x > maxX) continue;
+        if (p.low > 0) lo = Math.min(lo, p.low);
+        hi = Math.max(hi, p.high);
+      }
+    }
+  }
+  if (!Number.isFinite(lo) || !Number.isFinite(hi) || lo <= 0 || hi <= lo)
+    return [1, 1e6];
+  return [lo, hi];
+}
+function logBounds(lo, hi) {
+  const l = Math.log10(Math.max(lo, 1e-6));
+  const h = Math.log10(Math.max(hi, l + 0.1));
+  const pad = Math.max(0.06, (h - l) * 0.05);
+  return [10 ** (l - pad), 10 ** (h + pad)];
+}
+function decades(lo, hi) {
+  const out = [];
+  const from2 = Math.floor(Math.log10(Math.max(lo, 1e-6)));
+  const to2 = Math.ceil(Math.log10(Math.max(hi, 1)));
+  for (let e = from2; e <= to2; e++) {
+    const v = 10 ** e;
+    if (v >= lo * 1.0001 && v <= hi * 0.9999) out.push(v);
+  }
+  return out;
+}
+var statsCache = /* @__PURE__ */ new WeakMap();
+function statsOf(points) {
+  const cached = statsCache.get(points);
+  if (cached) return cached;
+  const vs = [];
+  for (const p of points) if (Number.isFinite(p.y)) vs.push(p.y);
+  if (vs.length === 0) return null;
+  const sorted = [...vs].sort((a, b) => a - b);
+  const n = sorted.length;
+  const mid = n >> 1;
+  const median = n % 2 === 1 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+  let sum = 0;
+  for (const v of vs) sum += v;
+  const stats = {
+    low: sorted[0],
+    high: sorted[n - 1],
+    mean: sum / n,
+    median,
+    count: n
+  };
+  statsCache.set(points, stats);
+  return stats;
+}
+
 // src/charts/trellis/interaction.ts
 function posOf(chart, e) {
   const { left, right, top, bottom } = chart.chartArea;
@@ -16590,6 +16324,24 @@ function nearestByY(chart, elements, e) {
   return best ?? elements[0];
 }
 var WEEK_MODE = "trellisWeek";
+
+// src/charts/trellis/palette.ts
+var DIM = 0.18;
+var SERIES2 = [
+  { key: "p", color: "#1d4ed8" },
+  { key: "a", color: "#b91c1c" },
+  { key: "f", color: "#047857" },
+  { key: "i", color: "#b45309" }
+];
+var RAMP2 = [
+  "#D6E6F2",
+  "#B0CFE6",
+  "#86B4D7",
+  "#5C97C5",
+  "#357AB0",
+  "#1B5C92",
+  "#0A3A63"
+];
 
 // src/charts/trellis/panel.ts
 function xScale(maxW) {
@@ -16688,7 +16440,7 @@ function tooltipSpec(kind) {
       },
       label: (item) => {
         const p = item.raw;
-        const value2 = p.low === p.high ? nf2().format(Math.round(p.low)) : `${nf2().format(Math.round(p.low))} \u2013 ${nf2().format(Math.round(p.high))}`;
+        const value2 = p.low === p.high ? nf().format(Math.round(p.low)) : `${nf().format(Math.round(p.low))} \u2013 ${nf().format(Math.round(p.high))}`;
         const flag = m.flags[p.flag];
         const line = flag ? fill(m.tooltip.lineWithFlag, { value: value2, flag }) : fill(m.tooltip.linePlain, { value: value2 });
         const name = kind === "item" ? m.episodes[EPISODES[item.dataset.__ep].id].short : "";
@@ -16698,7 +16450,7 @@ function tooltipSpec(kind) {
         const p = item.raw;
         const lines = [];
         if (kind === "item") {
-          const n = nf2().format(Math.round(p.base));
+          const n = nf().format(Math.round(p.base));
           const text = Math.abs(p.y - p.base) / p.base < 1e-9 ? fill(m.tooltip.firstFigure, { n }) : shareLine(p, item.dataset);
           if (text) lines.push(...wrapTooltipLines(text, item, "body"));
         }
@@ -16708,7 +16460,7 @@ function tooltipSpec(kind) {
       footer: (items) => {
         if (kind !== "episode") return [];
         const p = items[0].raw;
-        const n = nf2().format(Math.round(p.base));
+        const n = nf().format(Math.round(p.base));
         const text = Math.abs(p.y - p.base) / p.base < 1e-9 ? fill(m.tooltip.firstFigure, { n }) : shareLine(p, items[0].dataset);
         return text ? wrapTooltipLines(text, items[0], "footer") : [];
       }
@@ -16788,522 +16540,279 @@ function decoratePanel(chart, figure, title) {
   });
 }
 
-// src/sections/summary.ts
-var MEDIAN_COLOR = "#334155";
-var PEAK_COLOR = "#b45309";
-var RANGE_COLOR = "#64748b";
-var summaryPanels = [];
-var activeStat = null;
-function clipToArea(ctx, area) {
-  ctx.beginPath();
-  ctx.rect(area.left, area.top, area.width, area.height);
-  ctx.clip();
+// src/charts/trellis/legend.ts
+var legendHidden = /* @__PURE__ */ new Map();
+var legendButtons = /* @__PURE__ */ new Map();
+function legendState(key, n) {
+  const s = legendHidden.get(key) ?? [];
+  while (s.length < n) s.push(false);
+  s.length = n;
+  legendHidden.set(key, s);
+  return s;
 }
-function cellOf(ep, i, key) {
-  const pts = seriesData(ep, key);
-  if (!pts) return null;
-  const st = statsOf(pts);
-  if (!st) return null;
-  if (!(st.low > 0)) return null;
-  return {
-    x: i,
-    t: t().episodes[ep.id].short,
-    n: st.count,
-    min: st.low,
-    median: st.median,
-    max: st.high
-  };
+function legendMark(key, idx) {
+  legendButtons.get(key)?.forEach((b, i) => {
+    b.classList.toggle("is-active", i === idx);
+  });
 }
-function statPt(c, which) {
-  const y = which === "median" ? c.median : c.max;
-  return {
-    x: c.x,
-    y,
-    low: c.min,
-    high: c.max,
-    flag: "n",
-    base: c.median,
-    t: c.t,
-    n: c.n,
-    min: c.min,
-    median: c.median,
-    max: c.max
-  };
-}
-function medianDataset(key, label, cells) {
-  return {
-    type: "line",
-    label,
-    data: cells.map((c) => statPt(c, "median")),
-    showLine: false,
-    borderColor: MEDIAN_COLOR,
-    backgroundColor: MEDIAN_COLOR,
-    pointBackgroundColor: MEDIAN_COLOR,
-    pointBorderColor: MEDIAN_COLOR,
-    pointBorderWidth: 1.5,
-    pointRadius: 5,
-    pointHoverRadius: 7,
-    pointHitRadius: 12,
-    pointStyle: "circle",
-    __item: key,
-    __ep: -1,
-    __color: MEDIAN_COLOR,
-    __stat: "median"
-  };
-}
-function peakDataset(key, label, cells) {
-  return {
-    type: "line",
-    label,
-    data: cells.map((c) => statPt(c, "peak")),
-    showLine: false,
-    borderColor: PEAK_COLOR,
-    backgroundColor: PEAK_COLOR,
-    pointBackgroundColor: PEAK_COLOR,
-    pointBorderColor: PEAK_COLOR,
-    pointBorderWidth: 1.5,
-    pointRadius: cells.map((c) => c.n < 2 ? 0 : 6),
-    pointHoverRadius: cells.map((c) => c.n < 2 ? 0 : 8),
-    pointHitRadius: cells.map((c) => c.n < 2 ? 0 : 12),
-    pointStyle: "triangle",
-    __item: key,
-    __ep: -1,
-    __color: PEAK_COLOR,
-    __stat: "peak"
-  };
-}
-function rangeDataset(key, label, cells) {
-  return {
-    type: "line",
-    label,
-    data: cells.map((c) => statPt(c, "median")),
-    showLine: false,
-    borderColor: RANGE_COLOR,
-    backgroundColor: alpha(RANGE_COLOR, 0.2),
-    pointRadius: 0,
-    pointHoverRadius: 0,
-    pointHitRadius: 0,
-    __item: key,
-    __ep: -1,
-    __color: RANGE_COLOR,
-    __stat: "range",
-    __bands: cells.map((c) => [c.min, c.max])
-  };
-}
-var rangeBand = {
-  id: "rangeBand",
-  beforeDatasetsDraw(chart) {
-    const idx = chart.data.datasets.findIndex(
-      (d) => d.__bands !== void 0
-    );
-    if (idx < 0) return;
-    const ds = chart.data.datasets[idx];
-    const meta = chart.getDatasetMeta(idx);
-    if (meta.hidden) return;
-    const scale = chart.scales.y;
-    if (!scale) return;
-    const { ctx, chartArea } = chart;
-    const pts = meta.data;
-    const width = 9;
-    ctx.save();
-    clipToArea(ctx, chartArea);
-    ctx.fillStyle = ds.backgroundColor;
-    for (let j = 0; j < pts.length; j++) {
-      const band = ds.__bands[j];
-      const p = pts[j];
-      if (!band || p.skip) continue;
-      const yHi = scale.getPixelForValue(band[1]);
-      const yLo = scale.getPixelForValue(band[0]);
-      ctx.fillRect(p.x - width / 2, yHi, width, Math.max(yLo - yHi, 2));
+function legend(host, key, entries) {
+  const hidden = legendState(key, entries.length);
+  const buttons = entries.map((entry, idx) => {
+    const button = el("button");
+    button.type = "button";
+    button.setAttribute("aria-pressed", String(hidden[idx]));
+    button.classList.toggle("is-off", hidden[idx]);
+    const swatch = el("span", "swatch");
+    swatch.style.background = entry.dash?.length ? `repeating-linear-gradient(90deg, ${entry.color} 0 3px, transparent 3px 6px)` : entry.color;
+    button.append(swatch, document.createTextNode(entry.text));
+    if (entry.hide) {
+      button.addEventListener("click", () => {
+        hidden[idx] = !hidden[idx];
+        button.setAttribute("aria-pressed", String(hidden[idx]));
+        button.classList.toggle("is-off", hidden[idx]);
+        entry.hide?.(hidden[idx]);
+      });
+    } else {
+      let pinned = false;
+      button.addEventListener("click", () => {
+        pinned = !pinned;
+        button.setAttribute("aria-pressed", String(pinned));
+        pinned ? entry.on() : entry.off();
+      });
     }
-    ctx.restore();
-  }
-};
-function emphasiseStat(stat, force = false) {
-  if (!force && stat === activeStat) return;
-  activeStat = stat;
-  for (const chart of summaryPanels) {
-    for (const d of datasetsOf(chart)) {
-      const s = d.__stat;
-      if (!s) continue;
-      const on = stat === null || s === stat;
-      if (s === "range") {
-        d.backgroundColor = alpha(d.__color, on ? 0.2 : 0.05);
-      } else {
-        const c = on ? d.__color : alpha(d.__color, DIM);
-        d.borderColor = c;
-        d.pointBorderColor = c;
-        d.backgroundColor = c;
-        d.pointBackgroundColor = c;
-      }
-    }
-    chart.update("none");
-  }
+    for (const ev of ["mouseenter", "focus", "pointerdown"])
+      button.addEventListener(ev, () => {
+        entry.on();
+        legendMark(key, idx);
+      });
+    for (const ev of ["mouseleave", "blur"])
+      button.addEventListener(ev, () => {
+        if (!entry.hide && button.getAttribute("aria-pressed") === "true")
+          return;
+        entry.off();
+        legendMark(key, null);
+      });
+    return button;
+  });
+  legendButtons.set(key, buttons);
+  host.replaceChildren(...buttons);
+  entries.forEach((entry, idx) => {
+    if (hidden[idx]) entry.hide?.(true);
+  });
 }
-var statHidden = /* @__PURE__ */ new Map();
-function applyStatVisibility() {
-  for (const chart of summaryPanels) {
+function chartsIn(host) {
+  const out = [];
+  for (const c of host?.querySelectorAll("canvas") ?? []) {
+    const chart = Chart.getChart(c);
+    if (chart) out.push(chart);
+  }
+  return out;
+}
+function toggleDatasets(host, field, key, hidden) {
+  for (const chart of chartsIn(host)) {
+    let touched = false;
     datasetsOf(chart).forEach((d, i) => {
-      const s = d.__stat;
-      chart.setDatasetVisibility(i, !(s && statHidden.get(s)));
+      if (d[field] !== key) return;
+      chart.setDatasetVisibility(i, !hidden);
+      touched = true;
     });
+    if (touched) chart.update("none");
+  }
+}
+function wireLegendSync(host, key, indexOf) {
+  for (const canvas of host?.querySelectorAll("canvas") ?? []) {
+    const chart = Chart.getChart(canvas);
+    if (!chart) continue;
+    canvas.addEventListener("pointermove", (ev) => {
+      const mode = chart.options.interaction?.mode ?? "nearest";
+      const els = chart.getElementsAtEventForMode(
+        ev,
+        mode,
+        { intersect: !!chart.options.interaction?.intersect },
+        true
+      );
+      const d = els.length ? datasetsOf(chart)[els[0].datasetIndex] : void 0;
+      legendMark(key, d ? indexOf(d) : null);
+    });
+    canvas.addEventListener("pointerleave", () => legendMark(key, null));
+  }
+}
+
+// src/charts/trellis/index.ts
+var episodePanels = [];
+var itemPanels = [];
+var activeItem = null;
+var activeEvent = null;
+function restyle(d, on, bold = false) {
+  const c = on ? d.__color : alpha2(d.__color, DIM);
+  d.borderColor = c;
+  d.backgroundColor = c;
+  d.pointBorderColor = c;
+  d.borderWidth = bold && on ? 2.75 : 1.75;
+}
+function restylePanels(charts, keep, bold = false) {
+  for (const chart of charts) {
+    for (const d of datasetsOf(chart)) restyle(d, keep(d), bold);
     chart.update("none");
   }
 }
-function setStatHidden(stat, hidden) {
-  statHidden.set(stat, hidden);
-  applyStatVisibility();
+function emphasiseItem(key) {
+  if (key === activeItem) return;
+  activeItem = key;
+  restylePanels(episodePanels, (d) => key === null || d.__item === key, true);
+  for (const { chart, item } of itemPanels) {
+    const host = chart.canvas.parentElement;
+    if (host)
+      host.style.opacity = key === null || item === key ? "1" : String(DIM);
+  }
 }
-function mountSummary() {
-  const host = document.getElementById("summary");
-  const legendHost = document.getElementById("legend-summary");
-  if (!host || !legendHost) return;
-  summaryPanels.length = 0;
-  activeStat = null;
-  host.replaceChildren();
-  legendHost.replaceChildren();
+function emphasiseEvent(index) {
+  if (index === activeEvent) return;
+  activeEvent = index;
+  restylePanels(
+    itemPanels.map((p) => p.chart),
+    (d) => index === null || d.__ep === index
+  );
+}
+function trellisHosts() {
+  const episodeHost = document.getElementById("trellis-episodes");
+  const itemHost = document.getElementById("trellis-items");
+  const itemLegend = document.getElementById("legend-items");
+  const eventLegend = document.getElementById("legend-events");
+  if (!episodeHost || !itemHost || !itemLegend || !eventLegend) {
+    console.warn("[trellis] one or more hosts missing");
+    return null;
+  }
+  return { episodeHost, itemHost, itemLegend, eventLegend };
+}
+function mountCrossEpisode() {
+  const hosts = trellisHosts();
+  if (!hosts) return;
+  const { episodeHost, itemHost, itemLegend, eventLegend } = hosts;
+  if (!episodeHost || !itemHost || !itemLegend || !eventLegend) return;
+  episodePanels.length = 0;
+  itemPanels.length = 0;
+  activeItem = null;
+  activeEvent = null;
+  resetSeriesCache();
+  episodeHost.replaceChildren();
+  itemHost.replaceChildren();
+  itemLegend.replaceChildren();
+  eventLegend.replaceChildren();
   const m = t();
-  const cols = columns(host);
-  host.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
-  for (const [panelIndex, series] of SERIES2.entries()) {
-    const cells = [];
-    EPISODES.forEach((ep, i) => {
-      const c = cellOf(ep, i, series.key);
-      if (c) cells.push(c);
-    });
-    if (!cells.length) continue;
-    const lo = Math.min(...cells.map((c) => c.min)) * 0.8;
-    const hi = Math.max(...cells.map((c) => c.max)) * 1.3;
+  const unbounded = Number.POSITIVE_INFINITY;
+  const [yMin, yMax] = logBounds(...rawExtent(EPISODES, METRICS, unbounded));
+  const cols = columns(episodeHost);
+  episodeHost.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+  EPISODES.forEach((ep, idx) => {
+    const text = m.episodes[ep.id];
+    const maxW = Math.max(...ep.weeks.map((r) => r.w), 1);
     const { figure, canvas } = panelFigure(
-      m.items[series.key].short,
-      fill(m.panels.summaryMeta, { n: cells.length })
+      text.strip,
+      `${fmtSpan(ep.start, ep.end)} \xB7 ${observations(ep)}`,
+      text.banner
     );
-    host.append(figure);
-    const datasets = [
-      rangeDataset(series.key, m.panels.range, cells),
-      medianDataset(series.key, m.panels.median, cells),
-      peakDataset(series.key, m.panels.peak, cells)
-    ];
+    episodeHost.append(figure);
+    const datasets = SERIES2.map(
+      (s) => buildDataset(ep, idx, s.key, s.color, unbounded)
+    ).filter((d) => d !== null);
     const chart = track(
       new Chart(canvas, {
         type: "line",
         data: { datasets },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          animation: false,
-          interaction: { mode: "nearest", intersect: true, axis: "x" },
-          layout: { padding: { top: 6, right: 12, bottom: 0, left: 0 } },
-          scales: {
-            x: {
-              type: "linear",
-              min: -0.45,
-              max: EPISODES.length - 0.55,
-              grid: { display: false },
-              ticks: {
-                autoSkip: false,
-                maxRotation: 60,
-                minRotation: 60,
-                font: { size: 10 },
-                callback: (v) => {
-                  const n = Number(v);
-                  const i = Math.round(n);
-                  return Math.abs(n - i) < 1e-6 && EPISODES[i] ? m.episodes[EPISODES[i].id].short : "";
-                }
-              },
-              afterBuildTicks: (axis) => {
-                axis.ticks = EPISODES.map((_, i) => ({ value: i }));
-              }
-            },
-            y: {
-              type: "logarithmic",
-              min: lo,
-              max: hi,
-              title: {
-                display: panelIndex % cols === 0,
-                text: m.items[series.key].label,
-                color: THEME.label,
-                font: { size: 11 }
-              },
-              grid: { color: THEME.axisGrid, drawTicks: false },
-              ticks: {
-                autoSkip: false,
-                maxTicksLimit: 5,
-                padding: 6,
-                font: { size: 10 },
-                callback: (v) => {
-                  const n = Number(v);
-                  const dec = Math.abs(Math.log10(n) - Math.round(Math.log10(n))) < 1e-9;
-                  return dec ? compact().format(n) : "";
-                }
-              },
-              afterBuildTicks: (axis) => {
-                axis.ticks = decades(lo, hi).map((value2) => ({ value: value2 }));
-              }
-            }
-          },
-          plugins: {
-            legend: { display: false },
-            title: { display: false },
-            subtitle: { display: false },
-            tooltip: {
-              displayColors: true,
-              boxWidth: 8,
-              boxHeight: 8,
-              boxPadding: 4,
-              callbacks: {
-                title: (items) => {
-                  const p = items[0]?.raw;
-                  return p ? wrapTooltipLines(p.t, items[0], "title") : [];
-                },
-                label: (item) => {
-                  const p = item.raw;
-                  const name = item.dataset.label ?? "";
-                  const value2 = nf().format(Math.round(p.y));
-                  return wrapTooltipLines(
-                    name ? `${name}: ${value2}` : value2,
-                    item,
-                    "body"
-                  );
-                },
-                afterBody: (items) => {
-                  const first = items[0];
-                  if (!first) return [];
-                  const p = first.raw;
-                  const hovered = first.dataset.__stat;
-                  const lines = [];
-                  if (hovered !== "median" && p.n > 1)
-                    lines.push(
-                      `${m.panels.median}: ${nf().format(Math.round(p.median))}`
-                    );
-                  if (hovered !== "peak" && p.n > 1)
-                    lines.push(
-                      `${m.panels.peak}: ${nf().format(Math.round(p.max))}`
-                    );
-                  lines.push(
-                    `${m.panels.range}: ${nf().format(Math.round(p.min))}\u2013${nf().format(Math.round(p.max))}`
-                  );
-                  lines.push(
-                    p.n > 1 ? fill(m.panels.figureCount, { n: p.n }) : m.panels.singleFigure
-                  );
-                  return lines.map((l) => wrapTooltipLines(l, first, "body"));
-                }
-              }
-            }
-          },
-          onHover: (_e, els) => {
-            const d = els[0]?.dataset;
-            emphasiseStat(d?.__stat ?? null);
+        options: panelOptions(
+          "episode",
+          xScale(maxW),
+          yScale(yMin, yMax, idx % cols === 0),
+          (e, elements, host) => {
+            const hit = nearestByY(host, elements, e);
+            const d = hit ? host.data.datasets[hit.datasetIndex] : void 0;
+            emphasiseItem(d ? d.__item : null);
           }
-        },
-        plugins: [rangeBand]
+        ),
+        plugins: []
+        // no per-panel labels: the episode is the panel title
       })
     );
-    summaryPanels.push(chart);
-  }
-  legend(legendHost, "stats", [
-    {
-      text: m.panels.range,
-      color: alpha(RANGE_COLOR, 0.45),
-      on: () => emphasiseStat("range", true),
-      off: () => emphasiseStat(null, true),
-      hide: (hidden) => setStatHidden("range", hidden)
-    },
-    {
-      text: m.panels.median,
-      color: MEDIAN_COLOR,
-      on: () => emphasiseStat("median", true),
-      off: () => emphasiseStat(null, true),
-      hide: (hidden) => setStatHidden("median", hidden)
-    },
-    {
-      text: m.panels.peak,
-      color: PEAK_COLOR,
-      on: () => emphasiseStat("peak", true),
-      off: () => emphasiseStat(null, true),
-      hide: (hidden) => setStatHidden("peak", hidden)
-    }
-  ]);
-}
-
-// src/sections/kpis.ts
-var DAILY_SPECS = [
-  { copy: "protestersDaily", data: "turnout", unit: "count" },
-  { copy: "arrestsDaily", data: "arrests", unit: "count" },
-  { copy: "forcesDaily", data: "forcesInjured", unit: "count" },
-  { copy: "protestersInjuredDaily", data: "protesterInjured", unit: "count" },
-  { copy: "blockadesDaily", data: "blockades", unit: "count" },
-  { copy: "damagesDaily", data: "damagesCost", unit: "eurM" }
-];
-var WEEKLY_SPECS = [
-  { copy: "protestersWeekly", data: "turnout", unit: "count" },
-  { copy: "arrestsWeekly", data: "arrests", unit: "count" },
-  { copy: "forcesWeekly", data: "forcesInjured", unit: "count" },
-  { copy: "protestersInjuredWeekly", data: "protesterInjured", unit: "count" },
-  { copy: "blockadesWeekly", data: "blockades", unit: "count" }
-];
-var METRIC_KEYS = ["p", "a", "f", "i"];
-function meanMedian(values) {
-  if (!values.length) return null;
-  const sorted = [...values].sort((a, b) => a - b);
-  const n = sorted.length;
-  const mid = n >> 1;
-  let sum = 0;
-  for (const v of values) sum += v;
-  return {
-    mean: sum / n,
-    median: n % 2 === 1 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2
-  };
-}
-function bestRatio(obs, base) {
-  if (!(base > 0)) return null;
-  let best = null;
-  for (const o of obs) {
-    const pct = o.v / base;
-    if (!best || pct > best.pct) best = { obs: o, pct, base };
-  }
-  return best;
-}
-function bestValue(obs) {
-  let best = null;
-  for (const o of obs) if (!best || o.v > best.v) best = o;
-  return best;
-}
-function dailyRows(weekly) {
-  const specs = weekly ? WEEKLY_SPECS : DAILY_SPECS;
-  return specs.map((spec) => {
-    const pts = visiblePoints(spec.copy);
-    const obs = pts.map((p) => ({
-      v: p.v,
-      where: weekly ? fmtWeek(WEEKS[p.i].key, WEEKS[p.i].end) : fmtDate(DATES[p.i])
-    }));
-    const st = meanMedian(obs.map((o) => o.v));
-    const first = obs.length ? obs[0].v : 0;
-    return {
-      label: t().chart.series[spec.copy].label,
-      unit: spec.unit,
-      largest: bestValue(obs),
-      vsMean: st ? bestRatio(obs, st.mean) : null,
-      vsMedian: st ? bestRatio(obs, st.median) : null,
-      vsFirst: bestRatio(obs, first)
-    };
+    decoratePanel(chart, figure, text.strip);
+    canvas.addEventListener("mouseleave", () => emphasiseItem(null));
+    episodePanels.push(chart);
   });
-}
-function episodeRows(maxX) {
-  return METRIC_KEYS.map((key) => {
-    let largest = null;
-    let vsMean = null;
-    let vsMedian = null;
-    let vsFirst = null;
-    for (const ep of EPISODES) {
-      const pts = seriesData(ep, key) ?? [];
-      const kept = pts.filter((p) => p.x <= maxX);
-      if (!kept.length) continue;
-      const obs = kept.map((p) => ({
-        v: p.y,
-        where: `${t().episodes[ep.id].short} \xB7 ${p.t}`
-      }));
-      const st = meanMedian(obs.map((o) => o.v));
-      const first = kept[0].base;
-      const l = bestValue(obs);
-      if (l && (!largest || l.v > largest.v)) largest = l;
-      const m = st ? bestRatio(obs, st.mean) : null;
-      if (m && (!vsMean || m.pct > vsMean.pct)) vsMean = m;
-      const md = st ? bestRatio(obs, st.median) : null;
-      if (md && (!vsMedian || md.pct > vsMedian.pct)) vsMedian = md;
-      const f = bestRatio(obs, first);
-      if (f && (!vsFirst || f.pct > vsFirst.pct)) vsFirst = f;
-    }
-    return {
-      label: t().items[key].label,
-      unit: "count",
-      largest,
-      vsMean,
-      vsMedian,
-      vsFirst
-    };
+  const itemCols = columns(itemHost);
+  itemHost.style.gridTemplateColumns = `repeat(${itemCols}, minmax(0, 1fr))`;
+  SERIES2.forEach((series) => {
+    const [rawLo, rawHi] = rawExtent(EPISODES, [series.key], ENFORCEMENT_LAST);
+    const [lo, hi] = logBounds(rawLo, rawHi);
+    const range = fill(m.panels.valueRange, {
+      lo: compact().format(rawLo),
+      hi: compact().format(rawHi)
+    });
+    const { figure, canvas } = panelFigure(
+      m.items[series.key].short,
+      fill(m.panels.itemMeta, { range, n: ENFORCEMENT_LAST })
+    );
+    itemHost.append(figure);
+    const datasets = EPISODES.map(
+      (ep, i) => buildDataset(ep, i, series.key, RAMP2[i], ENFORCEMENT_LAST)
+    ).filter((d) => d !== null);
+    const chart = track(
+      new Chart(canvas, {
+        type: "line",
+        data: { datasets },
+        options: panelOptions(
+          "item",
+          xScale(ENFORCEMENT_LAST),
+          yScale(lo, hi, true)
+        ),
+        plugins: []
+      })
+    );
+    decoratePanel(chart, figure, m.items[series.key].short);
+    canvas.addEventListener("mouseleave", () => emphasiseEvent(null));
+    canvas.addEventListener("mousemove", (ev) => {
+      const pts = chart.getElementsAtEventForMode(
+        ev,
+        WEEK_MODE,
+        { intersect: false },
+        true
+      );
+      const hit = pts.length ? nearestByY(chart, pts, ev) : void 0;
+      const d = hit ? chart.data.datasets[hit.datasetIndex] : void 0;
+      emphasiseEvent(d ? d.__ep : null);
+    });
+    itemPanels.push({ chart, item: series.key });
   });
-}
-function fmtValue(v, unit) {
-  return unit === "eurM" ? fill(t().kpi.eurM, { v: eurM().format(v) }) : compact().format(v);
-}
-function fmtPct2(ratio) {
-  const x = ratio * 100;
-  if (x >= 1e3) return `${nf2().format(Math.round(x))}%`;
-  if (x >= 10) return `${Math.round(x)}%`;
-  return `${Number(x.toFixed(1))}%`;
-}
-function kpiRow(label, num, sub) {
-  const row = el("div", "kpi-row");
-  row.append(el("dt", "kpi-label", label));
-  const dd = el("dd");
-  dd.append(el("span", "kpi-num", num), el("span", "kpi-sub", sub));
-  row.append(dd);
-  return row;
-}
-function ratioCell(r, label, template, unit) {
-  if (!r) return kpiRow(label, "\u2014", t().kpi.none);
-  const against = fill(template, {
-    value: fmtValue(r.obs.v, unit),
-    base: fmtValue(r.base, unit)
-  });
-  return kpiRow(label, fmtPct2(r.pct), `${r.obs.where} \xB7 ${against}`);
-}
-function card(row, largestLabel) {
-  const k = t().kpi;
-  const box = el("div", "kpi-card");
-  box.append(el("h5", "kpi-title", row.label));
-  const list = el("dl", "kpi-list");
-  list.append(
-    row.largest ? kpiRow(
-      largestLabel,
-      fmtValue(row.largest.v, row.unit),
-      row.largest.where
-    ) : kpiRow(largestLabel, "\u2014", k.none),
-    ratioCell(row.vsMean, k.vsMean, k.againstMean, row.unit),
-    ratioCell(row.vsMedian, k.vsMedian, k.againstMedian, row.unit),
-    ratioCell(row.vsFirst, k.vsFirst, k.againstFirst, row.unit)
+  legend(
+    itemLegend,
+    "items",
+    SERIES2.map((s) => ({
+      text: m.items[s.key].label,
+      color: s.color,
+      on: () => emphasiseItem(s.key),
+      off: () => emphasiseItem(null),
+      hide: (hidden) => toggleDatasets(episodeHost, "__item", s.key, hidden)
+    }))
   );
-  box.append(list);
-  return box;
-}
-function block(rows, largestLabel, note2) {
-  const frag = document.createDocumentFragment();
-  frag.append(el("h4", "kpi-heading", t().kpi.heading));
-  const grid = el("div", "kpi-grid");
-  for (const row of rows) grid.append(card(row, largestLabel));
-  frag.append(grid);
-  frag.append(el("p", "kpi-note", note2));
-  return frag;
-}
-function mountKpis() {
-  const k = t().kpi;
-  const a = byId("kpi-a");
-  if (a) a.replaceChildren(block(dailyRows(false), k.largestDay, k.noteDaily));
-  const b = byId("kpi-b");
-  if (b) {
-    b.replaceChildren(block(dailyRows(true), k.largestWeek, k.noteWeekly));
-  }
-  const c = byId("kpi-c");
-  if (c) {
-    c.replaceChildren(
-      block(
-        episodeRows(Number.POSITIVE_INFINITY),
-        k.largestFigure,
-        k.noteEpisodes
-      )
-    );
-  }
-  const d = byId("kpi-d");
-  if (d) {
-    d.replaceChildren(
-      block(
-        episodeRows(ENFORCEMENT_LAST),
-        k.largestFigure,
-        k.noteEpisodesCapped
-      )
-    );
-  }
+  legend(
+    eventLegend,
+    "events",
+    EPISODES.map((ep, i) => ({
+      text: m.episodes[ep.id].short,
+      color: RAMP2[i],
+      on: () => emphasiseEvent(i),
+      off: () => emphasiseEvent(null),
+      hide: (hidden) => toggleDatasets(itemHost, "__ep", i, hidden)
+    }))
+  );
+  wireLegendSync(episodeHost, "items", (d) => {
+    const k = SERIES2.findIndex((s) => s.key === d.__item);
+    return k < 0 ? null : k;
+  });
+  wireLegendSync(
+    itemHost,
+    "events",
+    (d) => d.__ep >= 0 && d.__ep < EPISODES.length ? d.__ep : null
+  );
 }
 
 // src/core/lang.ts
@@ -17351,6 +16860,267 @@ function mountLangSwitch(host = document.querySelector(
     host.removeEventListener("keydown", onKey);
     delete host.dataset.bound;
   };
+}
+
+// src/core/theme.ts
+var KEY = "fpc-theme";
+var QUERY = "(prefers-color-scheme: dark)";
+var TOGGLE = "[data-theme-toggle]";
+var root = document.documentElement;
+var media = () => typeof window.matchMedia === "function" ? window.matchMedia(QUERY) : null;
+function systemTheme() {
+  const q = media();
+  return q ? q.matches ? "dark" : "light" : null;
+}
+function store(theme) {
+  try {
+    if (theme) localStorage.setItem(KEY, theme);
+    else localStorage.removeItem(KEY);
+  } catch {
+  }
+}
+function currentTheme() {
+  const explicit = root.dataset.theme;
+  if (explicit === "light" || explicit === "dark") return explicit;
+  return systemTheme() ?? "light";
+}
+function repaint() {
+  refreshTheme();
+  scheduleRender();
+}
+function syncThemeToggle(host = document.querySelector(TOGGLE)) {
+  if (!host) return;
+  host.setAttribute("aria-pressed", String(currentTheme() === "dark"));
+  host.dataset.theme = currentTheme();
+}
+function setTheme(theme) {
+  if (theme === systemTheme()) {
+    store(null);
+    delete root.dataset.theme;
+  } else {
+    store(theme);
+    root.dataset.theme = theme;
+  }
+  syncThemeToggle();
+  repaint();
+}
+function mountThemeToggle(host = document.querySelector(TOGGLE)) {
+  if (!host || host.dataset.bound === "true") return () => {
+  };
+  const onClick = () => {
+    setTheme(currentTheme() === "dark" ? "light" : "dark");
+  };
+  host.addEventListener("click", onClick);
+  host.dataset.bound = "true";
+  syncThemeToggle(host);
+  return () => {
+    host.removeEventListener("click", onClick);
+    delete host.dataset.bound;
+  };
+}
+function initTheme() {
+  syncThemeToggle();
+  const unbind = mountThemeToggle();
+  const q = media();
+  const onSystemChange = () => {
+    if (root.dataset.theme) return;
+    syncThemeToggle();
+    repaint();
+  };
+  q?.addEventListener("change", onSystemChange);
+  return () => {
+    unbind();
+    q?.removeEventListener("change", onSystemChange);
+  };
+}
+
+// src/sections/casualties.ts
+function cellText(c) {
+  switch (c.s) {
+    case "n":
+      return {
+        text: `${c.d ? "\u2248 " : ""}${nf().format(c.v)}`,
+        cls: c.d ? "cas-num cas-derived" : "cas-num"
+      };
+    case "r":
+      return {
+        text: `\u2248 ${nf().format(c.lo)}\u2013${nf().format(c.hi)}`,
+        cls: "cas-num cas-derived"
+      };
+    case "c":
+      return {
+        text: fill(t().casualties.casesCount, { n: c.n }),
+        cls: "cas-num cas-cases"
+      };
+    default:
+      return { text: t().casualties.why[c.why], cls: "cas-absent" };
+  }
+}
+function cell(c, extra = "") {
+  const { text, cls } = cellText(c);
+  return el("td", extra ? `${cls} ${extra}` : cls, text);
+}
+function share2(light, total) {
+  if (light.s !== "n" || total.s !== "n" || total.v <= 0) return null;
+  return light.v / total.v;
+}
+function bar(p) {
+  const wrap = el("span", "cas-bar");
+  const run = el("span", "cas-bar-fill");
+  run.style.width = `${Math.max(0, Math.min(1, p)) * 100}%`;
+  wrap.append(run);
+  return wrap;
+}
+function severityTable(rows, caption) {
+  const c = t().casualties;
+  const table = el("table", "cas-table");
+  table.append(el("caption", "cas-caption", caption));
+  const thead = el("thead");
+  const head = el("tr");
+  const labels = [
+    c.colScope,
+    c.colTotal,
+    c.colSerious,
+    c.colLight,
+    c.colLightShare,
+    c.colOther
+  ];
+  labels.forEach((label, i) => {
+    const th = el("th", i === 0 ? "cas-scope-head" : "cas-num-head", label);
+    th.scope = "col";
+    head.append(th);
+  });
+  thead.append(head);
+  table.append(thead);
+  const tbody = el("tbody");
+  for (const row of rows) {
+    const tr = el("tr");
+    const th = el("th", "cas-scope", c.scope[row.id] ?? row.id);
+    th.scope = "row";
+    tr.append(th);
+    tr.append(cell(row.total));
+    tr.append(cell(row.serious));
+    tr.append(cell(row.light));
+    const p = share2(row.light, row.total);
+    const td = el("td", "cas-share");
+    if (p === null) {
+      td.append(el("span", "cas-absent", "\u2014"));
+    } else {
+      td.append(el("span", "cas-pct", `${(p * 100).toFixed(1)}%`), bar(p));
+    }
+    tr.append(td);
+    tr.append(cell(row.other));
+    tbody.append(tr);
+  }
+  table.append(tbody);
+  return table;
+}
+function headline() {
+  const c = t().casualties;
+  const top = SEVERITY_LEVELS[0];
+  const p = share2(top.light, top.total);
+  const wrap = el("div", "cas-headline");
+  const left = el("div", "cas-head-stat");
+  left.append(
+    el("span", "cas-head-num", p === null ? "\u2014" : `${(p * 100).toFixed(1)}%`),
+    el(
+      "span",
+      "cas-head-label",
+      p === null || top.light.s !== "n" || top.total.s !== "n" ? c.headLightNote : fill(c.headLight, {
+        light: nf().format(top.light.v),
+        total: nf().format(top.total.v)
+      })
+    )
+  );
+  const right = el("div", "cas-head-stat cas-head-missing");
+  right.append(
+    el("span", "cas-head-num", "\u2014"),
+    el("span", "cas-head-label", c.headMissingNote)
+  );
+  wrap.append(left, right);
+  return wrap;
+}
+function causeTable(rows, caption) {
+  const c = t().casualties;
+  const table = el("table", "cas-table cas-cause");
+  table.append(el("caption", "cas-caption", caption));
+  const thead = el("thead");
+  const head = el("tr");
+  [c.colSide, c.colCircumstance, c.colCount, c.colCases].forEach((label, i) => {
+    const th = el("th", i < 2 ? "cas-scope-head" : "cas-num-head", label);
+    th.scope = "col";
+    head.append(th);
+  });
+  thead.append(head);
+  table.append(thead);
+  const tbody = el("tbody");
+  for (const row of rows) {
+    const tr = el("tr", row.reference ? "cas-reference" : "");
+    const th = el("th", "cas-scope", c.side[row.side]);
+    th.scope = "row";
+    tr.append(th);
+    tr.append(el("td", "cas-kind", c.kind[row.kind]));
+    tr.append(cell(row.count));
+    const td = el("td", "cas-cases-cell");
+    if (!row.cases.length) {
+      td.append(el("span", "cas-absent", t().casualties.noCases));
+    } else {
+      const list = el("ul", "cas-case-list");
+      for (const key of row.cases) list.append(el("li", "", c.cases[key]));
+      td.append(list);
+    }
+    tr.append(td);
+    tbody.append(tr);
+  }
+  table.append(tbody);
+  return table;
+}
+function resolutionTable() {
+  const c = t().casualties;
+  const table = el("table", "cas-table cas-resolution");
+  table.append(el("caption", "cas-caption", c.capResolution));
+  const thead = el("thead");
+  const head = el("tr");
+  [c.colQuestion, c.colWindow, c.colWeekly].forEach((label, i) => {
+    const th = el("th", i === 2 ? "cas-num-head" : "cas-scope-head", label);
+    th.scope = "col";
+    head.append(th);
+  });
+  thead.append(head);
+  table.append(thead);
+  const tbody = el("tbody");
+  for (const row of c.resolution) {
+    const tr = el("tr");
+    const th = el("th", "cas-scope", row.label);
+    th.scope = "row";
+    tr.append(th, el("td", "", row.window));
+    tr.append(el("td", "cas-num", row.weekly));
+    tbody.append(tr);
+  }
+  table.append(tbody);
+  return table;
+}
+function mountCasualties() {
+  const c = t().casualties;
+  const a = byId("cas-a");
+  if (a) {
+    a.replaceChildren(
+      el("h4", "cas-title", c.headlineTitle),
+      headline(),
+      severityTable(SEVERITY_LEVELS, c.capLevels),
+      causeTable(CASES, c.capCases),
+      el("p", "cas-note", c.noteLevels)
+    );
+  }
+  const b = byId("cas-b");
+  if (b) {
+    b.replaceChildren(
+      el("h4", "cas-title", c.weeklyTitle),
+      severityTable(SEVERITY_WEEKS, c.capWeeks),
+      resolutionTable(),
+      el("p", "cas-note", c.noteWeeks)
+    );
+  }
 }
 
 // src/sections/about/about.ts
@@ -17800,7 +17570,7 @@ function inline(run) {
   if (/^https?:/i.test(run.href)) a.target = "_blank";
   return a;
 }
-function block2(b) {
+function block(b) {
   if (b.kind === "p") {
     const p = document.createElement("p");
     p.append(...b.runs.map(inline));
@@ -17840,7 +17610,7 @@ function group(sub, open) {
   summary.append(title);
   const body = document.createElement("div");
   body.className = "about-body";
-  for (const b of sub.blocks) body.append(block2(b));
+  for (const b of sub.blocks) body.append(block(b));
   details.append(summary, body);
   return details;
 }
@@ -17909,6 +17679,186 @@ function renderChrome() {
   note("note-c", m.sections.c.note ?? "");
   note("note-d", m.sections.d.note ?? "");
   note("note-e", m.sections.e.note ?? "");
+}
+
+// src/sections/kpis.ts
+var DAILY_SPECS = [
+  { copy: "protestersDaily", data: "turnout", unit: "count" },
+  { copy: "arrestsDaily", data: "arrests", unit: "count" },
+  { copy: "forcesDaily", data: "forcesInjured", unit: "count" },
+  { copy: "protestersInjuredDaily", data: "protesterInjured", unit: "count" },
+  { copy: "blockadesDaily", data: "blockades", unit: "count" },
+  { copy: "damagesDaily", data: "damagesCost", unit: "eurM" }
+];
+var WEEKLY_SPECS = [
+  { copy: "protestersWeekly", data: "turnout", unit: "count" },
+  { copy: "arrestsWeekly", data: "arrests", unit: "count" },
+  { copy: "forcesWeekly", data: "forcesInjured", unit: "count" },
+  { copy: "protestersInjuredWeekly", data: "protesterInjured", unit: "count" },
+  { copy: "blockadesWeekly", data: "blockades", unit: "count" }
+];
+var METRIC_KEYS = ["p", "a", "f", "i"];
+function meanMedian(values) {
+  if (!values.length) return null;
+  const sorted = [...values].sort((a, b) => a - b);
+  const n = sorted.length;
+  const mid = n >> 1;
+  let sum = 0;
+  for (const v of values) sum += v;
+  return {
+    mean: sum / n,
+    median: n % 2 === 1 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2
+  };
+}
+function bestRatio(obs, base) {
+  if (!(base > 0)) return null;
+  let best = null;
+  for (const o of obs) {
+    const pct = o.v / base;
+    if (!best || pct > best.pct) best = { obs: o, pct, base };
+  }
+  return best;
+}
+function bestValue(obs) {
+  let best = null;
+  for (const o of obs) if (!best || o.v > best.v) best = o;
+  return best;
+}
+function dailyRows(weekly) {
+  const specs = weekly ? WEEKLY_SPECS : DAILY_SPECS;
+  return specs.map((spec) => {
+    const pts = visiblePoints(spec.copy);
+    const obs = pts.map((p) => ({
+      v: p.v,
+      where: weekly ? fmtWeek(WEEKS[p.i].key, WEEKS[p.i].end) : fmtDate(DATES[p.i])
+    }));
+    const st = meanMedian(obs.map((o) => o.v));
+    const first = obs.length ? obs[0].v : 0;
+    return {
+      label: t().chart.series[spec.copy].label,
+      unit: spec.unit,
+      largest: bestValue(obs),
+      vsMean: st ? bestRatio(obs, st.mean) : null,
+      vsMedian: st ? bestRatio(obs, st.median) : null,
+      vsFirst: bestRatio(obs, first)
+    };
+  });
+}
+function episodeRows(maxX) {
+  return METRIC_KEYS.map((key) => {
+    let largest = null;
+    let vsMean = null;
+    let vsMedian = null;
+    let vsFirst = null;
+    for (const ep of EPISODES) {
+      const pts = seriesData(ep, key) ?? [];
+      const kept = pts.filter((p) => p.x <= maxX);
+      if (!kept.length) continue;
+      const obs = kept.map((p) => ({
+        v: p.y,
+        where: `${t().episodes[ep.id].short} \xB7 ${p.t}`
+      }));
+      const st = meanMedian(obs.map((o) => o.v));
+      const first = kept[0].base;
+      const l = bestValue(obs);
+      if (l && (!largest || l.v > largest.v)) largest = l;
+      const m = st ? bestRatio(obs, st.mean) : null;
+      if (m && (!vsMean || m.pct > vsMean.pct)) vsMean = m;
+      const md = st ? bestRatio(obs, st.median) : null;
+      if (md && (!vsMedian || md.pct > vsMedian.pct)) vsMedian = md;
+      const f = bestRatio(obs, first);
+      if (f && (!vsFirst || f.pct > vsFirst.pct)) vsFirst = f;
+    }
+    return {
+      label: t().items[key].label,
+      unit: "count",
+      largest,
+      vsMean,
+      vsMedian,
+      vsFirst
+    };
+  });
+}
+function fmtValue(v, unit) {
+  return unit === "eurM" ? fill(t().kpi.eurM, { v: eurM().format(v) }) : compact().format(v);
+}
+function fmtPct2(ratio) {
+  const x = ratio * 100;
+  if (x >= 1e3) return `${nf().format(Math.round(x))}%`;
+  if (x >= 10) return `${Math.round(x)}%`;
+  return `${Number(x.toFixed(1))}%`;
+}
+function kpiRow(label, num, sub) {
+  const row = el("div", "kpi-row");
+  row.append(el("dt", "kpi-label", label));
+  const dd = el("dd");
+  dd.append(el("span", "kpi-num", num), el("span", "kpi-sub", sub));
+  row.append(dd);
+  return row;
+}
+function ratioCell(r, label, template, unit) {
+  if (!r) return kpiRow(label, "\u2014", t().kpi.none);
+  const against = fill(template, {
+    value: fmtValue(r.obs.v, unit),
+    base: fmtValue(r.base, unit)
+  });
+  return kpiRow(label, fmtPct2(r.pct), `${r.obs.where} \xB7 ${against}`);
+}
+function card(row, largestLabel) {
+  const k = t().kpi;
+  const box = el("div", "kpi-card");
+  box.append(el("h5", "kpi-title", row.label));
+  const list = el("dl", "kpi-list");
+  list.append(
+    row.largest ? kpiRow(
+      largestLabel,
+      fmtValue(row.largest.v, row.unit),
+      row.largest.where
+    ) : kpiRow(largestLabel, "\u2014", k.none),
+    ratioCell(row.vsMean, k.vsMean, k.againstMean, row.unit),
+    ratioCell(row.vsMedian, k.vsMedian, k.againstMedian, row.unit),
+    ratioCell(row.vsFirst, k.vsFirst, k.againstFirst, row.unit)
+  );
+  box.append(list);
+  return box;
+}
+function block2(rows, largestLabel, note2) {
+  const frag = document.createDocumentFragment();
+  frag.append(el("h4", "kpi-heading", t().kpi.heading));
+  const grid = el("div", "kpi-grid");
+  for (const row of rows) grid.append(card(row, largestLabel));
+  frag.append(grid);
+  frag.append(el("p", "kpi-note", note2));
+  return frag;
+}
+function mountKpis() {
+  const k = t().kpi;
+  const a = byId("kpi-a");
+  if (a) a.replaceChildren(block2(dailyRows(false), k.largestDay, k.noteDaily));
+  const b = byId("kpi-b");
+  if (b) {
+    b.replaceChildren(block2(dailyRows(true), k.largestWeek, k.noteWeekly));
+  }
+  const c = byId("kpi-c");
+  if (c) {
+    c.replaceChildren(
+      block2(
+        episodeRows(Number.POSITIVE_INFINITY),
+        k.largestFigure,
+        k.noteEpisodes
+      )
+    );
+  }
+  const d = byId("kpi-d");
+  if (d) {
+    d.replaceChildren(
+      block2(
+        episodeRows(ENFORCEMENT_LAST),
+        k.largestFigure,
+        k.noteEpisodesCapped
+      )
+    );
+  }
 }
 
 // src/sections/percapita/percapita.ts
@@ -18009,7 +17959,7 @@ var pctBand = (lo, hi) => {
   const a = pctText(lo);
   return Math.abs(hi - lo) < 1e-9 ? a : `${a} \u2013 ${pctText(hi)}`;
 };
-var countText = (v) => v === null ? "\u2014" : nf2().format(Math.round(v));
+var countText = (v) => v === null ? "\u2014" : nf().format(Math.round(v));
 var countBand = (r) => {
   if (r.lo === null) return "\u2014";
   const hi = r.hi ?? r.lo;
@@ -18397,7 +18347,7 @@ function sectionA(host) {
     },
     L2(COPY.titleA),
     fill(L2(COPY.noteA), {
-      pop: nf2().format(denominator(pop) ?? 0),
+      pop: nf().format(denominator(pop) ?? 0),
       min: floorLabel(rows)
     }),
     L2(COPY.colDate)
@@ -18418,7 +18368,7 @@ function sectionB(host) {
     },
     L2(COPY.titleB),
     fill(L2(COPY.noteB), {
-      pop: nf2().format(denominator(pop) ?? 0),
+      pop: nf().format(denominator(pop) ?? 0),
       min: floorLabel(rows)
     }),
     L2(COPY.colWeek)
@@ -18437,7 +18387,7 @@ function sectionC(host) {
     const pop = population(popKeyFor(ep.id));
     const base = denominator(pop);
     const caption = base === null ? L2(COPY.noBase) : fill(L2(COPY.base), {
-      n: `${nf2().format(base)}${basisOf(pop) === "metro" ? ` \xB7 ${L2(COPY.metro)}` : ""}`
+      n: `${nf().format(base)}${basisOf(pop) === "metro" ? ` \xB7 ${L2(COPY.metro)}` : ""}`
     });
     const panel = el("div", "pc-panel");
     render(
@@ -18489,78 +18439,6 @@ function mountPerCapita() {
       console.error("[percapita C]", e);
     }
   }
-}
-
-// src/core/theme.ts
-var KEY = "fpc-theme";
-var QUERY = "(prefers-color-scheme: dark)";
-var TOGGLE = "[data-theme-toggle]";
-var root = document.documentElement;
-var media = () => typeof window.matchMedia === "function" ? window.matchMedia(QUERY) : null;
-function systemTheme() {
-  const q = media();
-  return q ? q.matches ? "dark" : "light" : null;
-}
-function store(theme) {
-  try {
-    if (theme) localStorage.setItem(KEY, theme);
-    else localStorage.removeItem(KEY);
-  } catch {
-  }
-}
-function currentTheme() {
-  const explicit = root.dataset.theme;
-  if (explicit === "light" || explicit === "dark") return explicit;
-  return systemTheme() ?? "light";
-}
-function repaint() {
-  refreshTheme();
-  scheduleRender();
-}
-function syncThemeToggle(host = document.querySelector(TOGGLE)) {
-  if (!host) return;
-  host.setAttribute("aria-pressed", String(currentTheme() === "dark"));
-  host.dataset.theme = currentTheme();
-}
-function setTheme(theme) {
-  if (theme === systemTheme()) {
-    store(null);
-    delete root.dataset.theme;
-  } else {
-    store(theme);
-    root.dataset.theme = theme;
-  }
-  syncThemeToggle();
-  repaint();
-}
-function mountThemeToggle(host = document.querySelector(TOGGLE)) {
-  if (!host || host.dataset.bound === "true") return () => {
-  };
-  const onClick = () => {
-    setTheme(currentTheme() === "dark" ? "light" : "dark");
-  };
-  host.addEventListener("click", onClick);
-  host.dataset.bound = "true";
-  syncThemeToggle(host);
-  return () => {
-    host.removeEventListener("click", onClick);
-    delete host.dataset.bound;
-  };
-}
-function initTheme() {
-  syncThemeToggle();
-  const unbind = mountThemeToggle();
-  const q = media();
-  const onSystemChange = () => {
-    if (root.dataset.theme) return;
-    syncThemeToggle();
-    repaint();
-  };
-  q?.addEventListener("change", onSystemChange);
-  return () => {
-    unbind();
-    q?.removeEventListener("change", onSystemChange);
-  };
 }
 
 // src/data/sources/record.ts
@@ -20840,185 +20718,347 @@ function renderSources(host = document.getElementById("sources")) {
   host.replaceChildren(...kept, box);
 }
 
-// src/charts/trellis/index.ts
-var episodePanels = [];
-var itemPanels = [];
-var activeItem = null;
-var activeEvent = null;
-function restyle(d, on, bold = false) {
-  const c = on ? d.__color : alpha(d.__color, DIM);
-  d.borderColor = c;
-  d.backgroundColor = c;
-  d.pointBorderColor = c;
-  d.borderWidth = bold && on ? 2.75 : 1.75;
+// src/charts/plugins/clip.ts
+function clipToArea(ctx, area) {
+  ctx.beginPath();
+  ctx.rect(area.left, area.top, area.width, area.height);
+  ctx.clip();
 }
-function restylePanels(charts, keep, bold = false) {
-  for (const chart of charts) {
-    for (const d of datasetsOf(chart)) restyle(d, keep(d), bold);
+
+// src/sections/summary.ts
+var MEDIAN_COLOR = "#334155";
+var PEAK_COLOR = "#b45309";
+var RANGE_COLOR = "#64748b";
+var summaryPanels = [];
+var activeStat = null;
+function cellOf(ep, i, key) {
+  const pts = seriesData(ep, key);
+  if (!pts) return null;
+  const st = statsOf(pts);
+  if (!st) return null;
+  if (!(st.low > 0)) return null;
+  return {
+    x: i,
+    t: t().episodes[ep.id].short,
+    n: st.count,
+    min: st.low,
+    median: st.median,
+    max: st.high
+  };
+}
+function statPt(c, which) {
+  const y = which === "median" ? c.median : c.max;
+  return {
+    x: c.x,
+    y,
+    low: c.min,
+    high: c.max,
+    flag: "n",
+    base: c.median,
+    t: c.t,
+    n: c.n,
+    min: c.min,
+    median: c.median,
+    max: c.max
+  };
+}
+function medianDataset(key, label, cells) {
+  return {
+    type: "line",
+    label,
+    data: cells.map((c) => statPt(c, "median")),
+    showLine: false,
+    borderColor: MEDIAN_COLOR,
+    backgroundColor: MEDIAN_COLOR,
+    pointBackgroundColor: MEDIAN_COLOR,
+    pointBorderColor: MEDIAN_COLOR,
+    pointBorderWidth: 1.5,
+    pointRadius: 5,
+    pointHoverRadius: 7,
+    pointHitRadius: 12,
+    pointStyle: "circle",
+    __item: key,
+    __ep: -1,
+    __color: MEDIAN_COLOR,
+    __stat: "median"
+  };
+}
+function peakDataset(key, label, cells) {
+  return {
+    type: "line",
+    label,
+    data: cells.map((c) => statPt(c, "peak")),
+    showLine: false,
+    borderColor: PEAK_COLOR,
+    backgroundColor: PEAK_COLOR,
+    pointBackgroundColor: PEAK_COLOR,
+    pointBorderColor: PEAK_COLOR,
+    pointBorderWidth: 1.5,
+    pointRadius: cells.map((c) => c.n < 2 ? 0 : 6),
+    pointHoverRadius: cells.map((c) => c.n < 2 ? 0 : 8),
+    pointHitRadius: cells.map((c) => c.n < 2 ? 0 : 12),
+    pointStyle: "triangle",
+    __item: key,
+    __ep: -1,
+    __color: PEAK_COLOR,
+    __stat: "peak"
+  };
+}
+function rangeDataset(key, label, cells) {
+  return {
+    type: "line",
+    label,
+    data: cells.map((c) => statPt(c, "median")),
+    showLine: false,
+    borderColor: RANGE_COLOR,
+    backgroundColor: alpha2(RANGE_COLOR, 0.2),
+    pointRadius: 0,
+    pointHoverRadius: 0,
+    pointHitRadius: 0,
+    __item: key,
+    __ep: -1,
+    __color: RANGE_COLOR,
+    __stat: "range",
+    __bands: cells.map((c) => [c.min, c.max])
+  };
+}
+var rangeBand = {
+  id: "rangeBand",
+  beforeDatasetsDraw(chart) {
+    const idx = chart.data.datasets.findIndex(
+      (d) => d.__bands !== void 0
+    );
+    if (idx < 0) return;
+    const ds = chart.data.datasets[idx];
+    const meta = chart.getDatasetMeta(idx);
+    if (meta.hidden) return;
+    const scale = chart.scales.y;
+    if (!scale) return;
+    const { ctx, chartArea } = chart;
+    const pts = meta.data;
+    const width = 9;
+    ctx.save();
+    clipToArea(ctx, chartArea);
+    ctx.fillStyle = ds.backgroundColor;
+    for (let j = 0; j < pts.length; j++) {
+      const band = ds.__bands[j];
+      const p = pts[j];
+      if (!band || p.skip) continue;
+      const yHi = scale.getPixelForValue(band[1]);
+      const yLo = scale.getPixelForValue(band[0]);
+      ctx.fillRect(p.x - width / 2, yHi, width, Math.max(yLo - yHi, 2));
+    }
+    ctx.restore();
+  }
+};
+function emphasiseStat(stat, force = false) {
+  if (!force && stat === activeStat) return;
+  activeStat = stat;
+  for (const chart of summaryPanels) {
+    for (const d of datasetsOf(chart)) {
+      const s = d.__stat;
+      if (!s) continue;
+      const on = stat === null || s === stat;
+      if (s === "range") {
+        d.backgroundColor = alpha2(d.__color, on ? 0.2 : 0.05);
+      } else {
+        const c = on ? d.__color : alpha2(d.__color, DIM);
+        d.borderColor = c;
+        d.pointBorderColor = c;
+        d.backgroundColor = c;
+        d.pointBackgroundColor = c;
+      }
+    }
     chart.update("none");
   }
 }
-function emphasiseItem(key) {
-  if (key === activeItem) return;
-  activeItem = key;
-  restylePanels(episodePanels, (d) => key === null || d.__item === key, true);
-  for (const { chart, item } of itemPanels) {
-    const host = chart.canvas.parentElement;
-    if (host)
-      host.style.opacity = key === null || item === key ? "1" : String(DIM);
+var statHidden = /* @__PURE__ */ new Map();
+function applyStatVisibility() {
+  for (const chart of summaryPanels) {
+    datasetsOf(chart).forEach((d, i) => {
+      const s = d.__stat;
+      chart.setDatasetVisibility(i, !(s && statHidden.get(s)));
+    });
+    chart.update("none");
   }
 }
-function emphasiseEvent(index) {
-  if (index === activeEvent) return;
-  activeEvent = index;
-  restylePanels(
-    itemPanels.map((p) => p.chart),
-    (d) => index === null || d.__ep === index
-  );
+function setStatHidden(stat, hidden) {
+  statHidden.set(stat, hidden);
+  applyStatVisibility();
 }
-function mountCrossEpisode() {
-  const episodeHost = document.getElementById("trellis-episodes");
-  const itemHost = document.getElementById("trellis-items");
-  const itemLegend = document.getElementById("legend-items");
-  const eventLegend = document.getElementById("legend-events");
-  if (!episodeHost || !itemHost || !itemLegend || !eventLegend) return;
-  episodePanels.length = 0;
-  itemPanels.length = 0;
-  activeItem = null;
-  activeEvent = null;
-  resetSeriesCache();
-  episodeHost.replaceChildren();
-  itemHost.replaceChildren();
-  itemLegend.replaceChildren();
-  eventLegend.replaceChildren();
+function mountSummary() {
+  const host = document.getElementById("summary");
+  const legendHost = document.getElementById("legend-summary");
+  if (!host || !legendHost) return;
+  summaryPanels.length = 0;
+  activeStat = null;
+  host.replaceChildren();
+  legendHost.replaceChildren();
   const m = t();
-  const unbounded = Number.POSITIVE_INFINITY;
-  const [yMin, yMax] = logBounds(...rawExtent(EPISODES, METRICS, unbounded));
-  const cols = columns(episodeHost);
-  episodeHost.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
-  EPISODES.forEach((ep, idx) => {
-    const text = m.episodes[ep.id];
-    const maxW = Math.max(...ep.weeks.map((r) => r.w), 1);
-    const { figure, canvas } = panelFigure(
-      text.strip,
-      `${fmtSpan(ep.start, ep.end)} \xB7 ${observations(ep)}`,
-      text.banner
-    );
-    episodeHost.append(figure);
-    const datasets = SERIES2.map(
-      (s) => buildDataset(ep, idx, s.key, s.color, unbounded)
-    ).filter((d) => d !== null);
-    const chart = track(
-      new Chart(canvas, {
-        type: "line",
-        data: { datasets },
-        options: panelOptions(
-          "episode",
-          xScale(maxW),
-          yScale(yMin, yMax, idx % cols === 0),
-          (e, elements, host) => {
-            const hit = nearestByY(host, elements, e);
-            const d = hit ? host.data.datasets[hit.datasetIndex] : void 0;
-            emphasiseItem(d ? d.__item : null);
-          }
-        ),
-        plugins: []
-        // no per-panel labels: the episode is the panel title
-      })
-    );
-    decoratePanel(chart, figure, text.strip);
-    canvas.addEventListener("mouseleave", () => emphasiseItem(null));
-    episodePanels.push(chart);
-  });
-  const itemCols = columns(itemHost);
-  itemHost.style.gridTemplateColumns = `repeat(${itemCols}, minmax(0, 1fr))`;
-  SERIES2.forEach((series) => {
-    const [rawLo, rawHi] = rawExtent(EPISODES, [series.key], ENFORCEMENT_LAST);
-    const [lo, hi] = logBounds(rawLo, rawHi);
-    const range = fill(m.panels.valueRange, {
-      lo: compact().format(rawLo),
-      hi: compact().format(rawHi)
+  const cols = columns(host);
+  host.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+  for (const [panelIndex, series] of SERIES2.entries()) {
+    const cells = [];
+    EPISODES.forEach((ep, i) => {
+      const c = cellOf(ep, i, series.key);
+      if (c) cells.push(c);
     });
+    if (!cells.length) continue;
+    const lo = Math.min(...cells.map((c) => c.min)) * 0.8;
+    const hi = Math.max(...cells.map((c) => c.max)) * 1.3;
     const { figure, canvas } = panelFigure(
       m.items[series.key].short,
-      fill(m.panels.itemMeta, { range, n: ENFORCEMENT_LAST })
+      fill(m.panels.summaryMeta, { n: cells.length })
     );
-    itemHost.append(figure);
-    const datasets = EPISODES.map(
-      (ep, i) => buildDataset(ep, i, series.key, RAMP2[i], ENFORCEMENT_LAST)
-    ).filter((d) => d !== null);
+    host.append(figure);
+    const datasets = [
+      rangeDataset(series.key, m.panels.range, cells),
+      medianDataset(series.key, m.panels.median, cells),
+      peakDataset(series.key, m.panels.peak, cells)
+    ];
     const chart = track(
       new Chart(canvas, {
         type: "line",
         data: { datasets },
-        options: panelOptions(
-          "item",
-          xScale(ENFORCEMENT_LAST),
-          yScale(lo, hi, true)
-        ),
-        plugins: []
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: false,
+          interaction: { mode: "nearest", intersect: true, axis: "x" },
+          layout: { padding: { top: 6, right: 12, bottom: 0, left: 0 } },
+          scales: {
+            x: {
+              type: "linear",
+              min: -0.45,
+              max: EPISODES.length - 0.55,
+              grid: { display: false },
+              ticks: {
+                autoSkip: false,
+                maxRotation: 60,
+                minRotation: 60,
+                font: { size: 10 },
+                callback: (v) => {
+                  const n = Number(v);
+                  const i = Math.round(n);
+                  return Math.abs(n - i) < 1e-6 && EPISODES[i] ? m.episodes[EPISODES[i].id].short : "";
+                }
+              },
+              afterBuildTicks: (axis) => {
+                axis.ticks = EPISODES.map((_, i) => ({ value: i }));
+              }
+            },
+            y: {
+              type: "logarithmic",
+              min: lo,
+              max: hi,
+              title: {
+                display: panelIndex % cols === 0,
+                text: m.items[series.key].label,
+                color: THEME.label,
+                font: { size: 11 }
+              },
+              grid: { color: THEME.axisGrid, drawTicks: false },
+              ticks: {
+                autoSkip: false,
+                maxTicksLimit: 5,
+                padding: 6,
+                font: { size: 10 },
+                callback: (v) => {
+                  const n = Number(v);
+                  const dec = Math.abs(Math.log10(n) - Math.round(Math.log10(n))) < 1e-9;
+                  return dec ? compact().format(n) : "";
+                }
+              },
+              afterBuildTicks: (axis) => {
+                axis.ticks = decades(lo, hi).map((value2) => ({ value: value2 }));
+              }
+            }
+          },
+          plugins: {
+            legend: { display: false },
+            title: { display: false },
+            subtitle: { display: false },
+            tooltip: {
+              displayColors: true,
+              boxWidth: 8,
+              boxHeight: 8,
+              boxPadding: 4,
+              callbacks: {
+                title: (items) => {
+                  const p = items[0]?.raw;
+                  return p ? wrapTooltipLines(p.t, items[0], "title") : [];
+                },
+                label: (item) => {
+                  const p = item.raw;
+                  const name = item.dataset.label ?? "";
+                  const value2 = nf().format(Math.round(p.y));
+                  return wrapTooltipLines(
+                    name ? `${name}: ${value2}` : value2,
+                    item,
+                    "body"
+                  );
+                },
+                afterBody: (items) => {
+                  const first = items[0];
+                  if (!first) return [];
+                  const p = first.raw;
+                  const hovered = first.dataset.__stat;
+                  const lines = [];
+                  if (hovered !== "median" && p.n > 1)
+                    lines.push(
+                      `${m.panels.median}: ${nf().format(Math.round(p.median))}`
+                    );
+                  if (hovered !== "peak" && p.n > 1)
+                    lines.push(
+                      `${m.panels.peak}: ${nf().format(Math.round(p.max))}`
+                    );
+                  lines.push(
+                    `${m.panels.range}: ${nf().format(Math.round(p.min))}\u2013${nf().format(Math.round(p.max))}`
+                  );
+                  lines.push(
+                    p.n > 1 ? fill(m.panels.figureCount, { n: p.n }) : m.panels.singleFigure
+                  );
+                  return lines.map((l) => wrapTooltipLines(l, first, "body"));
+                }
+              }
+            }
+          },
+          onHover: (_e, els) => {
+            const d = els[0]?.dataset;
+            emphasiseStat(d?.__stat ?? null);
+          }
+        },
+        plugins: [rangeBand]
       })
     );
-    decoratePanel(chart, figure, m.items[series.key].short);
-    canvas.addEventListener("mouseleave", () => emphasiseEvent(null));
-    canvas.addEventListener("mousemove", (ev) => {
-      const pts = chart.getElementsAtEventForMode(
-        ev,
-        WEEK_MODE,
-        { intersect: false },
-        true
-      );
-      const hit = pts.length ? nearestByY(chart, pts, ev) : void 0;
-      const d = hit ? chart.data.datasets[hit.datasetIndex] : void 0;
-      emphasiseEvent(d ? d.__ep : null);
-    });
-    itemPanels.push({ chart, item: series.key });
-  });
-  legend(
-    itemLegend,
-    "items",
-    SERIES2.map((s) => ({
-      text: m.items[s.key].label,
-      color: s.color,
-      on: () => emphasiseItem(s.key),
-      off: () => emphasiseItem(null),
-      hide: (hidden) => toggleDatasets(episodeHost, "__item", s.key, hidden)
-    }))
-  );
-  legend(
-    eventLegend,
-    "events",
-    EPISODES.map((ep, i) => ({
-      text: m.episodes[ep.id].short,
-      color: RAMP2[i],
-      on: () => emphasiseEvent(i),
-      off: () => emphasiseEvent(null),
-      hide: (hidden) => toggleDatasets(itemHost, "__ep", i, hidden)
-    }))
-  );
-  wireLegendSync(episodeHost, "items", (d) => {
-    const k = SERIES2.findIndex((s) => s.key === d.__item);
-    return k < 0 ? null : k;
-  });
-  wireLegendSync(
-    itemHost,
-    "events",
-    (d) => d.__ep >= 0 && d.__ep < EPISODES.length ? d.__ep : null
-  );
+    summaryPanels.push(chart);
+  }
+  legend(legendHost, "stats", [
+    {
+      text: m.panels.range,
+      color: alpha2(RANGE_COLOR, 0.45),
+      on: () => emphasiseStat("range", true),
+      off: () => emphasiseStat(null, true),
+      hide: (hidden) => setStatHidden("range", hidden)
+    },
+    {
+      text: m.panels.median,
+      color: MEDIAN_COLOR,
+      on: () => emphasiseStat("median", true),
+      off: () => emphasiseStat(null, true),
+      hide: (hidden) => setStatHidden("median", hidden)
+    },
+    {
+      text: m.panels.peak,
+      color: PEAK_COLOR,
+      on: () => emphasiseStat("peak", true),
+      off: () => emphasiseStat(null, true),
+      hide: (hidden) => setStatHidden("peak", hidden)
+    }
+  ]);
 }
 
 // src/entry/main.ts
-function trellisHosts() {
-  const episodeHost = byId("trellis-episodes");
-  const itemHost = byId("trellis-items");
-  const itemLegend = byId("legend-items");
-  const eventLegend = byId("legend-events");
-  if (!episodeHost || !itemHost || !itemLegend || !eventLegend) {
-    console.warn("[trellis] one or more hosts missing");
-    return null;
-  }
-  return { episodeHost, itemHost, itemLegend, eventLegend };
-}
 function render2() {
   destroyAll();
   renderSources();
@@ -21030,13 +21070,11 @@ function render2() {
   mountCasualties();
   mountPerCapita();
   mountContext();
-  const hosts = trellisHosts();
-  if (hosts) {
-    try {
-      mountCrossEpisode();
-    } catch (err) {
-      console.error("[trellis]", err);
-    }
+  mountContext();
+  try {
+    mountCrossEpisode();
+  } catch (err) {
+    console.error("[trellis]", err);
   }
   try {
     mountSummary();
@@ -21057,7 +21095,7 @@ function scheduleRender() {
   });
 }
 var REQUIRED = [
-  ...CHARTS.map((c) => c.id),
+  ...CHARTS2.map((c) => c.id),
   "trellis-episodes",
   "trellis-items",
   "legend-items",

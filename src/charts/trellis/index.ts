@@ -82,13 +82,35 @@ function emphasiseEvent(index: number | null): void {
   );
 }
 
-/* ----- mount */
+/** The four hosts section C owns. One declaration, because main.ts and
+ *  mountCrossEpisode both query them and the ids must not drift apart. */
+export interface TrellisHosts {
+  readonly episodeHost: HTMLElement;
+  readonly itemHost: HTMLElement;
+  readonly itemLegend: HTMLElement;
+  readonly eventLegend: HTMLElement;
+}
 
-export function mountCrossEpisode(): void {
+/** Null rather than partial: a grid with no legend is a broken trellis, not a
+ *  degraded one. */
+export function trellisHosts(): TrellisHosts | null {
   const episodeHost = document.getElementById("trellis-episodes");
   const itemHost = document.getElementById("trellis-items");
   const itemLegend = document.getElementById("legend-items");
   const eventLegend = document.getElementById("legend-events");
+  if (!episodeHost || !itemHost || !itemLegend || !eventLegend) {
+    console.warn("[trellis] one or more hosts missing");
+    return null;
+  }
+  return { episodeHost, itemHost, itemLegend, eventLegend };
+}
+
+/* ----- mount */
+
+export function mountCrossEpisode(): void {
+  const hosts = trellisHosts();
+  if (!hosts) return;
+  const { episodeHost, itemHost, itemLegend, eventLegend } = hosts;
   if (!episodeHost || !itemHost || !itemLegend || !eventLegend) return;
 
   /* destroyAll() has already destroyed the previous instances; clear the handles

@@ -1,13 +1,12 @@
 /* src/client/main.ts — boot: locale, chrome, charts, trellis.
    One render path: setLang emits once, scheduleRender coalesces to one frame. */
 
-import { announce } from "../core/a11y.ts";
-import { destroyAll } from "../core/canvas-registry.ts";
-import { mountCasualties } from "../sections/casualties.ts";
-import { CHARTS, mountCharts } from "../charts/chart.ts";
-import { mountContext } from "../sections/context/context.ts";
-import { byId } from "../core/dom.ts";
-import { mountSummary } from "../sections/summary.ts";
+import { mountCharts } from "../charts/chart.ts";
+import { CHARTS } from "../charts/specs.ts";
+import {
+  mountCrossEpisode,
+  type TrellisHosts,
+} from "../charts/trellis/index.ts";
 import {
   applyStaticCopy,
   fill,
@@ -16,14 +15,18 @@ import {
   syncLangSwitch,
   t,
 } from "../copy";
-import { mountKpis } from "../sections/kpis.ts";
+import { announce } from "../core/a11y.ts";
+import { destroyAll } from "../core/canvas-registry.ts";
+import { byId } from "../core/dom.ts";
 import { applyUrlLang, mountLangSwitch } from "../core/lang.ts";
-import { renderChrome } from "../sections/chrome.ts";
-import { mountPerCapita } from "../sections/percapita/percapita.ts";
 import { initTheme } from "../core/theme.ts";
+import { mountCasualties } from "../sections/casualties.ts";
+import { renderChrome } from "../sections/chrome.ts";
+import { mountContext } from "../sections/context/context.ts";
+import { mountKpis } from "../sections/kpis.ts";
+import { mountPerCapita } from "../sections/percapita/percapita.ts";
 import { renderSources } from "../sections/sources/index.ts";
-import type { TrellisHosts } from "../charts/trellis/panel.ts";
-import { mountCrossEpisode } from "../charts/trellis/index.ts";
+import { mountSummary } from "../sections/summary.ts";
 
 function trellisHosts(): TrellisHosts | null {
   const episodeHost = byId("trellis-episodes");
@@ -48,13 +51,11 @@ export function render(): void {
   mountCasualties();
   mountPerCapita();
   mountContext();
-  const hosts = trellisHosts();
-  if (hosts) {
-    try {
-      mountCrossEpisode();
-    } catch (err) {
-      console.error("[trellis]", err);
-    }
+  mountContext();
+  try {
+    mountCrossEpisode();
+  } catch (err) {
+    console.error("[trellis]", err);
   }
   try {
     mountSummary();
