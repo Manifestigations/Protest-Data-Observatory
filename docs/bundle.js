@@ -15368,7 +15368,7 @@ function baseScales(v) {
     }
   };
 }
-function scalesFor(v, card2, ids) {
+function scalesFor(v, card3, ids) {
   const defs = ids.map((id) => DEF[id]);
   const left = defs.filter((d) => (d.axis ?? AXIS_LEFT) === AXIS_LEFT);
   const right = defs.filter((d) => d.axis === AXIS_RIGHT);
@@ -15376,12 +15376,12 @@ function scalesFor(v, card2, ids) {
   const leftUnit = left[0]?.unit ?? defs[0]?.unit ?? "count";
   const scales = {
     ...baseScales(v),
-    [AXIS_LEFT]: yAxis(card2.y ?? card2.yLeft ?? "", leftList, leftUnit, "left")
+    [AXIS_LEFT]: yAxis(card3.y ?? card3.yLeft ?? "", leftList, leftUnit, "left")
   };
   if (right.length) {
     scales[AXIS_RIGHT] = {
       ...yAxis(
-        card2.yRight ?? "",
+        card3.yRight ?? "",
         right.map((d) => d.data),
         right[0].unit,
         "right",
@@ -15562,7 +15562,7 @@ ${rate}` : body;
 // src/charts/datasets.ts
 var DAILY_GAP = 7;
 var WEEKLY_GAP = 1;
-function datasetsFor(id, weekly) {
+function datasetsFor(id, weekly2) {
   const def = DEF[id];
   if (!def) throw new Error(`datasets.ts: no DEF entry for series "${id}"`);
   if (!def.data) throw new Error(`datasets.ts: series "${id}" has no data`);
@@ -15605,7 +15605,7 @@ function datasetsFor(id, weekly) {
     spanGaps: false,
     connectors: {
       series: def.data,
-      slots: weekly ? WEEKLY_GAP : DAILY_GAP
+      slots: weekly2 ? WEEKLY_GAP : DAILY_GAP
     }
   };
   if (!def.data.some((p) => p.detach)) return [line];
@@ -15639,9 +15639,9 @@ function datasetsFor(id, weekly) {
 }
 
 // src/charts/view.ts
-function view(weekly) {
+function view(weekly2) {
   const c = t().chart;
-  return weekly ? {
+  return weekly2 ? {
     labels: WEEKS.map(
       (w) => fmtWeek(w.key, w.end) + (w.touchesEdge ? c.edgeMark : "")
     ),
@@ -15713,7 +15713,7 @@ var shell = (v, subtitle, title, extra) => ({
   }
 });
 function buildChart(spec) {
-  const card2 = t().chart.charts[spec.copy];
+  const card3 = t().chart.charts[spec.copy];
   const v = view(spec.weekly);
   const spans = spec.weekly ? weekSpans(WEEKS.map((w, i) => ({ w: i, from: w.key, to: w.end }))) : daySpans();
   return {
@@ -15721,14 +15721,14 @@ function buildChart(spec) {
       labels: v.labels,
       datasets: spec.series.flatMap((id) => datasetsFor(id, spec.weekly))
     },
-    ...shell(v, card2.subtitle, card2.title, {
+    ...shell(v, card3.subtitle, card3.title, {
       ...spec.id === "chart-costs" ? { spanMark: { spans: SPAN_MARKS } } : {},
       /* Always present — `shell()` already builds a `plugins` object, so the
          `if (options.plugins)` guard from my earlier draft is dead weight. An
          empty array no-ops inside the plugin. */
       contextBands: { spans }
     }),
-    scales: scalesFor(v, card2, spec.series)
+    scales: scalesFor(v, card3, spec.series)
   };
 }
 
@@ -16909,6 +16909,398 @@ function initTheme() {
   };
 }
 
+// src/site/media.ts
+var FILE = {
+  y2026: "hero-2026-demo.jpg",
+  historic: "hero-historic-1968.jpg",
+  turnout: "hero-turnout-belfort.jpg",
+  violence: "hero-violence-2026.jpg",
+  costs: "hero-costs-perpignan.jpg",
+  movements: "hero-movements-gilets-jaunes.jpg",
+  series: "hero-series-jussieu-2006.jpg"
+};
+var commonsPage = (file) => `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(file).replace(/%20/g, "_")}`;
+var UNVERIFIED = {
+  en: "see the file page for the licence",
+  fr: "licence \xE0 v\xE9rifier sur la page du fichier"
+};
+var f2026 = "Manifestation lyc\xE9enne du 6 octobre 2026 \xE0 Paris 25.jpg";
+var fHistoric = "1200x680 24mai68.jpg";
+var fBelfort = "2026-10-06 11-59-18 MouvementDesLyc\xE9ens-Belfort.jpg";
+var fPerpignan = "Journ\xE9e de mobilisation des lyc\xE9ens \xE0 Perpignan 14.jpg";
+var fGj = "Acte XIV gilets jaunes 16 f\xE9vrier 2019 Besan\xE7on Toufik-de-Planoise.jpg";
+var fJussieu = "Paris main entry campus jussieu-greve contre CPE-2006-02-27.jpg";
+var HERO_2026 = {
+  file: FILE.y2026,
+  alt: {
+    en: "School students on a lyc\xE9e demonstration in Paris, 6 October 2026.",
+    fr: "Lyc\xE9ens dans une manifestation lyc\xE9enne \xE0 Paris, le 6 octobre 2026."
+  },
+  credit: {
+    en: "Photograph: \u201CManifestation lyc\xE9enne du 6 octobre 2026 \xE0 Paris 25\u201D, Wikimedia Commons",
+    fr: "Photographie : \xAB Manifestation lyc\xE9enne du 6 octobre 2026 \xE0 Paris 25 \xBB, Wikimedia Commons"
+  },
+  filePage: commonsPage(f2026),
+  licence: UNVERIFIED,
+  licenceUrl: null,
+  sourceId: "media-2026-demo"
+};
+var HERO_HISTORIC = {
+  file: FILE.historic,
+  alt: {
+    en: "Historic photograph of a street demonstration in Paris, 24 May 1968.",
+    fr: "Photographie d\u2019\xE9poque d\u2019une manifestation de rue \xE0 Paris, le 24 mai 1968."
+  },
+  credit: {
+    en: "Photograph: \u201C1200x680 24mai68\u201D, Wikimedia Commons",
+    fr: "Photographie : \xAB 1200x680 24mai68 \xBB, Wikimedia Commons"
+  },
+  filePage: commonsPage(fHistoric),
+  licence: UNVERIFIED,
+  licenceUrl: null,
+  sourceId: "media-historic"
+};
+var HERO_TURNOUT = {
+  file: FILE.turnout,
+  alt: {
+    en: "Lyc\xE9e students demonstrating in Belfort, 6 October 2026.",
+    fr: "Lyc\xE9ens manifestant \xE0 Belfort, le 6 octobre 2026."
+  },
+  credit: {
+    en: "Photograph: \u201CMouvement des lyc\xE9ens, Belfort, 6 October 2026\u201D, Wikimedia Commons",
+    fr: "Photographie : \xAB Mouvement des lyc\xE9ens, Belfort, 6 octobre 2026 \xBB, Wikimedia Commons"
+  },
+  filePage: commonsPage(fBelfort),
+  licence: UNVERIFIED,
+  licenceUrl: null,
+  sourceId: "media-turnout"
+};
+var HERO_VIOLENCE = {
+  file: FILE.violence,
+  alt: {
+    en: "Police facing protesters during the autumn 2026 movement, 13 October 2026.",
+    fr: "Forces de l\u2019ordre face aux manifestants pendant le mouvement de l\u2019automne 2026, le 13 octobre 2026."
+  },
+  credit: {
+    en: "Photograph: Freedom Press, 13 October 2026 \u2014 not a Wikimedia Commons file",
+    fr: "Photographie : Freedom Press, 13 octobre 2026 \u2014 fichier non issu de Wikimedia Commons"
+  },
+  filePage: "https://freedompress.org.uk/",
+  licence: {
+    en: "no open licence stated: permission required from Freedom Press",
+    fr: "aucune licence libre indiqu\xE9e : autorisation de Freedom Press n\xE9cessaire"
+  },
+  licenceUrl: null,
+  sourceId: "media-violence"
+};
+var HERO_COSTS = {
+  file: FILE.costs,
+  alt: {
+    en: "A day of lyc\xE9e mobilisation in Perpignan.",
+    fr: "Une journ\xE9e de mobilisation des lyc\xE9ens \xE0 Perpignan."
+  },
+  credit: {
+    en: "Photograph: \u201CJourn\xE9e de mobilisation des lyc\xE9ens \xE0 Perpignan\u201D, Wikimedia Commons",
+    fr: "Photographie : \xAB Journ\xE9e de mobilisation des lyc\xE9ens \xE0 Perpignan \xBB, Wikimedia Commons"
+  },
+  filePage: commonsPage(fPerpignan),
+  licence: UNVERIFIED,
+  licenceUrl: null,
+  sourceId: "media-costs"
+};
+var HERO_MOVEMENTS = {
+  file: FILE.movements,
+  alt: {
+    en: "Gilets jaunes Act XIV in Besan\xE7on, 16 February 2019.",
+    fr: "Acte XIV des Gilets jaunes \xE0 Besan\xE7on, le 16 f\xE9vrier 2019."
+  },
+  credit: {
+    en: "Photograph: \u201CActe XIV gilets jaunes, Besan\xE7on, 16 February 2019\u201D, Toufik-de-Planoise, Wikimedia Commons",
+    fr: "Photographie : \xAB Acte XIV gilets jaunes, Besan\xE7on, 16 f\xE9vrier 2019 \xBB, Toufik-de-Planoise, Wikimedia Commons"
+  },
+  filePage: commonsPage(fGj),
+  licence: UNVERIFIED,
+  licenceUrl: null,
+  sourceId: "media-movements"
+};
+var HERO_SERIES = {
+  file: FILE.series,
+  alt: {
+    en: "The main entrance to the Jussieu campus, Paris, during the anti-CPE strike, 27 February 2006.",
+    fr: "L\u2019entr\xE9e principale du campus de Jussieu, \xE0 Paris, pendant la gr\xE8ve anti-CPE, le 27 f\xE9vrier 2006."
+  },
+  credit: {
+    en: "Photograph: \u201CParis main entry campus jussieu, gr\xE8ve contre le CPE, 27 February 2006\u201D, Wikimedia Commons",
+    fr: "Photographie : \xAB Paris main entry campus jussieu, gr\xE8ve contre le CPE, 27 f\xE9vrier 2006 \xBB, Wikimedia Commons"
+  },
+  filePage: commonsPage(fJussieu),
+  licence: UNVERIFIED,
+  licenceUrl: null,
+  sourceId: "media-series"
+};
+
+// src/site/routes.ts
+var SITE_NAME = {
+  en: "Protest activity in France",
+  fr: "Activit\xE9 contestataire en France"
+};
+var CRUMB_LABEL = { en: "Breadcrumb", fr: "Fil d\u2019Ariane" };
+var MORE_LABEL = { en: "Open", fr: "Ouvrir" };
+var CREDIT_LABEL = { en: "Image", fr: "Image" };
+var CREDIT_LINK_LABEL = {
+  en: "Image source and licensing (opens in a new tab)",
+  fr: "Source et licence de l\u2019image (nouvel onglet)"
+};
+var LICENCE_LABEL = { en: "Licence", fr: "Licence" };
+var dirOf = (p) => p.includes("/") ? p.slice(0, p.lastIndexOf("/")) : "";
+function relHref(fromPath, toPath) {
+  const from2 = dirOf(fromPath).split("/").filter(Boolean);
+  const to2 = toPath.split("/");
+  const file = to2.pop();
+  let i = 0;
+  while (i < from2.length && i < to2.length && from2[i] === to2[i]) i++;
+  const parts = [
+    ...Array(from2.length - i).fill(".."),
+    ...to2.slice(i),
+    file
+  ];
+  return parts.join("/") || file;
+}
+var PAGES = {
+  home: {
+    path: "index.html",
+    kind: "landing",
+    title: {
+      en: "Protest activity in France",
+      fr: "Activit\xE9 contestataire en France"
+    },
+    blurb: {
+      en: "Two groups of charts. The first follows the autumn 2026 movement day by day; the second sets the same measures against six earlier French movements.",
+      fr: "Deux ensembles de graphiques. Le premier suit le mouvement de l\u2019automne 2026 jour apr\xE8s jour ; le second confronte les m\xEAmes mesures \xE0 six mouvements fran\xE7ais ant\xE9rieurs."
+    },
+    parent: null,
+    cards: [
+      {
+        href: "2026",
+        title: {
+          en: "The Ongoing Revolt \xB7 2026",
+          fr: "La r\xE9volte en cours \xB7 2026"
+        },
+        blurb: {
+          en: "Turnout, arrests, injuries on both sides, school blockades, damage and the cost of policing, from 15 September to 11 November 2026 \u2014 plotted daily and aggregated by week.",
+          fr: "Foule, interpellations, bless\xE9s des deux c\xF4t\xE9s, blocages de lyc\xE9es, dommages et co\xFBt du maintien de l\u2019ordre, du 15 septembre au 11 novembre 2026 \u2014 au jour le jour et agr\xE9g\xE9s par semaine."
+        },
+        hero: HERO_2026
+      },
+      {
+        href: "historic",
+        title: { en: "Historical Comparisons", fr: "Comparaisons historiques" },
+        blurb: {
+          en: "May 68, CPE 2006, the Gilets jaunes, June 2023, the pensions movement, Bloquons tout 2025: one panel per movement, then one panel per series.",
+          fr: "Mai 68, le CPE 2006, les Gilets jaunes, juin 2023, les retraites, Bloquons tout 2025 : un panneau par mouvement, puis un panneau par s\xE9rie."
+        },
+        hero: HERO_HISTORIC
+      }
+    ]
+  },
+  "2026": {
+    path: "2026.html",
+    kind: "group",
+    title: { en: "The Ongoing Revolt", fr: "La r\xE9volte en cours" },
+    blurb: {
+      en: "The autumn 2026 movement. Three sections: how many people were in the street, what the policing cost them and the state, and what it cost in euros.",
+      fr: "Le mouvement de l\u2019automne 2026. Trois sections : combien de personnes dans la rue, ce que le maintien de l\u2019ordre a co\xFBt\xE9 aux personnes et \xE0 l\u2019\xC9tat, et ce qu\u2019il a co\xFBt\xE9 en euros."
+    },
+    parent: "home",
+    cards: [
+      {
+        href: "2026/turnout",
+        title: { en: "Turnout", fr: "Participation" },
+        blurb: {
+          en: "Turnout as a share of the population, plus protesters, people on strike and blocked schools \u2014 daily and as weekly peaks.",
+          fr: "La participation rapport\xE9e \xE0 la population, ainsi que manifestants, gr\xE9vistes et lyc\xE9es bloqu\xE9s \u2014 au jour le jour et en pics hebdomadaires."
+        },
+        hero: HERO_TURNOUT
+      },
+      {
+        href: "2026/violence",
+        title: { en: "Violence", fr: "Violences" },
+        blurb: {
+          en: "Arrests and injuries, daily; enforcement, weekly totals. How the injuries divide: light against serious, and who inflicted what.",
+          fr: "Interpellations et bless\xE9s au jour le jour ; le maintien de l\u2019ordre en totaux hebdomadaires. La r\xE9partition des blessures : l\xE9g\xE8res contre graves, et qui a inflig\xE9 quoi."
+        },
+        hero: HERO_VIOLENCE
+      },
+      {
+        href: "2026/costs",
+        title: { en: "Costs", fr: "Co\xFBts" },
+        blurb: {
+          en: "Material damage against the daily cost of policing, and where the two cross.",
+          fr: "Les dommages mat\xE9riels face au co\xFBt quotidien du maintien de l\u2019ordre, et le point o\xF9 les deux se croisent."
+        },
+        hero: HERO_COSTS
+      }
+    ]
+  },
+  historic: {
+    path: "historic.html",
+    kind: "group",
+    title: { en: "Historical Comparisons", fr: "Comparaisons historiques" },
+    blurb: {
+      en: "The same measures across six earlier French movements. The data is thinner the further back you go; each page says where.",
+      fr: "Les m\xEAmes mesures sur six mouvements fran\xE7ais ant\xE9rieurs. Les donn\xE9es se rar\xE9fient \xE0 mesure qu\u2019on remonte ; chaque page le signale."
+    },
+    parent: "home",
+    cards: [
+      {
+        href: "historic/movements",
+        title: { en: "One Panel Per Movement", fr: "Un panneau par mouvement" },
+        blurb: {
+          en: "Section C: each movement keeps its own time span on a shared logarithmic axis, so shapes are comparable and durations are not.",
+          fr: "Section C : chaque mouvement garde sa propre dur\xE9e sur un axe logarithmique commun : les formes se comparent, les dur\xE9es non."
+        },
+        hero: HERO_MOVEMENTS
+      },
+      {
+        href: "historic/series",
+        title: { en: "One Panel Per Series", fr: "Un panneau par s\xE9rie" },
+        blurb: {
+          en: "Section D: the movements overlaid on elapsed weeks, so one measure can be read from 1968 to 2026. Section E closes with median and peak.",
+          fr: "Section D : les mouvements superpos\xE9s en semaines \xE9coul\xE9es, pour lire une mesure de 1968 \xE0 2026. La section E conclut sur m\xE9diane et pic."
+        },
+        hero: HERO_SERIES
+      }
+    ]
+  },
+  "2026/turnout": {
+    path: "2026/turnout.html",
+    kind: "section",
+    title: { en: "Turnout", fr: "Participation" },
+    blurb: {
+      en: "Nine days in the window carry a published crowd; the rest are left empty rather than interpolated. The blockade line is a separate statistic, dotted across the Toussaint holiday because no lyc\xE9e was in session.",
+      fr: "Neuf journ\xE9es de la fen\xEAtre portent une foule publi\xE9e ; les autres restent vides plut\xF4t qu\u2019interpol\xE9es. La courbe des blocages est une statistique \xE0 part, en pointill\xE9s pendant la Toussaint car aucun lyc\xE9e n\u2019\xE9tait en cours."
+    },
+    parent: "2026",
+    cards: []
+  },
+  "2026/violence": {
+    path: "2026/violence.html",
+    kind: "section",
+    title: { en: "Violence", fr: "Violences" },
+    blurb: {
+      en: "The state publishes arrests and officer injuries as situation reports, not as a series; protester injuries have no official total at all. No figure here is a primary measurement made for this site.",
+      fr: "L\u2019\xC9tat publie interpellations et bless\xE9s parmi les forces en points de situation, non en s\xE9rie ; les bless\xE9s parmi les manifestants n\u2019ont aucun total officiel. Aucun chiffre ici n\u2019est une mesure primaire r\xE9alis\xE9e pour ce site."
+    },
+    parent: "2026",
+    cards: []
+  },
+  "2026/costs": {
+    path: "2026/costs.html",
+    kind: "section",
+    title: { en: "Costs", fr: "Co\xFBts" },
+    blurb: {
+      en: "Neither damage nor policing cost exists as a daily series: these are one-off assessments, which is why most cells are empty rather than estimated. Insurers\u2019 30-day claim window had not closed when they were published.",
+      fr: "Ni les dommages ni le co\xFBt du maintien de l\u2019ordre n\u2019existent en s\xE9rie quotidienne : ce sont des bilans ponctuels, d\u2019o\xF9 des cellules vides plut\xF4t qu\u2019estim\xE9es. Le d\xE9lai de 30 jours des assureurs n\u2019\xE9tait pas \xE9coul\xE9 lors de leur publication."
+    },
+    parent: "2026",
+    cards: []
+  },
+  "historic/movements": {
+    path: "historic/movements.html",
+    kind: "section",
+    title: { en: "One Panel Per Movement", fr: "Un panneau par mouvement" },
+    blurb: {
+      en: "Each panel keeps its own time span on a shared logarithmic axis. Hollow markers are regional, Paris-only, modelled or stock figures; dashed connectors span a week with nothing published.",
+      fr: "Chaque panneau garde sa propre dur\xE9e sur un axe logarithmique commun. Les marqueurs creux sont r\xE9gionaux, strictement parisiens, mod\xE9lis\xE9s ou de stock ; les connecteurs en pointill\xE9s couvrent une semaine sans publication."
+    },
+    parent: "historic",
+    cards: []
+  },
+  "historic/series": {
+    path: "historic/series.html",
+    kind: "section",
+    title: { en: "One Panel Per Series", fr: "Un panneau par s\xE9rie" },
+    blurb: {
+      en: "The same data with movements overlaid on elapsed weeks, capped at the last week with enforcement figures. Section E then reduces each measure to a median, a peak and a range.",
+      fr: "Les m\xEAmes donn\xE9es, mouvements superpos\xE9s en semaines \xE9coul\xE9es, jusqu\u2019\xE0 la derni\xE8re semaine disposant de chiffres r\xE9pressifs. La section E r\xE9duit ensuite chaque mesure \xE0 une m\xE9diane, un pic et une \xE9tendue."
+    },
+    parent: "historic",
+    cards: []
+  }
+};
+function pageById(id) {
+  return PAGES[id] ?? null;
+}
+function pageHref(fromPath, to2) {
+  return relHref(fromPath, PAGES[to2].path);
+}
+
+// src/sections/cards/index.ts
+var heroSrc = (fromPath, file) => relHref(fromPath, `img/${file}`);
+function creditId(card3) {
+  return `credit-${card3.href.replace(/\//g, "-")}`;
+}
+function hero(card3, fromPath) {
+  const figure = el("figure", "card-hero");
+  const img = el("img");
+  img.src = heroSrc(fromPath, card3.hero.file);
+  img.alt = bi(card3.hero.alt);
+  img.width = 1200;
+  img.height = 800;
+  img.loading = "lazy";
+  img.decoding = "async";
+  img.setAttribute("aria-describedby", creditId(card3));
+  figure.append(img);
+  return figure;
+}
+function credit(card3) {
+  const p = el("p", "card-credit");
+  p.id = creditId(card3);
+  p.append(el("span", "card-credit-label", `${bi(CREDIT_LABEL)}:`), " ");
+  const link = el("a", "card-credit-link");
+  link.href = card3.hero.filePage;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.textContent = card3.hero.credit.en === "" ? "" : bi(card3.hero.credit);
+  link.setAttribute(
+    "aria-label",
+    `${bi(card3.hero.credit)} \u2014 ${bi(CREDIT_LINK_LABEL)}`
+  );
+  p.append(link);
+  if (card3.hero.licenceUrl) {
+    p.append(" ");
+    const lic = el("a", "card-licence-link", bi(LICENCE_LABEL));
+    lic.href = card3.hero.licenceUrl;
+    lic.target = "_blank";
+    lic.rel = "noopener noreferrer";
+    p.append(lic);
+  }
+  p.append(" \xB7 ", el("span", "card-licence", bi(card3.hero.licence)));
+  return p;
+}
+function card(spec, fromPath) {
+  const article = el("article", "group-card");
+  const main = el("a", "card-main");
+  main.href = pageHref(fromPath, spec.href);
+  main.setAttribute("aria-describedby", creditId(spec));
+  const body = el("div", "card-body");
+  body.append(
+    el("h3", "card-title", bi(spec.title)),
+    el("p", "card-blurb", bi(spec.blurb))
+  );
+  body.append(el("p", "card-more", `${bi(MORE_LABEL)} \u2192`));
+  body.lastElementChild?.setAttribute("aria-hidden", "true");
+  main.append(hero(spec, fromPath), body);
+  article.append(main, credit(spec));
+  return article;
+}
+function mountCards(fromPath, cards, host = byId("card-grid")) {
+  if (!host) return;
+  const grid = el("div", "card-grid");
+  for (const c of cards) grid.append(card(c, fromPath));
+  host.replaceChildren(grid);
+}
+
 // src/sections/casualties.ts
 function cellText(c) {
   switch (c.s) {
@@ -17104,7 +17496,7 @@ var RN_VOTE = "https://www.humanite.fr/politique/rassemblement-national/entre-le
 var HELICOPTER = "https://www.lavoixdunord.fr/506027/article/2018-12-13/un-helicoptere-etait-pret-samedi-au-cas-ou-pour-emmener-emmanuel-macron";
 var STRATEGY = "https://lepoing.net/manifestation-du-7-novembre-a-montpellier-la-contestation-cherche-encore-sa-strategie/";
 var BUNKER = "https://neru.tv/sources/macron-bunker-secret-pour-fuir-le-peuple/";
-var PAGES = "https://y1dwgth1otzig.github.io/french-protest-charts";
+var PAGES2 = "https://y1dwgth1otzig.github.io/french-protest-charts";
 var REPO = "https://github.com/y1DWgTh1oTZIG/french-protest-charts";
 
 // src/sections/about/quote.ts
@@ -17311,7 +17703,7 @@ var ABOUT_EN = [
         kind: "p",
         runs: [
           "This project is hosted on ",
-          { link: "GitHub Pages", href: PAGES },
+          { link: "GitHub Pages", href: PAGES2 },
           ". You can view the code ",
           { link: "here", href: REPO },
           "."
@@ -17510,7 +17902,7 @@ var ABOUT_FR = [
         kind: "p",
         runs: [
           "Ce projet est h\xE9berg\xE9 sur ",
-          { link: "GitHub Pages", href: PAGES },
+          { link: "GitHub Pages", href: PAGES2 },
           ". Vous pouvez consulter le code ",
           { link: "ici", href: REPO },
           "."
@@ -17709,8 +18101,7 @@ function bestValue(obs) {
   for (const o of obs) if (!best || o.v > best.v) best = o;
   return best;
 }
-function dailyRows(weekly) {
-  const specs = weekly ? WEEKLY_SPECS : DAILY_SPECS;
+function dailyRowsFor(specs) {
   return specs.map((spec) => {
     const pts = visiblePoints(spec.copy);
     const obs = pts.map((p) => ({
@@ -17728,6 +18119,9 @@ function dailyRows(weekly) {
       vsFirst: bestRatio(obs, first)
     };
   });
+}
+function dailyRows(weekly2) {
+  return dailyRowsFor(weekly2 ? WEEKLY_SPECS : DAILY_SPECS);
 }
 function episodeRows(maxX) {
   return METRIC_KEYS.map((key) => {
@@ -17789,7 +18183,7 @@ function ratioCell(r, label, template, unit) {
   });
   return kpiRow(label, fmtPct2(r.pct), `${r.obs.where} \xB7 ${against}`);
 }
-function card(row, largestLabel) {
+function card2(row, largestLabel) {
   const k = t().kpi;
   const box = el("div", "kpi-card");
   box.append(el("h5", "kpi-title", row.label));
@@ -17811,10 +18205,43 @@ function block2(rows, largestLabel, note2) {
   const frag = document.createDocumentFragment();
   frag.append(el("h4", "kpi-heading", t().kpi.heading));
   const grid = el("div", "kpi-grid");
-  for (const row of rows) grid.append(card(row, largestLabel));
+  for (const row of rows) grid.append(card2(row, largestLabel));
   frag.append(grid);
   frag.append(el("p", "kpi-note", note2));
   return frag;
+}
+var PRESETS = {
+  "turnout-daily": { kind: "daily", data: ["turnout", "blockades"] },
+  "turnout-weekly": { kind: "weekly", data: ["turnout", "blockades"] },
+  "violence-daily": {
+    kind: "daily",
+    data: ["arrests", "forcesInjured", "protesterInjured"]
+  },
+  "violence-weekly": {
+    kind: "weekly",
+    data: ["arrests", "forcesInjured", "protesterInjured"]
+  },
+  "costs-daily": { kind: "daily", data: ["damagesCost"] }
+};
+function mountKpiPresets(root2 = document) {
+  for (const host of root2.querySelectorAll("[data-kpi-preset]")) {
+    const preset = PRESETS[host.dataset.kpiPreset ?? ""];
+    if (!preset) {
+      console.warn(`[kpi] unknown preset ${host.dataset.kpiPreset}`);
+      continue;
+    }
+    const specs = (preset.kind === "daily" ? DAILY_SPECS : WEEKLY_SPECS).filter(
+      (s) => preset.data.includes(s.data)
+    );
+    const k = t().kpi;
+    host.replaceChildren(
+      block2(
+        dailyRowsFor(specs),
+        preset.kind === "daily" ? k.largestDay : k.largestWeek,
+        preset.kind === "daily" ? k.noteDaily : k.noteWeekly
+      )
+    );
+  }
 }
 function mountKpis() {
   const k = t().kpi;
@@ -19129,6 +19556,80 @@ var MAI68_SOURCES = [
   )
 ];
 
+// src/data/sources/media.ts
+var MEDIA_SOURCES = [
+  {
+    id: "media-2026-demo",
+    group: "media",
+    label: "Wikimedia Commons \u2014 \xAB Manifestation lyc\xE9enne du 6 octobre 2026 \xE0 Paris 25 \xBB",
+    url: "https://commons.wikimedia.org/wiki/File:Manifestation_lyc%C3%A9enne_du_6_octobre_2026_%C3%A0_Paris_25.jpg",
+    what: {
+      en: "Hero image on the 2026 card (landing page) and the page's social preview. Licence: see the file page; the author and licence tag must be read there before publication.",
+      fr: "Image d\u2019en-t\xEAte de la carte 2026 (page d\u2019accueil) et aper\xE7u de la page. Licence : \xE0 lire sur la page du fichier ; l\u2019auteur et le bandeau de licence doivent y \xEAtre v\xE9rifi\xE9s avant publication."
+    }
+  },
+  {
+    id: "media-historic",
+    group: "media",
+    label: "Wikimedia Commons \u2014 \xAB 1200x680 24mai68 \xBB",
+    url: "https://commons.wikimedia.org/wiki/File:1200x680_24mai68.jpg",
+    what: {
+      en: "Hero image on the Historical Comparisons card. A 24 May 1968 photograph: the file page carries the provenance and the licence tag.",
+      fr: "Image d\u2019en-t\xEAte de la carte Comparaisons historiques. Photographie du 24 mai 1968 : la page du fichier porte la provenance et le bandeau de licence."
+    }
+  },
+  {
+    id: "media-turnout",
+    group: "media",
+    label: "Wikimedia Commons \u2014 \xAB 2026-10-06 11-59-18 MouvementDesLyc\xE9ens-Belfort \xBB",
+    url: "https://commons.wikimedia.org/wiki/File:2026-10-06_11-59-18_MouvementDesLyc%C3%A9ens-Belfort.jpg",
+    what: {
+      en: "Hero image on the Turnout card and page. Licence: see the file page.",
+      fr: "Image d\u2019en-t\xEAte de la carte et de la page Participation. Licence : voir la page du fichier."
+    }
+  },
+  {
+    id: "media-violence",
+    group: "media",
+    label: "Freedom Press \u2014 photograph, 13 October 2026",
+    url: "https://freedompress.org.uk/",
+    what: {
+      en: "Hero image on the Violence card and page. Not a Commons file and no open licence is stated: reproduced here as a credited press photograph; written permission from Freedom Press is required before republication.",
+      fr: "Image d\u2019en-t\xEAte de la carte et de la page Violences. Ce n\u2019est pas un fichier Commons et aucune licence libre n\u2019est indiqu\xE9e : reproduite comme photographie de presse cr\xE9dit\xE9e ; une autorisation \xE9crite de Freedom Press est n\xE9cessaire avant toute republication."
+    }
+  },
+  {
+    id: "media-costs",
+    group: "media",
+    label: "Wikimedia Commons \u2014 \xAB Journ\xE9e de mobilisation des lyc\xE9ens \xE0 Perpignan 14 \xBB",
+    url: "https://commons.wikimedia.org/wiki/File:Journ%C3%A9e_de_mobilisation_des_lyc%C3%A9ens_%C3%A0_Perpignan_14.jpg",
+    what: {
+      en: "Hero image on the Costs card and page. Licence: see the file page.",
+      fr: "Image d\u2019en-t\xEAte de la carte et de la page Co\xFBts. Licence : voir la page du fichier."
+    }
+  },
+  {
+    id: "media-movements",
+    group: "media",
+    label: "Wikimedia Commons \u2014 \xAB Acte XIV gilets jaunes 16 f\xE9vrier 2019 Besan\xE7on \xBB, Toufik-de-Planoise",
+    url: "https://commons.wikimedia.org/wiki/File:Acte_XIV_gilets_jaunes_16_f%C3%A9vrier_2019_Besan%C3%A7on_Toufik-de-Planoise.jpg",
+    what: {
+      en: "Hero image on the One Panel Per Movement card and page. Licence: see the file page.",
+      fr: "Image d\u2019en-t\xEAte de la carte et de la page Un panneau par mouvement. Licence : voir la page du fichier."
+    }
+  },
+  {
+    id: "media-series",
+    group: "media",
+    label: "Wikimedia Commons \u2014 \xAB Paris main entry campus jussieu-greve contre CPE-2006-02-27 \xBB",
+    url: "https://commons.wikimedia.org/wiki/File:Paris_main_entry_campus_jussieu-greve_contre_CPE-2006-02-27.jpg",
+    what: {
+      en: "Hero image on the One Panel Per Series card and page. Licence: see the file page.",
+      fr: "Image d\u2019en-t\xEAte de la carte et de la page Un panneau par s\xE9rie. Licence : voir la page du fichier."
+    }
+  }
+];
+
 // src/data/sources/nahel.ts
 var NAHEL_SOURCES = [
   /* -------------------------------------------------- Nahel Merzouk, 2023 */
@@ -20356,7 +20857,8 @@ var SOURCES = [
   ...REF2026_SOURCES,
   ...RETRAITES_SOURCES,
   ...RN2024_SOURCES,
-  ...STRIKES_SOURCES
+  ...STRIKES_SOURCES,
+  ...MEDIA_SOURCES
 ];
 {
   const seen = /* @__PURE__ */ new Set();
@@ -20526,6 +21028,17 @@ var GROUPS = [
     blurb: {
       en: "The closest precedent to 2026 and the reason the 2026 figures are shown as a band: the ministry revised its own 10 Sep count upward during the evening, from 175,000 to 197,000.",
       fr: "Le pr\xE9c\xE9dent le plus proche de 2026, et la raison pour laquelle les chiffres de 2026 sont trac\xE9s en fourchette : le minist\xE8re a r\xE9vis\xE9 son propre d\xE9compte du 10 sept. en cours de soir\xE9e, de 175 000 \xE0 197 000."
+    }
+  },
+  {
+    id: "media",
+    title: {
+      en: "Media \u2014 images and their licences",
+      fr: "M\xE9dias \u2014 images et licences"
+    },
+    blurb: {
+      en: "Every photograph used as a hero image on this site, with the file page it comes from and the licence it carries. Each card links its credit line here; nothing is reproduced without attribution. The Freedom Press photograph is not a Commons file and carries no open licence.",
+      fr: "Chaque photographie utilis\xE9e en image d\u2019en-t\xEAte, avec la page du fichier d\u2019origine et la licence associ\xE9e. La ligne de cr\xE9dit de chaque carte renvoie ici ; rien n\u2019est reproduit sans attribution. La photographie Freedom Press n\u2019est pas un fichier Commons et ne porte aucune licence libre."
     }
   }
 ];
@@ -21037,26 +21550,69 @@ function mountSummary() {
 }
 
 // src/entry/main.ts
+function header2(host, level, title, blurb) {
+  const h = el(level === 2 ? "h2" : "h3", "sec-title", title);
+  h.id = `${host.id}-title`;
+  host.replaceChildren(h, el("p", "sec-blurb", blurb));
+}
+function crumbs(page) {
+  const host = byId("crumbs");
+  if (!host) return;
+  host.setAttribute("aria-label", bi(CRUMB_LABEL));
+  const trail = [];
+  for (let p = page; p; p = p.parent ? PAGES[p.parent] : null)
+    trail.unshift(p);
+  const list = el("ol");
+  trail.forEach((p, i) => {
+    const li = el("li");
+    if (i === trail.length - 1) {
+      const span = el("span", void 0, bi(p.title));
+      span.setAttribute("aria-current", "page");
+      li.append(span);
+    } else {
+      const a = el("a", void 0, bi(p.title));
+      a.href = pageHref(
+        page.path,
+        p === PAGES.home ? "home" : Object.keys(PAGES).find(
+          (k) => PAGES[k] === p
+        ) ?? "home"
+      );
+      li.append(a);
+    }
+    list.append(li);
+  });
+  host.replaceChildren(list);
+}
+function mountPage(page) {
+  const hdr = byId("hdr-page");
+  if (hdr) header2(hdr, 2, bi(page.title), bi(page.blurb));
+  crumbs(page);
+  mountCards(page.path, page.cards);
+}
 function render2() {
   destroyAll();
-  renderSources();
+  const page = pageById(document.documentElement.dataset.page ?? "") ?? PAGES.home;
   renderChrome();
+  renderSources();
+  mountPage(page);
+  document.title = `${bi(page.title)} \u2014 ${bi(SITE_NAME)}`;
   applyStaticCopy();
   syncLangSwitch();
-  mountCharts();
-  mountKpis();
-  mountCasualties();
-  mountPerCapita();
-  mountContext();
-  try {
-    mountCrossEpisode();
-  } catch (err) {
-    console.error("[trellis]", err);
-  }
-  try {
-    mountSummary();
-  } catch (err) {
-    console.error("[summary]", err);
+  for (const mount2 of [
+    mountCharts,
+    mountKpis,
+    mountKpiPresets,
+    mountCasualties,
+    mountPerCapita,
+    mountContext,
+    mountCrossEpisode,
+    mountSummary
+  ]) {
+    try {
+      mount2();
+    } catch (err) {
+      console.error(`[${mount2.name}]`, err);
+    }
   }
 }
 var frame = 0;
@@ -21071,34 +21627,11 @@ function scheduleRender() {
     }
   });
 }
-var REQUIRED = [
-  ...CHARTS.map((c) => c.id),
-  "trellis-episodes",
-  "trellis-items",
-  "legend-items",
-  "legend-events",
-  "summary",
-  "legend-summary",
-  "disclaimer",
-  "sources",
-  "kpi-a",
-  "kpi-b",
-  "kpi-c",
-  "kpi-d",
-  "kpi-e"
-];
 function boot() {
-  const missing = REQUIRED.filter((id) => !byId(id));
-  if (missing.length) {
-    console.error(
-      `[boot] ${missing.length} host(s) absent from the DOM: ${missing.join(", ")}`
-    );
-    return;
-  }
   applyUrlLang();
   mountLangSwitch();
   initTheme();
-  onLocaleChange((_next, _prev) => {
+  onLocaleChange(() => {
     scheduleRender();
     announce(fill(t().a11y.switched, { lang: localeMeta2().label }));
   });

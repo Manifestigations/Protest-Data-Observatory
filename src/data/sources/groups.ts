@@ -143,4 +143,15 @@ export const GROUPS: readonly SourceGroup[] = [
       fr: "Le précédent le plus proche de 2026, et la raison pour laquelle les chiffres de 2026 sont tracés en fourchette : le ministère a révisé son propre décompte du 10 sept. en cours de soirée, de 175 000 à 197 000.",
     },
   },
+  {
+    id: "media",
+    title: {
+      en: "Media — images and their licences",
+      fr: "Médias — images et licences",
+    },
+    blurb: {
+      en: "Every photograph used as a hero image on this site, with the file page it comes from and the licence it carries. Each card links its credit line here; nothing is reproduced without attribution. The Freedom Press photograph is not a Commons file and carries no open licence.",
+      fr: "Chaque photographie utilisée en image d’en-tête, avec la page du fichier d’origine et la licence associée. La ligne de crédit de chaque carte renvoie ici ; rien n’est reproduit sans attribution. La photographie Freedom Press n’est pas un fichier Commons et ne porte aucune licence libre.",
+    },
+  },
 ];

@@ -8,6 +8,7 @@ import { COST_SOURCES } from "./cost";
 import { CPE_SOURCES } from "./cpe";
 import { GJ_SOURCES } from "./gj";
 import { MAI68_SOURCES } from "./mai68";
+import { MEDIA_SOURCES } from "./media";
 import { NAHEL_SOURCES } from "./nahel";
 import { OFFICIAL_SOURCES } from "./official";
 import { OVERSEAS_SOURCES } from "./overseas";
@@ -33,6 +34,7 @@ export const SOURCES: readonly Source[] = [
   ...RETRAITES_SOURCES,
   ...RN2024_SOURCES,
   ...STRIKES_SOURCES,
+  ...MEDIA_SOURCES,
 ];
 
 /* duplicate ids are a build error, not a runtime surprise */

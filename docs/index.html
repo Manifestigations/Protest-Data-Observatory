@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr" data-lang="fr">
+<html lang="fr" data-lang="fr" data-page="home">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -13,9 +13,6 @@
       media="(prefers-color-scheme: dark)"
       content="#0f1115"
     />
-    <!-- Applies a stored choice before first paint: no light flash. With no
-         stored choice the attribute stays absent and color-scheme follows the
-         OS entirely in CSS — this script is not needed for that path. -->
     <script>
       try {
         const t = localStorage.getItem("fpc-theme");
@@ -25,7 +22,6 @@
     </script>
     <title>Activité contestataire — octobre–novembre 2026</title>
     <link rel="stylesheet" href="styles.css" />
-    <!-- type="module" is deferred: the body exists before boot() runs -->
     <script type="module" src="bundle.js"></script>
   </head>
   <body>
@@ -77,7 +73,7 @@
         <a
           class="repo-link"
           id="repo-link"
-          href="https://github.com/y1DWgTh1oTZIG/french-protest-charts"
+          href="https://github.com/Manifestigations/Protest-Data-Observatory"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Code source sur GitHub"
@@ -91,126 +87,17 @@
       </div>
     </header>
 
-    <!-- role="note" + <div>: page.ts appends an <ol> here, which is illegal inside <p> -->
     <div id="disclaimer" class="disclaimer" role="note"></div>
-
-    <!-- announced on language change by renderChrome()/render() -->
     <p id="status" class="sr-only" role="status" aria-live="polite"></p>
 
     <main id="main" tabindex="-1">
-      <section
-        id="about"
-        class="about"
-        aria-label="Notes sur le projet"
-      ></section>
+      <nav id="crumbs" class="crumbs"></nav>
 
-      <section class="run-group" aria-labelledby="hdr-run-ongoing-title">
-        <header id="hdr-run-ongoing"></header>
+      <section id="about" class="about"></section>
 
-        <section aria-labelledby="hdr-a-title">
-          <header id="hdr-a"></header>
-
-          <div id="kpi-a" class="kpi-block"></div>
-          <div id="cas-a" class="cas-block"></div>
-          <div id="pc-a" class="pc-block"></div>
-          <div id="ctx-a" class="ctx-block"></div>
-
-          <figure class="card">
-            <figcaption id="cap-protesters"></figcaption>
-            <div class="canvas-box">
-              <canvas
-                id="chart-protesters"
-                role="img"
-                aria-labelledby="cap-protesters"
-              ></canvas>
-            </div>
-          </figure>
-
-          <figure class="card">
-            <figcaption id="cap-enforcement"></figcaption>
-            <div class="canvas-box">
-              <canvas
-                id="chart-enforcement"
-                role="img"
-                aria-labelledby="cap-enforcement"
-              ></canvas>
-            </div>
-          </figure>
-
-          <figure class="card">
-            <figcaption id="cap-costs"></figcaption>
-            <div class="canvas-box tall">
-              <canvas
-                id="chart-costs"
-                role="img"
-                aria-labelledby="cap-costs"
-              ></canvas>
-            </div>
-          </figure>
-        </section>
-
-        <section aria-labelledby="hdr-b-title">
-          <header id="hdr-b"></header>
-
-          <div id="kpi-b" class="kpi-block"></div>
-          <div id="cas-b" class="cas-block"></div>
-          <div id="pc-b" class="pc-block"></div>
-
-          <figure class="card">
-            <figcaption id="cap-protesters-weekly"></figcaption>
-            <div class="canvas-box">
-              <canvas
-                id="chart-protesters-weekly"
-                role="img"
-                aria-labelledby="cap-protesters-weekly"
-              ></canvas>
-            </div>
-          </figure>
-
-          <figure class="card">
-            <figcaption id="cap-enforcement-weekly"></figcaption>
-            <div class="canvas-box">
-              <canvas
-                id="chart-enforcement-weekly"
-                role="img"
-                aria-labelledby="cap-enforcement-weekly"
-              ></canvas>
-            </div>
-          </figure>
-        </section>
-      </section>
-
-      <section class="run-group" aria-labelledby="hdr-run-historical-title">
-        <header id="hdr-run-historical"></header>
-
-        <section aria-labelledby="hdr-c-title">
-          <header id="hdr-c"></header>
-          <div id="kpi-c" class="kpi-block"></div>
-          <div id="pc-c" class="pc-block pc-trellis"></div>
-          <p id="note-c" class="axis-note"></p>
-
-          <div id="trellis-episodes" class="trellis"></div>
-          <h3 class="legend-title" data-i18n="leg.items.title"></h3>
-          <div id="legend-items" class="legend"></div>
-        </section>
-
-        <section aria-labelledby="hdr-d-title">
-          <header id="hdr-d"></header>
-          <div id="kpi-d" class="kpi-block"></div>
-          <p id="note-d" class="axis-note"></p>
-          <div id="trellis-items" class="trellis"></div>
-          <h3 class="legend-title" data-i18n="leg.movements.title"></h3>
-          <div id="legend-events" class="legend"></div>
-        </section>
-
-        <section aria-labelledby="hdr-e-title">
-          <header id="hdr-e"></header>
-          <div id="kpi-e" class="kpi-block"></div>
-          <p id="note-e" class="axis-note"></p>
-          <div id="summary" class="trellis"></div>
-          <h3 class="legend-title" data-i18n="leg.summary.title"></h3>
-          <div id="legend-summary" class="legend"></div>
-        </section>
+      <section class="hub" aria-labelledby="hdr-page">
+        <header id="hdr-page"></header>
+        <div id="card-grid"></div>
       </section>
 
       <section id="sources" aria-labelledby="sources-title">

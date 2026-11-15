@@ -14,7 +14,8 @@ export type GroupId =
   | "nahel"
   | "retraites"
   | "rn2024"
-  | "bloquons";
+  | "bloquons"
+  | "media";
 
 export interface Source {
   readonly id: string;

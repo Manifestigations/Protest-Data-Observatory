@@ -122,9 +122,7 @@ function bestValue(obs: readonly Observation[]): Observation | null {
 
 /* ----- sections A and B: the 2026 series ----- */
 
-function dailyRows(weekly: boolean): Row[] {
-  const specs = weekly ? WEEKLY_SPECS : DAILY_SPECS;
-
+function dailyRowsFor(specs: readonly KpiSpec[]): Row[] {
   return specs.map((spec) => {
     const pts = visiblePoints(spec.copy);
     const obs: Observation[] = pts.map((p) => ({
@@ -148,6 +146,10 @@ function dailyRows(weekly: boolean): Row[] {
       vsFirst: bestRatio(obs, first),
     };
   });
+}
+
+function dailyRows(weekly: boolean): Row[] {
+  return dailyRowsFor(weekly ? WEEKLY_SPECS : DAILY_SPECS);
 }
 
 /* ----- sections C and D: every movement compared with itself ----- */
@@ -275,6 +277,51 @@ function block(
 }
 
 /* ----- mount ----- */
+
+/* (b) append: KPI subsets, selected by data-kpi-preset on the host element.
+   Turnout keeps the crowd and the blockades, Violence the enforcement side,
+   Costs the money; the split follows what each chart plots, so no KPI sits on
+   a page whose chart it does not describe. */
+interface Preset {
+  readonly kind: "daily" | "weekly";
+  readonly data: readonly string[];
+}
+
+const PRESETS: Readonly<Record<string, Preset>> = {
+  "turnout-daily": { kind: "daily", data: ["turnout", "blockades"] },
+  "turnout-weekly": { kind: "weekly", data: ["turnout", "blockades"] },
+  "violence-daily": {
+    kind: "daily",
+    data: ["arrests", "forcesInjured", "protesterInjured"],
+  },
+  "violence-weekly": {
+    kind: "weekly",
+    data: ["arrests", "forcesInjured", "protesterInjured"],
+  },
+  "costs-daily": { kind: "daily", data: ["damagesCost"] },
+};
+
+export function mountKpiPresets(root: ParentNode = document): void {
+  for (const host of root.querySelectorAll<HTMLElement>("[data-kpi-preset]")) {
+    const preset = PRESETS[host.dataset.kpiPreset ?? ""];
+    if (!preset) {
+      console.warn(`[kpi] unknown preset ${host.dataset.kpiPreset}`);
+      continue;
+    }
+
+    const specs = (preset.kind === "daily" ? DAILY_SPECS : WEEKLY_SPECS).filter(
+      (s) => preset.data.includes(s.data),
+    );
+    const k = t().kpi;
+    host.replaceChildren(
+      block(
+        dailyRowsFor(specs),
+        preset.kind === "daily" ? k.largestDay : k.largestWeek,
+        preset.kind === "daily" ? k.noteDaily : k.noteWeekly,
+      ),
+    );
+  }
+}
 
 export function mountKpis(): void {
   const k = t().kpi;

@@ -1,8 +1,8 @@
-/* src/client/main.ts — boot: locale, chrome, charts, trellis.
-   One render path: setLang emits once, scheduleRender coalesces to one frame. */
+/* Boot: locale, chrome, then whatever this page actually hosts. Every mount
+   is guarded, so one bundle serves all eight pages. `data-page` on <html>
+   selects the page table entry; an unknown value falls back to the landing. */
 
 import { mountCharts } from "../charts/mount.ts";
-import { CHARTS } from "../charts/specs.ts";
 import { mountCrossEpisode } from "../charts/trellis/index.ts";
 import {
   applyStaticCopy,
@@ -12,43 +12,112 @@ import {
   syncLangSwitch,
   t,
 } from "../copy";
-import { announce } from "../core/a11y.ts";
 import { destroyAll } from "../core/canvas-registry.ts";
-import { byId } from "../core/dom.ts";
+import { byId, el } from "../core/dom.ts";
 import { applyUrlLang, mountLangSwitch } from "../core/lang.ts";
 import { initTheme } from "../core/theme.ts";
+import { mountCards } from "../sections/cards/index.ts";
 import { mountCasualties } from "../sections/casualties.ts";
 import { renderChrome } from "../sections/chrome.ts";
 import { mountContext } from "../sections/context/context.ts";
-import { mountKpis } from "../sections/kpis.ts";
+import { mountKpis, mountKpiPresets } from "../sections/kpis.ts";
 import { mountPerCapita } from "../sections/percapita/percapita.ts";
 import { renderSources } from "../sections/sources/index.ts";
 import { mountSummary } from "../sections/summary.ts";
+import {
+  CRUMB_LABEL,
+  HOME_LABEL,
+  PAGES,
+  SITE_NAME,
+  pageById,
+  pageHref,
+  type PageSpec,
+} from "../site/routes.ts";
+import { bi } from "../copy";
+import { announce } from "../core/a11y.ts";
+
+function header(
+  host: HTMLElement,
+  level: 2 | 3,
+  title: string,
+  blurb: string,
+): void {
+  const h = el(level === 2 ? "h2" : "h3", "sec-title", title);
+  h.id = `${host.id}-title`;
+  host.replaceChildren(h, el("p", "sec-blurb", blurb));
+}
+
+function crumbs(page: PageSpec): void {
+  const host = byId("crumbs");
+  if (!host) return;
+  host.setAttribute("aria-label", bi(CRUMB_LABEL));
+
+  const trail: PageSpec[] = [];
+  for (let p: PageSpec | null = page; p; p = p.parent ? PAGES[p.parent] : null)
+    trail.unshift(p);
+
+  const list = el("ol");
+  trail.forEach((p, i) => {
+    const li = el("li");
+    if (i === trail.length - 1) {
+      const span = el("span", undefined, bi(p.title));
+      span.setAttribute("aria-current", "page");
+      li.append(span);
+    } else {
+      const a = el("a", undefined, bi(p.title));
+      a.href = pageHref(
+        page.path,
+        p === PAGES.home
+          ? "home"
+          : ((Object.keys(PAGES) as Array<keyof typeof PAGES>).find(
+              (k) => PAGES[k] === p,
+            ) ?? "home"),
+      );
+      li.append(a);
+    }
+    list.append(li);
+  });
+  host.replaceChildren(list);
+}
+
+function mountPage(page: PageSpec): void {
+  const hdr = byId("hdr-page");
+  if (hdr) header(hdr, 2, bi(page.title), bi(page.blurb));
+  crumbs(page);
+  mountCards(page.path, page.cards);
+}
 
 export function render(): void {
-  destroyAll(); // one owner for every chart instance, both sections
-  renderSources();
-  renderChrome(); // headers, notes, #disclaimer, #sources, <title>
-  applyStaticCopy(); // kicker, lede, card titles, legend headings
+  destroyAll();
+  const page =
+    pageById(document.documentElement.dataset.page ?? "") ?? PAGES.home;
+
+  renderChrome(); // legacy A–E headers, notes, #about, <title>
+  renderSources(); // Sources + the new Media group
+  mountPage(page);
+  document.title = `${bi(page.title)} — ${bi(SITE_NAME)}`;
+
+  applyStaticCopy();
   syncLangSwitch();
-  mountCharts();
-  mountKpis();
-  mountCasualties();
-  mountPerCapita();
-  mountContext();
-  try {
-    mountCrossEpisode();
-  } catch (err) {
-    console.error("[trellis]", err);
-  }
-  try {
-    mountSummary();
-  } catch (err) {
-    console.error("[summary]", err);
+
+  for (const mount of [
+    mountCharts,
+    mountKpis,
+    mountKpiPresets,
+    mountCasualties,
+    mountPerCapita,
+    mountContext,
+    mountCrossEpisode,
+    mountSummary,
+  ]) {
+    try {
+      mount();
+    } catch (err) {
+      console.error(`[${mount.name}]`, err);
+    }
   }
 }
 
-/* Coalesce: several listeners switching language still produce one render. */
 let frame = 0;
 
 export function scheduleRender(): void {
@@ -63,42 +132,15 @@ export function scheduleRender(): void {
   });
 }
 
-const REQUIRED = [
-  ...CHARTS.map((c) => c.id),
-  "trellis-episodes",
-  "trellis-items",
-  "legend-items",
-  "legend-events",
-  "summary",
-  "legend-summary",
-  "disclaimer",
-  "sources",
-  "kpi-a",
-  "kpi-b",
-  "kpi-c",
-  "kpi-d",
-  "kpi-e",
-] as const;
-
-/** hdr-a…hdr-cp are no longer validated: page.ts already no-ops on a missing
- *  header, so their absence was an abort switch for no reason. */
 function boot(): void {
-  const missing = REQUIRED.filter((id) => !byId(id));
-  if (missing.length) {
-    console.error(
-      `[boot] ${missing.length} host(s) absent from the DOM: ${missing.join(", ")}`,
-    );
-    return;
-  }
-
-  applyUrlLang(); // ?lang= → state, no persist, before any subscriber
-  mountLangSwitch(); // the only click handler for the control
-  initTheme(); // toggle + system-change listener; charts repaint on change
-  onLocaleChange((_next, _prev) => {
+  applyUrlLang();
+  mountLangSwitch();
+  initTheme();
+  onLocaleChange(() => {
     scheduleRender();
     announce(fill(t().a11y.switched, { lang: localeMeta().label }));
   });
-  render(); // first paint
+  render();
   window.addEventListener("pagehide", destroyAll, { once: true });
 }
 
