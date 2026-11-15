@@ -1,12 +1,9 @@
 /* src/client/main.ts — boot: locale, chrome, charts, trellis.
    One render path: setLang emits once, scheduleRender coalesces to one frame. */
 
-import { mountCharts } from "../charts/chart.ts";
+import { mountCharts } from "../charts/mount.ts";
 import { CHARTS } from "../charts/specs.ts";
-import {
-  mountCrossEpisode,
-  type TrellisHosts,
-} from "../charts/trellis/index.ts";
+import { mountCrossEpisode } from "../charts/trellis/index.ts";
 import {
   applyStaticCopy,
   fill,
@@ -28,18 +25,6 @@ import { mountPerCapita } from "../sections/percapita/percapita.ts";
 import { renderSources } from "../sections/sources/index.ts";
 import { mountSummary } from "../sections/summary.ts";
 
-function trellisHosts(): TrellisHosts | null {
-  const episodeHost = byId("trellis-episodes");
-  const itemHost = byId("trellis-items");
-  const itemLegend = byId("legend-items");
-  const eventLegend = byId("legend-events");
-  if (!episodeHost || !itemHost || !itemLegend || !eventLegend) {
-    console.warn("[trellis] one or more hosts missing");
-    return null;
-  }
-  return { episodeHost, itemHost, itemLegend, eventLegend }; // no `as Required<>` cast
-}
-
 export function render(): void {
   destroyAll(); // one owner for every chart instance, both sections
   renderSources();
@@ -50,7 +35,6 @@ export function render(): void {
   mountKpis();
   mountCasualties();
   mountPerCapita();
-  mountContext();
   mountContext();
   try {
     mountCrossEpisode();

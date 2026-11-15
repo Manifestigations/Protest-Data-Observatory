@@ -1,11 +1,11 @@
 /* ------------------------------------------------------------------ model */
 
-type Run =
+export type Run =
   | string
   | { readonly em: string }
   | { readonly link: string; readonly href: string };
 
-type Block =
+export type Block =
   | { readonly kind: "p"; readonly runs: readonly Run[] }
   | { readonly kind: "ul"; readonly items: readonly (readonly Run[])[] }
   | {
@@ -14,8 +14,11 @@ type Block =
       readonly by: readonly Run[];
     };
 
-interface SubSection {
+export interface SubSection {
   readonly id: string;
   readonly title: string;
   readonly blocks: readonly Block[];
 }
+
+/** The whole section, per locale. */
+export type About = readonly SubSection[];

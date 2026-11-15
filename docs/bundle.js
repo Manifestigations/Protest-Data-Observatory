@@ -13728,6 +13728,15 @@ function destroyAll() {
   live2.clear();
 }
 
+// src/core/dom.ts
+var byId = (id) => document.getElementById(id);
+function el(name, cls, text) {
+  const node = document.createElement(name);
+  if (cls) node.className = cls;
+  if (text !== void 0) node.textContent = text;
+  return node;
+}
+
 // src/model/index.ts
 var METRICS = ["p", "a", "f", "i"];
 var METRIC_OF = {
@@ -14517,15 +14526,6 @@ var CASES = [
   }
 ];
 
-// src/core/dom.ts
-var byId = (id) => document.getElementById(id);
-function el(name, cls, text) {
-  const node = document.createElement(name);
-  if (cls) node.className = cls;
-  if (text !== void 0) node.textContent = text;
-  return node;
-}
-
 // src/sections/context/context.ts
 var L = (o) => String(getLocale()).slice(0, 2) === "fr" ? o.fr : o.en;
 var fillL = (o, params) => fill(L(o), params);
@@ -14834,197 +14834,9 @@ function mountContext() {
   }
 }
 
-// src/data/notes.ts
-function noteText(ref) {
-  if (!ref) return "";
-  const m = t().chart;
-  switch (ref.k) {
-    case "obs":
-      return m.obsNotes[ref.date]?.[ref.metric] ?? "";
-    case "policing": {
-      const head = ref.low === ref.high ? nf().format(ref.low) : `${nf().format(ref.low)}\u2013${nf().format(ref.high)}`;
-      const note2 = m.deployNotes[ref.date];
-      return fill(note2 ? m.policingDay : m.policingDayPlain, {
-        head,
-        low: nf().format(RATE.low),
-        high: nf().format(RATE.high),
-        note: note2 ?? ""
-      });
-    }
-    case "cumulative":
-      return fill(ref.added ? m.cumulativeAdded : m.cumulativeCarried, {
-        days: ref.days
-      });
-    case "week": {
-      const p = ref.p;
-      const parts = [
-        fill(p.kind === "national" ? m.weekNational : m.weekRegionalOnly, {
-          n: p.days
-        })
-      ];
-      if (p.peak) parts.push(fill(m.weekPeak, { date: fmtDayMonth(p.peak) }));
-      if (p.noNational) parts.push(m.weekNoNational);
-      if (p.excluded) parts.push(fill(m.weekExcluded, { n: p.excluded }));
-      if (p.floored) parts.push(m.weekFloored);
-      if (p.clipped) parts.push(m.weekClipped);
-      if (p.vacation) parts.push(m.weekVacation);
-      return parts.join(m.weekJoin);
-    }
-    default:
-      return "";
-  }
-}
-function suffixFor(q, detached) {
-  const s = t().chart.suffix;
-  const text = q === "c" ? s.c : q === "w" ? s.w : q === "e" ? s.e : q === "f" ? s.f : q === "x" ? s.x : detached ? s.regional : "";
-  return text ? fill(t().chart.suffixWrap, { text }) : "";
-}
-
-// src/data/population.ts
-var POPULATION = {
-  /* 1968 has one base only. INSEE, RP1968 in the 1 January 2026 geography:
-     49 711 853. Not 49 723 072 — that is the older "sans doubles comptes"
-     figure, 11 000 people adrift. Dated to the census, not to 1 January. */
-  "1968": { at: "1968-03-07", france: null, metro: 49711853 },
-  "2006": { at: "2006-01-01", france: 63186117, metro: 61399733 },
-  "2018": { at: "2018-01-01", france: 66992e3, metro: 64844e3 },
-  "2019": { at: "2019-01-01", france: 67258e3, metro: 65097e3 },
-  "2023": { at: "2023-01-01", france: 68405e3, metro: 66165815 },
-  "2025": { at: "2025-01-01", france: 68852e3, metro: 66579e3 },
-  "2026": {
-    at: "2026-01-01",
-    france: 69082e3,
-    metro: 66793e3,
-    aged15_64: 42514e3,
-    // summed from the age-by-age table — an estimate
-    active: 318e5
-    // 2025 annual average; the 2026 release is not out
-  }
-};
-var KEY_2026 = "2026";
-var EPISODE_POP = {
-  may68: "1968",
-  cpe: "2006",
-  gj: "2018",
-  nahel: "2023",
-  pensions: "2023",
-  bt: "2025",
-  students26: "2026"
-};
-var popKeyFor = (id) => EPISODE_POP[id] ?? "";
-var population = (key) => POPULATION[key] ?? null;
-function basisOf(pop) {
-  if (!pop) return null;
-  if (pop.france !== null) return "france";
-  return pop.metro > 0 ? "metro" : null;
-}
-function denominator(pop) {
-  if (!pop) return null;
-  if (pop.france !== null) return pop.france;
-  return pop.metro > 0 ? pop.metro : null;
-}
-function pctOfValue(v, pop) {
-  if (v === null || !Number.isFinite(v) || !(v > 0)) return null;
-  const d = denominator(pop);
-  if (d === null || !(d > 0)) return null;
-  return v / d * 100;
-}
-
-// src/charts/tooltip.ts
-var DEFAULT_SIZE = 12;
-var MAX_WIDTH = 360;
-var MIN_WIDTH = 80;
-var probe;
-function measurer() {
-  if (probe === void 0) {
-    probe = document.createElement("canvas").getContext("2d");
-  }
-  return probe;
-}
-function fontCss(font, bold) {
-  const size = font?.size ?? Chart.defaults.font.size ?? DEFAULT_SIZE;
-  const family = Array.isArray(font?.family) ? font.family.join(", ") : font?.family ?? Chart.defaults.font.family;
-  const style = font?.style ?? "normal";
-  const weight = font?.weight ?? (bold ? "bold" : "normal");
-  return `${style} ${weight} ${size}px ${family}`;
-}
-function chromeWidth(tt) {
-  const pad = tt.padding ?? 6;
-  const side = typeof pad === "number" ? pad * 2 : (pad.left ?? 0) + (pad.right ?? 0);
-  const swatch = tt.displayColors === false ? 0 : (tt.boxWidth ?? DEFAULT_SIZE) + (tt.boxPadding ?? 6);
-  return side + swatch + 2 * (tt.caretPadding ?? 2);
-}
-function textWidth(chart, tt) {
-  const frame2 = chart.chartArea?.width ?? chart.width;
-  return Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, frame2 - chromeWidth(tt)));
-}
-function wrapText(text, max, font) {
-  const ctx = measurer();
-  if (!ctx) return text.split("\n");
-  ctx.font = font;
-  const fits = (s) => ctx.measureText(s).width <= max;
-  const lines = [];
-  for (const para of text.split("\n")) {
-    const words = para.split(/\s+/).filter(Boolean);
-    if (!words.length) {
-      lines.push("");
-      continue;
-    }
-    let line = "";
-    for (const word of words) {
-      if (line && !fits(`${line} ${word}`)) {
-        lines.push(line);
-        line = "";
-      }
-      if (!line && !fits(word)) {
-        let rest = word;
-        while (rest.length > 1 && !fits(rest)) {
-          let lo = 1;
-          let hi = rest.length;
-          while (lo < hi) {
-            const mid = lo + hi + 1 >> 1;
-            if (fits(rest.slice(0, mid))) lo = mid;
-            else hi = mid - 1;
-          }
-          lines.push(rest.slice(0, lo));
-          rest = rest.slice(lo);
-        }
-        line = rest;
-        continue;
-      }
-      line = line ? `${line} ${word}` : word;
-    }
-    if (line) lines.push(line);
-  }
-  return lines;
-}
-function wrapTooltipLines(text, item, part = "body") {
-  const chart = item?.chart;
-  if (!chart) return text.split("\n");
-  const tt = chart.options.plugins?.tooltip ?? {};
-  const font = fontCss(
-    part === "title" ? tt.titleFont : part === "footer" ? tt.footerFont : tt.bodyFont,
-    part !== "body"
-  );
-  return wrapText(text, textWidth(chart, tt), font);
-}
-
-// src/charts/chart.ts
-Chart.register(
-  LineController,
-  LineElement,
-  LogarithmicScale,
-  PointElement,
-  LinearScale,
-  CategoryScale,
-  plugin_tooltip,
-  plugin_legend,
-  plugin_title,
-  plugin_subtitle
-);
-var LEFT = "y";
-var RIGHT = "y1";
-var CAP_PX = 5;
+// src/charts/series.ts
+var AXIS_LEFT = "y";
+var AXIS_RIGHT = "y1";
 var DAMAGES_ANCHOR = "2026-10-24";
 var damagesRadius = (r) => DATES.map((d) => d === DAMAGES_ANCHOR ? 0 : r);
 var DEF = {
@@ -15041,7 +14853,7 @@ var DEF = {
     unit: "count",
     radius: 3,
     width: 1.75,
-    axis: RIGHT,
+    axis: AXIS_RIGHT,
     log: true
   },
   strikersDaily: {
@@ -15134,7 +14946,7 @@ var DEF = {
     unit: "count",
     radius: 3,
     width: 1.75,
-    axis: RIGHT,
+    axis: AXIS_RIGHT,
     log: true
   },
   arrestsWeekly: {
@@ -15173,227 +14985,15 @@ function visiblePoints(id) {
   });
   return out;
 }
-var CHARTS = [
-  {
-    id: "chart-protesters",
-    copy: "protestersDaily",
-    weekly: false,
-    series: ["protestersDaily", "strikersDaily", "blockadesDaily"]
-  },
-  {
-    id: "chart-enforcement",
-    copy: "enforcementDaily",
-    weekly: false,
-    series: [
-      "arrestsDaily",
-      "forcesDaily",
-      "forcesInjuredStock",
-      "protestersInjuredDaily"
-    ]
-  },
-  {
-    id: "chart-costs",
-    copy: "cost",
-    weekly: false,
-    series: ["damagesDaily", "policingDaily", "policingCumulative"]
-  },
-  {
-    id: "chart-protesters-weekly",
-    copy: "protestersWeekly",
-    weekly: true,
-    series: ["protestersWeekly", "strikersWeekly", "blockadesWeekly"]
-  },
-  {
-    id: "chart-enforcement-weekly",
-    copy: "enforcementWeekly",
-    weekly: true,
-    series: ["arrestsWeekly", "forcesWeekly", "protestersInjuredWeekly"]
-  }
-];
-function view(weekly) {
-  const c = t().chart;
-  return weekly ? {
-    labels: WEEKS.map(
-      (w) => fmtWeek(w.key, w.end) + (w.touchesEdge ? c.edgeMark : "")
-    ),
-    titles: WEEKS.map(
-      (w) => fill(w.touchesEdge ? c.weekOfPartial : c.weekOf, {
-        date: fmtDayMonth(w.key)
-      })
-    ),
-    footers: WEEKS.map(() => null),
-    xTitle: c.axisWeek,
-    maxRotation: 0,
-    maxTicksLimit: 12
-  } : {
-    labels: DATES.map(fmtDayMonth),
-    titles: DATES.map(fmtDate),
-    footers: DATES.map((d) => c.dayNotes[d] ?? null),
-    xTitle: c.axisDate,
-    maxRotation: 90,
-    maxTicksLimit: 25
-  };
+
+// src/charts/plugins/clip.ts
+function clipToArea(ctx, area) {
+  ctx.beginPath();
+  ctx.rect(area.left, area.top, area.width, area.height);
+  ctx.clip();
 }
-var DAILY_GAP = 7;
-var WEEKLY_GAP = 1;
-function datasetsFor(id, weekly) {
-  const def = DEF[id];
-  if (!def) throw new Error(`chart.ts: no DEF entry for series "${id}"`);
-  if (!def.data) throw new Error(`chart.ts: series "${id}" has no data`);
-  if (def.pointRadius && def.pointRadius.length !== def.data.length) {
-    throw new Error(
-      `chart.ts: "${id}" pointRadius has ${def.pointRadius.length} entries, expected ${def.data.length}`
-    );
-  }
-  const radiusAt = (i, bump = 0) => {
-    const r = def.pointRadius?.[i] ?? def.radius;
-    return r === 0 ? 0 : r + bump;
-  };
-  const copy = t().chart.series[id];
-  const axis = def.axis ?? LEFT;
-  const plot = (keep) => def.data.map((p) => keep(p) ? p.v : null);
-  const bands = (keep) => def.data.map((p) => keep(p) ? p.band : null);
-  const line = {
-    label: copy.label,
-    data: plot((p) => !p.detach),
-    yAxisID: axis,
-    unit: def.unit,
-    perCapita: id === "protestersDaily" || id === "protestersWeekly",
-    errorBars: bands((p) => !p.detach),
-    errorBarColor: def.color,
-    bandFill: Boolean(def.bandFill),
-    bandFillColor: def.bandFill,
-    noWhiskers: Boolean(def.shadeOnly),
-    quality: def.data.map((p) => p.q),
-    notes: def.data.map((p) => p.note),
-    borderColor: def.color,
-    backgroundColor: def.color,
-    borderWidth: def.width,
-    pointStyle: def.style,
-    pointRadius: def.data.map((_, i) => radiusAt(i)),
-    pointHoverRadius: def.data.map((_, i) => radiusAt(i, 2)),
-    pointHitRadius: 14,
-    tension: 0,
-    // Chart.js must connect nothing across a hole: the connectors plugin
-    // draws every bridge itself, so solid/dashed/dotted is decided once.
-    spanGaps: false,
-    connectors: {
-      series: def.data,
-      slots: weekly ? WEEKLY_GAP : DAILY_GAP
-    }
-  };
-  if (!def.data.some((p) => p.detach)) return [line];
-  return [
-    line,
-    {
-      label: copy.detached,
-      data: plot((p) => p.detach),
-      yAxisID: axis,
-      unit: def.unit,
-      perCapita: id === "protestersDaily" || id === "protestersWeekly",
-      showLine: false,
-      detachedOnly: true,
-      errorBars: bands((p) => p.detach),
-      errorBarColor: def.color,
-      noWhiskers: Boolean(def.shadeOnly),
-      quality: line.quality,
-      notes: line.notes,
-      borderWidth: 0,
-      pointStyle: def.style ?? "circle",
-      pointBackgroundColor: THEME.hollow,
-      pointBorderColor: def.color,
-      pointBorderWidth: 2,
-      pointRadius: def.data.map((_, i) => radiusAt(i, 1)),
-      pointHoverRadius: def.data.map((_, i) => radiusAt(i, 3)),
-      pointHoverBorderWidth: 3,
-      pointHitRadius: 14,
-      spanGaps: false
-    }
-  ];
-}
-var errorBars = {
-  id: "errorBars",
-  beforeDatasetsDraw(chart) {
-    const { ctx, chartArea } = chart;
-    for (let i = 0; i < chart.data.datasets.length; i++) {
-      const ds = chart.data.datasets[i];
-      if (!ds.bandFill || !ds.errorBars) continue;
-      const meta = chart.getDatasetMeta(i);
-      if (meta.hidden) continue;
-      const scale = chart.scales[meta.yAxisID ?? LEFT];
-      if (!scale) continue;
-      const pts = meta.data;
-      const lowPts = [];
-      const highPts = [];
-      for (let j = 0; j < pts.length; j++) {
-        const band = ds.errorBars[j];
-        const p = pts[j];
-        if (!band || p.skip) continue;
-        lowPts.push([p.x, scale.getPixelForValue(band[0])]);
-        highPts.push([p.x, scale.getPixelForValue(band[1])]);
-      }
-      if (lowPts.length < 2) continue;
-      ctx.save();
-      ctx.beginPath();
-      ctx.rect(
-        chartArea.left,
-        chartArea.top,
-        chartArea.width,
-        chartArea.height
-      );
-      ctx.clip();
-      ctx.beginPath();
-      ctx.moveTo(lowPts[0][0], lowPts[0][1]);
-      for (let k = 1; k < lowPts.length; k++)
-        ctx.lineTo(lowPts[k][0], lowPts[k][1]);
-      for (let k = highPts.length - 1; k >= 0; k--)
-        ctx.lineTo(highPts[k][0], highPts[k][1]);
-      ctx.closePath();
-      ctx.fillStyle = ds.bandFillColor ?? "rgba(14,116,144,0.14)";
-      ctx.fill();
-      ctx.restore();
-    }
-  },
-  afterDatasetsDraw(chart) {
-    const { ctx, chartArea } = chart;
-    for (let i = 0; i < chart.data.datasets.length; i++) {
-      const ds = chart.data.datasets[i];
-      if (!ds.errorBars || ds.noWhiskers) continue;
-      const meta = chart.getDatasetMeta(i);
-      if (meta.hidden) continue;
-      const scale = chart.scales[meta.yAxisID ?? LEFT];
-      if (!scale) continue;
-      const pts = meta.data;
-      ctx.save();
-      ctx.beginPath();
-      ctx.rect(
-        chartArea.left,
-        chartArea.top,
-        chartArea.width,
-        chartArea.height
-      );
-      ctx.clip();
-      ctx.strokeStyle = ds.errorBarColor ?? THEME.muted;
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      for (let j = 0; j < pts.length; j++) {
-        const band = ds.errorBars[j];
-        const p = pts[j];
-        if (!band || p.skip) continue;
-        const yHigh = scale.getPixelForValue(band[1]);
-        const yLow = scale.getPixelForValue(band[0]);
-        ctx.moveTo(p.x, yHigh);
-        ctx.lineTo(p.x, yLow);
-        ctx.moveTo(p.x - CAP_PX, yHigh);
-        ctx.lineTo(p.x + CAP_PX, yHigh);
-        ctx.moveTo(p.x - CAP_PX, yLow);
-        ctx.lineTo(p.x + CAP_PX, yLow);
-      }
-      ctx.stroke();
-      ctx.restore();
-    }
-  }
-};
+
+// src/charts/plugins/connectors.ts
 var connectors = {
   id: "connectors",
   beforeDatasetsDraw(chart) {
@@ -15406,7 +15006,7 @@ var connectors = {
       if (!spec) continue;
       const meta = chart.getDatasetMeta(i);
       if (meta.hidden) continue;
-      const ys = scales[meta.yAxisID ?? LEFT];
+      const ys = scales[meta.yAxisID ?? AXIS_LEFT];
       if (!ys) continue;
       const logAxis = ys.type === "logarithmic";
       const at = [];
@@ -15418,14 +15018,7 @@ var connectors = {
       }
       if (at.length < 2) continue;
       ctx.save();
-      ctx.beginPath();
-      ctx.rect(
-        chartArea.left,
-        chartArea.top,
-        chartArea.width,
-        chartArea.height
-      );
-      ctx.clip();
+      clipToArea(ctx, chartArea);
       ctx.strokeStyle = ds.borderColor ?? THEME.ink;
       ctx.lineWidth = ds.borderWidth ?? 1;
       ctx.lineJoin = "round";
@@ -15447,6 +15040,80 @@ var connectors = {
     }
   }
 };
+
+// src/charts/plugins/error-bars.ts
+var CAP_PX = 5;
+var errorBars = {
+  id: "errorBars",
+  beforeDatasetsDraw(chart) {
+    const { ctx, chartArea } = chart;
+    for (let i = 0; i < chart.data.datasets.length; i++) {
+      const ds = chart.data.datasets[i];
+      if (!ds.bandFill || !ds.errorBars) continue;
+      const meta = chart.getDatasetMeta(i);
+      if (meta.hidden) continue;
+      const scale = chart.scales[meta.yAxisID ?? AXIS_LEFT];
+      if (!scale) continue;
+      const pts = meta.data;
+      const lowPts = [];
+      const highPts = [];
+      for (let j = 0; j < pts.length; j++) {
+        const band = ds.errorBars[j];
+        const p = pts[j];
+        if (!band || p.skip) continue;
+        lowPts.push([p.x, scale.getPixelForValue(band[0])]);
+        highPts.push([p.x, scale.getPixelForValue(band[1])]);
+      }
+      if (lowPts.length < 2) continue;
+      ctx.save();
+      clipToArea(ctx, chartArea);
+      ctx.beginPath();
+      ctx.moveTo(lowPts[0][0], lowPts[0][1]);
+      for (let k = 1; k < lowPts.length; k++)
+        ctx.lineTo(lowPts[k][0], lowPts[k][1]);
+      for (let k = highPts.length - 1; k >= 0; k--)
+        ctx.lineTo(highPts[k][0], highPts[k][1]);
+      ctx.closePath();
+      ctx.fillStyle = ds.bandFillColor ?? "rgba(14,116,144,0.14)";
+      ctx.fill();
+      ctx.restore();
+    }
+  },
+  afterDatasetsDraw(chart) {
+    const { ctx, chartArea } = chart;
+    for (let i = 0; i < chart.data.datasets.length; i++) {
+      const ds = chart.data.datasets[i];
+      if (!ds.errorBars || ds.noWhiskers) continue;
+      const meta = chart.getDatasetMeta(i);
+      if (meta.hidden) continue;
+      const scale = chart.scales[meta.yAxisID ?? AXIS_LEFT];
+      if (!scale) continue;
+      const pts = meta.data;
+      ctx.save();
+      clipToArea(ctx, chartArea);
+      ctx.strokeStyle = ds.errorBarColor ?? THEME.muted;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      for (let j = 0; j < pts.length; j++) {
+        const band = ds.errorBars[j];
+        const p = pts[j];
+        if (!band || p.skip) continue;
+        const yHigh = scale.getPixelForValue(band[1]);
+        const yLow = scale.getPixelForValue(band[0]);
+        ctx.moveTo(p.x, yHigh);
+        ctx.lineTo(p.x, yLow);
+        ctx.moveTo(p.x - CAP_PX, yHigh);
+        ctx.lineTo(p.x + CAP_PX, yHigh);
+        ctx.moveTo(p.x - CAP_PX, yLow);
+        ctx.lineTo(p.x + CAP_PX, yLow);
+      }
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+};
+
+// src/charts/plugins/span-mark.ts
 var SPAN_MARKS = [
   {
     from: "2026-10-17",
@@ -15469,13 +15136,11 @@ var spanMark = {
     const spans = chart.options.plugins?.spanMark?.spans;
     if (!spans?.length) return;
     const xs = chart.scales.x;
-    const ys = chart.scales[LEFT];
+    const ys = chart.scales[AXIS_LEFT];
     if (!xs || !ys) return;
     const { ctx, chartArea } = chart;
     ctx.save();
-    ctx.beginPath();
-    ctx.rect(chartArea.left, chartArea.top, chartArea.width, chartArea.height);
-    ctx.clip();
+    clipToArea(ctx, chartArea);
     ctx.lineWidth = 1.5;
     for (const s of spans) {
       const i0 = DATES.indexOf(s.from);
@@ -15520,17 +15185,74 @@ var spanMark = {
     ctx.restore();
   }
 };
+
+// src/data/population.ts
+var POPULATION = {
+  /* 1968 has one base only. INSEE, RP1968 in the 1 January 2026 geography:
+     49 711 853. Not 49 723 072 — that is the older "sans doubles comptes"
+     figure, 11 000 people adrift. Dated to the census, not to 1 January. */
+  "1968": { at: "1968-03-07", france: null, metro: 49711853 },
+  "2006": { at: "2006-01-01", france: 63186117, metro: 61399733 },
+  "2018": { at: "2018-01-01", france: 66992e3, metro: 64844e3 },
+  "2019": { at: "2019-01-01", france: 67258e3, metro: 65097e3 },
+  "2023": { at: "2023-01-01", france: 68405e3, metro: 66165815 },
+  "2025": { at: "2025-01-01", france: 68852e3, metro: 66579e3 },
+  "2026": {
+    at: "2026-01-01",
+    france: 69082e3,
+    metro: 66793e3,
+    aged15_64: 42514e3,
+    // summed from the age-by-age table — an estimate
+    active: 318e5
+    // 2025 annual average; the 2026 release is not out
+  }
+};
+var KEY_2026 = "2026";
+var EPISODE_POP = {
+  may68: "1968",
+  cpe: "2006",
+  gj: "2018",
+  nahel: "2023",
+  pensions: "2023",
+  bt: "2025",
+  students26: "2026"
+};
+var popKeyFor = (id) => EPISODE_POP[id] ?? "";
+var population = (key) => POPULATION[key] ?? null;
+function basisOf(pop) {
+  if (!pop) return null;
+  if (pop.france !== null) return "france";
+  return pop.metro > 0 ? "metro" : null;
+}
+function denominator(pop) {
+  if (!pop) return null;
+  if (pop.france !== null) return pop.france;
+  return pop.metro > 0 ? pop.metro : null;
+}
+function pctOfValue(v, pop) {
+  if (v === null || !Number.isFinite(v) || !(v > 0)) return null;
+  const d = denominator(pop);
+  if (d === null || !(d > 0)) return null;
+  return v / d * 100;
+}
+
+// src/charts/format.ts
 function fmt(v, unit) {
   return unit === "eurM" ? fill(t().chart.eurM, { v: eurM().format(v) }) : nf().format(Math.round(v));
 }
+var pctFormat = new Intl.NumberFormat(getLocale(), {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2
+});
+var fmtPct = (v) => `${pctFormat.format(v)}%`;
 var RATE2 = {
   en: "= {pct} of the population ({pop} residents)",
   fr: "= {pct} de la population ({pop} habitants)"
 };
 function rateLine(band, v) {
   const pop = population(KEY_2026);
-  const lo = share(band?.[0] ?? v, pop);
-  const hi = share(band?.[1] ?? v, pop);
+  const lo = pctOfValue(band?.[0] ?? v, pop);
+  const hi = pctOfValue(band?.[1] ?? v, pop);
   if (lo === null || hi === null) return null;
   const pct = hi - lo < 1e-9 ? fmtPct(lo) : `${fmtPct(lo)} \u2013 ${fmtPct(hi)}`;
   return fill(bi(RATE2), {
@@ -15538,42 +15260,12 @@ function rateLine(band, v) {
     pop: nf().format(denominator(pop) ?? 0)
   });
 }
-var tickFormat = (unit) => (v) => unit === "eurM" ? fill(t().chart.eurM, { v: nf().format(v) }) : compact().format(v);
-function tooltipCallbacks(v) {
-  const m = t().chart;
-  return {
-    title: (items) => wrapTooltipLines(v.titles[items[0].dataIndex] ?? "", items[0], "title"),
-    label: (item) => {
-      const ds = item.dataset;
-      const unit = ds.unit ?? "count";
-      const note2 = noteText(ds.notes?.[item.dataIndex]);
-      const detached = ds.showLine === false;
-      const band = ds.errorBars?.[item.dataIndex];
-      const base = band ? fill(m.tooltipRange, {
-        label: ds.label,
-        mid: fmt((band[0] + band[1]) / 2, unit),
-        low: fmt(band[0], unit),
-        high: fmt(band[1], unit)
-      }) : fill(m.tooltipPoint, {
-        label: ds.label,
-        value: fmt(item.parsed.y ?? 0, unit)
-      });
-      const body = base + suffixFor(ds.quality?.[item.dataIndex], detached);
-      const rate = ds.perCapita ? rateLine(ds.errorBars?.[item.dataIndex], item.parsed.y ?? 0) : null;
-      const full = rate ? `${body}
-${rate}` : body;
-      return wrapTooltipLines(
-        note2 ? fill(m.tooltipNote, { base: full, note: note2 }) : full,
-        item,
-        "body"
-      );
-    },
-    footer: (items) => {
-      const note2 = v.footers[items[0].dataIndex];
-      return note2 ? wrapTooltipLines(fill(m.footerMark, { note: note2 }), items[0], "footer") : [];
-    }
-  };
+var tickFormat = (unit) => (v) => unit === "eurM" ? fill(t().chart.eurM, { v: nf().format(v) }) : compactFixed(v);
+function compactFixed(v) {
+  return nf().format(v);
 }
+
+// src/charts/axes.ts
 function niceCeil(v) {
   if (!Number.isFinite(v) || v <= 0) return 10;
   const base = 10 ** Math.floor(Math.log10(v));
@@ -15678,16 +15370,16 @@ function baseScales(v) {
 }
 function scalesFor(v, card2, ids) {
   const defs = ids.map((id) => DEF[id]);
-  const left = defs.filter((d) => (d.axis ?? LEFT) === LEFT);
-  const right = defs.filter((d) => d.axis === RIGHT);
+  const left = defs.filter((d) => (d.axis ?? AXIS_LEFT) === AXIS_LEFT);
+  const right = defs.filter((d) => d.axis === AXIS_RIGHT);
   const leftList = (left.length ? left : defs).map((d) => d.data);
   const leftUnit = left[0]?.unit ?? defs[0]?.unit ?? "count";
   const scales = {
     ...baseScales(v),
-    [LEFT]: yAxis(card2.y ?? card2.yLeft ?? "", leftList, leftUnit, "left")
+    [AXIS_LEFT]: yAxis(card2.y ?? card2.yLeft ?? "", leftList, leftUnit, "left")
   };
   if (right.length) {
-    scales[RIGHT] = {
+    scales[AXIS_RIGHT] = {
       ...yAxis(
         card2.yRight ?? "",
         right.map((d) => d.data),
@@ -15704,6 +15396,275 @@ function scalesFor(v, card2, ids) {
   }
   return scales;
 }
+
+// src/data/notes.ts
+function noteText(ref) {
+  if (!ref) return "";
+  const m = t().chart;
+  switch (ref.k) {
+    case "obs":
+      return m.obsNotes[ref.date]?.[ref.metric] ?? "";
+    case "policing": {
+      const head = ref.low === ref.high ? nf().format(ref.low) : `${nf().format(ref.low)}\u2013${nf().format(ref.high)}`;
+      const note2 = m.deployNotes[ref.date];
+      return fill(note2 ? m.policingDay : m.policingDayPlain, {
+        head,
+        low: nf().format(RATE.low),
+        high: nf().format(RATE.high),
+        note: note2 ?? ""
+      });
+    }
+    case "cumulative":
+      return fill(ref.added ? m.cumulativeAdded : m.cumulativeCarried, {
+        days: ref.days
+      });
+    case "week": {
+      const p = ref.p;
+      const parts = [
+        fill(p.kind === "national" ? m.weekNational : m.weekRegionalOnly, {
+          n: p.days
+        })
+      ];
+      if (p.peak) parts.push(fill(m.weekPeak, { date: fmtDayMonth(p.peak) }));
+      if (p.noNational) parts.push(m.weekNoNational);
+      if (p.excluded) parts.push(fill(m.weekExcluded, { n: p.excluded }));
+      if (p.floored) parts.push(m.weekFloored);
+      if (p.clipped) parts.push(m.weekClipped);
+      if (p.vacation) parts.push(m.weekVacation);
+      return parts.join(m.weekJoin);
+    }
+    default:
+      return "";
+  }
+}
+function suffixFor(q, detached) {
+  const s = t().chart.suffix;
+  const text = q === "c" ? s.c : q === "w" ? s.w : q === "e" ? s.e : q === "f" ? s.f : q === "x" ? s.x : detached ? s.regional : "";
+  return text ? fill(t().chart.suffixWrap, { text }) : "";
+}
+
+// src/charts/tooltip.ts
+var DEFAULT_SIZE = 12;
+var MAX_WIDTH = 360;
+var MIN_WIDTH = 80;
+var probe;
+function measurer() {
+  if (probe === void 0) {
+    probe = document.createElement("canvas").getContext("2d");
+  }
+  return probe;
+}
+function fontCss(font, bold) {
+  const size = font?.size ?? Chart.defaults.font.size ?? DEFAULT_SIZE;
+  const family = Array.isArray(font?.family) ? font.family.join(", ") : font?.family ?? Chart.defaults.font.family;
+  const style = font?.style ?? "normal";
+  const weight = font?.weight ?? (bold ? "bold" : "normal");
+  return `${style} ${weight} ${size}px ${family}`;
+}
+function chromeWidth(tt) {
+  const pad = tt.padding ?? 6;
+  const side = typeof pad === "number" ? pad * 2 : (pad.left ?? 0) + (pad.right ?? 0);
+  const swatch = tt.displayColors === false ? 0 : (tt.boxWidth ?? DEFAULT_SIZE) + (tt.boxPadding ?? 6);
+  return side + swatch + 2 * (tt.caretPadding ?? 2);
+}
+function textWidth(chart, tt) {
+  const frame2 = chart.chartArea?.width ?? chart.width;
+  return Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, frame2 - chromeWidth(tt)));
+}
+function wrapText(text, max, font) {
+  const ctx = measurer();
+  if (!ctx) return text.split("\n");
+  ctx.font = font;
+  const fits = (s) => ctx.measureText(s).width <= max;
+  const lines = [];
+  for (const para of text.split("\n")) {
+    const words = para.split(/\s+/).filter(Boolean);
+    if (!words.length) {
+      lines.push("");
+      continue;
+    }
+    let line = "";
+    for (const word of words) {
+      if (line && !fits(`${line} ${word}`)) {
+        lines.push(line);
+        line = "";
+      }
+      if (!line && !fits(word)) {
+        let rest = word;
+        while (rest.length > 1 && !fits(rest)) {
+          let lo = 1;
+          let hi = rest.length;
+          while (lo < hi) {
+            const mid = lo + hi + 1 >> 1;
+            if (fits(rest.slice(0, mid))) lo = mid;
+            else hi = mid - 1;
+          }
+          lines.push(rest.slice(0, lo));
+          rest = rest.slice(lo);
+        }
+        line = rest;
+        continue;
+      }
+      line = line ? `${line} ${word}` : word;
+    }
+    if (line) lines.push(line);
+  }
+  return lines;
+}
+function wrapTooltipLines(text, item, part = "body") {
+  const chart = item?.chart;
+  if (!chart) return text.split("\n");
+  const tt = chart.options.plugins?.tooltip ?? {};
+  const font = fontCss(
+    part === "title" ? tt.titleFont : part === "footer" ? tt.footerFont : tt.bodyFont,
+    part !== "body"
+  );
+  return wrapText(text, textWidth(chart, tt), font);
+}
+
+// src/charts/chart-tooltip.ts
+function tooltipCallbacks(v) {
+  const m = t().chart;
+  return {
+    title: (items) => wrapTooltipLines(v.titles[items[0].dataIndex] ?? "", items[0], "title"),
+    label: (item) => {
+      const ds = item.dataset;
+      const unit = ds.unit ?? "count";
+      const note2 = noteText(ds.notes?.[item.dataIndex]);
+      const detached = ds.showLine === false;
+      const band = ds.errorBars?.[item.dataIndex];
+      const base = band ? fill(m.tooltipRange, {
+        label: ds.label,
+        mid: fmt((band[0] + band[1]) / 2, unit),
+        low: fmt(band[0], unit),
+        high: fmt(band[1], unit)
+      }) : fill(m.tooltipPoint, {
+        label: ds.label,
+        value: fmt(item.parsed.y ?? 0, unit)
+      });
+      const body = base + suffixFor(ds.quality?.[item.dataIndex], detached);
+      const rate = ds.perCapita ? rateLine(ds.errorBars?.[item.dataIndex], item.parsed.y ?? 0) : null;
+      const full = rate ? `${body}
+${rate}` : body;
+      return wrapTooltipLines(
+        note2 ? fill(m.tooltipNote, { base: full, note: note2 }) : full,
+        item,
+        "body"
+      );
+    },
+    footer: (items) => {
+      const note2 = v.footers[items[0].dataIndex];
+      return note2 ? wrapTooltipLines(fill(m.footerMark, { note: note2 }), items[0], "footer") : [];
+    }
+  };
+}
+
+// src/charts/datasets.ts
+var DAILY_GAP = 7;
+var WEEKLY_GAP = 1;
+function datasetsFor(id, weekly) {
+  const def = DEF[id];
+  if (!def) throw new Error(`datasets.ts: no DEF entry for series "${id}"`);
+  if (!def.data) throw new Error(`datasets.ts: series "${id}" has no data`);
+  if (def.pointRadius && def.pointRadius.length !== def.data.length) {
+    throw new Error(
+      `datasets.ts: "${id}" pointRadius has ${def.pointRadius.length} entries, expected ${def.data.length}`
+    );
+  }
+  const radiusAt = (i, bump = 0) => {
+    const r = def.pointRadius?.[i] ?? def.radius;
+    return r === 0 ? 0 : r + bump;
+  };
+  const copy = t().chart.series[id];
+  const axis = def.axis ?? AXIS_LEFT;
+  const plot = (keep) => def.data.map((p) => keep(p) ? p.v : null);
+  const bands = (keep) => def.data.map((p) => keep(p) ? p.band : null);
+  const line = {
+    label: copy.label,
+    data: plot((p) => !p.detach),
+    yAxisID: axis,
+    unit: def.unit,
+    perCapita: id === "protestersDaily" || id === "protestersWeekly",
+    errorBars: bands((p) => !p.detach),
+    errorBarColor: def.color,
+    bandFill: Boolean(def.bandFill),
+    bandFillColor: def.bandFill,
+    noWhiskers: Boolean(def.shadeOnly),
+    quality: def.data.map((p) => p.q),
+    notes: def.data.map((p) => p.note),
+    borderColor: def.color,
+    backgroundColor: def.color,
+    borderWidth: def.width,
+    pointStyle: def.style,
+    pointRadius: def.data.map((_, i) => radiusAt(i)),
+    pointHoverRadius: def.data.map((_, i) => radiusAt(i, 2)),
+    pointHitRadius: 14,
+    tension: 0,
+    // Chart.js must connect nothing across a hole: the connectors plugin
+    // draws every bridge itself, so solid/dashed/dotted is decided once.
+    spanGaps: false,
+    connectors: {
+      series: def.data,
+      slots: weekly ? WEEKLY_GAP : DAILY_GAP
+    }
+  };
+  if (!def.data.some((p) => p.detach)) return [line];
+  return [
+    line,
+    {
+      label: copy.detached,
+      data: plot((p) => p.detach),
+      yAxisID: axis,
+      unit: def.unit,
+      perCapita: id === "protestersDaily" || id === "protestersWeekly",
+      showLine: false,
+      detachedOnly: true,
+      errorBars: bands((p) => p.detach),
+      errorBarColor: def.color,
+      noWhiskers: Boolean(def.shadeOnly),
+      quality: line.quality,
+      notes: line.notes,
+      borderWidth: 0,
+      pointStyle: def.style ?? "circle",
+      pointBackgroundColor: THEME.hollow,
+      pointBorderColor: def.color,
+      pointBorderWidth: 2,
+      pointRadius: def.data.map((_, i) => radiusAt(i, 1)),
+      pointHoverRadius: def.data.map((_, i) => radiusAt(i, 3)),
+      pointHoverBorderWidth: 3,
+      pointHitRadius: 14,
+      spanGaps: false
+    }
+  ];
+}
+
+// src/charts/view.ts
+function view(weekly) {
+  const c = t().chart;
+  return weekly ? {
+    labels: WEEKS.map(
+      (w) => fmtWeek(w.key, w.end) + (w.touchesEdge ? c.edgeMark : "")
+    ),
+    titles: WEEKS.map(
+      (w) => fill(w.touchesEdge ? c.weekOfPartial : c.weekOf, {
+        date: fmtDayMonth(w.key)
+      })
+    ),
+    footers: WEEKS.map(() => null),
+    xTitle: c.axisWeek,
+    maxRotation: 0,
+    maxTicksLimit: 12
+  } : {
+    labels: DATES.map(fmtDayMonth),
+    titles: DATES.map(fmtDate),
+    footers: DATES.map((d) => c.dayNotes[d] ?? null),
+    xTitle: c.axisDate,
+    maxRotation: 90,
+    maxTicksLimit: 25
+  };
+}
+
+// src/charts/shell.ts
 var shell = (v, subtitle, title, extra) => ({
   responsive: true,
   maintainAspectRatio: false,
@@ -15770,6 +15731,59 @@ function buildChart(spec) {
     scales: scalesFor(v, card2, spec.series)
   };
 }
+
+// src/charts/specs.ts
+var CHARTS = [
+  {
+    id: "chart-protesters",
+    copy: "protestersDaily",
+    weekly: false,
+    series: ["protestersDaily", "strikersDaily", "blockadesDaily"]
+  },
+  {
+    id: "chart-enforcement",
+    copy: "enforcementDaily",
+    weekly: false,
+    series: [
+      "arrestsDaily",
+      "forcesDaily",
+      "forcesInjuredStock",
+      "protestersInjuredDaily"
+    ]
+  },
+  {
+    id: "chart-costs",
+    copy: "cost",
+    weekly: false,
+    series: ["damagesDaily", "policingDaily", "policingCumulative"]
+  },
+  {
+    id: "chart-protesters-weekly",
+    copy: "protestersWeekly",
+    weekly: true,
+    series: ["protestersWeekly", "strikersWeekly", "blockadesWeekly"]
+  },
+  {
+    id: "chart-enforcement-weekly",
+    copy: "enforcementWeekly",
+    weekly: true,
+    series: ["arrestsWeekly", "forcesWeekly", "protestersInjuredWeekly"]
+  }
+];
+
+// src/charts/mount.ts
+Chart.register(
+  LineController,
+  LineElement,
+  LogarithmicScale,
+  PointElement,
+  LinearScale,
+  CategoryScale,
+  plugin_tooltip,
+  plugin_legend,
+  plugin_title,
+  plugin_subtitle
+);
 var MIN_CHART_H = 420;
 function ensureChartBox(canvas) {
   let host = canvas.parentElement;
@@ -15828,45 +15842,6 @@ function mountCharts() {
     }
   }
 }
-
-// src/charts/specs.ts
-var CHARTS2 = [
-  {
-    id: "chart-protesters",
-    copy: "protestersDaily",
-    weekly: false,
-    series: ["protestersDaily", "strikersDaily", "blockadesDaily"]
-  },
-  {
-    id: "chart-enforcement",
-    copy: "enforcementDaily",
-    weekly: false,
-    series: [
-      "arrestsDaily",
-      "forcesDaily",
-      "forcesInjuredStock",
-      "protestersInjuredDaily"
-    ]
-  },
-  {
-    id: "chart-costs",
-    copy: "cost",
-    weekly: false,
-    series: ["damagesDaily", "policingDaily", "policingCumulative"]
-  },
-  {
-    id: "chart-protesters-weekly",
-    copy: "protestersWeekly",
-    weekly: true,
-    series: ["protestersWeekly", "strikersWeekly", "blockadesWeekly"]
-  },
-  {
-    id: "chart-enforcement-weekly",
-    copy: "enforcementWeekly",
-    weekly: true,
-    series: ["arrestsWeekly", "forcesWeekly", "protestersInjuredWeekly"]
-  }
-];
 
 // src/data/episodes/mai68.ts
 var MAY68 = {
@@ -16960,7 +16935,7 @@ function cell(c, extra = "") {
   const { text, cls } = cellText(c);
   return el("td", extra ? `${cls} ${extra}` : cls, text);
 }
-function share2(light, total) {
+function share(light, total) {
   if (light.s !== "n" || total.s !== "n" || total.v <= 0) return null;
   return light.v / total.v;
 }
@@ -17001,7 +16976,7 @@ function severityTable(rows, caption) {
     tr.append(cell(row.total));
     tr.append(cell(row.serious));
     tr.append(cell(row.light));
-    const p = share2(row.light, row.total);
+    const p = share(row.light, row.total);
     const td = el("td", "cas-share");
     if (p === null) {
       td.append(el("span", "cas-absent", "\u2014"));
@@ -17018,7 +16993,7 @@ function severityTable(rows, caption) {
 function headline() {
   const c = t().casualties;
   const top = SEVERITY_LEVELS[0];
-  const p = share2(top.light, top.total);
+  const p = share(top.light, top.total);
   const wrap = el("div", "cas-headline");
   const left = el("div", "cas-head-stat");
   left.append(
@@ -17129,7 +17104,7 @@ var RN_VOTE = "https://www.humanite.fr/politique/rassemblement-national/entre-le
 var HELICOPTER = "https://www.lavoixdunord.fr/506027/article/2018-12-13/un-helicoptere-etait-pret-samedi-au-cas-ou-pour-emmener-emmanuel-macron";
 var STRATEGY = "https://lepoing.net/manifestation-du-7-novembre-a-montpellier-la-contestation-cherche-encore-sa-strategie/";
 var BUNKER = "https://neru.tv/sources/macron-bunker-secret-pour-fuir-le-peuple/";
-var PAGES = "https://y1dwgth1otzig.github.io/french-protest-charts/?lang=en";
+var PAGES = "https://y1dwgth1otzig.github.io/french-protest-charts";
 var REPO = "https://github.com/y1DWgTh1oTZIG/french-protest-charts";
 
 // src/sections/about/quote.ts
@@ -17553,9 +17528,17 @@ var ABOUT_FR = [
 var SECTION_LABEL_FR = "Notes sur le projet";
 var CALLOUT_FR = "\u2026sauf cette section, qui est \xE9crite \xE0 100 % par un humain ! (en anglais, puis traduite automatiquement)";
 
+// src/sections/about/copy.ts
+var ABOUT = { en: ABOUT_EN, fr: ABOUT_FR };
+var SECTION_LABEL = {
+  en: SECTION_LABEL_EN,
+  fr: SECTION_LABEL_FR
+};
+var CALLOUT = { en: CALLOUT_EN, fr: CALLOUT_FR };
+
 // src/sections/about/blocks.ts
-var OPEN_ID = "";
-var FEATURED_ID = "analysis";
+var OPEN_ID = "analysis";
+var FEATURED_ID = OPEN_ID;
 function inline(run) {
   if (typeof run === "string") return document.createTextNode(run);
   if ("em" in run) {
@@ -17614,10 +17597,6 @@ function group(sub, open) {
   details.append(summary, body);
   return details;
 }
-var CALLOUT = {
-  en: CALLOUT_EN,
-  fr: CALLOUT_FR
-};
 function callout(lang) {
   const p = document.createElement("p");
   p.className = "callout callout--positive";
@@ -17627,14 +17606,6 @@ function callout(lang) {
 }
 
 // src/sections/about/index.ts
-var ABOUT = {
-  en: ABOUT_EN,
-  fr: ABOUT_FR
-};
-var SECTION_LABEL = {
-  en: SECTION_LABEL_EN,
-  fr: SECTION_LABEL_FR
-};
 function renderAbout(host = document.getElementById("about")) {
   if (!host) return;
   const lang = localeMeta2().meta.htmlLang;
@@ -20732,13 +20703,6 @@ function renderSources(host = document.getElementById("sources")) {
   host.replaceChildren(...kept, box);
 }
 
-// src/charts/plugins/clip.ts
-function clipToArea(ctx, area) {
-  ctx.beginPath();
-  ctx.rect(area.left, area.top, area.width, area.height);
-  ctx.clip();
-}
-
 // src/sections/summary.ts
 var MEDIAN_COLOR = "#334155";
 var PEAK_COLOR = "#b45309";
@@ -21084,7 +21048,6 @@ function render2() {
   mountCasualties();
   mountPerCapita();
   mountContext();
-  mountContext();
   try {
     mountCrossEpisode();
   } catch (err) {
@@ -21109,7 +21072,7 @@ function scheduleRender() {
   });
 }
 var REQUIRED = [
-  ...CHARTS2.map((c) => c.id),
+  ...CHARTS.map((c) => c.id),
   "trellis-episodes",
   "trellis-items",
   "legend-items",

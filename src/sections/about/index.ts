@@ -1,17 +1,6 @@
-import { localeMeta, type Lang } from "../../copy";
+import { localeMeta } from "../../copy";
 import { callout, group } from "./blocks";
-import { ABOUT_EN, SECTION_LABEL_EN } from "./copy.en";
-import { ABOUT_FR, SECTION_LABEL_FR } from "./copy.fr";
-
-const ABOUT = {
-  en: ABOUT_EN,
-  fr: ABOUT_FR,
-};
-
-const SECTION_LABEL: Record<Lang, string> = {
-  en: SECTION_LABEL_EN,
-  fr: SECTION_LABEL_FR,
-};
+import { ABOUT, SECTION_LABEL } from "./copy";
 
 export function renderAbout(
   host: HTMLElement | null = document.getElementById("about"),

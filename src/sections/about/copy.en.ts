@@ -7,9 +7,10 @@ import {
   RN_VOTE,
   STRATEGY,
 } from "./links";
+import type { About } from "./model";
 import { QUOTE } from "./quote";
 
-export const ABOUT_EN = [
+export const ABOUT_EN: About = [
   {
     id: "analysis",
     title: "My Analysis",

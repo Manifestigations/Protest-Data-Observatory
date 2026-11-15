@@ -8,6 +8,5 @@ export const STRATEGY =
   "https://lepoing.net/manifestation-du-7-novembre-a-montpellier-la-contestation-cherche-encore-sa-strategie/";
 export const BUNKER =
   "https://neru.tv/sources/macron-bunker-secret-pour-fuir-le-peuple/";
-export const PAGES =
-  "https://y1dwgth1otzig.github.io/french-protest-charts/?lang=en";
+export const PAGES = "https://y1dwgth1otzig.github.io/french-protest-charts";
 export const REPO = "https://github.com/y1DWgTh1oTZIG/french-protest-charts";

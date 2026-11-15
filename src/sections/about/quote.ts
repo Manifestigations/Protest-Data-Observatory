@@ -1,3 +1,5 @@
+import type { Block } from "./model";
+
 const SPOOK = "https://www.youtube.com/watch?v=HG-56GKbPtk&t=3896";
 
 /** Quoted verbatim, so it stays in English in both locales. */

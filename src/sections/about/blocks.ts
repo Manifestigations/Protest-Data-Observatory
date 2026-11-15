@@ -1,14 +1,13 @@
 import type { Lang } from "../../copy";
-import { CALLOUT_EN } from "./copy.en";
-import { CALLOUT_FR } from "./copy.fr";
+import { CALLOUT } from "./copy";
+import type { Block, Run, SubSection } from "./model";
 
-/** Only this sub-section is expanded on load. Set to "" to collapse everything. */
-const OPEN_ID = "";
+/** Only this sub-section is expanded on load; "" collapses everything. */
+const OPEN_ID: string = "analysis";
+/** Gets the accent treatment. Same id, because the featured section is the open one. */
+const FEATURED_ID = OPEN_ID;
 
-/** Gets the accent treatment; must exist in both locales. */
-const FEATURED_ID = "analysis";
-
-export function inline(run: Run): Node {
+function inline(run: Run): Node {
   if (typeof run === "string") return document.createTextNode(run);
 
   if ("em" in run) {
@@ -25,7 +24,7 @@ export function inline(run: Run): Node {
   return a;
 }
 
-export function block(b: Block): HTMLElement {
+function block(b: Block): HTMLElement {
   if (b.kind === "p") {
     const p = document.createElement("p");
     p.append(...b.runs.map(inline));
@@ -83,12 +82,6 @@ export function group(
   details.append(summary, body);
   return details;
 }
-
-/** Green counterweight to the amber disclaimer; the "…" continues its sentence. */
-const CALLOUT: Record<Lang, string> = {
-  en: CALLOUT_EN,
-  fr: CALLOUT_FR,
-};
 
 export function callout(lang: Lang): HTMLElement {
   const p = document.createElement("p");
