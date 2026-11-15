@@ -1,4 +1,4 @@
-/* ------------------------------------------------------------------ model */
+/* ----- model */
 
 export type Run =
   | string
@@ -8,6 +8,7 @@ export type Run =
 export type Block =
   | { readonly kind: "p"; readonly runs: readonly Run[] }
   | { readonly kind: "ul"; readonly items: readonly (readonly Run[])[] }
+  | { readonly kind: "h"; readonly text: string }
   | {
       readonly kind: "quote";
       readonly paras: readonly (readonly Run[])[];

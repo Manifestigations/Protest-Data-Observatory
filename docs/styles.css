@@ -1439,3 +1439,16 @@ details.data-table th[scope=row] {
 @media (prefers-reduced-motion: reduce) {
   .cta-help { transition: none; }
 }
+
+/* Sub-headings inside an About group (Policing, Costs, …) */
+.about-body .about-subhead {
+  margin: 1.75rem 0 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+}
+
+.about-body .about-subhead:first-child {
+  margin-top: 0;
+}

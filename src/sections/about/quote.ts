@@ -7,13 +7,13 @@ export const QUOTE: Block = {
   kind: "quote",
   paras: [
     [
-      "In guerilla warfare, the winning is in not losing. When you sleep on the floor, you can’t fall out of bed.",
+      "In guerrilla warfare, the winning is in not losing. When you sleep on the floor, you can’t fall out of bed.",
     ],
     [
-      "[We have to force] him to make a choice between the two things which he seems to dig most of all.",
+      "[We have to force them] to make a choice between the two things which he seems to dig most of all.",
     ],
     [
-      "There is no way that the United States can police the world and keep us on our ass too unless we cooperate. When we revolt, we reduce it to a simple choice.",
+      "There is no way that [they] can police the world and keep us on our ass too unless we cooperate. When we revolt, we reduce it to a simple choice.",
     ],
     ["[The time for others to make a] choice is when we start."],
     [
@@ -23,5 +23,8 @@ export const QUOTE: Block = {
       "[But if they support us] then it’s hit and run, harass and hound, and we can paralyze this country.",
     ],
   ],
-  by: ["Dan Freeman, ", { link: "The Spook Who Sat by the Door", href: SPOOK }],
+  by: [
+    "Dan “Turk” Freeman, ",
+    { link: "The Spook Who Sat by the Door", href: SPOOK },
+  ],
 };

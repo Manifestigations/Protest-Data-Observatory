@@ -23,13 +23,14 @@ function inline(run: Run): Node {
 }
 
 function block(b: Block): HTMLElement {
-  if (b.kind === "p") {
+  switch (b.kind) {
+    case "p": {
     const p = document.createElement("p");
     p.append(...b.runs.map(inline));
     return p;
   }
 
-  if (b.kind === "ul") {
+    case "ul": {
     const ul = document.createElement("ul");
     for (const item of b.items) {
       const li = document.createElement("li");
@@ -39,6 +40,15 @@ function block(b: Block): HTMLElement {
     return ul;
   }
 
+    /* h4, not h3: the group title is already the h3. */
+    case "h": {
+      const h = document.createElement("h4");
+      h.className = "about-subhead";
+      h.textContent = b.text;
+      return h;
+    }
+
+    default: {
   const quote = document.createElement("blockquote");
   quote.className = "about-quote";
   for (const para of b.paras) {
@@ -50,6 +60,8 @@ function block(b: Block): HTMLElement {
   by.append(...b.by.map(inline));
   quote.append(by);
   return quote;
+    }
+  }
 }
 
 /* `open` carries the reader's choices across locale changes; nothing is
