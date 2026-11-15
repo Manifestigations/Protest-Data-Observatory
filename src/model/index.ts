@@ -20,6 +20,8 @@ export type MetricKey =
   | "forcesInjuredStock"
   | "protesterInjured"
   | "damagesCost"
+  | "policingCost"    
+  | "heliCost"     
   | "blockades";
 
 /** Short code used by sections B/C → long key used by the dashboards. */
@@ -61,6 +63,7 @@ export interface WeekNoteParts {
 export type NoteRef =
   | { k: "obs"; date: string; metric: MetricKey }
   | { k: "policing"; low: number; high: number; date: string }
+  | { k: "heli"; hoursLow: number; hoursHigh: number; date: string } 
   | { k: "cumulative"; days: number; added: boolean }
   | { k: "week"; p: WeekNoteParts };
 

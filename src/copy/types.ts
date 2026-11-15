@@ -220,3 +220,20 @@ export interface Catalogue {
   /** Dictionary lookups; `t('key')` reads these. */
   readonly [key: string]: unknown;
 }
+
+export interface HeliCopy {
+  readonly heading: string;
+  readonly intro: string;
+  readonly steps: readonly { readonly title: string; readonly body: string }[];
+  readonly summary: (v: {
+    days: number;
+    hLo: number;
+    hHi: number;
+    cLo: string;
+    cHi: string;
+    aLo: string;
+    aHi: string;
+  }) => string;
+  readonly caveat: string;
+  readonly basis: Readonly<Record<string, string>>;
+}

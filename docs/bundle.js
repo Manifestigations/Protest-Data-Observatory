@@ -13392,6 +13392,88 @@ var A11Y = {
 };
 var a11y = () => A11Y[current];
 
+// src/copy/en/helicopters.ts
+var HELI_COPY_EN = {
+  heading: "How the policing-cost model is built",
+  intro: "No French ministry publishes what a protest day costs. The figures here are reconstructed from published unit costs and published deployment numbers. Read them as an order of magnitude, not an invoice.",
+  steps: [
+    {
+      title: "Ground deployment: unit cost \xD7 officers deployed",
+      body: "The unit of account is one company of riot police, about a hundred officers. Published benchmarks put a CRS company at 15,000 to 30,000 euros a day once pay, allowances, transport, meals and relief rotations are counted. Mobile gendarmerie squadrons are costed the same way, with a published reference of 3.4 million euros for 3,000 gendarmes."
+    },
+    {
+      title: "Deployment numbers come from the prefectures",
+      body: "A day with a published deployment figure gets a value: officers divided by a hundred, times the unit-cost band. Days without one stay empty rather than being interpolated, which is why the daily line is ragged. The cumulative line carries the last known value forward, so it is a floor."
+    },
+    {
+      title: "Aerial surveillance is a separate component, costed by the flight hour",
+      body: "Helicopters are billed as flight hours times an hourly rate, so that is how they are modelled. The Police nationale owns no helicopters; it reimburses the gendarmerie or the S\xE9curit\xE9 civile on a requisition tariff of about 1,412 euros an hour. Hours come from ADS-B traces, which give exact block times for the aircraft that broadcast, mainly the S\xE9curit\xE9 civile H145s, combined with press and prefecture reports of the cities covered. The low bound counts only aircraft confirmed by a trace or a report; the high bound assumes one aircraft per reported city. Repositioning legs and rescue sorties are removed first."
+    },
+    {
+      title: "Three rates, three answers",
+      body: "1,412 euros an hour reproduces the 2019 precedent, when the gendarmerie flew 717 hours during the yellow-vest protests for about a million euros. An audit figure of 1,800 euros an hour is the upper bound of the in-service band. A Senate estimate of up to 7,000 euros an hour, all-in for the new H145-D3 and H160 fleet, values the same flying time several times higher. The chart uses the in-service band; the all-in figure is a sensitivity."
+    },
+    {
+      title: "Why the aerial line barely moves the chart",
+      body: "The aerial component is a fraction of a million euros on the days it exists, against a ground line of 12 to 44 million. It is added to the model and visible in the totals below, but at this scale it cannot be seen on the plotted line. That is the finding, not a defect: surveillance flying is small money next to the standing army of a protest day."
+    },
+    {
+      title: "What the model leaves out",
+      body: "Sick leave after injury, for police, protesters and bystanders. Overtime carried into later months. Damage to public property, tracked separately. Drone hours, cheap per hour but published in no usable form. Prosecution, detention and judicial follow-up. The material cost of the surveillance apparatus itself. Every one of these pushes the true figure up."
+    }
+  ],
+  summary: (v) => `${v.days} days of surveillance flying recorded, ${v.hLo} to ${v.hHi} flight hours: ${v.cLo} to ${v.cHi} at the in-service tariff, ${v.aLo} to ${v.aHi} at full cost. Only the part of those hours that falls on a day with a published deployment figure is folded into the plotted line; the rest is stated here and excluded from the chart.`,
+  caveat: "The aerial component is the least solid part of the model: the gendarmerie's EC135s and AS350s do not broadcast ADS-B, so most of their flying is invisible to trackers and the hours are inferred from reports rather than measured. Treat the aerial figure as a lower bound with a wide error.",
+  basis: {
+    clashes: "clashes and pillaging, aircraft over several cities",
+    nightPatrol: "night patrol of restricted perimeters in Paris",
+    saturday: "Saturday mobilisation, aircraft over the largest cities",
+    intersyndical: "inter-union day, dispersal orders broadcast from the air",
+    ongoing: "continued daily surveillance"
+  }
+};
+
+// src/copy/fr/helicopters.ts
+var HELI_COPY_FR = {
+  heading: "Comment le mod\xE8le de co\xFBt du maintien de l'ordre est construit",
+  intro: "Aucun minist\xE8re fran\xE7ais ne publie ce que co\xFBte une journ\xE9e de manifestation. Les chiffres pr\xE9sent\xE9s ici sont reconstitu\xE9s \xE0 partir de co\xFBts unitaires publi\xE9s et d'effectifs d\xE9ploy\xE9s publi\xE9s. \xC0 lire comme un ordre de grandeur, pas comme une facture.",
+  steps: [
+    {
+      title: "D\xE9ploiement au sol : co\xFBt unitaire \xD7 effectifs engag\xE9s",
+      body: "L'unit\xE9 de compte est la compagnie de CRS, une centaine de fonctionnaires. Les r\xE9f\xE9rences publi\xE9es situent une compagnie entre 15 000 et 30 000 euros par jour, une fois compt\xE9s la solde, les indemnit\xE9s, le transport, la restauration et les rel\xE8ves. Les escadrons de gendarmerie mobile sont valoris\xE9s de la m\xEAme mani\xE8re, avec une r\xE9f\xE9rence publi\xE9e de 3,4 millions d'euros pour 3 000 gendarmes."
+    },
+    {
+      title: "Les effectifs viennent des pr\xE9fectures",
+      body: "Une journ\xE9e disposant d'un effectif publi\xE9 re\xE7oit une valeur : effectif divis\xE9 par cent, multipli\xE9 par la fourchette de co\xFBt unitaire. Les journ\xE9es sans chiffre restent vides plut\xF4t que d'\xEAtre interpol\xE9es, d'o\xF9 l'aspect irr\xE9gulier de la s\xE9rie quotidienne. La courbe cumul\xE9e reporte la derni\xE8re valeur connue : c'est un plancher."
+    },
+    {
+      title: "La surveillance a\xE9rienne est une composante distincte, valoris\xE9e \xE0 l'heure de vol",
+      body: "Les h\xE9licopt\xE8res sont factur\xE9s en heures de vol multipli\xE9es par un tarif horaire, et c'est ainsi qu'ils sont mod\xE9lis\xE9s. La Police nationale ne poss\xE8de aucun h\xE9licopt\xE8re : elle rembourse la gendarmerie ou la S\xE9curit\xE9 civile sur un tarif de r\xE9quisition d'environ 1 412 euros par heure. Les heures viennent des traces ADS-B, qui donnent les temps de vol exacts des appareils qui \xE9mettent, principalement les H145 de la S\xE9curit\xE9 civile, crois\xE9es avec les rapports de presse et des pr\xE9fectures sur les villes couvertes. La borne basse ne compte que les appareils confirm\xE9s par une trace ou un rapport, la borne haute suppose un appareil par ville signal\xE9e. Les trajets de repositionnement et les missions de secours sont retir\xE9s."
+    },
+    {
+      title: "Trois tarifs, trois r\xE9ponses",
+      body: "1 412 euros par heure reproduit le pr\xE9c\xE9dent de 2019, quand la gendarmerie avait vol\xE9 717 heures pendant les Gilets jaunes pour environ un million d'euros. Un chiffre d'audit de 1 800 euros par heure borne la fourchette en service. Une estimation s\xE9natoriale allant jusqu'\xE0 7 000 euros par heure, en co\xFBt complet pour la flotte H145-D3 et H160, valorise le m\xEAme temps de vol plusieurs fois plus haut. Le graphique retient la fourchette en service ; le co\xFBt complet est une sensibilit\xE9."
+    },
+    {
+      title: "Pourquoi la composante a\xE9rienne d\xE9place \xE0 peine la courbe",
+      body: "La composante a\xE9rienne repr\xE9sente une fraction de million d'euros les jours o\xF9 elle existe, contre une courbe au sol de 12 \xE0 44 millions. Elle est int\xE9gr\xE9e au mod\xE8le et visible dans les totaux ci-dessous, mais \xE0 cette \xE9chelle elle est ind\xE9celable sur la courbe. C'est le r\xE9sultat, pas un d\xE9faut : le vol de surveillance p\xE8se peu face \xE0 l'arm\xE9e immobilis\xE9e d'une journ\xE9e de manifestation."
+    },
+    {
+      title: "Ce que le mod\xE8le laisse de c\xF4t\xE9",
+      body: "Les arr\xEAts maladie cons\xE9cutifs \xE0 des blessures, pour les policiers, les manifestants et les passants. Les heures suppl\xE9mentaires report\xE9es sur les mois suivants. Les dommages aux biens publics, suivis s\xE9par\xE9ment. Les heures de drones, peu co\xFBteuses \xE0 l'heure mais publi\xE9es sous aucune forme exploitable. Les suites judiciaires, la r\xE9tention, les enqu\xEAtes. Le co\xFBt mat\xE9riel de l'appareil de surveillance. Chacun pousse le chiffre r\xE9el vers le haut."
+    }
+  ],
+  summary: (v) => `${v.days} journ\xE9es de vols de surveillance recens\xE9es, ${v.hLo} \xE0 ${v.hHi} heures de vol : ${v.cLo} \xE0 ${v.cHi} au tarif en service, ${v.aLo} \xE0 ${v.aHi} en co\xFBt complet. Seule la part de ces heures tombant un jour disposant d'un effectif publi\xE9 est int\xE9gr\xE9e \xE0 la courbe ; le reste est indiqu\xE9 ici et exclu du graphique.`,
+  caveat: "La composante a\xE9rienne est la partie la moins solide du mod\xE8le : les EC135 et AS350 de la gendarmerie n'\xE9mettent pas en ADS-B, l'essentiel de leurs vols \xE9chappe aux traceurs et les heures sont d\xE9duites de rapports plut\xF4t que mesur\xE9es. \xC0 lire comme une borne basse \xE0 erreur large.",
+  basis: {
+    clashes: "affrontements et pillages, appareils sur plusieurs villes",
+    nightPatrol: "patrouille nocturne des p\xE9rim\xE8tres interdits \xE0 Paris",
+    saturday: "mobilisation du samedi, appareils sur les plus grandes villes",
+    intersyndical: "journ\xE9e interprofessionnelle, sommations diffus\xE9es depuis les airs",
+    ongoing: "surveillance quotidienne continue"
+  }
+};
+
 // src/core/a11y.ts
 var live = null;
 var timer = 0;
@@ -15562,7 +15644,7 @@ ${rate}` : body;
 // src/charts/datasets.ts
 var DAILY_GAP = 7;
 var WEEKLY_GAP = 1;
-function datasetsFor(id, weekly2) {
+function datasetsFor(id, weekly) {
   const def = DEF[id];
   if (!def) throw new Error(`datasets.ts: no DEF entry for series "${id}"`);
   if (!def.data) throw new Error(`datasets.ts: series "${id}" has no data`);
@@ -15605,7 +15687,7 @@ function datasetsFor(id, weekly2) {
     spanGaps: false,
     connectors: {
       series: def.data,
-      slots: weekly2 ? WEEKLY_GAP : DAILY_GAP
+      slots: weekly ? WEEKLY_GAP : DAILY_GAP
     }
   };
   if (!def.data.some((p) => p.detach)) return [line];
@@ -15639,9 +15721,9 @@ function datasetsFor(id, weekly2) {
 }
 
 // src/charts/view.ts
-function view(weekly2) {
+function view(weekly) {
   const c = t().chart;
-  return weekly2 ? {
+  return weekly ? {
     labels: WEEKS.map(
       (w) => fmtWeek(w.key, w.end) + (w.touchesEdge ? c.edgeMark : "")
     ),
@@ -15771,6 +15853,144 @@ var CHARTS = [
   }
 ];
 
+// src/data/helicopters.ts
+var RATE_REQUISITION = 1412;
+var RATE_AUDIT = 1800;
+var RATE_ALL_IN = 7e3;
+var M = 1e6;
+var FLIGHT_DAYS = [
+  { date: "2026-10-17", hours: [8, 20], cities: 6, basis: "clashes" },
+  { date: "2026-10-18", hours: [6, 14], cities: 4, basis: "clashes" },
+  { date: "2026-10-19", hours: [2, 4], cities: 1, basis: "nightPatrol" },
+  { date: "2026-10-24", hours: [10, 24], cities: 6, basis: "saturday" },
+  { date: "2026-10-31", hours: [10, 24], cities: 6, basis: "saturday" },
+  { date: "2026-11-05", hours: [8, 18], cities: 5, basis: "intersyndical" },
+  { date: "2026-11-07", hours: [10, 24], cities: 6, basis: "saturday" },
+  { date: "2026-11-14", hours: [8, 20], cities: 5, basis: "ongoing" },
+  { date: "2026-11-15", hours: [8, 20], cities: 5, basis: "ongoing" }
+];
+var HELI_DAYS = FLIGHT_DAYS.map((d) => {
+  const [hLo, hHi] = bandOf(d.hours);
+  return {
+    date: d.date,
+    hours: [hLo, hHi],
+    cities: d.cities,
+    basis: d.basis,
+    inService: [hLo * RATE_REQUISITION / M, hHi * RATE_AUDIT / M],
+    allIn: [hLo * RATE_ALL_IN / M, hHi * RATE_ALL_IN / M]
+  };
+});
+var HELI_BY_DATE = new Map(
+  HELI_DAYS.map((d) => [d.date, d])
+);
+var HELI_AT = new Map(
+  DATES.reduce((acc, date, i) => {
+    const d = HELI_BY_DATE.get(date);
+    if (d) acc.push([i, d]);
+    return acc;
+  }, [])
+);
+var DATES_SET = new Set(DATES);
+var sum = (pick) => HELI_DAYS.reduce(
+  (a, d) => {
+    const [lo, hi] = pick(d);
+    return [a[0] + lo, a[1] + hi];
+  },
+  [0, 0]
+);
+var HELI_TOTALS = {
+  days: HELI_DAYS.length,
+  hours: sum((d) => d.hours),
+  inService: sum((d) => d.inService),
+  allIn: sum((d) => d.allIn),
+  /** The part falling on a day the chart also carries a ground deployment
+   *  figure — the only part that moves the plotted line. */
+  onPublishedDays: sum((d) => DATES_SET.has(d.date) ? d.inService : [0, 0])
+};
+function withAerial(base, mode) {
+  let runLo = 0;
+  let runHi = 0;
+  return base.map((p, i) => {
+    const date = DATES[i];
+    if (date === void 0) return p;
+    const d = HELI_AT.get(i);
+    if (d === void 0) return p;
+    const [aLo, aHi] = d.inService;
+    if (mode === "cumulative") {
+      runLo += aLo;
+      runHi += aHi;
+      if (p.v === null) return p;
+      const [bLo2, bHi2] = p.band ?? [p.v, p.v];
+      const loT2 = bLo2 + runLo;
+      const hiT2 = bHi2 + runHi;
+      return { ...p, v: (loT2 + hiT2) / 2, band: [loT2, hiT2] };
+    }
+    if (p.v === null) return p;
+    const [bLo, bHi] = p.band ?? [p.v, p.v];
+    const loT = bLo + aLo;
+    const hiT = bHi + aHi;
+    return { ...p, v: (loT + hiT) / 2, band: [loT, hiT] };
+  });
+}
+var POLICING_WITH_AERIAL = {
+  daily: withAerial(DAILY.policing, "daily"),
+  cumulative: withAerial(DAILY.policingCumulative, "cumulative")
+};
+
+// src/sections/costs/methodology.ts
+var eur = (millions) => new Intl.NumberFormat("fr-FR", {
+  style: "currency",
+  currency: "EUR",
+  notation: "compact",
+  maximumFractionDigits: 2
+}).format(millions * 1e6);
+function insertCostMethodology(anchor, canvas) {
+  const lang = getLocale();
+  const c = lang === "fr" ? HELI_COPY_FR : HELI_COPY_EN;
+  const section = document.createElement("section");
+  section.className = "cost-method";
+  section.dataset.role = "cost-method";
+  const h = document.createElement("h3");
+  h.textContent = c.heading;
+  const intro = document.createElement("p");
+  intro.className = "cost-method__intro";
+  intro.textContent = c.intro;
+  const ol = document.createElement("ol");
+  ol.className = "cost-method__steps";
+  for (const step of c.steps) {
+    const li = document.createElement("li");
+    const title = document.createElement("strong");
+    title.textContent = step.title;
+    const body = document.createElement("p");
+    body.textContent = step.body;
+    li.append(title, body);
+    ol.append(li);
+  }
+  const [hLo, hHi] = HELI_TOTALS.hours;
+  const [cLo, cHi] = HELI_TOTALS.inService;
+  const [aLo, aHi] = HELI_TOTALS.allIn;
+  const summary = document.createElement("p");
+  summary.className = "cost-method__summary";
+  summary.textContent = c.summary({
+    days: HELI_TOTALS.days,
+    hLo,
+    hHi,
+    cLo: eur(cLo),
+    cHi: eur(cHi),
+    aLo: eur(aLo),
+    aHi: eur(aHi)
+  });
+  const caveat = document.createElement("p");
+  caveat.className = "cost-method__caveat";
+  caveat.textContent = c.caveat;
+  section.append(h, intro, ol, summary, caveat);
+  const wrap = canvas.parentElement;
+  const ref = wrap && wrap !== anchor && anchor.contains(wrap) ? wrap : canvas;
+  if (anchor.contains(ref)) anchor.insertBefore(section, ref);
+  else anchor.before(section);
+  return section;
+}
+
 // src/charts/mount.ts
 Chart.register(
   LineController,
@@ -15828,6 +16048,9 @@ function mountCharts() {
       const chart = mount(canvas, buildChart(spec));
       const host = canvas.closest("figure") ?? canvas.parentElement;
       host?.querySelector(".data-table")?.remove();
+      host?.querySelector('[data-role="cost-method"]')?.remove();
+      if (spec.id === "chart-costs" && host)
+        insertCostMethodology(host, canvas);
       const table = fromChart(chart, {
         caption: fill(a11y().tableCaption, { title: copy.title }),
         indexHeader: a11y().dateHeader
@@ -16257,12 +16480,12 @@ function statsOf(points) {
   const n = sorted.length;
   const mid = n >> 1;
   const median = n % 2 === 1 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
-  let sum = 0;
-  for (const v of vs) sum += v;
+  let sum2 = 0;
+  for (const v of vs) sum2 += v;
   const stats = {
     low: sorted[0],
     high: sorted[n - 1],
-    mean: sum / n,
+    mean: sum2 / n,
     median,
     count: n
   };
@@ -18358,10 +18581,10 @@ function meanMedian(values) {
   const sorted = [...values].sort((a, b) => a - b);
   const n = sorted.length;
   const mid = n >> 1;
-  let sum = 0;
-  for (const v of values) sum += v;
+  let sum2 = 0;
+  for (const v of values) sum2 += v;
   return {
-    mean: sum / n,
+    mean: sum2 / n,
     median: n % 2 === 1 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2
   };
 }
@@ -18379,7 +18602,7 @@ function bestValue(obs) {
   for (const o of obs) if (!best || o.v > best.v) best = o;
   return best;
 }
-function dailyRowsFor(specs) {
+function dailyRowsFor(specs, weekly) {
   return specs.map((spec) => {
     const pts = visiblePoints(spec.copy);
     const obs = pts.map((p) => ({
@@ -18398,8 +18621,8 @@ function dailyRowsFor(specs) {
     };
   });
 }
-function dailyRows(weekly2) {
-  return dailyRowsFor(weekly2 ? WEEKLY_SPECS : DAILY_SPECS);
+function dailyRows(weekly) {
+  return dailyRowsFor(weekly ? WEEKLY_SPECS : DAILY_SPECS, weekly);
 }
 function episodeRows(maxX) {
   return METRIC_KEYS.map((key) => {
@@ -18514,7 +18737,7 @@ function mountKpiPresets(root2 = document) {
     const k = t().kpi;
     host.replaceChildren(
       block2(
-        dailyRowsFor(specs),
+        dailyRowsFor(specs, !(preset.kind === "daily")),
         preset.kind === "daily" ? k.largestDay : k.largestWeek,
         preset.kind === "daily" ? k.noteDaily : k.noteWeekly
       )
@@ -19618,6 +19841,82 @@ var COST_SOURCES = [
       "les r\xE9f\xE9rences de 15 000\u201330 000 \u20AC par compagnie de CRS et par jour, et de 3,4 M\u20AC pour 3 000 gendarmes, derri\xE8re la fourchette de co\xFBt du maintien de l\u2019ordre ; aussi les 1 435 interpellations et 53 policiers bless\xE9s du 24 oct."
     ),
     "2026-10-28"
+  ),
+  src(
+    "senat-2026-aerien",
+    "cost",
+    "S\xE9nat, rapport 25-812 \u2014 Les moyens a\xE9riens de la gendarmerie et de la police nationales",
+    "https://www.senat.fr/rap/r25-812/r25-81232.html",
+    both(
+      "All-in cost of a new-generation helicopter hour, up to about 7,000 euros; aerial maintenance up from under 30M to over 60M euros a year.",
+      "Co\xFBt complet de l'heure de vol d'un h\xE9licopt\xE8re de nouvelle g\xE9n\xE9ration, jusqu'\xE0 environ 7 000 euros ; maintenance a\xE9rienne pass\xE9e de moins de 30 M\u20AC \xE0 plus de 60 M\u20AC par an."
+    ),
+    "2026-10-01"
+  ),
+  src(
+    "senat-2014-aerien",
+    "cost",
+    "S\xE9nat, rapport 13-091 \u2014 Le co\xFBt des a\xE9ronefs de la gendarmerie",
+    "https://www.senat.fr/rap/r13-091/r13-09113.html",
+    both(
+      "812 to 1,690 euros per helicopter flight hour, against 172 euros for a gendarmerie fixed-wing aircraft.",
+      "812 \xE0 1 690 euros par heure de vol en h\xE9licopt\xE8re, contre 172 euros pour un avion de la gendarmerie."
+    ),
+    "2014-10-01"
+  ),
+  src(
+    "iga-2016-helico",
+    "cost",
+    "IGA 2016, via Flagrant Deni \u2014 L'h\xE9lico de police, un mouchard de haut vol",
+    "https://www.flagrant-deni.fr/l-helico-de-police-un-mouchard-de-haut-vol/",
+    both(
+      "About 1,800 euros per flight hour: 6,000 law-and-order hours for roughly 11M euros a year, out of a 67M euro helicopter budget.",
+      "Environ 1 800 euros par heure de vol : 6 000 heures de maintien de l'ordre pour pr\xE8s de 11 M\u20AC par an, sur un budget h\xE9licopt\xE8res de 67 M\u20AC."
+    ),
+    "2016-01-01"
+  ),
+  src(
+    "lepoint-2019-helico",
+    "cost",
+    "Le Point \u2014 Gilets jaunes : les h\xE9licopt\xE8res ont d\xE9j\xE0 co\xFBt\xE9 un million d'euros",
+    "https://www.lepoint.fr/societe/gilets-jaunes-les-helicopteres-ont-deja-coute-un-million-d-euros-22-03-2019-2303127_23.php",
+    both(
+      "The precedent the requisition rate is calibrated on: 717 flight hours across six cities, about 1.01M euros, so roughly 1,412 euros an hour.",
+      "Le pr\xE9c\xE9dent qui calibre le tarif de r\xE9quisition : 717 heures de vol dans six villes, environ 1,01 M\u20AC, soit pr\xE8s de 1 412 euros par heure."
+    ),
+    "2019-03-22"
+  ),
+  src(
+    "assemblee-2019-aerien",
+    "cost",
+    "Assembl\xE9e nationale \u2014 L'action a\xE9rospatiale de l'\xC9tat",
+    "https://www.assemblee-nationale.fr/dyn/opendata/RINFANR5L15B2166.html",
+    both(
+      "About 1,690 euros an hour billed to the Police nationale for a gendarmerie helicopter, against 209 euros for a rented light aircraft.",
+      "Environ 1 690 euros par heure factur\xE9s \xE0 la Police nationale pour un h\xE9licopt\xE8re de la gendarmerie, contre 209 euros pour un avion de tourisme lou\xE9."
+    ),
+    "2019-06-01"
+  ),
+  src(
+    "france24-2026-helico",
+    "cost",
+    "France 24 \u2014 Depuis le 17 octobre, drones et h\xE9licopt\xE8res sont sortis pour surveiller les manifestations",
+    "https://www.france24.com/fr/france/20261107-depuis-17-octobre-drones-h%C3%A9licopt%C3%A8res-sont-sortie-pour-surveiller-manifestations",
+    both(
+      "The cities and dates of the aerial sorties that FLIGHT_DAYS is built from: Paris night patrols from 19 October, Montpellier and Place de la Nation dispersal orders on 5 November, a helicopter announced again for 7 November.",
+      "Les villes et dates des sorties a\xE9riennes sur lesquelles FLIGHT_DAYS est construit : patrouilles nocturnes \xE0 Paris d\xE8s le 19 octobre, sommations \xE0 Montpellier et place de la Nation le 5 novembre, h\xE9licopt\xE8re de nouveau annonc\xE9 pour le 7 novembre."
+    ),
+    "2026-11-07"
+  ),
+  src(
+    "opensky-data",
+    "cost",
+    "OpenSky Network \u2014 Donn\xE9es ADS-B historiques",
+    "https://opensky-network.org/data/",
+    both(
+      "Source of the measured block times: ADS-B, Mode-S and FLARM traces, with per-aircraft history behind a subscription.",
+      "Source des temps de vol mesur\xE9s : traces ADS-B, Mode-S et FLARM, avec l'historique par appareil derri\xE8re un abonnement."
+    )
   )
 ];
 

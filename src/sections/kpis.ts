@@ -122,7 +122,7 @@ function bestValue(obs: readonly Observation[]): Observation | null {
 
 /* ----- sections A and B: the 2026 series ----- */
 
-function dailyRowsFor(specs: readonly KpiSpec[]): Row[] {
+function dailyRowsFor(specs: readonly KpiSpec[], weekly: boolean): Row[] {
   return specs.map((spec) => {
     const pts = visiblePoints(spec.copy);
     const obs: Observation[] = pts.map((p) => ({
@@ -149,7 +149,7 @@ function dailyRowsFor(specs: readonly KpiSpec[]): Row[] {
 }
 
 function dailyRows(weekly: boolean): Row[] {
-  return dailyRowsFor(weekly ? WEEKLY_SPECS : DAILY_SPECS);
+  return dailyRowsFor(weekly ? WEEKLY_SPECS : DAILY_SPECS, weekly);
 }
 
 /* ----- sections C and D: every movement compared with itself ----- */
@@ -315,7 +315,7 @@ export function mountKpiPresets(root: ParentNode = document): void {
     const k = t().kpi;
     host.replaceChildren(
       block(
-        dailyRowsFor(specs),
+        dailyRowsFor(specs, !(preset.kind === "daily")),
         preset.kind === "daily" ? k.largestDay : k.largestWeek,
         preset.kind === "daily" ? k.noteDaily : k.noteWeekly,
       ),

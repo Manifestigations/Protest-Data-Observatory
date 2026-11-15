@@ -23,6 +23,7 @@ import { errorBars } from "./plugins/error-bars.ts";
 import { spanMark } from "./plugins/span-mark.ts";
 import { buildChart, type Cfg } from "./shell.ts";
 import { CHARTS } from "./specs.ts";
+import { insertCostMethodology } from "../sections/costs/methodology.ts";
 
 Chart.register(
   LineController,
@@ -94,6 +95,13 @@ export function mountCharts(): void {
 
       const host = canvas.closest("figure") ?? canvas.parentElement;
       host?.querySelector(".data-table")?.remove();
+
+      // mountCharts() re-runs on every locale change, so the block is rebuilt,
+      // not appended twice. Same remove-then-add discipline as the table above.
+      host?.querySelector('[data-role="cost-method"]')?.remove();
+      if (spec.id === "chart-costs" && host)
+        insertCostMethodology(host, canvas);
+
       const table = fromChart(chart, {
         caption: fill(a11y().tableCaption, { title: copy.title }),
         indexHeader: a11y().dateHeader,

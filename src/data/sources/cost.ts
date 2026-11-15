@@ -246,4 +246,130 @@ export const COST_SOURCES: readonly Source[] = [
     ),
     "2026-10-28",
   ),
+
+  src(
+    "senat-2026-aerien",
+    "cost",
+    "Sénat, rapport 25-812 — Les moyens aériens de la gendarmerie et de la police nationales",
+    "https://www.senat.fr/rap/r25-812/r25-81232.html",
+    both(
+      "All-in cost of a new-generation helicopter hour, up to about 7,000 euros; aerial maintenance up from under 30M to over 60M euros a year.",
+      "Coût complet de l'heure de vol d'un hélicoptère de nouvelle génération, jusqu'à environ 7 000 euros ; maintenance aérienne passée de moins de 30 M€ à plus de 60 M€ par an.",
+    ),
+    "2026-10-01",
+  ),
+  src(
+    "senat-2014-aerien",
+    "cost",
+    "Sénat, rapport 13-091 — Le coût des aéronefs de la gendarmerie",
+    "https://www.senat.fr/rap/r13-091/r13-09113.html",
+    both(
+      "812 to 1,690 euros per helicopter flight hour, against 172 euros for a gendarmerie fixed-wing aircraft.",
+      "812 à 1 690 euros par heure de vol en hélicoptère, contre 172 euros pour un avion de la gendarmerie.",
+    ),
+    "2014-10-01",
+  ),
+  src(
+    "iga-2016-helico",
+    "cost",
+    "IGA 2016, via Flagrant Deni — L'hélico de police, un mouchard de haut vol",
+    "https://www.flagrant-deni.fr/l-helico-de-police-un-mouchard-de-haut-vol/",
+    both(
+      "About 1,800 euros per flight hour: 6,000 law-and-order hours for roughly 11M euros a year, out of a 67M euro helicopter budget.",
+      "Environ 1 800 euros par heure de vol : 6 000 heures de maintien de l'ordre pour près de 11 M€ par an, sur un budget hélicoptères de 67 M€.",
+    ),
+    "2016-01-01",
+  ),
+  src(
+    "lepoint-2019-helico",
+    "cost",
+    "Le Point — Gilets jaunes : les hélicoptères ont déjà coûté un million d'euros",
+    "https://www.lepoint.fr/societe/gilets-jaunes-les-helicopteres-ont-deja-coute-un-million-d-euros-22-03-2019-2303127_23.php",
+    both(
+      "The precedent the requisition rate is calibrated on: 717 flight hours across six cities, about 1.01M euros, so roughly 1,412 euros an hour.",
+      "Le précédent qui calibre le tarif de réquisition : 717 heures de vol dans six villes, environ 1,01 M€, soit près de 1 412 euros par heure.",
+    ),
+    "2019-03-22",
+  ),
+  src(
+    "assemblee-2019-aerien",
+    "cost",
+    "Assemblée nationale — L'action aérospatiale de l'État",
+    "https://www.assemblee-nationale.fr/dyn/opendata/RINFANR5L15B2166.html",
+    both(
+      "About 1,690 euros an hour billed to the Police nationale for a gendarmerie helicopter, against 209 euros for a rented light aircraft.",
+      "Environ 1 690 euros par heure facturés à la Police nationale pour un hélicoptère de la gendarmerie, contre 209 euros pour un avion de tourisme loué.",
+    ),
+    "2019-06-01",
+  ),
+  src(
+    "france24-2026-helico",
+    "cost",
+    "France 24 — Depuis le 17 octobre, drones et hélicoptères sont sortis pour surveiller les manifestations",
+    "https://www.france24.com/fr/france/20261107-depuis-17-octobre-drones-h%C3%A9licopt%C3%A8res-sont-sortie-pour-surveiller-manifestations",
+    both(
+      "The cities and dates of the aerial sorties that FLIGHT_DAYS is built from: Paris night patrols from 19 October, Montpellier and Place de la Nation dispersal orders on 5 November, a helicopter announced again for 7 November.",
+      "Les villes et dates des sorties aériennes sur lesquelles FLIGHT_DAYS est construit : patrouilles nocturnes à Paris dès le 19 octobre, sommations à Montpellier et place de la Nation le 5 novembre, hélicoptère de nouveau annoncé pour le 7 novembre.",
+    ),
+    "2026-11-07",
+  ),
+  src(
+    "opensky-data",
+    "cost",
+    "OpenSky Network — Données ADS-B historiques",
+    "https://opensky-network.org/data/",
+    both(
+      "Source of the measured block times: ADS-B, Mode-S and FLARM traces, with per-aircraft history behind a subscription.",
+      "Source des temps de vol mesurés : traces ADS-B, Mode-S et FLARM, avec l'historique par appareil derrière un abonnement.",
+    ),
+  ),
 ];
+
+export const s = [
+  {
+    id: "senat-2026-aerien",
+    label:
+      "Sénat, rapport 25-812 — Les moyens aériens de la gendarmerie et de la police nationales",
+    url: "https://www.senat.fr/rap/r25-812/r25-81232.html",
+    note: "coût complet jusqu'à ~7 000 €/h, H145-D3 et H160",
+  },
+  {
+    id: "senat-2014-aerien",
+    label:
+      "Sénat, rapport 13-091 — coût horaire des aéronefs de la gendarmerie",
+    url: "https://www.senat.fr/rap/r13-091/r13-09113.html",
+    note: "812 à 1 690 €/h pour les hélicoptères",
+  },
+  {
+    id: "iga-2016-helico",
+    label:
+      "IGA 2016, via Flagrant Deni — l'hélico de police, un mouchard de haut vol",
+    url: "https://www.flagrant-deni.fr/l-helico-de-police-un-mouchard-de-haut-vol/",
+    note: "~1 800 €/h ; 6 000 h de maintien de l'ordre pour ~11 M€/an",
+  },
+  {
+    id: "lepoint-2019-helico",
+    label:
+      "Le Point — Gilets jaunes : les hélicoptères ont déjà coûté un million d'euros",
+    url: "https://www.lepoint.fr/societe/gilets-jaunes-les-helicopteres-ont-deja-coute-un-million-d-euros-22-03-2019-2303127_23.php",
+    note: "717 heures, ~1,01 M€, soit ~1 412 €/h",
+  },
+  {
+    id: "assemblee-2019-aerien",
+    label: "Assemblée nationale — l'action aérospatiale de l'État",
+    url: "https://www.assemblee-nationale.fr/dyn/opendata/RINFANR5L15B2166.html",
+    note: "~1 690 €/h facturés à la Police nationale",
+  },
+  {
+    id: "france24-2026-helico",
+    label: "France 24 — drones et hélicoptères sortis depuis le 17 octobre",
+    url: "https://www.france24.com/fr/france/20261107-depuis-17-octobre-drones-h%C3%A9licopt%C3%A8res-sont-sortie-pour-surveiller-manifestations",
+    note: "villes et dates des sorties aériennes",
+  },
+  {
+    id: "opensky-data",
+    label: "OpenSky Network — données ADS-B historiques",
+    url: "https://opensky-network.org/data/",
+    note: "source des temps de vol mesurés",
+  },
+] as const;
