@@ -6,8 +6,8 @@
  * not here. One writer per attribute.
  */
 
-import { renderAbout } from "./about/about.ts";
 import { localeMeta, onLocaleChange, t, type SectionCopy } from "../copy";
+import { renderAbout } from "./about";
 
 const $ = (id: string): HTMLElement | null => document.getElementById(id);
 
