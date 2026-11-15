@@ -13263,9 +13263,9 @@ function localeMeta2(locale2 = current) {
 
 // src/copy/chrome.ts
 var STATIC = {
-  "hdr.kicker": {
-    en: "15 Sep \u2013 11 Nov 2026",
-    fr: "15 sept. \u2013 11 nov. 2026"
+  "hdr.cta": {
+    en: "Help improve this tool",
+    fr: "Aidez \xE0 am\xE9liorer cet outil"
   },
   "hdr.title": {
     en: "Protest activity in France, autumn 2026",
@@ -17226,6 +17226,17 @@ var PAGES = {
     },
     parent: "historic",
     cards: []
+  },
+  contribute: {
+    path: "contribute.html",
+    kind: "page",
+    title: { en: "Help improve this tool", fr: "Aidez \xE0 am\xE9liorer cet outil" },
+    blurb: {
+      en: "Three ways to make this observatory better: send a data point or a correction, send code, or hand the charts to someone arguing with a rumour. None of them requires being a programmer.",
+      fr: "Trois fa\xE7ons d\u2019am\xE9liorer cet observatoire : envoyer un chiffre ou une correction, envoyer du code, ou transmettre les graphiques \xE0 quelqu\u2019un qui d\xE9bat avec une rumeur. Aucune n\u2019exige d\u2019\xEAtre programmeur."
+    },
+    parent: "home",
+    cards: []
   }
 };
 function pageById(id) {
@@ -17233,6 +17244,9 @@ function pageById(id) {
 }
 function pageHref(fromPath, to2) {
   return relHref(fromPath, PAGES[to2].path);
+}
+function pageKey(page) {
+  return Object.keys(PAGES).find((k) => PAGES[k] === page) ?? "home";
 }
 
 // src/sections/cards/index.ts
@@ -17929,8 +17943,7 @@ var SECTION_LABEL = {
 var CALLOUT = { en: CALLOUT_EN, fr: CALLOUT_FR };
 
 // src/sections/about/blocks.ts
-var OPEN_ID = "analysis";
-var FEATURED_ID = OPEN_ID;
+var FEATURED_ID = "analysis";
 function inline(run) {
   if (typeof run === "string") return document.createTextNode(run);
   if ("em" in run) {
@@ -17976,7 +17989,7 @@ function group(sub, open) {
   const details = document.createElement("details");
   details.className = sub.id === FEATURED_ID ? "about-group about-group--featured" : "about-group";
   details.dataset.about = sub.id;
-  details.open = open.get(sub.id) ?? sub.id === OPEN_ID;
+  details.open = open.get(sub.id) ?? false;
   const summary = document.createElement("summary");
   summary.className = "about-summary";
   const title = document.createElement("h3");
@@ -21124,6 +21137,49 @@ var MENTIONS = [
   }
 ];
 
+// src/data/sources/page-map.ts
+var HISTORIC = ["historic/movements", "historic/series"];
+var PAGES_BY_GROUP = {
+  /* 2026: state reports and press underpin every 2026 figure. */
+  official: ["2026/turnout", "2026/violence", "2026/costs"],
+  press: ["2026/turnout", "2026/violence", "2026/costs"],
+  strikes: ["2026/turnout"],
+  blockades: ["2026/turnout"],
+  overseas: ["2026/turnout", "2026/violence"],
+  ref2026: ["2026/turnout", "2026/violence"],
+  /* costs: the only page that plots money. */
+  cost: ["2026/costs"],
+  /* historic: both trellises carry all seven movements. */
+  mai68: HISTORIC,
+  cpe: HISTORIC,
+  gj: HISTORIC,
+  nahel: HISTORIC,
+  retraites: HISTORIC,
+  rn2024: HISTORIC,
+  bloquons: HISTORIC,
+  /* media: only where a hero image is actually rendered. */
+  media: ["home", "2026", "historic"]
+};
+var MEDIA_BY_PAGE = {
+  home: ["media-2026-demo", "media-historic"],
+  "2026": ["media-turnout", "media-violence", "media-costs"],
+  historic: ["media-movements", "media-series"]
+};
+var PAGE_GROUPS = /* @__PURE__ */ new Map();
+for (const [id, pages] of Object.entries(PAGES_BY_GROUP)) {
+  for (const page of pages) {
+    const list = PAGE_GROUPS.get(page) ?? [];
+    list.push(id);
+    PAGE_GROUPS.set(page, list);
+  }
+}
+function groupsForPage(page) {
+  return PAGE_GROUPS.get(page) ?? [];
+}
+function mediaForPage(page) {
+  return MEDIA_BY_PAGE[page] ?? [];
+}
+
 // src/sections/sources/copy.ts
 var BOX_TITLE = {
   en: "Sources and method",
@@ -21132,18 +21188,6 @@ var BOX_TITLE = {
 var INTRO = {
   en: "Compiled by an LLM from the reports below; no figure here is a primary measurement made for this page. Where a movement has an official count, the interior ministry is the source of the arrest and officer-injury numbers and the unions publish the competing turnout figure. Counts that only ever existed as scattered daily press reports were summed by hand, which is where most of the error will be.",
   fr: "Compil\xE9 par une IA \xE0 partir des sources ci-dessous ; aucun chiffre ici n\u2019est une mesure primaire r\xE9alis\xE9e pour cette page. Lorsqu\u2019un mouvement dispose d\u2019un d\xE9compte officiel, le minist\xE8re de l\u2019Int\xE9rieur est la source des interpellations et des bless\xE9s parmi les forces, les syndicats publiant la foule concurrente. Les d\xE9comptes qui n\u2019ont exist\xE9 que sous forme de br\xE8ves quotidiennes dispers\xE9es ont \xE9t\xE9 additionn\xE9s \xE0 la main : c\u2019est l\xE0 que se concentre l\u2019essentiel de l\u2019erreur."
-};
-var FOOT = {
-  en: "Not a source, but load-bearing: the index in the earlier drafts of Section C divided each series by its own first figure, and the C\u2032 x-axis was set by the longest episode. Both were replaced \u2014 C plots raw counts on a shared log axis, and C\u2032 is capped at week 7. The blockade series counts establishments where pupils could not attend normally; its band runs from the ministry count to the union count, and the union's count also includes administratively closed schools. The Toussaint holiday (17 Oct \u2013 1 Nov) is drawn dotted: no lyc\xE9e was in session, so the figure did not exist. Nothing here has been through external review.",
-  fr: "Ce n\u2019est pas une source, mais cela porte la lecture : dans les brouillons ant\xE9rieurs, l\u2019indice de la section C divisait chaque s\xE9rie par son premier chiffre, et l\u2019axe des x de C\u2032 \xE9tait fix\xE9 par l\u2019\xE9pisode le plus long. Les deux ont \xE9t\xE9 remplac\xE9s \u2014 C trace des effectifs bruts sur un axe log partag\xE9, et C\u2032 est plafonn\xE9 \xE0 la semaine 7. La s\xE9rie des blocages compte les \xE9tablissements o\xF9 les \xE9l\xE8ves ne pouvaient pas suivre normalement ; sa fourchette va du d\xE9compte minist\xE9riel au d\xE9compte syndical, et ce dernier inclut aussi les lyc\xE9es ferm\xE9s administrativement. Les vacances de la Toussaint (17 oct. \u2013 1 nov.) sont en pointill\xE9s : aucun lyc\xE9e n\u2019\xE9tait en cours, le chiffre n\u2019existait donc pas. Rien ici n\u2019a fait l\u2019objet d\u2019une relecture externe."
-};
-var MENTIONS_TITLE = {
-  en: "Named in the reporting, not linked",
-  fr: "Nomm\xE9s dans les articles, non li\xE9s"
-};
-var MENTIONS_BLURB = {
-  en: "Organisations and authors whose figures this page uses second-hand, through the articles above. List them here rather than invent a URL for them.",
-  fr: "Organisations et auteurs dont les chiffres sont repris de seconde main, via les articles ci-dessus. Les nommer ici plut\xF4t que d\u2019inventer une URL."
 };
 
 // src/sections/sources/index.ts
@@ -21178,7 +21222,7 @@ function sourceGroup(id, summary, body) {
   details.append(head, ...body);
   return details;
 }
-function renderSources(host = document.getElementById("sources")) {
+function renderSources(page = "home", host = document.getElementById("sources")) {
   if (!host) return;
   const kept = [...host.children].filter(
     (n) => /^H[1-6]$/.test(n.tagName)
@@ -21186,9 +21230,16 @@ function renderSources(host = document.getElementById("sources")) {
   if (kept[0]) kept[0].textContent = bi(BOX_TITLE);
   const box = el("div", "sources-box");
   box.append(el("p", "intro", bi(INTRO)));
+  const allowed = new Set(groupsForPage(page));
   for (const group2 of GROUPS) {
-    const items = SOURCES_BY_GROUP.get(group2.id);
+    if (!allowed.has(group2.id)) continue;
+    let items = SOURCES_BY_GROUP.get(group2.id);
     if (!items || items.length === 0) continue;
+    if (group2.id === "media") {
+      const keep = new Set(mediaForPage(page));
+      items = items.filter((s) => keep.has(s.id));
+      if (items.length === 0) continue;
+    }
     const title = el("h3", void 0, bi(group2.title));
     title.append(" ", el("span", "count", String(items.length)));
     const list = el("ul");
@@ -21197,22 +21248,6 @@ function renderSources(host = document.getElementById("sources")) {
       sourceGroup(group2.id, [title], [el("p", "blurb", bi(group2.blurb)), list])
     );
   }
-  const dl = el("dl", "mention-list");
-  for (const { name, note: note2 } of MENTIONS) {
-    dl.append(el("dt", void 0, name), el("dd", void 0, bi(note2)));
-  }
-  box.append(
-    sourceGroup(
-      "mentions",
-      [el("h3", void 0, bi(MENTIONS_TITLE))],
-      [el("p", "blurb", bi(MENTIONS_BLURB)), dl]
-    )
-  );
-  const key = el("dl", "marker-list");
-  for (const { key: marker, text } of MARKERS) {
-    key.append(el("dt", void 0, marker), el("dd", void 0, bi(text)));
-  }
-  box.append(key, el("p", "foot", bi(FOOT)));
   host.replaceChildren(...kept, box);
 }
 
@@ -21549,7 +21584,187 @@ function mountSummary() {
   ]);
 }
 
+// src/sections/contribute/index.ts
+var REPO2 = "https://github.com/Manifestigations/Protest-Data-Observatory";
+var NEW_ISSUE = `${REPO2}/issues/new`;
+var ISSUES = `${REPO2}/issues`;
+var DATA_NOTE = {
+  en: "French or English, whichever you write in. A free GitHub account is the only requirement: no local setup, no code, no knowledge of this repository.",
+  fr: "En fran\xE7ais ou en anglais, selon ce qui vous est le plus facile. Un compte GitHub gratuit est la seule condition : aucune installation, aucun code, aucune connaissance de ce d\xE9p\xF4t."
+};
+var BLOCKS = [
+  {
+    id: "data",
+    title: {
+      en: "Send a data point, or a correction",
+      fr: "Envoyer un chiffre, ou une correction"
+    },
+    lead: {
+      en: "You do not need to be a programmer and you do not need to read the code. If you know a figure this site is missing \u2014 or has wrong \u2014 open an issue and paste the number with the source that publishes it. That is the whole process: a figure, a date, a link.",
+      fr: "Il n\u2019est pas n\xE9cessaire d\u2019\xEAtre programmeur ni de lire le code. Si vous connaissez un chiffre qui manque \xE0 ce site \u2014 ou qui y est faux \u2014 ouvrez un ticket et collez le chiffre avec la source qui le publie. C\u2019est tout le processus : un chiffre, une date, un lien."
+    },
+    bullets: [
+      {
+        en: "What the figure is: turnout, arrests, injuries, blocked schools, damage, cost of policing.",
+        fr: "Ce que mesure le chiffre : foule, interpellations, bless\xE9s, lyc\xE9es bloqu\xE9s, dommages, co\xFBt du maintien de l\u2019ordre."
+      },
+      {
+        en: "Where and when: the date, and the territory \u2014 national, a region, one city, one establishment.",
+        fr: "O\xF9 et quand : la date, et le territoire \u2014 national, une r\xE9gion, une ville, un \xE9tablissement."
+      },
+      {
+        en: "The figure as published, including the range if the publisher gives one. Do not average two publishers for us.",
+        fr: "Le chiffre tel que publi\xE9, fourchette comprise si l\u2019\xE9diteur en donne une. Ne moyennez pas deux \xE9diteurs \xE0 notre place."
+      },
+      {
+        en: "The source: a URL, a report title and page, or the outlet and date of an article. Paywalled or a PDF is fine \u2014 say so and we will find it.",
+        fr: "La source : une URL, un titre de rapport et sa page, ou le m\xE9dia et la date d\u2019un article. Payant ou en PDF, ce n\u2019est pas un obstacle : dites-le et nous irons le chercher."
+      },
+      {
+        en: "Who published it, and whether they are counting or estimating. The charts mark the difference.",
+        fr: "Qui l\u2019a publi\xE9, et s\u2019il s\u2019agit d\u2019un d\xE9compte ou d\u2019une estimation. Les graphiques distinguent les deux."
+      }
+    ],
+    note: DATA_NOTE,
+    actions: [
+      { label: { en: "Open an issue", fr: "Ouvrir un ticket" }, href: NEW_ISSUE },
+      { label: { en: "See existing issues", fr: "Voir les tickets existants" }, href: ISSUES }
+    ]
+  },
+  {
+    id: "code",
+    title: { en: "Contribute code", fr: "Contribuer au code" },
+    lead: {
+      en: "The site is TypeScript with no framework: one esbuild bundle serves every page, the charts are drawn on canvas, and all copy is written as { en, fr } pairs beside the module that uses it. npm run build writes docs/bundle.js and docs/styles.css, which is what GitHub Pages serves.",
+      fr: "Le site est en TypeScript sans framework : un seul bundle esbuild sert toutes les pages, les graphiques sont dessin\xE9s sur canvas, et chaque texte existe en { en, fr } \xE0 c\xF4t\xE9 du module qui l\u2019utilise. npm run build \xE9crit docs/bundle.js et docs/styles.css, que GitHub Pages sert tels quels."
+    },
+    bullets: [
+      {
+        en: "A movement missing from the comparison, or a source group that needs adding to src/data/sources.",
+        fr: "Un mouvement absent de la comparaison, ou un groupe de sources \xE0 ajouter dans src/data/sources."
+      },
+      {
+        en: "Chart correctness: a band drawn from one publisher, a gap interpolated that should have stayed empty.",
+        fr: "L\u2019exactitude des graphiques : une fourchette trac\xE9e depuis un seul \xE9diteur, un vide interpol\xE9 qui aurait d\xFB rester vide."
+      },
+      {
+        en: "Accessibility: focus order, canvas descriptions, contrast, the grayscale-to-colour cards under prefers-contrast.",
+        fr: "L\u2019accessibilit\xE9 : ordre de tabulation, descriptions des canvas, contrastes, cartes en noir et blanc selon prefers-contrast."
+      },
+      {
+        en: "The French copy, which reads as a translation in places because it is one.",
+        fr: "Les textes fran\xE7ais, qui se lisent parfois comme une traduction parce qu\u2019ils en sont une."
+      }
+    ],
+    note: {
+      en: "Open an issue before a large pull request: settling the data question first usually halves the code.",
+      fr: "Ouvrez un ticket avant une grosse pull request : r\xE9gler la question des donn\xE9es d\u2019abord divise g\xE9n\xE9ralement le code par deux."
+    },
+    actions: [{ label: { en: "Repository on GitHub", fr: "D\xE9p\xF4t sur GitHub" }, href: REPO2 }]
+  },
+  {
+    id: "medics",
+    status: { en: "In preparation", fr: "En pr\xE9paration" },
+    title: {
+      en: "Coming: how to record better data",
+      fr: "\xC0 venir : mieux consigner les donn\xE9es"
+    },
+    lead: {
+      en: "A guide for street medics, legal observers and anyone counting in the street, on turning what you see into a figure that survives being checked six months later.",
+      fr: "Un guide pour les street medics, les observateurs juridiques et toute personne qui compte dans la rue, pour transformer ce que vous voyez en un chiffre qui r\xE9siste \xE0 une v\xE9rification six mois plus tard."
+    },
+    bullets: [
+      {
+        en: "What to write down at the time: hour, place, who was counting, and the boundary of what was counted.",
+        fr: "Ce qu\u2019il faut noter sur le moment : heure, lieu, qui comptait, et la limite de ce qui \xE9tait compt\xE9."
+      },
+      {
+        en: "A count and an estimate are different data. Record which one you have, and never round a count into an estimate.",
+        fr: "Un d\xE9compte et une estimation sont deux donn\xE9es diff\xE9rentes. Notez laquelle vous avez, et n\u2019arrondissez jamais un d\xE9compte en estimation."
+      },
+      {
+        en: "Always the denominator: injuries without a number of people present cannot be compared with anything.",
+        fr: "Toujours le d\xE9nominateur : des bless\xE9s sans nombre de personnes pr\xE9sentes ne se comparent \xE0 rien."
+      },
+      {
+        en: "The chain from observation to publication, so a figure can be traced back to the person who saw it.",
+        fr: "La cha\xEEne de l\u2019observation \xE0 la publication, pour qu\u2019un chiffre remonte jusqu\u2019\xE0 la personne qui l\u2019a vu."
+      },
+      {
+        en: "Consent, anonymity and safety, which outrank the data every time.",
+        fr: "Le consentement, l\u2019anonymat et la s\xE9curit\xE9, qui priment sur la donn\xE9e \xE0 chaque fois."
+      }
+    ],
+    note: {
+      en: "What should the guide cover? Suggest it as an issue now \u2014 the outline is still open.",
+      fr: "Que devrait couvrir ce guide ? Proposez-le d\xE8s maintenant en ticket : le plan est encore ouvert."
+    },
+    actions: [{ label: { en: "Suggest a topic", fr: "Proposer un sujet" }, href: NEW_ISSUE }]
+  },
+  {
+    id: "share",
+    title: { en: "Or just share it", fr: "Ou simplement le partager" },
+    lead: {
+      en: "Challenging a false narrative is easier with a chart than with an argument. Link the page rather than a screenshot: the numbers stay current, and the source travels with them.",
+      fr: "Contester un r\xE9cit faux est plus facile avec un graphique qu\u2019avec un argument. Partagez le lien de la page plut\xF4t qu\u2019une capture d\u2019\xE9cran : les chiffres restent \xE0 jour, et la source voyage avec eux."
+    },
+    bullets: [
+      {
+        en: "Quote the band, not one end of it. \u201CBetween 175,000 and 197,000\u201D is the finding; either number alone is a half-truth.",
+        fr: "Citez la fourchette, pas une de ses bornes. \xAB Entre 175 000 et 197 000 \xBB est le r\xE9sultat ; un seul des deux chiffres est une demi-v\xE9rit\xE9."
+      },
+      {
+        en: "Say what the chart does not show \u2014 every page states its own gaps under the title.",
+        fr: "Dites ce que le graphique ne montre pas : chaque page \xE9nonce ses lacunes sous son titre."
+      },
+      {
+        en: "Point people at the Sources box on that page, so the figure can be checked without trusting us.",
+        fr: "Renvoiez vers la rubrique Sources de la page, pour que le chiffre soit v\xE9rifiable sans nous faire confiance."
+      }
+    ]
+  }
+];
+function block3(b) {
+  const section = el("section", "contribute-section");
+  section.id = `contribute-${b.id}`;
+  section.setAttribute("aria-labelledby", `${section.id}-title`);
+  const head = el("header", "contribute-head");
+  const h = el("h2", "contribute-title", bi(b.title));
+  h.id = `${section.id}-title`;
+  head.append(h);
+  if (b.status) head.append(el("span", "contribute-status", bi(b.status)));
+  section.append(head, el("p", "contribute-lead", bi(b.lead)));
+  if (b.bullets.length) {
+    const ul = el("ul", "contribute-list");
+    for (const t2 of b.bullets) ul.append(el("li", void 0, bi(t2)));
+    section.append(ul);
+  }
+  if (b.note) section.append(el("p", "callout", bi(b.note)));
+  if (b.actions?.length) {
+    const row = el("p", "contribute-actions");
+    for (const a of b.actions) {
+      const link = el("a", "contribute-button", bi(a.label));
+      link.href = a.href;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      row.append(link);
+    }
+    section.append(row);
+  }
+  return section;
+}
+function mountContribute(host = byId("contribute")) {
+  if (!host) return;
+  host.replaceChildren(...BLOCKS.map(block3));
+}
+
 // src/entry/main.ts
+function fixPageLinks(page) {
+  for (const a of document.querySelectorAll("[data-page-link]")) {
+    const id = a.dataset.pageLink;
+    if (id && PAGES[id]) a.href = pageHref(page.path, id);
+  }
+}
 function header2(host, level, title, blurb) {
   const h = el(level === 2 ? "h2" : "h3", "sec-title", title);
   h.id = `${host.id}-title`;
@@ -21592,9 +21807,11 @@ function mountPage(page) {
 function render2() {
   destroyAll();
   const page = pageById(document.documentElement.dataset.page ?? "") ?? PAGES.home;
+  const id = pageKey(page);
   renderChrome();
-  renderSources();
+  renderSources(id);
   mountPage(page);
+  fixPageLinks(page);
   document.title = `${bi(page.title)} \u2014 ${bi(SITE_NAME)}`;
   applyStaticCopy();
   syncLangSwitch();
@@ -21606,7 +21823,8 @@ function render2() {
     mountPerCapita,
     mountContext,
     mountCrossEpisode,
-    mountSummary
+    mountSummary,
+    mountContribute
   ]) {
     try {
       mount2();

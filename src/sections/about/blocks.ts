@@ -2,10 +2,8 @@ import type { Lang } from "../../copy";
 import { CALLOUT } from "./copy";
 import type { Block, Run, SubSection } from "./model";
 
-/** Only this sub-section is expanded on load; "" collapses everything. */
-const OPEN_ID: string = "analysis";
 /** Gets the accent treatment. Same id, because the featured section is the open one. */
-const FEATURED_ID = OPEN_ID;
+const FEATURED_ID = "analysis";
 
 function inline(run: Run): Node {
   if (typeof run === "string") return document.createTextNode(run);
@@ -54,7 +52,9 @@ function block(b: Block): HTMLElement {
   return quote;
 }
 
-/** `open` carries the reader's choices across locale changes. */
+/* `open` carries the reader's choices across locale changes; nothing is
+   opened on a first visit, so the section reads as a list of three closed
+   questions rather than landing on the longest one. */
 export function group(
   sub: SubSection,
   open: ReadonlyMap<string, boolean>,
@@ -65,7 +65,7 @@ export function group(
       ? "about-group about-group--featured"
       : "about-group";
   details.dataset.about = sub.id;
-  details.open = open.get(sub.id) ?? sub.id === OPEN_ID;
+  details.open = open.get(sub.id) ?? false;
 
   const summary = document.createElement("summary");
   summary.className = "about-summary";

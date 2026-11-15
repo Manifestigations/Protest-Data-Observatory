@@ -29,14 +29,9 @@ export const CREDIT_LINK_LABEL: Bi = {
 export const LICENCE_LABEL: Bi = { en: "Licence", fr: "Licence" };
 
 export type PageId =
-  | "home"
-  | "2026"
-  | "historic"
-  | "2026/turnout"
-  | "2026/violence"
-  | "2026/costs"
-  | "historic/movements"
-  | "historic/series";
+  | "home" | "2026" | "historic" | "contribute"
+  | "2026/turnout" | "2026/violence" | "2026/costs"
+  | "historic/movements" | "historic/series";
 
 export interface CardSpec {
   readonly href: PageId;
@@ -46,9 +41,8 @@ export interface CardSpec {
 }
 
 export interface PageSpec {
-  /** docs-relative file name. */
   readonly path: string;
-  readonly kind: "landing" | "group" | "section";
+  readonly kind: "landing" | "group" | "section" | "page";
   readonly title: Bi;
   readonly blurb: Bi;
   readonly parent: PageId | null;
@@ -241,6 +235,18 @@ export const PAGES: Readonly<Record<PageId, PageSpec>> = {
     parent: "historic",
     cards: [],
   },
+
+  contribute: {
+    path: "contribute.html",
+    kind: "page",
+    title: { en: "Help improve this tool", fr: "Aidez à améliorer cet outil" },
+    blurb: {
+      en: "Three ways to make this observatory better: send a data point or a correction, send code, or hand the charts to someone arguing with a rumour. None of them requires being a programmer.",
+      fr: "Trois façons d’améliorer cet observatoire : envoyer un chiffre ou une correction, envoyer du code, ou transmettre les graphiques à quelqu’un qui débat avec une rumeur. Aucune n’exige d’être programmeur.",
+    },
+    parent: "home",
+    cards: [],
+  },
 };
 
 export function pageById(id: string): PageSpec | null {
@@ -249,4 +255,11 @@ export function pageById(id: string): PageSpec | null {
 
 export function pageHref(fromPath: string, to: PageId): string {
   return relHref(fromPath, PAGES[to].path);
+}
+
+/* and, replacing the inline lookup inside crumbs(): */
+export function pageKey(page: PageSpec): PageId {
+  return (
+    (Object.keys(PAGES) as PageId[]).find((k) => PAGES[k] === page) ?? "home"
+  );
 }

@@ -9,9 +9,9 @@ import type { Bi } from "./types";
 type AttrName = "text" | "aria-label" | "title" | "placeholder";
 
 const STATIC: Record<string, Bi> = {
-  "hdr.kicker": {
-    en: "15 Sep – 11 Nov 2026",
-    fr: "15 sept. – 11 nov. 2026",
+  "hdr.cta": {
+    en: "Help improve this tool",
+    fr: "Aidez à améliorer cet outil",
   },
   "hdr.title": {
     en: "Protest activity in France, autumn 2026",

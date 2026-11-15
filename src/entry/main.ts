@@ -31,10 +31,22 @@ import {
   SITE_NAME,
   pageById,
   pageHref,
+  pageKey,
+  type PageId,
   type PageSpec,
 } from "../site/routes.ts";
 import { bi } from "../copy";
 import { announce } from "../core/a11y.ts";
+import { mountContribute } from "../sections/contribute/index.ts";
+
+/* Static anchors carry a plausible href for no-JS readers; this makes it
+   correct for the page's depth (2026/turnout.html → ../contribute.html). */
+function fixPageLinks(page: PageSpec): void {
+  for (const a of document.querySelectorAll<HTMLAnchorElement>("[data-page-link]")) {
+    const id = a.dataset.pageLink as PageId | undefined;
+    if (id && PAGES[id]) a.href = pageHref(page.path, id);
+  }
+}
 
 function header(
   host: HTMLElement,
@@ -89,32 +101,24 @@ function mountPage(page: PageSpec): void {
 
 export function render(): void {
   destroyAll();
-  const page =
-    pageById(document.documentElement.dataset.page ?? "") ?? PAGES.home;
+  const page = pageById(document.documentElement.dataset.page ?? "") ?? PAGES.home;
+  const id = pageKey(page);
 
-  renderChrome(); // legacy A–E headers, notes, #about, <title>
-  renderSources(); // Sources + the new Media group
+  renderChrome();
+  renderSources(id);
   mountPage(page);
+  fixPageLinks(page);
   document.title = `${bi(page.title)} — ${bi(SITE_NAME)}`;
 
   applyStaticCopy();
   syncLangSwitch();
 
   for (const mount of [
-    mountCharts,
-    mountKpis,
-    mountKpiPresets,
-    mountCasualties,
-    mountPerCapita,
-    mountContext,
-    mountCrossEpisode,
-    mountSummary,
+    mountCharts, mountKpis, mountKpiPresets, mountCasualties,
+    mountPerCapita, mountContext, mountCrossEpisode, mountSummary,
+    mountContribute,
   ]) {
-    try {
-      mount();
-    } catch (err) {
-      console.error(`[${mount.name}]`, err);
-    }
+    try { mount(); } catch (err) { console.error(`[${mount.name}]`, err); }
   }
 }
 
