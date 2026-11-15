@@ -1613,9 +1613,7 @@ details.data-table th[scope="row"] {
 }
 
 .group-card {
-  &:hover .card-hero img {
-    filter: grayscale(0);
-  }
+  &:hover .card-hero img,
   &:focus-within .card-hero img {
     filter: grayscale(0);
     transform: scale(1.02);
@@ -1692,6 +1690,140 @@ details.data-table th[scope="row"] {
   .group-card:focus-within {
     outline-color: Highlight;
   }
+}
+
+/* ---- header CTA (replaces the kicker) ---------------------------------- */
+.cta-help {
+  grid-area: kicker;
+  display: inline-flex;
+  align-items: center;
+  inline-size: fit-content;
+  gap: 0.35em;
+  margin-bottom: 10px;
+  padding: 6px 13px;
+  border: 1px solid var(--accent-line);
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--accent-ink);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background var(--dur) ease,
+    border-color var(--dur) ease;
+
+  &::after {
+    content: "→";
+  }
+  &:hover {
+    background: var(--surface);
+    border-color: var(--accent-ink);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+/* ---- contribute page --------------------------------------------------- */
+.contribute {
+  max-width: 68ch;
+}
+
+.contribute-section + .contribute-section {
+  margin-top: clamp(28px, 3.4vw, 46px);
+}
+
+.contribute-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.contribute-title {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--ink-1);
+  text-wrap: balance;
+}
+
+.contribute-status {
+  padding: 2px 8px;
+  border: 1px solid var(--accent-line);
+  border-radius: 999px;
+  font-size: var(--fs-3xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+}
+
+.contribute-lead {
+  margin-top: 8px;
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+.contribute-list {
+  margin-top: 10px;
+  padding-left: 1.1rem;
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--ink-2);
+
+  & li + li {
+    margin-top: 5px;
+  }
+}
+
+.contribute-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.contribute-button {
+  display: inline-flex;
+  padding: 9px 16px;
+  border: 1px solid var(--accent-line);
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--accent-ink);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    border-color: var(--accent-ink);
+    background: var(--surface);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-help {
+    transition: none;
+  }
+}
+
+/* Sub-headings inside an About group (Policing, Costs, …) */
+.about-body .about-subhead {
+  margin: 1.75rem 0 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+}
+
+.about-body .about-subhead:first-child {
+  margin-top: 0;
 }
 
 .cost-method {
