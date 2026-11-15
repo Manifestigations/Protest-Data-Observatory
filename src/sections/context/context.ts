@@ -34,7 +34,7 @@ import {
   START,
 } from "../../data/data.ts";
 import { byId, el } from "../../core/dom.ts";
-import { fmtDate, getLocale } from "../../copy";
+import { fill, fmtDate, getLocale } from "../../copy";
 
 /* ----- copy */
 
@@ -42,8 +42,13 @@ interface Bi {
   readonly en: string;
   readonly fr: string;
 }
+
 const L = (o: Bi): string =>
   String(getLocale()).slice(0, 2) === "fr" ? o.fr : o.en;
+
+/** `fill` on a bilingual pair: resolve the locale first, then substitute. */
+const fillL = (o: Bi, params?: Record<string, string | number>): string =>
+  fill(L(o), params);
 
 /* ----- scope taxonomy */
 
@@ -312,6 +317,26 @@ export const contextBands: Plugin<"line"> = {
   },
 };
 
+/** One window for the strip, and the only place its bounds are stated. */
+interface Range {
+  readonly from: string; // ISO, inclusive
+  readonly to: string; // ISO, inclusive
+  readonly title: Bi;
+}
+
+/** Inclusive ISO span → percentage box inside `RANGE`. A one-day span keeps a
+ *  visible sliver rather than rounding to zero width. */
+function spanBox(from: string, to: string): { left: number; width: number } {
+  const t0 = Date.parse(RANGE.from);
+  const total = Math.max(Date.parse(RANGE.to) - t0, DAY);
+  const a = Math.max(Date.parse(from), t0);
+  const b = Math.min(Date.parse(to) + DAY, t0 + total); // +DAY: `to` is inclusive
+  return {
+    left: ((a - t0) / total) * 100,
+    width: (Math.max(b - a, 0) / total) * 100,
+  };
+}
+
 /* ----- the strip */
 
 const RANGE: Range = {
@@ -319,6 +344,67 @@ const RANGE: Range = {
   to: END,
   title: { en: "The 2026 window", fr: "La fenêtre 2026" },
 };
+
+/** One layer's row: name column, then a track holding one bar per span.
+ *  An empty row keeps its track and says so — see the municipal case in
+ *  renderStrip, where the emptiness is the finding. */
+function stripRow(
+  kind: ContextKind,
+  label: string,
+  spans: readonly Span[],
+): HTMLElement {
+  const row = el("div", "ctx-row");
+  row.append(el("span", "ctx-name", label));
+
+  const track = el("div", "ctx-track");
+  for (const s of spans) {
+    const { left, width } = spanBox(s.from, s.to);
+    const bar = el("div", "ctx-bar");
+    bar.style.left = `${left}%`;
+    bar.style.width = `${Math.max(width, 0.25)}%`;
+    bar.style.background = KIND_COLOR[kind]; // .ctx-bar sets no colour of its own
+    bar.title =
+      s.from === s.to
+        ? `${L(s.label)} — ${fmtDate(s.from)}`
+        : `${L(s.label)} — ${fmtDate(s.from)} – ${fmtDate(s.to)}`;
+    track.append(bar);
+  }
+  if (!spans.length)
+    track.append(
+      el("span", "ctx-empty", L({ en: "none recorded", fr: "aucune mesure" })),
+    );
+
+  row.append(track);
+  return row;
+}
+
+/** Month boundaries inside the window, plus the end. Ticks are anchored at their
+ *  date, not at a label centroid: the CSS left-aligns the first one. */
+function axisRow(): HTMLElement {
+  const row = el("div", "ctx-row ctx-axis");
+  row.append(el("span", "ctx-name", "")); // keeps the label column aligned
+
+  const track = el("div", "ctx-track");
+  const t0 = Date.parse(RANGE.from);
+  const t1 = Date.parse(RANGE.to);
+
+  const ticks: string[] = [];
+  const d = new Date(t0);
+  d.setUTCDate(1); // first of the month, or the first of the next one
+  if (d.getTime() < t0) d.setUTCMonth(d.getUTCMonth() + 1);
+  for (; d.getTime() <= t1; d.setUTCMonth(d.getUTCMonth() + 1))
+    ticks.push(d.toISOString().slice(0, 10));
+
+  /* One tick per boundary: a month start that lands on END must not draw twice. */
+  for (const iso of new Set([...ticks, RANGE.to])) {
+    const tick = el("span", "ctx-tick", fmtDate(iso));
+    tick.style.left = `${spanBox(iso, iso).left}%`; // no second copy of the maths
+    track.append(tick);
+  }
+
+  row.append(track);
+  return row;
+}
 
 function renderStrip(host: HTMLElement): void {
   const figure = el("figure", "ctx-figure");

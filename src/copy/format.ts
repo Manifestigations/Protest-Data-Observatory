@@ -142,3 +142,15 @@ const HAS_CLOCK = /[T ]\d{2}:\d{2}/;
 const MINUTE = 60_000;
 const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;
+
+/**
+ * Share, for tooltips: "12%" at 10 and above, "4.5%" below, so a small share
+ * never reads as "0%". Was a file-local const in episodes.ts.
+ *
+ * Deliberately not built on Intl: the % glyph and its placement are identical
+ * in both locales, and the thresholds are part of the copy's meaning.
+ */
+export function pctOf(v: number, base: number): string {
+  const r = (100 * v) / base;
+  return r >= 10 ? `${Math.round(r)}%` : `${Number(r.toFixed(1))}%`;
+}

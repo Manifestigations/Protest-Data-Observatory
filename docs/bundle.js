@@ -1347,7 +1347,7 @@ function buildFormats(tag3) {
     day: new Intl.DateTimeFormat(tag3, { day: "numeric", ...UTC })
   };
 }
-var nf = () => numFmt;
+var nf2 = () => numFmt;
 var compact = () => cptFmt;
 var eurM = () => eurFmt;
 function toDate(value2) {
@@ -1407,6 +1407,10 @@ function fmtSpan(span, end) {
 var MINUTE = 6e4;
 var HOUR = 60 * MINUTE;
 var DAY = 24 * HOUR;
+function pctOf(v, base) {
+  const r = 100 * v / base;
+  return r >= 10 ? `${Math.round(r)}%` : `${Number(r.toFixed(1))}%`;
+}
 
 // src/copy/fr/meta.ts
 var FR_META = {
@@ -1706,13 +1710,13 @@ function announce(text) {
 }
 var txt = (v) => {
   if (v == null) return "\u2014";
-  if (typeof v === "number") return nf().format(Math.round(v));
+  if (typeof v === "number") return nf2().format(Math.round(v));
   if (typeof v === "object") {
     const p = v;
     if (typeof p.low === "number" && typeof p.high === "number")
-      return p.low === p.high ? nf().format(Math.round(p.low)) : `${nf().format(Math.round(p.low))} \u2013 ${nf().format(Math.round(p.high))}`;
+      return p.low === p.high ? nf2().format(Math.round(p.low)) : `${nf2().format(Math.round(p.low))} \u2013 ${nf2().format(Math.round(p.high))}`;
     for (const n of [p.v, p.y])
-      if (typeof n === "number") return nf().format(Math.round(n));
+      if (typeof n === "number") return nf2().format(Math.round(n));
   }
   return String(v);
 };
@@ -2820,12 +2824,12 @@ function cellText(c) {
   switch (c.s) {
     case "n":
       return {
-        text: `${c.d ? "\u2248 " : ""}${nf().format(c.v)}`,
+        text: `${c.d ? "\u2248 " : ""}${nf2().format(c.v)}`,
         cls: c.d ? "cas-num cas-derived" : "cas-num"
       };
     case "r":
       return {
-        text: `\u2248 ${nf().format(c.lo)}\u2013${nf().format(c.hi)}`,
+        text: `\u2248 ${nf2().format(c.lo)}\u2013${nf2().format(c.hi)}`,
         cls: "cas-num cas-derived"
       };
     case "c":
@@ -2908,8 +2912,8 @@ function headline() {
       "span",
       "cas-head-label",
       p === null || top.light.s !== "n" || top.total.s !== "n" ? c.headLightNote : fill(c.headLight, {
-        light: nf().format(top.light.v),
-        total: nf().format(top.total.v)
+        light: nf2().format(top.light.v),
+        total: nf2().format(top.total.v)
       })
     )
   );
@@ -8836,12 +8840,12 @@ var Scale = class _Scale extends Element {
     const increment = Math.floor(length / getTicksLimit(length, maxTicksLimit));
     let widestLabelSize = 0;
     let highestLabelSize = 0;
-    let i, j, jlen, label, tickFont, fontString2, cache2, lineHeight, width, height, nestedLabel;
+    let i, j, jlen, label, tickFont, fontString, cache2, lineHeight, width, height, nestedLabel;
     for (i = 0; i < length; i += increment) {
       label = ticks[i].label;
       tickFont = this._resolveTickFontOptions(i);
-      ctx.font = fontString2 = tickFont.string;
-      cache2 = caches[fontString2] = caches[fontString2] || {
+      ctx.font = fontString = tickFont.string;
+      cache2 = caches[fontString] = caches[fontString] || {
         data: {},
         gc: []
       };
@@ -14713,6 +14717,7 @@ var TimeSeriesScale = class extends TimeScale {
 
 // src/sections/context/context.ts
 var L = (o) => String(getLocale()).slice(0, 2) === "fr" ? o.fr : o.en;
+var fillL = (o, params) => fill(L(o), params);
 var LAYERS = [
   {
     kind: "school",
@@ -14777,6 +14782,7 @@ var SPANS = [
     source: "https://www.lemonde.fr/en/france/article/2026/10/22/french-city-of-lyon-bans-all-protests-on-saturday_6761449_7.html"
   }
 ];
+var DAY2 = 864e5;
 function daySpans() {
   const out = [];
   for (const s of SPANS) {
@@ -14887,11 +14893,61 @@ var contextBands = {
     ctx.restore();
   }
 };
+function spanBox(from2, to2) {
+  const t0 = Date.parse(RANGE.from);
+  const total = Math.max(Date.parse(RANGE.to) - t0, DAY2);
+  const a = Math.max(Date.parse(from2), t0);
+  const b = Math.min(Date.parse(to2) + DAY2, t0 + total);
+  return {
+    left: (a - t0) / total * 100,
+    width: Math.max(b - a, 0) / total * 100
+  };
+}
 var RANGE = {
   from: START,
   to: END,
   title: { en: "The 2026 window", fr: "La fen\xEAtre 2026" }
 };
+function stripRow(kind, label, spans) {
+  const row = el("div", "ctx-row");
+  row.append(el("span", "ctx-name", label));
+  const track2 = el("div", "ctx-track");
+  for (const s of spans) {
+    const { left, width } = spanBox(s.from, s.to);
+    const bar2 = el("div", "ctx-bar");
+    bar2.style.left = `${left}%`;
+    bar2.style.width = `${Math.max(width, 0.25)}%`;
+    bar2.style.background = KIND_COLOR[kind];
+    bar2.title = s.from === s.to ? `${L(s.label)} \u2014 ${fmtDate(s.from)}` : `${L(s.label)} \u2014 ${fmtDate(s.from)} \u2013 ${fmtDate(s.to)}`;
+    track2.append(bar2);
+  }
+  if (!spans.length)
+    track2.append(
+      el("span", "ctx-empty", L({ en: "none recorded", fr: "aucune mesure" }))
+    );
+  row.append(track2);
+  return row;
+}
+function axisRow() {
+  const row = el("div", "ctx-row ctx-axis");
+  row.append(el("span", "ctx-name", ""));
+  const track2 = el("div", "ctx-track");
+  const t0 = Date.parse(RANGE.from);
+  const t1 = Date.parse(RANGE.to);
+  const ticks = [];
+  const d = new Date(t0);
+  d.setUTCDate(1);
+  if (d.getTime() < t0) d.setUTCMonth(d.getUTCMonth() + 1);
+  for (; d.getTime() <= t1; d.setUTCMonth(d.getUTCMonth() + 1))
+    ticks.push(d.toISOString().slice(0, 10));
+  for (const iso2 of /* @__PURE__ */ new Set([...ticks, RANGE.to])) {
+    const tick = el("span", "ctx-tick", fmtDate(iso2));
+    tick.style.left = `${spanBox(iso2, iso2).left}%`;
+    track2.append(tick);
+  }
+  row.append(track2);
+  return row;
+}
 function renderStrip(host) {
   const figure = el("figure", "ctx-figure");
   const cap = el("figcaption", "ctx-caption");
@@ -14975,12 +15031,12 @@ function noteText(ref) {
     case "obs":
       return m.obsNotes[ref.date]?.[ref.metric] ?? "";
     case "policing": {
-      const head = ref.low === ref.high ? nf().format(ref.low) : `${nf().format(ref.low)}\u2013${nf().format(ref.high)}`;
+      const head = ref.low === ref.high ? nf2().format(ref.low) : `${nf2().format(ref.low)}\u2013${nf2().format(ref.high)}`;
       const note2 = m.deployNotes[ref.date];
       return fill(note2 ? m.policingDay : m.policingDayPlain, {
         head,
-        low: nf().format(RATE.low),
-        high: nf().format(RATE.high),
+        low: nf2().format(RATE.low),
+        high: nf2().format(RATE.high),
         note: note2 ?? ""
       });
     }
@@ -15654,7 +15710,7 @@ var spanMark = {
   }
 };
 function fmt(v, unit) {
-  return unit === "eurM" ? fill(t().chart.eurM, { v: eurM().format(v) }) : nf().format(Math.round(v));
+  return unit === "eurM" ? fill(t().chart.eurM, { v: eurM().format(v) }) : nf2().format(Math.round(v));
 }
 var RATE2 = {
   en: "= {pct} of the population ({pop} residents)",
@@ -15668,10 +15724,10 @@ function rateLine(band, v) {
   const pct = hi - lo < 1e-9 ? fmtPct(lo) : `${fmtPct(lo)} \u2013 ${fmtPct(hi)}`;
   return fill(bi(RATE2), {
     pct,
-    pop: nf().format(denominator(pop) ?? 0)
+    pop: nf2().format(denominator(pop) ?? 0)
   });
 }
-var tickFormat = (unit) => (v) => unit === "eurM" ? fill(t().chart.eurM, { v: nf().format(v) }) : compact().format(v);
+var tickFormat = (unit) => (v) => unit === "eurM" ? fill(t().chart.eurM, { v: nf2().format(v) }) : compact().format(v);
 function tooltipCallbacks(v) {
   const m = t().chart;
   return {
@@ -15962,302 +16018,8 @@ function mountCharts() {
   }
 }
 
-// src/data/episodes/episodes.ts
-var DIM = THEME.dim;
-var SERIES2 = [
-  { key: "p", color: "#1d4ed8" },
-  { key: "a", color: "#b91c1c" },
-  { key: "f", color: "#047857" },
-  { key: "i", color: "#b45309" }
-];
-var RAMP2 = [
-  "#D6E6F2",
-  "#B0CFE6",
-  "#86B4D7",
-  "#5C97C5",
-  "#357AB0",
-  "#1B5C92",
-  "#0A3A63"
-];
-var MAY68 = {
-  id: "may68",
-  start: "1968-04-29",
-  end: "1968-06-30",
-  weeks: [
-    /* 1 May, République → Bastille: 25,000 (police) vs 100,000 (CGT). */
-    { w: 0, from: "1968-04-29", to: "1968-05-05", p: [25e3, 1e5] },
-    {
-      /* 6 May: >20,000 to the Sorbonne; 10 May: 20,000 (12,000 police).
-         Night of 10–11 May: 6,255 police, 125 cars damaged / 63 burnt,
-         469 arrests. The 891 high adds 422 early-May arrests.
-         Forces: 300+ on 6 May, 247 on 10–11 May.
-         Protesters injured: ≥100 — no national count was published. */
-      w: 1,
-      from: "1968-05-06",
-      to: "1968-05-12",
-      p: 2e4,
-      a: [469, 891],
-      f: [247, 300],
-      i: 100,
-      flag: { i: "f" }
-    },
-    /* 13 May, Paris — peak of the episode: prefecture 230,000 · ORTF 171,000
-       · surface-area estimate 500,000 · unions 1,000,000. */
-    { w: 2, from: "1968-05-13", to: "1968-05-19", p: [23e4, 1e6] },
-    {
-      /* 25 May: 1,000+ arrests (floor), ~9M strikers, ORTF walkout.
-         887 injured — from the English-Wikipedia infobox, attributed to 25 May
-         only. Weak provenance, flagged "e". */
-      w: 3,
-      from: "1968-05-20",
-      to: "1968-05-26",
-      a: 1e3,
-      i: 887,
-      flag: { a: "f", i: "e" }
-    },
-    /* 27 May Grenelle protocol · Charléty meeting. */
-    { w: 4, from: "1968-05-27", to: "1968-06-02" },
-    /* 4 Jun partial return to work · 7 Jun Renault Flins clashes. */
-    { w: 5, from: "1968-06-03", to: "1968-06-09" },
-    /* 10 Jun: Tautin killed · 11 Jun: 2 killed at Sochaux · 12 Jun:
-       demonstrations banned nationwide. */
-    { w: 6, from: "1968-06-10", to: "1968-06-16" },
-    /* 23 Jun legislative elections. */
-    { w: 7, from: "1968-06-17", to: "1968-06-23" },
-    /* Crisis closes 30 Jun. */
-    { w: 8, from: "1968-06-24", to: "1968-06-30" }
-  ]
-};
-var CPE = {
-  id: "cpe",
-  start: "2006-02-06",
-  end: "2006-04-16",
-  weeks: [
-    /* 7 Feb: first national action day, 187 demonstrations. */
-    { w: 0, from: "2006-02-06", to: "2006-02-12", p: [2e5, 4e5] },
-    /* 7 Mar: ">1 million" claimed; ~38 universities on strike by 9 Mar. */
-    { w: 4, from: "2006-03-06", to: "2006-03-12", p: [4e5, 1e6] },
-    {
-      /* 16 Mar: 250,000 (Le Monde) / 447,500 (police) — the ministry's
-         247,500 is the same police count rounded differently.
-         18 Mar: 500,000 ministry / 1.5M organisers; Paris 80,000–350,000.
-         Enforcement, Paris only: 156 (ministry) / 167 (organisers) arrests;
-         34 forces injured.
-         Protesters injured 70 = 18 (16 Mar) + 52 (18 Mar), Paris only —
-         flagged "e" because it is a two-day Paris sum inside a weekly row.
-         14 Mar (same week, second action day): 41,000 (police source). */
-      w: 5,
-      from: "2006-03-13",
-      to: "2006-03-19",
-      p: [5e5, 15e5],
-      a: [156, 167],
-      f: 34,
-      i: 70,
-      flag: { i: "e" }
-    },
-    {
-      /* 23 Mar: 21 universities fully blocked, 67 striking or blocked.
-         630 arrests, 90 forces injured. */
-      w: 6,
-      from: "2006-03-20",
-      to: "2006-03-26",
-      p: [22e4, 45e4],
-      a: 630,
-      f: 90
-    },
-    /* 28 Mar: 4th national action day, 600 arrests. */
-    {
-      w: 7,
-      from: "2006-03-27",
-      to: "2006-04-02",
-      p: [1055e3, 271e4],
-      a: 600
-    },
-    /* 4 Apr: peak day of the episode. */
-    { w: 8, from: "2006-04-03", to: "2006-04-09", p: [1e6, 31e5] },
-    /* CPE scrapped 10 Apr; the movement splits, Easter follows. */
-    { w: 9, from: "2006-04-10", to: "2006-04-16" }
-  ]
-};
-var GJ_ACTS = [
-  [0, "2018-11-17", 287700],
-  [1, "2018-11-24", 166e3],
-  [2, "2018-12-01", 136e3],
-  [3, "2018-12-08", 136e3],
-  [4, "2018-12-15", 66e3],
-  [5, "2018-12-22", 38600],
-  [6, "2018-12-29", 32e3],
-  [7, "2019-01-05", 5e4],
-  [8, "2019-01-12", 84e3],
-  [9, "2019-01-19", 84e3],
-  [10, "2019-01-26", 69e3],
-  [11, "2019-02-02", 58600],
-  [12, "2019-02-09", 51400],
-  [13, "2019-02-16", 41500],
-  [14, "2019-02-23", 46600],
-  [15, "2019-03-02", 39300],
-  [16, "2019-03-09", 28600],
-  [17, "2019-03-16", 32300],
-  [18, "2019-03-23", 40500],
-  [19, "2019-03-30", 33700],
-  [20, "2019-04-06", 22300],
-  [21, "2019-04-13", 31e3],
-  [22, "2019-04-20", 27900],
-  [23, "2019-04-27", 23600],
-  [24, "2019-05-04", 18900],
-  [25, "2019-05-11", 18600],
-  [26, "2019-05-18", 15500],
-  [27, "2019-05-25", 12500],
-  [28, "2019-06-01", 9500],
-  [29, "2019-06-08", 10300],
-  [30, "2019-06-15", 7e3],
-  [31, "2019-06-22", 11800],
-  [32, "2019-06-29", 5800],
-  [43, "2019-09-07", 7e3]
-];
-var GJ_EXTRA = {
-  0: { a: [117, 73], flag: { a: "f" } },
-  1: { a: [101, 103], f: 5, i: 19, flag: { i: "e" } },
-  2: {},
-  3: { a: 1385 }
-};
-var GILETS = {
-  id: "gj",
-  start: "2018-11-12",
-  end: "2019-09-09",
-  weeks: GJ_ACTS.map(([w, date, n]) => ({
-    w,
-    from: date,
-    to: date,
-    act: w + 1,
-    p: n,
-    ...GJ_EXTRA[w] ?? {},
-    flag: {
-      ...w === 0 ? { p: "c" } : {},
-      ...GJ_EXTRA[w]?.flag ?? {}
-    }
-  }))
-};
-var NAHEL = {
-  id: "nahel",
-  start: "2023-06-27",
-  end: "2023-07-09",
-  weeks: [
-    {
-      w: 0,
-      from: "2023-06-26",
-      to: "2023-07-02",
-      p: [8e3, 5e4],
-      a: 3354,
-      f: 722,
-      flag: { p: "e" }
-    },
-    { w: 1, from: "2023-07-03", to: "2023-07-09", a: 108, f: 1 }
-  ]
-};
-var PENSIONS = {
-  id: "pensions",
-  start: "2023-01-19",
-  end: "2023-06-08",
-  weeks: [
-    { w: 0, from: "2023-01-16", to: "2023-01-22", p: [112e4, 2e6] },
-    { w: 2, from: "2023-01-30", to: "2023-02-05", p: [127e4, 28e5] },
-    { w: 3, from: "2023-02-06", to: "2023-02-12", p: [963e3, 25e5] },
-    { w: 4, from: "2023-02-13", to: "2023-02-19", p: [44e4, 13e5] },
-    { w: 7, from: "2023-03-06", to: "2023-03-12", p: [128e4, 35e5] },
-    { w: 8, from: "2023-03-13", to: "2023-03-19", p: [48e4, 17e5] },
-    {
-      /* 23 Mar: the flashpoint — 49.3 passed, two failed no-confidence votes.
-         Ministry: up to 1.08M nationwide / 119,000 Paris; CGT 3.5M / 800,000.
-         Darmanin's consolidated day: 457 arrests, 441 security forces injured.
-         An earlier evening statement had given 80+ arrests / 123 police hurt,
-         so 457/441 is the final figure and the only one plotted. */
-      w: 9,
-      from: "2023-03-20",
-      to: "2023-03-26",
-      p: [1089e3, 35e5],
-      a: 457,
-      f: 441
-    },
-    {
-      /* 27 Mar: the eleventh day of mobilisation, after the 5 April talks
-         failed. Expected 600,000–800,000 nationwide (60,000–90,000 Paris).
-         Interior Ministry: 111 arrests, 154 police officers injured. */
-      w: 11,
-      from: "2023-04-03",
-      to: "2023-04-09",
-      p: [57e4, 2e6],
-      a: 111,
-      f: 154
-    },
-    { w: 10, from: "2023-03-27", to: "2023-04-02", p: [74e4, 2e6] },
-    { w: 12, from: "2023-04-10", to: "2023-04-16", p: [38e4, 15e5] },
-    { w: 16, from: "2023-05-01", to: "2023-05-07", p: [782e3, 23e5] },
-    { w: 20, from: "2023-06-05", to: "2023-06-08", p: [281e3, 9e5] }
-  ]
-};
-var BLOQUONS = {
-  id: "bt",
-  start: "2025-09-10",
-  end: "2025-10-05",
-  weeks: [
-    {
-      w: 0,
-      from: "2025-09-08",
-      to: "2025-09-14",
-      p: [175e3, 25e4],
-      a: 540,
-      flag: { p: "c" }
-    },
-    {
-      w: 1,
-      from: "2025-09-15",
-      to: "2025-09-21",
-      p: [5e5, 1e6],
-      a: 309,
-      f: 26,
-      i: 11
-    },
-    { w: 3, from: "2025-09-29", to: "2025-10-05", p: [195e3, 6e5] }
-  ]
-};
-function rows2026() {
-  return STUDENT_WEEKS.map((wk, w) => {
-    const row = { w, from: wk.key, to: wk.end, partial: wk.touchesEdge };
-    for (const m of METRICS) {
-      const band = wk[m];
-      if (band) row[m] = band;
-      const flag = wk.flags[m];
-      if (flag && flag !== "n") (row.flag ??= {})[m] = flag;
-      const ref = wk.notes[m];
-      if (ref) (row.noteRef ??= {})[m] = ref;
-    }
-    return row;
-  });
-}
-var STUDENTS = {
-  id: "students26",
-  start: STUDENT_WEEKS[0].key,
-  end: END,
-  // the window's last day, not the Sunday of the final week
-  weeks: rows2026()
-};
-var EPISODES = [
-  MAY68,
-  CPE,
-  GILETS,
-  NAHEL,
-  PENSIONS,
-  BLOQUONS,
-  STUDENTS
-];
-var ENFORCEMENT_LAST = EPISODES.reduce(
-  (last, ep) => ep.weeks.reduce(
-    (l, r) => r.a !== void 0 || r.f !== void 0 || r.i !== void 0 ? Math.max(l, r.w) : l,
-    last
-  ),
-  0
-);
+// src/charts/trellis/engine.ts
+var datasetsOf = (chart) => chart.data.datasets;
 function rowTitle(ep, r) {
   const m = t();
   if (ep.id === "students26") {
@@ -16275,28 +16037,34 @@ function noteFor(id, r, m) {
   return t().episodes[id].weeks[r.w]?.note?.[m];
 }
 var seriesCache = /* @__PURE__ */ new Map();
+function resetSeriesCache() {
+  seriesCache.clear();
+}
 function seriesData(ep, key) {
   const id = `${ep.id}:${key}`;
-  if (seriesCache.has(id)) return seriesCache.get(id);
+  const hit = seriesCache.get(id);
+  if (hit !== void 0) return hit;
   const rows = ep.weeks.filter((r) => r[key] !== void 0).sort((a, b) => a.w - b.w);
-  const out = rows.length === 0 ? null : (() => {
-    const flagOf = (r) => r.flag?.[key] ?? "n";
-    const baseRow = rows.find((r) => flagOf(r) !== "c") ?? rows[0];
-    const base = midOf(baseRow[key]);
-    return rows.map((r) => {
-      const [low, high] = bandOf(r[key]);
-      return {
-        x: r.w,
-        y: (low + high) / 2,
-        low,
-        high,
-        flag: flagOf(r),
-        note: noteFor(ep.id, r, key),
-        base,
-        t: rowTitle(ep, r)
-      };
-    });
-  })();
+  if (rows.length === 0) {
+    seriesCache.set(id, null);
+    return null;
+  }
+  const flagOf = (r) => r.flag?.[key] ?? "n";
+  const baseRow = rows.find((r) => flagOf(r) !== "c") ?? rows[0];
+  const base = midOf(baseRow[key]);
+  const out = rows.map((r) => {
+    const [low, high] = bandOf(r[key]);
+    return {
+      x: r.w,
+      y: (low + high) / 2,
+      low,
+      high,
+      flag: flagOf(r),
+      note: noteFor(ep.id, r, key),
+      base,
+      t: rowTitle(ep, r)
+    };
+  });
   seriesCache.set(id, out);
   return out;
 }
@@ -16345,78 +16113,22 @@ function rawExtent(eps, keys, maxX) {
     return [1, 1e6];
   return [lo, hi];
 }
-function xScale(maxW) {
-  const step = maxW <= 8 ? 1 : maxW <= 12 ? 2 : maxW <= 24 ? 4 : 8;
-  return {
-    type: "linear",
-    min: -0.5,
-    max: maxW + 0.5,
-    grid: { display: false },
-    border: { display: false },
-    ticks: {
-      autoSkip: false,
-      maxRotation: 0,
-      font: { size: 9 },
-      color: THEME.muted,
-      padding: 4,
-      callback: (v) => String(Number(v))
-    },
-    afterBuildTicks: (axis) => {
-      const out = [];
-      for (let v = 0; v <= maxW + 1e-3; v += step) out.push({ value: v });
-      axis.ticks = out;
-    },
-    afterFit: (s) => {
-      s.height = 20;
-    }
-  };
-}
 function logBounds(lo, hi) {
   const l = Math.log10(Math.max(lo, 1e-6));
   const h = Math.log10(Math.max(hi, l + 0.1));
   const pad = Math.max(0.06, (h - l) * 0.05);
   return [10 ** (l - pad), 10 ** (h + pad)];
 }
-function logTicks2(min, max) {
-  const l = Math.log10(min);
-  const span = Math.log10(max) - l;
-  const mantissas = span > 4.5 ? [1] : span > 1.5 ? [1, 3] : [1, 2, 5];
+function decades(lo, hi) {
   const out = [];
-  for (let e = Math.floor(l); e <= Math.ceil(Math.log10(max)); e++) {
-    for (const mm of mantissas) {
-      const v = Number((mm * 10 ** e).toPrecision(12));
-      if (v > min * 1.01 && v < max / 1.01) out.push(v);
-    }
+  const from2 = Math.floor(Math.log10(Math.max(lo, 1e-6)));
+  const to2 = Math.ceil(Math.log10(Math.max(hi, 1)));
+  for (let e = from2; e <= to2; e++) {
+    const v = 10 ** e;
+    if (v >= lo * 1.0001 && v <= hi * 0.9999) out.push(v);
   }
   return out;
 }
-function yScale(min, max, showLabels) {
-  const ticks = logTicks2(min, max);
-  return {
-    type: "logarithmic",
-    min,
-    max,
-    grid: { color: THEME.grid, drawTicks: false, lineWidth: 1 },
-    border: { display: false },
-    ticks: {
-      display: showLabels,
-      font: { size: 9 },
-      color: THEME.muted,
-      padding: 6,
-      callback: (v) => compact().format(Number(v))
-    },
-    afterBuildTicks: (axis) => {
-      axis.ticks = ticks.map((value2) => ({ value: value2 }));
-    },
-    afterFit: (s) => {
-      s.width = 46;
-    }
-  };
-}
-var pctOf = (v, base) => {
-  const r = 100 * v / base;
-  return r >= 10 ? `${Math.round(r)}%` : `${Number(r.toFixed(1))}%`;
-};
 var statsCache = /* @__PURE__ */ new WeakMap();
 function statsOf(points) {
   const cached = statsCache.get(points);
@@ -16440,158 +16152,8 @@ function statsOf(points) {
   statsCache.set(points, stats);
   return stats;
 }
-function shareLine(p, dataset) {
-  if (!(p.base > 0)) return null;
-  const stats = statsOf(dataset.data);
-  if (!stats) return null;
-  const m = t().tooltip;
-  const part = (label, n) => `${pctOf(p.y, n)} (${label})`;
-  const parts = [
-    part(m.cmpHighest, stats.high),
-    part(m.cmpMean, stats.mean),
-    part(m.cmpMedian, stats.median),
-    part(m.cmpFirst, p.base)
-  ];
-  const last = parts.pop();
-  return fill(m.shareComparisons, {
-    list: `${parts.join(", ")}${m.listAnd}${last}`
-  });
-}
-var posOf = (e, chart) => {
-  const native = e.native ?? e;
-  return getRelativePosition(native, chart);
-};
-function weekAt(chart, px) {
-  const scale = chart.scales.x;
-  if (!scale) return null;
-  const at = Number(scale.getValueForPixel(px));
-  let best = null;
-  chart.data.datasets.forEach((ds, i) => {
-    if (chart.getDatasetMeta(i).hidden) return;
-    for (const raw of ds.data) {
-      if (!raw) continue;
-      if (best === null || Math.abs(raw.x - at) < Math.abs(best - at)) {
-        best = raw.x;
-      }
-    }
-  });
-  return best;
-}
-var trellisWeek = (chart, e) => {
-  const week = weekAt(chart, posOf(e, chart).x);
-  if (week === null) return [];
-  const out = [];
-  chart.data.datasets.forEach((ds, datasetIndex) => {
-    const meta = chart.getDatasetMeta(datasetIndex);
-    if (meta.hidden) return;
-    ds.data.forEach((raw, index) => {
-      const element = meta.data[index];
-      if (raw && raw.x === week && element && !element.skip) {
-        out.push({ element, datasetIndex, index });
-      }
-    });
-  });
-  return out;
-};
-Interaction.modes.trellisWeek = trellisWeek;
-var WEEK_MODE = "trellisWeek";
-function nearestByY(chart, elements, e) {
-  const { y } = posOf(e, chart);
-  let best;
-  let bestD = Number.POSITIVE_INFINITY;
-  for (const el2 of elements) {
-    const c = el2.element.getCenterPoint();
-    const d = Math.abs(c.y - y);
-    if (d < bestD) {
-      bestD = d;
-      best = el2;
-    }
-  }
-  return best;
-}
-function tooltipSpec(kind) {
-  const m = t();
-  return {
-    /* C: the swatch is the series. C′: every dataset is labelled with the
-       metric name, so the swatch is the only thing tying a line to its episode. */
-    displayColors: true,
-    boxWidth: 8,
-    boxHeight: 8,
-    boxPadding: 4,
-    callbacks: {
-      title: (items) => {
-        const p = items[0].raw;
-        const text = kind === "episode" ? p.t : `${a11y().weekHeader} ${p.x}`;
-        return wrapTooltipLines(text, items[0], "title");
-      },
-      label: (item) => {
-        const p = item.raw;
-        const value2 = p.low === p.high ? nf().format(Math.round(p.low)) : `${nf().format(Math.round(p.low))} \u2013 ${nf().format(Math.round(p.high))}`;
-        const flag = m.flags[p.flag];
-        const line = flag ? fill(m.tooltip.lineWithFlag, { value: value2, flag }) : fill(m.tooltip.linePlain, { value: value2 });
-        const name = kind === "item" ? m.episodes[EPISODES[item.dataset.__ep].id].short : "";
-        return wrapTooltipLines(name ? `${name}: ${line}` : line, item, "body");
-      },
-      afterLabel: (item) => {
-        const p = item.raw;
-        const lines = [];
-        if (kind === "item") {
-          const n = nf().format(Math.round(p.base));
-          const text = Math.abs(p.y - p.base) / p.base < 1e-9 ? fill(m.tooltip.firstFigure, { n }) : shareLine(p, item.dataset);
-          if (text) lines.push(...wrapTooltipLines(text, item, "body"));
-        }
-        if (p.note) lines.push(...wrapTooltipLines(p.note, item, "body"));
-        return lines;
-      },
-      footer: (items) => {
-        if (kind !== "episode") return [];
-        const p = items[0].raw;
-        const n = nf().format(Math.round(p.base));
-        const text = Math.abs(p.y - p.base) / p.base < 1e-9 ? fill(m.tooltip.firstFigure, { n }) : shareLine(p, items[0].dataset);
-        return text ? wrapTooltipLines(text, items[0], "footer") : [];
-      }
-    }
-  };
-}
-var episodePanels = [];
-var itemPanels = [];
-var activeItem = null;
-var activeEvent = null;
-var datasetsOf = (chart) => chart.data.datasets;
-function restyle(d, on, bold = false) {
-  const c = on ? d.__color : alpha(d.__color, DIM);
-  d.borderColor = c;
-  d.backgroundColor = c;
-  d.pointBorderColor = c;
-  d.pointBackgroundColor = d.data.map(
-    (p) => isDetached(p.flag) ? THEME.hollow : c
-  );
-  d.borderWidth = bold && on ? 2.75 : 1.75;
-}
-function restylePanels(charts, keep, bold = false) {
-  for (const chart of charts) {
-    for (const d of datasetsOf(chart)) restyle(d, keep(d), bold);
-    chart.update("none");
-  }
-}
-function emphasiseItem(key) {
-  if (key === activeItem) return;
-  activeItem = key;
-  restylePanels(episodePanels, (d) => key === null || d.__item === key, true);
-  for (const { chart, item } of itemPanels) {
-    const host = chart.canvas.parentElement;
-    if (host)
-      host.style.opacity = key === null || item === key ? "1" : String(DIM);
-  }
-}
-function emphasiseEvent(index) {
-  if (index === activeEvent) return;
-  activeEvent = index;
-  restylePanels(
-    itemPanels.map((p) => p.chart),
-    (d) => index === null || d.__ep === index
-  );
-}
+
+// src/charts/trellis/legend.ts
 var legendHidden = /* @__PURE__ */ new Map();
 var legendButtons = /* @__PURE__ */ new Map();
 function legendState(key, n) {
@@ -16670,15 +16232,6 @@ function toggleDatasets(host, field, key, hidden) {
     if (touched) chart.update("none");
   }
 }
-function applyStatVisibility() {
-  for (const chart of summaryPanels) {
-    datasetsOf(chart).forEach((d, i) => {
-      const s = d.__stat;
-      chart.setDatasetVisibility(i, !(s && statHidden.get(s)));
-    });
-    chart.update("none");
-  }
-}
 function wireLegendSync(host, key, indexOf) {
   for (const canvas of host?.querySelectorAll("canvas") ?? []) {
     const chart = Chart.getChart(canvas);
@@ -16696,6 +16249,471 @@ function wireLegendSync(host, key, indexOf) {
     });
     canvas.addEventListener("pointerleave", () => legendMark(key, null));
   }
+}
+
+// src/charts/trellis/palette.ts
+var DIM = 0.18;
+var SERIES2 = [
+  { key: "p", color: "#1d4ed8" },
+  { key: "a", color: "#b91c1c" },
+  { key: "f", color: "#047857" },
+  { key: "i", color: "#b45309" }
+];
+var RAMP2 = [
+  "#D6E6F2",
+  "#B0CFE6",
+  "#86B4D7",
+  "#5C97C5",
+  "#357AB0",
+  "#1B5C92",
+  "#0A3A63"
+];
+
+// src/data/episodes/mai68.ts
+var MAY68 = {
+  id: "may68",
+  start: "1968-04-29",
+  end: "1968-06-30",
+  weeks: [
+    /* 1 May, République → Bastille: 25,000 (police) vs 100,000 (CGT). */
+    { w: 0, from: "1968-04-29", to: "1968-05-05", p: [25e3, 1e5] },
+    {
+      /* 6 May: >20,000 to the Sorbonne; 10 May: 20,000 (12,000 police).
+         Night of 10–11 May: 6,255 police, 125 cars damaged / 63 burnt,
+         469 arrests. The 891 high adds 422 early-May arrests.
+         Forces: 300+ on 6 May, 247 on 10–11 May.
+         Protesters injured: ≥100 — no national count was published. */
+      w: 1,
+      from: "1968-05-06",
+      to: "1968-05-12",
+      p: 2e4,
+      a: [469, 891],
+      f: [247, 300],
+      i: 100,
+      flag: { i: "f" }
+    },
+    /* 13 May, Paris — peak of the episode: prefecture 230,000 · ORTF 171,000
+       · surface-area estimate 500,000 · unions 1,000,000. */
+    { w: 2, from: "1968-05-13", to: "1968-05-19", p: [23e4, 1e6] },
+    {
+      /* 25 May: 1,000+ arrests (floor), ~9M strikers, ORTF walkout.
+         887 injured — from the English-Wikipedia infobox, attributed to 25 May
+         only. Weak provenance, flagged "e". */
+      w: 3,
+      from: "1968-05-20",
+      to: "1968-05-26",
+      a: 1e3,
+      i: 887,
+      flag: { a: "f", i: "e" }
+    },
+    /* 27 May Grenelle protocol · Charléty meeting. */
+    { w: 4, from: "1968-05-27", to: "1968-06-02" },
+    /* 4 Jun partial return to work · 7 Jun Renault Flins clashes. */
+    { w: 5, from: "1968-06-03", to: "1968-06-09" },
+    /* 10 Jun: Tautin killed · 11 Jun: 2 killed at Sochaux · 12 Jun:
+       demonstrations banned nationwide. */
+    { w: 6, from: "1968-06-10", to: "1968-06-16" },
+    /* 23 Jun legislative elections. */
+    { w: 7, from: "1968-06-17", to: "1968-06-23" },
+    /* Crisis closes 30 Jun. */
+    { w: 8, from: "1968-06-24", to: "1968-06-30" }
+  ]
+};
+
+// src/data/episodes/cpe.ts
+var CPE = {
+  id: "cpe",
+  start: "2006-02-06",
+  end: "2006-04-16",
+  weeks: [
+    /* 7 Feb: first national action day, 187 demonstrations. */
+    { w: 0, from: "2006-02-06", to: "2006-02-12", p: [2e5, 4e5] },
+    /* 7 Mar: ">1 million" claimed; ~38 universities on strike by 9 Mar. */
+    { w: 4, from: "2006-03-06", to: "2006-03-12", p: [4e5, 1e6] },
+    {
+      /* 16 Mar: 250,000 (Le Monde) / 447,500 (police) — the ministry's
+         247,500 is the same police count rounded differently.
+         18 Mar: 500,000 ministry / 1.5M organisers; Paris 80,000–350,000.
+         Enforcement, Paris only: 156 (ministry) / 167 (organisers) arrests;
+         34 forces injured.
+         Protesters injured 70 = 18 (16 Mar) + 52 (18 Mar), Paris only —
+         flagged "e" because it is a two-day Paris sum inside a weekly row.
+         14 Mar (same week, second action day): 41,000 (police source). */
+      w: 5,
+      from: "2006-03-13",
+      to: "2006-03-19",
+      p: [5e5, 15e5],
+      a: [156, 167],
+      f: 34,
+      i: 70,
+      flag: { i: "e" }
+    },
+    {
+      /* 23 Mar: 21 universities fully blocked, 67 striking or blocked.
+         630 arrests, 90 forces injured. */
+      w: 6,
+      from: "2006-03-20",
+      to: "2006-03-26",
+      p: [22e4, 45e4],
+      a: 630,
+      f: 90
+    },
+    /* 28 Mar: 4th national action day, 600 arrests. */
+    {
+      w: 7,
+      from: "2006-03-27",
+      to: "2006-04-02",
+      p: [1055e3, 271e4],
+      a: 600
+    },
+    /* 4 Apr: peak day of the episode. */
+    { w: 8, from: "2006-04-03", to: "2006-04-09", p: [1e6, 31e5] },
+    /* CPE scrapped 10 Apr; the movement splits, Easter follows. */
+    { w: 9, from: "2006-04-10", to: "2006-04-16" }
+  ]
+};
+
+// src/data/episodes/gilets-jaunes.ts
+var GJ_ACTS = [
+  [0, "2018-11-17", 287700],
+  [1, "2018-11-24", 166e3],
+  [2, "2018-12-01", 136e3],
+  [3, "2018-12-08", 136e3],
+  [4, "2018-12-15", 66e3],
+  [5, "2018-12-22", 38600],
+  [6, "2018-12-29", 32e3],
+  [7, "2019-01-05", 5e4],
+  [8, "2019-01-12", 84e3],
+  [9, "2019-01-19", 84e3],
+  [10, "2019-01-26", 69e3],
+  [11, "2019-02-02", 58600],
+  [12, "2019-02-09", 51400],
+  [13, "2019-02-16", 41500],
+  [14, "2019-02-23", 46600],
+  [15, "2019-03-02", 39300],
+  [16, "2019-03-09", 28600],
+  [17, "2019-03-16", 32300],
+  [18, "2019-03-23", 40500],
+  [19, "2019-03-30", 33700],
+  [20, "2019-04-06", 22300],
+  [21, "2019-04-13", 31e3],
+  [22, "2019-04-20", 27900],
+  [23, "2019-04-27", 23600],
+  [24, "2019-05-04", 18900],
+  [25, "2019-05-11", 18600],
+  [26, "2019-05-18", 15500],
+  [27, "2019-05-25", 12500],
+  [28, "2019-06-01", 9500],
+  [29, "2019-06-08", 10300],
+  [30, "2019-06-15", 7e3],
+  [31, "2019-06-22", 11800],
+  [32, "2019-06-29", 5800],
+  [43, "2019-09-07", 7e3]
+];
+var GJ_EXTRA = {
+  0: { a: [117, 73], flag: { a: "f" } },
+  1: { a: [101, 103], f: 5, i: 19, flag: { i: "e" } },
+  2: {},
+  3: { a: 1385 }
+};
+var GILETS = {
+  id: "gj",
+  start: "2018-11-12",
+  end: "2019-09-09",
+  weeks: GJ_ACTS.map(([w, date, n]) => ({
+    w,
+    from: date,
+    to: date,
+    act: w + 1,
+    p: n,
+    ...GJ_EXTRA[w] ?? {},
+    flag: {
+      ...w === 0 ? { p: "c" } : {},
+      ...GJ_EXTRA[w]?.flag ?? {}
+    }
+  }))
+};
+
+// src/data/episodes/nahel.ts
+var NAHEL = {
+  id: "nahel",
+  start: "2023-06-27",
+  end: "2023-07-09",
+  weeks: [
+    {
+      w: 0,
+      from: "2023-06-26",
+      to: "2023-07-02",
+      p: [8e3, 5e4],
+      a: 3354,
+      f: 722,
+      flag: { p: "e" }
+    },
+    { w: 1, from: "2023-07-03", to: "2023-07-09", a: 108, f: 1 }
+  ]
+};
+
+// src/data/episodes/retraites.ts
+var PENSIONS = {
+  id: "pensions",
+  start: "2023-01-19",
+  end: "2023-06-08",
+  weeks: [
+    { w: 0, from: "2023-01-16", to: "2023-01-22", p: [112e4, 2e6] },
+    { w: 2, from: "2023-01-30", to: "2023-02-05", p: [127e4, 28e5] },
+    { w: 3, from: "2023-02-06", to: "2023-02-12", p: [963e3, 25e5] },
+    { w: 4, from: "2023-02-13", to: "2023-02-19", p: [44e4, 13e5] },
+    { w: 7, from: "2023-03-06", to: "2023-03-12", p: [128e4, 35e5] },
+    { w: 8, from: "2023-03-13", to: "2023-03-19", p: [48e4, 17e5] },
+    {
+      /* 23 Mar: the flashpoint — 49.3 passed, two failed no-confidence votes.
+         Ministry: up to 1.08M nationwide / 119,000 Paris; CGT 3.5M / 800,000.
+         Darmanin's consolidated day: 457 arrests, 441 security forces injured.
+         An earlier evening statement had given 80+ arrests / 123 police hurt,
+         so 457/441 is the final figure and the only one plotted. */
+      w: 9,
+      from: "2023-03-20",
+      to: "2023-03-26",
+      p: [1089e3, 35e5],
+      a: 457,
+      f: 441
+    },
+    {
+      /* 27 Mar: the eleventh day of mobilisation, after the 5 April talks
+         failed. Expected 600,000–800,000 nationwide (60,000–90,000 Paris).
+         Interior Ministry: 111 arrests, 154 police officers injured. */
+      w: 11,
+      from: "2023-04-03",
+      to: "2023-04-09",
+      p: [57e4, 2e6],
+      a: 111,
+      f: 154
+    },
+    { w: 10, from: "2023-03-27", to: "2023-04-02", p: [74e4, 2e6] },
+    { w: 12, from: "2023-04-10", to: "2023-04-16", p: [38e4, 15e5] },
+    { w: 16, from: "2023-05-01", to: "2023-05-07", p: [782e3, 23e5] },
+    { w: 20, from: "2023-06-05", to: "2023-06-08", p: [281e3, 9e5] }
+  ]
+};
+
+// src/data/episodes/bloquons.ts
+var BLOQUONS = {
+  id: "bt",
+  start: "2025-09-10",
+  end: "2025-10-05",
+  weeks: [
+    {
+      w: 0,
+      from: "2025-09-08",
+      to: "2025-09-14",
+      p: [175e3, 25e4],
+      a: 540,
+      flag: { p: "c" }
+    },
+    {
+      w: 1,
+      from: "2025-09-15",
+      to: "2025-09-21",
+      p: [5e5, 1e6],
+      a: 309,
+      f: 26,
+      i: 11
+    },
+    { w: 3, from: "2025-09-29", to: "2025-10-05", p: [195e3, 6e5] }
+  ]
+};
+
+// src/data/episodes/students.ts
+var STUDENTS = {
+  id: "students26",
+  start: STUDENT_WEEKS[0].key,
+  end: END,
+  // the window's last day, not the Sunday of the final week
+  weeks: STUDENT_WEEKS.map((wk, w) => {
+    const row = { w, from: wk.key, to: wk.end, partial: wk.touchesEdge };
+    for (const m of METRICS) {
+      const band = wk[m];
+      if (band) row[m] = band;
+      const flag = wk.flags[m];
+      if (flag && flag !== "n") (row.flag ??= {})[m] = flag;
+      const ref = wk.notes[m];
+      if (ref) (row.noteRef ??= {})[m] = ref;
+    }
+    return row;
+  })
+};
+
+// src/data/episodes/index.ts
+var EPISODES = [
+  MAY68,
+  CPE,
+  GILETS,
+  NAHEL,
+  PENSIONS,
+  BLOQUONS,
+  STUDENTS
+];
+var ENFORCEMENT_LAST = EPISODES.reduce(
+  (last, ep) => ep.weeks.reduce(
+    (l, r) => r.a !== void 0 || r.f !== void 0 || r.i !== void 0 ? Math.max(l, r.w) : l,
+    last
+  ),
+  0
+);
+
+// src/charts/trellis/interaction.ts
+function posOf(chart, e) {
+  const { left, right, top, bottom } = chart.chartArea;
+  const native = e.native;
+  const rect = chart.canvas.getBoundingClientRect();
+  if (!native || rect.width === 0) return null;
+  const x = native.clientX - rect.left;
+  const y = native.clientY - rect.top;
+  if (x < left || x > right || y < top || y > bottom) return null;
+  return { x, y };
+}
+function nearestByY(chart, elements, e) {
+  const p = posOf(chart, e);
+  if (!p || elements.length === 0) return elements[0];
+  let best;
+  let bestDy = Number.POSITIVE_INFINITY;
+  for (const el2 of elements) {
+    const meta = chart.getDatasetMeta(el2.datasetIndex);
+    const pt = meta.data[el2.index];
+    if (!pt || pt.skip || pt.y === void 0) continue;
+    const dy = Math.abs(pt.y - p.y);
+    if (dy < bestDy) {
+      bestDy = dy;
+      best = el2;
+    }
+  }
+  return best ?? elements[0];
+}
+var WEEK_MODE = "trellisWeek";
+
+// src/charts/trellis/panel.ts
+function xScale(maxW) {
+  const step = maxW <= 8 ? 1 : maxW <= 12 ? 2 : maxW <= 24 ? 4 : 8;
+  return {
+    type: "linear",
+    min: -0.5,
+    max: maxW + 0.5,
+    grid: { display: false },
+    border: { display: false },
+    ticks: {
+      autoSkip: false,
+      maxRotation: 0,
+      font: { size: 9 },
+      color: THEME.muted,
+      padding: 4,
+      callback: (v) => String(Number(v))
+    },
+    afterBuildTicks: (axis) => {
+      const out = [];
+      for (let v = 0; v <= maxW + 1e-3; v += step) out.push({ value: v });
+      axis.ticks = out;
+    },
+    afterFit: (s) => {
+      s.height = 20;
+    }
+  };
+}
+function logTicks2(min, max) {
+  const l = Math.log10(min);
+  const span = Math.log10(max) - l;
+  const mantissas = span > 4.5 ? [1] : span > 1.5 ? [1, 3] : [1, 2, 5];
+  const out = [];
+  for (let e = Math.floor(l); e <= Math.ceil(Math.log10(max)); e++) {
+    for (const m of mantissas) {
+      const v = Number((m * 10 ** e).toPrecision(12));
+      if (v > min * 1.01 && v < max / 1.01) out.push(v);
+    }
+  }
+  return out;
+}
+function yScale(min, max, showLabels) {
+  const ticks = logTicks2(min, max);
+  return {
+    type: "logarithmic",
+    min,
+    max,
+    grid: { color: THEME.grid, drawTicks: false, lineWidth: 1 },
+    border: { display: false },
+    ticks: {
+      display: showLabels,
+      font: { size: 9 },
+      color: THEME.muted,
+      padding: 6,
+      callback: (v) => compact().format(Number(v))
+    },
+    afterBuildTicks: (axis) => {
+      axis.ticks = ticks.map((value2) => ({ value: value2 }));
+    },
+    afterFit: (s) => {
+      s.width = 46;
+    }
+  };
+}
+function shareLine(p, dataset) {
+  if (!(p.base > 0)) return null;
+  const stats = statsOf(dataset.data);
+  if (!stats) return null;
+  const m = t().tooltip;
+  const part = (label, n) => `${pctOf(p.y, n)} (${label})`;
+  const parts = [
+    part(m.cmpHighest, stats.high),
+    part(m.cmpMean, stats.mean),
+    part(m.cmpMedian, stats.median),
+    part(m.cmpFirst, p.base)
+  ];
+  const last = parts.pop();
+  return fill(m.shareComparisons, {
+    list: `${parts.join(", ")}${m.listAnd}${last}`
+  });
+}
+function tooltipSpec(kind) {
+  const m = t();
+  return {
+    /* C: the swatch is the series. C′: every dataset is labelled with the
+       metric name, so the swatch is the only thing tying a line to its episode. */
+    displayColors: true,
+    boxWidth: 8,
+    boxHeight: 8,
+    boxPadding: 4,
+    callbacks: {
+      title: (items) => {
+        const p = items[0].raw;
+        const text = kind === "episode" ? p.t : `${a11y().weekHeader}${p.x}`;
+        return wrapTooltipLines(text, items[0], "title");
+      },
+      label: (item) => {
+        const p = item.raw;
+        const value2 = p.low === p.high ? nf2().format(Math.round(p.low)) : `${nf2().format(Math.round(p.low))} \u2013 ${nf2().format(Math.round(p.high))}`;
+        const flag = m.flags[p.flag];
+        const line = flag ? fill(m.tooltip.lineWithFlag, { value: value2, flag }) : fill(m.tooltip.linePlain, { value: value2 });
+        const name = kind === "item" ? m.episodes[EPISODES[item.dataset.__ep].id].short : "";
+        return wrapTooltipLines(name ? `${name}: ${line}` : line, item, "body");
+      },
+      afterLabel: (item) => {
+        const p = item.raw;
+        const lines = [];
+        if (kind === "item") {
+          const n = nf2().format(Math.round(p.base));
+          const text = Math.abs(p.y - p.base) / p.base < 1e-9 ? fill(m.tooltip.firstFigure, { n }) : shareLine(p, item.dataset);
+          if (text) lines.push(...wrapTooltipLines(text, item, "body"));
+        }
+        if (p.note) lines.push(...wrapTooltipLines(p.note, item, "body"));
+        return lines;
+      },
+      footer: (items) => {
+        if (kind !== "episode") return [];
+        const p = items[0].raw;
+        const n = nf2().format(Math.round(p.base));
+        const text = Math.abs(p.y - p.base) / p.base < 1e-9 ? fill(m.tooltip.firstFigure, { n }) : shareLine(p, items[0].dataset);
+        return text ? wrapTooltipLines(text, items[0], "footer") : [];
+      }
+    }
+  };
 }
 function observations(ep) {
   const m = t();
@@ -16769,145 +16787,17 @@ function decoratePanel(chart, figure, title) {
     }
   });
 }
-function mountCrossEpisode(opts) {
-  episodePanels.length = 0;
-  itemPanels.length = 0;
-  activeItem = null;
-  activeEvent = null;
-  seriesCache = /* @__PURE__ */ new Map();
-  opts.episodeHost.replaceChildren();
-  opts.itemHost.replaceChildren();
-  const m = t();
-  const unbounded = Number.POSITIVE_INFINITY;
-  const [yMin, yMax] = logBounds(...rawExtent(EPISODES, METRICS, unbounded));
-  const cols = columns(opts.episodeHost);
-  opts.episodeHost.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
-  EPISODES.forEach((ep, idx) => {
-    const text = m.episodes[ep.id];
-    const maxW = Math.max(...ep.weeks.map((r) => r.w), 1);
-    const { figure, canvas } = panelFigure(
-      text.strip,
-      `${fmtSpan(ep.start, ep.end)} \xB7 ${observations(ep)}`,
-      text.banner
-    );
-    opts.episodeHost.append(figure);
-    const datasets = SERIES2.map(
-      (s) => buildDataset(ep, idx, s.key, s.color, unbounded)
-    ).filter((d) => d !== null);
-    const chart = track(
-      new Chart(canvas, {
-        type: "line",
-        data: { datasets },
-        options: panelOptions(
-          "episode",
-          xScale(maxW),
-          yScale(yMin, yMax, idx % cols === 0),
-          (e, elements, host) => {
-            const hit = nearestByY(host, elements, e);
-            const d = hit?.dataset;
-            emphasiseItem(d ? d.__item : null);
-          }
-        ),
-        plugins: []
-        // no per-panel labels: the episode is the panel title
-      })
-    );
-    decoratePanel(chart, figure, text.strip);
-    canvas.addEventListener("mouseleave", () => emphasiseItem(null));
-    episodePanels.push(chart);
-  });
-  const itemCols = columns(opts.itemHost);
-  opts.itemHost.style.gridTemplateColumns = `repeat(${itemCols}, minmax(0, 1fr))`;
-  SERIES2.forEach((series) => {
-    const [rawLo, rawHi] = rawExtent(EPISODES, [series.key], ENFORCEMENT_LAST);
-    const [lo, hi] = logBounds(rawLo, rawHi);
-    const range = fill(m.panels.valueRange, {
-      lo: compact().format(rawLo),
-      hi: compact().format(rawHi)
-    });
-    const { figure, canvas } = panelFigure(
-      m.items[series.key].short,
-      fill(m.panels.itemMeta, { range, n: ENFORCEMENT_LAST })
-    );
-    opts.itemHost.append(figure);
-    const datasets = EPISODES.map(
-      (ep, i) => buildDataset(ep, i, series.key, RAMP2[i], ENFORCEMENT_LAST)
-    ).filter((d) => d !== null);
-    const chart = track(
-      new Chart(canvas, {
-        type: "line",
-        data: { datasets },
-        options: panelOptions(
-          "item",
-          xScale(ENFORCEMENT_LAST),
-          yScale(lo, hi, true)
-        ),
-        plugins: []
-      })
-    );
-    decoratePanel(chart, figure, m.items[series.key].short);
-    canvas.addEventListener("mouseleave", () => emphasiseEvent(null));
-    canvas.addEventListener("mousemove", (ev) => {
-      const pts = chart.getElementsAtEventForMode(
-        ev,
-        WEEK_MODE,
-        { intersect: false },
-        true
-      );
-      const hit = pts.length ? nearestByY(chart, pts, ev) : void 0;
-      const d = hit ? datasetsOf(chart)[hit.datasetIndex] : void 0;
-      emphasiseEvent(d ? d.__ep : null);
-    });
-    itemPanels.push({ chart, item: series.key });
-  });
-  const cHost = opts.episodeHost;
-  const dHost = opts.itemHost;
-  legend(
-    opts.itemLegend,
-    "items",
-    SERIES2.map((s) => ({
-      text: m.items[s.key].label,
-      color: s.color,
-      on: () => emphasiseItem(s.key),
-      off: () => emphasiseItem(null),
-      hide: (hidden) => toggleDatasets(cHost, "__item", s.key, hidden)
-    }))
-  );
-  legend(
-    opts.eventLegend,
-    "events",
-    EPISODES.map((ep, i) => ({
-      text: m.episodes[ep.id].short,
-      color: RAMP2[i],
-      on: () => emphasiseEvent(i),
-      off: () => emphasiseEvent(null),
-      hide: (hidden) => toggleDatasets(dHost, "__ep", i, hidden)
-    }))
-  );
-  wireLegendSync(cHost, "items", (d) => {
-    const k = SERIES2.findIndex((s) => s.key === d.__item);
-    return k < 0 ? null : k;
-  });
-  wireLegendSync(
-    dHost,
-    "events",
-    (d) => d.__ep >= 0 && d.__ep < EPISODES.length ? d.__ep : null
-  );
-}
+
+// src/sections/summary.ts
 var MEDIAN_COLOR = "#334155";
 var PEAK_COLOR = "#b45309";
 var RANGE_COLOR = "#64748b";
 var summaryPanels = [];
 var activeStat = null;
-function decades(lo, hi) {
-  const out = [];
-  const from2 = Math.floor(Math.log10(Math.max(lo, 1e-6)));
-  const to2 = Math.ceil(Math.log10(Math.max(hi, 1)));
-  for (let e = from2; e <= to2; e++) {
-    const v = 10 ** e;
-    if (v >= lo * 1.0001 && v <= hi * 0.9999) out.push(v);
-  }
-  return out;
+function clipToArea(ctx, area) {
+  ctx.beginPath();
+  ctx.rect(area.left, area.top, area.width, area.height);
+  ctx.clip();
 }
 function cellOf(ep, i, key) {
   const pts = seriesData(ep, key);
@@ -17003,7 +16893,6 @@ function rangeDataset(key, label, cells) {
 var rangeBand = {
   id: "rangeBand",
   beforeDatasetsDraw(chart) {
-    const { ctx, chartArea } = chart;
     const idx = chart.data.datasets.findIndex(
       (d) => d.__bands !== void 0
     );
@@ -17013,12 +16902,11 @@ var rangeBand = {
     if (meta.hidden) return;
     const scale = chart.scales.y;
     if (!scale) return;
+    const { ctx, chartArea } = chart;
     const pts = meta.data;
     const width = 9;
     ctx.save();
-    ctx.beginPath();
-    ctx.rect(chartArea.left, chartArea.top, chartArea.width, chartArea.height);
-    ctx.clip();
+    clipToArea(ctx, chartArea);
     ctx.fillStyle = ds.backgroundColor;
     for (let j = 0; j < pts.length; j++) {
       const band = ds.__bands[j];
@@ -17053,6 +16941,15 @@ function emphasiseStat(stat, force = false) {
   }
 }
 var statHidden = /* @__PURE__ */ new Map();
+function applyStatVisibility() {
+  for (const chart of summaryPanels) {
+    datasetsOf(chart).forEach((d, i) => {
+      const s = d.__stat;
+      chart.setDatasetVisibility(i, !(s && statHidden.get(s)));
+    });
+    chart.update("none");
+  }
+}
 function setStatHidden(stat, hidden) {
   statHidden.set(stat, hidden);
   applyStatVisibility();
@@ -17068,17 +16965,15 @@ function mountSummary() {
   const m = t();
   const cols = columns(host);
   host.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
-  SERIES2.forEach((series, panelIndex) => {
+  for (const [panelIndex, series] of SERIES2.entries()) {
     const cells = [];
     EPISODES.forEach((ep, i) => {
       const c = cellOf(ep, i, series.key);
       if (c) cells.push(c);
     });
-    if (!cells.length) return;
-    const values = [];
-    for (const c of cells) values.push(c.min, c.max);
-    const lo = Math.min(...values) * 0.8;
-    const hi = Math.max(...values) * 1.3;
+    if (!cells.length) continue;
+    const lo = Math.min(...cells.map((c) => c.min)) * 0.8;
+    const hi = Math.max(...cells.map((c) => c.max)) * 1.3;
     const { figure, canvas } = panelFigure(
       m.items[series.key].short,
       fill(m.panels.summaryMeta, { n: cells.length })
@@ -17205,7 +17100,7 @@ function mountSummary() {
       })
     );
     summaryPanels.push(chart);
-  });
+  }
   legend(legendHost, "stats", [
     {
       text: m.panels.range,
@@ -17334,7 +17229,7 @@ function fmtValue(v, unit) {
 }
 function fmtPct2(ratio) {
   const x = ratio * 100;
-  if (x >= 1e3) return `${nf().format(Math.round(x))}%`;
+  if (x >= 1e3) return `${nf2().format(Math.round(x))}%`;
   if (x >= 10) return `${Math.round(x)}%`;
   return `${Number(x.toFixed(1))}%`;
 }
@@ -18114,7 +18009,7 @@ var pctBand = (lo, hi) => {
   const a = pctText(lo);
   return Math.abs(hi - lo) < 1e-9 ? a : `${a} \u2013 ${pctText(hi)}`;
 };
-var countText = (v) => v === null ? "\u2014" : nf().format(Math.round(v));
+var countText = (v) => v === null ? "\u2014" : nf2().format(Math.round(v));
 var countBand = (r) => {
   if (r.lo === null) return "\u2014";
   const hi = r.hi ?? r.lo;
@@ -18502,7 +18397,7 @@ function sectionA(host) {
     },
     L2(COPY.titleA),
     fill(L2(COPY.noteA), {
-      pop: nf().format(denominator(pop) ?? 0),
+      pop: nf2().format(denominator(pop) ?? 0),
       min: floorLabel(rows)
     }),
     L2(COPY.colDate)
@@ -18523,7 +18418,7 @@ function sectionB(host) {
     },
     L2(COPY.titleB),
     fill(L2(COPY.noteB), {
-      pop: nf().format(denominator(pop) ?? 0),
+      pop: nf2().format(denominator(pop) ?? 0),
       min: floorLabel(rows)
     }),
     L2(COPY.colWeek)
@@ -18542,7 +18437,7 @@ function sectionC(host) {
     const pop = population(popKeyFor(ep.id));
     const base = denominator(pop);
     const caption = base === null ? L2(COPY.noBase) : fill(L2(COPY.base), {
-      n: `${nf().format(base)}${basisOf(pop) === "metro" ? ` \xB7 ${L2(COPY.metro)}` : ""}`
+      n: `${nf2().format(base)}${basisOf(pop) === "metro" ? ` \xB7 ${L2(COPY.metro)}` : ""}`
     });
     const panel = el("div", "pc-panel");
     render(
@@ -20945,6 +20840,173 @@ function renderSources(host = document.getElementById("sources")) {
   host.replaceChildren(...kept, box);
 }
 
+// src/charts/trellis/index.ts
+var episodePanels = [];
+var itemPanels = [];
+var activeItem = null;
+var activeEvent = null;
+function restyle(d, on, bold = false) {
+  const c = on ? d.__color : alpha(d.__color, DIM);
+  d.borderColor = c;
+  d.backgroundColor = c;
+  d.pointBorderColor = c;
+  d.borderWidth = bold && on ? 2.75 : 1.75;
+}
+function restylePanels(charts, keep, bold = false) {
+  for (const chart of charts) {
+    for (const d of datasetsOf(chart)) restyle(d, keep(d), bold);
+    chart.update("none");
+  }
+}
+function emphasiseItem(key) {
+  if (key === activeItem) return;
+  activeItem = key;
+  restylePanels(episodePanels, (d) => key === null || d.__item === key, true);
+  for (const { chart, item } of itemPanels) {
+    const host = chart.canvas.parentElement;
+    if (host)
+      host.style.opacity = key === null || item === key ? "1" : String(DIM);
+  }
+}
+function emphasiseEvent(index) {
+  if (index === activeEvent) return;
+  activeEvent = index;
+  restylePanels(
+    itemPanels.map((p) => p.chart),
+    (d) => index === null || d.__ep === index
+  );
+}
+function mountCrossEpisode() {
+  const episodeHost = document.getElementById("trellis-episodes");
+  const itemHost = document.getElementById("trellis-items");
+  const itemLegend = document.getElementById("legend-items");
+  const eventLegend = document.getElementById("legend-events");
+  if (!episodeHost || !itemHost || !itemLegend || !eventLegend) return;
+  episodePanels.length = 0;
+  itemPanels.length = 0;
+  activeItem = null;
+  activeEvent = null;
+  resetSeriesCache();
+  episodeHost.replaceChildren();
+  itemHost.replaceChildren();
+  itemLegend.replaceChildren();
+  eventLegend.replaceChildren();
+  const m = t();
+  const unbounded = Number.POSITIVE_INFINITY;
+  const [yMin, yMax] = logBounds(...rawExtent(EPISODES, METRICS, unbounded));
+  const cols = columns(episodeHost);
+  episodeHost.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+  EPISODES.forEach((ep, idx) => {
+    const text = m.episodes[ep.id];
+    const maxW = Math.max(...ep.weeks.map((r) => r.w), 1);
+    const { figure, canvas } = panelFigure(
+      text.strip,
+      `${fmtSpan(ep.start, ep.end)} \xB7 ${observations(ep)}`,
+      text.banner
+    );
+    episodeHost.append(figure);
+    const datasets = SERIES2.map(
+      (s) => buildDataset(ep, idx, s.key, s.color, unbounded)
+    ).filter((d) => d !== null);
+    const chart = track(
+      new Chart(canvas, {
+        type: "line",
+        data: { datasets },
+        options: panelOptions(
+          "episode",
+          xScale(maxW),
+          yScale(yMin, yMax, idx % cols === 0),
+          (e, elements, host) => {
+            const hit = nearestByY(host, elements, e);
+            const d = hit ? host.data.datasets[hit.datasetIndex] : void 0;
+            emphasiseItem(d ? d.__item : null);
+          }
+        ),
+        plugins: []
+        // no per-panel labels: the episode is the panel title
+      })
+    );
+    decoratePanel(chart, figure, text.strip);
+    canvas.addEventListener("mouseleave", () => emphasiseItem(null));
+    episodePanels.push(chart);
+  });
+  const itemCols = columns(itemHost);
+  itemHost.style.gridTemplateColumns = `repeat(${itemCols}, minmax(0, 1fr))`;
+  SERIES2.forEach((series) => {
+    const [rawLo, rawHi] = rawExtent(EPISODES, [series.key], ENFORCEMENT_LAST);
+    const [lo, hi] = logBounds(rawLo, rawHi);
+    const range = fill(m.panels.valueRange, {
+      lo: compact().format(rawLo),
+      hi: compact().format(rawHi)
+    });
+    const { figure, canvas } = panelFigure(
+      m.items[series.key].short,
+      fill(m.panels.itemMeta, { range, n: ENFORCEMENT_LAST })
+    );
+    itemHost.append(figure);
+    const datasets = EPISODES.map(
+      (ep, i) => buildDataset(ep, i, series.key, RAMP2[i], ENFORCEMENT_LAST)
+    ).filter((d) => d !== null);
+    const chart = track(
+      new Chart(canvas, {
+        type: "line",
+        data: { datasets },
+        options: panelOptions(
+          "item",
+          xScale(ENFORCEMENT_LAST),
+          yScale(lo, hi, true)
+        ),
+        plugins: []
+      })
+    );
+    decoratePanel(chart, figure, m.items[series.key].short);
+    canvas.addEventListener("mouseleave", () => emphasiseEvent(null));
+    canvas.addEventListener("mousemove", (ev) => {
+      const pts = chart.getElementsAtEventForMode(
+        ev,
+        WEEK_MODE,
+        { intersect: false },
+        true
+      );
+      const hit = pts.length ? nearestByY(chart, pts, ev) : void 0;
+      const d = hit ? chart.data.datasets[hit.datasetIndex] : void 0;
+      emphasiseEvent(d ? d.__ep : null);
+    });
+    itemPanels.push({ chart, item: series.key });
+  });
+  legend(
+    itemLegend,
+    "items",
+    SERIES2.map((s) => ({
+      text: m.items[s.key].label,
+      color: s.color,
+      on: () => emphasiseItem(s.key),
+      off: () => emphasiseItem(null),
+      hide: (hidden) => toggleDatasets(episodeHost, "__item", s.key, hidden)
+    }))
+  );
+  legend(
+    eventLegend,
+    "events",
+    EPISODES.map((ep, i) => ({
+      text: m.episodes[ep.id].short,
+      color: RAMP2[i],
+      on: () => emphasiseEvent(i),
+      off: () => emphasiseEvent(null),
+      hide: (hidden) => toggleDatasets(itemHost, "__ep", i, hidden)
+    }))
+  );
+  wireLegendSync(episodeHost, "items", (d) => {
+    const k = SERIES2.findIndex((s) => s.key === d.__item);
+    return k < 0 ? null : k;
+  });
+  wireLegendSync(
+    itemHost,
+    "events",
+    (d) => d.__ep >= 0 && d.__ep < EPISODES.length ? d.__ep : null
+  );
+}
+
 // src/entry/main.ts
 function trellisHosts() {
   const episodeHost = byId("trellis-episodes");
@@ -20971,7 +21033,7 @@ function render2() {
   const hosts = trellisHosts();
   if (hosts) {
     try {
-      mountCrossEpisode(hosts);
+      mountCrossEpisode();
     } catch (err) {
       console.error("[trellis]", err);
     }
@@ -21049,7 +21111,6 @@ export {
 
 chart.js/dist/chunks/index.js:
 chart.js/dist/chart.js:
-chart.js/dist/helpers.js:
   (*!
    * Chart.js v4.6.1
    * https://www.chartjs.org

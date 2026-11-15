@@ -53,7 +53,6 @@ import {
   type Pt as DayPt,
 } from "../../data/data.ts";
 import { byId, el } from "../../core/dom.ts";
-import { EPISODES, seriesData } from "../../data/episodes/episodes.ts";
 import {
   a11y,
   fill,
@@ -74,6 +73,8 @@ import {
   population,
 } from "../../data/population.ts";
 import { wrapTooltipLines } from "../../charts/tooltip.ts";
+import { seriesData } from "../../charts/trellis/engine.ts";
+import { EPISODES } from "../../data/episodes/index.ts";
 
 Chart.register(
   LineController,

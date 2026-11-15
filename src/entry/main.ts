@@ -7,11 +7,7 @@ import { mountCasualties } from "../sections/casualties.ts";
 import { CHARTS, mountCharts } from "../charts/chart.ts";
 import { mountContext } from "../sections/context/context.ts";
 import { byId } from "../core/dom.ts";
-import {
-  mountCrossEpisode,
-  mountSummary,
-  type TrellisHosts,
-} from "../data/episodes/episodes.ts";
+import { mountSummary } from "../sections/summary.ts";
 import {
   applyStaticCopy,
   fill,
@@ -26,6 +22,8 @@ import { renderChrome } from "../sections/chrome.ts";
 import { mountPerCapita } from "../sections/percapita/percapita.ts";
 import { initTheme } from "../core/theme.ts";
 import { renderSources } from "../sections/sources/index.ts";
+import type { TrellisHosts } from "../charts/trellis/panel.ts";
+import { mountCrossEpisode } from "../charts/trellis/index.ts";
 
 function trellisHosts(): TrellisHosts | null {
   const episodeHost = byId("trellis-episodes");
@@ -53,7 +51,7 @@ export function render(): void {
   const hosts = trellisHosts();
   if (hosts) {
     try {
-      mountCrossEpisode(hosts);
+      mountCrossEpisode();
     } catch (err) {
       console.error("[trellis]", err);
     }

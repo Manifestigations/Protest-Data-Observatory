@@ -16,12 +16,6 @@
 import { DATES, WEEKS } from "../data/data.ts";
 import { visiblePoints } from "../charts/chart.ts";
 import {
-  ENFORCEMENT_LAST,
-  EPISODES,
-  seriesData,
-  type Pt,
-} from "../data/episodes/episodes.ts";
-import {
   compact,
   eurM,
   fill,
@@ -32,6 +26,8 @@ import {
   type ChartCopy,
 } from "../copy";
 import { byId, el } from "../core/dom.ts";
+import { seriesData, type Pt } from "../charts/trellis/engine.ts";
+import { ENFORCEMENT_LAST, EPISODES } from "../data/episodes/index.ts";
 
 type SeriesCopyKey = keyof ChartCopy["series"];
 
