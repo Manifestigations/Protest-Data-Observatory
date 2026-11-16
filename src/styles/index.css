@@ -43,6 +43,50 @@
   --good-rule: light-dark(#2f8f46, #46b563);
   --good-ink: light-dark(#1f5130, #b3e2c2);
 
+  --c-police: light-dark(#1d4ed8, #7aa7f8);
+  --c-police-wash: light-dark(rgb(29 78 216 / 14%), rgb(122 167 248 / 22%));
+  --c-police-on: light-dark(#fff, #06121b);
+
+  --c-protest: light-dark(#000, #e9ecf1);
+  --c-protest-wash: light-dark(rgb(0 0 0 / 12%), rgb(233 236 241 / 20%));
+  --c-protest-on: light-dark(#fff, #0f1115);
+
+  --c-bystander: light-dark(#fff, #151922);
+  --c-bystander-wash: light-dark(
+    rgb(255 255 255 / 20%),
+    rgb(255 255 255 / 12%)
+  );
+  --c-bystander-ink: light-dark(#111827, #e9ecf1);
+  --c-bystander-edge: light-dark(#9aa3af, #4b5563);
+
+  --c-arrest: light-dark(#b91c1c, #ff8080);
+  --c-arrest-wash: light-dark(rgb(185 28 28 / 14%), rgb(255 128 128 / 22%));
+  --c-arrest-on: light-dark(#fff, #1a0505);
+
+  --c-turnout: light-dark(#0f7a3d, #4ade80);
+  --c-turnout-wash: light-dark(rgb(15 122 61 / 14%), rgb(74 222 128 / 20%));
+  --c-turnout-on: light-dark(#fff, #04160c);
+
+  --c-cost: light-dark(#d99e00, #f2c765);
+  --c-cost-wash: light-dark(rgb(217 158 0 / 18%), rgb(242 199 101 / 22%));
+  --c-cost-on: light-dark(#1b1300, #1b1300);
+
+  --c-protest-soft: light-dark(#3f3f46, #a1a1aa);
+  --c-protest-soft-wash: light-dark(
+    rgb(63 63 70 / 14%),
+    rgb(161 161 170 / 20%)
+  );
+  --c-protest-soft-on: light-dark(#fff, #111318);
+
+  --c-blockade: light-dark(#4a2c17, #c08457);
+  --c-blockade-wash: light-dark(rgb(74 44 23 / 14%), rgb(192 132 87 / 22%));
+  --c-blockade-on: light-dark(#fff, #492a14);
+
+  --c-remainder: light-dark(#c7ccd3, #33383f);
+  --c-remainder-wash: light-dark(rgb(199 204 211 / 55%), rgb(51 56 63 / 70%));
+  --c-remainder-ink: light-dark(#111827, #e9ecf1);
+  --c-remainder-edge: light-dark(#9aa3af, #4b5563);
+
   /* canvas colours — resolved by canvas.ts, never used by CSS */
   --chart-ink: light-dark(#111827, #e9ecf1);
   --chart-label: light-dark(#4b5563, #a9b2be);
@@ -114,6 +158,24 @@
       --chart-muted: #5c6470;
       --chart-grid: #e5e5e5;
       --chart-hollow: #fff;
+      --c-police: #1d4ed8;
+      --c-protest: #000;
+      --c-bystander: #fff;
+      --c-arrest: #b91c1c;
+      --c-turnout: #0f7a3d;
+      --c-cost: #d99e00;
+      --c-bystander-edge: #9aa3af;
+    }
+
+    @media print {
+      :root {
+        --c-protest: #000;
+        --c-bystander: #fff;
+        --c-police: #1d4ed8;
+        --c-arrest: #b91c1c;
+        --c-turnout: #0f7a3d;
+        --c-cost: #d99e00;
+      }
     }
   }
 }
@@ -743,18 +805,6 @@ section {
 }
 
 /* ---- sources ------------------------------------------------------------ */
-#sources {
-  margin-top: var(--section-gap);
-  padding: clamp(14px, 2.2vw, 18px) clamp(12px, 2.4vw, 20px) 6px;
-  border: 1px solid var(--line-1);
-  background: var(--surface-2);
-
-  /* the static heading sources.ts preserves and re-labels */
-  & > :is(h1, h2) {
-    margin-bottom: 6px;
-    color: var(--ink-4);
-  }
-}
 
 .sources-box {
   font-size: var(--fs-sm);
@@ -2221,10 +2271,9 @@ details.data-table th[scope="row"] {
 /* dots | label | count | ——— | expander */
 .cas-tally-body {
   display: grid;
-  grid-template-columns: minmax(0, auto) minmax(0, max-content) auto minmax(
-      0,
-      1fr
-    ) auto;
+  grid-template-columns:
+    minmax(0, auto) minmax(0, max-content) auto minmax(0, 1fr)
+    auto;
   grid-template-areas: "dots kind count gap more";
   align-items: center;
   column-gap: 12px;
@@ -2337,4 +2386,159 @@ details.data-table th[scope="row"] {
 }
 .cas-table-toggle[open] > summary {
   margin-bottom: 8px;
+}
+
+/* ---- section toolbar ---------------------------------------------------- */
+.sec-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-block: 1rem 0;
+}
+
+.sec-tools__btn {
+  font: inherit;
+  font-size: var(--fs-2xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.7rem;
+  color: var(--ink-2);
+  background: var(--surface-2);
+  border: 1px solid var(--line-1);
+  border-radius: 999px;
+  cursor: pointer;
+  transition:
+    background var(--dur) ease,
+    color var(--dur) ease;
+}
+
+.sec-tools__btn:hover {
+  background: var(--hover);
+  color: var(--ink-1);
+}
+
+/* ---- adaptations -------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .sec-card > .sec-summary::after {
+    transition: none;
+  }
+}
+
+@media print {
+  .sec-card {
+    break-inside: avoid-page;
+    box-shadow: none;
+    border-color: var(--line-4);
+    margin-block: 1rem 0;
+  }
+  .sec-card > .sec-summary {
+    background: none;
+  }
+  .sec-card > .sec-summary::after,
+  .sec-tools {
+    display: none;
+  }
+}
+
+.sec-card {
+  --card-radius: 10px;
+  --card-pad: clamp(14px, 1.6vw, 22px);
+
+  margin-block: var(--section-gap) 0;
+  border: 1px solid var(--line-1);
+  border-radius: var(--card-radius);
+  background: var(--surface);
+  box-shadow: 0 1px 2px var(--shadow-1);
+  overflow: clip;
+  scroll-margin-block-start: 1.5rem;
+}
+
+/* no [data-tone] colour rules: the disclosure is chrome, not data */
+
+.sec-card > .sec-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: var(--card-pad);
+  background: var(--surface-2);
+  border-block-end: 1px solid var(--line-2);
+  cursor: pointer;
+  list-style: none;
+  transition: background var(--dur) ease;
+}
+
+.sec-card > .sec-summary::-webkit-details-marker {
+  display: none;
+}
+.sec-card > .sec-summary:hover {
+  background: var(--hover);
+}
+
+.sec-card > .sec-summary:focus-visible {
+  outline: 2px solid var(--ink-4); /* was --accent: still no colour accent */
+  outline-offset: -2px;
+}
+
+/* the tone chip is deleted outright — no ::before at all */
+
+.sec-summary > header,
+.sec-summary > .sources-title {
+  display: grid;
+  gap: 0.25rem;
+  min-inline-size: 0;
+}
+
+.sec-summary .sec-blurb {
+  color: var(--ink-3);
+  font-size: var(--fs-sm);
+  max-inline-size: 78ch;
+}
+
+/* the chevron, neutral */
+.sec-card > .sec-summary::after {
+  content: "";
+  grid-column: 2;
+  inline-size: 0.55rem;
+  block-size: 0.55rem;
+  border-inline-end: 2px solid var(--ink-4);
+  border-block-end: 2px solid var(--ink-4);
+  rotate: -45deg;
+  transition: rotate var(--dur) ease;
+}
+
+.sec-card[open] > .sec-summary::after {
+  rotate: 45deg;
+}
+.sec-card[open] > .sec-summary {
+  border-block-end-color: var(--line-1);
+}
+
+.sec-card > section,
+.sec-card > .run-group {
+  padding: var(--card-pad);
+  margin: 0;
+  display: grid;
+  gap: clamp(16px, 2vw, 26px);
+}
+
+/* nested subsection: neutral rail, not a toned one */
+.sec-card .sec-card--sub {
+  margin-block: 0;
+  border: 0;
+  border-inline-start: 3px solid var(--line-1);
+  border-radius: calc(var(--card-radius) - 4px);
+  background: var(--surface-2);
+  box-shadow: none;
+}
+
+.sec-card .sec-card--sub > .sec-summary {
+  padding: calc(var(--card-pad) * 0.7) calc(var(--card-pad) * 0.9);
+  background: transparent;
+  border-block-end: 1px solid var(--line-3);
+}
+
+.sec-card .sec-card--sub[open] > .sec-summary {
+  border-block-end-color: var(--line-1);
 }

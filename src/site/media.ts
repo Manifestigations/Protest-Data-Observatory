@@ -10,7 +10,7 @@ const FILE = {
   turnout: "hero-turnout-belfort.jpg",
   violence: "hero-violence-2026.jpg",
   costs: "hero-costs-perpignan.jpg",
-  movements: "hero-movements-gilets-jaunes.jpg",
+  movements: "hero-movements-gilets-jaunes.webp",
   series: "hero-series-jussieu-2006.jpg",
 } as const;
 

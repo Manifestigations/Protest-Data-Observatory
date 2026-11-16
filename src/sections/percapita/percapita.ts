@@ -75,6 +75,7 @@ import {
 import { wrapTooltipLines } from "../../charts/tooltip.ts";
 import { seriesData } from "../../charts/trellis/engine.ts";
 import { EPISODES } from "../../data/episodes/index.ts";
+import { tones } from "../../core/colors.ts";
 
 Chart.register(
   LineController,
@@ -88,9 +89,8 @@ Chart.register(
 
 /* ----- constants */
 
-const BLUE = "#1d4ed8";
-const PALE = "rgba(29,78,216,0.10)";
-/** The top of the stack. Not a cap: 100 % is the whole country. */
+const STREET = () => tones.protest; // "In the street" — black
+const REST = () => tones.remainder; // "The rest of the population" — grey
 const STACK_TOTAL = 100;
 
 /* ----- copy */
@@ -366,7 +366,7 @@ const pcStack: Plugin<"line"> = {
     for (const p of pts) ctx.lineTo(p.x, p.y);
     ctx.lineTo(xN, yTop);
     ctx.closePath();
-    ctx.fillStyle = PALE;
+    ctx.fillStyle = REST().fill;
     ctx.fill();
 
     // turnout: axis floor up to the turnout line
@@ -375,7 +375,7 @@ const pcStack: Plugin<"line"> = {
     for (const p of pts) ctx.lineTo(p.x, p.y);
     ctx.lineTo(xN, yBottom);
     ctx.closePath();
-    ctx.fillStyle = BLUE;
+    ctx.fillStyle = STREET().fill;
     ctx.fill();
 
     ctx.restore();
@@ -420,7 +420,7 @@ const pcPeak: Plugin<"line"> = {
     ctx.lineWidth = 3;
     ctx.strokeStyle = "#fff";
     ctx.strokeText(text, x, y);
-    ctx.fillStyle = BLUE;
+    ctx.fillStyle = STREET();
     ctx.fillText(text, x, y);
     ctx.restore();
   },
@@ -470,15 +470,14 @@ function build(rows: readonly Row[], o: Opts): Cfg | null {
   const dataset: ChartDataset<"line", (number | null)[]> = {
     label: L(COPY.turnout),
     data: plotted,
-    borderColor: BLUE,
+    borderColor: STREET().fill,
     backgroundColor: "transparent", // the area is drawn by pcStack
     borderWidth: 2,
-    // nine observations across 58 days: without this the series is invisible
     spanGaps: true,
     tension: 0,
     pointRadius: (ctx) => (ctx.raw === null ? 0 : 3),
-    pointBackgroundColor: "#fff",
-    pointBorderColor: BLUE,
+    pointBackgroundColor: THEME.hollow,
+    pointBorderColor: STREET().fill,
     pointBorderWidth: 1.5,
     pointHoverRadius: 5,
     pointHitRadius: 12,
@@ -593,7 +592,7 @@ function legendRow(): HTMLElement {
     const sw = el("span", "pc-swatch");
     sw.style.background = bg;
     if (ring) {
-      sw.style.border = `1.5px solid ${BLUE}`;
+      sw.style.border = `1.5px solid ${STREET}`;
       sw.style.background = "#fff";
       sw.style.borderRadius = "50%";
     }
@@ -601,9 +600,9 @@ function legendRow(): HTMLElement {
     return span;
   };
   row.append(
-    chip(BLUE, L(COPY.turnout), false),
-    chip(PALE, `${L(COPY.rest)} ${L(COPY.logNote)}`, false),
-    chip("#fff", L(COPY.measured), true),
+    chip(STREET().fill, L(COPY.turnout), false),
+    chip(REST().fill, `${L(COPY.rest)} ${L(COPY.logNote)}`, false),
+    chip(THEME.hollow, L(COPY.measured), true),
   );
   return row;
 }

@@ -55,6 +55,7 @@ export const DEF = {
     width: 1.75,
     axis: AXIS_RIGHT,
     log: true,
+    style: "rect",
   },
   strikersDaily: {
     data: DAILY.strikers,

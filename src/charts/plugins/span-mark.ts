@@ -3,14 +3,15 @@
 import type { Plugin } from "chart.js";
 import { fmtDayMonth } from "../../copy";
 import { DATES } from "../../data/data.ts";
-import { AXIS_LEFT, DEF } from "../series.ts";
+import { AXIS_LEFT, DEF, type SeriesId } from "../series.ts";
 import { clipToArea } from "./clip.ts";
+import { styleOf } from "../datasets.ts";
 
 export type SpanMark = {
   readonly from: string; // ISO date, inclusive
   readonly to: string; // ISO date, inclusive
   readonly value: number; // €M, drawn on the left axis
-  readonly color: string;
+  readonly series: SeriesId;
 };
 
 /** CCI France's 27 Oct tally values 17–24 Oct as a whole, so the €1bn cell is
@@ -20,7 +21,7 @@ export const SPAN_MARKS: readonly SpanMark[] = [
     from: "2026-10-17",
     to: "2026-10-24",
     value: 1_000,
-    color: DEF.damagesDaily.color,
+    series: "damagesDaily",
   },
 ];
 
@@ -64,11 +65,15 @@ export const spanMark: Plugin<"line"> = {
       const x1 = xs.getPixelForValue(i1);
       if (Math.abs(x1 - x0) < 8) continue;
 
+      // Per draw, not per module load: `tones` re-reads the CSS tokens, so a
+      // theme switch or a remount after render() picks up the right values.
+      const style = styleOf(s.series);
+
       const y = ys.getPixelForValue(s.value);
       const mid = (x0 + x1) / 2;
 
-      ctx.strokeStyle = s.color;
-      ctx.fillStyle = withAlpha(s.color, 0.1);
+      ctx.strokeStyle = style.fill; // ← same colour as the Damage dataset
+      ctx.fillStyle = style.wash; // ← its low-alpha twin, no hex math
       ctx.beginPath();
 
       if (MARKER === "ellipse") {
@@ -92,7 +97,7 @@ export const spanMark: Plugin<"line"> = {
         2;
       if (labelY - 10 > chartArea.top) {
         ctx.font = "10px system-ui, sans-serif";
-        ctx.fillStyle = s.color;
+        ctx.fillStyle = style.ink; // dark ink: a yellow caption at 10px fails contrast
         ctx.textAlign = "center";
         ctx.textBaseline = "bottom";
         ctx.fillText(

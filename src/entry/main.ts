@@ -39,6 +39,7 @@ import { bi } from "../copy";
 import { announce } from "../core/a11y.ts";
 import { mountContribute } from "../sections/contribute/index.ts";
 import { mountCasualties } from "../sections/casualties/index.ts";
+import { initDisclosure } from "../sections/disclosure.ts";
 
 /* Static anchors carry a plausible href for no-JS readers; this makes it
    correct for the page's depth (2026/turnout.html → ../contribute.html). */
@@ -135,6 +136,21 @@ export function render(): void {
       console.error(`[${mount.name}]`, err);
     }
   }
+
+  // + Sections are enhanced last: the <header> nodes that chrome.ts and
+  // + mountPage() create must exist before they move into <summary>, and the
+  // + canvases must exist before a reveal can need resizing.
+  // + Idempotent: already-wrapped sections are skipped, the old toolbar is
+  // + replaced so labels follow the locale.
+  initDisclosure({
+    onReveal: (card) => {
+      // Chart.js is responsive and observes the canvas parent; one frame after
+      // the reveal is enough for a chart that measured 0×0 while collapsed.
+      if (card.querySelector("canvas")) {
+        requestAnimationFrame(() => dispatchEvent(new Event("resize")));
+      }
+    },
+  });
 }
 
 let frame = 0;

@@ -1518,14 +1518,14 @@ function _measureText(ctx, data, gc, longest, string) {
   }
   return longest;
 }
-function _longestText(ctx, font, arrayOfThings, cache2) {
-  cache2 = cache2 || {};
-  let data = cache2.data = cache2.data || {};
-  let gc = cache2.garbageCollect = cache2.garbageCollect || [];
-  if (cache2.font !== font) {
-    data = cache2.data = {};
-    gc = cache2.garbageCollect = [];
-    cache2.font = font;
+function _longestText(ctx, font, arrayOfThings, cache3) {
+  cache3 = cache3 || {};
+  let data = cache3.data = cache3.data || {};
+  let gc = cache3.garbageCollect = cache3.garbageCollect || [];
+  if (cache3.font !== font) {
+    data = cache3.data = {};
+    gc = cache3.garbageCollect = [];
+    cache3.font = font;
   }
   ctx.save();
   ctx.font = font;
@@ -1926,7 +1926,7 @@ function _createResolver(scopes, prefixes = [
   if (typeof fallback === "undefined") {
     fallback = _resolve("_fallback", scopes);
   }
-  const cache2 = {
+  const cache3 = {
     [Symbol.toStringTag]: "Object",
     _cacheable: true,
     _scopes: scopes,
@@ -1938,7 +1938,7 @@ function _createResolver(scopes, prefixes = [
       ...scopes
     ], prefixes, finalRootScopes, fallback)
   };
-  return new Proxy(cache2, {
+  return new Proxy(cache3, {
     /**
     * A trap for the delete operator.
     */
@@ -1991,7 +1991,7 @@ function _createResolver(scopes, prefixes = [
   });
 }
 function _attachContext(proxy, context, subProxy, descriptorDefaults) {
-  const cache2 = {
+  const cache3 = {
     _cacheable: false,
     _proxy: proxy,
     _context: context,
@@ -2001,7 +2001,7 @@ function _attachContext(proxy, context, subProxy, descriptorDefaults) {
     setContext: (ctx) => _attachContext(proxy, ctx, subProxy, descriptorDefaults),
     override: (scope) => _attachContext(proxy.override(scope), context, subProxy, descriptorDefaults)
   };
-  return new Proxy(cache2, {
+  return new Proxy(cache3, {
     /**
     * A trap for the delete operator.
     */
@@ -2914,15 +2914,15 @@ function styleChanged(style, prevStyle) {
   if (!prevStyle) {
     return false;
   }
-  const cache2 = [];
+  const cache3 = [];
   const replacer = function(key, value2) {
     if (!isPatternOrGradient(value2)) {
       return value2;
     }
-    if (!cache2.includes(value2)) {
-      cache2.push(value2);
+    if (!cache3.includes(value2)) {
+      cache3.push(value2);
     }
-    return cache2.indexOf(value2);
+    return cache3.indexOf(value2);
   };
   return JSON.stringify(style, replacer) !== JSON.stringify(prevStyle, replacer);
 }
@@ -3894,9 +3894,9 @@ var DatasetController = class {
   }
   _resolveElementOptions(elementType, mode = "default", index) {
     const active = mode === "active";
-    const cache2 = this._cachedDataOpts;
+    const cache3 = this._cachedDataOpts;
     const cacheKey = elementType + "-" + mode;
-    const cached = cache2[cacheKey];
+    const cached = cache3[cacheKey];
     const sharing = this.enableOptionSharing && defined(index);
     if (cached) {
       return cloneIfNotShared(cached, sharing);
@@ -3918,15 +3918,15 @@ var DatasetController = class {
     const values = config.resolveNamedOptions(scopes, names2, context, prefixes);
     if (values.$shared) {
       values.$shared = sharing;
-      cache2[cacheKey] = Object.freeze(cloneIfNotShared(values, sharing));
+      cache3[cacheKey] = Object.freeze(cloneIfNotShared(values, sharing));
     }
     return values;
   }
   _resolveAnimations(index, transition, active) {
     const chart = this.chart;
-    const cache2 = this._cachedDataOpts;
+    const cache3 = this._cachedDataOpts;
     const cacheKey = `animation-${transition}`;
-    const cached = cache2[cacheKey];
+    const cached = cache3[cacheKey];
     if (cached) {
       return cached;
     }
@@ -3939,7 +3939,7 @@ var DatasetController = class {
     }
     const animations = new Animations(chart, options && options.animations);
     if (options && options._cacheable) {
-      cache2[cacheKey] = Object.freeze(animations);
+      cache3[cacheKey] = Object.freeze(animations);
     }
     return animations;
   }
@@ -4532,8 +4532,8 @@ function wrapBoxes(boxes) {
 }
 function buildStacks(layouts2) {
   const stacks = {};
-  for (const wrap of layouts2) {
-    const { stack, pos, stackWeight } = wrap;
+  for (const wrap2 of layouts2) {
+    const { stack, pos, stackWeight } = wrap2;
     if (!stack || !STATIC_POSITIONS.includes(pos)) {
       continue;
     }
@@ -4569,7 +4569,7 @@ function setLayoutDims(layouts2, params) {
 }
 function buildLayoutBoxes(boxes) {
   const layoutBoxes = wrapBoxes(boxes);
-  const fullSize = sortByWeight(layoutBoxes.filter((wrap) => wrap.box.fullSize), true);
+  const fullSize = sortByWeight(layoutBoxes.filter((wrap2) => wrap2.box.fullSize), true);
   const left = sortByWeight(filterByPosition(layoutBoxes, "left"), true);
   const right = sortByWeight(filterByPosition(layoutBoxes, "right"));
   const top = sortByWeight(filterByPosition(layoutBoxes, "top"), true);
@@ -4774,7 +4774,7 @@ var layouts = {
         box.beforeLayout();
       }
     });
-    const visibleVerticalBoxCount = verticalBoxes.reduce((total, wrap) => wrap.box.options && wrap.box.options.display === false ? total : total + 1, 0) || 1;
+    const visibleVerticalBoxCount = verticalBoxes.reduce((total, wrap2) => wrap2.box.options && wrap2.box.options.display === false ? total : total + 1, 0) || 1;
     const params = Object.freeze({
       outerWidth: width,
       outerHeight: height,
@@ -5299,13 +5299,13 @@ function getPixelForGridLine(scale, index, offsetGridLines) {
   return lineValue;
 }
 function garbageCollect(caches, length) {
-  each(caches, (cache2) => {
-    const gc = cache2.gc;
+  each(caches, (cache3) => {
+    const gc = cache3.gc;
     const gcLen = gc.length / 2;
     let i;
     if (gcLen > length) {
       for (i = 0; i < gcLen; ++i) {
-        delete cache2.data[gc[i]];
+        delete cache3.data[gc[i]];
       }
       gc.splice(0, gcLen);
     }
@@ -5830,25 +5830,25 @@ var Scale = class _Scale extends Element {
     const increment = Math.floor(length / getTicksLimit(length, maxTicksLimit));
     let widestLabelSize = 0;
     let highestLabelSize = 0;
-    let i, j, jlen, label, tickFont, fontString, cache2, lineHeight, width, height, nestedLabel;
+    let i, j, jlen, label, tickFont, fontString, cache3, lineHeight, width, height, nestedLabel;
     for (i = 0; i < length; i += increment) {
       label = ticks[i].label;
       tickFont = this._resolveTickFontOptions(i);
       ctx.font = fontString = tickFont.string;
-      cache2 = caches[fontString] = caches[fontString] || {
+      cache3 = caches[fontString] = caches[fontString] || {
         data: {},
         gc: []
       };
       lineHeight = tickFont.lineHeight;
       width = height = 0;
       if (!isNullOrUndef(label) && !isArray(label)) {
-        width = _measureText(ctx, cache2.data, cache2.gc, width, label);
+        width = _measureText(ctx, cache3.data, cache3.gc, width, label);
         height = lineHeight;
       } else if (isArray(label)) {
         for (j = 0, jlen = label.length; j < jlen; ++j) {
           nestedLabel = label[j];
           if (!isNullOrUndef(nestedLabel) && !isArray(nestedLabel)) {
-            width = _measureText(ctx, cache2.data, cache2.gc, width, nestedLabel);
+            width = _measureText(ctx, cache3.data, cache3.gc, width, nestedLabel);
             height += lineHeight;
           }
         }
@@ -7065,17 +7065,17 @@ var Config = class {
   }
   _cachedScopes(mainScope, resetCache) {
     const _scopeCache = this._scopeCache;
-    let cache2 = _scopeCache.get(mainScope);
-    if (!cache2 || resetCache) {
-      cache2 = /* @__PURE__ */ new Map();
-      _scopeCache.set(mainScope, cache2);
+    let cache3 = _scopeCache.get(mainScope);
+    if (!cache3 || resetCache) {
+      cache3 = /* @__PURE__ */ new Map();
+      _scopeCache.set(mainScope, cache3);
     }
-    return cache2;
+    return cache3;
   }
   getOptionScopes(mainScope, keyLists, resetCache) {
     const { options, type } = this;
-    const cache2 = this._cachedScopes(mainScope, resetCache);
-    const cached = cache2.get(keyLists);
+    const cache3 = this._cachedScopes(mainScope, resetCache);
+    const cached = cache3.get(keyLists);
     if (cached) {
       return cached;
     }
@@ -7095,7 +7095,7 @@ var Config = class {
       array.push(/* @__PURE__ */ Object.create(null));
     }
     if (keysCached.has(keyLists)) {
-      cache2.set(keyLists, array);
+      cache3.set(keyLists, array);
     }
     return array;
   }
@@ -7139,20 +7139,20 @@ var Config = class {
   }
 };
 function getResolver(resolverCache, scopes, prefixes) {
-  let cache2 = resolverCache.get(scopes);
-  if (!cache2) {
-    cache2 = /* @__PURE__ */ new Map();
-    resolverCache.set(scopes, cache2);
+  let cache3 = resolverCache.get(scopes);
+  if (!cache3) {
+    cache3 = /* @__PURE__ */ new Map();
+    resolverCache.set(scopes, cache3);
   }
   const cacheKey = prefixes.join();
-  let cached = cache2.get(cacheKey);
+  let cached = cache3.get(cacheKey);
   if (!cached) {
     const resolver = _createResolver(scopes, prefixes);
     cached = {
       resolver,
       subPrefixes: prefixes.filter((p) => !p.toLowerCase().includes("hover"))
     };
-    cache2.set(cacheKey, cached);
+    cache3.set(cacheKey, cached);
   }
   return cached;
 }
@@ -13973,24 +13973,24 @@ var FALLBACK = {
   series7: "#062844"
 };
 var ctx2d = document.createElement("canvas").getContext("2d");
-function normalise(css, fallback) {
+function normalise(css2, fallback) {
   if (!ctx2d) return fallback;
   ctx2d.fillStyle = fallback;
-  ctx2d.fillStyle = css;
+  ctx2d.fillStyle = css2;
   return typeof ctx2d.fillStyle === "string" ? ctx2d.fillStyle : fallback;
 }
 var cache = null;
 function read() {
   const out = {};
-  const probe2 = document.createElement("span");
-  probe2.setAttribute("aria-hidden", "true");
-  probe2.style.cssText = "position:absolute;width:0;height:0;visibility:hidden";
-  (document.body ?? document.documentElement).append(probe2);
+  const probe3 = document.createElement("span");
+  probe3.setAttribute("aria-hidden", "true");
+  probe3.style.cssText = "position:absolute;width:0;height:0;visibility:hidden";
+  (document.body ?? document.documentElement).append(probe3);
   for (const key of Object.keys(VARS)) {
-    probe2.style.color = `var(${VARS[key]})`;
-    out[key] = normalise(getComputedStyle(probe2).color, FALLBACK[key]);
+    probe3.style.color = `var(${VARS[key]})`;
+    out[key] = normalise(getComputedStyle(probe3).color, FALLBACK[key]);
   }
-  probe2.remove();
+  probe3.remove();
   return out;
 }
 var value = (key) => (cache ??= read(), cache[key]);
@@ -15760,7 +15760,8 @@ var DEF = {
     radius: 3,
     width: 1.75,
     axis: AXIS_RIGHT,
-    log: true
+    log: true,
+    style: "rect"
   },
   strikersDaily: {
     data: DAILY.strikers,
@@ -16019,23 +16020,294 @@ var errorBars = {
   }
 };
 
+// src/core/colors.ts
+var FALLBACK2 = {
+  "c-police": "#1d4ed8",
+  "c-police-wash": "rgb(29 78 216 / 14%)",
+  "c-police-on": "#ffffff",
+  "c-protest": "#000000",
+  "c-protest-wash": "rgb(0 0 0 / 12%)",
+  "c-protest-on": "#ffffff",
+  "c-bystander": "#ffffff",
+  "c-bystander-wash": "rgb(255 255 255 / 20%)",
+  "c-bystander-ink": "#111827",
+  "c-bystander-edge": "#9aa3af",
+  "c-arrest": "#b91c1c",
+  "c-arrest-wash": "rgb(185 28 28 / 14%)",
+  "c-arrest-on": "#ffffff",
+  "c-turnout": "#0f7a3d",
+  "c-turnout-wash": "rgb(15 122 61 / 14%)",
+  "c-turnout-on": "#ffffff",
+  "c-cost": "#d99e00",
+  "c-cost-wash": "rgb(217 158 0 / 18%)",
+  "c-cost-on": "#1b1300",
+  "c-protest-soft": "#3f3f46",
+  "c-protest-soft-wash": "rgb(63 63 70 / 14%)",
+  "c-protest-soft-on": "#ffffff",
+  "c-blockade": "#4a2c17",
+  "c-blockade-wash": "rgb(74 44 23 / 14%)",
+  "c-blockade-on": "#ffffff",
+  "c-remainder": "#c7ccd3",
+  "c-remainder-wash": "rgb(199 204 211 / 55%)",
+  "c-remainder-ink": "#111827",
+  "c-remainder-edge": "#9aa3af"
+};
+var cache2 = /* @__PURE__ */ new Map();
+var probe = null;
+function css(token) {
+  const hit = cache2.get(token);
+  if (hit !== void 0) return hit;
+  if (!probe) {
+    probe = document.createElement("span");
+    probe.setAttribute("aria-hidden", "true");
+    probe.style.cssText = "position:absolute;inline-size:0;block-size:0;overflow:hidden;pointer-events:none";
+    document.body.append(probe);
+  }
+  probe.style.color = `var(--${token}, ${FALLBACK2[token] ?? "currentColor"})`;
+  const value2 = getComputedStyle(probe).color || FALLBACK2[token] || "currentColor";
+  cache2.set(token, value2);
+  return value2;
+}
+function resetColours() {
+  cache2.clear();
+}
+var tones = {
+  get police() {
+    return {
+      fill: css("c-police"),
+      wash: css("c-police-wash"),
+      ink: css("c-police-on"),
+      edge: css("c-police")
+    };
+  },
+  get protest() {
+    return {
+      fill: css("c-protest"),
+      wash: css("c-protest-wash"),
+      ink: css("c-protest-on"),
+      edge: css("c-protest")
+    };
+  },
+  get bystander() {
+    return {
+      fill: css("c-bystander"),
+      wash: css("c-bystander-wash"),
+      ink: css("c-bystander-ink"),
+      edge: css("c-bystander-edge")
+    };
+  },
+  get arrest() {
+    return {
+      fill: css("c-arrest"),
+      wash: css("c-arrest-wash"),
+      ink: css("c-arrest-on"),
+      edge: css("c-arrest")
+    };
+  },
+  get turnout() {
+    return {
+      fill: css("c-turnout"),
+      wash: css("c-turnout-wash"),
+      ink: css("c-turnout-on"),
+      edge: css("c-turnout")
+    };
+  },
+  get cost() {
+    return {
+      fill: css("c-cost"),
+      wash: css("c-cost-wash"),
+      ink: css("c-cost-on"),
+      edge: css("c-cost")
+    };
+  },
+  /** Blue & yellow: the cost of policing, everywhere it appears. */
+  get policeCost() {
+    return {
+      fill: css("c-police"),
+      wash: css("c-police-wash"),
+      ink: css("c-police-on"),
+      edge: css("c-police"),
+      hatch: css("c-cost")
+    };
+  },
+  get protestSoft() {
+    return {
+      fill: css("c-protest-soft"),
+      wash: css("c-protest-soft-wash"),
+      ink: css("c-protest-soft-on"),
+      edge: css("c-protest-soft")
+    };
+  },
+  get blockade() {
+    return {
+      fill: css("c-blockade"),
+      wash: css("c-blockade-wash"),
+      ink: css("c-blockade-on"),
+      edge: css("c-blockade")
+    };
+  },
+  get remainder() {
+    return {
+      fill: css("c-remainder"),
+      wash: css("c-remainder-wash"),
+      ink: css("c-remainder-ink"),
+      edge: css("c-remainder-edge")
+    };
+  }
+};
+if (typeof document !== "undefined") {
+  matchMedia("(prefers-color-scheme: dark)").addEventListener(
+    "change",
+    resetColours
+  );
+  new MutationObserver(resetColours).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"]
+  });
+}
+
+// src/charts/datasets.ts
+var SERIES_TONE = {
+  protestersDaily: "protest",
+  protestersWeekly: "protest",
+  strikersDaily: "protestSoft",
+  strikersWeekly: "protestSoft",
+  arrestsDaily: "arrest",
+  arrestsWeekly: "arrest",
+  forcesDaily: "police",
+  forcesWeekly: "police",
+  forcesInjuredStock: "police",
+  protestersInjuredDaily: "protest",
+  protestersInjuredWeekly: "protest",
+  blockadesDaily: "blockade",
+  blockadesWeekly: "blockade",
+  damagesDaily: "cost",
+  policingDaily: "policeCost",
+  policingCumulative: "policeCost"
+};
+var toneOf = (id) => SERIES_TONE[id] ?? "police";
+var styleOf = (id) => tones[toneOf(id)];
+var DAILY_GAP = 7;
+var WEEKLY_GAP = 1;
+function datasetsFor(id, weekly) {
+  const def = DEF[id];
+  if (!def) throw new Error(`datasets.ts: no DEF entry for series "${id}"`);
+  if (!def.data) throw new Error(`datasets.ts: series "${id}" has no data`);
+  if (def.pointRadius && def.pointRadius.length !== def.data.length) {
+    throw new Error(
+      `datasets.ts: "${id}" pointRadius has ${def.pointRadius.length} entries, expected ${def.data.length}`
+    );
+  }
+  const c = styleOf(id);
+  const copy = t().chart.series[id];
+  const axis = def.axis ?? AXIS_LEFT;
+  const perCapita = id === "protestersDaily" || id === "protestersWeekly";
+  const shaded = Boolean(def.bandFill);
+  const n2 = def.data.length;
+  const solid = Array.from({ length: n2 }, () => null);
+  const detached = Array.from({ length: n2 }, () => null);
+  const solidBand = Array.from({ length: n2 }, () => null);
+  const detachedBand = Array.from({ length: n2 }, () => null);
+  const quality = new Array(n2);
+  const notes = new Array(n2);
+  const radius = new Array(n2);
+  const hoverRadius = new Array(n2);
+  const twinRadius = new Array(n2);
+  const twinHoverRadius = new Array(n2);
+  let anyDetached = false;
+  for (let i = 0; i < n2; i++) {
+    const p = def.data[i];
+    const r = def.pointRadius?.[i] ?? def.radius;
+    const base = r === 0 ? 0 : r;
+    quality[i] = p.q;
+    notes[i] = p.note;
+    radius[i] = base;
+    hoverRadius[i] = base === 0 ? 0 : base + 2;
+    twinRadius[i] = base === 0 ? 0 : base + 1;
+    twinHoverRadius[i] = base === 0 ? 0 : base + 3;
+    if (p.detach) {
+      anyDetached = true;
+      detached[i] = p.v;
+      detachedBand[i] = p.band;
+    } else {
+      solid[i] = p.v;
+      solidBand[i] = p.band;
+    }
+  }
+  const line = {
+    label: copy.label,
+    data: solid,
+    yAxisID: axis,
+    unit: def.unit,
+    perCapita,
+    errorBars: solidBand,
+    errorBarColor: c.fill,
+    bandFill: shaded,
+    bandFillColor: shaded ? c.wash : void 0,
+    noWhiskers: Boolean(def.shadeOnly),
+    quality,
+    notes,
+    borderColor: c.fill,
+    backgroundColor: shaded ? c.wash : c.fill,
+    borderWidth: def.width,
+    pointStyle: def.style,
+    pointRadius: radius,
+    pointHoverRadius: hoverRadius,
+    pointHitRadius: 14,
+    tension: 0,
+    // Chart.js must connect nothing across a hole: the connectors plugin
+    // draws every bridge itself, so solid/dashed/dotted is decided once.
+    spanGaps: false,
+    connectors: {
+      series: def.data,
+      slots: weekly ? WEEKLY_GAP : DAILY_GAP
+    }
+  };
+  if (!anyDetached) return [line];
+  return [
+    line,
+    {
+      label: copy.detached,
+      data: detached,
+      yAxisID: axis,
+      unit: def.unit,
+      perCapita,
+      showLine: false,
+      detachedOnly: true,
+      errorBars: detachedBand,
+      errorBarColor: c.fill,
+      noWhiskers: Boolean(def.shadeOnly),
+      quality,
+      notes,
+      borderWidth: 0,
+      pointStyle: def.style ?? "circle",
+      // Hollow: page-coloured fill, toned rim. `edge` keeps a white tone
+      // (bystanders) visible against a white sheet.
+      pointBackgroundColor: THEME.hollow,
+      pointBorderColor: c.edge,
+      pointBorderWidth: 2,
+      pointRadius: twinRadius,
+      pointHoverRadius: twinHoverRadius,
+      pointHoverBorderWidth: 3,
+      pointHitRadius: 14,
+      spanGaps: false
+    }
+  ];
+}
+
 // src/charts/plugins/span-mark.ts
 var SPAN_MARKS = [
   {
     from: "2026-10-17",
     to: "2026-10-24",
     value: 1e3,
-    color: DEF.damagesDaily.color
+    series: "damagesDaily"
   }
 ];
 var MARKER = "ellipse";
 var ELLIPSE_RY = 7;
 var BRACE_CURL = 6;
 var BRACE_LIFT = 12;
-function withAlpha2(hex2, a) {
-  const n2 = Number.parseInt(hex2.slice(1), 16);
-  return `rgba(${n2 >> 16 & 255},${n2 >> 8 & 255},${n2 & 255},${a})`;
-}
 var spanMark = {
   id: "spanMark",
   afterDatasetsDraw(chart) {
@@ -16055,10 +16327,11 @@ var spanMark = {
       const x0 = xs.getPixelForValue(i0);
       const x1 = xs.getPixelForValue(i1);
       if (Math.abs(x1 - x0) < 8) continue;
+      const style = styleOf(s.series);
       const y = ys.getPixelForValue(s.value);
       const mid = (x0 + x1) / 2;
-      ctx.strokeStyle = s.color;
-      ctx.fillStyle = withAlpha2(s.color, 0.1);
+      ctx.strokeStyle = style.fill;
+      ctx.fillStyle = style.wash;
       ctx.beginPath();
       if (MARKER === "ellipse") {
         ctx.setLineDash([4, 3]);
@@ -16077,7 +16350,7 @@ var spanMark = {
       const labelY = (MARKER === "ellipse" ? y - ELLIPSE_RY : y - BRACE_LIFT - BRACE_CURL) - 2;
       if (labelY - 10 > chartArea.top) {
         ctx.font = "10px system-ui, sans-serif";
-        ctx.fillStyle = s.color;
+        ctx.fillStyle = style.ink;
         ctx.textAlign = "center";
         ctx.textBaseline = "bottom";
         ctx.fillText(
@@ -16353,12 +16626,12 @@ function suffixFor(q, detached) {
 var DEFAULT_SIZE = 12;
 var MAX_WIDTH = 360;
 var MIN_WIDTH = 80;
-var probe;
+var probe2;
 function measurer() {
-  if (probe === void 0) {
-    probe = document.createElement("canvas").getContext("2d");
+  if (probe2 === void 0) {
+    probe2 = document.createElement("canvas").getContext("2d");
   }
-  return probe;
+  return probe2;
 }
 function fontCss(font, bold) {
   const size = font?.size ?? Chart.defaults.font.size ?? DEFAULT_SIZE;
@@ -16463,85 +16736,6 @@ ${rate}` : body;
       return note2 ? wrapTooltipLines(fill(m.footerMark, { note: note2 }), items[0], "footer") : [];
     }
   };
-}
-
-// src/charts/datasets.ts
-var DAILY_GAP = 7;
-var WEEKLY_GAP = 1;
-function datasetsFor(id, weekly) {
-  const def = DEF[id];
-  if (!def) throw new Error(`datasets.ts: no DEF entry for series "${id}"`);
-  if (!def.data) throw new Error(`datasets.ts: series "${id}" has no data`);
-  if (def.pointRadius && def.pointRadius.length !== def.data.length) {
-    throw new Error(
-      `datasets.ts: "${id}" pointRadius has ${def.pointRadius.length} entries, expected ${def.data.length}`
-    );
-  }
-  const radiusAt = (i, bump = 0) => {
-    const r = def.pointRadius?.[i] ?? def.radius;
-    return r === 0 ? 0 : r + bump;
-  };
-  const copy = t().chart.series[id];
-  const axis = def.axis ?? AXIS_LEFT;
-  const plot = (keep) => def.data.map((p) => keep(p) ? p.v : null);
-  const bands = (keep) => def.data.map((p) => keep(p) ? p.band : null);
-  const line = {
-    label: copy.label,
-    data: plot((p) => !p.detach),
-    yAxisID: axis,
-    unit: def.unit,
-    perCapita: id === "protestersDaily" || id === "protestersWeekly",
-    errorBars: bands((p) => !p.detach),
-    errorBarColor: def.color,
-    bandFill: Boolean(def.bandFill),
-    bandFillColor: def.bandFill,
-    noWhiskers: Boolean(def.shadeOnly),
-    quality: def.data.map((p) => p.q),
-    notes: def.data.map((p) => p.note),
-    borderColor: def.color,
-    backgroundColor: def.color,
-    borderWidth: def.width,
-    pointStyle: def.style,
-    pointRadius: def.data.map((_, i) => radiusAt(i)),
-    pointHoverRadius: def.data.map((_, i) => radiusAt(i, 2)),
-    pointHitRadius: 14,
-    tension: 0,
-    // Chart.js must connect nothing across a hole: the connectors plugin
-    // draws every bridge itself, so solid/dashed/dotted is decided once.
-    spanGaps: false,
-    connectors: {
-      series: def.data,
-      slots: weekly ? WEEKLY_GAP : DAILY_GAP
-    }
-  };
-  if (!def.data.some((p) => p.detach)) return [line];
-  return [
-    line,
-    {
-      label: copy.detached,
-      data: plot((p) => p.detach),
-      yAxisID: axis,
-      unit: def.unit,
-      perCapita: id === "protestersDaily" || id === "protestersWeekly",
-      showLine: false,
-      detachedOnly: true,
-      errorBars: bands((p) => p.detach),
-      errorBarColor: def.color,
-      noWhiskers: Boolean(def.shadeOnly),
-      quality: line.quality,
-      notes: line.notes,
-      borderWidth: 0,
-      pointStyle: def.style ?? "circle",
-      pointBackgroundColor: THEME.hollow,
-      pointBorderColor: def.color,
-      pointBorderWidth: 2,
-      pointRadius: def.data.map((_, i) => radiusAt(i, 1)),
-      pointHoverRadius: def.data.map((_, i) => radiusAt(i, 3)),
-      pointHoverBorderWidth: 3,
-      pointHitRadius: 14,
-      spanGaps: false
-    }
-  ];
 }
 
 // src/charts/view.ts
@@ -16808,8 +17002,8 @@ function insertCostMethodology(anchor, canvas) {
   caveat.className = "cost-method__caveat";
   caveat.textContent = c.caveat;
   section.append(h, intro, ol, summary, caveat);
-  const wrap = canvas.parentElement;
-  const ref = wrap && wrap !== anchor && anchor.contains(wrap) ? wrap : canvas;
+  const wrap2 = canvas.parentElement;
+  const ref = wrap2 && wrap2 !== anchor && anchor.contains(wrap2) ? wrap2 : canvas;
   if (anchor.contains(ref)) anchor.insertBefore(section, ref);
   else anchor.before(section);
   return section;
@@ -17965,7 +18159,7 @@ var FILE = {
   turnout: "hero-turnout-belfort.jpg",
   violence: "hero-violence-2026.jpg",
   costs: "hero-costs-perpignan.jpg",
-  movements: "hero-movements-gilets-jaunes.jpg",
+  movements: "hero-movements-gilets-jaunes.webp",
   series: "hero-series-jussieu-2006.jpg"
 };
 var commonsPage = (file) => `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(file).replace(/%20/g, "_")}`;
@@ -19457,8 +19651,8 @@ Chart.register(
   plugin_tooltip,
   plugin_legend
 );
-var BLUE = "#1d4ed8";
-var PALE = "rgba(29,78,216,0.10)";
+var STREET = () => tones.protest;
+var REST = () => tones.remainder;
 var STACK_TOTAL = 100;
 var L2 = (o) => String(getLocale()).slice(0, 2) === "fr" ? o.fr : o.en;
 var COPY = {
@@ -19673,14 +19867,14 @@ var pcStack = {
     for (const p of pts) ctx.lineTo(p.x, p.y);
     ctx.lineTo(xN, yTop);
     ctx.closePath();
-    ctx.fillStyle = PALE;
+    ctx.fillStyle = REST().fill;
     ctx.fill();
     ctx.beginPath();
     ctx.moveTo(x0, yBottom);
     for (const p of pts) ctx.lineTo(p.x, p.y);
     ctx.lineTo(xN, yBottom);
     ctx.closePath();
-    ctx.fillStyle = BLUE;
+    ctx.fillStyle = STREET().fill;
     ctx.fill();
     ctx.restore();
   }
@@ -19716,7 +19910,7 @@ var pcPeak = {
     ctx.lineWidth = 3;
     ctx.strokeStyle = "#fff";
     ctx.strokeText(text, x, y);
-    ctx.fillStyle = BLUE;
+    ctx.fillStyle = STREET();
     ctx.fillText(text, x, y);
     ctx.restore();
   }
@@ -19737,16 +19931,15 @@ function build(rows, o) {
   const dataset = {
     label: L2(COPY.turnout),
     data: plotted,
-    borderColor: BLUE,
+    borderColor: STREET().fill,
     backgroundColor: "transparent",
     // the area is drawn by pcStack
     borderWidth: 2,
-    // nine observations across 58 days: without this the series is invisible
     spanGaps: true,
     tension: 0,
     pointRadius: (ctx) => ctx.raw === null ? 0 : 3,
-    pointBackgroundColor: "#fff",
-    pointBorderColor: BLUE,
+    pointBackgroundColor: THEME.hollow,
+    pointBorderColor: STREET().fill,
     pointBorderWidth: 1.5,
     pointHoverRadius: 5,
     pointHitRadius: 12,
@@ -19854,7 +20047,7 @@ function legendRow() {
     const sw = el("span", "pc-swatch");
     sw.style.background = bg;
     if (ring) {
-      sw.style.border = `1.5px solid ${BLUE}`;
+      sw.style.border = `1.5px solid ${STREET}`;
       sw.style.background = "#fff";
       sw.style.borderRadius = "50%";
     }
@@ -19862,9 +20055,9 @@ function legendRow() {
     return span;
   };
   row.append(
-    chip(BLUE, L2(COPY.turnout), false),
-    chip(PALE, `${L2(COPY.rest)} ${L2(COPY.logNote)}`, false),
-    chip("#fff", L2(COPY.measured), true)
+    chip(STREET().fill, L2(COPY.turnout), false),
+    chip(REST().fill, `${L2(COPY.rest)} ${L2(COPY.logNote)}`, false),
+    chip(THEME.hollow, L2(COPY.measured), true)
   );
   return row;
 }
@@ -23098,25 +23291,25 @@ function head(labels, lead = 1) {
   return thead;
 }
 function bar(p) {
-  const wrap = el("span", "cas-bar");
+  const wrap2 = el("span", "cas-bar");
   const run = el("span", "cas-bar-fill");
   run.style.width = `${Math.max(0, Math.min(1, p)) * 100}%`;
-  wrap.append(run);
-  return wrap;
+  wrap2.append(run);
+  return wrap2;
 }
 function stat(num, label, cls = "cas-head-stat") {
-  const wrap = el("div", cls);
-  wrap.append(
+  const wrap2 = el("div", cls);
+  wrap2.append(
     el("span", "cas-head-num", num),
     el("span", "cas-head-label", label)
   );
-  return wrap;
+  return wrap2;
 }
 function headline() {
   const c = t().casualties;
-  const wrap = el("div", "cas-headline");
+  const wrap2 = el("div", "cas-headline");
   const total = nf().format(FORCES.movement);
-  wrap.append(
+  wrap2.append(
     stat(
       `${pct(SERIOUS_MOVEMENT.lo / FORCES.movement)}\u2013${pct(SERIOUS_MOVEMENT.hi / FORCES.movement)}`,
       fill(c.headSeriousShare, {
@@ -23137,12 +23330,12 @@ function headline() {
       fill(c.headMix, { light: nf().format(MIX[0].central), total })
     )
   );
-  return wrap;
+  return wrap2;
 }
 function mixBlock() {
   const c = t().casualties;
-  const wrap = el("div", "cas-mix");
-  wrap.append(el("h4", "cas-title", c.mixTitle));
+  const wrap2 = el("div", "cas-mix");
+  wrap2.append(el("h4", "cas-title", c.mixTitle));
   const total = MIX.reduce((a, b) => a + b.central, 0);
   for (const band of MIX) {
     const row = el("div", "cas-mix-row");
@@ -23164,10 +23357,10 @@ function mixBlock() {
         `${pct(band.lo / total)}\u2013${pct(band.hi / total)}`
       )
     );
-    wrap.append(row);
+    wrap2.append(row);
   }
-  wrap.append(el("p", "cas-note", c.noteMix));
-  return wrap;
+  wrap2.append(el("p", "cas-note", c.noteMix));
+  return wrap2;
 }
 function severityTable(rows, caption) {
   const c = t().casualties;
@@ -23384,7 +23577,7 @@ function strip(row, cp) {
   const c = t().casualties;
   const total = lo(row.total);
   const { parts, serious } = stackOf(row);
-  const wrap = el("div", "cas-strip");
+  const wrap2 = el("div", "cas-strip");
   const head2 = el("div", "cas-strip-head");
   head2.append(
     el("span", "cas-strip-name", cp.scope(row.id)),
@@ -23392,7 +23585,7 @@ function strip(row, cp) {
   );
   const p = share(row.light, row.total);
   if (p !== null) head2.append(el("span", "cas-strip-share", pct(p)));
-  wrap.append(head2);
+  wrap2.append(head2);
   const box = el("div", "cas-track-wrap");
   const track2 = el("div", "cas-track");
   if (total === null || parts.length === 0) {
@@ -23422,13 +23615,13 @@ function strip(row, cp) {
   track2.setAttribute("role", "img");
   track2.setAttribute("aria-label", `${head2.textContent} \u2014 ${meta}`);
   box.append(track2);
-  wrap.append(box, el("p", "cas-strip-meta", meta));
-  return wrap;
+  wrap2.append(box, el("p", "cas-strip-meta", meta));
+  return wrap2;
 }
 function severityStrips(rows, caption) {
   const cp = casCopy();
-  const wrap = el("div", "cas-visual");
-  wrap.append(el("p", "cas-caption", caption));
+  const wrap2 = el("div", "cas-visual");
+  wrap2.append(el("p", "cas-caption", caption));
   const legend2 = el("div", "cas-legend");
   const keys = [
     ["cas-seg-serious", cp.legend.serious],
@@ -23440,9 +23633,9 @@ function severityStrips(rows, caption) {
     item.append(el("i", `cas-swatch ${cls}`), el("span", "", label));
     legend2.append(item);
   }
-  wrap.append(legend2);
-  for (const row of rows) wrap.append(strip(row, cp));
-  return wrap;
+  wrap2.append(legend2);
+  for (const row of rows) wrap2.append(strip(row, cp));
+  return wrap2;
 }
 function tally(cell2, cp) {
   const txt2 = cellView(cell2).text.trim();
@@ -23484,8 +23677,8 @@ function detailsFor(row, cp) {
 }
 function caseTally(rows, caption) {
   const cp = casCopy();
-  const wrap = el("div", "cas-visual");
-  wrap.append(el("p", "cas-caption", caption));
+  const wrap2 = el("div", "cas-visual");
+  wrap2.append(el("p", "cas-caption", caption));
   let side = null;
   for (const row of rows) {
     const t2 = tally(row.count, cp);
@@ -23509,9 +23702,9 @@ function caseTally(rows, caption) {
       "aria-label",
       `${sideLabel} \u2014 ${cp.kind(row.kind)}: ${cellView(row.count).text}`
     );
-    wrap.append(line);
+    wrap2.append(line);
   }
-  return wrap;
+  return wrap2;
 }
 function withTable(visual, table, label) {
   const det = el("details", "cas-table-toggle");
@@ -23571,6 +23764,140 @@ function mountCasualties() {
   ];
   if (bHead) bHead.replaceChildren(...bTop);
   if (b) b.replaceChildren(...bHead ? bRest : [...bTop, ...bRest]);
+}
+
+// src/sections/disclosure.ts
+var OPEN_KEY = "pdo-open";
+var LABEL2 = {
+  en: {
+    tools: "Section controls",
+    expand: "Expand all",
+    collapse: "Collapse all"
+  },
+  fr: {
+    tools: "Contr\xF4les des sections",
+    expand: "Tout d\xE9plier",
+    collapse: "Tout replier"
+  }
+};
+var reveal;
+var defaultOpen = true;
+function pageKey2() {
+  const last = location.pathname.split("/").filter(Boolean).pop() ?? "index";
+  const name = /\.[a-z]+$/i.test(last) ? last : `${last}.html`;
+  const hits = Object.keys(PAGES).filter((k) => {
+    const p = PAGES[k].path;
+    return p === name || p.endsWith(`/${name}`);
+  });
+  if (hits.length === 1) return hits[0];
+  return document.documentElement.dataset.page ?? "home";
+}
+function readAll() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(OPEN_KEY) ?? "{}");
+    return raw && typeof raw === "object" ? raw : {};
+  } catch {
+    return {};
+  }
+}
+function storedOpen(id) {
+  return readAll()[pageKey2()]?.[id];
+}
+function saveOpen(id, open) {
+  try {
+    const all = readAll();
+    const page = pageKey2();
+    all[page] = { ...all[page] ?? {}, [id]: open };
+    localStorage.setItem(OPEN_KEY, JSON.stringify(all));
+  } catch {
+  }
+}
+function wrap(host, level) {
+  const head2 = host.querySelector(
+    ':scope > header[id^="hdr-"], :scope > h2'
+  );
+  if (!head2) return null;
+  const card3 = document.createElement("details");
+  card3.className = level === 2 ? "sec-card sec-card--sub" : "sec-card";
+  const id = head2.id || `sec-${Math.random().toString(36).slice(2, 8)}`;
+  card3.dataset.sec = id;
+  const summary = document.createElement("summary");
+  summary.className = "sec-summary";
+  summary.append(head2);
+  host.before(card3);
+  card3.append(summary, host);
+  card3.open = level === 2 ? true : storedOpen(id) ?? defaultOpen;
+  card3.addEventListener("toggle", () => {
+    saveOpen(id, card3.open);
+    if (card3.open) reveal?.(card3);
+  });
+  return card3;
+}
+var isPageShell = (s) => !!s.querySelector(":scope > header#hdr-page");
+function enhanceSections() {
+  if (typeof document === "undefined") return;
+  const sections = [
+    ...document.querySelectorAll(
+      "main section[aria-labelledby], main section#sources"
+    )
+  ].filter((s) => !s.closest("details.sec-card") && !isPageShell(s));
+  for (const section of sections) {
+    if (!wrap(section, 1)) continue;
+    for (const group2 of section.querySelectorAll(".run-group")) {
+      if (group2.closest("section") !== section) continue;
+      if (group2.closest("details.sec-card")) continue;
+      wrap(group2, 2);
+    }
+  }
+}
+function setAllCards(open) {
+  for (const card3 of document.querySelectorAll(
+    "main details.sec-card"
+  )) {
+    card3.open = open;
+    saveOpen(card3.dataset.sec ?? "", open);
+  }
+}
+function toolbar() {
+  document.querySelector("main > .sec-tools")?.remove();
+  const host = document.querySelector("main > #crumbs") ?? document.querySelector("main");
+  if (!host) return null;
+  const label = LABEL2[getLocale() === "fr" ? "fr" : "en"];
+  const bar2 = document.createElement("div");
+  bar2.className = "sec-tools";
+  bar2.setAttribute("role", "group");
+  bar2.setAttribute("aria-label", label.tools);
+  for (const [text, open] of [
+    [label.expand, true],
+    [label.collapse, false]
+  ]) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "sec-tools__btn";
+    b.textContent = text;
+    b.addEventListener("click", () => setAllCards(open));
+    bar2.append(b);
+  }
+  host.after(bar2);
+  return bar2;
+}
+var printHookBound = false;
+function initDisclosure(opts = {}) {
+  reveal = opts.onReveal;
+  if (opts.defaultOpen !== void 0) defaultOpen = opts.defaultOpen;
+  enhanceSections();
+  const bar2 = toolbar();
+  const openForPrint = () => setAllCards(true);
+  addEventListener("beforeprint", openForPrint);
+  if (!printHookBound) {
+    addEventListener("beforeprint", () => setAllCards(true));
+    printHookBound = true;
+  }
+  return () => {
+    reveal = void 0;
+    bar2?.remove();
+    removeEventListener("beforeprint", openForPrint);
+  };
 }
 
 // src/entry/main.ts
@@ -23650,6 +23977,13 @@ function render2() {
       console.error(`[${mount2.name}]`, err);
     }
   }
+  initDisclosure({
+    onReveal: (card3) => {
+      if (card3.querySelector("canvas")) {
+        requestAnimationFrame(() => dispatchEvent(new Event("resize")));
+      }
+    }
+  });
 }
 var frame = 0;
 function scheduleRender() {
