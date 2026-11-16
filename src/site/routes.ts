@@ -29,9 +29,15 @@ export const CREDIT_LINK_LABEL: Bi = {
 export const LICENCE_LABEL: Bi = { en: "Licence", fr: "Licence" };
 
 export type PageId =
-  | "home" | "2026" | "historic" | "contribute"
-  | "2026/turnout" | "2026/violence" | "2026/costs"
-  | "historic/movements" | "historic/series";
+  | "home"
+  | "2026"
+  | "historic"
+  | "contribute"
+  | "2026/turnout"
+  | "2026/violence"
+  | "2026/costs"
+  | "historic/movements"
+  | "historic/series";
 
 export interface CardSpec {
   readonly href: PageId;
@@ -110,7 +116,7 @@ export const PAGES: Readonly<Record<PageId, PageSpec>> = {
     kind: "group",
     title: { en: "The Ongoing Revolt", fr: "La révolte en cours" },
     blurb: {
-      en: "The autumn 2026 movement. Three sections: how many people were in the street, what the policing cost them and the state, and what it cost in euros.",
+      en: "The autumn 2026 movement. Three sections: how many people were in the street, what it cost in arrests and injuries, and what it cost in euros.",
       fr: "Le mouvement de l’automne 2026. Trois sections : combien de personnes dans la rue, ce que le maintien de l’ordre a coûté aux personnes et à l’État, et ce qu’il a coûté en euros.",
     },
     parent: "home",
@@ -181,8 +187,8 @@ export const PAGES: Readonly<Record<PageId, PageSpec>> = {
     kind: "section",
     title: { en: "Turnout", fr: "Participation" },
     blurb: {
-      en: "Nine days in the window carry a published crowd; the rest are left empty rather than interpolated. The blockade line is a separate statistic, dotted across the Toussaint holiday because no lycée was in session.",
-      fr: "Neuf journées de la fenêtre portent une foule publiée ; les autres restent vides plutôt qu’interpolées. La courbe des blocages est une statistique à part, en pointillés pendant la Toussaint car aucun lycée n’était en cours.",
+      en: "Some days in the window carry a published crowd; the rest are left empty rather than interpolated. The blockade line is a separate statistic, dotted across the Toussaint holiday because no lycée was in session.",
+      fr: "Quelques journées de la fenêtre portent une foule publiée ; les autres restent vides plutôt qu’interpolées. La courbe des blocages est une statistique à part, en pointillés pendant la Toussaint car aucun lycée n’était en cours.",
     },
     parent: "2026",
     cards: [],

@@ -5,7 +5,8 @@ export const FR_META: LocaleMeta = {
   label: "Français",
   meta: {
     htmlLang: "fr",
-    title: "L’activité contestataire en France — septembre–novembre 2026",
+    title:
+      "L’activité contestataire en France — 15 septembre – 11 novembre 2026",
     description:
       "Foules, interpellations, blessés et dommages du mouvement de l’automne 2026, comparés à six mouvements français antérieurs.",
   },
@@ -29,7 +30,7 @@ export const FR_META: LocaleMeta = {
     d: {
       title: "D · Transposé : un panneau par série",
       blurb:
-        "Les mêmes données avec les mouvements superposés, pour lire une même mesure de 1968 à 2026. L’axe des x est le nombre de semaines écoulées, arrêté à la dernière semaine de chiffres de maintien de l’ordre. Les comparaisons de l’infobulle fonctionnent comme en section C, mais sont calculées sur les seules semaines tracées dans le panneau survolé.",
+        "Les mêmes données avec les mouvements superposés, pour lire une même mesure de 1968 à 2026. L’axe des x est le nombre de semaines écoulées, arrêté à la dernière semaine de chiffres de maintien de l’ordre. Les comparaisons de l’infobulle fonctionnent comme sur la page des mouvements, mais sont calculées sur les seules semaines tracées dans le panneau survolé.",
       note: "Survolez une mesure ou un mouvement pour l’isoler. L’ordre des panneaux suit celui de la légende.",
     },
     e: {
@@ -37,18 +38,6 @@ export const FR_META: LocaleMeta = {
       blurb:
         "Chaque panneau rassemble une mesure pour les mouvements qui l’ont publiée. Le point est la médiane de la série — la semaine typique — et le triangle sa pointe, le plus grand chiffre publié. La barre claire derrière chaque paire couvre toute la série, de son plus petit chiffre à son plus grand : un mouvement régulier se lit donc comme une barre courte, un mouvement ayant connu quelques semaines énormes comme une barre longue. L’axe est logarithmique, de sorte que quelques marches de masse et une semaine ordinaire peuvent partager un panneau.",
       note: "Chaque chiffre est compté une fois, au milieu de sa fourchette lorsqu’une fourchette a été publiée. Le nombre de chiffres publiés figure dans l’infobulle : avec un seul chiffre, la médiane et la pointe sont le même nombre.",
-    },
-  },
-  groups: {
-    ongoing: {
-      title: "La révolte en cours",
-      blurb:
-        "Les deux sections portent sur le mouvement de l’automne 2026. A trace chaque chiffre quotidien publié ; B agrège ces mêmes chiffres par semaine, de sorte qu’une foule de jour de pointe et un total d’interpellations ne partagent jamais un axe.",
-    },
-    historical: {
-      title: "Comparaisons historiques",
-      blurb:
-        "Les mêmes mesures rapportées à six mouvements français antérieurs : 1968, 1986, 1995, 2006, 2010 et 2016. C garde un panneau par mouvement ; D un panneau par série.",
     },
   },
 };

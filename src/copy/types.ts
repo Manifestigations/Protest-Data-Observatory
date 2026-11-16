@@ -23,11 +23,10 @@ export interface LocaleMeta {
     readonly title: string;
     readonly description: string;
   };
-  readonly groups: {
+  readonly groups?: {
     readonly ongoing: SectionCopy;
     readonly historical: SectionCopy;
   };
-
   readonly sections: Readonly<Record<SectionId, SectionCopy>>;
 }
 
@@ -111,6 +110,7 @@ export interface PanelsCopy {
   readonly withAction: string;
   readonly seriesContinues: string;
   readonly obs: string;
+  readonly obsSep: string;
   readonly valueRange: string;
   readonly itemMeta: string;
   readonly median: string;

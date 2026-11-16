@@ -207,7 +207,7 @@ export const CHART_EN: ChartCopy = {
     },
     "2026-11-05": {
       strikers:
-        "Derived, not counted. The government put 9.89% of state civil servants on strike at midday and 11% by the end of the day, on 2,500,000 agents: 247,250 to 275,000 — the band is the timing of the count, not an error bar. The Education ministry's own weighted rate was 12.77% (19.14% in the first degree, 25.65% for life-schools staff): a component of that total, never an addition to it.",
+        "Derived, not counted. The government put 9.89% of state civil servants on strike at midday and 11% by the end of the day, on 2,500,000 agents: 247,250 to 275,000 — the band is the timing of the count, not an error bar. Education: 12.77% of staff (ministry, excluding the Toulouse academy) = 127,700, a component of that total, never an addition to it. Excluded: local authorities 4.60% and public hospitals 3.93% (no headcount published), the SNES-FSU's 52% (narrower scope), and the CGT's “nearly 1.6 million on strike and in demonstrations”, which spans two populations and already bounds the turnout band above.",
       forcesInjured: "The day's own figure: 53 at 18:00, 112 on consolidation.",
       forcesInjuredStock:
         "The ministry's final running total: 1,580 injured since the start of the movement. It reconciles exactly with the published daily increments — 1,144 (17 October) + 267 (24 October) + 116 (31 October) + 53 (5 November) = 1,580.",
@@ -232,7 +232,7 @@ export const CHART_EN: ChartCopy = {
     "2026-10-05": "deployment estimated",
     "2026-10-06": "deployment estimated",
     "2026-10-08": "deployment estimated",
-    "2026-10-12": "estimé — Île-de-France, Lyon et Strasbourg",
+    "2026-10-12": "estimated — Île-de-France, Lyon and Strasbourg",
     "2026-10-13": "deployment estimated",
     "2026-10-17": "deployment published",
     "2026-10-18": "estimated — Paris curfew",

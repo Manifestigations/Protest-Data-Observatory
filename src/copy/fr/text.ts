@@ -7,7 +7,8 @@ export const TEXT_FR = {
     act: "Acte {n}",
     withAction: "{when} · {action}",
     seriesContinues: "{name} (suite)",
-    obs: "observations {counts} sur {weeks}",
+    obs: "relevés\u00A0: {counts}",
+    obsSep: " · ",
     valueRange: "{lo}–{hi}",
     itemMeta: "fourchette {range} · jusqu’à la semaine {n}",
     median: "médiane",
@@ -36,7 +37,7 @@ export const TEXT_FR = {
     noteEpisodes:
       "Chaque mouvement est comparé à sa propre série — sa moyenne, sa médiane et son premier chiffre publié — et le plus grand rapport sur les sept mouvements est affiché. Un rapport au premier chiffre peut atteindre des milliers de pour cent lorsqu’un mouvement a commencé avec une poignée de personnes.",
     noteEpisodesCapped:
-      "Comme en section C, mais sur les seules semaines tracées en section D, qui s’arrêtent à la dernière semaine de chiffres de maintien de l’ordre.",
+      "Sur les seules semaines tracées ici, qui s’arrêtent à la dernière semaine de chiffres de maintien de l’ordre.",
     eurM: "{v} M€",
     none: "aucun chiffre publié",
   },

@@ -7,6 +7,7 @@ import { mountCrossEpisode } from "../charts/trellis/index.ts";
 import {
   applyStaticCopy,
   fill,
+  getLocale,
   localeMeta,
   onLocaleChange,
   syncLangSwitch,
@@ -18,7 +19,7 @@ import { applyUrlLang, mountLangSwitch } from "../core/lang.ts";
 import { initTheme } from "../core/theme.ts";
 import { mountCards } from "../sections/cards/index.ts";
 import { mountCasualties } from "../sections/casualties.ts";
-import { renderChrome } from "../sections/chrome.ts";
+import { currentPage, renderChrome } from "../sections/chrome.ts";
 import { mountContext } from "../sections/context/context.ts";
 import { mountKpis, mountKpiPresets } from "../sections/kpis.ts";
 import { mountPerCapita } from "../sections/percapita/percapita.ts";
@@ -42,7 +43,9 @@ import { mountContribute } from "../sections/contribute/index.ts";
 /* Static anchors carry a plausible href for no-JS readers; this makes it
    correct for the page's depth (2026/turnout.html → ../contribute.html). */
 function fixPageLinks(page: PageSpec): void {
-  for (const a of document.querySelectorAll<HTMLAnchorElement>("[data-page-link]")) {
+  for (const a of document.querySelectorAll<HTMLAnchorElement>(
+    "[data-page-link]",
+  )) {
     const id = a.dataset.pageLink as PageId | undefined;
     if (id && PAGES[id]) a.href = pageHref(page.path, id);
   }
@@ -99,12 +102,14 @@ function mountPage(page: PageSpec): void {
   mountCards(page.path, page.cards);
 }
 
+const page2 = currentPage();
 export function render(): void {
   destroyAll();
-  const page = pageById(document.documentElement.dataset.page ?? "") ?? PAGES.home;
+  const page =
+    pageById(document.documentElement.dataset.page ?? "") ?? PAGES.home;
   const id = pageKey(page);
 
-  renderChrome();
+  renderChrome(page2);
   renderSources(id);
   mountPage(page);
   fixPageLinks(page);
@@ -114,11 +119,21 @@ export function render(): void {
   syncLangSwitch();
 
   for (const mount of [
-    mountCharts, mountKpis, mountKpiPresets, mountCasualties,
-    mountPerCapita, mountContext, mountCrossEpisode, mountSummary,
+    mountCharts,
+    mountKpis,
+    mountKpiPresets,
+    mountCasualties,
+    mountPerCapita,
+    mountContext,
+    mountCrossEpisode,
+    mountSummary,
     mountContribute,
   ]) {
-    try { mount(); } catch (err) { console.error(`[${mount.name}]`, err); }
+    try {
+      mount();
+    } catch (err) {
+      console.error(`[${mount.name}]`, err);
+    }
   }
 }
 
@@ -138,6 +153,8 @@ export function scheduleRender(): void {
 
 function boot(): void {
   applyUrlLang();
+  if (document.documentElement.dataset.lang !== getLocale())
+    console.error("[lang] DOM attribute out of sync with locale state");
   mountLangSwitch();
   initTheme();
   onLocaleChange(() => {

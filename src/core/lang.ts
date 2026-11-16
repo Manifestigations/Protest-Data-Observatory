@@ -7,6 +7,7 @@ import {
   localeFromUrl,
   normalizeLocale,
   setLang,
+  syncLangAttrs,
   syncLangSwitch,
   type Lang,
 } from "../copy";
@@ -19,6 +20,7 @@ export function applyUrlLang(search?: string): Lang {
   const from = localeFromUrl(search);
   if (from && from !== getLocale())
     setLang(from, { persist: false, notify: false });
+  syncLangAttrs();
   return getLocale();
 }
 

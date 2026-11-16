@@ -107,6 +107,14 @@ export interface SetLangOptions {
   notify?: boolean;
 }
 
+/** Write <html lang> / data-lang from `current`. Safe to call any number of times. */
+export function syncLangAttrs(): void {
+  if (!hasDom()) return;
+  const locale = localeMeta(current);
+  document.documentElement.lang = locale.meta.htmlLang;
+  document.documentElement.dataset.lang = current;
+}
+
 export function setLang(next: Lang | string, opts: SetLangOptions = {}): Lang {
   const { persist = true, notify = true } = opts;
   const target = normalizeLocale(next);
@@ -114,27 +122,25 @@ export function setLang(next: Lang | string, opts: SetLangOptions = {}): Lang {
     warnOnce(`locale:${String(next)}`, `unrecognised locale "${String(next)}"`);
     return current;
   }
+
   const previous = current;
-  if (previous === target) return current;
+  const changed = previous !== target;
 
-  current = target;
-  version += 1;
-
-  const locale = localeMeta(target);
-  buildFormats(locale.tag);
-
-  if (hasDom()) {
-    if (persist) {
+  if (changed) {
+    current = target;
+    version += 1;
+    buildFormats(localeMeta(target).tag);
+    if (persist && hasDom()) {
       try {
         window.localStorage.setItem(STORAGE_KEY, target);
       } catch {
         /* private mode or quota — never fatal */
       }
     }
-    document.documentElement.lang = locale.meta.htmlLang;
-    document.documentElement.dataset.lang = target;
   }
-  if (notify) emit(target, previous);
+
+  syncLangAttrs();
+  if (changed && notify) emit(target, previous);
   return current;
 }
 

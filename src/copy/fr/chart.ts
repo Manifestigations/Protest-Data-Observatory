@@ -29,6 +29,10 @@ export const CHART_FR: ChartCopy = {
       "Première journée nationale scolaire après les vacances, avec les stocks ministériels.",
     "2026-10-06":
       "Acte III — première manifestation étudiante nationale de plein exercice.",
+    "2026-10-07":
+      "Le ministère de l’Intérieur suspend l’usage des grenades de désencerclement pour les mobilisations étudiantes, après qu’un lycéen a été blessé à Lens.",
+    "2026-10-09":
+      "Le ministère de la Justice publie son premier bilan judiciaire : 6 877 gardes à vue depuis la mi-septembre.",
     "2026-10-13":
       "La fourchette de foule va du simple au triple : plancher ministériel, plafond syndical.",
     "2026-10-16":
@@ -128,10 +132,16 @@ export const CHART_FR: ChartCopy = {
     "2026-10-08": {
       damagesCost:
         "Ancrage de l’incrément de dommages francilien du 1er au 8 octobre. Les mêmes 6 M€ sont publiés au 6 octobre et ne sont pas comptés deux fois.",
+      strikers:
+        "Chiffre dérivé, non compté. Le ministère de l’Éducation publie un taux de participation pondéré de 0,82 % pour les personnels de l’éducation ; aucun taux pour l’ensemble de la fonction publique n’a été publié ce jour-là, le taux de l’éducation tient donc lieu de taux de la fonction publique sur la même base de 2 500 000 agents : 20 500. L’approximation est connue pour sous-estimer — là où les deux existent, l’éducation était à 11,47 % contre environ 10 % pour la fonction publique (29 sept.) et à 12,77 % contre 10,46 % (5 nov.).",
       blockades:
         "Mesure plus large : 224 établissements fermés (ministère) ; plus de 150 encore perturbés (franceinfo). Le chiffre de 224 est celui que le ministère rappellera le 13 octobre.",
       forcesInjuredStock:
         "Cumul : 761 blessés (Nuñez). Les incréments publiés se recoupent — 715 le 5 octobre plus 43 le 6 octobre font 758.",
+    },
+    "2026-10-09": {
+      arrests:
+        "Bilan judiciaire du ministère de la Justice, arrêté au 8 oct. 17 h : 6 877 personnes placées en garde à vue depuis le début du mouvement, 86 % de mineurs, 2 376 poursuivies, 21 en détention. Un périmètre différent (depuis la mi-septembre) et une statistique différente (gardes à vue, non interpellations) de la série du ministère de l’Intérieur — non réconciliable avec elle.",
     },
     "2026-10-10": {
       blockades: "« Plus de 40 lycées bloqués » (AFP/Reuters, 10 octobre).",
@@ -149,6 +159,8 @@ export const CHART_FR: ChartCopy = {
     "2026-10-13": {
       blockades:
         "Mesure plus large : 214 établissements fermés, 94,2 % de lycées ouverts — contre 224 le 8 octobre. Le ministère parle d’un mouvement « en recul ».",
+      strikers:
+        "Chiffre dérivé, non compté. 3,71 % de participation pondérée dans l’éducation (ministère), utilisés comme approximation de la fonction publique sur la base de 2 500 000 agents : 92 750. Taux propres à l’éducation ce jour-là : 4,52 % des enseignants, 10,31 % des personnels de vie scolaire. Le chiffre ministériel exclut Toulouse, La Réunion (vacances depuis le 10 octobre), la Guadeloupe, la Martinique et la Guyane (décalage horaire).",
     },
     "2026-10-14": {
       forcesInjuredStock: "Cumul : 937 blessés (Nuñez).",
@@ -175,6 +187,8 @@ export const CHART_FR: ChartCopy = {
     "2026-10-24": {
       damagesCost:
         "Bilan national de CCI France pour le 17–24 octobre — un surensemble de la cellule du 17 octobre, jamais additionné.",
+      forcesInjuredStock:
+        "Dérivé : 1 144 (17 octobre) plus 267 blessés ce jour-là font 1 411.",
     },
     "2026-10-31": {
       damagesCost:
@@ -204,6 +218,10 @@ export const CHART_FR: ChartCopy = {
       arrests:
         "Chiffres de préfectures régionales uniquement — Bordeaux, Lyon, Strasbourg.",
     },
+    "2026-11-10": {
+      strikers:
+        "Chiffre dérivé, non compté. 1,55 % de participation pondérée dans l’éducation (ministère), utilisés comme approximation de la fonction publique sur la base de 2 500 000 agents : 38 750. Taux propres à l’éducation : 1,60 % des enseignants, 7,01 % des personnels de vie scolaire. Le chiffre ministériel ne couvre que les académies métropolitaines.",
+    },
   },
   deployNotes: {
     "2026-09-28": "dispositif estimé",
@@ -214,7 +232,7 @@ export const CHART_FR: ChartCopy = {
     "2026-10-05": "dispositif estimé",
     "2026-10-06": "dispositif estimé",
     "2026-10-08": "dispositif estimé",
-    "2026-10-12": "estimated — Île-de-France, Lyon and Strasbourg",
+    "2026-10-12": "estimé — Île-de-France, Lyon et Strasbourg",
     "2026-10-13": "dispositif estimé",
     "2026-10-17": "dispositif publié",
     "2026-10-18": "estimé — couvre-feu parisien",
@@ -317,7 +335,7 @@ export const CHART_FR: ChartCopy = {
     protestersDaily: {
       title: "Manifestants, personnes en grève et lycées bloqués, par jour",
       subtitle:
-        "Foules et personnes en grève sur l’axe de gauche, blocages de lycées sur l’axe de droite. Les personnes en grève sont dérivées de taux de participation publiés — aucune autorité n’a publié de décompte. La ligne en pointillés correspond aux vacances de la Toussaint",
+        "Foules et personnes en grève sur l’axe de gauche, blocages de lycées sur l’axe de droite. Les personnes en grève sont dérivées de taux de participation publiés — aucune autorité n’a publié de décompte. La ligne en pointillés correspond aux vacances de la Toussaint. Trois des cinq points de grève sont dérivés.",
       y: "Personnes dans la rue ou en grève",
       yRight: "Lycées bloqués ou fermés",
     },

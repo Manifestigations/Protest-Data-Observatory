@@ -185,13 +185,11 @@ export function tooltipSpec(kind: TrellisKind) {
 
 export function observations(ep: Episode): string {
   const m = t();
-  const counts = METRICS.map(
-    (k) => ep.weeks.filter((r) => r[k] !== undefined).length,
-  ).join("·");
-  return fill(m.panels.obs, {
-    counts,
-    weeks: plural(m.units.weeks, ep.weeks.length),
-  });
+  const counts = METRICS.map((k) => {
+    const n = ep.weeks.filter((r) => r[k] !== undefined).length;
+    return `${m.items[k].short} ${n}`;
+  }).join(m.panels.obsSep);
+  return fill(m.panels.obs, { counts });
 }
 
 export function panelFigure(strip: string, meta: string, note?: string) {

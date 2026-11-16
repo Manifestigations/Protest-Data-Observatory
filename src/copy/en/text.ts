@@ -7,7 +7,8 @@ export const TEXT_EN = {
     act: "Act {n}",
     withAction: "{when} · {action}",
     seriesContinues: "{name} (cont.)",
-    obs: "observations {counts} over {weeks}",
+    obs: "observations: {counts}",
+    obsSep: " · ",
     valueRange: "{lo}–{hi}",
     itemMeta: "range {range} · up to week {n}",
     median: "median",
@@ -36,7 +37,7 @@ export const TEXT_EN = {
     noteEpisodes:
       "Each movement is compared with its own series — its mean, its median and its first published figure — and the largest ratio across all seven movements is shown. A ratio of the first figure can run into the thousands when a movement began with a handful of people.",
     noteEpisodesCapped:
-      "As in section C, but over the weeks plotted in section D only, which stop at the last week with an enforcement figure.",
+      "Over the weeks plotted here only, which stop at the last week with an enforcement figure.",
     eurM: "€{v}M",
     none: "no figure published",
   },

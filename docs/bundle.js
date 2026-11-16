@@ -11711,7 +11711,7 @@ var EN_META = {
   label: "English",
   meta: {
     htmlLang: "en",
-    title: "Protest activity in France \u2014 September\u2013November 2026",
+    title: "Protest activity in France \u2014 15 September \u2013 11 November 2026",
     description: "Turnout, arrests, injuries and damage in the autumn 2026 movement, set against six earlier French movements."
   },
   sections: {
@@ -11730,23 +11730,13 @@ var EN_META = {
     },
     d: {
       title: "D \xB7 Transposed: one panel per series",
-      blurb: "The same data with movements overlaid, so a single measure can be read across 1968 to 2026. The x axis is elapsed weeks, capped at the last week with enforcement figures. Tooltip comparisons work as in section C, but are computed over the weeks actually plotted in the hovered panel.",
+      blurb: "The same data with movements overlaid, so a single measure can be read across 1968 to 2026. The x axis is elapsed weeks, capped at the last week with enforcement figures. Tooltip comparisons work as on the movement page, but are computed over the weeks actually plotted in the hovered panel.",
       note: "Hover a measure or a movement to isolate it. Panel order matches legend order."
     },
     e: {
       title: "E \xB7 Median and peak",
       blurb: "Each panel gathers one measure across the movements that published it. The dot is the median of the series \u2014 the typical week \u2014 and the triangle its peak, the largest single figure. The pale bar behind each pair spans the whole series, from its smallest figure to its largest, so a movement that was steady reads as a short bar and one that had a few enormous weeks as a long one. The axis is logarithmic, so a handful of mass marches and a routine week can share a panel.",
       note: "Each figure is counted once, at the midpoint of its range where one was published. The count of published figures is in the tooltip: with a single figure the median and the peak are the same number."
-    }
-  },
-  groups: {
-    ongoing: {
-      title: "The Ongoing Revolt",
-      blurb: "Both sections cover the autumn 2026 movement. A plots every published daily figure; B aggregates those same figures by week, so a peak-day crowd and a summed arrest count never share an axis."
-    },
-    historical: {
-      title: "Historical Comparisons",
-      blurb: "The same measures set against six earlier French movements: 1968, 1986, 1995, 2006, 2010 and 2016. C keeps one panel per movement; D keeps one panel per series."
     }
   }
 };
@@ -11824,14 +11814,14 @@ var FLAGS = [
     }
   }
 ];
-function suffixMap(lang) {
+function suffixMap(lang2) {
   const out = {};
-  for (const f of FLAGS) out[f.key] = f.suffix ? f.suffix[lang] : "";
+  for (const f of FLAGS) out[f.key] = f.suffix ? f.suffix[lang2] : "";
   return out;
 }
-function flagMap(lang) {
+function flagMap(lang2) {
   const out = {};
-  for (const f of FLAGS) out[f.key] = f.chip[lang];
+  for (const f of FLAGS) out[f.key] = f.chip[lang2];
   return out;
 }
 var MARKERS = FLAGS.filter((f) => f.long !== null).map(
@@ -11980,7 +11970,7 @@ var CHART_EN = {
       blockades: "Education ministry: 48 schools blocked. The USL counted nearly 500."
     },
     "2026-11-05": {
-      strikers: "Derived, not counted. The government put 9.89% of state civil servants on strike at midday and 11% by the end of the day, on 2,500,000 agents: 247,250 to 275,000 \u2014 the band is the timing of the count, not an error bar. The Education ministry's own weighted rate was 12.77% (19.14% in the first degree, 25.65% for life-schools staff): a component of that total, never an addition to it.",
+      strikers: "Derived, not counted. The government put 9.89% of state civil servants on strike at midday and 11% by the end of the day, on 2,500,000 agents: 247,250 to 275,000 \u2014 the band is the timing of the count, not an error bar. Education: 12.77% of staff (ministry, excluding the Toulouse academy) = 127,700, a component of that total, never an addition to it. Excluded: local authorities 4.60% and public hospitals 3.93% (no headcount published), the SNES-FSU's 52% (narrower scope), and the CGT's \u201Cnearly 1.6 million on strike and in demonstrations\u201D, which spans two populations and already bounds the turnout band above.",
       forcesInjured: "The day's own figure: 53 at 18:00, 112 on consolidation.",
       forcesInjuredStock: "The ministry's final running total: 1,580 injured since the start of the movement. It reconciles exactly with the published daily increments \u2014 1,144 (17 October) + 267 (24 October) + 116 (31 October) + 53 (5 November) = 1,580.",
       protesterInjured: 'Published as a floor: "at least this many".',
@@ -12002,7 +11992,7 @@ var CHART_EN = {
     "2026-10-05": "deployment estimated",
     "2026-10-06": "deployment estimated",
     "2026-10-08": "deployment estimated",
-    "2026-10-12": "estim\xE9 \u2014 \xCEle-de-France, Lyon et Strasbourg",
+    "2026-10-12": "estimated \u2014 \xCEle-de-France, Lyon and Strasbourg",
     "2026-10-13": "deployment estimated",
     "2026-10-17": "deployment published",
     "2026-10-18": "estimated \u2014 Paris curfew",
@@ -12485,7 +12475,8 @@ var TEXT_EN = {
     act: "Act {n}",
     withAction: "{when} \xB7 {action}",
     seriesContinues: "{name} (cont.)",
-    obs: "observations {counts} over {weeks}",
+    obs: "observations: {counts}",
+    obsSep: " \xB7 ",
     valueRange: "{lo}\u2013{hi}",
     itemMeta: "range {range} \xB7 up to week {n}",
     median: "median",
@@ -12509,7 +12500,7 @@ var TEXT_EN = {
     noteDaily: "Ratios are computed on the daily series: each published figure is divided by the mean, the median and the first published figure of its own series. Days with no published figure are left out, not counted as zero. The \u20AC1,000M damages total of 24 October carries no marker on the chart and is left out here too.",
     noteWeekly: "Ratios are computed on the weekly series: each published figure is divided by the mean, the median and the first published figure of its own series. Weeks with no published figure are left out, not counted as zero.",
     noteEpisodes: "Each movement is compared with its own series \u2014 its mean, its median and its first published figure \u2014 and the largest ratio across all seven movements is shown. A ratio of the first figure can run into the thousands when a movement began with a handful of people.",
-    noteEpisodesCapped: "As in section C, but over the weeks plotted in section D only, which stop at the last week with an enforcement figure.",
+    noteEpisodesCapped: "Over the weeks plotted here only, which stop at the last week with an enforcement figure.",
     eurM: "\u20AC{v}M",
     none: "no figure published"
   },
@@ -12566,6 +12557,8 @@ var CHART_FR = {
     "2026-10-03": "Aucun chiffre de week-end n\u2019a \xE9t\xE9 publi\xE9 ; les interpellations des 3\u20134 octobre sont d\xE9riv\xE9es par soustraction. 735 \xE9tablissements perturb\xE9s \u2014 une mesure plus large que les blocages ; le point est signal\xE9 comme tel.",
     "2026-10-05": "Premi\xE8re journ\xE9e nationale scolaire apr\xE8s les vacances, avec les stocks minist\xE9riels.",
     "2026-10-06": "Acte III \u2014 premi\xE8re manifestation \xE9tudiante nationale de plein exercice.",
+    "2026-10-07": "Le minist\xE8re de l\u2019Int\xE9rieur suspend l\u2019usage des grenades de d\xE9sencerclement pour les mobilisations \xE9tudiantes, apr\xE8s qu\u2019un lyc\xE9en a \xE9t\xE9 bless\xE9 \xE0 Lens.",
+    "2026-10-09": "Le minist\xE8re de la Justice publie son premier bilan judiciaire : 6 877 gardes \xE0 vue depuis la mi-septembre.",
     "2026-10-13": "La fourchette de foule va du simple au triple : plancher minist\xE9riel, plafond syndical.",
     "2026-10-16": "Dernier jour de cours avant les vacances de la Toussaint : \xE0 partir du 17 octobre aucun lyc\xE9e n\u2019est en cours, le d\xE9compte des blocages s\u2019interrompt.",
     "2026-10-17": "La journ\xE9e de pointe. La fourchette de dommages ici est l\u2019estimation IFRAP des 17\u201318 octobre, non un flux quotidien. Vacances de la Toussaint \u2014 \xE9tablissements ferm\xE9s. ",
@@ -12630,8 +12623,12 @@ var CHART_FR = {
     },
     "2026-10-08": {
       damagesCost: "Ancrage de l\u2019incr\xE9ment de dommages francilien du 1er au 8 octobre. Les m\xEAmes 6 M\u20AC sont publi\xE9s au 6 octobre et ne sont pas compt\xE9s deux fois.",
+      strikers: "Chiffre d\xE9riv\xE9, non compt\xE9. Le minist\xE8re de l\u2019\xC9ducation publie un taux de participation pond\xE9r\xE9 de 0,82 % pour les personnels de l\u2019\xE9ducation ; aucun taux pour l\u2019ensemble de la fonction publique n\u2019a \xE9t\xE9 publi\xE9 ce jour-l\xE0, le taux de l\u2019\xE9ducation tient donc lieu de taux de la fonction publique sur la m\xEAme base de 2 500 000 agents : 20 500. L\u2019approximation est connue pour sous-estimer \u2014 l\xE0 o\xF9 les deux existent, l\u2019\xE9ducation \xE9tait \xE0 11,47 % contre environ 10 % pour la fonction publique (29 sept.) et \xE0 12,77 % contre 10,46 % (5 nov.).",
       blockades: "Mesure plus large : 224 \xE9tablissements ferm\xE9s (minist\xE8re) ; plus de 150 encore perturb\xE9s (franceinfo). Le chiffre de 224 est celui que le minist\xE8re rappellera le 13 octobre.",
       forcesInjuredStock: "Cumul : 761 bless\xE9s (Nu\xF1ez). Les incr\xE9ments publi\xE9s se recoupent \u2014 715 le 5 octobre plus 43 le 6 octobre font 758."
+    },
+    "2026-10-09": {
+      arrests: "Bilan judiciaire du minist\xE8re de la Justice, arr\xEAt\xE9 au 8 oct. 17 h : 6 877 personnes plac\xE9es en garde \xE0 vue depuis le d\xE9but du mouvement, 86 % de mineurs, 2 376 poursuivies, 21 en d\xE9tention. Un p\xE9rim\xE8tre diff\xE9rent (depuis la mi-septembre) et une statistique diff\xE9rente (gardes \xE0 vue, non interpellations) de la s\xE9rie du minist\xE8re de l\u2019Int\xE9rieur \u2014 non r\xE9conciliable avec elle."
     },
     "2026-10-10": {
       blockades: "\xAB Plus de 40 lyc\xE9es bloqu\xE9s \xBB (AFP/Reuters, 10 octobre)."
@@ -12643,7 +12640,8 @@ var CHART_FR = {
       blockades: "Pr\xE9fecture du Rh\xF4ne uniquement : 19 des 27 \xE9tablissements touch\xE9s \xE9taient des lyc\xE9es (six universit\xE9s, deux coll\xE8ges). L\u2019\xCEle-de-France comptait pr\xE8s de 80 lyc\xE9es perturb\xE9s le m\xEAme jour."
     },
     "2026-10-13": {
-      blockades: "Mesure plus large : 214 \xE9tablissements ferm\xE9s, 94,2 % de lyc\xE9es ouverts \u2014 contre 224 le 8 octobre. Le minist\xE8re parle d\u2019un mouvement \xAB en recul \xBB."
+      blockades: "Mesure plus large : 214 \xE9tablissements ferm\xE9s, 94,2 % de lyc\xE9es ouverts \u2014 contre 224 le 8 octobre. Le minist\xE8re parle d\u2019un mouvement \xAB en recul \xBB.",
+      strikers: "Chiffre d\xE9riv\xE9, non compt\xE9. 3,71 % de participation pond\xE9r\xE9e dans l\u2019\xE9ducation (minist\xE8re), utilis\xE9s comme approximation de la fonction publique sur la base de 2 500 000 agents : 92 750. Taux propres \xE0 l\u2019\xE9ducation ce jour-l\xE0 : 4,52 % des enseignants, 10,31 % des personnels de vie scolaire. Le chiffre minist\xE9riel exclut Toulouse, La R\xE9union (vacances depuis le 10 octobre), la Guadeloupe, la Martinique et la Guyane (d\xE9calage horaire)."
     },
     "2026-10-14": {
       forcesInjuredStock: "Cumul : 937 bless\xE9s (Nu\xF1ez)."
@@ -12662,7 +12660,8 @@ var CHART_FR = {
       arrests: "Chiffres des pr\xE9fectures de Guadeloupe uniquement \u2014 r\xE9gional."
     },
     "2026-10-24": {
-      damagesCost: "Bilan national de CCI France pour le 17\u201324 octobre \u2014 un surensemble de la cellule du 17 octobre, jamais additionn\xE9."
+      damagesCost: "Bilan national de CCI France pour le 17\u201324 octobre \u2014 un surensemble de la cellule du 17 octobre, jamais additionn\xE9.",
+      forcesInjuredStock: "D\xE9riv\xE9 : 1 144 (17 octobre) plus 267 bless\xE9s ce jour-l\xE0 font 1 411."
     },
     "2026-10-31": {
       damagesCost: "Estimation locale \u2014 aucun chiffre national de dommages n\u2019a \xE9t\xE9 publi\xE9.",
@@ -12683,6 +12682,9 @@ var CHART_FR = {
     },
     "2026-11-09": {
       arrests: "Chiffres de pr\xE9fectures r\xE9gionales uniquement \u2014 Bordeaux, Lyon, Strasbourg."
+    },
+    "2026-11-10": {
+      strikers: "Chiffre d\xE9riv\xE9, non compt\xE9. 1,55 % de participation pond\xE9r\xE9e dans l\u2019\xE9ducation (minist\xE8re), utilis\xE9s comme approximation de la fonction publique sur la base de 2 500 000 agents : 38 750. Taux propres \xE0 l\u2019\xE9ducation : 1,60 % des enseignants, 7,01 % des personnels de vie scolaire. Le chiffre minist\xE9riel ne couvre que les acad\xE9mies m\xE9tropolitaines."
     }
   },
   deployNotes: {
@@ -12694,7 +12696,7 @@ var CHART_FR = {
     "2026-10-05": "dispositif estim\xE9",
     "2026-10-06": "dispositif estim\xE9",
     "2026-10-08": "dispositif estim\xE9",
-    "2026-10-12": "estimated \u2014 \xCEle-de-France, Lyon and Strasbourg",
+    "2026-10-12": "estim\xE9 \u2014 \xCEle-de-France, Lyon et Strasbourg",
     "2026-10-13": "dispositif estim\xE9",
     "2026-10-17": "dispositif publi\xE9",
     "2026-10-18": "estim\xE9 \u2014 couvre-feu parisien",
@@ -12792,7 +12794,7 @@ var CHART_FR = {
   charts: {
     protestersDaily: {
       title: "Manifestants, personnes en gr\xE8ve et lyc\xE9es bloqu\xE9s, par jour",
-      subtitle: "Foules et personnes en gr\xE8ve sur l\u2019axe de gauche, blocages de lyc\xE9es sur l\u2019axe de droite. Les personnes en gr\xE8ve sont d\xE9riv\xE9es de taux de participation publi\xE9s \u2014 aucune autorit\xE9 n\u2019a publi\xE9 de d\xE9compte. La ligne en pointill\xE9s correspond aux vacances de la Toussaint",
+      subtitle: "Foules et personnes en gr\xE8ve sur l\u2019axe de gauche, blocages de lyc\xE9es sur l\u2019axe de droite. Les personnes en gr\xE8ve sont d\xE9riv\xE9es de taux de participation publi\xE9s \u2014 aucune autorit\xE9 n\u2019a publi\xE9 de d\xE9compte. La ligne en pointill\xE9s correspond aux vacances de la Toussaint. Trois des cinq points de gr\xE8ve sont d\xE9riv\xE9s.",
       y: "Personnes dans la rue ou en gr\xE8ve",
       yRight: "Lyc\xE9es bloqu\xE9s ou ferm\xE9s"
     },
@@ -13182,7 +13184,8 @@ var TEXT_FR = {
     act: "Acte {n}",
     withAction: "{when} \xB7 {action}",
     seriesContinues: "{name} (suite)",
-    obs: "observations {counts} sur {weeks}",
+    obs: "relev\xE9s\xA0: {counts}",
+    obsSep: " \xB7 ",
     valueRange: "{lo}\u2013{hi}",
     itemMeta: "fourchette {range} \xB7 jusqu\u2019\xE0 la semaine {n}",
     median: "m\xE9diane",
@@ -13206,7 +13209,7 @@ var TEXT_FR = {
     noteDaily: "Les rapports sont calcul\xE9s sur les s\xE9ries quotidiennes : chaque chiffre publi\xE9 est divis\xE9 par la moyenne, la m\xE9diane et le premier chiffre publi\xE9 de sa propre s\xE9rie. Les jours sans chiffre publi\xE9 sont \xE9cart\xE9s, non compt\xE9s comme z\xE9ro. Le total de dommages de 1 000 M\u20AC du 24 octobre n\u2019a pas de marqueur sur le graphique et en est donc \xE9cart\xE9 ici aussi.",
     noteWeekly: "Les rapports sont calcul\xE9s sur les s\xE9ries hebdomadaires : chaque chiffre publi\xE9 est divis\xE9 par la moyenne, la m\xE9diane et le premier chiffre publi\xE9 de sa propre s\xE9rie. Les semaines sans chiffre publi\xE9 sont \xE9cart\xE9es, non compt\xE9es comme z\xE9ro.",
     noteEpisodes: "Chaque mouvement est compar\xE9 \xE0 sa propre s\xE9rie \u2014 sa moyenne, sa m\xE9diane et son premier chiffre publi\xE9 \u2014 et le plus grand rapport sur les sept mouvements est affich\xE9. Un rapport au premier chiffre peut atteindre des milliers de pour cent lorsqu\u2019un mouvement a commenc\xE9 avec une poign\xE9e de personnes.",
-    noteEpisodesCapped: "Comme en section C, mais sur les seules semaines trac\xE9es en section D, qui s\u2019arr\xEAtent \xE0 la derni\xE8re semaine de chiffres de maintien de l\u2019ordre.",
+    noteEpisodesCapped: "Sur les seules semaines trac\xE9es ici, qui s\u2019arr\xEAtent \xE0 la derni\xE8re semaine de chiffres de maintien de l\u2019ordre.",
     eurM: "{v} M\u20AC",
     none: "aucun chiffre publi\xE9"
   },
@@ -13258,15 +13261,6 @@ function fill(template, params) {
     TOKEN,
     (whole, name) => name in p ? String(p[name]) : whole
   );
-}
-function plural(a, b, c) {
-  if (typeof a === "string") {
-    const n2 = typeof b === "number" ? b : 0;
-    return Math.abs(n2) === 1 ? a : c ?? `${a}s`;
-  }
-  const isOne = Math.abs(a) === 1;
-  if (typeof b !== "string") return isOne ? "" : "s";
-  return isOne ? b : c ?? `${b}s`;
 }
 
 // src/copy/lookup.ts
@@ -13433,7 +13427,7 @@ var FR_META = {
   label: "Fran\xE7ais",
   meta: {
     htmlLang: "fr",
-    title: "L\u2019activit\xE9 contestataire en France \u2014 septembre\u2013novembre 2026",
+    title: "L\u2019activit\xE9 contestataire en France \u2014 15 septembre \u2013 11 novembre 2026",
     description: "Foules, interpellations, bless\xE9s et dommages du mouvement de l\u2019automne 2026, compar\xE9s \xE0 six mouvements fran\xE7ais ant\xE9rieurs."
   },
   sections: {
@@ -13452,23 +13446,13 @@ var FR_META = {
     },
     d: {
       title: "D \xB7 Transpos\xE9 : un panneau par s\xE9rie",
-      blurb: "Les m\xEAmes donn\xE9es avec les mouvements superpos\xE9s, pour lire une m\xEAme mesure de 1968 \xE0 2026. L\u2019axe des x est le nombre de semaines \xE9coul\xE9es, arr\xEAt\xE9 \xE0 la derni\xE8re semaine de chiffres de maintien de l\u2019ordre. Les comparaisons de l\u2019infobulle fonctionnent comme en section C, mais sont calcul\xE9es sur les seules semaines trac\xE9es dans le panneau survol\xE9.",
+      blurb: "Les m\xEAmes donn\xE9es avec les mouvements superpos\xE9s, pour lire une m\xEAme mesure de 1968 \xE0 2026. L\u2019axe des x est le nombre de semaines \xE9coul\xE9es, arr\xEAt\xE9 \xE0 la derni\xE8re semaine de chiffres de maintien de l\u2019ordre. Les comparaisons de l\u2019infobulle fonctionnent comme sur la page des mouvements, mais sont calcul\xE9es sur les seules semaines trac\xE9es dans le panneau survol\xE9.",
       note: "Survolez une mesure ou un mouvement pour l\u2019isoler. L\u2019ordre des panneaux suit celui de la l\xE9gende."
     },
     e: {
       title: "E \xB7 M\xE9diane et pointe",
       blurb: "Chaque panneau rassemble une mesure pour les mouvements qui l\u2019ont publi\xE9e. Le point est la m\xE9diane de la s\xE9rie \u2014 la semaine typique \u2014 et le triangle sa pointe, le plus grand chiffre publi\xE9. La barre claire derri\xE8re chaque paire couvre toute la s\xE9rie, de son plus petit chiffre \xE0 son plus grand : un mouvement r\xE9gulier se lit donc comme une barre courte, un mouvement ayant connu quelques semaines \xE9normes comme une barre longue. L\u2019axe est logarithmique, de sorte que quelques marches de masse et une semaine ordinaire peuvent partager un panneau.",
       note: "Chaque chiffre est compt\xE9 une fois, au milieu de sa fourchette lorsqu\u2019une fourchette a \xE9t\xE9 publi\xE9e. Le nombre de chiffres publi\xE9s figure dans l\u2019infobulle : avec un seul chiffre, la m\xE9diane et la pointe sont le m\xEAme nombre."
-    }
-  },
-  groups: {
-    ongoing: {
-      title: "La r\xE9volte en cours",
-      blurb: "Les deux sections portent sur le mouvement de l\u2019automne 2026. A trace chaque chiffre quotidien publi\xE9 ; B agr\xE8ge ces m\xEAmes chiffres par semaine, de sorte qu\u2019une foule de jour de pointe et un total d\u2019interpellations ne partagent jamais un axe."
-    },
-    historical: {
-      title: "Comparaisons historiques",
-      blurb: "Les m\xEAmes mesures rapport\xE9es \xE0 six mouvements fran\xE7ais ant\xE9rieurs : 1968, 1986, 1995, 2006, 2010 et 2016. C garde un panneau par mouvement ; D un panneau par s\xE9rie."
     }
   }
 };
@@ -13535,6 +13519,12 @@ function emit(next, previous) {
     emitting = false;
   }
 }
+function syncLangAttrs() {
+  if (!hasDom()) return;
+  const locale2 = localeMeta2(current);
+  document.documentElement.lang = locale2.meta.htmlLang;
+  document.documentElement.dataset.lang = current;
+}
 function setLang(next, opts = {}) {
   const { persist = true, notify = true } = opts;
   const target = normalizeLocale(next);
@@ -13543,22 +13533,20 @@ function setLang(next, opts = {}) {
     return current;
   }
   const previous = current;
-  if (previous === target) return current;
-  current = target;
-  version2 += 1;
-  const locale2 = localeMeta2(target);
-  buildFormats(locale2.tag);
-  if (hasDom()) {
-    if (persist) {
+  const changed = previous !== target;
+  if (changed) {
+    current = target;
+    version2 += 1;
+    buildFormats(localeMeta2(target).tag);
+    if (persist && hasDom()) {
       try {
         window.localStorage.setItem(STORAGE_KEY, target);
       } catch {
       }
     }
-    document.documentElement.lang = locale2.meta.htmlLang;
-    document.documentElement.dataset.lang = target;
   }
-  if (notify) emit(target, previous);
+  syncLangAttrs();
+  if (changed && notify) emit(target, previous);
   return current;
 }
 var LOCALES = Object.freeze([
@@ -16769,8 +16757,8 @@ var eur = (millions) => new Intl.NumberFormat("fr-FR", {
   maximumFractionDigits: 2
 }).format(millions * 1e6);
 function insertCostMethodology(anchor, canvas) {
-  const lang = getLocale();
-  const c = lang === "fr" ? HELI_COPY_FR : HELI_COPY_EN;
+  const lang2 = getLocale();
+  const c = lang2 === "fr" ? HELI_COPY_FR : HELI_COPY_EN;
   const section = document.createElement("section");
   section.className = "cost-method";
   section.dataset.role = "cost-method";
@@ -17491,13 +17479,11 @@ function tooltipSpec(kind) {
 }
 function observations(ep) {
   const m = t();
-  const counts = METRICS.map(
-    (k) => ep.weeks.filter((r) => r[k] !== void 0).length
-  ).join("\xB7");
-  return fill(m.panels.obs, {
-    counts,
-    weeks: plural(m.units.weeks, ep.weeks.length)
-  });
+  const counts = METRICS.map((k) => {
+    const n2 = ep.weeks.filter((r) => r[k] !== void 0).length;
+    return `${m.items[k].short} ${n2}`;
+  }).join(m.panels.obsSep);
+  return fill(m.panels.obs, { counts });
 }
 function panelFigure(strip, meta, note2) {
   const figure = el("figure", "trellis-panel");
@@ -17842,6 +17828,7 @@ function applyUrlLang(search) {
   const from2 = localeFromUrl(search);
   if (from2 && from2 !== getLocale())
     setLang(from2, { persist: false, notify: false });
+  syncLangAttrs();
   return getLocale();
 }
 function mountLangSwitch(host = document.querySelector(
@@ -18155,7 +18142,7 @@ var PAGES = {
     kind: "group",
     title: { en: "The Ongoing Revolt", fr: "La r\xE9volte en cours" },
     blurb: {
-      en: "The autumn 2026 movement. Three sections: how many people were in the street, what the policing cost them and the state, and what it cost in euros.",
+      en: "The autumn 2026 movement. Three sections: how many people were in the street, what it cost in arrests and injuries, and what it cost in euros.",
       fr: "Le mouvement de l\u2019automne 2026. Trois sections : combien de personnes dans la rue, ce que le maintien de l\u2019ordre a co\xFBt\xE9 aux personnes et \xE0 l\u2019\xC9tat, et ce qu\u2019il a co\xFBt\xE9 en euros."
     },
     parent: "home",
@@ -18224,8 +18211,8 @@ var PAGES = {
     kind: "section",
     title: { en: "Turnout", fr: "Participation" },
     blurb: {
-      en: "Nine days in the window carry a published crowd; the rest are left empty rather than interpolated. The blockade line is a separate statistic, dotted across the Toussaint holiday because no lyc\xE9e was in session.",
-      fr: "Neuf journ\xE9es de la fen\xEAtre portent une foule publi\xE9e ; les autres restent vides plut\xF4t qu\u2019interpol\xE9es. La courbe des blocages est une statistique \xE0 part, en pointill\xE9s pendant la Toussaint car aucun lyc\xE9e n\u2019\xE9tait en cours."
+      en: "Some days in the window carry a published crowd; the rest are left empty rather than interpolated. The blockade line is a separate statistic, dotted across the Toussaint holiday because no lyc\xE9e was in session.",
+      fr: "Quelques journ\xE9es de la fen\xEAtre portent une foule publi\xE9e ; les autres restent vides plut\xF4t qu\u2019interpol\xE9es. La courbe des blocages est une statistique \xE0 part, en pointill\xE9s pendant la Toussaint car aucun lyc\xE9e n\u2019\xE9tait en cours."
     },
     parent: "2026",
     cards: []
@@ -19314,18 +19301,18 @@ function group(sub, open) {
   details.append(summary, body);
   return details;
 }
-function callout(lang) {
+function callout(lang2) {
   const p = document.createElement("p");
   p.className = "callout callout--positive";
   p.setAttribute("role", "note");
-  p.textContent = CALLOUT[lang];
+  p.textContent = CALLOUT[lang2];
   return p;
 }
 
 // src/sections/about/index.ts
 function renderAbout(host = document.getElementById("about")) {
   if (!host) return;
-  const lang = localeMeta2().meta.htmlLang;
+  const lang2 = localeMeta2().meta.htmlLang;
   const open = /* @__PURE__ */ new Map();
   for (const el2 of host.querySelectorAll(
     "details[data-about]"
@@ -19333,16 +19320,42 @@ function renderAbout(host = document.getElementById("about")) {
     const id = el2.dataset.about;
     if (id) open.set(id, el2.open);
   }
-  host.setAttribute("aria-label", SECTION_LABEL[lang]);
-  const subs = ABOUT[lang];
+  host.setAttribute("aria-label", SECTION_LABEL[lang2]);
+  const subs = ABOUT[lang2];
   const frag = document.createDocumentFragment();
-  frag.append(callout(lang));
+  frag.append(callout(lang2));
   for (const sub of subs) frag.append(group(sub, open));
   host.replaceChildren(frag);
 }
 
+// src/copy/meta-overrides.ts
+var PAGE_SECTIONS = {
+  en: {
+    "2026/violence:a": {
+      title: "A \xB7 Daily counts, 15 September \u2013 11 November 2026",
+      blurb: "One marker per day on which an arrest, an injury or a deployment figure was published. Days with no figure stay empty rather than interpolated; gaps in a line are dashed. These are situation reports, not a series: where a figure is a floor or a running total, the tooltip says so."
+    },
+    "2026/violence:b": {
+      title: "B \xB7 Weekly aggregates",
+      blurb: "Weeks run Monday to Sunday. Arrests are summed across the week; injuries are the highest published level of the week, never a sum, and the officer-injury running total is a stock carried forward, not a weekly toll. The tooltip says which is which."
+    }
+    /* add "2026/costs:a" / "2026/costs:b" here if that page needs its own wording */
+  },
+  fr: {
+    "2026/violence:a": {
+      title: "A \xB7 D\xE9comptes quotidiens, 15 septembre \u2013 11 novembre 2026",
+      blurb: "Un marqueur par jour o\xF9 un chiffre d\u2019interpellation, de blessure ou de d\xE9ploiement a \xE9t\xE9 publi\xE9. Les jours sans chiffre restent vides plut\xF4t qu\u2019interpol\xE9s ; les lacunes d\u2019une courbe sont en pointill\xE9s. Ce sont des points de situation, non une s\xE9rie : lorsqu\u2019un chiffre est un plancher ou un cumul, l\u2019infobulle le pr\xE9cise."
+    },
+    "2026/violence:b": {
+      title: "B \xB7 Agr\xE9gats hebdomadaires",
+      blurb: "Les semaines vont du lundi au dimanche. Les interpellations sont somm\xE9es sur la semaine ; les blessures retiennent le niveau publi\xE9 le plus haut de la semaine, jamais une somme, et le cumul des bless\xE9s parmi les forces est un stock report\xE9, non un bilan hebdomadaire. L\u2019infobulle pr\xE9cise lequel est lequel."
+    }
+  }
+};
+
 // src/sections/chrome.ts
 var $ = (id) => document.getElementById(id);
+var lang = () => getLocale();
 function tag(name, className, text) {
   const el2 = document.createElement(name);
   if (className) el2.className = className;
@@ -19366,21 +19379,31 @@ function disclaimer() {
   if (!host) return;
   host.textContent = t().disclaimer.body;
 }
-function renderChrome() {
-  const m = localeMeta2();
-  document.title = m.meta.title;
+function currentPage() {
+  const last = location.pathname.split("/").filter(Boolean).pop() ?? "index";
+  const name = /\.[a-z]+$/i.test(last) ? last : `${last}.html`;
+  const hits = Object.keys(PAGES).filter((k) => {
+    const p = PAGES[k].path;
+    return p === name || p.endsWith(`/${name}`);
+  });
+  if (hits.length === 1) return hits[0];
+  const raw = document.documentElement.dataset.page ?? document.body?.dataset.page ?? "";
+  return pageById(raw) ? raw : "home";
+}
+var asPage = (p) => p && pageById(p) ? p : currentPage();
+var sec = (page, k) => PAGE_SECTIONS[lang()][`${page}:${k}`] ?? localeMeta2().sections[k];
+function renderChrome(pageIn) {
+  const page = asPage(pageIn);
   disclaimer();
   renderAbout();
-  header("hdr-run-ongoing", m.groups.ongoing, 2);
-  header("hdr-a", m.sections.a, 3);
-  header("hdr-b", m.sections.b, 3);
-  header("hdr-run-historical", m.groups.historical, 2);
-  header("hdr-c", m.sections.c, 3);
-  header("hdr-d", m.sections.d, 3);
-  header("hdr-e", m.sections.e, 3);
-  note("note-c", m.sections.c.note ?? "");
-  note("note-d", m.sections.d.note ?? "");
-  note("note-e", m.sections.e.note ?? "");
+  header("hdr-a", sec(page, "a"), 3);
+  header("hdr-b", sec(page, "b"), 3);
+  header("hdr-c", sec(page, "c"), 3);
+  header("hdr-d", sec(page, "d"), 3);
+  header("hdr-e", sec(page, "e"), 3);
+  note("note-c", sec(page, "c").note ?? "");
+  note("note-d", sec(page, "d").note ?? "");
+  note("note-e", sec(page, "e").note ?? "");
 }
 
 // src/sections/kpis.ts
@@ -23181,7 +23204,9 @@ function mountContribute(host = byId("contribute")) {
 
 // src/entry/main.ts
 function fixPageLinks(page) {
-  for (const a of document.querySelectorAll("[data-page-link]")) {
+  for (const a of document.querySelectorAll(
+    "[data-page-link]"
+  )) {
     const id = a.dataset.pageLink;
     if (id && PAGES[id]) a.href = pageHref(page.path, id);
   }
@@ -23225,11 +23250,12 @@ function mountPage(page) {
   crumbs(page);
   mountCards(page.path, page.cards);
 }
+var page2 = currentPage();
 function render2() {
   destroyAll();
   const page = pageById(document.documentElement.dataset.page ?? "") ?? PAGES.home;
   const id = pageKey(page);
-  renderChrome();
+  renderChrome(page2);
   renderSources(id);
   mountPage(page);
   fixPageLinks(page);
@@ -23268,6 +23294,8 @@ function scheduleRender() {
 }
 function boot() {
   applyUrlLang();
+  if (document.documentElement.dataset.lang !== getLocale())
+    console.error("[lang] DOM attribute out of sync with locale state");
   mountLangSwitch();
   initTheme();
   onLocaleChange(() => {
