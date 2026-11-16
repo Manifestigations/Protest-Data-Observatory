@@ -11735,7 +11735,7 @@ var EN_META = {
     },
     e: {
       title: "E \xB7 Median and peak",
-      blurb: "Each panel gathers one measure across the movements that published it. The dot is the median of the series \u2014 the typical week \u2014 and the triangle its peak, the largest single figure. The pale bar behind each pair spans the whole series, from its smallest figure to its largest, so a movement that was steady reads as a short bar and one that had a few enormous weeks as a long one. The axis is logarithmic, so a handful of mass marches and a routine week can share a panel.",
+      blurb: "Each panel gathers one measure across the movements that published it. The dot is the median of the series \u2014 the typical week \u2014 and the triangle its peak, the largest single figure. The pale bar behind each pair spans the whole series, from its smallest figure to its largest, so a movement that was steady reads as a short bar and one that had a few enormous weeks as a long one. The axis is logarithmic, so a handful of mass marches and a routine week can share a panel. City-level counts by street medics are annotations, not observations.",
       note: "Each figure is counted once, at the midpoint of its range where one was published. The count of published figures is in the tooltip: with a single figure the median and the peak are the same number."
     }
   }
@@ -11856,7 +11856,7 @@ var CHART_EN = {
     "2026-10-10": "CNEWS compiles a national damage bill of \u20AC30M \u2014 with no ministry tally behind it.",
     "2026-10-13": "Turnout band spans a factor of three: ministry floor, organiser ceiling.",
     "2026-10-16": "Last day of classes before the Toussaint holiday: from 17 October no lyc\xE9e is in session, so the blockade count stops.",
-    "2026-10-17": "The peak day. The damage band here is the 17\u201318 October IFRAP estimate, not a daily flow. Toussaint holiday \u2014 schools closed.",
+    "2026-10-17": "The peak day. The damage band here is the 17\u201318 October IFRAP estimate, not a daily flow. Toussaint holiday \u2014 schools closed. Montpellier: eleven street-medic teams counted 60 people injured by law enforcement \u2014 9 by beanbag rounds, 5 by baton strikes, 3 suspected head injuries. Provisional, self-reported, one city: not part of any national series.",
     "2026-10-19": "Toussaint holiday \u2014 students supported the lyc\xE9e movement from outside the schools.",
     "2026-10-24": "Arrest figures include preventive stops; not all become custody placements. Toussaint holiday \u2014 the mobilisation was an inter-union day, not a school day.",
     "2026-10-31": "No protester-injury figure was published for this day. Toussaint holiday \u2014 inter-union mobilisation.",
@@ -12112,7 +12112,17 @@ var CHART_EN = {
       subtitle: "Weekly sums; a stock or a floor is not additive",
       y: "People (weekly total)"
     }
-  }
+  },
+  breakdown: {
+    lbd: "beanbag rounds",
+    baton: "baton strikes",
+    grenade: "stun grenades",
+    gas: "tear gas",
+    cranialTraumaSuspected: "suspected head injuries"
+  },
+  cityHead: "{city} \u2014 {n} injured by law enforcement",
+  cityTail: "{parts} \xB7 {teams} teams \xB7 {collector} \xB7 {flag}",
+  cityProvisional: "provisional, one city, not in the national series"
 };
 
 // src/copy/en/episodes.ts
@@ -12266,7 +12276,8 @@ var CASUALTY_EN = {
     week12oct: "Week of 12 October",
     week19oct: "Week of 19 October",
     week26oct: "Week of 26 October",
-    week2nov: "Week of 2 November"
+    week2nov: "Week of 2 November",
+    "montpellier-2026-10-17": "Montpellier, 17 October 2026"
   },
   side: { forces: "Police and gendarmerie", protesters: "Protesters" },
   kind: {
@@ -12465,7 +12476,18 @@ var CASUALTY_EN = {
       weekly: "yes"
     },
     { label: "Daily increments", window: "One day", weekly: "yes" }
-  ]
+  ],
+  capCity: "City-level counts by street medics",
+  colSource: "Collector",
+  breakdown: {
+    lbd: "by beanbag round",
+    baton: "by baton strike",
+    grenade: "by stun grenade",
+    gas: "by tear gas",
+    cranialTraumaSuspected: "suspected head injuries"
+  },
+  provisional: "provisional",
+  teams: "teams"
 };
 
 // src/copy/en/text.ts
@@ -12561,7 +12583,7 @@ var CHART_FR = {
     "2026-10-09": "Le minist\xE8re de la Justice publie son premier bilan judiciaire : 6 877 gardes \xE0 vue depuis la mi-septembre.",
     "2026-10-13": "La fourchette de foule va du simple au triple : plancher minist\xE9riel, plafond syndical.",
     "2026-10-16": "Dernier jour de cours avant les vacances de la Toussaint : \xE0 partir du 17 octobre aucun lyc\xE9e n\u2019est en cours, le d\xE9compte des blocages s\u2019interrompt.",
-    "2026-10-17": "La journ\xE9e de pointe. La fourchette de dommages ici est l\u2019estimation IFRAP des 17\u201318 octobre, non un flux quotidien. Vacances de la Toussaint \u2014 \xE9tablissements ferm\xE9s. ",
+    "2026-10-17": "La journ\xE9e de pointe. La fourchette de dommages ici est l\u2019estimation IFRAP des 17\u201318 octobre, non un flux quotidien. Vacances de la Toussaint \u2014 \xE9tablissements ferm\xE9s. Montpellier : onze \xE9quipes de street medics ont recens\xE9 60 personnes bless\xE9es par les forces de l\u2019ordre \u2014 9 par tir de LBD, 5 par coups de matraque, 3 suspicions de trauma cr\xE2nien. Bilan provisoire, auto-d\xE9clar\xE9, une seule ville : hors de toute s\xE9rie nationale.",
     "2026-10-19": "Vacances de la Toussaint \u2014 les \xE9tudiants soutiennent le mouvement lyc\xE9een depuis l\u2019ext\xE9rieur des \xE9tablissements.",
     "2026-10-24": "Les interpellations incluent les contr\xF4les pr\xE9ventifs ; toutes ne deviennent pas des gardes \xE0 vue. Vacances de la Toussaint \u2014 la mobilisation \xE9tait une journ\xE9e interprofessionnelle, pas une journ\xE9e scolaire.",
     "2026-10-31": "Aucun chiffre de bless\xE9s parmi les manifestants n\u2019a \xE9t\xE9 publi\xE9 ce jour-l\xE0. Vacances de la Toussaint \u2014 mobilisation interprofessionnelle.",
@@ -12819,7 +12841,17 @@ var CHART_FR = {
       subtitle: "Sommes hebdomadaires ; un stock ou un plancher ne s\u2019additionne pas",
       y: "Personnes (total hebdomadaire)"
     }
-  }
+  },
+  breakdown: {
+    lbd: "tirs de LBD",
+    baton: "coups de matraque",
+    grenade: "grenades de d\xE9sencerclement",
+    gas: "gaz lacrymog\xE8ne",
+    cranialTraumaSuspected: "suspicions de trauma cr\xE2nien"
+  },
+  cityHead: "{city} \u2014 {n} bless\xE9s par les forces de l\u2019ordre",
+  cityTail: "{parts} \xB7 {teams} \xE9quipes \xB7 {collector} \xB7 {flag}",
+  cityProvisional: "bilan provisoire, une seule ville, hors s\xE9rie nationale"
 };
 
 // src/copy/fr/episodes.ts
@@ -12975,7 +13007,8 @@ var CASUALTY_FR = {
     week12oct: "Semaine du 12 octobre",
     week19oct: "Semaine du 19 octobre",
     week26oct: "Semaine du 26 octobre",
-    week2nov: "Semaine du 2 novembre"
+    week2nov: "Semaine du 2 novembre",
+    "montpellier-2026-10-17": "Montpellier, 17 octobre 2026"
   },
   side: { forces: "Police et gendarmerie", protesters: "Manifestant\xB7es" },
   kind: {
@@ -13174,7 +13207,18 @@ var CASUALTY_FR = {
     },
     { label: "Cumul des forces bless\xE9es", window: "Un jour", weekly: "oui" },
     { label: "Incr\xE9ments quotidiens", window: "Un jour", weekly: "oui" }
-  ]
+  ],
+  capCity: "D\xE9comptes \xE0 l\u2019\xE9chelle d\u2019une ville, par les street medics",
+  colSource: "Recueil",
+  breakdown: {
+    lbd: "par tir de LBD",
+    baton: "par coup de matraque",
+    grenade: "par grenade de d\xE9sencerclement",
+    gas: "par gaz lacrymog\xE8ne",
+    cranialTraumaSuspected: "suspicions de trauma cr\xE2nien"
+  },
+  provisional: "provisoire",
+  teams: "\xE9quipes"
 };
 
 // src/copy/fr/text.ts
@@ -16148,9 +16192,9 @@ function rateLine(band, v) {
   const lo = pctOfValue(band?.[0] ?? v, pop);
   const hi = pctOfValue(band?.[1] ?? v, pop);
   if (lo === null || hi === null) return null;
-  const pct = hi - lo < 1e-9 ? fmtPct(lo) : `${fmtPct(lo)} \u2013 ${fmtPct(hi)}`;
+  const pct2 = hi - lo < 1e-9 ? fmtPct(lo) : `${fmtPct(lo)} \u2013 ${fmtPct(hi)}`;
   return fill(bi(RATE2), {
-    pct,
+    pct: pct2,
     pop: nf().format(denominator(pop) ?? 0)
   });
 }
@@ -16416,7 +16460,73 @@ function wrapTooltipLines(text, item, part = "body") {
   return wrapText(text, textWidth(chart, tt), font);
 }
 
+// src/data/casualties/medics.ts
+var CITY_COUNTS = [
+  {
+    date: "2026-10-17",
+    scope: "montpellier-2026-10-17",
+    city: "Montpellier",
+    injured: 60,
+    breakdown: { lbd: 9, baton: 5, cranialTraumaSuspected: 3 },
+    teams: 11,
+    provisional: true,
+    collector: "Street Medics Montpellier",
+    sources: ["sm-mtp-2026-10-17-ig", "sm-mtp-2026-10-17-press"]
+  }
+];
+var cityCountsOn = (date) => CITY_COUNTS.filter((c) => c.date === date);
+
+// src/copy/city.ts
+var STR = {
+  en: {
+    breakdown: {
+      lbd: "beanbag rounds",
+      baton: "baton strikes",
+      grenade: "stun grenades",
+      gas: "tear gas",
+      cranialTraumaSuspected: "suspected head injuries"
+    },
+    head: "{city} \u2014 {n} injured by law enforcement",
+    tail: "{parts} \xB7 {teams} teams \xB7 {collector} \xB7 provisional, one city, not in the national series"
+  },
+  fr: {
+    breakdown: {
+      lbd: "tirs de LBD",
+      baton: "coups de matraque",
+      grenade: "grenades de d\xE9sencerclement",
+      gas: "gaz lacrymog\xE8ne",
+      cranialTraumaSuspected: "suspicions de trauma cr\xE2nien"
+    },
+    head: "{city} \u2014 {n} bless\xE9s par les forces de l\u2019ordre",
+    tail: "{parts} \xB7 {teams} \xE9quipes \xB7 {collector} \xB7 provisoire, une seule ville, hors s\xE9rie nationale"
+  }
+};
+var cityTooltip = (c) => {
+  const s = STR[getLocale()];
+  const parts = Object.entries(c.breakdown).map(([k, v]) => `${s.breakdown[k]} ${v}`).join(" \xB7 ");
+  const fill2 = (tpl, m) => tpl.replace(/\{(\w+)\}/g, (_, k) => m[k] ?? "");
+  return [
+    fill2(s.head, { city: c.city, n: String(c.injured) }),
+    fill2(s.tail, {
+      parts,
+      teams: String(c.teams),
+      collector: c.collector
+    })
+  ].join("\n");
+};
+
 // src/charts/chart-tooltip.ts
+var cityFooter = (item) => {
+  const marks = item.chart.options.plugins?.cityMarks;
+  if (!marks) return [];
+  const date = DATES[item.dataIndex];
+  if (!date) return [];
+  const counts = cityCountsOn(date);
+  if (!counts.length) return [];
+  return counts.flatMap(
+    (c) => wrapTooltipLines(cityTooltip(c), item, "footer")
+  );
+};
 function tooltipCallbacks(v) {
   const m = t().chart;
   return {
@@ -16447,8 +16557,13 @@ ${rate}` : body;
       );
     },
     footer: (items) => {
-      const note2 = v.footers[items[0].dataIndex];
-      return note2 ? wrapTooltipLines(fill(m.footerMark, { note: note2 }), items[0], "footer") : [];
+      const item = items[0];
+      const note2 = v.footers[item.dataIndex];
+      const lines = [
+        ...note2 ? wrapTooltipLines(fill(m.footerMark, { note: note2 }), item, "footer") : [],
+        ...cityFooter(item)
+      ];
+      return lines.length ? lines : [];
     }
   };
 }
@@ -16617,6 +16732,7 @@ function buildChart(spec) {
     },
     ...shell(v, card3.subtitle, card3.title, {
       ...spec.id === "chart-costs" ? { spanMark: { spans: SPAN_MARKS } } : {},
+      ...spec.id === "chart-enforcement" ? { cityMarks: { dates: ["2026-10-17"] } } : {},
       /* Always present — `shell()` already builds a `plugins` object, so the
          `if (options.plugins)` guard from my earlier draft is dead weight. An
          empty array no-ops inside the plugin. */
@@ -16803,6 +16919,42 @@ function insertCostMethodology(anchor, canvas) {
   return section;
 }
 
+// src/charts/plugins/city-marks.ts
+var cityMarks = {
+  id: "cityMarks",
+  afterDatasetsDraw(chart) {
+    const o = chart.options.plugins?.cityMarks;
+    if (!o?.dates?.length) return;
+    const xs = chart.scales.x;
+    if (!xs) return;
+    const { ctx, chartArea } = chart;
+    ctx.save();
+    for (const date of o.dates) {
+      const i = DATES.indexOf(date);
+      if (i < 0 || i >= (chart.data.labels?.length ?? 0)) continue;
+      const px = xs.getPixelForValue(i);
+      if (px < chartArea.left || px > chartArea.right) continue;
+      ctx.strokeStyle = "#111";
+      ctx.lineWidth = 1;
+      ctx.setLineDash([2, 2]);
+      ctx.beginPath();
+      ctx.moveTo(px, chartArea.top);
+      ctx.lineTo(px, chartArea.bottom);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.strokeRect(px - 2.5, chartArea.top + 2, 5, 5);
+      ctx.fillStyle = "#111";
+      ctx.font = "10px system-ui, sans-serif";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "top";
+      for (const c of cityCountsOn(date)) {
+        ctx.fillText(`${c.city} ${c.injured}`, px + 4, chartArea.top - 14);
+      }
+    }
+    ctx.restore();
+  }
+};
+
 // src/charts/mount.ts
 Chart.register(
   LineController,
@@ -16841,7 +16993,7 @@ function mount(canvas, cfg) {
       type: "line",
       data,
       options,
-      plugins: [contextBands, errorBars, connectors, spanMark]
+      plugins: [contextBands, errorBars, connectors, spanMark, cityMarks]
     })
   );
 }
@@ -18349,6 +18501,78 @@ function mountCards(fromPath, cards, host = byId("card-grid")) {
   host.replaceChildren(grid);
 }
 
+// src/sections/casualties/model.ts
+function cellView(c) {
+  switch (c.s) {
+    case "n": {
+      const cls = ["cas-num"];
+      if (c.d) cls.push("cas-derived");
+      if (c.regional) cls.push("cas-regional");
+      return {
+        text: `${c.d ? "\u2248 " : ""}${nf().format(c.v)}`,
+        cls: cls.join(" ")
+      };
+    }
+    case "r":
+      return {
+        text: `\u2248 ${nf().format(c.lo)}\u2013${nf().format(c.hi)}`,
+        cls: `cas-num cas-derived${c.regional ? " cas-regional" : ""}`
+      };
+    case "f":
+      return { text: `\u2265 ${nf().format(c.v)}`, cls: "cas-num cas-floor" };
+    case "c":
+      return {
+        text: fill(t().casualties.casesCount, { n: c.n }),
+        cls: "cas-num cas-cases"
+      };
+    default:
+      return { text: t().casualties.why[c.why], cls: "cas-absent" };
+  }
+}
+function pct(p) {
+  return `${nf().format(Number((p * 100).toFixed(1)))}%`;
+}
+
+// src/sections/casualties/tables.ts
+function cell(c, extra = "") {
+  const v = cellView(c);
+  return el("td", extra ? `${v.cls} ${extra}` : v.cls, v.text);
+}
+var CIVILIAN_PROXY = pct(CIVILIAN_PROXY_SHARE);
+function cityTable(rows, caption) {
+  const c = t().casualties;
+  const table = el("table", "cas-table cas-city");
+  table.append(el("caption", "cas-caption", caption));
+  const thead = el("thead");
+  const head = el("tr");
+  [c.colScope, c.colTotal, c.colCircumstance, c.colSource].forEach(
+    (label, i) => {
+      const th = el("th", i === 1 ? "cas-num-head" : "cas-scope-head", label);
+      th.scope = "col";
+      head.append(th);
+    }
+  );
+  thead.append(head);
+  table.append(thead);
+  const tbody = el("tbody");
+  for (const row of rows) {
+    const tr = el("tr");
+    tr.append(el("th", "cas-scope", c.scope[row.scope] ?? row.city));
+    tr.append(cell(row.injured));
+    const parts = Object.entries(row.breakdown).map(([k, v]) => `${c.breakdown[k]} ${v}`).join(" \xB7 ");
+    const td = el("td", "cas-kind");
+    td.append(document.createTextNode(parts));
+    if (row.provisional) td.append(el("span", "cas-flag", c.provisional));
+    tr.append(td);
+    tr.append(
+      el("td", "cas-cases-cell", `${row.collector}, ${row.teams} ${c.teams}`)
+    );
+    tbody.append(tr);
+  }
+  table.append(tbody);
+  return table;
+}
+
 // src/sections/casualties.ts
 function cellText(c) {
   switch (c.s) {
@@ -18371,11 +18595,11 @@ function cellText(c) {
       return { text: t().casualties.why[c.why], cls: "cas-absent" };
   }
 }
-function cell(c, extra = "") {
+function cell2(c, extra = "") {
   const { text, cls } = cellText(c);
   return el("td", extra ? `${cls} ${extra}` : cls, text);
 }
-function share(light, total) {
+function share2(light, total) {
   if (light.s !== "n" || total.s !== "n" || total.v <= 0) return null;
   return light.v / total.v;
 }
@@ -18413,10 +18637,10 @@ function severityTable(rows, caption) {
     const th = el("th", "cas-scope", c.scope[row.id] ?? row.id);
     th.scope = "row";
     tr.append(th);
-    tr.append(cell(row.total));
-    tr.append(cell(row.serious));
-    tr.append(cell(row.light));
-    const p = share(row.light, row.total);
+    tr.append(cell2(row.total));
+    tr.append(cell2(row.serious));
+    tr.append(cell2(row.light));
+    const p = share2(row.light, row.total);
     const td = el("td", "cas-share");
     if (p === null) {
       td.append(el("span", "cas-absent", "\u2014"));
@@ -18424,7 +18648,7 @@ function severityTable(rows, caption) {
       td.append(el("span", "cas-pct", `${(p * 100).toFixed(1)}%`), bar(p));
     }
     tr.append(td);
-    tr.append(cell(row.other));
+    tr.append(cell2(row.other));
     tbody.append(tr);
   }
   table.append(tbody);
@@ -18433,7 +18657,7 @@ function severityTable(rows, caption) {
 function headline() {
   const c = t().casualties;
   const top = SEVERITY_LEVELS[0];
-  const p = share(top.light, top.total);
+  const p = share2(top.light, top.total);
   const wrap = el("div", "cas-headline");
   const left = el("div", "cas-head-stat");
   left.append(
@@ -18475,7 +18699,7 @@ function causeTable(rows, caption) {
     th.scope = "row";
     tr.append(th);
     tr.append(el("td", "cas-kind", c.kind[row.kind]));
-    tr.append(cell(row.count));
+    tr.append(cell2(row.count));
     const td = el("td", "cas-cases-cell");
     if (!row.cases.length) {
       td.append(el("span", "cas-absent", t().casualties.noCases));
@@ -18524,6 +18748,9 @@ function mountCasualties() {
       headline(),
       severityTable(SEVERITY_LEVELS, c.capLevels),
       causeTable(CASES, c.capCases),
+      /* City-level counts, by street medics. Separate table, separate scope,
+         never summed into SEVERITY_LEVELS. */
+      cityTable(CITY_COUNTS, c.capCity ?? c.headlineTitle),
       el("p", "cas-note", c.noteLevels)
     );
   }
@@ -19439,8 +19666,8 @@ function bestRatio(obs, base) {
   if (!(base > 0)) return null;
   let best = null;
   for (const o of obs) {
-    const pct = o.v / base;
-    if (!best || pct > best.pct) best = { obs: o, pct, base };
+    const pct2 = o.v / base;
+    if (!best || pct2 > best.pct) best = { obs: o, pct: pct2, base };
   }
   return best;
 }

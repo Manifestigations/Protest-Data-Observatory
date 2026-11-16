@@ -95,6 +95,9 @@ export function buildChart(spec: ChartSpec): Cfg {
     },
     ...shell(v, card.subtitle, card.title, {
       ...(spec.id === "chart-costs" ? { spanMark: { spans: SPAN_MARKS } } : {}),
+      ...(spec.id === "chart-enforcement"
+        ? { cityMarks: { dates: ["2026-10-17"] } }
+        : {}),
       /* Always present — `shell()` already builds a `plugins` object, so the
          `if (options.plugins)` guard from my earlier draft is dead weight. An
          empty array no-ops inside the plugin. */

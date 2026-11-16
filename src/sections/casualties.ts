@@ -26,6 +26,8 @@ import {
 } from "../data/data.ts";
 import { byId, el } from "../core/dom.ts";
 import { fill, nf, t } from "../copy";
+import { cityTable } from "./casualties/tables.ts";
+import { CITY_COUNTS } from "../data/casualties/medics.ts";
 
 /* ----- cells ----- */
 
@@ -242,6 +244,9 @@ export function mountCasualties(): void {
       headline(),
       severityTable(SEVERITY_LEVELS, c.capLevels),
       causeTable(CASES, c.capCases),
+      /* City-level counts, by street medics. Separate table, separate scope,
+         never summed into SEVERITY_LEVELS. */
+      cityTable(CITY_COUNTS, c.capCity ?? c.headlineTitle),
       el("p", "cas-note", c.noteLevels),
     );
   }

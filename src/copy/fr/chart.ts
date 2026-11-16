@@ -38,7 +38,7 @@ export const CHART_FR: ChartCopy = {
     "2026-10-16":
       "Dernier jour de cours avant les vacances de la Toussaint : à partir du 17 octobre aucun lycée n’est en cours, le décompte des blocages s’interrompt.",
     "2026-10-17":
-      "La journée de pointe. La fourchette de dommages ici est l’estimation IFRAP des 17–18 octobre, non un flux quotidien. Vacances de la Toussaint — établissements fermés. ",
+      "La journée de pointe. La fourchette de dommages ici est l’estimation IFRAP des 17–18 octobre, non un flux quotidien. Vacances de la Toussaint — établissements fermés. Montpellier : onze équipes de street medics ont recensé 60 personnes blessées par les forces de l’ordre — 9 par tir de LBD, 5 par coups de matraque, 3 suspicions de trauma crânien. Bilan provisoire, auto-déclaré, une seule ville : hors de toute série nationale.",
     "2026-10-19":
       "Vacances de la Toussaint — les étudiants soutiennent le mouvement lycéeen depuis l’extérieur des établissements.",
     "2026-10-24":
@@ -365,4 +365,14 @@ export const CHART_FR: ChartCopy = {
       y: "Personnes (total hebdomadaire)",
     },
   },
+  breakdown: {
+    lbd: "tirs de LBD",
+    baton: "coups de matraque",
+    grenade: "grenades de désencerclement",
+    gas: "gaz lacrymogène",
+    cranialTraumaSuspected: "suspicions de trauma crânien",
+  },
+  cityHead: "{city} — {n} blessés par les forces de l’ordre",
+  cityTail: "{parts} · {teams} équipes · {collector} · {flag}",
+  cityProvisional: "bilan provisoire, une seule ville, hors série nationale",
 };

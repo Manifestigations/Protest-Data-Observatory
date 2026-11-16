@@ -40,7 +40,7 @@ export const CHART_EN: ChartCopy = {
     "2026-10-16":
       "Last day of classes before the Toussaint holiday: from 17 October no lycée is in session, so the blockade count stops.",
     "2026-10-17":
-      "The peak day. The damage band here is the 17–18 October IFRAP estimate, not a daily flow. Toussaint holiday — schools closed.",
+      "The peak day. The damage band here is the 17–18 October IFRAP estimate, not a daily flow. Toussaint holiday — schools closed. Montpellier: eleven street-medic teams counted 60 people injured by law enforcement — 9 by beanbag rounds, 5 by baton strikes, 3 suspected head injuries. Provisional, self-reported, one city: not part of any national series.",
     "2026-10-19":
       "Toussaint holiday — students supported the lycée movement from outside the schools.",
     "2026-10-24":
@@ -359,4 +359,14 @@ export const CHART_EN: ChartCopy = {
       y: "People (weekly total)",
     },
   },
+  breakdown: {
+    lbd: "beanbag rounds",
+    baton: "baton strikes",
+    grenade: "stun grenades",
+    gas: "tear gas",
+    cranialTraumaSuspected: "suspected head injuries",
+  },
+  cityHead: "{city} — {n} injured by law enforcement",
+  cityTail: "{parts} · {teams} teams · {collector} · {flag}",
+  cityProvisional: "provisional, one city, not in the national series",
 };

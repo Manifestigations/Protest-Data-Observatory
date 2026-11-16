@@ -1,3 +1,5 @@
+import type { BreakdownKey } from "../data/casualties/medics";
+
 export type Lang = "fr" | "en";
 
 export interface Bi {
@@ -80,6 +82,10 @@ export interface ChartCopy {
   readonly holidayLine: string;
   readonly metricNote: string;
   readonly blockerNote: string;
+  readonly breakdown: Readonly<Record<BreakdownKey, string>>;
+  readonly cityHead: string; // "{city} — {n} injured by law enforcement"
+  readonly cityTail: string; // "{parts} · {teams} teams · {collector} · {flag}"
+  readonly cityProvisional: string;
 }
 
 export interface WeekCopy {
@@ -229,6 +235,12 @@ export interface CasualtyCopy {
     readonly window: string;
     readonly weekly: string;
   }[];
+
+  readonly capCity: string;
+  readonly colSource: string;
+  readonly breakdown: Readonly<Record<BreakdownKey, string>>;
+  readonly provisional: string;
+  readonly teams: string;
 }
 
 export interface ItemCopy {

@@ -23,6 +23,7 @@ import {
   type Estimate,
   type SevRow,
 } from "../../data/casualties/index.ts";
+import type { BreakdownKey, CityCount } from "../../data/casualties/medics.ts";
 import { cellView, estimateRange, pct, share, type CellView } from "./model.ts";
 
 function cell(c: Cell, extra = ""): HTMLElement {
@@ -157,16 +158,25 @@ export function severityTable(
   const tbody = el("tbody");
   for (const row of rows) {
     const tr = el("tr");
-    tr.append(rowHead(c.scope[row.id] ?? row.id));
-    tr.append(cell(row.total), cell(row.serious), cell(row.light));
+    tr.append(el("th", "cas-scope", c.scope?.[row.scope] ?? row.city));
 
-    const p = share(row.light, row.total);
-    const td = el("td", "cas-share");
-    if (p === null) td.append(el("span", "cas-absent", "—"));
-    else td.append(el("span", "cas-pct", pct(p)), bar(p));
+    const parts = (Object.entries(row.breakdown) as [BreakdownKey, number][])
+      .map(([k, v]) => `${c.breakdown?.[k] ?? k} ${v}`)
+      .join(" · ");
+
+    const td = el("td", "cas-kind");
+    td.append(document.createTextNode(parts));
+    if (row.provisional)
+      td.append(el("span", "cas-flag", c.provisional ?? "†"));
     tr.append(td);
 
-    tr.append(cell(row.other));
+    tr.append(
+      el(
+        "td",
+        "cas-cases-cell",
+        `${row.collector}, ${row.teams} ${c.teams ?? ""}`.trim(),
+      ),
+    );
     tbody.append(tr);
   }
   table.append(tbody);
@@ -355,3 +365,46 @@ export function ladderList(): HTMLElement {
 export const CIVILIAN_PROXY = pct(CIVILIAN_PROXY_SHARE);
 
 export { byId };
+
+export function cityTable(
+  rows: readonly CityCount[],
+  caption: string,
+): HTMLElement {
+  const c = t().casualties;
+  const table = el("table", "cas-table cas-city");
+  table.append(el("caption", "cas-caption", caption));
+
+  const thead = el("thead");
+  const head = el("tr");
+  [c.colScope, c.colTotal, c.colCircumstance, c.colSource].forEach(
+    (label, i) => {
+      const th = el("th", i === 1 ? "cas-num-head" : "cas-scope-head", label);
+      (th as HTMLTableCellElement).scope = "col";
+      head.append(th);
+    },
+  );
+  thead.append(head);
+  table.append(thead);
+
+  const tbody = el("tbody");
+  for (const row of rows) {
+    const tr = el("tr");
+    tr.append(el("th", "cas-scope", c.scope[row.scope] ?? row.city));
+    tr.append(cell(row.injured));
+
+    const parts = (Object.entries(row.breakdown) as [BreakdownKey, number][])
+      .map(([k, v]) => `${c.breakdown[k]} ${v}`)
+      .join(" · ");
+    const td = el("td", "cas-kind");
+    td.append(document.createTextNode(parts));
+    if (row.provisional) td.append(el("span", "cas-flag", c.provisional));
+    tr.append(td);
+
+    tr.append(
+      el("td", "cas-cases-cell", `${row.collector}, ${row.teams} ${c.teams}`),
+    );
+    tbody.append(tr);
+  }
+  table.append(tbody);
+  return table;
+}
