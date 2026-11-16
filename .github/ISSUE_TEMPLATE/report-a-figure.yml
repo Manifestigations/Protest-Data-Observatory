@@ -1,0 +1,101 @@
+# .github/ISSUE_TEMPLATE/report-a-figure.yml
+name: Report a figure
+description: A figure is missing from the site, or wrong. One number, one date, one link.
+title: "[figure] "
+labels: ["data"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        You do not need to code, install anything, or read the repository.
+        French or English, whichever is easier.
+
+        One number, one date, one link is the whole process. If the publisher
+        gives a range, give the whole range — do not pick one bound, and do not
+        average two publishers.
+
+        To report an accessibility or translation problem instead, just open a
+        plain issue.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What should happen?
+      options:
+        - A figure is missing
+        - A figure is wrong
+        - A figure has the wrong source or territory
+    validations:
+      required: true
+  - type: dropdown
+    id: metric
+    attributes:
+      label: What does the number measure?
+      options:
+        - Crowd / turnout
+        - People on strike
+        - Arrests
+        - Injuries (protesters)
+        - Injuries (police / gendarmes)
+        - Blockaded schools or sites
+        - Damage
+        - Cost of policing
+        - Other (describe below)
+    validations:
+      required: true
+  - type: input
+    id: when
+    attributes:
+      label: Date
+      description: The date the figure describes, or the start and end of a period.
+      placeholder: "2026-11-08, or 2026-11-03 to 2026-11-09"
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Territory
+      description: National, a region, a city, or one institution.
+      placeholder: "national / Paris / Lyon / Lycée X"
+    validations:
+      required: true
+  - type: input
+    id: value
+    attributes:
+      label: The figure as published
+      description: Keep the range if there is one.
+      placeholder: "between 175,000 and 197,000"
+    validations:
+      required: true
+  - type: dropdown
+    id: nature
+    attributes:
+      label: Is it a count or an estimate?
+      description: The charts distinguish the two. Do not round a count into an estimate.
+      options:
+        - Count (someone counted)
+        - Estimate (someone modelled or extrapolated)
+        - Not stated by the publisher
+    validations:
+      required: true
+  - type: input
+    id: publisher
+    attributes:
+      label: Who published it
+      placeholder: "Ministry of the Interior / prefecture / IFRAP / Le Monde"
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Source
+      description: A URL, a report title and page, or outlet and date. Paywalled or PDF is fine — say so.
+      placeholder: "https://… or « Report title », p. 12"
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything that affects how the number should be read
+      description: Missing denominator, excluded category, changed methodology, two vintages of the same series…
+    validations:
+      required: false
