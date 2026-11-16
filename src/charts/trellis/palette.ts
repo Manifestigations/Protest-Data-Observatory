@@ -1,33 +1,52 @@
-/* ── Palette ─────────────────────────────────────────────────────────────────
-   The colour values are load-bearing: they must stay in step with the print
-   palette and the CSS custom properties. Copied verbatim from episodes.ts —
-   retyping them silently recolours four charts. */
+/* ==========================================================================
+   src/charts/trellis/palette.ts — full replacement.
+   The four series colours become tone references, the ramp becomes tokens,
+   and DIM is re-exported so legend.ts keeps importing it from here.
+   ========================================================================== */
 
-import type { Metric } from "../../model";
+import { DIM, hollow, ramp, tones, type Tone } from "../../core/colors.ts";
+import { METRICS, METRIC_OF, type Metric } from "../../model/index.ts";
+import { TONE_OF } from "../palette.ts";
 
-/** One dim factor for the whole app: emphasis, legend hover, host opacity. */
-export const DIM = 0.18;
+export { DIM };
 
-export interface SeriesDef {
+export interface TrellisSeries {
   readonly key: Metric;
+  readonly tone: Tone;
+  /** Line, marker stroke and tooltip swatch. */
   readonly color: string;
+  /** Hollow-marker interior: the card, so it flips with the theme. */
+  readonly hole: string;
 }
 
-/** Colour only — labels come from t().items. */
-export const SERIES: readonly SeriesDef[] = [
-  { key: "p", color: "#1d4ed8" },
-  { key: "a", color: "#b91c1c" },
-  { key: "f", color: "#047857" },
-  { key: "i", color: "#b45309" },
-];
+/**
+ * Resolved per mount, never at module load: `tones` reads computed style, and
+ * CSS variables cannot be baked into a Chart.js dataset at import time.
+ * Order follows METRICS (p, a, f, i) so panel legends keep their sequence.
+ */
+export function seriesStyles(): TrellisSeries[] {
+  const hole = hollow();
+  return METRICS.map((key) => {
+    const tone = TONE_OF[METRIC_OF[key]];
+    return { key, tone, color: tones[tone].fill, hole };
+  });
+}
 
-/** Sequential ramp, light → dark, identical in every companion panel. */
-export const RAMP: readonly string[] = [
-  "#D6E6F2",
-  "#B0CFE6",
-  "#86B4D7",
-  "#5C97C5",
-  "#357AB0",
-  "#1B5C92",
-  "#0A3A63",
-] as const;
+/** Seven movements, earliest → latest. Same call per mount, same reason. */
+export const movementRamp = (): string[] => ramp();
+
+/**
+ * Low-alpha twin of a resolved colour. Tokens come back as `rgb(r g b)` or
+ * `rgb(r, g, b)`, so the old hex-only helper in canvas-registry is not enough
+ * here; hex is kept as a fallback so a stray literal dims instead of vanishing.
+ */
+const RGB = /^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)/;
+
+export function fade(color: string, a: number): string {
+  const m = RGB.exec(color);
+  if (m) return `rgb(${m[1]} ${m[2]} ${m[3]} / ${a})`;
+  const h = color.replace("#", "");
+  if (/^[0-9a-f]{6}$/i.test(h))
+    return `rgb(${parseInt(h.slice(0, 2), 16)} ${parseInt(h.slice(2, 4), 16)} ${parseInt(h.slice(4, 6), 16)} / ${a})`;
+  return color; // wide-gamut `color(srgb …)`: leave it, never break the chart
+}

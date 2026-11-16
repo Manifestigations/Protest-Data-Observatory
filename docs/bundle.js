@@ -15740,63 +15740,237 @@ function mountContext() {
   }
 }
 
+// src/core/colors.ts
+var FALLBACK2 = {
+  "c-police": "#1d4ed8",
+  "c-police-wash": "rgb(29 78 216 / 14%)",
+  "c-police-on": "#ffffff",
+  "c-protest": "#000000",
+  "c-protest-wash": "rgb(0 0 0 / 12%)",
+  "c-protest-on": "#ffffff",
+  "c-bystander": "#ffffff",
+  "c-bystander-wash": "rgb(255 255 255 / 20%)",
+  "c-bystander-ink": "#111827",
+  "c-bystander-edge": "#9aa3af",
+  "c-arrest": "#b91c1c",
+  "c-arrest-wash": "rgb(185 28 28 / 14%)",
+  "c-arrest-on": "#ffffff",
+  "c-turnout": "#0f7a3d",
+  "c-turnout-wash": "rgb(15 122 61 / 14%)",
+  "c-turnout-on": "#ffffff",
+  "c-cost": "#d99e00",
+  "c-cost-wash": "rgb(217 158 0 / 18%)",
+  "c-cost-on": "#1b1300",
+  "c-protest-soft": "#3f3f46",
+  "c-protest-soft-wash": "rgb(63 63 70 / 14%)",
+  "c-protest-soft-on": "#ffffff",
+  "c-blockade": "#4a2c17",
+  "c-blockade-wash": "rgb(74 44 23 / 14%)",
+  "c-blockade-on": "#ffffff",
+  "c-remainder": "#c7ccd3",
+  "c-remainder-wash": "rgb(199 204 211 / 55%)",
+  "c-remainder-ink": "#111827",
+  "c-remainder-edge": "#9aa3af",
+  "chart-hollow": "#ffffff",
+  "chart-series-1": "#5c97c5",
+  "chart-series-2": "#357ab0",
+  "chart-series-3": "#2a6b9c",
+  "chart-series-4": "#1b5c92",
+  "chart-series-5": "#124a78",
+  "chart-series-6": "#0a3a63",
+  "chart-series-7": "#062844"
+};
+var cache2 = /* @__PURE__ */ new Map();
+var probe = null;
+function css(token) {
+  const hit = cache2.get(token);
+  if (hit !== void 0) return hit;
+  if (!probe) {
+    probe = document.createElement("span");
+    probe.setAttribute("aria-hidden", "true");
+    probe.style.cssText = "position:absolute;inline-size:0;block-size:0;overflow:hidden;pointer-events:none";
+    document.body.append(probe);
+  }
+  probe.style.color = `var(--${token}, ${FALLBACK2[token] ?? "currentColor"})`;
+  const value2 = getComputedStyle(probe).color || FALLBACK2[token] || "currentColor";
+  cache2.set(token, value2);
+  return value2;
+}
+function resetColours() {
+  cache2.clear();
+}
+var tones = {
+  get police() {
+    return {
+      fill: css("c-police"),
+      wash: css("c-police-wash"),
+      ink: css("c-police-on"),
+      edge: css("c-police")
+    };
+  },
+  get protest() {
+    return {
+      fill: css("c-protest"),
+      wash: css("c-protest-wash"),
+      ink: css("c-protest-on"),
+      edge: css("c-protest")
+    };
+  },
+  get bystander() {
+    return {
+      fill: css("c-bystander"),
+      wash: css("c-bystander-wash"),
+      ink: css("c-bystander-ink"),
+      edge: css("c-bystander-edge")
+    };
+  },
+  get arrest() {
+    return {
+      fill: css("c-arrest"),
+      wash: css("c-arrest-wash"),
+      ink: css("c-arrest-on"),
+      edge: css("c-arrest")
+    };
+  },
+  get turnout() {
+    return {
+      fill: css("c-turnout"),
+      wash: css("c-turnout-wash"),
+      ink: css("c-turnout-on"),
+      edge: css("c-turnout")
+    };
+  },
+  get cost() {
+    return {
+      fill: css("c-cost"),
+      wash: css("c-cost-wash"),
+      ink: css("c-cost-on"),
+      edge: css("c-cost")
+    };
+  },
+  /** Blue & yellow: the cost of policing, everywhere it appears. */
+  get policeCost() {
+    return {
+      fill: css("c-police"),
+      wash: css("c-police-wash"),
+      ink: css("c-police-on"),
+      edge: css("c-police"),
+      hatch: css("c-cost")
+    };
+  },
+  get protestSoft() {
+    return {
+      fill: css("c-protest-soft"),
+      wash: css("c-protest-soft-wash"),
+      ink: css("c-protest-soft-on"),
+      edge: css("c-protest-soft")
+    };
+  },
+  get blockade() {
+    return {
+      fill: css("c-blockade"),
+      wash: css("c-blockade-wash"),
+      ink: css("c-blockade-on"),
+      edge: css("c-blockade")
+    };
+  },
+  get remainder() {
+    return {
+      fill: css("c-remainder"),
+      wash: css("c-remainder-wash"),
+      ink: css("c-remainder-ink"),
+      edge: css("c-remainder-edge")
+    };
+  }
+};
+if (typeof document !== "undefined") {
+  matchMedia("(prefers-color-scheme: dark)").addEventListener(
+    "change",
+    resetColours
+  );
+  new MutationObserver(resetColours).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"]
+  });
+}
+var RAMP_STEPS = 7;
+function ramp(steps2 = RAMP_STEPS) {
+  const n2 = Math.min(steps2, RAMP_STEPS);
+  return Array.from({ length: n2 }, (_, i) => css(`chart-series-${i + 1}`));
+}
+var hollow = () => css("chart-hollow");
+
 // src/charts/series.ts
 var AXIS_LEFT = "y";
 var AXIS_RIGHT = "y1";
 var DAMAGES_ANCHOR = "2026-10-24";
 var damagesRadius = (r) => DATES.map((d) => d === DAMAGES_ANCHOR ? 0 : r);
+function def(spec) {
+  const { band, ...rest } = spec;
+  const d = rest;
+  Object.defineProperty(d, "color", {
+    get: () => tones[spec.tone].fill,
+    enumerable: true
+  });
+  if (band)
+    Object.defineProperty(d, "bandFill", {
+      get: () => tones[spec.tone].wash,
+      enumerable: true
+    });
+  return d;
+}
 var DEF = {
-  protestersDaily: {
+  protestersDaily: def({
     data: DAILY.turnout,
-    color: "#1d4ed8",
+    tone: "turnout",
     unit: "count",
     radius: 4,
     width: 2
-  },
-  blockadesDaily: {
+  }),
+  blockadesDaily: def({
     data: DAILY.blockades,
-    color: "#8C564B",
+    tone: "protest",
     unit: "count",
     radius: 3,
     width: 1.75,
     axis: AXIS_RIGHT,
     log: true,
     style: "rect"
-  },
-  strikersDaily: {
+  }),
+  strikersDaily: def({
     data: DAILY.strikers,
-    color: "#0f766e",
+    tone: "turnout",
     unit: "count",
     radius: 4.5,
     width: 2,
     style: "star"
-  },
-  strikersWeekly: {
+  }),
+  strikersWeekly: def({
     data: WEEKLY.strikers,
-    color: "#0f766e",
+    tone: "turnout",
     unit: "count",
     radius: 5,
     width: 2,
     style: "star"
-  },
-  arrestsDaily: {
+  }),
+  arrestsDaily: def({
     data: DAILY.arrests,
-    color: "#b91c1c",
+    tone: "arrest",
     unit: "count",
     radius: 3.5,
     width: 1.5
-  },
-  forcesDaily: {
+  }),
+  forcesDaily: def({
     data: DAILY.forcesInjured,
-    color: "#047857",
+    tone: "police",
     unit: "count",
     radius: 4,
     width: 1.5,
     style: "rectRot"
-  },
-  forcesInjuredStock: {
+  }),
+  forcesInjuredStock: def({
     data: DAILY.forcesInjuredStock,
-    color: "#065f46",
+    tone: "police",
     unit: "count",
     radius: 3,
     width: 2,
@@ -15804,88 +15978,88 @@ var DEF = {
        observation, so it is drawn as policingCumulative's is: one filled
        polygon between the low and high levels, no per-point whisker caps.
        `shadeOnly` sets noWhiskers and leaves the band to the tooltip. */
-    bandFill: "rgba(6,95,70,0.14)",
+    band: true,
     shadeOnly: true
-  },
-  protestersInjuredDaily: {
+  }),
+  protestersInjuredDaily: def({
     data: DAILY.protesterInjured,
-    color: "#b45309",
+    tone: "protest",
     unit: "count",
     radius: 5,
     width: 1.5,
     style: "triangle"
-  },
-  damagesDaily: {
+  }),
+  damagesDaily: def({
     data: DAILY.damagesCost,
-    color: "#7c3aed",
+    tone: "cost",
     unit: "eurM",
     radius: 5,
     pointRadius: damagesRadius(5),
     width: 2
-  },
-  policingDaily: {
+  }),
+  policingDaily: def({
     data: DAILY.policing,
-    color: "#0e7490",
+    tone: "policeCost",
     unit: "eurM",
     radius: 4,
     width: 2,
     style: "rect"
-  },
-  policingCumulative: {
+  }),
+  policingCumulative: def({
     data: DAILY.policingCumulative,
-    color: "#0369a1",
+    tone: "policeCost",
     unit: "eurM",
     radius: 0,
     width: 2,
-    bandFill: "rgba(3,105,161,0.12)",
+    band: true,
     shadeOnly: true
-  },
-  protestersWeekly: {
+  }),
+  protestersWeekly: def({
     data: WEEKLY.turnout,
-    color: "#1d4ed8",
+    tone: "turnout",
     unit: "count",
     radius: 5,
     width: 2
-  },
-  blockadesWeekly: {
+  }),
+  blockadesWeekly: def({
     data: WEEKLY.blockades,
-    color: "#8C564B",
+    tone: "protest",
     unit: "count",
     radius: 3,
     width: 1.75,
     axis: AXIS_RIGHT,
     log: true
-  },
-  arrestsWeekly: {
+  }),
+  arrestsWeekly: def({
     data: WEEKLY.arrests,
-    color: "#b91c1c",
+    tone: "arrest",
     unit: "count",
     radius: 4,
     width: 2
-  },
-  forcesWeekly: {
+  }),
+  forcesWeekly: def({
     data: WEEKLY.forcesInjured,
-    color: "#047857",
+    tone: "police",
     unit: "count",
     radius: 4,
     width: 1.5,
     style: "rectRot"
-  },
-  protestersInjuredWeekly: {
+  }),
+  protestersInjuredWeekly: def({
     data: WEEKLY.protesterInjured,
-    color: "#b45309",
+    tone: "protest",
     unit: "count",
     radius: 5,
     width: 1.5,
     style: "triangle"
-  }
+  })
 };
 function visiblePoints(id) {
-  const def = DEF[id];
-  if (!def?.data) return [];
-  const mask = def.pointRadius;
+  const def2 = DEF[id];
+  if (!def2?.data) return [];
+  const mask = def2.pointRadius;
   const out = [];
-  def.data.forEach((p, i) => {
+  def2.data.forEach((p, i) => {
     if (p.v === null) return;
     if (mask?.[i] === 0) return;
     out.push({ i, v: p.v });
@@ -16020,152 +16194,6 @@ var errorBars = {
   }
 };
 
-// src/core/colors.ts
-var FALLBACK2 = {
-  "c-police": "#1d4ed8",
-  "c-police-wash": "rgb(29 78 216 / 14%)",
-  "c-police-on": "#ffffff",
-  "c-protest": "#000000",
-  "c-protest-wash": "rgb(0 0 0 / 12%)",
-  "c-protest-on": "#ffffff",
-  "c-bystander": "#ffffff",
-  "c-bystander-wash": "rgb(255 255 255 / 20%)",
-  "c-bystander-ink": "#111827",
-  "c-bystander-edge": "#9aa3af",
-  "c-arrest": "#b91c1c",
-  "c-arrest-wash": "rgb(185 28 28 / 14%)",
-  "c-arrest-on": "#ffffff",
-  "c-turnout": "#0f7a3d",
-  "c-turnout-wash": "rgb(15 122 61 / 14%)",
-  "c-turnout-on": "#ffffff",
-  "c-cost": "#d99e00",
-  "c-cost-wash": "rgb(217 158 0 / 18%)",
-  "c-cost-on": "#1b1300",
-  "c-protest-soft": "#3f3f46",
-  "c-protest-soft-wash": "rgb(63 63 70 / 14%)",
-  "c-protest-soft-on": "#ffffff",
-  "c-blockade": "#4a2c17",
-  "c-blockade-wash": "rgb(74 44 23 / 14%)",
-  "c-blockade-on": "#ffffff",
-  "c-remainder": "#c7ccd3",
-  "c-remainder-wash": "rgb(199 204 211 / 55%)",
-  "c-remainder-ink": "#111827",
-  "c-remainder-edge": "#9aa3af"
-};
-var cache2 = /* @__PURE__ */ new Map();
-var probe = null;
-function css(token) {
-  const hit = cache2.get(token);
-  if (hit !== void 0) return hit;
-  if (!probe) {
-    probe = document.createElement("span");
-    probe.setAttribute("aria-hidden", "true");
-    probe.style.cssText = "position:absolute;inline-size:0;block-size:0;overflow:hidden;pointer-events:none";
-    document.body.append(probe);
-  }
-  probe.style.color = `var(--${token}, ${FALLBACK2[token] ?? "currentColor"})`;
-  const value2 = getComputedStyle(probe).color || FALLBACK2[token] || "currentColor";
-  cache2.set(token, value2);
-  return value2;
-}
-function resetColours() {
-  cache2.clear();
-}
-var tones = {
-  get police() {
-    return {
-      fill: css("c-police"),
-      wash: css("c-police-wash"),
-      ink: css("c-police-on"),
-      edge: css("c-police")
-    };
-  },
-  get protest() {
-    return {
-      fill: css("c-protest"),
-      wash: css("c-protest-wash"),
-      ink: css("c-protest-on"),
-      edge: css("c-protest")
-    };
-  },
-  get bystander() {
-    return {
-      fill: css("c-bystander"),
-      wash: css("c-bystander-wash"),
-      ink: css("c-bystander-ink"),
-      edge: css("c-bystander-edge")
-    };
-  },
-  get arrest() {
-    return {
-      fill: css("c-arrest"),
-      wash: css("c-arrest-wash"),
-      ink: css("c-arrest-on"),
-      edge: css("c-arrest")
-    };
-  },
-  get turnout() {
-    return {
-      fill: css("c-turnout"),
-      wash: css("c-turnout-wash"),
-      ink: css("c-turnout-on"),
-      edge: css("c-turnout")
-    };
-  },
-  get cost() {
-    return {
-      fill: css("c-cost"),
-      wash: css("c-cost-wash"),
-      ink: css("c-cost-on"),
-      edge: css("c-cost")
-    };
-  },
-  /** Blue & yellow: the cost of policing, everywhere it appears. */
-  get policeCost() {
-    return {
-      fill: css("c-police"),
-      wash: css("c-police-wash"),
-      ink: css("c-police-on"),
-      edge: css("c-police"),
-      hatch: css("c-cost")
-    };
-  },
-  get protestSoft() {
-    return {
-      fill: css("c-protest-soft"),
-      wash: css("c-protest-soft-wash"),
-      ink: css("c-protest-soft-on"),
-      edge: css("c-protest-soft")
-    };
-  },
-  get blockade() {
-    return {
-      fill: css("c-blockade"),
-      wash: css("c-blockade-wash"),
-      ink: css("c-blockade-on"),
-      edge: css("c-blockade")
-    };
-  },
-  get remainder() {
-    return {
-      fill: css("c-remainder"),
-      wash: css("c-remainder-wash"),
-      ink: css("c-remainder-ink"),
-      edge: css("c-remainder-edge")
-    };
-  }
-};
-if (typeof document !== "undefined") {
-  matchMedia("(prefers-color-scheme: dark)").addEventListener(
-    "change",
-    resetColours
-  );
-  new MutationObserver(resetColours).observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ["data-theme"]
-  });
-}
-
 // src/charts/datasets.ts
 var SERIES_TONE = {
   protestersDaily: "protest",
@@ -16190,20 +16218,20 @@ var styleOf = (id) => tones[toneOf(id)];
 var DAILY_GAP = 7;
 var WEEKLY_GAP = 1;
 function datasetsFor(id, weekly) {
-  const def = DEF[id];
-  if (!def) throw new Error(`datasets.ts: no DEF entry for series "${id}"`);
-  if (!def.data) throw new Error(`datasets.ts: series "${id}" has no data`);
-  if (def.pointRadius && def.pointRadius.length !== def.data.length) {
+  const def2 = DEF[id];
+  if (!def2) throw new Error(`datasets.ts: no DEF entry for series "${id}"`);
+  if (!def2.data) throw new Error(`datasets.ts: series "${id}" has no data`);
+  if (def2.pointRadius && def2.pointRadius.length !== def2.data.length) {
     throw new Error(
-      `datasets.ts: "${id}" pointRadius has ${def.pointRadius.length} entries, expected ${def.data.length}`
+      `datasets.ts: "${id}" pointRadius has ${def2.pointRadius.length} entries, expected ${def2.data.length}`
     );
   }
   const c = styleOf(id);
   const copy = t().chart.series[id];
-  const axis = def.axis ?? AXIS_LEFT;
+  const axis = def2.axis ?? AXIS_LEFT;
   const perCapita = id === "protestersDaily" || id === "protestersWeekly";
-  const shaded = Boolean(def.bandFill);
-  const n2 = def.data.length;
+  const shaded = Boolean(def2.bandFill);
+  const n2 = def2.data.length;
   const solid = Array.from({ length: n2 }, () => null);
   const detached = Array.from({ length: n2 }, () => null);
   const solidBand = Array.from({ length: n2 }, () => null);
@@ -16216,8 +16244,8 @@ function datasetsFor(id, weekly) {
   const twinHoverRadius = new Array(n2);
   let anyDetached = false;
   for (let i = 0; i < n2; i++) {
-    const p = def.data[i];
-    const r = def.pointRadius?.[i] ?? def.radius;
+    const p = def2.data[i];
+    const r = def2.pointRadius?.[i] ?? def2.radius;
     const base = r === 0 ? 0 : r;
     quality[i] = p.q;
     notes[i] = p.note;
@@ -16238,19 +16266,19 @@ function datasetsFor(id, weekly) {
     label: copy.label,
     data: solid,
     yAxisID: axis,
-    unit: def.unit,
+    unit: def2.unit,
     perCapita,
     errorBars: solidBand,
     errorBarColor: c.fill,
     bandFill: shaded,
     bandFillColor: shaded ? c.wash : void 0,
-    noWhiskers: Boolean(def.shadeOnly),
+    noWhiskers: Boolean(def2.shadeOnly),
     quality,
     notes,
     borderColor: c.fill,
     backgroundColor: shaded ? c.wash : c.fill,
-    borderWidth: def.width,
-    pointStyle: def.style,
+    borderWidth: def2.width,
+    pointStyle: def2.style,
     pointRadius: radius,
     pointHoverRadius: hoverRadius,
     pointHitRadius: 14,
@@ -16259,7 +16287,7 @@ function datasetsFor(id, weekly) {
     // draws every bridge itself, so solid/dashed/dotted is decided once.
     spanGaps: false,
     connectors: {
-      series: def.data,
+      series: def2.data,
       slots: weekly ? WEEKLY_GAP : DAILY_GAP
     }
   };
@@ -16270,17 +16298,17 @@ function datasetsFor(id, weekly) {
       label: copy.detached,
       data: detached,
       yAxisID: axis,
-      unit: def.unit,
+      unit: def2.unit,
       perCapita,
       showLine: false,
       detachedOnly: true,
       errorBars: detachedBand,
       errorBarColor: c.fill,
-      noWhiskers: Boolean(def.shadeOnly),
+      noWhiskers: Boolean(def2.shadeOnly),
       quality,
       notes,
       borderWidth: 0,
-      pointStyle: def.style ?? "circle",
+      pointStyle: def2.style ?? "circle",
       // Hollow: page-coloured fill, toned rim. `edge` keeps a white tone
       // (bystanders) visible against a white sheet.
       pointBackgroundColor: THEME.hollow,
@@ -17444,7 +17472,6 @@ function buildDataset(ep, epIndex, key, color2, maxX) {
     pointBackgroundColor: points.map(
       (p) => isDetached(p.flag) ? THEME.hollow : color2
     ),
-    pointBorderColor: color2,
     pointBorderWidth: 1.5,
     pointHoverRadius: 4.5,
     pointHitRadius: 12,
@@ -17544,23 +17571,36 @@ function nearestByY(chart, elements, e) {
 }
 var WEEK_MODE = "trellisWeek";
 
+// src/charts/palette.ts
+var TONE_OF = {
+  turnout: "turnout",
+  strikers: "turnout",
+  arrests: "arrest",
+  forcesInjured: "police",
+  forcesInjuredStock: "police",
+  protesterInjured: "protest",
+  damagesCost: "cost",
+  blockades: "protest"
+};
+
 // src/charts/trellis/palette.ts
-var DIM = 0.18;
-var SERIES2 = [
-  { key: "p", color: "#1d4ed8" },
-  { key: "a", color: "#b91c1c" },
-  { key: "f", color: "#047857" },
-  { key: "i", color: "#b45309" }
-];
-var RAMP2 = [
-  "#D6E6F2",
-  "#B0CFE6",
-  "#86B4D7",
-  "#5C97C5",
-  "#357AB0",
-  "#1B5C92",
-  "#0A3A63"
-];
+function seriesStyles() {
+  const hole = hollow();
+  return METRICS.map((key) => {
+    const tone = TONE_OF[METRIC_OF[key]];
+    return { key, tone, color: tones[tone].fill, hole };
+  });
+}
+var movementRamp = () => ramp();
+var RGB = /^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)/;
+function fade(color2, a) {
+  const m = RGB.exec(color2);
+  if (m) return `rgb(${m[1]} ${m[2]} ${m[3]} / ${a})`;
+  const h = color2.replace("#", "");
+  if (/^[0-9a-f]{6}$/i.test(h))
+    return `rgb(${parseInt(h.slice(0, 2), 16)} ${parseInt(h.slice(2, 4), 16)} ${parseInt(h.slice(4, 6), 16)} / ${a})`;
+  return color2;
+}
 
 // src/charts/trellis/panel.ts
 function xScale(maxW) {
@@ -17861,10 +17901,14 @@ var itemPanels = [];
 var activeItem = null;
 var activeEvent = null;
 function restyle(d, on, bold = false) {
-  const c = on ? d.__color : alpha2(d.__color, DIM);
+  const c = on ? d.__color : fade(d.__color, DIM2);
   d.borderColor = c;
   d.backgroundColor = c;
   d.pointBorderColor = c;
+  if (Array.isArray(d.pointBackgroundColor))
+    d.pointBackgroundColor = d.data.map(
+      (p) => isDetached(p.flag) ? THEME.hollow : c
+    );
   d.borderWidth = bold && on ? 2.75 : 1.75;
 }
 function restylePanels(charts, keep, bold = false) {
@@ -17880,7 +17924,7 @@ function emphasiseItem(key) {
   for (const { chart, item } of itemPanels) {
     const host = chart.canvas.parentElement;
     if (host)
-      host.style.opacity = key === null || item === key ? "1" : String(DIM);
+      host.style.opacity = key === null || item === key ? "1" : String(DIM2);
   }
 }
 function emphasiseEvent(index) {
@@ -17891,31 +17935,39 @@ function emphasiseEvent(index) {
     (d) => index === null || d.__ep === index
   );
 }
-function trellisHosts() {
-  const episodeHost = document.getElementById("trellis-episodes");
-  const itemHost = document.getElementById("trellis-items");
-  const itemLegend = document.getElementById("legend-items");
-  const eventLegend = document.getElementById("legend-events");
-  if (!episodeHost || !itemHost || !itemLegend || !eventLegend) {
-    console.warn("[trellis] one or more hosts missing");
-    return null;
+var EPISODE_HOSTS = {
+  episodeHost: "trellis-episodes",
+  itemLegend: "legend-items"
+};
+var ITEM_HOSTS = {
+  itemHost: "trellis-items",
+  eventLegend: "legend-events"
+};
+function resolveHosts(ids) {
+  const keys = Object.keys(ids);
+  const out = {};
+  const missing = [];
+  for (const key of keys) {
+    const node = document.getElementById(ids[key]);
+    if (node) out[key] = node;
+    else missing.push(ids[key]);
   }
-  return { episodeHost, itemHost, itemLegend, eventLegend };
+  if (!missing.length) return out;
+  if (missing.length < keys.length)
+    console.warn(
+      `[trellis] missing host(s): ${missing.map((m) => `#${m}`).join(", ")}`
+    );
+  return null;
 }
-function mountCrossEpisode() {
-  const hosts = trellisHosts();
+function mountEpisodeTrellis() {
+  const hosts = resolveHosts(EPISODE_HOSTS);
   if (!hosts) return;
-  const { episodeHost, itemHost, itemLegend, eventLegend } = hosts;
-  if (!episodeHost || !itemHost || !itemLegend || !eventLegend) return;
+  const { episodeHost, itemLegend } = hosts;
+  const styles = seriesStyles();
   episodePanels.length = 0;
-  itemPanels.length = 0;
   activeItem = null;
-  activeEvent = null;
-  resetSeriesCache();
   episodeHost.replaceChildren();
-  itemHost.replaceChildren();
   itemLegend.replaceChildren();
-  eventLegend.replaceChildren();
   const m = t();
   const unbounded = Number.POSITIVE_INFINITY;
   const [yMin, yMax] = logBounds(...rawExtent(EPISODES, METRICS, unbounded));
@@ -17930,9 +17982,7 @@ function mountCrossEpisode() {
       text.banner
     );
     episodeHost.append(figure);
-    const datasets = SERIES2.map(
-      (s) => buildDataset(ep, idx, s.key, s.color, unbounded)
-    ).filter((d) => d !== null);
+    const datasets = styles.map((s) => buildDataset(ep, idx, s.key, s.color, unbounded)).filter((d) => d !== null);
     const chart = track(
       new Chart(canvas, {
         type: "line",
@@ -17948,29 +17998,55 @@ function mountCrossEpisode() {
           }
         ),
         plugins: []
-        // no per-panel labels: the episode is the panel title
       })
     );
     decoratePanel(chart, figure, text.strip);
     canvas.addEventListener("mouseleave", () => emphasiseItem(null));
     episodePanels.push(chart);
   });
+  legend(
+    itemLegend,
+    "items",
+    styles.map((s) => ({
+      text: m.items[s.key].label,
+      color: s.color,
+      on: () => emphasiseItem(s.key),
+      off: () => emphasiseItem(null),
+      hide: (hidden) => toggleDatasets(episodeHost, "__item", s.key, hidden)
+    }))
+  );
+  wireLegendSync(episodeHost, "items", (d) => {
+    const k = styles.findIndex((s) => s.key === d.__item);
+    return k < 0 ? null : k;
+  });
+}
+function mountItemTrellis() {
+  const hosts = resolveHosts(ITEM_HOSTS);
+  if (!hosts) return;
+  const { itemHost, eventLegend } = hosts;
+  const styles = seriesStyles();
+  const steps2 = movementRamp();
+  itemPanels.length = 0;
+  activeEvent = null;
+  itemHost.replaceChildren();
+  eventLegend.replaceChildren();
+  const m = t();
   const itemCols = columns(itemHost);
   itemHost.style.gridTemplateColumns = `repeat(${itemCols}, minmax(0, 1fr))`;
-  SERIES2.forEach((series) => {
-    const [rawLo, rawHi] = rawExtent(EPISODES, [series.key], ENFORCEMENT_LAST);
+  styles.forEach((s) => {
+    const [rawLo, rawHi] = rawExtent(EPISODES, [s.key], ENFORCEMENT_LAST);
     const [lo2, hi2] = logBounds(rawLo, rawHi);
     const range = fill(m.panels.valueRange, {
       lo: compact().format(rawLo),
       hi: compact().format(rawHi)
     });
     const { figure, canvas } = panelFigure(
-      m.items[series.key].short,
+      m.items[s.key].short,
       fill(m.panels.itemMeta, { range, n: ENFORCEMENT_LAST })
     );
     itemHost.append(figure);
     const datasets = EPISODES.map(
-      (ep, i) => buildDataset(ep, i, series.key, RAMP2[i], ENFORCEMENT_LAST)
+      (ep, i) => buildDataset(ep, i, s.key, steps2[i % steps2.length], ENFORCEMENT_LAST)
     ).filter((d) => d !== null);
     const chart = track(
       new Chart(canvas, {
@@ -17984,7 +18060,7 @@ function mountCrossEpisode() {
         plugins: []
       })
     );
-    decoratePanel(chart, figure, m.items[series.key].short);
+    decoratePanel(chart, figure, m.items[s.key].short);
     canvas.addEventListener("mouseleave", () => emphasiseEvent(null));
     canvas.addEventListener("mousemove", (ev) => {
       const pts = chart.getElementsAtEventForMode(
@@ -17997,39 +18073,29 @@ function mountCrossEpisode() {
       const d = hit ? chart.data.datasets[hit.datasetIndex] : void 0;
       emphasiseEvent(d ? d.__ep : null);
     });
-    itemPanels.push({ chart, item: series.key });
+    itemPanels.push({ chart, item: s.key });
   });
-  legend(
-    itemLegend,
-    "items",
-    SERIES2.map((s) => ({
-      text: m.items[s.key].label,
-      color: s.color,
-      on: () => emphasiseItem(s.key),
-      off: () => emphasiseItem(null),
-      hide: (hidden) => toggleDatasets(episodeHost, "__item", s.key, hidden)
-    }))
-  );
   legend(
     eventLegend,
     "events",
     EPISODES.map((ep, i) => ({
       text: m.episodes[ep.id].short,
-      color: RAMP2[i],
+      color: steps2[i % steps2.length],
       on: () => emphasiseEvent(i),
       off: () => emphasiseEvent(null),
       hide: (hidden) => toggleDatasets(itemHost, "__ep", i, hidden)
     }))
   );
-  wireLegendSync(episodeHost, "items", (d) => {
-    const k = SERIES2.findIndex((s) => s.key === d.__item);
-    return k < 0 ? null : k;
-  });
   wireLegendSync(
     itemHost,
     "events",
     (d) => d.__ep >= 0 && d.__ep < EPISODES.length ? d.__ep : null
   );
+}
+function mountCrossEpisode() {
+  resetSeriesCache();
+  mountEpisodeTrellis();
+  mountItemTrellis();
 }
 
 // src/core/lang.ts
@@ -22851,7 +22917,7 @@ function emphasiseStat(stat2, force = false) {
       if (s === "range") {
         d.backgroundColor = alpha2(d.__color, on ? 0.2 : 0.05);
       } else {
-        const c = on ? d.__color : alpha2(d.__color, DIM);
+        const c = on ? d.__color : alpha2(d.__color, DIM3);
         d.borderColor = c;
         d.pointBorderColor = c;
         d.backgroundColor = c;
@@ -22879,6 +22945,7 @@ function mountSummary() {
   const host = document.getElementById("summary");
   const legendHost = document.getElementById("legend-summary");
   if (!host || !legendHost) return;
+  const styles = seriesStyles();
   summaryPanels.length = 0;
   activeStat = null;
   host.replaceChildren();
@@ -22886,7 +22953,7 @@ function mountSummary() {
   const m = t();
   const cols = columns(host);
   host.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
-  for (const [panelIndex, series] of SERIES2.entries()) {
+  for (const [panelIndex, series] of styles.entries()) {
     const cells = [];
     EPISODES.forEach((ep, i) => {
       const c = cellOf(ep, i, series.key);

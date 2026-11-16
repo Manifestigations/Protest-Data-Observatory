@@ -12,7 +12,7 @@ import {
   type Pt,
 } from "../charts/trellis/engine.ts";
 import { legend } from "../charts/trellis/legend.ts";
-import { DIM, SERIES } from "../charts/trellis/palette.ts";
+import { DIM, SERIES, seriesStyles } from "../charts/trellis/palette.ts";
 import { compact, fill, nf, t } from "../copy";
 import { alpha, THEME, track } from "../core/canvas-registry.ts";
 import { EPISODES } from "../data/episodes/index.ts";
@@ -273,6 +273,8 @@ export function mountSummary(): void {
   const legendHost = document.getElementById("legend-summary");
   if (!host || !legendHost) return;
 
+  const styles = seriesStyles(); // ← ordered, resolved per mount
+
   summaryPanels.length = 0;
   activeStat = null;
   host.replaceChildren();
@@ -282,7 +284,7 @@ export function mountSummary(): void {
   const cols = columns(host);
   host.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
 
-  for (const [panelIndex, series] of SERIES.entries()) {
+  for (const [panelIndex, series] of styles.entries()) {
     /* One cell per episode that published something for this measure. Every
        dataset gets the same cells in the same order, so the markers line up by
        index. */

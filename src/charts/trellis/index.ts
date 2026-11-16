@@ -1,18 +1,21 @@
-/* ── Section C — cross-episode comparison ────────────────────────────────────
-   Primary figure: one panel per episode, four series per panel, one shared log
-   axis. Companion: one panel per series, one line per episode on a sequential
-   ramp, x capped at ENFORCEMENT_LAST.
+/* ── Sections C and D — cross-episode comparison ─────────────────────────────
+   Section C (historic/movements.html): one panel per movement, four series per
+   panel, one shared log axis.
+   Section D (historic/series.html): one panel per series, one line per movement
+   on a sequential ramp, x capped at ENFORCEMENT_LAST.
 
-   The two grids share emphasis state by design: hovering a legend entry dims the
-   matching series in the primary grid and the matching episode in the companion.
-   They are one component with two grids, not two components — splitting them
-   means threading eight mutable bindings across two modules. */
+   The two grids used to share a page, so one mount demanded all four hosts at
+   once. They are paginated now, so each grid is mounted on its own and claims
+   only the hosts it owns: no host at all means "this page does not host that
+   grid" (silent, like mountCharts); some but not all means a markup bug.
+   The emphasis maps stay module-scoped, so if both grids ever land on the same
+   page, hovering one still dims the other. */
 
 import { Chart, type ChartData, type ChartEvent } from "chart.js";
-import { alpha, track } from "../../core/canvas-registry.ts";
+import { alpha, THEME, track } from "../../core/canvas-registry.ts";
 import { compact, fill, fmtSpan, t } from "../../copy/index.ts";
 import { ENFORCEMENT_LAST, EPISODES } from "../../data/episodes/index.ts";
-import { METRICS, type Metric } from "../../model/index.ts";
+import { isDetached, METRICS, type Metric } from "../../model/index.ts";
 import {
   buildDataset,
   datasetsOf,
@@ -22,7 +25,14 @@ import {
   type PanelDataset,
 } from "./engine.ts";
 import { WEEK_MODE, nearestByY } from "./interaction.ts";
-import { DIM, RAMP, SERIES } from "./palette.ts";
+import {
+  DIM,
+  fade,
+  movementRamp,
+  RAMP,
+  SERIES,
+  seriesStyles,
+} from "./palette.ts";
 import {
   columns,
   decoratePanel,
@@ -34,7 +44,7 @@ import {
 } from "./panel.ts";
 import { legend, toggleDatasets, wireLegendSync } from "./legend.ts";
 
-/* ----- emphasis */
+/* ----- emphasis (shared by whichever grids this page hosts) */
 
 const episodePanels: Chart<"line">[] = [];
 const itemPanels: { chart: Chart<"line">; item: Metric }[] = [];
@@ -43,11 +53,18 @@ let activeEvent: number | null = null;
 
 /** One recolour path for both emphasis modes. Hollow points are decided from the
  *  point's own flag at draw time, so nothing has to be kept in sync. */
+/* `restyle` now dims through fade(): tokens are rgb(), not hex. */
 function restyle(d: PanelDataset, on: boolean, bold = false): void {
-  const c = on ? d.__color : alpha(d.__color, DIM);
+  const c = on ? d.__color : fade(d.__color, DIM);
   d.borderColor = c;
-  d.backgroundColor = c; // the tooltip swatch is drawn from this
+  d.backgroundColor = c;
   d.pointBorderColor = c;
+  /* Per-point interiors: hollow stays hollow, solid follows the dim. Rebuilt
+     from d.data each call, so repeated emphasises cannot compound the alpha. */
+  if (Array.isArray(d.pointBackgroundColor))
+    d.pointBackgroundColor = d.data.map((p) =>
+      isDetached(p.flag) ? THEME.hollow : c,
+    );
   d.borderWidth = bold && on ? 2.75 : 1.75;
 }
 
@@ -61,6 +78,9 @@ function restylePanels(
     chart.update("none");
   }
 }
+
+/* Both emphasises tolerate an empty panel list: on a paginated site one of the
+   two grids is always absent, and that is not a degraded state. */
 
 function emphasiseItem(key: Metric | null): void {
   if (key === activeItem) return;
@@ -82,53 +102,70 @@ function emphasiseEvent(index: number | null): void {
   );
 }
 
-/** The four hosts section C owns. One declaration, because main.ts and
- *  mountCrossEpisode both query them and the ids must not drift apart. */
-export interface TrellisHosts {
-  readonly episodeHost: HTMLElement;
-  readonly itemHost: HTMLElement;
-  readonly itemLegend: HTMLElement;
-  readonly eventLegend: HTMLElement;
+/* ----- hosts: one grid per page */
+
+interface EpisodeHosts {
+  episodeHost: HTMLElement;
+  itemLegend: HTMLElement;
 }
 
-/** Null rather than partial: a grid with no legend is a broken trellis, not a
- *  degraded one. */
-export function trellisHosts(): TrellisHosts | null {
-  const episodeHost = document.getElementById("trellis-episodes");
-  const itemHost = document.getElementById("trellis-items");
-  const itemLegend = document.getElementById("legend-items");
-  const eventLegend = document.getElementById("legend-events");
-  if (!episodeHost || !itemHost || !itemLegend || !eventLegend) {
-    console.warn("[trellis] one or more hosts missing");
-    return null;
+interface ItemHosts {
+  itemHost: HTMLElement;
+  eventLegend: HTMLElement;
+}
+
+/** The four ids section C/D own. The grids no longer share a page, so each grid
+ *  resolves its own pair — one declaration, because the ids must not drift. */
+const EPISODE_HOSTS = {
+  episodeHost: "trellis-episodes",
+  itemLegend: "legend-items",
+} as const;
+
+const ITEM_HOSTS = {
+  itemHost: "trellis-items",
+  eventLegend: "legend-events",
+} as const;
+
+/** Absent everywhere = this page does not host the grid (no warning).
+ *  Present but partial = a markup bug (warn, and mount nothing). */
+function resolveHosts<T extends Record<string, string>>(
+  ids: T,
+): { -readonly [K in keyof T]: HTMLElement } | null {
+  const keys = Object.keys(ids) as Array<keyof T & string>;
+  const out = {} as { -readonly [K in keyof T]: HTMLElement };
+  const missing: string[] = [];
+
+  for (const key of keys) {
+    const node = document.getElementById(ids[key]);
+    if (node) out[key] = node;
+    else missing.push(ids[key]);
   }
-  return { episodeHost, itemHost, itemLegend, eventLegend };
+
+  if (!missing.length) return out;
+  if (missing.length < keys.length)
+    console.warn(
+      `[trellis] missing host(s): ${missing.map((m) => `#${m}`).join(", ")}`,
+    );
+  return null;
 }
 
-/* ----- mount */
+/* ----- section C: one panel per movement */
 
-export function mountCrossEpisode(): void {
-  const hosts = trellisHosts();
+export function mountEpisodeTrellis(): void {
+  const hosts = resolveHosts(EPISODE_HOSTS);
   if (!hosts) return;
-  const { episodeHost, itemHost, itemLegend, eventLegend } = hosts;
-  if (!episodeHost || !itemHost || !itemLegend || !eventLegend) return;
+  const { episodeHost, itemLegend } = hosts;
 
-  /* destroyAll() has already destroyed the previous instances; clear the handles
-     so emphasis cannot touch a dead chart. */
+  const styles = seriesStyles(); // ← token lookup happens here, per mount
+
   episodePanels.length = 0;
-  itemPanels.length = 0;
   activeItem = null;
-  activeEvent = null;
-  resetSeriesCache(); // titles and notes are locale-bound
   episodeHost.replaceChildren();
-  itemHost.replaceChildren();
   itemLegend.replaceChildren();
-  eventLegend.replaceChildren();
 
   const m = t();
   const unbounded = Number.POSITIVE_INFINITY;
 
-  /* ---- primary trellis: one panel per episode, one y range for all ---- */
   const [yMin, yMax] = logBounds(...rawExtent(EPISODES, METRICS, unbounded));
   const cols = columns(episodeHost);
   episodeHost.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
@@ -143,9 +180,9 @@ export function mountCrossEpisode(): void {
     );
     episodeHost.append(figure);
 
-    const datasets = SERIES.map((s) =>
-      buildDataset(ep, idx, s.key, s.color, unbounded),
-    ).filter((d): d is PanelDataset => d !== null);
+    const datasets = styles
+      .map((s) => buildDataset(ep, idx, s.key, s.color, unbounded))
+      .filter((d): d is PanelDataset => d !== null);
 
     const chart = track(
       new Chart<"line">(canvas, {
@@ -156,7 +193,6 @@ export function mountCrossEpisode(): void {
           xScale(maxW),
           yScale(yMin, yMax, idx % cols === 0),
           (e, elements, host) => {
-            // every series at the week is active; follow the closest line
             const hit = nearestByY(host, elements, e);
             const d = hit
               ? (host.data.datasets[hit.datasetIndex] as PanelDataset)
@@ -164,22 +200,54 @@ export function mountCrossEpisode(): void {
             emphasiseItem(d ? d.__item : null);
           },
         ),
-        plugins: [], // no per-panel labels: the episode is the panel title
+        plugins: [],
       }),
     );
 
     decoratePanel(chart, figure, text.strip);
-
     canvas.addEventListener("mouseleave", () => emphasiseItem(null));
     episodePanels.push(chart);
   });
 
-  /* ---- companion: one panel per series, x capped at the last enforcement week ---- */
+  legend(
+    itemLegend,
+    "items",
+    styles.map((s) => ({
+      text: m.items[s.key].label,
+      color: s.color,
+      on: () => emphasiseItem(s.key),
+      off: () => emphasiseItem(null),
+      hide: (hidden) => toggleDatasets(episodeHost, "__item", s.key, hidden),
+    })),
+  );
+
+  wireLegendSync(episodeHost, "items", (d) => {
+    const k = styles.findIndex((s) => s.key === d.__item);
+    return k < 0 ? null : k;
+  });
+}
+
+/* 3. section D — same, with the ordinal ramp resolved once */
+export function mountItemTrellis(): void {
+  const hosts = resolveHosts(ITEM_HOSTS);
+  if (!hosts) return;
+  const { itemHost, eventLegend } = hosts;
+
+  const styles = seriesStyles();
+  const steps = movementRamp(); // ← --chart-series-1..7, theme-aware, per mount
+
+  itemPanels.length = 0;
+  activeEvent = null;
+  itemHost.replaceChildren();
+  eventLegend.replaceChildren();
+
+  const m = t();
+
   const itemCols = columns(itemHost);
   itemHost.style.gridTemplateColumns = `repeat(${itemCols}, minmax(0, 1fr))`;
 
-  SERIES.forEach((series) => {
-    const [rawLo, rawHi] = rawExtent(EPISODES, [series.key], ENFORCEMENT_LAST);
+  styles.forEach((s) => {
+    const [rawLo, rawHi] = rawExtent(EPISODES, [s.key], ENFORCEMENT_LAST);
     const [lo, hi] = logBounds(rawLo, rawHi);
     const range = fill(m.panels.valueRange, {
       lo: compact().format(rawLo),
@@ -187,13 +255,13 @@ export function mountCrossEpisode(): void {
     });
 
     const { figure, canvas } = panelFigure(
-      m.items[series.key].short,
+      m.items[s.key].short,
       fill(m.panels.itemMeta, { range, n: ENFORCEMENT_LAST }),
     );
     itemHost.append(figure);
 
     const datasets = EPISODES.map((ep, i) =>
-      buildDataset(ep, i, series.key, RAMP[i], ENFORCEMENT_LAST),
+      buildDataset(ep, i, s.key, steps[i % steps.length], ENFORCEMENT_LAST),
     ).filter((d): d is PanelDataset => d !== null);
 
     const chart = track(
@@ -209,12 +277,10 @@ export function mountCrossEpisode(): void {
       }),
     );
 
-    decoratePanel(chart, figure, m.items[series.key].short);
+    decoratePanel(chart, figure, m.items[s.key].short);
 
     canvas.addEventListener("mouseleave", () => emphasiseEvent(null));
     canvas.addEventListener("mousemove", (ev) => {
-      // same week band as the tooltip, else the emphasis dims a series the
-      // tooltip is not showing
       const pts = chart.getElementsAtEventForMode(
         ev,
         WEEK_MODE,
@@ -230,39 +296,33 @@ export function mountCrossEpisode(): void {
       emphasiseEvent(d ? d.__ep : null);
     });
 
-    itemPanels.push({ chart, item: series.key });
+    itemPanels.push({ chart, item: s.key });
   });
-
-  /* ---- legends ---- */
-  legend(
-    itemLegend,
-    "items",
-    SERIES.map((s) => ({
-      text: m.items[s.key].label,
-      color: s.color,
-      on: () => emphasiseItem(s.key),
-      off: () => emphasiseItem(null),
-      hide: (hidden) => toggleDatasets(episodeHost, "__item", s.key, hidden),
-    })),
-  );
 
   legend(
     eventLegend,
     "events",
     EPISODES.map((ep, i) => ({
       text: m.episodes[ep.id].short,
-      color: RAMP[i],
+      color: steps[i % steps.length],
       on: () => emphasiseEvent(i),
       off: () => emphasiseEvent(null),
       hide: (hidden) => toggleDatasets(itemHost, "__ep", i, hidden),
     })),
   );
 
-  wireLegendSync(episodeHost, "items", (d) => {
-    const k = SERIES.findIndex((s) => s.key === d.__item);
-    return k < 0 ? null : k;
-  });
   wireLegendSync(itemHost, "events", (d) =>
     d.__ep >= 0 && d.__ep < EPISODES.length ? d.__ep : null,
   );
+}
+
+/* ----- entry point kept for main.ts */
+
+/** Mounts whichever grids this page hosts. Titles and notes are locale-bound, so
+ *  the derivation cache is dropped once per render, before either grid rebuilds.
+ *  Callers that mount a single grid directly must call resetSeriesCache() first. */
+export function mountCrossEpisode(): void {
+  resetSeriesCache();
+  mountEpisodeTrellis();
+  mountItemTrellis();
 }

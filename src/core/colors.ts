@@ -65,6 +65,14 @@ const FALLBACK: Readonly<Record<string, string>> = {
   "c-remainder-wash": "rgb(199 204 211 / 55%)",
   "c-remainder-ink": "#111827",
   "c-remainder-edge": "#9aa3af",
+  "chart-hollow": "#ffffff",
+  "chart-series-1": "#5c97c5",
+  "chart-series-2": "#357ab0",
+  "chart-series-3": "#2a6b9c",
+  "chart-series-4": "#1b5c92",
+  "chart-series-5": "#124a78",
+  "chart-series-6": "#0a3a63",
+  "chart-series-7": "#062844",
 };
 
 const cache = new Map<string, string>();
@@ -194,3 +202,23 @@ if (typeof document !== "undefined") {
     attributeFilter: ["data-theme"],
   });
 }
+
+/* ----- ordinal ramp + hollow marker (trellis grids C and D) --------------- */
+
+/** Seven movement steps exist in the stylesheet; a caller asking for more gets
+ *  what is authored rather than an undefined colour. */
+export const RAMP_STEPS = 7;
+
+/**
+ * Movements are ordered in time, so they take the site's ordinal ramp — not a
+ * semantic tone. `--chart-series-N` is authored light→dark in light mode and
+ * value-reversed in dark mode, so "lightest = earliest" survives both themes.
+ * Called per mount: Chart.js bakes colours at create time.
+ */
+export function ramp(steps = RAMP_STEPS): string[] {
+  const n = Math.min(steps, RAMP_STEPS);
+  return Array.from({ length: n }, (_, i) => css(`chart-series-${i + 1}`));
+}
+
+/** Interior of a hollow marker — the card, never a literal white. */
+export const hollow = (): string => css("chart-hollow");

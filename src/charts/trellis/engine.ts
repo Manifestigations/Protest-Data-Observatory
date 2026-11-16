@@ -19,6 +19,7 @@ import {
   type Metric,
   type Row,
 } from "../../model/index.ts";
+import { hollow } from "../../core/colors.ts";
 
 export interface Pt {
   x: number;
@@ -136,7 +137,6 @@ export function buildDataset(
     pointBackgroundColor: points.map((p) =>
       isDetached(p.flag) ? THEME.hollow : color,
     ),
-    pointBorderColor: color,
     pointBorderWidth: 1.5,
     pointHoverRadius: 4.5,
     pointHitRadius: 12,

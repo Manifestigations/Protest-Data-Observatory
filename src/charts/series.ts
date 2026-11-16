@@ -1,9 +1,9 @@
-/* ── Section A/B — one row per plotted series ────────────────────────────────
-   The five build*Config() bodies that differed only in their arguments are one
-   table (DEF). Split out of chart.ts so datasets, axes and plugins can read the
-   table without importing the chart shell. */
+/* ==========================================================================
+   src/charts/series.ts — DEF resolves its colours from tones, never literals.
+   ========================================================================== */
 
 import type { PointStyle } from "chart.js";
+import { tones, type Tone } from "../core/colors.ts";
 import { DAILY, DATES, WEEKLY, type Series } from "../data/data.ts";
 
 export type Unit = "count" | "eurM";
@@ -12,8 +12,6 @@ export type Unit = "count" | "eurM";
 export const AXIS_LEFT = "y";
 export const AXIS_RIGHT = "y1";
 
-/** The €1,000M damages total is the span ring's right-hand anchor: keep the
- *  datum (tooltip, band, axis max) and hide only its marker. */
 const DAMAGES_ANCHOR = "2026-10-24";
 
 const damagesRadius = (r: number): number[] =>
@@ -21,76 +19,101 @@ const damagesRadius = (r: number): number[] =>
 
 export interface SeriesDef {
   readonly data: Series;
+  /** Semantic identity — the only input to the colour. */
+  readonly tone: Tone;
+  /** Resolved from `tone` on read (see `def()`), never stored. */
   readonly color: string;
   readonly unit: Unit;
   readonly radius: number;
-  /** Per-index override of `radius`; a 0 hides the marker, not the point. */
   readonly pointRadius?: readonly number[];
   readonly width: number;
   readonly style?: PointStyle;
   readonly axis?: string;
+  /** The tone's wash, for cumulative/stock bands. */
   readonly bandFill?: string;
   readonly log?: boolean;
   readonly shadeOnly?: boolean;
 }
 
+/** A table entry before its colours exist. `band` = give it a bandFill. */
+type Spec = Omit<SeriesDef, "color" | "bandFill"> & { band?: boolean };
+
 /**
- * `satisfies` rather than `Record<SeriesId, SeriesDef>`: the key set is
- * inferred from the object, so `keyof typeof DEF` is a literal union and a
- * misspelled key becomes a compile error instead of a runtime undefined.
+ * Getters, not values: `tones` reads computed style and its cache is cleared by
+ * resetColours(), so a literal-free table has to resolve when it is read.
+ * Written by hand because `{...spread}` would invoke the getter once and freeze
+ * whichever theme happened to be active at import time.
  */
+function def(spec: Spec): SeriesDef {
+  const { band, ...rest } = spec;
+  const d = rest as SeriesDef;
+
+  Object.defineProperty(d, "color", {
+    get: () => tones[spec.tone].fill,
+    enumerable: true,
+  });
+
+  if (band)
+    Object.defineProperty(d, "bandFill", {
+      get: () => tones[spec.tone].wash,
+      enumerable: true,
+    });
+
+  return d;
+}
+
 export const DEF = {
-  protestersDaily: {
+  protestersDaily: def({
     data: DAILY.turnout,
-    color: "#1d4ed8",
+    tone: "turnout",
     unit: "count",
     radius: 4,
     width: 2,
-  },
-  blockadesDaily: {
+  }),
+  blockadesDaily: def({
     data: DAILY.blockades,
-    color: "#8C564B",
+    tone: "protest",
     unit: "count",
     radius: 3,
     width: 1.75,
     axis: AXIS_RIGHT,
     log: true,
     style: "rect",
-  },
-  strikersDaily: {
+  }),
+  strikersDaily: def({
     data: DAILY.strikers,
-    color: "#0f766e",
+    tone: "turnout",
     unit: "count",
     radius: 4.5,
     width: 2,
     style: "star",
-  },
-  strikersWeekly: {
+  }),
+  strikersWeekly: def({
     data: WEEKLY.strikers,
-    color: "#0f766e",
+    tone: "turnout",
     unit: "count",
     radius: 5,
     width: 2,
     style: "star",
-  },
-  arrestsDaily: {
+  }),
+  arrestsDaily: def({
     data: DAILY.arrests,
-    color: "#b91c1c",
+    tone: "arrest",
     unit: "count",
     radius: 3.5,
     width: 1.5,
-  },
-  forcesDaily: {
+  }),
+  forcesDaily: def({
     data: DAILY.forcesInjured,
-    color: "#047857",
+    tone: "police",
     unit: "count",
     radius: 4,
     width: 1.5,
     style: "rectRot",
-  },
-  forcesInjuredStock: {
+  }),
+  forcesInjuredStock: def({
     data: DAILY.forcesInjuredStock,
-    color: "#065f46",
+    tone: "police",
     unit: "count",
     radius: 3,
     width: 2,
@@ -98,94 +121,87 @@ export const DEF = {
        observation, so it is drawn as policingCumulative's is: one filled
        polygon between the low and high levels, no per-point whisker caps.
        `shadeOnly` sets noWhiskers and leaves the band to the tooltip. */
-    bandFill: "rgba(6,95,70,0.14)",
+    band: true,
     shadeOnly: true,
-  },
-  protestersInjuredDaily: {
+  }),
+  protestersInjuredDaily: def({
     data: DAILY.protesterInjured,
-    color: "#b45309",
+    tone: "protest",
     unit: "count",
     radius: 5,
     width: 1.5,
     style: "triangle",
-  },
-  damagesDaily: {
+  }),
+  damagesDaily: def({
     data: DAILY.damagesCost,
-    color: "#7c3aed",
+    tone: "cost",
     unit: "eurM",
     radius: 5,
     pointRadius: damagesRadius(5),
     width: 2,
-  },
-  policingDaily: {
+  }),
+  policingDaily: def({
     data: DAILY.policing,
-    color: "#0e7490",
+    tone: "policeCost",
     unit: "eurM",
     radius: 4,
     width: 2,
     style: "rect",
-  },
-  policingCumulative: {
+  }),
+  policingCumulative: def({
     data: DAILY.policingCumulative,
-    color: "#0369a1",
+    tone: "policeCost",
     unit: "eurM",
     radius: 0,
     width: 2,
-    bandFill: "rgba(3,105,161,0.12)",
+    band: true,
     shadeOnly: true,
-  },
-  protestersWeekly: {
+  }),
+  protestersWeekly: def({
     data: WEEKLY.turnout,
-    color: "#1d4ed8",
+    tone: "turnout",
     unit: "count",
     radius: 5,
     width: 2,
-  },
-  blockadesWeekly: {
+  }),
+  blockadesWeekly: def({
     data: WEEKLY.blockades,
-    color: "#8C564B",
+    tone: "protest",
     unit: "count",
     radius: 3,
     width: 1.75,
     axis: AXIS_RIGHT,
     log: true,
-  },
-  arrestsWeekly: {
+  }),
+  arrestsWeekly: def({
     data: WEEKLY.arrests,
-    color: "#b91c1c",
+    tone: "arrest",
     unit: "count",
     radius: 4,
     width: 2,
-  },
-  forcesWeekly: {
+  }),
+  forcesWeekly: def({
     data: WEEKLY.forcesInjured,
-    color: "#047857",
+    tone: "police",
     unit: "count",
     radius: 4,
     width: 1.5,
     style: "rectRot",
-  },
-  protestersInjuredWeekly: {
+  }),
+  protestersInjuredWeekly: def({
     data: WEEKLY.protesterInjured,
-    color: "#b45309",
+    tone: "protest",
     unit: "count",
     radius: 5,
     width: 1.5,
     style: "triangle",
-  },
+  }),
 } satisfies Record<string, SeriesDef>;
 
 /** Literal union of the keys actually defined — a typo is now a type error. */
 export type SeriesId = keyof typeof DEF;
 
-/** The points a series actually draws, as index/value pairs.
- *
- * A marker with radius 0 is an aggregate that is not a daily value — the
- * €1,000M damages total of 24 Oct, kept as the span ring's right-hand anchor
- * but drawn without a marker. The KPIs take the chart's own mask, so a figure
- * the reader cannot see as a marker is neither a "largest day" nor an item in
- * a mean. Delete the two mask lines below to count it like any other point.
- * The id names the series, so no daily/weekly switch and no DEF scan. */
+/** The points a series actually draws, as index/value pairs. Unchanged. */
 export function visiblePoints(id: SeriesId): { i: number; v: number }[] {
   const def = DEF[id];
   if (!def?.data) return [];
