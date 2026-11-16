@@ -18,7 +18,6 @@ import { byId, el } from "../core/dom.ts";
 import { applyUrlLang, mountLangSwitch } from "../core/lang.ts";
 import { initTheme } from "../core/theme.ts";
 import { mountCards } from "../sections/cards/index.ts";
-import { mountCasualties } from "../sections/casualties.ts";
 import { currentPage, renderChrome } from "../sections/chrome.ts";
 import { mountContext } from "../sections/context/context.ts";
 import { mountKpis, mountKpiPresets } from "../sections/kpis.ts";
@@ -39,6 +38,7 @@ import {
 import { bi } from "../copy";
 import { announce } from "../core/a11y.ts";
 import { mountContribute } from "../sections/contribute/index.ts";
+import { mountCasualties } from "../sections/casualties/index.ts";
 
 /* Static anchors carry a plausible href for no-JS readers; this makes it
    correct for the page's depth (2026/turnout.html → ../contribute.html). */

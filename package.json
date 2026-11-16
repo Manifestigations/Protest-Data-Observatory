@@ -6,13 +6,10 @@
     "node": ">=22.18"
   },
   "scripts": {
-    "build": "npm run build:css && npm run build:js -- --sourcemap --watch",
-    "build:js": "esbuild src/entry/main.ts --bundle --format=esm --target=es2022 --outfile=docs/bundle.js",
-    "build:css": "esbuild src/styles/index.css --bundle --outfile=docs/styles.css",
-    "check:casualties": "node scripts/check-casualties.ts",
-    "dev:client": "npm run build",
-    "dev:server": "node --watch server.ts",
-    "typecheck": "tsc --noEmit"
+    "dev": "node scripts/build.ts --watch",
+    "build": "node scripts/build.ts",
+    "typecheck": "tsc --noEmit",
+    "check:casualties": "node scripts/check-casualties.ts"
   },
   "dependencies": {
     "chart.js": "^4.5.0"

@@ -1872,3 +1872,469 @@ details.data-table th[scope="row"] {
   opacity: 0.75;
   font-style: italic;
 }
+
+/* ---------------- CASUALTIES */
+
+/* 1. Vars belong on the block, not on .cas-visual: .cas-mix is a sibling of the strips. */
+.cas-block {
+  --cas-serious: #b3261e;
+  --cas-light: #2f7d63;
+  --cas-void: color-mix(in srgb, currentColor 18%, transparent);
+}
+[data-theme="dark"] .cas-block {
+  --cas-serious: #ef8371;
+  --cas-light: #58c6a1;
+  --cas-void: color-mix(in srgb, currentColor 26%, transparent);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .cas-block {
+    --cas-serious: #ef8371;
+    --cas-light: #58c6a1;
+    --cas-void: color-mix(in srgb, currentColor 26%, transparent);
+  }
+}
+
+/* 2. The missing block. Without this the whole "HOW THE INJURIES DIVIDE" section is prose. */
+.cas-mix {
+  display: grid;
+  gap: 2px;
+  margin-block: 20px 12px;
+}
+.cas-mix-row {
+  display: grid;
+  grid-template-columns: minmax(8.5rem, 13rem) minmax(0, 1fr) auto auto;
+  align-items: center;
+  column-gap: 14px;
+  row-gap: 4px;
+  padding-block: 7px;
+  border-top: 1px solid var(--cas-void);
+}
+.cas-mix-label {
+  font-size: 0.84rem;
+  line-height: 1.3;
+}
+.cas-mix-track {
+  position: relative;
+  display: block;
+  height: 16px;
+  border-radius: 2px;
+  background: var(--cas-void);
+  overflow: clip;
+}
+.cas-mix-track::after {
+  /* 100 % edge, so a 95 % bar reads as 95 % */
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  width: 1px;
+  background: currentColor;
+  opacity: 0.3;
+}
+.cas-mix-fill {
+  display: block;
+  height: 100%;
+  background: currentColor;
+  opacity: 0.45;
+}
+.cas-mix-value,
+.cas-mix-share {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+.cas-mix-value {
+  opacity: 0.65;
+}
+.cas-mix-share {
+  font-weight: 650;
+  text-align: end;
+  min-width: 5.2rem;
+}
+/* band order comes from MIX[]: light, not-light, serious — verify before relying on it */
+.cas-mix-row:nth-of-type(1) .cas-mix-fill {
+  background: var(--cas-light);
+  opacity: 1;
+}
+.cas-mix-row:nth-of-type(2) .cas-mix-fill {
+  background: currentColor;
+  opacity: 0.32;
+}
+.cas-mix-row:nth-of-type(3) .cas-mix-fill {
+  background: var(--cas-serious);
+  opacity: 1;
+}
+
+@media (max-width: 640px) {
+  .cas-mix-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .cas-mix-label {
+    grid-column: 1;
+  }
+  .cas-mix-share {
+    grid-column: 2;
+  }
+  .cas-mix-track {
+    grid-column: 1 / -1;
+  }
+  .cas-mix-value {
+    grid-column: 1 / -1;
+  }
+}
+
+/* 3. Honour the computed widths exactly. */
+.cas-seg {
+  flex: 0 0 auto;
+}
+
+/* 4. Contain the whisker: this alone kills the full-page red rule. */
+.cas-track-wrap {
+  position: relative;
+  overflow: clip;
+  padding-block: 4px;
+}
+.cas-whisker {
+  position: absolute;
+  top: 0;
+  height: 7px; /* was 22px, which overprinted the label row */
+  max-width: 100%;
+  border-top: 1px solid var(--cas-serious);
+  border-inline: 1px solid var(--cas-serious);
+  pointer-events: none;
+}
+
+/* 5. Dots next to their facts, and a cap so 29 circles wrap inside the row. */
+.cas-tally-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+}
+.cas-dots {
+  flex: 0 1 auto;
+  max-width: 60%;
+  min-width: 0;
+}
+.cas-tally-facts {
+  flex: 1 0 auto;
+  margin-inline-start: auto;
+  justify-content: flex-end;
+}
+.cas-dots-empty {
+  flex: 0 0 3rem;
+  height: 1px;
+  border-bottom: 1px dashed var(--cas-void);
+}
+.cas-dot-unknown {
+  display: inline-grid;
+  place-items: center;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px var(--cas-void);
+}
+
+/* 6. .cas-cases is a <details> now, not a table cell. */
+.cas-cases {
+  font-style: normal;
+}
+.cas-cases > summary {
+  list-style: none;
+}
+.cas-cases > summary::-webkit-details-marker {
+  display: none;
+}
+.cas-cases > summary::before {
+  content: "▸";
+  margin-inline-end: 4px;
+  opacity: 0.6;
+}
+.cas-cases[open] > summary::before {
+  content: "▾";
+}
+
+/* ===== severity strips =====
+ 
+.cas-visual { margin-bottom: 6px; }
+.cas-visual > p.cas-caption { margin: 0 0 10px; padding: 0; }
+
+/* --- legend --- */
+.cas-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 16px;
+  margin: 0 0 10px;
+  font-size: var(--fs-2xs);
+  color: var(--ink-4);
+}
+.cas-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.cas-swatch {
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 14px;
+  height: 8px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.75;
+}
+.cas-swatch.cas-seg-unpub {
+  background: repeating-linear-gradient(
+    135deg,
+    currentColor 0 1px,
+    transparent 1px 4px
+  );
+  opacity: 1;
+}
+/* serious is a marker now, so its legend key is a bracket, not a block */
+.cas-swatch.cas-legend-whisker {
+  height: 8px;
+  background: none;
+  border-top: 1.5px solid var(--cas-serious, #b3261e);
+  border-inline: 1px solid var(--cas-serious, #b3261e);
+  opacity: 0.9;
+}
+
+/* --- strip --- */
+.cas-strip {
+  padding: 12px 0 10px;
+  border-top: 1px solid var(--line-1);
+}
+.cas-strip-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 6px;
+  font-size: var(--fs-xs);
+}
+.cas-strip-name {
+  flex: 1 1 auto;
+  font-weight: 600;
+  color: var(--ink-1);
+}
+.cas-strip-total {
+  flex: 0 0 auto;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.cas-strip-share {
+  flex: 0 0 auto;
+  min-width: 4.5rem;
+  text-align: end;
+  font-weight: 700;
+  color: var(--ink-1);
+  font-variant-numeric: tabular-nums;
+}
+
+.cas-track-wrap {
+  position: relative;
+  overflow: clip;
+  padding-top: 10px;
+}
+
+/* grid, not flex: fr columns normalise to the total and cannot overflow */
+.cas-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  height: 16px;
+  border-radius: 3px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--ink-4) 14%, transparent);
+}
+.cas-track-empty {
+  display: flex;
+  align-items: center;
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--line-1);
+}
+.cas-track-note {
+  padding-inline: 8px;
+  font-size: var(--fs-2xs);
+  color: var(--ink-4);
+}
+
+.cas-seg {
+  display: block;
+  height: 100%;
+  min-width: 0;
+}
+.cas-seg-serious {
+  background: var(--cas-serious, #b3261e);
+}
+.cas-seg-light {
+  background: var(--cas-light, #2f7d63);
+}
+.cas-seg-other {
+  background: color-mix(in srgb, var(--ink-4) 45%, transparent);
+}
+.cas-seg-unpub {
+  background: repeating-linear-gradient(
+    135deg,
+    var(--ink-4) 0 1px,
+    transparent 1px 5px
+  );
+  opacity: 0.55;
+}
+
+.cas-whisker {
+  position: absolute;
+  top: 0;
+  height: 8px;
+  box-sizing: border-box;
+  max-width: 100%;
+  border-top: 1.5px solid var(--cas-serious, #b3261e);
+  border-inline: 1px solid var(--cas-serious, #b3261e);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.cas-strip-meta {
+  margin: 6px 0 0;
+  font-size: var(--fs-2xs);
+  color: var(--ink-4);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- tally --- */
+.cas-tally-row {
+  padding: 10px 0 9px;
+  border-top: 1px solid var(--line-1);
+}
+.cas-tally-row.cas-reference {
+  opacity: 0.62;
+}
+.cas-tally-side {
+  margin: 14px 0 4px;
+  font-size: var(--fs-2xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+
+/* dots | label | count | ——— | expander */
+.cas-tally-body {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, max-content) auto minmax(
+      0,
+      1fr
+    ) auto;
+  grid-template-areas: "dots kind count gap more";
+  align-items: center;
+  column-gap: 12px;
+  row-gap: 6px;
+}
+.cas-dots {
+  grid-area: dots;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3px;
+  max-width: 12rem;
+  min-height: 12px;
+}
+.cas-dot {
+  display: block;
+  flex: 0 0 auto;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--cas-serious, #b3261e);
+}
+.cas-dot-ref {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px
+    color-mix(in srgb, var(--ink-3) 55%, transparent);
+}
+.cas-dot-more {
+  font-size: var(--fs-2xs);
+  color: var(--ink-4);
+}
+.cas-dots-empty {
+  width: 3rem;
+  min-height: 0;
+  height: 0;
+  border-bottom: 1px dashed var(--line-1);
+}
+.cas-dot-unknown {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--ink-3) 60%, transparent);
+  font-size: 0.6rem;
+  line-height: 1;
+  color: var(--ink-3);
+}
+
+/* children join the row grid: no more right-flung label */
+.cas-tally-facts {
+  display: contents;
+}
+.cas-tally-kind {
+  grid-area: kind;
+  font-size: var(--fs-2xs);
+  color: var(--ink-3);
+}
+.cas-tally-count {
+  grid-area: count;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--ink-1);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+
+.cas-cases {
+  grid-area: more;
+  font-style: normal;
+}
+.cas-cases > summary {
+  cursor: pointer;
+  list-style: none;
+  font-size: var(--fs-2xs);
+  color: var(--ink-4);
+  white-space: nowrap;
+}
+.cas-cases > summary::-webkit-details-marker {
+  display: none;
+}
+.cas-cases > summary::before {
+  content: "▸";
+  margin-inline-end: 4px;
+  opacity: 0.6;
+}
+.cas-cases[open] > summary::before {
+  content: "▾";
+}
+.cas-cases[open] {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+.cas-case-list {
+  margin: 6px 0 0;
+  padding-inline-start: 16px;
+  font-size: var(--fs-2xs);
+  line-height: 1.5;
+}
+
+/* --- table fallback --- */
+.cas-table-toggle {
+  margin-top: 2px;
+}
+.cas-table-toggle > summary {
+  cursor: pointer;
+  padding: 6px 0;
+  font-size: var(--fs-2xs);
+  color: var(--ink-4);
+}
+.cas-table-toggle[open] > summary {
+  margin-bottom: 8px;
+}

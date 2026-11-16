@@ -76,10 +76,18 @@ export function mount(canvas: HTMLCanvasElement, cfg: Cfg): Chart<"line"> {
 export function mountCharts(): void {
   for (const spec of CHARTS) {
     const canvas = byId(spec.id);
+
+    // Absent = this page does not host the chart. Not a warning.
+    if (!canvas) continue;
+
+    // Present but wrong tag = a real markup bug. Warn, keep going.
     if (!(canvas instanceof HTMLCanvasElement)) {
-      console.warn(`[chart] #${spec.id} is not a canvas`);
+      console.warn(
+        `[chart] #${spec.id} exists but is a <${canvas.tagName.toLowerCase()}>`,
+      );
       continue;
     }
+
     try {
       const copy = t().chart.charts[spec.copy];
       const name = copy.subtitle

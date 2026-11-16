@@ -229,6 +229,18 @@ export interface CasualtyCopy {
     readonly window: string;
     readonly weekly: string;
   }[];
+
+  /** Short legend labels for the severity strips. Optional: falls back to
+   *  colSerious / colLight / why.notPublished. */
+  readonly legend?: {
+    readonly serious: string;
+    readonly light: string;
+    readonly unpub: string;
+  };
+  /** "{n}" is substituted with the number of documented cases. */
+  readonly showCases?: string;
+  /** Singular of casesCount, if the language needs one. */
+  readonly caseSingular?: string;
 }
 
 export interface ItemCopy {

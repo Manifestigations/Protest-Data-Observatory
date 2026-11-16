@@ -878,20 +878,20 @@ function _isBetween(value2, start, end, epsilon = 1e-6) {
 }
 function _lookup(table, value2, cmp) {
   cmp = cmp || ((index) => table[index] < value2);
-  let hi = table.length - 1;
-  let lo = 0;
+  let hi2 = table.length - 1;
+  let lo2 = 0;
   let mid;
-  while (hi - lo > 1) {
-    mid = lo + hi >> 1;
+  while (hi2 - lo2 > 1) {
+    mid = lo2 + hi2 >> 1;
     if (cmp(mid)) {
-      lo = mid;
+      lo2 = mid;
     } else {
-      hi = mid;
+      hi2 = mid;
     }
   }
   return {
-    lo,
-    hi
+    lo: lo2,
+    hi: hi2
   };
 }
 var _lookupByKey = (table, key, value2, last) => _lookup(table, value2, last ? (index) => {
@@ -4307,8 +4307,8 @@ function evaluateInteractionItems(chart, axis, position, handler, intersect) {
   const value2 = position[axis];
   for (let i = 0, ilen = metasets.length; i < ilen; ++i) {
     const { index, data } = metasets[i];
-    const { lo, hi } = binarySearch(metasets[i], axis, value2, intersect);
-    for (let j = lo; j <= hi; ++j) {
+    const { lo: lo2, hi: hi2 } = binarySearch(metasets[i], axis, value2, intersect);
+    for (let j = lo2; j <= hi2; ++j) {
       const element = data[j];
       if (!element.skip) {
         handler(element, index, j);
@@ -11276,8 +11276,8 @@ function addTick(ticks, time, timestamps) {
   if (!timestamps) {
     ticks[time] = true;
   } else if (timestamps.length) {
-    const { lo, hi } = _lookup(timestamps, time);
-    const timestamp = timestamps[lo] >= time ? timestamps[lo] : timestamps[hi];
+    const { lo: lo2, hi: hi2 } = _lookup(timestamps, time);
+    const timestamp = timestamps[lo2] >= time ? timestamps[lo2] : timestamps[hi2];
     ticks[timestamp] = true;
   }
 }
@@ -11597,21 +11597,21 @@ var TimeScale = class extends Scale {
   }
 };
 function interpolate2(table, val, reverse) {
-  let lo = 0;
-  let hi = table.length - 1;
+  let lo2 = 0;
+  let hi2 = table.length - 1;
   let prevSource, nextSource, prevTarget, nextTarget;
   if (reverse) {
-    if (val >= table[lo].pos && val <= table[hi].pos) {
-      ({ lo, hi } = _lookupByKey(table, "pos", val));
+    if (val >= table[lo2].pos && val <= table[hi2].pos) {
+      ({ lo: lo2, hi: hi2 } = _lookupByKey(table, "pos", val));
     }
-    ({ pos: prevSource, time: prevTarget } = table[lo]);
-    ({ pos: nextSource, time: nextTarget } = table[hi]);
+    ({ pos: prevSource, time: prevTarget } = table[lo2]);
+    ({ pos: nextSource, time: nextTarget } = table[hi2]);
   } else {
-    if (val >= table[lo].time && val <= table[hi].time) {
-      ({ lo, hi } = _lookupByKey(table, "time", val));
+    if (val >= table[lo2].time && val <= table[hi2].time) {
+      ({ lo: lo2, hi: hi2 } = _lookupByKey(table, "time", val));
     }
-    ({ time: prevSource, pos: prevTarget } = table[lo]);
-    ({ time: nextSource, pos: nextTarget } = table[hi]);
+    ({ time: prevSource, pos: prevTarget } = table[lo2]);
+    ({ time: nextSource, pos: nextTarget } = table[hi2]);
   }
   const span = nextSource - prevSource;
   return span ? prevTarget + (nextTarget - prevTarget) * (val - prevSource) / span : prevTarget;
@@ -13814,12 +13814,12 @@ function dataTable(spec) {
   const cap = document.createElement("caption");
   cap.className = "sr-only";
   cap.textContent = spec.caption;
-  const head = table.createTHead().insertRow();
+  const head2 = table.createTHead().insertRow();
   for (const h of [spec.indexHeader, ...spec.columns.map((c) => c.header)]) {
     const th = document.createElement("th");
     th.scope = "col";
     th.textContent = h;
-    head.append(th);
+    head2.append(th);
   }
   const body = table.createTBody();
   spec.index.forEach((label, i) => {
@@ -14127,8 +14127,8 @@ var DETACHED = /* @__PURE__ */ new Set(["r", "p", "e", "c"]);
 var isDetached = (q) => q != null && q !== "n" && DETACHED.has(q);
 var bandOf = (b) => typeof b === "number" ? [b, b] : b;
 var midOf = (b) => {
-  const [lo, hi] = bandOf(b);
-  return (lo + hi) / 2;
+  const [lo2, hi2] = bandOf(b);
+  return (lo2 + hi2) / 2;
 };
 
 // src/data/casualties/inputs.ts
@@ -14482,6 +14482,13 @@ function assertCasualties() {
 }
 
 // src/data/casualties/universe.ts
+var POPULATION_ORDER = [
+  "forces",
+  "protesters",
+  "bystanders",
+  "educationDeclared",
+  "mixed"
+];
 var OBSERVATIONS = [
   {
     id: "edu29",
@@ -14587,6 +14594,11 @@ var OBSERVATIONS = [
     sources: []
   }
 ];
+var BYSTANDER_CELLS = {
+  documented: { s: "n", v: 3, regional: true },
+  serious: { s: "x", why: "notEstimable" },
+  national: { s: "x", why: "notPublished" }
+};
 var FORCE_CARRIER = {
   total: FORCES.movement,
   declared: FORCES.stock17Oct,
@@ -15205,11 +15217,11 @@ function projectPolicingDaily() {
   return DATES.map((date) => {
     const dep = DEPLOYMENT[date];
     if (!dep) return NIL;
-    const [lo, hi] = costBand(dep);
+    const [lo2, hi2] = costBand(dep);
     const q = dep.q ?? "n";
     return {
-      v: round22((lo + hi) / 2),
-      band: [round22(lo), round22(hi)],
+      v: round22((lo2 + hi2) / 2),
+      band: [round22(lo2), round22(hi2)],
       q,
       note: { k: "policing", low: dep.low, high: dep.high, date },
       detach: isDetached(q)
@@ -15217,23 +15229,23 @@ function projectPolicingDaily() {
   });
 }
 function projectPolicingCumulative() {
-  let lo = 0;
-  let hi = 0;
+  let lo2 = 0;
+  let hi2 = 0;
   let days = 0;
   let started = false;
   return DATES.map((date) => {
     const dep = DEPLOYMENT[date];
     if (dep) {
       const [a, b] = costBand(dep);
-      lo += a;
-      hi += b;
+      lo2 += a;
+      hi2 += b;
       days++;
       started = true;
     }
     if (!started) return NIL;
     return {
-      v: round22((lo + hi) / 2),
-      band: [round22(lo), round22(hi)],
+      v: round22((lo2 + hi2) / 2),
+      band: [round22(lo2), round22(hi2)],
       q: "e",
       note: { k: "cumulative", days, added: Boolean(dep) },
       detach: false
@@ -15664,15 +15676,15 @@ function renderStrip(host) {
     { title: L(RANGE.title) }
   );
   figure.append(cap);
-  const strip = el("div", "ctx-strip");
+  const strip2 = el("div", "ctx-strip");
   const spans = SPANS.filter((s) => s.to >= RANGE.from && s.from <= RANGE.to);
   for (const layer of LAYERS) {
     const mine = spans.filter((s) => s.kind === layer.kind);
     if (!mine.length && layer.kind !== "municipal") continue;
-    strip.append(stripRow(layer.kind, L(layer.label), mine));
+    strip2.append(stripRow(layer.kind, L(layer.label), mine));
   }
-  strip.append(axisRow());
-  figure.append(strip);
+  strip2.append(axisRow());
+  figure.append(strip2);
   figure.append(
     dataTable({
       caption: fillL(
@@ -16145,12 +16157,12 @@ var RATE2 = {
 };
 function rateLine(band, v) {
   const pop = population(KEY_2026);
-  const lo = pctOfValue(band?.[0] ?? v, pop);
-  const hi = pctOfValue(band?.[1] ?? v, pop);
-  if (lo === null || hi === null) return null;
-  const pct = hi - lo < 1e-9 ? fmtPct(lo) : `${fmtPct(lo)} \u2013 ${fmtPct(hi)}`;
+  const lo2 = pctOfValue(band?.[0] ?? v, pop);
+  const hi2 = pctOfValue(band?.[1] ?? v, pop);
+  if (lo2 === null || hi2 === null) return null;
+  const pct2 = hi2 - lo2 < 1e-9 ? fmtPct(lo2) : `${fmtPct(lo2)} \u2013 ${fmtPct(hi2)}`;
   return fill(bi(RATE2), {
-    pct,
+    pct: pct2,
     pop: nf().format(denominator(pop) ?? 0)
   });
 }
@@ -16299,10 +16311,10 @@ function noteText(ref) {
     case "obs":
       return m.obsNotes[ref.date]?.[ref.metric] ?? "";
     case "policing": {
-      const head = ref.low === ref.high ? nf().format(ref.low) : `${nf().format(ref.low)}\u2013${nf().format(ref.high)}`;
+      const head2 = ref.low === ref.high ? nf().format(ref.low) : `${nf().format(ref.low)}\u2013${nf().format(ref.high)}`;
       const note2 = m.deployNotes[ref.date];
       return fill(note2 ? m.policingDay : m.policingDayPlain, {
-        head,
+        head: head2,
         low: nf().format(RATE.low),
         high: nf().format(RATE.high),
         note: note2 ?? ""
@@ -16386,15 +16398,15 @@ function wrapText(text, max, font) {
       if (!line && !fits(word)) {
         let rest = word;
         while (rest.length > 1 && !fits(rest)) {
-          let lo = 1;
-          let hi = rest.length;
-          while (lo < hi) {
-            const mid = lo + hi + 1 >> 1;
-            if (fits(rest.slice(0, mid))) lo = mid;
-            else hi = mid - 1;
+          let lo2 = 1;
+          let hi2 = rest.length;
+          while (lo2 < hi2) {
+            const mid = lo2 + hi2 + 1 >> 1;
+            if (fits(rest.slice(0, mid))) lo2 = mid;
+            else hi2 = mid - 1;
           }
-          lines.push(rest.slice(0, lo));
-          rest = rest.slice(lo);
+          lines.push(rest.slice(0, lo2));
+          rest = rest.slice(lo2);
         }
         line = rest;
         continue;
@@ -16705,8 +16717,8 @@ var HELI_AT = new Map(
 var DATES_SET = new Set(DATES);
 var sum = (pick) => HELI_DAYS.reduce(
   (a, d) => {
-    const [lo, hi] = pick(d);
-    return [a[0] + lo, a[1] + hi];
+    const [lo2, hi2] = pick(d);
+    return [a[0] + lo2, a[1] + hi2];
   },
   [0, 0]
 );
@@ -16848,8 +16860,11 @@ function mount(canvas, cfg) {
 function mountCharts() {
   for (const spec of CHARTS) {
     const canvas = byId(spec.id);
+    if (!canvas) continue;
     if (!(canvas instanceof HTMLCanvasElement)) {
-      console.warn(`[chart] #${spec.id} is not a canvas`);
+      console.warn(
+        `[chart] #${spec.id} exists but is a <${canvas.tagName.toLowerCase()}>`
+      );
       continue;
     }
     try {
@@ -17248,36 +17263,36 @@ function buildDataset(ep, epIndex, key, color2, maxX) {
   };
 }
 function rawExtent(eps, keys, maxX) {
-  let lo = Number.POSITIVE_INFINITY;
-  let hi = Number.NEGATIVE_INFINITY;
+  let lo2 = Number.POSITIVE_INFINITY;
+  let hi2 = Number.NEGATIVE_INFINITY;
   for (const ep of eps) {
     for (const k of keys) {
       const pts = seriesData(ep, k);
       if (!pts) continue;
       for (const p of pts) {
         if (p.x > maxX) continue;
-        if (p.low > 0) lo = Math.min(lo, p.low);
-        hi = Math.max(hi, p.high);
+        if (p.low > 0) lo2 = Math.min(lo2, p.low);
+        hi2 = Math.max(hi2, p.high);
       }
     }
   }
-  if (!Number.isFinite(lo) || !Number.isFinite(hi) || lo <= 0 || hi <= lo)
+  if (!Number.isFinite(lo2) || !Number.isFinite(hi2) || lo2 <= 0 || hi2 <= lo2)
     return [1, 1e6];
-  return [lo, hi];
+  return [lo2, hi2];
 }
-function logBounds(lo, hi) {
-  const l = Math.log10(Math.max(lo, 1e-6));
-  const h = Math.log10(Math.max(hi, l + 0.1));
+function logBounds(lo2, hi2) {
+  const l = Math.log10(Math.max(lo2, 1e-6));
+  const h = Math.log10(Math.max(hi2, l + 0.1));
   const pad = Math.max(0.06, (h - l) * 0.05);
   return [10 ** (l - pad), 10 ** (h + pad)];
 }
-function decades(lo, hi) {
+function decades(lo2, hi2) {
   const out = [];
-  const from2 = Math.floor(Math.log10(Math.max(lo, 1e-6)));
-  const to2 = Math.ceil(Math.log10(Math.max(hi, 1)));
+  const from2 = Math.floor(Math.log10(Math.max(lo2, 1e-6)));
+  const to2 = Math.ceil(Math.log10(Math.max(hi2, 1)));
   for (let e = from2; e <= to2; e++) {
     const v = 10 ** e;
-    if (v >= lo * 1.0001 && v <= hi * 0.9999) out.push(v);
+    if (v >= lo2 * 1.0001 && v <= hi2 * 0.9999) out.push(v);
   }
   return out;
 }
@@ -17485,10 +17500,10 @@ function observations(ep) {
   }).join(m.panels.obsSep);
   return fill(m.panels.obs, { counts });
 }
-function panelFigure(strip, meta, note2) {
+function panelFigure(strip2, meta, note2) {
   const figure = el("figure", "trellis-panel");
   const caption = el("figcaption");
-  const title = el("span", "strip", strip);
+  const title = el("span", "strip", strip2);
   title.id = `strip-${crypto.randomUUID().slice(0, 8)}`;
   caption.append(title, el("span", "strip-meta", meta));
   if (note2) caption.append(el("p", "strip-note", note2));
@@ -17750,7 +17765,7 @@ function mountCrossEpisode() {
   itemHost.style.gridTemplateColumns = `repeat(${itemCols}, minmax(0, 1fr))`;
   SERIES2.forEach((series) => {
     const [rawLo, rawHi] = rawExtent(EPISODES, [series.key], ENFORCEMENT_LAST);
-    const [lo, hi] = logBounds(rawLo, rawHi);
+    const [lo2, hi2] = logBounds(rawLo, rawHi);
     const range = fill(m.panels.valueRange, {
       lo: compact().format(rawLo),
       hi: compact().format(rawHi)
@@ -17770,7 +17785,7 @@ function mountCrossEpisode() {
         options: panelOptions(
           "item",
           xScale(ENFORCEMENT_LAST),
-          yScale(lo, hi, true)
+          yScale(lo2, hi2, true)
         ),
         plugins: []
       })
@@ -18347,195 +18362,6 @@ function mountCards(fromPath, cards, host = byId("card-grid")) {
   const grid = el("div", "card-grid");
   for (const c of cards) grid.append(card(c, fromPath));
   host.replaceChildren(grid);
-}
-
-// src/sections/casualties.ts
-function cellText(c) {
-  switch (c.s) {
-    case "n":
-      return {
-        text: `${c.d ? "\u2248 " : ""}${nf().format(c.v)}`,
-        cls: c.d ? "cas-num cas-derived" : "cas-num"
-      };
-    case "r":
-      return {
-        text: `\u2248 ${nf().format(c.lo)}\u2013${nf().format(c.hi)}`,
-        cls: "cas-num cas-derived"
-      };
-    case "c":
-      return {
-        text: fill(t().casualties.casesCount, { n: c.n }),
-        cls: "cas-num cas-cases"
-      };
-    default:
-      return { text: t().casualties.why[c.why], cls: "cas-absent" };
-  }
-}
-function cell(c, extra = "") {
-  const { text, cls } = cellText(c);
-  return el("td", extra ? `${cls} ${extra}` : cls, text);
-}
-function share(light, total) {
-  if (light.s !== "n" || total.s !== "n" || total.v <= 0) return null;
-  return light.v / total.v;
-}
-function bar(p) {
-  const wrap = el("span", "cas-bar");
-  const run = el("span", "cas-bar-fill");
-  run.style.width = `${Math.max(0, Math.min(1, p)) * 100}%`;
-  wrap.append(run);
-  return wrap;
-}
-function severityTable(rows, caption) {
-  const c = t().casualties;
-  const table = el("table", "cas-table");
-  table.append(el("caption", "cas-caption", caption));
-  const thead = el("thead");
-  const head = el("tr");
-  const labels = [
-    c.colScope,
-    c.colTotal,
-    c.colSerious,
-    c.colLight,
-    c.colLightShare,
-    c.colOther
-  ];
-  labels.forEach((label, i) => {
-    const th = el("th", i === 0 ? "cas-scope-head" : "cas-num-head", label);
-    th.scope = "col";
-    head.append(th);
-  });
-  thead.append(head);
-  table.append(thead);
-  const tbody = el("tbody");
-  for (const row of rows) {
-    const tr = el("tr");
-    const th = el("th", "cas-scope", c.scope[row.id] ?? row.id);
-    th.scope = "row";
-    tr.append(th);
-    tr.append(cell(row.total));
-    tr.append(cell(row.serious));
-    tr.append(cell(row.light));
-    const p = share(row.light, row.total);
-    const td = el("td", "cas-share");
-    if (p === null) {
-      td.append(el("span", "cas-absent", "\u2014"));
-    } else {
-      td.append(el("span", "cas-pct", `${(p * 100).toFixed(1)}%`), bar(p));
-    }
-    tr.append(td);
-    tr.append(cell(row.other));
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
-}
-function headline() {
-  const c = t().casualties;
-  const top = SEVERITY_LEVELS[0];
-  const p = share(top.light, top.total);
-  const wrap = el("div", "cas-headline");
-  const left = el("div", "cas-head-stat");
-  left.append(
-    el("span", "cas-head-num", p === null ? "\u2014" : `${(p * 100).toFixed(1)}%`),
-    el(
-      "span",
-      "cas-head-label",
-      p === null || top.light.s !== "n" || top.total.s !== "n" ? c.headLightNote : fill(c.headLight, {
-        light: nf().format(top.light.v),
-        total: nf().format(top.total.v)
-      })
-    )
-  );
-  const right = el("div", "cas-head-stat cas-head-missing");
-  right.append(
-    el("span", "cas-head-num", "\u2014"),
-    el("span", "cas-head-label", c.headMissingNote)
-  );
-  wrap.append(left, right);
-  return wrap;
-}
-function causeTable(rows, caption) {
-  const c = t().casualties;
-  const table = el("table", "cas-table cas-cause");
-  table.append(el("caption", "cas-caption", caption));
-  const thead = el("thead");
-  const head = el("tr");
-  [c.colSide, c.colCircumstance, c.colCount, c.colCases].forEach((label, i) => {
-    const th = el("th", i < 2 ? "cas-scope-head" : "cas-num-head", label);
-    th.scope = "col";
-    head.append(th);
-  });
-  thead.append(head);
-  table.append(thead);
-  const tbody = el("tbody");
-  for (const row of rows) {
-    const tr = el("tr", row.reference ? "cas-reference" : "");
-    const th = el("th", "cas-scope", c.side[row.side]);
-    th.scope = "row";
-    tr.append(th);
-    tr.append(el("td", "cas-kind", c.kind[row.kind]));
-    tr.append(cell(row.count));
-    const td = el("td", "cas-cases-cell");
-    if (!row.cases.length) {
-      td.append(el("span", "cas-absent", t().casualties.noCases));
-    } else {
-      const list = el("ul", "cas-case-list");
-      for (const key of row.cases) list.append(el("li", "", c.cases[key]));
-      td.append(list);
-    }
-    tr.append(td);
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
-}
-function resolutionTable() {
-  const c = t().casualties;
-  const table = el("table", "cas-table cas-resolution");
-  table.append(el("caption", "cas-caption", c.capResolution));
-  const thead = el("thead");
-  const head = el("tr");
-  [c.colQuestion, c.colWindow, c.colWeekly].forEach((label, i) => {
-    const th = el("th", i === 2 ? "cas-num-head" : "cas-scope-head", label);
-    th.scope = "col";
-    head.append(th);
-  });
-  thead.append(head);
-  table.append(thead);
-  const tbody = el("tbody");
-  for (const row of c.resolution) {
-    const tr = el("tr");
-    const th = el("th", "cas-scope", row.label);
-    th.scope = "row";
-    tr.append(th, el("td", "", row.window));
-    tr.append(el("td", "cas-num", row.weekly));
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
-}
-function mountCasualties() {
-  const c = t().casualties;
-  const a = byId("cas-a");
-  if (a) {
-    a.replaceChildren(
-      el("h4", "cas-title", c.headlineTitle),
-      headline(),
-      severityTable(SEVERITY_LEVELS, c.capLevels),
-      causeTable(CASES, c.capCases),
-      el("p", "cas-note", c.noteLevels)
-    );
-  }
-  const b = byId("cas-b");
-  if (b) {
-    b.replaceChildren(
-      el("h4", "cas-title", c.weeklyTitle),
-      severityTable(SEVERITY_WEEKS, c.capWeeks),
-      resolutionTable(),
-      el("p", "cas-note", c.noteWeeks)
-    );
-  }
 }
 
 // src/sections/about/links.ts
@@ -19439,8 +19265,8 @@ function bestRatio(obs, base) {
   if (!(base > 0)) return null;
   let best = null;
   for (const o of obs) {
-    const pct = o.v / base;
-    if (!best || pct > best.pct) best = { obs: o, pct, base };
+    const pct2 = o.v / base;
+    if (!best || pct2 > best.pct) best = { obs: o, pct: pct2, base };
   }
   return best;
 }
@@ -19714,16 +19540,16 @@ var pctText = (v) => {
   locale();
   return v === null ? "\u2014" : pctFmt.format(v);
 };
-var pctBand = (lo, hi) => {
-  if (lo === null || hi === null) return "\u2014";
-  const a = pctText(lo);
-  return Math.abs(hi - lo) < 1e-9 ? a : `${a} \u2013 ${pctText(hi)}`;
+var pctBand = (lo2, hi2) => {
+  if (lo2 === null || hi2 === null) return "\u2014";
+  const a = pctText(lo2);
+  return Math.abs(hi2 - lo2) < 1e-9 ? a : `${a} \u2013 ${pctText(hi2)}`;
 };
 var countText = (v) => v === null ? "\u2014" : nf().format(Math.round(v));
 var countBand = (r) => {
   if (r.lo === null) return "\u2014";
-  const hi = r.hi ?? r.lo;
-  return Math.abs(hi - r.lo) < 1e-9 ? countText(r.lo) : `${countText(r.lo)} \u2013 ${countText(hi)}`;
+  const hi2 = r.hi ?? r.lo;
+  return Math.abs(hi2 - r.lo) < 1e-9 ? countText(r.lo) : `${countText(r.lo)} \u2013 ${countText(hi2)}`;
 };
 function tickText(v) {
   const exp = Math.round(Math.log10(v));
@@ -19740,9 +19566,9 @@ function dailyRows2() {
   return DATES.map((d, i) => {
     const p = DAILY.turnout[i];
     const v = p?.v ?? null;
-    const hi = p?.band?.[1] ?? v;
+    const hi2 = p?.band?.[1] ?? v;
     const plo = v === null ? null : pctOfValue(v, pop);
-    const phi = hi === null ? null : pctOfValue(hi, pop);
+    const phi = hi2 === null ? null : pctOfValue(hi2, pop);
     return {
       key: fmtDayMonth(d),
       title: fmtDate(d),
@@ -19750,7 +19576,7 @@ function dailyRows2() {
       plo: plo === null ? null : plo / 100,
       phi: phi === null ? null : phi / 100,
       lo: v,
-      hi: hi ?? null,
+      hi: hi2 ?? null,
       note: notes?.[d]
     };
   });
@@ -19760,9 +19586,9 @@ function weeklyRows() {
   return WEEKS.map((w, i) => {
     const p = WEEKLY.turnout[i];
     const v = p?.v ?? null;
-    const hi = p?.band?.[1] ?? v;
+    const hi2 = p?.band?.[1] ?? v;
     const plo = v === null ? null : pctOfValue(v, pop);
-    const phi = hi === null ? null : pctOfValue(hi, pop);
+    const phi = hi2 === null ? null : pctOfValue(hi2, pop);
     return {
       key: String(w.key),
       title: fmtWeek(w.key, w.end),
@@ -19770,7 +19596,7 @@ function weeklyRows() {
       plo: plo === null ? null : plo / 100,
       phi: phi === null ? null : phi / 100,
       lo: v,
-      hi: hi ?? null
+      hi: hi2 ?? null
     };
   });
 }
@@ -19796,19 +19622,19 @@ function episodeRows2(ep) {
       });
       continue;
     }
-    const lo = p.low ?? p.y ?? null;
-    const hi = p.high ?? p.y ?? null;
+    const lo2 = p.low ?? p.y ?? null;
+    const hi2 = p.high ?? p.y ?? null;
     const mid = pctOfValue(p.y, pop);
-    const plo = pctOfValue(lo, pop);
-    const phi = pctOfValue(hi, pop);
+    const plo = pctOfValue(lo2, pop);
+    const phi = pctOfValue(hi2, pop);
     out.push({
       key: String(w),
       title: p.t,
       p: mid === null ? null : mid / 100,
       plo: plo === null ? null : plo / 100,
       phi: phi === null ? null : phi / 100,
-      lo,
-      hi,
+      lo: lo2,
+      hi: hi2,
       note: p.note,
       basis
     });
@@ -20167,9 +19993,9 @@ function sectionC(host) {
     );
     host.append(panel);
   });
-  const head = el("div", "pc-trellis-head");
-  head.append(el("p", "pc-note", L2(COPY.noteC)));
-  host.append(head);
+  const head2 = el("div", "pc-trellis-head");
+  head2.append(el("p", "pc-note", L2(COPY.noteC)));
+  host.append(head2);
 }
 function mountPerCapita() {
   const a = byId("pc-a");
@@ -22661,9 +22487,9 @@ function sourceItem(s) {
 function sourceGroup(id, summary, body) {
   const details = el("details", "source-group");
   details.dataset.group = id;
-  const head = el("summary", "group-summary");
-  head.append(...summary);
-  details.append(head, ...body);
+  const head2 = el("summary", "group-summary");
+  head2.append(...summary);
+  details.append(head2, ...body);
   return details;
 }
 function renderSources(page = "home", host = document.getElementById("sources")) {
@@ -22821,14 +22647,14 @@ var rangeBand = {
     ctx.restore();
   }
 };
-function emphasiseStat(stat, force = false) {
-  if (!force && stat === activeStat) return;
-  activeStat = stat;
+function emphasiseStat(stat2, force = false) {
+  if (!force && stat2 === activeStat) return;
+  activeStat = stat2;
   for (const chart of summaryPanels) {
     for (const d of datasetsOf(chart)) {
       const s = d.__stat;
       if (!s) continue;
-      const on = stat === null || s === stat;
+      const on = stat2 === null || s === stat2;
       if (s === "range") {
         d.backgroundColor = alpha2(d.__color, on ? 0.2 : 0.05);
       } else {
@@ -22852,8 +22678,8 @@ function applyStatVisibility() {
     chart.update("none");
   }
 }
-function setStatHidden(stat, hidden) {
-  statHidden.set(stat, hidden);
+function setStatHidden(stat2, hidden) {
+  statHidden.set(stat2, hidden);
   applyStatVisibility();
 }
 function mountSummary() {
@@ -22874,8 +22700,8 @@ function mountSummary() {
       if (c) cells.push(c);
     });
     if (!cells.length) continue;
-    const lo = Math.min(...cells.map((c) => c.min)) * 0.8;
-    const hi = Math.max(...cells.map((c) => c.max)) * 1.3;
+    const lo2 = Math.min(...cells.map((c) => c.min)) * 0.8;
+    const hi2 = Math.max(...cells.map((c) => c.max)) * 1.3;
     const { figure, canvas } = panelFigure(
       m.items[series.key].short,
       fill(m.panels.summaryMeta, { n: cells.length })
@@ -22919,8 +22745,8 @@ function mountSummary() {
             },
             y: {
               type: "logarithmic",
-              min: lo,
-              max: hi,
+              min: lo2,
+              max: hi2,
               title: {
                 display: panelIndex % cols === 0,
                 text: m.items[series.key].label,
@@ -22940,7 +22766,7 @@ function mountSummary() {
                 }
               },
               afterBuildTicks: (axis) => {
-                axis.ticks = decades(lo, hi).map((value2) => ({ value: value2 }));
+                axis.ticks = decades(lo2, hi2).map((value2) => ({ value: value2 }));
               }
             }
           },
@@ -23172,12 +22998,12 @@ function block3(b) {
   const section = el("section", "contribute-section");
   section.id = `contribute-${b.id}`;
   section.setAttribute("aria-labelledby", `${section.id}-title`);
-  const head = el("header", "contribute-head");
+  const head2 = el("header", "contribute-head");
   const h = el("h2", "contribute-title", bi(b.title));
   h.id = `${section.id}-title`;
-  head.append(h);
-  if (b.status) head.append(el("span", "contribute-status", bi(b.status)));
-  section.append(head, el("p", "contribute-lead", bi(b.lead)));
+  head2.append(h);
+  if (b.status) head2.append(el("span", "contribute-status", bi(b.status)));
+  section.append(head2, el("p", "contribute-lead", bi(b.lead)));
   if (b.bullets.length) {
     const ul = el("ul", "contribute-list");
     for (const t2 of b.bullets) ul.append(el("li", void 0, bi(t2)));
@@ -23200,6 +23026,551 @@ function block3(b) {
 function mountContribute(host = byId("contribute")) {
   if (!host) return;
   host.replaceChildren(...BLOCKS.map(block3));
+}
+
+// src/sections/casualties/model.ts
+function cellView(c) {
+  switch (c.s) {
+    case "n": {
+      const cls = ["cas-num"];
+      if (c.d) cls.push("cas-derived");
+      if (c.regional) cls.push("cas-regional");
+      return {
+        text: `${c.d ? "\u2248 " : ""}${nf().format(c.v)}`,
+        cls: cls.join(" ")
+      };
+    }
+    case "r":
+      return {
+        text: `\u2248 ${nf().format(c.lo)}\u2013${nf().format(c.hi)}`,
+        cls: `cas-num cas-derived${c.regional ? " cas-regional" : ""}`
+      };
+    case "f":
+      return { text: `\u2265 ${nf().format(c.v)}`, cls: "cas-num cas-floor" };
+    case "c":
+      return {
+        text: fill(t().casualties.casesCount, { n: c.n }),
+        cls: "cas-num cas-cases"
+      };
+    default:
+      return { text: t().casualties.why[c.why], cls: "cas-absent" };
+  }
+}
+function share(light, total) {
+  if (light.s !== "n" || total.s !== "n" || total.v <= 0) return null;
+  return light.v / total.v;
+}
+function pct(p) {
+  return `${nf().format(Number((p * 100).toFixed(1)))}%`;
+}
+function estimateRange(e) {
+  if (!e.value) return cellView({ s: "x", why: e.why ?? "notEstimable" });
+  const f = e.unit === "share" ? pct : (x) => nf().format(x);
+  return {
+    text: e.value.lo === e.value.hi ? f(e.value.lo) : `${f(e.value.lo)}\u2013${f(e.value.hi)}`,
+    cls: e.unit === "share" ? "cas-num cas-derived" : "cas-num"
+  };
+}
+
+// src/sections/casualties/tables.ts
+function cell(c, extra = "") {
+  const v = cellView(c);
+  return el("td", extra ? `${v.cls} ${extra}` : v.cls, v.text);
+}
+function rowHead(text) {
+  const th = el("th", "cas-scope", text);
+  th.scope = "row";
+  return th;
+}
+function head(labels, lead = 1) {
+  const tr = el("tr");
+  labels.forEach((label, i) => {
+    const th = el(
+      "th",
+      i < lead ? "cas-scope-head" : "cas-num-head",
+      label
+    );
+    th.scope = "col";
+    tr.append(th);
+  });
+  const thead = el("thead");
+  thead.append(tr);
+  return thead;
+}
+function bar(p) {
+  const wrap = el("span", "cas-bar");
+  const run = el("span", "cas-bar-fill");
+  run.style.width = `${Math.max(0, Math.min(1, p)) * 100}%`;
+  wrap.append(run);
+  return wrap;
+}
+function stat(num, label, cls = "cas-head-stat") {
+  const wrap = el("div", cls);
+  wrap.append(
+    el("span", "cas-head-num", num),
+    el("span", "cas-head-label", label)
+  );
+  return wrap;
+}
+function headline() {
+  const c = t().casualties;
+  const wrap = el("div", "cas-headline");
+  const total = nf().format(FORCES.movement);
+  wrap.append(
+    stat(
+      `${pct(SERIOUS_MOVEMENT.lo / FORCES.movement)}\u2013${pct(SERIOUS_MOVEMENT.hi / FORCES.movement)}`,
+      fill(c.headSeriousShare, {
+        lo: pct(SERIOUS_MOVEMENT.lo / FORCES.movement),
+        hi: pct(SERIOUS_MOVEMENT.hi / FORCES.movement),
+        total
+      })
+    ),
+    stat(
+      `${nf().format(SERIOUS_MOVEMENT.lo)}\u2013${nf().format(SERIOUS_MOVEMENT.hi)}`,
+      fill(c.headSeriousCount, {
+        forces: `${nf().format(SERIOUS_MOVEMENT.lo)}\u2013${nf().format(SERIOUS_MOVEMENT.hi)}`,
+        protesters: `\u2265 ${nf().format(THINES.seriousTo5Nov + THINES.deathsTo5Nov)}`
+      })
+    ),
+    stat(
+      pct(MIX[0].central / FORCES.movement),
+      fill(c.headMix, { light: nf().format(MIX[0].central), total })
+    )
+  );
+  return wrap;
+}
+function mixBlock() {
+  const c = t().casualties;
+  const wrap = el("div", "cas-mix");
+  wrap.append(el("h4", "cas-title", c.mixTitle));
+  const total = MIX.reduce((a, b) => a + b.central, 0);
+  for (const band of MIX) {
+    const row = el("div", "cas-mix-row");
+    row.append(el("span", "cas-mix-label", c.mix[band.id]));
+    const track2 = el("span", "cas-mix-track");
+    const run = el("span", `cas-mix-fill cas-mix-${band.id}`);
+    run.style.width = `${band.central / total * 100}%`;
+    track2.append(run);
+    row.append(
+      track2,
+      el(
+        "span",
+        "cas-mix-value",
+        `${nf().format(band.lo)}\u2013${nf().format(band.hi)}`
+      ),
+      el(
+        "span",
+        "cas-mix-share",
+        `${pct(band.lo / total)}\u2013${pct(band.hi / total)}`
+      )
+    );
+    wrap.append(row);
+  }
+  wrap.append(el("p", "cas-note", c.noteMix));
+  return wrap;
+}
+function severityTable(rows, caption) {
+  const c = t().casualties;
+  const table = el("table", "cas-table");
+  table.append(el("caption", "cas-caption", caption));
+  table.append(
+    head([
+      c.colScope,
+      c.colTotal,
+      c.colSerious,
+      c.colLight,
+      c.colLightShare,
+      c.colOther
+    ])
+  );
+  const tbody = el("tbody");
+  for (const row of rows) {
+    const tr = el("tr");
+    tr.append(rowHead(c.scope[row.id] ?? row.id));
+    tr.append(cell(row.total), cell(row.serious), cell(row.light));
+    const p = share(row.light, row.total);
+    const td = el("td", "cas-share");
+    if (p === null) td.append(el("span", "cas-absent", "\u2014"));
+    else td.append(el("span", "cas-pct", pct(p)), bar(p));
+    tr.append(td);
+    tr.append(cell(row.other));
+    tbody.append(tr);
+  }
+  table.append(tbody);
+  return table;
+}
+function populationTable() {
+  const c = t().casualties;
+  const table = el("table", "cas-table cas-population");
+  table.append(el("caption", "cas-caption", c.capPopulation));
+  table.append(
+    head([
+      c.colScope,
+      c.colPopulation,
+      c.colParticipation,
+      c.colSelection,
+      c.colCount
+    ])
+  );
+  const tbody = el("tbody");
+  const ordered = [...OBSERVATIONS].sort(
+    (a, b) => POPULATION_ORDER.indexOf(a.population) - POPULATION_ORDER.indexOf(b.population) || a.date.localeCompare(b.date)
+  );
+  for (const obs of ordered) {
+    const tr = el("tr");
+    tr.append(rowHead(c.observations[obs.id] ?? obs.id));
+    tr.append(el("td", "cas-kind", c.population[obs.population]));
+    tr.append(el("td", "cas-kind", c.participation[obs.participation]));
+    tr.append(el("td", "cas-kind", c.selection[obs.selection]));
+    tr.append(cell(obs.count));
+    tbody.append(tr);
+  }
+  table.append(tbody);
+  return table;
+}
+function bystanderTable() {
+  const c = t().casualties;
+  const table = el("table", "cas-table cas-bystanders");
+  table.append(el("caption", "cas-caption", c.bystanderCaption));
+  table.append(head([c.colQuestion, c.colCount]));
+  const tbody = el("tbody");
+  const rows = [
+    [c.bystanders.documented, BYSTANDER_CELLS.documented],
+    [c.bystanders.serious, BYSTANDER_CELLS.serious],
+    [c.bystanders.national, BYSTANDER_CELLS.national]
+  ];
+  for (const [label, c2] of rows) {
+    const tr = el("tr");
+    tr.append(rowHead(label), cell(c2));
+    tbody.append(tr);
+  }
+  table.append(tbody);
+  return table;
+}
+function estimateTable() {
+  const c = t().casualties;
+  const table = el("table", "cas-table cas-estimates");
+  table.append(el("caption", "cas-caption", c.capEstimate));
+  table.append(
+    head([c.colEstimate, c.colRange, c.colMethod, c.colEdges, c.colStatus])
+  );
+  const tbody = el("tbody");
+  for (const e of ESTIMATES) {
+    const copy = c.estimates[e.key];
+    const tr = el("tr", e.status === "gap" ? "cas-reference" : "");
+    tr.append(rowHead(copy?.label ?? e.key));
+    const v = estimateRange(e);
+    tr.append(el("td", v.cls, v.text));
+    tr.append(el("td", "cas-kind", copy?.method ?? ""));
+    tr.append(
+      el(
+        "td",
+        "cas-kind",
+        fill(c.edgePair, { lo: c.edge[e.loEdge], hi: c.edge[e.hiEdge] })
+      )
+    );
+    tr.append(el("td", "cas-kind", c.status[e.status]));
+    tbody.append(tr);
+  }
+  table.append(tbody);
+  return table;
+}
+function sensitivityTable() {
+  const c = t().casualties;
+  const table = el("table", "cas-table cas-sensitivity");
+  table.append(el("caption", "cas-caption", c.capSensitivity));
+  table.append(head([c.colRatio, c.colAt17, c.colMovement]));
+  const tbody = el("tbody");
+  for (const row of SENSITIVITY) {
+    const tr = el("tr", row.ratio === RATIO.mid ? "cas-reference" : "");
+    tr.append(rowHead(`r = ${row.ratio}`));
+    tr.append(el("td", "cas-num cas-derived", nf().format(row.at17Oct)));
+    tr.append(el("td", "cas-num cas-derived", nf().format(row.movement)));
+    tbody.append(tr);
+  }
+  table.append(tbody);
+  return table;
+}
+function causeTable(rows, caption) {
+  const c = t().casualties;
+  const table = el("table", "cas-table cas-cause");
+  table.append(el("caption", "cas-caption", caption));
+  table.append(head([c.colSide, c.colCircumstance, c.colCount, c.colCases], 2));
+  const tbody = el("tbody");
+  for (const row of rows) {
+    const tr = el("tr", row.reference ? "cas-reference" : "");
+    tr.append(rowHead(c.side[row.side]));
+    tr.append(el("td", "cas-kind", c.kind[row.kind]));
+    tr.append(cell(row.count));
+    const td = el("td", "cas-cases-cell");
+    if (!row.cases.length) td.append(el("span", "cas-absent", c.noCases));
+    else {
+      const list = el("ul", "cas-case-list");
+      for (const key of row.cases) list.append(el("li", "", c.cases[key]));
+      td.append(list);
+    }
+    tr.append(td);
+    tbody.append(tr);
+  }
+  table.append(tbody);
+  return table;
+}
+function resolutionTable() {
+  const c = t().casualties;
+  const table = el("table", "cas-table cas-resolution");
+  table.append(el("caption", "cas-caption", c.capResolution));
+  table.append(head([c.colQuestion, c.colWindow, c.colWeekly], 2));
+  const tbody = el("tbody");
+  for (const row of c.resolution) {
+    const tr = el("tr");
+    tr.append(rowHead(row.label), el("td", "", row.window));
+    tr.append(el("td", "cas-num", row.weekly));
+    tbody.append(tr);
+  }
+  table.append(tbody);
+  return table;
+}
+var CIVILIAN_PROXY = pct(CIVILIAN_PROXY_SHARE);
+
+// src/sections/casualties/visuals.ts
+var NUM = /\d[\d\s\u00a0\u202f]*(?:[.,]\d+)?/g;
+var clean = (s) => Number(s.replace(/[\s\u00a0\u202f]/g, "").replace(",", "."));
+var nums = (c) => {
+  NUM.lastIndex = 0;
+  return (cellView(c).text.match(NUM) ?? []).map(clean);
+};
+var lo = (c) => nums(c)[0] ?? null;
+var hi = (c) => nums(c).at(-1) ?? null;
+function casCopy() {
+  const c = t().casualties;
+  return {
+    scope: (id) => c.scope[id] ?? id,
+    side: (id) => c.side[id] ?? id,
+    kind: (id) => c.kind[id] ?? id,
+    caseText: (id) => c.cases[id] ?? id,
+    legend: {
+      serious: c.colSerious,
+      light: c.colLight,
+      unpub: c.why.notPublished
+    },
+    casesLabel: (n2) => c.casesCount.replace(/\{n\}/g, String(n2)),
+    noCases: c.noCases
+  };
+}
+function stackOf(row) {
+  const total = lo(row.total);
+  if (total === null) return { parts: [], serious: null };
+  const light = lo(row.light);
+  const other = lo(row.other);
+  const sLo = lo(row.serious);
+  const sHi = hi(row.serious);
+  const parts = [];
+  if (light !== null) parts.push({ cls: "cas-seg-light", n: light });
+  if (other !== null) parts.push({ cls: "cas-seg-other", n: other });
+  if (parts.length === 0 && sHi !== null) {
+    parts.push({ cls: "cas-seg-serious", n: Math.min(sHi, total) });
+  }
+  const used = parts.reduce((a, p) => a + p.n, 0);
+  if (used < total) parts.push({ cls: "cas-seg-unpub", n: total - used });
+  else if (used > total) {
+    console.warn(
+      `[casualties] ${row.id}: published parts sum to ${used} > total ${total}; proportions are scaled, the remainder is unknown`
+    );
+  }
+  const serious = sLo !== null && sHi !== null && sHi > sLo ? [sLo, sHi] : null;
+  return { parts, serious };
+}
+function strip(row, cp) {
+  const c = t().casualties;
+  const total = lo(row.total);
+  const { parts, serious } = stackOf(row);
+  const wrap = el("div", "cas-strip");
+  const head2 = el("div", "cas-strip-head");
+  head2.append(
+    el("span", "cas-strip-name", cp.scope(row.id)),
+    el("span", "cas-strip-total", cellView(row.total).text)
+  );
+  const p = share(row.light, row.total);
+  if (p !== null) head2.append(el("span", "cas-strip-share", pct(p)));
+  wrap.append(head2);
+  const box = el("div", "cas-track-wrap");
+  const track2 = el("div", "cas-track");
+  if (total === null || parts.length === 0) {
+    track2.classList.add("cas-track-empty");
+    track2.append(el("span", "cas-track-note", cellView(row.total).text));
+  } else {
+    track2.style.gridTemplateColumns = parts.map((x) => `${Math.max(x.n, 0)}fr`).join(" ");
+    for (const x of parts) track2.append(el("span", `cas-seg ${x.cls}`));
+    if (serious) {
+      const left = Math.min(100, Math.max(0, serious[0] / total * 100));
+      const width = Math.min(
+        100 - left,
+        Math.max(0.6, (serious[1] - serious[0]) / total * 100)
+      );
+      const whisk = el("span", "cas-whisker");
+      whisk.style.left = `${left}%`;
+      whisk.style.width = `${width}%`;
+      whisk.title = `${c.colSerious} ${cellView(row.serious).text}`;
+      box.append(whisk);
+    }
+  }
+  const meta = [
+    `${c.colSerious} ${cellView(row.serious).text}`,
+    `${c.colLight} ${cellView(row.light).text}`,
+    `${c.colOther} ${cellView(row.other).text}`
+  ].join(" \xB7 ");
+  track2.setAttribute("role", "img");
+  track2.setAttribute("aria-label", `${head2.textContent} \u2014 ${meta}`);
+  box.append(track2);
+  wrap.append(box, el("p", "cas-strip-meta", meta));
+  return wrap;
+}
+function severityStrips(rows, caption) {
+  const cp = casCopy();
+  const wrap = el("div", "cas-visual");
+  wrap.append(el("p", "cas-caption", caption));
+  const legend2 = el("div", "cas-legend");
+  const keys = [
+    ["cas-seg-serious", cp.legend.serious],
+    ["cas-seg-light", cp.legend.light],
+    ["cas-seg-unpub", cp.legend.unpub]
+  ];
+  for (const [cls, label] of keys) {
+    const item = el("span", "cas-legend-item");
+    item.append(el("i", `cas-swatch ${cls}`), el("span", "", label));
+    legend2.append(item);
+  }
+  wrap.append(legend2);
+  for (const row of rows) wrap.append(strip(row, cp));
+  return wrap;
+}
+function tally(cell2, cp) {
+  const txt2 = cellView(cell2).text.trim();
+  if (txt2 === cp.noCases) return { kind: "zero", n: 0 };
+  const n2 = lo(cell2);
+  return n2 === null ? { kind: "unknown", n: 0 } : { kind: "n", n: n2 };
+}
+var DOT_CAP = 24;
+function dotsFor(row, t2) {
+  const dots = el("div", "cas-dots");
+  dots.setAttribute("aria-hidden", "true");
+  if (t2.kind === "unknown") {
+    dots.append(el("span", "cas-dot-unknown", "?"));
+    return dots;
+  }
+  if (t2.kind === "zero") {
+    dots.classList.add("cas-dots-empty");
+    return dots;
+  }
+  const ref = row.reference;
+  const shown = Math.min(t2.n, DOT_CAP);
+  for (let i = 0; i < shown; i++) {
+    dots.append(el("i", ref ? "cas-dot cas-dot-ref" : "cas-dot"));
+  }
+  if (t2.n > DOT_CAP) {
+    dots.append(el("span", "cas-dot-more", `+${t2.n - DOT_CAP}`));
+  }
+  return dots;
+}
+function detailsFor(row, cp) {
+  const det = el("details", "cas-cases");
+  const sum2 = el("summary", "cas-cases-sum");
+  sum2.setAttribute("aria-label", cp.casesLabel(row.cases.length));
+  sum2.title = cp.casesLabel(row.cases.length);
+  const ul = el("ul", "cas-case-list");
+  for (const key of row.cases) ul.append(el("li", "", cp.caseText(key)));
+  det.append(sum2, ul);
+  return det;
+}
+function caseTally(rows, caption) {
+  const cp = casCopy();
+  const wrap = el("div", "cas-visual");
+  wrap.append(el("p", "cas-caption", caption));
+  let side = null;
+  for (const row of rows) {
+    const t2 = tally(row.count, cp);
+    const line = el("div", "cas-tally-row");
+    if (row.reference) line.classList.add("cas-reference");
+    const sideLabel = cp.side(row.side);
+    if (sideLabel !== side) {
+      side = sideLabel;
+      line.append(el("p", "cas-tally-side", sideLabel));
+    }
+    const facts = el("div", "cas-tally-facts");
+    facts.append(
+      el("span", "cas-tally-kind", cp.kind(row.kind)),
+      el("span", "cas-tally-count", cellView(row.count).text)
+    );
+    if (row.cases.length > 0) facts.append(detailsFor(row, cp));
+    const body = el("div", "cas-tally-body");
+    body.append(dotsFor(row, t2), facts);
+    line.append(body);
+    line.setAttribute(
+      "aria-label",
+      `${sideLabel} \u2014 ${cp.kind(row.kind)}: ${cellView(row.count).text}`
+    );
+    wrap.append(line);
+  }
+  return wrap;
+}
+function withTable(visual, table, label) {
+  const det = el("details", "cas-table-toggle");
+  det.append(el("summary", "", label), table);
+  const box = el("div", "cas-visual-box");
+  box.append(visual, det);
+  return box;
+}
+
+// src/sections/casualties/index.ts
+var LABEL = {
+  fr: "Voir les chiffres",
+  en: "See the numbers"
+};
+function mountCasualties() {
+  const c = t().casualties;
+  const label = c.showTable ?? LABEL[getLocale()] ?? LABEL.en;
+  const a = byId("cas-a");
+  const aHead = byId("cas-a-head");
+  const aTop = [el("h4", "cas-title", c.headlineTitle), headline(), mixBlock()];
+  const aRest = [
+    withTable(
+      severityStrips(SEVERITY_LEVELS, c.capLevels),
+      severityTable(SEVERITY_LEVELS, c.capLevels),
+      label
+    ),
+    el("h4", "cas-title", c.popTitle),
+    populationTable(),
+    el("p", "cas-note", c.notePopulation),
+    el("h4", "cas-title", c.bystanderTitle),
+    bystanderTable(),
+    el("p", "cas-note", fill(c.noteBystanders, { proxy: CIVILIAN_PROXY })),
+    withTable(
+      caseTally(CASES, c.capCases),
+      causeTable(CASES, c.capCases),
+      label
+    ),
+    el("p", "cas-note", c.noteLevels)
+  ];
+  if (aHead) aHead.replaceChildren(...aTop);
+  if (a) a.replaceChildren(...aHead ? aRest : [...aTop, ...aRest]);
+  const b = byId("cas-b");
+  const bHead = byId("cas-b-head");
+  const bTop = [
+    el("h4", "cas-title", c.weeklyTitle),
+    severityStrips(SEVERITY_WEEKS, c.capWeeks)
+  ];
+  const bRest = [
+    severityTable(SEVERITY_WEEKS, c.capWeeks),
+    el("h4", "cas-title", c.estTitle),
+    estimateTable(),
+    el("p", "cas-note", c.noteEstimate),
+    sensitivityTable(),
+    el("p", "cas-note", c.noteSensitivity),
+    resolutionTable(),
+    el("p", "cas-note", c.noteWeeks)
+  ];
+  if (bHead) bHead.replaceChildren(...bTop);
+  if (b) b.replaceChildren(...bHead ? bRest : [...bTop, ...bRest]);
 }
 
 // src/entry/main.ts
