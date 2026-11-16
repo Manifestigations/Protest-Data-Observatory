@@ -423,7 +423,6 @@ export const FACTS: Readonly<Record<string, Partial<Record<MetricKey, Obs>>>> =
        d'élève, 1 agent de la Région. */
     "2026-10-12": {
       arrests: { low: 13, high: 13, q: "r" },
-      protesterInjured: { low: 3, high: 3, q: "r" },
       damagesCost: { low: 1.5, high: 1.5, q: "c" },
       blockades: { low: 19, high: 19, q: "r" },
     },
@@ -467,7 +466,8 @@ export const FACTS: Readonly<Record<string, Partial<Record<MetricKey, Obs>>>> =
       turnout: { low: 550_000, high: 800_000 },
       arrests: { low: 2_397, high: 2_628 },
       forcesInjured: { low: 207, high: 207, q: "e" },
-      protesterInjured: { low: 55, high: 1000, q: "e" },
+      /* 54 x 13 = 702 — see E8/E10 in casualties/estimate.ts. */
+      protesterInjured: { low: 55, high: 702, q: "e" },
       damagesCost: { low: 244, high: 866, q: "e" },
     },
 
@@ -980,189 +980,15 @@ export const STUDENT_WEEKS: readonly StudentWeek[] = WEEKS.map((week, idx) => {
   return out;
 });
 
-/* ── Casualty breakdown (sections A and B) ─────────────────────────────────
- *
- * The injured series in DAILY/WEEKLY hold one figure per day or week. These
- * breakdowns do not, and they are not interchangeable:
- *
- *   · the CRS file is an administrative count with two categories, light and
- *     not-light, for one month (October) and one corps;
- *   · the 17 October tally is a police count of all forces since 30 September,
- *     with a serious sub-count and no light category;
- *   · the protester figure is a case register with no total at all.
- *
- * Different populations, different windows, different categories. The table
- * keeps each on its own row and never sums across rows.
- *
- * Sources: Médiapart 13 Nov 2026 for the CRS file (1,233 declared, 1,167
- * light, 94.6%); BFMTV 18 Oct for the 1,144 consolidation and its 7 serious;
- * Le Progrès 10 Oct via Contre-Attaque for Givors; Médiapart 3 Nov for the
- * protester cases. The Sainte-Soline row is 2023 and is marked as a precedent,
- * not as 2026 data. */
-
-export type Why =
-  | "notPublished"
-  | "noDenominator"
-  | "binaryFile"
-  | "noTally"
-  | "noneDocumented";
-
-/** A cell is a figure, a range, a count of documented cases, or an absence
- *  with a stated reason. `d` marks a figure obtained by subtraction. */
-export type Cell =
-  | { readonly s: "n"; readonly v: number; readonly d?: true }
-  | {
-      readonly s: "r";
-      readonly lo: number;
-      readonly hi: number;
-      readonly d?: true;
-    }
-  | { readonly s: "c"; readonly n: number }
-  | { readonly s: "x"; readonly why: Why };
-
-export interface SevRow {
-  /** Key in casualties.scope. */
-  readonly id: string;
-  readonly total: Cell;
-  readonly serious: Cell;
-  readonly light: Cell;
-  /** Not light, not broken down further — the file's second category. */
-  readonly other: Cell;
-}
-
-/* ── A: the levels, at the finest window each source publishes ── */
-
-export const SEVERITY_LEVELS: readonly SevRow[] = [
-  {
-    /* 1,167 / 1,233 = 94.65% → the 94.6% the file itself states. */
-    id: "crsOctober",
-    total: { s: "n", v: 1_233 },
-    serious: { s: "x", why: "binaryFile" },
-    light: { s: "n", v: 1_167 },
-    other: { s: "n", v: 66, d: true },
-  },
-  {
-    /* All forces, running total at the peak, consolidated. */
-    id: "forcesPeak",
-    total: { s: "n", v: 1_144 },
-    serious: { s: "n", v: 7 },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" },
-  },
-  {
-    /* No total has ever been published, so no share can exist. */
-    id: "protesters",
-    total: { s: "x", why: "noDenominator" },
-    serious: { s: "x", why: "noTally" },
-    light: { s: "x", why: "noDenominator" },
-    other: { s: "x", why: "noDenominator" },
-  },
-];
-
-/* ── B: the same question asked of a week ──
- *
- * Increments are derived from FORCES_STOCK: the difference between the
- * running total at the end of the week and at its start. The reconciliation
- * is exact against the ministry's 1,580:
- *
- *   83 + 854 (to 14 Oct) + 207 + 267 + 116 + 53 = 1,580
- *
- * The 116 is not a range: 1,527 + 53 = 1,580 rules out the 159 implied by
- * the day's own figure. The 7 serious are attached to the 1,144 level, which
- * falls in the week of 12 October, not to that week's 207 increment. */
-
-export const SEVERITY_WEEKS: readonly SevRow[] = [
-  {
-    id: "week12oct",
-    total: { s: "n", v: 207, d: true },
-    serious: { s: "n", v: 7 },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" },
-  },
-  {
-    id: "week19oct",
-    total: { s: "n", v: 267, d: true },
-    serious: { s: "x", why: "notPublished" },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" },
-  },
-  {
-    id: "week26oct",
-    total: { s: "n", v: 116, d: true },
-    serious: { s: "x", why: "notPublished" },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" },
-  },
-  {
-    id: "week2nov",
-    total: { s: "n", v: 53 },
-    serious: { s: "x", why: "notPublished" },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" },
-  },
-  {
-    /* The month is the smallest window at which a split exists at all. */
-    id: "crsOctober",
-    total: { s: "n", v: 1_233 },
-    serious: { s: "x", why: "binaryFile" },
-    light: { s: "n", v: 1_167 },
-    other: { s: "n", v: 66, d: true },
-  },
-];
-
-/* ── Circumstances ──
- *
- * No source publishes a causation breakdown. What exists is a set of case
- * reports, each a named incident. `n` in a "c" cell counts documented cases,
- * never a proportion of a total: four documented cases do not mean four per
- * cent, and they do not mean four in total. */
-
-export interface CaseRow {
-  readonly id: string;
-  readonly side: "forces" | "protesters";
-  readonly kind: "accidental" | "conflictual";
-  readonly count: Cell;
-  /** Keys in casualties.cases, in the order they should read. */
-  readonly cases: readonly string[];
-  /** Era marker: this row is not 2026 data. */
-  readonly reference?: true;
-}
-
-export const CASES: readonly CaseRow[] = [
-  {
-    id: "forcesAccidental",
-    side: "forces",
-    kind: "accidental",
-    count: { s: "c", n: 4 },
-    cases: ["givors", "crsWrist", "crsAnkle"],
-  },
-  {
-    id: "forcesConflictual",
-    side: "forces",
-    kind: "conflictual",
-    count: { s: "x", why: "noTally" },
-    cases: ["helmet", "groin2023"],
-  },
-  {
-    id: "protesterConflictual",
-    side: "protesters",
-    kind: "conflictual",
-    count: { s: "x", why: "noTally" },
-    cases: ["mael", "alaric", "eyes"],
-  },
-  {
-    id: "protesterAccidental",
-    side: "protesters",
-    kind: "accidental",
-    count: { s: "x", why: "noneDocumented" },
-    cases: [],
-  },
-  {
-    id: "sainteSoline",
-    side: "forces",
-    kind: "accidental",
-    count: { s: "c", n: 29 },
-    cases: ["sainteSoline"],
-    reference: true,
-  },
-];
+/* Casualty data now lives in ./casualties — the cells, the observations, the
+   estimators and the invariants they must satisfy. Re-exported here so the
+   charts, the KPI layer and the renderer keep their existing import paths. */
+export {
+  CASES,
+  SEVERITY_LEVELS,
+  SEVERITY_WEEKS,
+  type CaseRow,
+  type Cell,
+  type SevRow,
+  type Why,
+} from "./casualties/index.ts";

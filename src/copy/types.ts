@@ -158,12 +158,33 @@ export interface CasualtyCopy {
   readonly colQuestion: string;
   readonly colWindow: string;
   readonly colWeekly: string;
+  /** The universe table's three tags. */
+  readonly colPopulation: string;
+  readonly colParticipation: string;
+  readonly colSelection: string;
+  /** The estimand table. */
+  readonly colEstimate: string;
+  readonly colRange: string;
+  readonly colMethod: string;
+  readonly colEdges: string;
+  readonly colStatus: string;
+  /** The treated-per-serious sensitivity table. */
+  readonly colRatio: string;
+  readonly colAt17: string;
+  readonly colMovement: string;
 
   readonly scope: Readonly<Record<string, string>>;
   readonly side: Readonly<Record<string, string>>;
   readonly kind: Readonly<Record<string, string>>;
   readonly why: Readonly<Record<string, string>>;
   readonly cases: Readonly<Record<string, string>>;
+
+  /** Population / participation / selection / edge / status tags — one map per
+   *  enum, so a widening of the data union fails here rather than at runtime. */
+  readonly population: Readonly<Record<string, string>>;
+  readonly participation: Readonly<Record<string, string>>;
+  readonly selection: Readonly<Record<string, string>>;
+  readonly edge: Readonly<Record<string, string>>;
 
   readonly casesCount: string;
   readonly noCases: string;
@@ -172,12 +193,36 @@ export interface CasualtyCopy {
   readonly capWeeks: string;
   readonly capCases: string;
   readonly capResolution: string;
+  readonly capMix: string;
+  readonly capPopulation: string;
+  readonly capEstimate: string;
+  readonly capSensitivity: string;
+
   readonly noteLevels: string;
   readonly noteWeeks: string;
+  readonly noteMix: string;
+  readonly notePopulation: string;
+  readonly noteEstimate: string;
+  readonly noteSensitivity: string;
+  readonly noteBystanders: string;
 
   readonly headLight: string;
   readonly headLightNote: string;
   readonly headMissingNote: string;
+  readonly headSeriousShare: string;
+  readonly headSeriousCount: string;
+  readonly headMix: string;
+
+  readonly estimates: Readonly<
+    Record<string, { readonly label: string; readonly method: string }>
+  >;
+  readonly assumptions: Readonly<Record<string, string>>;
+  readonly status: Readonly<Record<string, string>>;
+  readonly edgePair: string;
+  readonly ladder: Readonly<Record<string, string>>;
+  readonly mix: Readonly<Record<string, string>>;
+  readonly bystanders: Readonly<Record<string, string>>;
+  readonly observations: Readonly<Record<string, string>>;
 
   readonly resolution: readonly {
     readonly label: string;

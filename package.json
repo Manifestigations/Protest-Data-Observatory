@@ -9,6 +9,7 @@
     "build": "npm run build:css && npm run build:js -- --sourcemap --watch",
     "build:js": "esbuild src/entry/main.ts --bundle --format=esm --target=es2022 --outfile=docs/bundle.js",
     "build:css": "esbuild src/styles/index.css --bundle --outfile=docs/styles.css",
+    "check:casualties": "node scripts/check-casualties.ts",
     "dev:client": "npm run build",
     "dev:server": "node --watch server.ts",
     "typecheck": "tsc --noEmit"
@@ -17,7 +18,7 @@
     "chart.js": "^4.5.0"
   },
   "devDependencies": {
-    "@types/node": "^24.0.0",
+    "@types/node": "^24.19.2",
     "esbuild": "^0.25.0",
     "typescript": "^5.9.0"
   }

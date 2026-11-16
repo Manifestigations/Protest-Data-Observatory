@@ -1,7 +1,7 @@
 import { both, src } from "./record.ts";
 import type { Source } from "./types.ts";
 
-/* 71 entries, split out of sources.ts. Order and the
+/* 74 entries, split out of sources.ts. Order and the
  * comments annotating each entry are preserved verbatim; the render layer sorts
  * by publication date and never depends on this order. */
 export const PRESS_SOURCES: readonly Source[] = [
@@ -860,5 +860,40 @@ export const PRESS_SOURCES: readonly Source[] = [
       "la lecture polémique des deux mêmes chiffres — les 1 580 du ministère et les 94,6 % de « petits bobos » du fichier des CRS — avec les cas qu’elle oppose au total : blessures accidentelles (deux policiers brûlés dans leur voiture de patrouille à Givors par leur propre grenade, le 10 octobre) ou bénignes (un CRS avec le poignet contusionné en fermant la portière de son véhicule). À lire comme une thèse sur la composition du total, non comme une source du total.",
     ),
     "2026-11-13",
+  ),
+  src(
+    "lemonde-blessures-0511",
+    "press",
+    "Le Monde — « Hands torn off, broken bones, blinded eye: a month of serious injuries at protests »",
+    "https://www.lemonde.fr/en/france/article/2026/11/05/hands-torn-off-broken-bones-blinded-eye-le-monde-investigates-french-protesters-injuries_6772405_7.html",
+    both(
+      "the serious-injury register: 78 serious cases and one death by 5 November, 10 blinded, 9 cranio-facial injuries, 7 amputations. Serious cases only, built from press, militant blogs and IGPN referrals — a floor, and a non-independent list.",
+      "le registre des blessures graves : 78 cas graves et un décès au 5 novembre, 10 éborgnés, 9 traumatismes crânio-faciaux, 7 amputations. Cas graves seulement, bâti sur la presse, les blogs militants et les saisines de l’IGPN — un plancher, et une liste non indépendante.",
+    ),
+    "2026-11-05",
+  ),
+
+  src(
+    "lemonde-lycees-0610",
+    "press",
+    "Le Monde — « French high school protests: what we know about injuries among demonstrators and police »",
+    "https://www.lemonde.fr/en/france/article/2026/10/06/high-school-protests-what-we-know-about-injuries-among-demonstrators-and-police_6758279_7.html",
+    both(
+      "the education-ministry wording that keeps the student counts out of both series: injuries 'either due to accidental circumstances … or injuries caused by troublemakers'.",
+      "la formulation du ministère qui maintient les décomptes d’élèves hors des deux séries : blessures « soit accidentelles … soit causées par des fauteurs de troubles ».",
+    ),
+    "2026-10-06",
+  ),
+
+  src(
+    "lemonde-principaux-1210",
+    "press",
+    "Le Monde — « French high school protests: exhausted principals struggle with violent clashes »",
+    "https://www.lemonde.fr/en/france/article/2026/10/12/french-high-school-protests-exhausted-principals-struggle-to-deal-with-violent-clashes-at-their-schools_6758508_7.html",
+    both(
+      "that more than 210 students had been injured, 'some by police', alongside 88 staff including about 40 principals — the population behind the 'educationDeclared' tag.",
+      "que plus de 210 élèves avaient été blessés, « certains par la police », aux côtés de 88 personnels dont une quarantaine de chefs d’établissement — la population derrière l’étiquette « educationDeclared ».",
+    ),
+    "2026-10-12",
   ),
 ];

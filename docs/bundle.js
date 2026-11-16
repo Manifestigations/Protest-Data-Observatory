@@ -51,11 +51,11 @@ function hexString(v) {
 var HUE_RE = /^(hsla?|hwb|hsv)\(\s*([-+.e\d]+)(?:deg)?[\s,]+([-+.e\d]+)%[\s,]+([-+.e\d]+)%(?:[\s,]+([-+.e\d]+)(%)?)?\s*\)$/;
 function hsl2rgbn(h, s, l) {
   const a = s * Math.min(l, 1 - l);
-  const f = (n, k = (n + h / 30) % 12) => l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+  const f = (n2, k = (n2 + h / 30) % 12) => l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
   return [f(0), f(8), f(4)];
 }
 function hsv2rgbn(h, s, v) {
-  const f = (n, k = (n + h / 60) % 6) => v - v * s * Math.max(Math.min(k, 4 - k, 1), 0);
+  const f = (n2, k = (n2 + h / 60) % 6) => v - v * s * Math.max(Math.min(k, 4 - k, 1), 0);
   return [f(5), f(3), f(1)];
 }
 function hwb2rgbn(h, w, b) {
@@ -797,11 +797,11 @@ function _factorize(value2) {
   result.sort((a, b) => a - b).pop();
   return result;
 }
-function isNonPrimitive(n) {
-  return typeof n === "symbol" || typeof n === "object" && n !== null && !(Symbol.toPrimitive in n || "toString" in n || "valueOf" in n);
+function isNonPrimitive(n2) {
+  return typeof n2 === "symbol" || typeof n2 === "object" && n2 !== null && !(Symbol.toPrimitive in n2 || "toString" in n2 || "valueOf" in n2);
 }
-function isNumber(n) {
-  return !isNonPrimitive(n) && !isNaN(parseFloat(n)) && isFinite(n);
+function isNumber(n2) {
+  return !isNonPrimitive(n2) && !isNaN(parseFloat(n2)) && isFinite(n2);
 }
 function almostWhole(x, epsilon) {
   const rounded = Math.round(x);
@@ -1387,7 +1387,7 @@ function getScope$1(node, key) {
     return node;
   }
   const keys = key.split(".");
-  for (let i = 0, n = keys.length; i < n; ++i) {
+  for (let i = 0, n2 = keys.length; i < n2; ++i) {
     const k = keys[i];
     node = node[k] || (node[k] = /* @__PURE__ */ Object.create(null));
   }
@@ -12240,6 +12240,244 @@ var EPISODES_EN = {
   }
 };
 
+// src/sections/casualties/copy.en.ts
+var CASUALTY_EN = {
+  headlineTitle: "How the injuries divide",
+  weeklyTitle: "What a week can establish",
+  colScope: "Population",
+  colTotal: "Declared total",
+  colSerious: "Serious",
+  colLight: "Light",
+  colLightShare: "Light share",
+  colOther: "Not classed light",
+  colSide: "Side",
+  colCircumstance: "Circumstance",
+  colCount: "Count",
+  colCases: "Documented cases",
+  colQuestion: "Question",
+  colWindow: "Smallest published window",
+  colWeekly: "Weekly figure",
+  colPopulation: "Population counted",
+  colParticipation: "Participating",
+  colSelection: "How selected",
+  colEstimate: "Estimand",
+  colRange: "Range",
+  colMethod: "Method",
+  colEdges: "Edges",
+  colStatus: "Status",
+  colRatio: "Treated per serious case",
+  colAt17: "17 October (54 serious)",
+  colMovement: "Movement (78 serious)",
+  scope: {
+    crsOctober: "CRS, October 2026",
+    forcesPeak: "All forces, running total at its peak",
+    forcesMovement: "All forces, movement to 5 November",
+    protesters: "Protesters, since 30 September",
+    week12oct: "Week of 12 October",
+    week19oct: "Week of 19 October",
+    week26oct: "Week of 26 October",
+    week2nov: "Week of 2 November"
+  },
+  side: { forces: "Police and gendarmerie", protesters: "Protesters" },
+  kind: {
+    accidental: "Accidental or self-inflicted",
+    conflictual: "Inflicted in the confrontation"
+  },
+  population: {
+    forces: "Police and gendarmerie",
+    protesters: "Protesters",
+    bystanders: "Bystanders",
+    educationDeclared: "Students and education staff",
+    mixed: "Civilians, cause not stated"
+  },
+  participation: {
+    participating: "participating",
+    "non-participating": "not participating",
+    unknown: "unknown"
+  },
+  selection: {
+    official: "official count",
+    declared: "declaration",
+    register: "case register",
+    treated: "treated",
+    legal: "legal clients",
+    regional: "one region"
+  },
+  edge: {
+    published: "published count",
+    floor: "documented floor",
+    ceiling: "modelled ceiling",
+    transfer: "rate transfer",
+    residual: "residual",
+    bound: "structural bound",
+    unbounded: "no bound exists"
+  },
+  why: {
+    notPublished: "not published",
+    noDenominator: "no published total",
+    binaryFile: "file is light / not light only",
+    noTally: "no count, cases only",
+    noneDocumented: "none documented",
+    universeMismatch: "different population, cannot transfer",
+    noSeverityClass: "source has no severity class",
+    registerOnly: "register of serious cases only",
+    causeUnknown: "cause not published",
+    notEstimable: "not estimable from these data"
+  },
+  estimates: {
+    crsSeriousShare: {
+      label: "CRS, October: serious share",
+      method: "Nested bound \u2014 serious is a subset of not-light, and the file has no serious class"
+    },
+    forcesSeriousShare17: {
+      label: "All forces: serious share at the peak",
+      method: "Published: 7 serious in the 1,144 consolidation"
+    },
+    forcesSeriousCount: {
+      label: "All forces: seriously injured, movement",
+      method: "Floor published, central by rate transfer, ceiling by adding the post-peak not-light share"
+    },
+    forcesNotLightCount: {
+      label: "All forces: not classed light, movement",
+      method: "CRS actual as a floor, CRS rate transferred onto 1,580 as the ceiling"
+    },
+    crsShareOfForces: {
+      label: "CRS share of all force injuries in October",
+      method: "1,233 against October's all-forces increment"
+    },
+    seriousShareMovement: {
+      label: "Serious share of the 1,580",
+      method: "Derived from the serious count band, over the ministry's own denominator"
+    },
+    protestersSeriousFloor: {
+      label: "Protesters: seriously injured",
+      method: "Register of serious cases and deaths \u2014 a floor, with no ceiling available"
+    },
+    protestersSeriousShare: {
+      label: "Protesters: serious share",
+      method: "Inferred from people treated per serious case (r = 5 to 30)"
+    },
+    bystandersSerious: {
+      label: "Bystanders: seriously injured",
+      method: "No count exists \u2014 a named gap, not a missing number"
+    }
+  },
+  assumptions: {
+    seriousSubsetOfNotLight: "A serious injury is always also not classed light.",
+    rateTransfer: "The severity mix does not change after 17 October.",
+    crsDominatesOctober: "CRS is 83\u201385% of all force injuries in October, so its rate can stand in for the rest.",
+    declarationsNotPersons: "The ministry's 1,580 and the CRS file's 1,233 count the same kind of thing.",
+    registerSelection: "The register holds serious cases only, so it can be a floor but never a rate.",
+    treatedPerSerious: "Between 5 and 30 people were treated for each serious case.",
+    singleDayProxy: "One day's civilian mix stands in for the movement's.",
+    listsNotIndependent: "The injury lists share sources, so capture\u2013recapture does not apply."
+  },
+  status: { publishable: "headline", note: "method note", gap: "declared gap" },
+  edgePair: "{lo} to {hi}",
+  ladder: {
+    light: "Light",
+    residual: "Not classed light \u2014 unresolved",
+    serious: "Serious",
+    vision: "Permanent visual loss",
+    destruction: "Amputation or cranio-facial destruction",
+    fatal: "Fatal"
+  },
+  mix: {
+    light: "Light",
+    residual: "Not light, not serious",
+    serious: "Serious"
+  },
+  bystanders: {
+    documented: "Injured while not protesting, documented",
+    serious: "Serious among them",
+    national: "National total"
+  },
+  observations: {
+    edu29: "29 September \u2014 31 students and staff injured that day",
+    edu30: "30 September \u2014 119 injured since the start (85 students, 34 staff)",
+    edu01: "1 October \u2014 235 injured since the start (170 students, 65 staff)",
+    edu05: "5 October \u2014 300 injured (215 students, 85 staff)",
+    reg12: "12 October \u2014 1 proviseur, 1 parent d'\xE9l\xE8ve, 1 regional agent (\xCEle-de-France)",
+    thines17: "17 October \u2014 54 seriously injured and 1 death, register to that date",
+    toulouse17: "17 October \u2014 130+ people treated in Toulouse",
+    civ24: "24 October \u2014 150 civilians injured, 3 seriously",
+    thines05: "5 November \u2014 78 seriously injured and 1 death, register to that date",
+    legal05: "5 November \u2014 18 people who instructed lawyers to sue"
+  },
+  cases: {
+    givors: "Givors, 10 October: two officers on patrol outside a school burned on the hand and thigh when a grenade fired accidentally inside their own vehicle, setting it alight.",
+    crsWrist: "A CRS officer bruised his left wrist closing his own vehicle door.",
+    crsAnkle: "Another CRS officer sprained his ankle falling out of a van.",
+    helmet: "Paris, 31 October: a CRS officer struck on the helmet, found uninjured \u2014 a little paint removed from the shell.",
+    groin2023: "Sainte-Soline, March 2023, for comparison: of the 29 gendarmes counted, one had a groin haematoma, one respiratory trauma, the rest were examined for acoustic trauma.",
+    mael: "Tours, 30 September: a school student blinded in one eye by a rubber bullet, having thrown nothing.",
+    alaric: "Paris, 17 October: a 19-year-old student burned on the torso and arm by a tear-gas grenade fired flat at him; second-degree burns, unhealed ten days later.",
+    eyes: "Several other minors lost an eye in the same circumstances.",
+    sainteSoline: "The official claim was 29 gendarmes injured, two in absolute emergency. The two were later described as a groin haematoma and respiratory trauma."
+  },
+  casesCount: "{n} documented cases",
+  noCases: "none documented",
+  capLevels: "Severity, by the finest window each source publishes. Rows are different populations and different windows \u2014 they are never summed.",
+  capWeeks: "Severity, by week. The increment is the difference between the running total at the start and the end of the week.",
+  capCases: "Circumstance. No source counts this, so the column gives the number of documented cases, not a share.",
+  capResolution: "The smallest window at which each breakdown exists, and whether a weekly figure can be derived from it.",
+  capMix: "The 1,580 force injuries, split into three bands that are mutually exclusive and add to the total.",
+  capPopulation: "Every injury count the site holds, tagged with the population it counts and how it was selected.",
+  capEstimate: "Each estimand with its range, its method and what the two edges of the range rest on.",
+  capSensitivity: "The protester total as a function of people treated per serious case.",
+  noteLevels: "The 1,167 of 1,233 is the only published light share: 94.6%, the figure the file itself states. It covers CRS officers in October, so it cannot be extended to all forces or to the whole movement. The 7 serious injuries belong to the 1,144 consolidation of 17 October. No total for protester injuries has ever been published, so no share can be computed on that side \u2014 the serious cases are a register, not a rate. The four documented accidental injuries are four named people, not four per cent of anything.",
+  noteWeeks: "The ministry publishes a running total, not a weekly severity breakdown. Splitting the total into weeks is arithmetic, and it reconciles exactly to 1,580, but the only light/not-light split that exists is the October CRS file, which spans four of these weeks and cannot be attributed to any one of them. That is why section A carries the breakdown and section B carries the increments.",
+  noteMix: "Serious is the published 7, raised to 30 only by assuming the post-17-October injuries carry the CRS file's not-light rate. Not light, not serious is what remains of the 66\u201385 not-light cases once serious is taken out, so it can never be added to serious twice.",
+  notePopulation: "The education-ministry counts are held apart rather than folded into either side: the ministry says in words that students were hurt accidentally, by troublemakers and by police, and never quantifies the split. The 12 October cell is three named non-participants and has been removed from the protester series.",
+  noteEstimate: "Every range here is a constraint, not a confidence interval: the two edges rest on different kinds of evidence and the table says which. Capture\u2013recapture is not used \u2014 the injury lists share sources and are not independent.",
+  noteSensitivity: "The 13 in bold is Toulouse's 130+ treatments against 54 serious cases. The band it produces is the honest width of the protester estimate: 390 to 2,340 for the movement.",
+  noteBystanders: "The only bystander count in the dataset is three people in one region on one day. Nothing counts the national total and nothing records severity for them, and the 24 October civilian figure mixes all causes at {proxy} serious without saying who was participating. The emptiness is the finding.",
+  headLight: "{light} of {total} declared injuries were classed light",
+  headLightNote: "CRS officers, October 2026",
+  headMissingNote: "No published total for protester injuries, so no share exists",
+  headSeriousShare: "Serious injuries were {lo}\u2013{hi} of the {total} injured forces",
+  headSeriousCount: "Seriously injured: forces {forces}; protesters {protesters}",
+  headMix: "{light} of the {total} force injuries were classed light",
+  resolution: [
+    {
+      label: "Light / serious split",
+      window: "One month (October 2026), CRS only",
+      weekly: "no"
+    },
+    {
+      label: "Serious share of all forces",
+      window: "One day (17 October)",
+      weekly: "no"
+    },
+    {
+      label: "Severity mix of the 1,580",
+      window: "One month, transferred by rate",
+      weekly: "no"
+    },
+    {
+      label: "Serious count, protesters",
+      window: "Movement to date, register",
+      weekly: "no"
+    },
+    {
+      label: "Serious count, bystanders",
+      window: "None \u2014 no count exists",
+      weekly: "no"
+    },
+    {
+      label: "Accidental / conflictual split",
+      window: "None \u2014 named cases only",
+      weekly: "no"
+    },
+    {
+      label: "Running total of injured forces",
+      window: "One day",
+      weekly: "yes"
+    },
+    { label: "Daily increments", window: "One day", weekly: "yes" }
+  ]
+};
+
 // src/copy/en/text.ts
 var TEXT_EN = {
   panels: {
@@ -12275,91 +12513,7 @@ var TEXT_EN = {
     eurM: "\u20AC{v}M",
     none: "no figure published"
   },
-  casualties: {
-    headlineTitle: "How the injuries divide",
-    weeklyTitle: "What a week can establish",
-    colScope: "Population",
-    colTotal: "Declared total",
-    colSerious: "Serious",
-    colLight: "Light",
-    colLightShare: "Light share",
-    colOther: "Not classed light",
-    colSide: "Side",
-    colCircumstance: "Circumstance",
-    colCount: "Count",
-    colCases: "Documented cases",
-    colQuestion: "Question",
-    colWindow: "Smallest published window",
-    colWeekly: "Weekly figure",
-    scope: {
-      crsOctober: "CRS, October 2026",
-      forcesPeak: "All forces, running total at its peak",
-      protesters: "Protesters, since 30 September",
-      week12oct: "Week of 12 October",
-      week19oct: "Week of 19 October",
-      week26oct: "Week of 26 October",
-      week2nov: "Week of 2 November"
-    },
-    side: {
-      forces: "Police and gendarmerie",
-      protesters: "Protesters"
-    },
-    kind: {
-      accidental: "Accidental or self-inflicted",
-      conflictual: "Inflicted in the confrontation"
-    },
-    why: {
-      notPublished: "not published",
-      noDenominator: "no published total",
-      binaryFile: "file is light / not light only",
-      noTally: "no count, cases only",
-      noneDocumented: "none documented"
-    },
-    cases: {
-      givors: "Givors, 10 October: two officers on patrol outside a school burned on the hand and thigh when a grenade fired accidentally inside their own vehicle, setting it alight.",
-      crsWrist: "A CRS officer bruised his left wrist closing his own vehicle door.",
-      crsAnkle: "Another CRS officer sprained his ankle falling out of a van.",
-      helmet: "Paris, 31 October: a CRS officer struck on the helmet, found uninjured \u2014 a little paint removed from the shell.",
-      groin2023: "Sainte-Soline, March 2023, for comparison: of the 29 gendarmes counted, one had a groin haematoma, one respiratory trauma, the rest were examined for acoustic trauma.",
-      mael: "Tours, 30 September: a school student blinded in one eye by a rubber bullet, having thrown nothing.",
-      alaric: "Paris, 17 October: a 19-year-old student burned on the torso and arm by a tear-gas grenade fired flat at him; second-degree burns, unhealed ten days later.",
-      eyes: "Several other minors lost an eye in the same circumstances.",
-      sainteSoline: "The official claim was 29 gendarmes injured, two in absolute emergency. The two were later described as a groin haematoma and respiratory trauma."
-    },
-    casesCount: "{n} documented cases",
-    noCases: "none documented",
-    capLevels: "Severity, by the finest window each source publishes. Rows are different populations and different windows \u2014 they are never summed.",
-    capWeeks: "Severity, by week. The increment is the difference between the running total at the start and the end of the week.",
-    capCases: "Circumstance. No source counts this, so the column gives the number of documented cases, not a share.",
-    capResolution: "The smallest window at which each breakdown exists, and whether a weekly figure can be derived from it.",
-    noteLevels: "The 1,167 of 1,233 is the only published light share: 94.6%, the figure the file itself states. It covers CRS officers in October, so it cannot be extended to all forces or to the whole movement. The 7 serious injuries belong to the 1,144 consolidation of 17 October. No total for protester injuries has ever been published, so no share can be computed on that side \u2014 the serious cases are a register, not a rate. The four documented accidental injuries are four named people, not four per cent of anything.",
-    noteWeeks: "The ministry publishes a running total, not a weekly severity breakdown. Splitting the total into weeks is arithmetic, and it reconciles exactly to 1,580, but the only light/not-light split that exists is the October CRS file, which spans four of these weeks and cannot be attributed to any one of them. That is why section A carries the breakdown and section B carries the increments.",
-    headLight: "{light} of {total} declared injuries were classed light",
-    headLightNote: "CRS officers, October 2026",
-    headMissingNote: "No published total for protester injuries, so no share exists",
-    resolution: [
-      {
-        label: "Light / serious split",
-        window: "One month (October 2026), CRS only",
-        weekly: "no"
-      },
-      {
-        label: "Accidental / conflictual split",
-        window: "None \u2014 named cases only",
-        weekly: "no"
-      },
-      {
-        label: "Running total of injured forces",
-        window: "One day",
-        weekly: "yes"
-      },
-      {
-        label: "Daily increments",
-        window: "One day",
-        weekly: "yes"
-      }
-    ]
-  },
+  casualties: CASUALTY_EN,
   items: {
     p: { label: "Protesters", short: "Protesters" },
     a: { label: "Arrests", short: "Arrests" },
@@ -12783,6 +12937,244 @@ var EPISODES_FR = {
   }
 };
 
+// src/sections/casualties/copy.fr.ts
+var CASUALTY_FR = {
+  headlineTitle: "Comment se r\xE9partissent les blessures",
+  weeklyTitle: "Ce qu\u2019une semaine peut \xE9tablir",
+  colScope: "Population",
+  colTotal: "Total d\xE9clar\xE9",
+  colSerious: "Graves",
+  colLight: "L\xE9g\xE8res",
+  colLightShare: "Part de l\xE9g\xE8res",
+  colOther: "Non class\xE9es l\xE9g\xE8res",
+  colSide: "Camp",
+  colCircumstance: "Circonstance",
+  colCount: "D\xE9compte",
+  colCases: "Cas document\xE9s",
+  colQuestion: "Question",
+  colWindow: "Plus petite fen\xEAtre publi\xE9e",
+  colWeekly: "Chiffre hebdomadaire",
+  colPopulation: "Population compt\xE9e",
+  colParticipation: "Participation",
+  colSelection: "Mode de s\xE9lection",
+  colEstimate: "Grandeur",
+  colRange: "Intervalle",
+  colMethod: "M\xE9thode",
+  colEdges: "Bornes",
+  colStatus: "Statut",
+  colRatio: "Pris en charge par cas grave",
+  colAt17: "17 octobre (54 cas graves)",
+  colMovement: "Mouvement (78 cas graves)",
+  scope: {
+    crsOctober: "CRS, octobre 2026",
+    forcesPeak: "Toutes forces, cumul \xE0 son pic",
+    forcesMovement: "Toutes forces, mouvement jusqu\u2019au 5 novembre",
+    protesters: "Manifestant\xB7es, depuis le 30 septembre",
+    week12oct: "Semaine du 12 octobre",
+    week19oct: "Semaine du 19 octobre",
+    week26oct: "Semaine du 26 octobre",
+    week2nov: "Semaine du 2 novembre"
+  },
+  side: { forces: "Police et gendarmerie", protesters: "Manifestant\xB7es" },
+  kind: {
+    accidental: "Accidentelle ou auto-inflig\xE9e",
+    conflictual: "Imput\xE9e \xE0 l\u2019affrontement"
+  },
+  population: {
+    forces: "Police et gendarmerie",
+    protesters: "Manifestant\xB7es",
+    bystanders: "Personnes non participantes",
+    educationDeclared: "\xC9l\xE8ves et personnels de l\u2019\xE9ducation",
+    mixed: "Civils, cause non pr\xE9cis\xE9e"
+  },
+  participation: {
+    participating: "participant",
+    "non-participating": "ne participant pas",
+    unknown: "inconnue"
+  },
+  selection: {
+    official: "d\xE9compte officiel",
+    declared: "d\xE9claration",
+    register: "registre de cas",
+    treated: "pris en charge",
+    legal: "clients d\u2019avocats",
+    regional: "une seule r\xE9gion"
+  },
+  edge: {
+    published: "chiffre publi\xE9",
+    floor: "plancher document\xE9",
+    ceiling: "plafond mod\xE9lis\xE9",
+    transfer: "transfert de taux",
+    residual: "r\xE9sidu",
+    bound: "borne structurelle",
+    unbounded: "aucune borne n\u2019existe"
+  },
+  why: {
+    notPublished: "non publi\xE9",
+    noDenominator: "aucun total publi\xE9",
+    binaryFile: "fichier binaire : l\xE9ger / non l\xE9ger",
+    noTally: "aucun d\xE9compte, des cas seulement",
+    noneDocumented: "aucun cas document\xE9",
+    universeMismatch: "population diff\xE9rente, non transf\xE9rable",
+    noSeverityClass: "la source n\u2019a pas de classe de gravit\xE9",
+    registerOnly: "registre de cas graves seulement",
+    causeUnknown: "cause non publi\xE9e",
+    notEstimable: "non estimable \xE0 partir de ces donn\xE9es"
+  },
+  estimates: {
+    crsSeriousShare: {
+      label: "CRS, octobre : part de cas graves",
+      method: "Borne imbriqu\xE9e \u2014 un cas grave est toujours non l\xE9ger, et le fichier n\u2019a pas de classe grave"
+    },
+    forcesSeriousShare17: {
+      label: "Toutes forces : part de cas graves au pic",
+      method: "Publi\xE9 : 7 cas graves dans la consolidation de 1 144"
+    },
+    forcesSeriousCount: {
+      label: "Toutes forces : bless\xE9s graves, mouvement",
+      method: "Plancher publi\xE9, centre par transfert de taux, plafond en ajoutant la part non l\xE9g\xE8re post-pic"
+    },
+    forcesNotLightCount: {
+      label: "Toutes forces : non class\xE9s l\xE9gers, mouvement",
+      method: "Le r\xE9el des CRS comme plancher, son taux transf\xE9r\xE9 \xE0 1 580 comme plafond"
+    },
+    crsShareOfForces: {
+      label: "Part des CRS dans les bless\xE9s des forces en octobre",
+      method: "1 233 rapport\xE9s \xE0 l\u2019incr\xE9ment d\u2019octobre, toutes forces"
+    },
+    seriousShareMovement: {
+      label: "Part de cas graves sur les 1 580",
+      method: "Tir\xE9e de l\u2019intervalle des cas graves, sur le d\xE9nominateur du minist\xE8re"
+    },
+    protestersSeriousFloor: {
+      label: "Manifestant\xB7es : bless\xE9s graves",
+      method: "Registre des cas graves et des d\xE9c\xE8s \u2014 un plancher, sans plafond disponible"
+    },
+    protestersSeriousShare: {
+      label: "Manifestant\xB7es : part de cas graves",
+      method: "D\xE9duite du nombre de pris en charge par cas grave (r = 5 \xE0 30)"
+    },
+    bystandersSerious: {
+      label: "Non-participant\xB7es : bless\xE9s graves",
+      method: "Aucun d\xE9compte n\u2019existe \u2014 une lacune nomm\xE9e, pas un chiffre manquant"
+    }
+  },
+  assumptions: {
+    seriousSubsetOfNotLight: "Une blessure grave est toujours aussi non class\xE9e l\xE9g\xE8re.",
+    rateTransfer: "La r\xE9partition par gravit\xE9 ne change pas apr\xE8s le 17 octobre.",
+    crsDominatesOctober: "Les CRS repr\xE9sentent 83 \xE0 85 % des bless\xE9s des forces en octobre : leur taux vaut pour le reste.",
+    declarationsNotPersons: "Les 1 580 du minist\xE8re et les 1 233 du fichier CRS comptent la m\xEAme chose.",
+    registerSelection: "Le registre ne contient que des cas graves : il peut \xEAtre un plancher, jamais un taux.",
+    treatedPerSerious: "Entre 5 et 30 personnes ont \xE9t\xE9 prises en charge par cas grave.",
+    singleDayProxy: "La r\xE9partition civile d\u2019un jour vaut pour tout le mouvement.",
+    listsNotIndependent: "Les listes partagent leurs sources : la capture\u2013recapture ne s\u2019applique pas."
+  },
+  status: {
+    publishable: "titre",
+    note: "note de m\xE9thode",
+    gap: "lacune d\xE9clar\xE9e"
+  },
+  edgePair: "{lo} \xE0 {hi}",
+  ladder: {
+    light: "L\xE9g\xE8res",
+    residual: "Non class\xE9es l\xE9g\xE8res \u2014 non r\xE9solues",
+    serious: "Graves",
+    vision: "Perte visuelle d\xE9finitive",
+    destruction: "Amputation ou destruction cr\xE2nio-faciale",
+    fatal: "D\xE9c\xE8s"
+  },
+  mix: {
+    light: "L\xE9g\xE8res",
+    residual: "Non l\xE9g\xE8res, non graves",
+    serious: "Graves"
+  },
+  bystanders: {
+    documented: "Bless\xE9\xB7es hors participation, document\xE9\xB7es",
+    serious: "Dont cas graves",
+    national: "Total national"
+  },
+  observations: {
+    edu29: "29 septembre \u2014 31 \xE9l\xE8ves et personnels bless\xE9s ce jour-l\xE0",
+    edu30: "30 septembre \u2014 119 bless\xE9s depuis le d\xE9but (85 \xE9l\xE8ves, 34 personnels)",
+    edu01: "1er octobre \u2014 235 bless\xE9s depuis le d\xE9but (170 \xE9l\xE8ves, 65 personnels)",
+    edu05: "5 octobre \u2014 300 bless\xE9s (215 \xE9l\xE8ves, 85 personnels)",
+    reg12: "12 octobre \u2014 1 proviseur, 1 parent d\u2019\xE9l\xE8ve, 1 agent de la R\xE9gion (\xCEle-de-France)",
+    thines17: "17 octobre \u2014 54 bless\xE9s graves et 1 d\xE9c\xE8s, registre \xE0 cette date",
+    toulouse17: "17 octobre \u2014 plus de 130 personnes prises en charge \xE0 Toulouse",
+    civ24: "24 octobre \u2014 150 civils bless\xE9s, dont 3 graves",
+    thines05: "5 novembre \u2014 78 bless\xE9s graves et 1 d\xE9c\xE8s, registre \xE0 cette date",
+    legal05: "5 novembre \u2014 18 personnes ayant saisi des avocats"
+  },
+  cases: {
+    givors: "Givors, 10 octobre : deux policiers en faction devant un lyc\xE9e se br\xFBlent \xE0 la main et \xE0 la cuisse quand une grenade part accidentellement dans leur propre v\xE9hicule, qui prend feu.",
+    crsWrist: "Un CRS s\u2019est contusionn\xE9 le poignet gauche en fermant la porti\xE8re de son v\xE9hicule.",
+    crsAnkle: "Un autre CRS s\u2019est tordu la cheville en chutant du fourgon.",
+    helmet: "Paris, 31 octobre : un CRS touch\xE9 au casque, indemne \u2014 un peu de peinture \xF4t\xE9e de la coque.",
+    groin2023: "Sainte-Soline, mars 2023, pour comparaison : sur 29 gendarmes recens\xE9s, un h\xE9matome \xE0 l\u2019aine, un traumatisme respiratoire, les autres examin\xE9s pour traumatismes sonores.",
+    mael: "Tours, 30 septembre : un lyc\xE9en \xE9borgn\xE9 par une balle en caoutchouc, alors qu\u2019il ne lan\xE7ait rien.",
+    alaric: "Paris, 17 octobre : un \xE9tudiant de 19 ans br\xFBl\xE9 au torse et au bras par une grenade lacrymog\xE8ne tir\xE9e en tir tendu ; br\xFBlures au deuxi\xE8me degr\xE9, non cicatris\xE9es dix jours plus tard.",
+    eyes: "Plusieurs autres mineurs ont perdu un \u0153il dans les m\xEAmes circonstances.",
+    sainteSoline: "Le bilan officiel \xE9tait de 29 gendarmes bless\xE9s, dont deux en urgence absolue. Les deux ont ensuite \xE9t\xE9 d\xE9crits comme un h\xE9matome \xE0 l\u2019aine et un traumatisme respiratoire."
+  },
+  casesCount: "{n} cas document\xE9s",
+  noCases: "aucun cas document\xE9",
+  capLevels: "Gravit\xE9, \xE0 la plus fine fen\xEAtre publi\xE9e par chaque source. Les lignes sont des populations et des fen\xEAtres diff\xE9rentes \u2014 elles ne s\u2019additionnent jamais.",
+  capWeeks: "Gravit\xE9, par semaine. L\u2019incr\xE9ment est la diff\xE9rence entre le cumul en d\xE9but et en fin de semaine.",
+  capCases: "Circonstance. Aucune source ne la d\xE9nombre : la colonne donne le nombre de cas document\xE9s, non une part.",
+  capResolution: "La plus petite fen\xEAtre \xE0 laquelle chaque ventilation existe, et si un chiffre hebdomadaire peut en \xEAtre tir\xE9.",
+  capMix: "Les 1 580 bless\xE9s des forces, en trois bandes exclusives qui font le total.",
+  capPopulation: "Tous les d\xE9comptes de bless\xE9s du site, \xE9tiquet\xE9s par population et par mode de s\xE9lection.",
+  capEstimate: "Chaque grandeur avec son intervalle, sa m\xE9thode et ce sur quoi reposent ses deux bornes.",
+  capSensitivity: "Le total chez les manifestant\xB7es selon le nombre de pris en charge par cas grave.",
+  noteLevels: "Les 1 167 sur 1 233 constituent la seule part de bless\xE9s l\xE9gers publi\xE9e : 94,6 %, le chiffre que le fichier \xE9nonce lui-m\xEAme. Il porte sur les CRS en octobre : il ne s\u2019\xE9tend ni \xE0 toutes les forces ni \xE0 tout le mouvement. Les 7 bless\xE9s graves rel\xE8vent de la consolidation de 1 144 du 17 octobre. Aucun total des blessures chez les manifestant\xB7es n\u2019a jamais \xE9t\xE9 publi\xE9 : aucune part ne peut donc \xEAtre calcul\xE9e de ce c\xF4t\xE9 \u2014 les cas graves forment un registre, non un taux. Les quatre blessures accidentelles document\xE9es sont quatre personnes nomm\xE9es, non quatre pour cent de quoi que ce soit.",
+  noteWeeks: "Le minist\xE8re publie un cumul, non une ventilation hebdomadaire de la gravit\xE9. D\xE9couper ce cumul en semaines est de l\u2019arithm\xE9tique, et le total se recoupe exactement \xE0 1 580, mais la seule ventilation l\xE9ger / non l\xE9ger existante est le fichier des CRS d\u2019octobre, qui couvre quatre de ces semaines sans pouvoir \xEAtre attribu\xE9 \xE0 l\u2019une d\u2019elles. C\u2019est pourquoi la section A porte la ventilation et la section B les incr\xE9ments.",
+  noteMix: "Les cas graves partent des 7 publi\xE9s et ne montent \xE0 30 qu\u2019en supposant que les bless\xE9s post\xE9rieurs au 17 octobre portent le taux non l\xE9ger du fichier CRS. Les non l\xE9gers non graves sont ce qui reste des 66 \xE0 85 cas non l\xE9gers une fois les graves retir\xE9s : ils ne peuvent donc jamais \xEAtre compt\xE9s deux fois.",
+  notePopulation: "Les d\xE9comptes du minist\xE8re de l\u2019\xC9ducation restent \xE0 part plut\xF4t que d\u2019\xEAtre vers\xE9s d\u2019un c\xF4t\xE9 ou de l\u2019autre : le minist\xE8re dit en mots que des \xE9l\xE8ves ont \xE9t\xE9 bless\xE9s accidentellement, par des \xAB fauteurs de troubles \xBB et par la police, sans jamais chiffrer la r\xE9partition. La cellule du 12 octobre est trois non-participants nomm\xE9s ; elle a \xE9t\xE9 retir\xE9e de la s\xE9rie des manifestant\xB7es.",
+  noteEstimate: "Chaque intervalle est une contrainte, non un intervalle de confiance : ses deux bornes reposent sur des preuves de nature diff\xE9rente et le tableau le dit. La capture\u2013recapture n\u2019est pas utilis\xE9e \u2014 les listes partagent leurs sources et ne sont pas ind\xE9pendantes.",
+  noteSensitivity: "Le 13 en gras est le rapport de Toulouse : plus de 130 prises en charge pour 54 cas graves. La bande qu\u2019il produit est la largeur honn\xEAte de l\u2019estimation : 390 \xE0 2 340 pour le mouvement.",
+  noteBystanders: "Le seul d\xE9compte de non-participants est de trois personnes dans une r\xE9gion et un jour. Rien ne compte le total national, rien n\u2019enregistre leur gravit\xE9, et le chiffre civil du 24 octobre m\xEAle toutes les causes \xE0 {proxy} de cas graves sans dire qui participait. Le vide est le r\xE9sultat.",
+  headLight: "{light} blessures d\xE9clar\xE9es sur {total} class\xE9es l\xE9g\xE8res",
+  headLightNote: "Agents des CRS, octobre 2026",
+  headMissingNote: "Aucun total publi\xE9 pour les blessures des manifestant\xB7es : aucune part n\u2019existe",
+  headSeriousShare: "Les blessures graves repr\xE9sentent {lo} \xE0 {hi} des {total} bless\xE9s des forces",
+  headSeriousCount: "Bless\xE9s graves : forces {forces} ; manifestant\xB7es {protesters}",
+  headMix: "{light} des {total} bless\xE9s des forces ont \xE9t\xE9 class\xE9s l\xE9gers",
+  resolution: [
+    {
+      label: "Ventilation l\xE9ger / grave",
+      window: "Un mois (octobre 2026), CRS seulement",
+      weekly: "non"
+    },
+    {
+      label: "Part de cas graves, toutes forces",
+      window: "Un jour (17 octobre)",
+      weekly: "non"
+    },
+    {
+      label: "R\xE9partition par gravit\xE9 des 1 580",
+      window: "Un mois, transf\xE9r\xE9 par taux",
+      weekly: "non"
+    },
+    {
+      label: "Nombre de cas graves, manifestant\xB7es",
+      window: "Mouvement \xE0 ce jour, registre",
+      weekly: "non"
+    },
+    {
+      label: "Nombre de cas graves, non-participant\xB7es",
+      window: "Aucune \u2014 aucun d\xE9compte",
+      weekly: "non"
+    },
+    {
+      label: "Ventilation accidentelle / conflictuelle",
+      window: "Aucune \u2014 des cas nomm\xE9s seulement",
+      weekly: "non"
+    },
+    { label: "Cumul des forces bless\xE9es", window: "Un jour", weekly: "oui" },
+    { label: "Incr\xE9ments quotidiens", window: "Un jour", weekly: "oui" }
+  ]
+};
+
 // src/copy/fr/text.ts
 var TEXT_FR = {
   panels: {
@@ -12818,91 +13210,7 @@ var TEXT_FR = {
     eurM: "{v} M\u20AC",
     none: "aucun chiffre publi\xE9"
   },
-  casualties: {
-    headlineTitle: "Comment se r\xE9partissent les blessures",
-    weeklyTitle: "Ce qu\u2019une semaine peut \xE9tablir",
-    colScope: "Population",
-    colTotal: "Total d\xE9clar\xE9",
-    colSerious: "Graves",
-    colLight: "L\xE9g\xE8res",
-    colLightShare: "Part de l\xE9g\xE8res",
-    colOther: "Non class\xE9es l\xE9g\xE8res",
-    colSide: "Camp",
-    colCircumstance: "Circonstance",
-    colCount: "D\xE9compte",
-    colCases: "Cas document\xE9s",
-    colQuestion: "Question",
-    colWindow: "Plus petite fen\xEAtre publi\xE9e",
-    colWeekly: "Chiffre hebdomadaire",
-    scope: {
-      crsOctober: "CRS, octobre 2026",
-      forcesPeak: "Toutes forces, cumul \xE0 son pic",
-      protesters: "Manifestant\xB7es, depuis le 30 septembre",
-      week12oct: "Semaine du 12 octobre",
-      week19oct: "Semaine du 19 octobre",
-      week26oct: "Semaine du 26 octobre",
-      week2nov: "Semaine du 2 novembre"
-    },
-    side: {
-      forces: "Police et gendarmerie",
-      protesters: "Manifestant\xB7es"
-    },
-    kind: {
-      accidental: "Accidentelle ou auto-inflig\xE9e",
-      conflictual: "Imput\xE9e \xE0 l\u2019affrontement"
-    },
-    why: {
-      notPublished: "non publi\xE9",
-      noDenominator: "aucun total publi\xE9",
-      binaryFile: "fichier binaire : l\xE9ger / non l\xE9ger",
-      noTally: "aucun d\xE9compte, des cas seulement",
-      noneDocumented: "aucun cas document\xE9"
-    },
-    cases: {
-      givors: "Givors, 10 octobre : deux policiers en faction devant un lyc\xE9e se br\xFBlent \xE0 la main et \xE0 la cuisse quand une grenade part accidentellement dans leur propre v\xE9hicule, qui prend feu.",
-      crsWrist: "Un CRS s\u2019est contusionn\xE9 le poignet gauche en fermant la porti\xE8re de son v\xE9hicule.",
-      crsAnkle: "Un autre CRS s\u2019est tordu la cheville en chutant du fourgon.",
-      helmet: "Paris, 31 octobre : un CRS touch\xE9 au casque, indemne \u2014 un peu de peinture \xF4t\xE9e de la coque.",
-      groin2023: "Sainte-Soline, mars 2023, pour comparaison : sur 29 gendarmes recens\xE9s, un h\xE9matome \xE0 l\u2019aine, un traumatisme respiratoire, les autres examin\xE9s pour traumatismes sonores.",
-      mael: "Tours, 30 septembre : un lyc\xE9en \xE9borgn\xE9 par une balle en caoutchouc, alors qu\u2019il ne lan\xE7ait rien.",
-      alaric: "Paris, 17 octobre : un \xE9tudiant de 19 ans br\xFBl\xE9 au torse et au bras par une grenade lacrymog\xE8ne tir\xE9e en tir tendu ; br\xFBlures au deuxi\xE8me degr\xE9, non cicatris\xE9es dix jours plus tard.",
-      eyes: "Plusieurs autres mineurs ont perdu un \u0153il dans les m\xEAmes circonstances.",
-      sainteSoline: "Le bilan officiel \xE9tait de 29 gendarmes bless\xE9s, dont deux en urgence absolue. Les deux ont ensuite \xE9t\xE9 d\xE9crits comme un h\xE9matome \xE0 l\u2019aine et un traumatisme respiratoire."
-    },
-    casesCount: "{n} cas document\xE9s",
-    noCases: "aucun cas document\xE9",
-    capLevels: "Gravit\xE9, \xE0 la plus fine fen\xEAtre publi\xE9e par chaque source. Les lignes sont des populations et des fen\xEAtres diff\xE9rentes \u2014 elles ne s\u2019additionnent jamais.",
-    capWeeks: "Gravit\xE9, par semaine. L\u2019incr\xE9ment est la diff\xE9rence entre le cumul en d\xE9but et en fin de semaine.",
-    capCases: "Circonstance. Aucune source ne la d\xE9nombre : la colonne donne le nombre de cas document\xE9s, non une part.",
-    capResolution: "La plus petite fen\xEAtre \xE0 laquelle chaque ventilation existe, et si un chiffre hebdomadaire peut en \xEAtre tir\xE9.",
-    noteLevels: "Les 1 167 sur 1 233 constituent la seule part de bless\xE9s l\xE9gers publi\xE9e : 94,6 %, le chiffre que le fichier \xE9nonce lui-m\xEAme. Il porte sur les CRS en octobre : il ne s\u2019\xE9tend ni \xE0 toutes les forces ni \xE0 tout le mouvement. Les 7 bless\xE9s graves rel\xE8vent de la consolidation de 1 144 du 17 octobre. Aucun total des blessures chez les manifestant\xB7es n\u2019a jamais \xE9t\xE9 publi\xE9 : aucune part ne peut donc \xEAtre calcul\xE9e de ce c\xF4t\xE9 \u2014 les cas graves forment un registre, non un taux. Les quatre blessures accidentelles document\xE9es sont quatre personnes nomm\xE9es, non quatre pour cent de quoi que ce soit.",
-    noteWeeks: "Le minist\xE8re publie un cumul, non une ventilation hebdomadaire de la gravit\xE9. D\xE9couper ce cumul en semaines est de l\u2019arithm\xE9tique, et le total se recoupe exactement \xE0 1 580, mais la seule ventilation l\xE9ger / non l\xE9ger existante est le fichier des CRS d\u2019octobre, qui couvre quatre de ces semaines sans pouvoir \xEAtre attribu\xE9 \xE0 l\u2019une d\u2019elles. C\u2019est pourquoi la section A porte la ventilation et la section B les incr\xE9ments.",
-    headLight: "{light} blessures d\xE9clar\xE9es sur {total} class\xE9es l\xE9g\xE8res",
-    headLightNote: "Agents des CRS, octobre 2026",
-    headMissingNote: "Aucun total publi\xE9 pour les blessures des manifestant\xB7es : aucune part n\u2019existe",
-    resolution: [
-      {
-        label: "Ventilation l\xE9ger / grave",
-        window: "Un mois (octobre 2026), CRS seulement",
-        weekly: "non"
-      },
-      {
-        label: "Ventilation accidentelle / conflictuelle",
-        window: "Aucune \u2014 des cas nomm\xE9s seulement",
-        weekly: "non"
-      },
-      {
-        label: "Cumul des forces bless\xE9es",
-        window: "Un jour",
-        weekly: "oui"
-      },
-      {
-        label: "Incr\xE9ments quotidiens",
-        window: "Un jour",
-        weekly: "oui"
-      }
-    ]
-  },
+  casualties: CASUALTY_FR,
   items: {
     p: { label: "Manifestants", short: "Manifestants" },
     a: { label: "Interpellations", short: "Interpellations" },
@@ -12953,8 +13261,8 @@ function fill(template, params) {
 }
 function plural(a, b, c) {
   if (typeof a === "string") {
-    const n = typeof b === "number" ? b : 0;
-    return Math.abs(n) === 1 ? a : c ?? `${a}s`;
+    const n2 = typeof b === "number" ? b : 0;
+    return Math.abs(n2) === 1 ? a : c ?? `${a}s`;
   }
   const isOne = Math.abs(a) === 1;
   if (typeof b !== "string") return isOne ? "" : "s";
@@ -13504,8 +13812,8 @@ var txt = (v) => {
     const p = v;
     if (typeof p.low === "number" && typeof p.high === "number")
       return p.low === p.high ? nf().format(Math.round(p.low)) : `${nf().format(Math.round(p.low))} \u2013 ${nf().format(Math.round(p.high))}`;
-    for (const n of [p.v, p.y])
-      if (typeof n === "number") return nf().format(Math.round(n));
+    for (const n2 of [p.v, p.y])
+      if (typeof n2 === "number") return nf().format(Math.round(n2));
   }
   return String(v);
 };
@@ -13545,7 +13853,7 @@ function fromChart(chart, opts) {
     (d) => opts.include?.(d) ?? true
   );
   const labels = (data.labels ?? []).map(String);
-  const n = labels.length || Math.max(
+  const n2 = labels.length || Math.max(
     0,
     ...sets.map((d) => (d.data ?? []).length)
   );
@@ -13553,14 +13861,14 @@ function fromChart(chart, opts) {
     caption: opts.caption,
     indexHeader: opts.indexHeader,
     index: Array.from(
-      { length: n },
+      { length: n2 },
       (_, i) => opts.indexOf?.(sets[0], i) ?? labels[i] ?? String(i + 1)
     ),
     columns: sets.map((d) => {
       const ds = d;
       return {
         header: String(ds.label ?? ""),
-        values: Array.from({ length: n }, (_, i) => txt(ds.data?.[i]))
+        values: Array.from({ length: n2 }, (_, i) => txt(ds.data?.[i]))
       };
     })
   });
@@ -13576,8 +13884,8 @@ function readout(chart, i) {
 var seq = 0;
 function keyboardChart(chart, opts) {
   const canvas = chart.canvas;
-  const n = chart.data.labels?.length ?? 0;
-  if (!n) return;
+  const n2 = chart.data.labels?.length ?? 0;
+  if (!n2) return;
   const hintId = canvas.id ? `kbd-${canvas.id}` : `kbd-chart-${++seq}`;
   if (!document.getElementById(hintId)) {
     const hint = document.createElement("p");
@@ -13596,7 +13904,7 @@ function keyboardChart(chart, opts) {
   const speak = opts.readout ?? ((i) => readout(chart, i));
   let at = -1;
   const paint = (next) => {
-    if (next === null || next < 0 || next >= n) {
+    if (next === null || next < 0 || next >= n2) {
       at = -1;
       chart.setActiveElements([]);
       chart.tooltip.setActiveElements([], { x: 0, y: 0 });
@@ -13618,17 +13926,17 @@ function keyboardChart(chart, opts) {
     switch (ev.key) {
       case "ArrowRight":
       case "ArrowUp":
-        paint(at < 0 ? 0 : Math.min(n - 1, at + 1));
+        paint(at < 0 ? 0 : Math.min(n2 - 1, at + 1));
         break;
       case "ArrowLeft":
       case "ArrowDown":
-        paint(at < 0 ? n - 1 : Math.max(0, at - 1));
+        paint(at < 0 ? n2 - 1 : Math.max(0, at - 1));
         break;
       case "Home":
         paint(0);
         break;
       case "End":
-        paint(n - 1);
+        paint(n2 - 1);
         break;
       case "Escape":
         paint(null);
@@ -13769,8 +14077,8 @@ var RAMP = DASHES.map((dash, i) => ({
 function alpha2(hex2, a) {
   const m = /^#([0-9a-f]{6})$/i.exec(hex2);
   if (!m) throw new Error(`alpha() expects #rrggbb, got "${hex2}"`);
-  const n = Number.parseInt(m[1], 16);
-  return `rgba(${n >> 16 & 255}, ${n >> 8 & 255}, ${n & 255}, ${a})`;
+  const n2 = Number.parseInt(m[1], 16);
+  return `rgba(${n2 >> 16 & 255}, ${n2 >> 8 & 255}, ${n2 & 255}, ${a})`;
 }
 function segIndex(ctx, which) {
   const given = which === 0 ? ctx.p0DataIndex : ctx.p1DataIndex;
@@ -13835,15 +14143,633 @@ var midOf = (b) => {
   return (lo + hi) / 2;
 };
 
+// src/data/casualties/inputs.ts
+var CRS_OCTOBER = {
+  /** Médiapart 13 Nov 2026, internal CRS file, October 2026, CRS only. */
+  declared: 1233,
+  light: 1167,
+  /** The file has two categories and no "serious" one. */
+  serious: null,
+  sources: ["mediapart-crs-blesses-1311"]
+};
+var FORCES = {
+  /** Ministry running totals (FORCES_STOCK in data.ts). */
+  stock30Sep: 83,
+  stock14Oct: 937,
+  stock17Oct: 1144,
+  serious17Oct: 7,
+  stock31Oct: { lo: 1527, hi: 1570 },
+  movement: 1580,
+  increments: {
+    to14Oct: 854,
+    week12oct: 207,
+    week19oct: 267,
+    week26oct: 116,
+    week2nov: 53
+  },
+  sources: ["bfmtv-bilan-17oct"]
+};
+var THINES = {
+  seriousTo5Nov: 78,
+  deathsTo5Nov: 1,
+  seriousAt17Oct: 54,
+  // 5 eye + 5 cranio-facial + 2 amputations + 42 other
+  sources: ["lemonde-blessures-0511"]
+};
+var CIVILIANS_24OCT = {
+  injured: 150,
+  serious: 3,
+  sources: []
+};
+var TOULOUSE = {
+  treated: 130,
+  date: "2026-10-17",
+  sources: ["mediacites-toulouse-17oct"]
+};
+var EDUCATION = { d29: 31, d30: 119, d01: 235, d05: 300 };
+
+// src/data/casualties/estimate.ts
+var round2 = Math.round;
+var n = (x) => x.toLocaleString("en-GB");
+var NOT_LIGHT = CRS_OCTOBER.declared - CRS_OCTOBER.light;
+var POST_PEAK = FORCES.movement - FORCES.stock17Oct;
+var NOT_LIGHT_SHARE = NOT_LIGHT / CRS_OCTOBER.declared;
+var SERIOUS_SHARE_17 = FORCES.serious17Oct / FORCES.stock17Oct;
+var OCTOBER_ALL_FORCES = {
+  lo: FORCES.stock31Oct.lo - FORCES.stock30Sep,
+  hi: FORCES.stock31Oct.hi - FORCES.stock30Sep
+};
+var SERIOUS_MOVEMENT = {
+  /** Published: 7 serious at the 17 Oct consolidation. */
+  lo: FORCES.serious17Oct,
+  /** Rate transfer: 1,580 × (7 ÷ 1,144) = 9.67 → 10. */
+  central: round2(FORCES.movement * SERIOUS_SHARE_17),
+  /** Ceiling: 7 + 436 × (66 ÷ 1,233) = 7 + 23 = 30. Serious ⊆ not-light. */
+  hi: FORCES.serious17Oct + round2(POST_PEAK * NOT_LIGHT_SHARE)
+};
+var NOT_LIGHT_MOVEMENT = {
+  /** 66 is the CRS October actual, a subset of the movement total. */
+  lo: NOT_LIGHT,
+  /** Rate transfer: 1,580 × 5.35 % = 84.6 → 85. */
+  central: round2(FORCES.movement * NOT_LIGHT_SHARE),
+  hi: round2(FORCES.movement * NOT_LIGHT_SHARE)
+};
+var MIX = [
+  {
+    id: "light",
+    lo: FORCES.movement - NOT_LIGHT_MOVEMENT.hi,
+    // 1,495
+    hi: FORCES.movement - NOT_LIGHT_MOVEMENT.lo,
+    // 1,514
+    central: FORCES.movement - NOT_LIGHT_MOVEMENT.hi
+    // 1,495
+  },
+  {
+    id: "residual",
+    lo: NOT_LIGHT_MOVEMENT.lo - SERIOUS_MOVEMENT.hi,
+    // 36
+    hi: NOT_LIGHT_MOVEMENT.hi - SERIOUS_MOVEMENT.lo,
+    // 78
+    central: NOT_LIGHT_MOVEMENT.hi - SERIOUS_MOVEMENT.central
+    // 75
+  },
+  {
+    id: "serious",
+    lo: SERIOUS_MOVEMENT.lo,
+    // 7
+    hi: SERIOUS_MOVEMENT.hi,
+    // 30
+    central: SERIOUS_MOVEMENT.central
+    // 10
+  }
+];
+var LIGHT_CENTRAL_SHARE = MIX[0].central / FORCES.movement;
+var RATIO = {
+  lo: 5,
+  mid: round2(TOULOUSE.treated / THINES.seriousAt17Oct),
+  hi: 30
+};
+var SENSITIVITY = [5, 10, 13, 20, 30].map(
+  (ratio) => ({
+    ratio,
+    at17Oct: THINES.seriousAt17Oct * ratio,
+    movement: THINES.seriousTo5Nov * ratio
+  })
+);
+var ESTIMATES = [
+  {
+    id: "E1",
+    key: "crsSeriousShare",
+    population: "forces",
+    unit: "share",
+    value: { lo: 0, hi: NOT_LIGHT_SHARE },
+    loEdge: "bound",
+    hiEdge: "ceiling",
+    arithmetic: `0 \xF7 ${n(CRS_OCTOBER.declared)} = 0%; ${n(NOT_LIGHT)} \xF7 ${n(CRS_OCTOBER.declared)} = 5.35%`,
+    assumptions: ["seriousSubsetOfNotLight"],
+    sources: ["mediapart-crs-blesses-1311"],
+    status: "publishable",
+    flag: "e"
+  },
+  {
+    id: "E2",
+    key: "forcesSeriousShare17",
+    population: "forces",
+    unit: "share",
+    value: { lo: SERIOUS_SHARE_17, hi: SERIOUS_SHARE_17 },
+    loEdge: "published",
+    hiEdge: "published",
+    arithmetic: `${n(FORCES.serious17Oct)} \xF7 ${n(FORCES.stock17Oct)} = 0.61%`,
+    assumptions: [],
+    sources: ["bfmtv-bilan-17oct"],
+    status: "publishable",
+    flag: "n"
+  },
+  {
+    id: "E3",
+    key: "forcesSeriousCount",
+    population: "forces",
+    unit: "count",
+    value: SERIOUS_MOVEMENT,
+    loEdge: "published",
+    hiEdge: "ceiling",
+    arithmetic: `${n(FORCES.serious17Oct)}; ${n(FORCES.movement)} \xD7 (7 \xF7 ${n(FORCES.stock17Oct)}) = ${SERIOUS_MOVEMENT.central}; 7 + ${n(POST_PEAK)} \xD7 (${n(NOT_LIGHT)} \xF7 ${n(CRS_OCTOBER.declared)}) = ${SERIOUS_MOVEMENT.hi}`,
+    assumptions: ["rateTransfer", "seriousSubsetOfNotLight"],
+    sources: ["bfmtv-bilan-17oct", "mediapart-crs-blesses-1311"],
+    status: "publishable",
+    flag: "e"
+  },
+  {
+    id: "E4",
+    key: "forcesNotLightCount",
+    population: "forces",
+    unit: "count",
+    value: NOT_LIGHT_MOVEMENT,
+    loEdge: "bound",
+    hiEdge: "transfer",
+    arithmetic: `${n(NOT_LIGHT)}; ${n(FORCES.movement)} \xD7 (${n(NOT_LIGHT)} \xF7 ${n(CRS_OCTOBER.declared)}) = ${NOT_LIGHT_MOVEMENT.hi}`,
+    assumptions: ["rateTransfer", "crsDominatesOctober"],
+    sources: ["mediapart-crs-blesses-1311"],
+    status: "publishable",
+    flag: "e"
+  },
+  {
+    id: "E5",
+    key: "crsShareOfForces",
+    population: "forces",
+    unit: "share",
+    value: {
+      lo: CRS_OCTOBER.declared / OCTOBER_ALL_FORCES.hi,
+      hi: CRS_OCTOBER.declared / OCTOBER_ALL_FORCES.lo
+    },
+    loEdge: "bound",
+    hiEdge: "bound",
+    arithmetic: `${n(CRS_OCTOBER.declared)} \xF7 ${n(OCTOBER_ALL_FORCES.hi)} \u2026 ${n(CRS_OCTOBER.declared)} \xF7 ${n(OCTOBER_ALL_FORCES.lo)}`,
+    assumptions: ["crsDominatesOctober", "declarationsNotPersons"],
+    sources: ["mediapart-crs-blesses-1311"],
+    status: "note",
+    flag: "e"
+  },
+  {
+    id: "E6",
+    key: "seriousShareMovement",
+    population: "all",
+    unit: "share",
+    value: {
+      lo: SERIOUS_MOVEMENT.lo / FORCES.movement,
+      hi: SERIOUS_MOVEMENT.hi / FORCES.movement,
+      central: SERIOUS_MOVEMENT.central / FORCES.movement
+    },
+    loEdge: "published",
+    hiEdge: "ceiling",
+    arithmetic: `7 \xF7 ${n(FORCES.movement)} = 0.44%; 30 \xF7 ${n(FORCES.movement)} = 1.90%`,
+    assumptions: ["rateTransfer", "seriousSubsetOfNotLight"],
+    sources: ["bfmtv-bilan-17oct", "mediapart-crs-blesses-1311"],
+    status: "publishable",
+    flag: "e"
+  },
+  {
+    id: "E7",
+    key: "protestersSeriousFloor",
+    population: "protesters",
+    unit: "count",
+    value: {
+      lo: THINES.seriousTo5Nov + THINES.deathsTo5Nov,
+      hi: THINES.seriousTo5Nov + THINES.deathsTo5Nov
+    },
+    loEdge: "floor",
+    hiEdge: "unbounded",
+    arithmetic: `${n(THINES.seriousTo5Nov)} + ${n(THINES.deathsTo5Nov)} = ${n(THINES.seriousTo5Nov + THINES.deathsTo5Nov)}`,
+    assumptions: ["registerSelection"],
+    sources: ["lemonde-blessures-0511"],
+    status: "publishable",
+    flag: "f"
+  },
+  {
+    id: "E8",
+    key: "protestersSeriousShare",
+    population: "protesters",
+    unit: "share",
+    value: { lo: 1 / RATIO.hi, hi: 1 / RATIO.lo },
+    loEdge: "bound",
+    hiEdge: "bound",
+    arithmetic: `1 \xF7 ${RATIO.hi} = 3.3%; 1 \xF7 ${RATIO.lo} = 20% (r \u2208 [${RATIO.lo}, ${RATIO.hi}])`,
+    assumptions: ["treatedPerSerious", "registerSelection"],
+    sources: ["lemonde-blessures-0511", "mediacites-toulouse-17oct"],
+    status: "note",
+    flag: "e"
+  },
+  {
+    id: "E9",
+    key: "bystandersSerious",
+    population: "bystanders",
+    unit: "count",
+    why: "notEstimable",
+    loEdge: "unbounded",
+    hiEdge: "unbounded",
+    arithmetic: "no count exists: the register tracks protesters only, and the ministry counts carry no severity tag",
+    assumptions: ["registerSelection"],
+    sources: [],
+    status: "gap"
+  }
+];
+var CIVILIAN_PROXY_SHARE = CIVILIANS_24OCT.serious / CIVILIANS_24OCT.injured;
+
+// src/data/casualties/checks.ts
+var close = (a, b, eps = 1e-9) => Math.abs(a - b) <= eps;
+function casualtyFailures() {
+  const f = [];
+  const eq2 = (name, got, want) => {
+    if (!close(got, want)) f.push(`${name}: ${got} \u2260 ${want}`);
+  };
+  const ok = (name, cond) => {
+    if (!cond) f.push(name);
+  };
+  eq2(
+    "83 + 854 + 207 + 267 + 116 + 53",
+    FORCES.stock30Sep + FORCES.increments.to14Oct + FORCES.increments.week12oct + FORCES.increments.week19oct + FORCES.increments.week26oct + FORCES.increments.week2nov,
+    FORCES.movement
+  );
+  eq2(
+    "1,144 + 267 + 116 + 53",
+    FORCES.stock17Oct + FORCES.increments.week19oct + FORCES.increments.week26oct + FORCES.increments.week2nov,
+    FORCES.movement
+  );
+  eq2(
+    "83 + 854",
+    FORCES.stock30Sep + FORCES.increments.to14Oct,
+    FORCES.stock14Oct
+  );
+  eq2(
+    "1,167 / 1,233",
+    Number((CRS_OCTOBER.light / CRS_OCTOBER.declared * 100).toFixed(2)),
+    94.65
+  );
+  eq2("1,167 + 66", CRS_OCTOBER.light + NOT_LIGHT, CRS_OCTOBER.declared);
+  ok("serious lo \u2265 7", SERIOUS_MOVEMENT.lo >= FORCES.serious17Oct);
+  ok("not-light lo \u2265 66", NOT_LIGHT_MOVEMENT.lo >= NOT_LIGHT);
+  ok("serious hi \u2264 not-light hi", SERIOUS_MOVEMENT.hi <= NOT_LIGHT_MOVEMENT.hi);
+  eq2(
+    "light lo + not-light hi",
+    MIX[0].lo + NOT_LIGHT_MOVEMENT.hi,
+    FORCES.movement
+  );
+  eq2(
+    "light hi + not-light lo",
+    MIX[0].hi + NOT_LIGHT_MOVEMENT.lo,
+    FORCES.movement
+  );
+  eq2("residual lo", MIX[1].lo, NOT_LIGHT_MOVEMENT.lo - SERIOUS_MOVEMENT.hi);
+  eq2("residual hi", MIX[1].hi, NOT_LIGHT_MOVEMENT.hi - SERIOUS_MOVEMENT.lo);
+  eq2(
+    "mix total (central)",
+    MIX.reduce((a, b) => a + b.central, 0),
+    FORCES.movement
+  );
+  eq2(
+    "E3 hi",
+    SERIOUS_MOVEMENT.hi,
+    7 + Math.round(
+      (FORCES.movement - FORCES.stock17Oct) * (NOT_LIGHT / CRS_OCTOBER.declared)
+    )
+  );
+  eq2(
+    "E3 central",
+    SERIOUS_MOVEMENT.central,
+    Math.round(FORCES.movement * (7 / FORCES.stock17Oct))
+  );
+  eq2(
+    "E4 hi",
+    NOT_LIGHT_MOVEMENT.hi,
+    Math.round(FORCES.movement * (NOT_LIGHT / CRS_OCTOBER.declared))
+  );
+  eq2(
+    "E6 central light share",
+    Number((LIGHT_CENTRAL_SHARE * 100).toFixed(2)),
+    94.62
+  );
+  eq2("E7 floor", THINES.seriousTo5Nov + THINES.deathsTo5Nov, 79);
+  eq2(
+    "civilian proxy",
+    Number(
+      (CIVILIANS_24OCT.serious / CIVILIANS_24OCT.injured * 100).toFixed(1)
+    ),
+    2
+  );
+  ok("E7 is a floor", SERIOUS_MOVEMENT.lo >= 0);
+  ok(
+    "bands not inverted",
+    [MIX[0], MIX[1], MIX[2]].every((b) => b.lo <= b.hi)
+  );
+  return f;
+}
+function assertCasualties() {
+  const failures = casualtyFailures();
+  if (failures.length) {
+    throw new Error(
+      `casualties: ${failures.length} invariant failure(s)
+  ${failures.join("\n  ")}`
+    );
+  }
+}
+
+// src/data/casualties/universe.ts
+var OBSERVATIONS = [
+  {
+    id: "edu29",
+    date: "2026-09-29",
+    population: "educationDeclared",
+    participation: "unknown",
+    selection: "official",
+    window: "day",
+    count: { s: "n", v: EDUCATION.d29 },
+    sources: []
+  },
+  {
+    id: "edu30",
+    date: "2026-09-30",
+    population: "educationDeclared",
+    participation: "unknown",
+    selection: "official",
+    window: "movement",
+    count: { s: "n", v: EDUCATION.d30, d: true },
+    sources: []
+  },
+  {
+    id: "edu01",
+    date: "2026-10-01",
+    population: "educationDeclared",
+    participation: "unknown",
+    selection: "official",
+    window: "movement",
+    count: { s: "n", v: EDUCATION.d01, d: true },
+    sources: []
+  },
+  {
+    id: "edu05",
+    date: "2026-10-05",
+    population: "educationDeclared",
+    participation: "unknown",
+    selection: "official",
+    window: "movement",
+    count: { s: "n", v: EDUCATION.d05 },
+    sources: []
+  },
+  {
+    /* 1 proviseur, 1 parent d'élève, 1 agent de la Région — the repo's own
+       comment says these are "not protesters". Moved out of protesterInjured. */
+    id: "reg12",
+    date: "2026-10-12",
+    population: "bystanders",
+    participation: "non-participating",
+    selection: "regional",
+    window: "day",
+    count: { s: "n", v: 3, regional: true },
+    sources: []
+  },
+  {
+    /* 54 serious + 1 death; register only, so no denominator exists. */
+    id: "thines17",
+    date: "2026-10-17",
+    population: "protesters",
+    participation: "participating",
+    selection: "register",
+    window: "movement",
+    count: { s: "f", v: THINES.seriousAt17Oct + THINES.deathsTo5Nov },
+    sources: THINES.sources
+  },
+  {
+    id: "toulouse17",
+    date: TOULOUSE.date,
+    population: "protesters",
+    participation: "participating",
+    selection: "treated",
+    window: "day",
+    count: { s: "n", v: TOULOUSE.treated },
+    sources: TOULOUSE.sources
+  },
+  {
+    id: "civ24",
+    date: "2026-10-24",
+    population: "mixed",
+    participation: "unknown",
+    selection: "official",
+    window: "day",
+    count: { s: "n", v: CIVILIANS_24OCT.injured },
+    sources: CIVILIANS_24OCT.sources
+  },
+  {
+    id: "thines05",
+    date: "2026-11-05",
+    population: "protesters",
+    participation: "participating",
+    selection: "register",
+    window: "movement",
+    count: { s: "f", v: THINES.seriousTo5Nov + THINES.deathsTo5Nov },
+    sources: THINES.sources
+  },
+  {
+    id: "legal05",
+    date: "2026-11-05",
+    population: "protesters",
+    participation: "participating",
+    selection: "legal",
+    window: "movement",
+    count: { s: "f", v: 18 },
+    sources: []
+  }
+];
+var FORCE_CARRIER = {
+  total: FORCES.movement,
+  declared: FORCES.stock17Oct,
+  serious: FORCES.serious17Oct
+};
+
+// src/data/casualties/levels.ts
+var SEVERITY_LEVELS = [
+  {
+    /* 1,167 / 1,233 = 94.65% → the 94.6% the file itself states. Serious is
+       bounded 0–66 because serious ⊆ not-light and the file has no class of
+       its own: that is a structural bound, not a count. */
+    id: "crsOctober",
+    population: "forces",
+    total: { s: "n", v: 1233 },
+    serious: { s: "r", lo: 0, hi: NOT_LIGHT, d: true },
+    light: { s: "n", v: 1167 },
+    other: { s: "n", v: NOT_LIGHT, d: true },
+    sources: ["mediapart-crs-blesses-1311"]
+  },
+  {
+    /* Published level at the peak: 7 serious out of 1,144. */
+    id: "forcesPeak",
+    population: "forces",
+    total: { s: "n", v: FORCES.stock17Oct },
+    serious: { s: "n", v: FORCES.serious17Oct },
+    light: { s: "x", why: "notPublished" },
+    other: { s: "x", why: "notPublished" },
+    sources: ["bfmtv-bilan-17oct"]
+  },
+  {
+    /* The movement total, decomposed in estimate.ts (E3, E4, E6). */
+    id: "forcesMovement",
+    population: "forces",
+    total: { s: "n", v: FORCES.movement },
+    serious: {
+      s: "r",
+      lo: SERIOUS_MOVEMENT.lo,
+      hi: SERIOUS_MOVEMENT.hi,
+      d: true
+    },
+    light: {
+      s: "r",
+      lo: FORCES.movement - NOT_LIGHT_MOVEMENT.hi,
+      hi: FORCES.movement - NOT_LIGHT_MOVEMENT.lo,
+      d: true
+    },
+    other: {
+      s: "r",
+      lo: NOT_LIGHT_MOVEMENT.lo - SERIOUS_MOVEMENT.hi,
+      hi: NOT_LIGHT_MOVEMENT.hi - SERIOUS_MOVEMENT.lo,
+      d: true
+    },
+    sources: ["bfmtv-bilan-17oct", "mediapart-crs-blesses-1311"]
+  },
+  {
+    /* A register, not a rate: no total has ever been published, so no share can
+       exist on this row. The serious cell is a documented floor. */
+    id: "protesters",
+    population: "protesters",
+    participation: "participating",
+    total: { s: "x", why: "noDenominator" },
+    serious: { s: "f", v: THINES_FLOOR() },
+    light: { s: "x", why: "noDenominator" },
+    other: { s: "x", why: "registerOnly" },
+    sources: ["lemonde-blessures-0511"]
+  }
+];
+function THINES_FLOOR() {
+  return 79;
+}
+var SEVERITY_WEEKS = [
+  {
+    id: "week12oct",
+    population: "forces",
+    total: { s: "n", v: 207, d: true },
+    serious: { s: "n", v: 7 },
+    light: { s: "x", why: "notPublished" },
+    other: { s: "x", why: "notPublished" },
+    sources: ["bfmtv-bilan-17oct"]
+  },
+  {
+    id: "week19oct",
+    population: "forces",
+    total: { s: "n", v: 267, d: true },
+    serious: { s: "x", why: "notPublished" },
+    light: { s: "x", why: "notPublished" },
+    other: { s: "x", why: "notPublished" },
+    sources: ["bfmtv-bilan-17oct"]
+  },
+  {
+    id: "week26oct",
+    population: "forces",
+    total: { s: "n", v: 116, d: true },
+    serious: { s: "x", why: "notPublished" },
+    light: { s: "x", why: "notPublished" },
+    other: { s: "x", why: "notPublished" },
+    sources: ["bfmtv-bilan-17oct"]
+  },
+  {
+    id: "week2nov",
+    population: "forces",
+    total: { s: "n", v: 53 },
+    serious: { s: "x", why: "notPublished" },
+    light: { s: "x", why: "notPublished" },
+    other: { s: "x", why: "notPublished" },
+    sources: ["bfmtv-bilan-17oct"]
+  },
+  {
+    id: "crsOctober",
+    population: "forces",
+    total: { s: "n", v: 1233 },
+    serious: { s: "r", lo: 0, hi: NOT_LIGHT, d: true },
+    light: { s: "n", v: 1167 },
+    other: { s: "n", v: NOT_LIGHT, d: true },
+    sources: ["mediapart-crs-blesses-1311"]
+  }
+];
+
+// src/data/casualties/cases.ts
+var CASES = [
+  {
+    id: "forcesAccidental",
+    side: "forces",
+    kind: "accidental",
+    count: { s: "c", n: 4 },
+    cases: ["givors", "crsWrist", "crsAnkle"]
+  },
+  {
+    id: "forcesConflictual",
+    side: "forces",
+    kind: "conflictual",
+    count: { s: "x", why: "causeUnknown" },
+    cases: ["helmet", "groin2023"]
+  },
+  {
+    id: "protesterConflictual",
+    side: "protesters",
+    kind: "conflictual",
+    count: { s: "x", why: "causeUnknown" },
+    cases: ["mael", "alaric", "eyes"]
+  },
+  {
+    id: "protesterAccidental",
+    side: "protesters",
+    kind: "accidental",
+    count: { s: "x", why: "noneDocumented" },
+    cases: []
+  },
+  {
+    id: "sainteSoline",
+    side: "forces",
+    kind: "accidental",
+    count: { s: "c", n: 29 },
+    cases: ["sainteSoline"],
+    reference: true
+  }
+];
+
+// src/data/casualties/index.ts
+assertCasualties();
+
 // src/data/data.ts
 var NIL = { v: null, band: null, q: null, note: null, detach: false };
 var START = "2026-09-15";
 var END = "2026-11-11";
 var utc = (s) => /* @__PURE__ */ new Date(`${s}T00:00:00Z`);
 var iso = (d) => d.toISOString().slice(0, 10);
-var addDays = (isoDate, n) => {
+var addDays = (isoDate, n2) => {
   const d = /* @__PURE__ */ new Date(`${isoDate}T00:00:00Z`);
-  d.setUTCDate(d.getUTCDate() + n);
+  d.setUTCDate(d.getUTCDate() + n2);
   return d.toISOString().slice(0, 10);
 };
 var mondayOf = (isoDate) => {
@@ -14091,7 +15017,6 @@ var FACTS = {
      d'élève, 1 agent de la Région. */
   "2026-10-12": {
     arrests: { low: 13, high: 13, q: "r" },
-    protesterInjured: { low: 3, high: 3, q: "r" },
     damagesCost: { low: 1.5, high: 1.5, q: "c" },
     blockades: { low: 19, high: 19, q: "r" }
   },
@@ -14133,7 +15058,8 @@ var FACTS = {
     turnout: { low: 55e4, high: 8e5 },
     arrests: { low: 2397, high: 2628 },
     forcesInjured: { low: 207, high: 207, q: "e" },
-    protesterInjured: { low: 55, high: 1e3, q: "e" },
+    /* 54 x 13 = 702 — see E8/E10 in casualties/estimate.ts. */
+    protesterInjured: { low: 55, high: 702, q: "e" },
     damagesCost: { low: 244, high: 866, q: "e" }
   },
   /* Sun 18 Oct — Paris curfew only, 108 interpellations.
@@ -14265,7 +15191,7 @@ var FORCES_STOCK_DERIVED = {
   // + 116–159
 };
 var RATE = { low: 136, high: 1133 };
-var round2 = (v) => Number.isInteger(v) ? v : Math.round(v * 100) / 100;
+var round22 = (v) => Number.isInteger(v) ? v : Math.round(v * 100) / 100;
 var costBand = (dep) => [
   dep.low * RATE.low / 1e6,
   dep.high * RATE.high / 1e6
@@ -14276,7 +15202,7 @@ function projectDaily(key) {
     if (!obs) return NIL;
     const q = obs.q ?? "n";
     return {
-      v: round2((obs.low + obs.high) / 2),
+      v: round22((obs.low + obs.high) / 2),
       band: [obs.low, obs.high],
       q,
       note: { k: "obs", date, metric: key },
@@ -14294,8 +15220,8 @@ function projectPolicingDaily() {
     const [lo, hi] = costBand(dep);
     const q = dep.q ?? "n";
     return {
-      v: round2((lo + hi) / 2),
-      band: [round2(lo), round2(hi)],
+      v: round22((lo + hi) / 2),
+      band: [round22(lo), round22(hi)],
       q,
       note: { k: "policing", low: dep.low, high: dep.high, date },
       detach: isDetached(q)
@@ -14318,8 +15244,8 @@ function projectPolicingCumulative() {
     }
     if (!started) return NIL;
     return {
-      v: round2((lo + hi) / 2),
-      band: [round2(lo), round2(hi)],
+      v: round22((lo + hi) / 2),
+      band: [round22(lo), round22(hi)],
       q: "e",
       note: { k: "cumulative", days, added: Boolean(dep) },
       detach: false
@@ -14332,7 +15258,7 @@ function projectForcesStock() {
     const pub = FORCES_STOCK[date];
     if (pub) {
       return {
-        v: round2((pub.low + pub.high) / 2),
+        v: round22((pub.low + pub.high) / 2),
         band: [pub.low, pub.high],
         q: "c",
         note: { k: "obs", date, metric: "forcesInjuredStock" },
@@ -14342,7 +15268,7 @@ function projectForcesStock() {
     const der = FORCES_STOCK_DERIVED[date];
     if (der) {
       return {
-        v: round2((der.low + der.high) / 2),
+        v: round22((der.low + der.high) / 2),
         band: [der.low, der.high],
         q: "e",
         note: { k: "obs", date, metric: "forcesInjuredStock" },
@@ -14368,8 +15294,8 @@ function aggregate(key, op) {
     );
     if (last.q === "c" && last.obs.high >= othersHigh) {
       return {
-        v: round2((last.obs.low + last.obs.high) / 2),
-        band: [round2(last.obs.low), round2(last.obs.high)],
+        v: round22((last.obs.low + last.obs.high) / 2),
+        band: [round22(last.obs.low), round22(last.obs.high)],
         q: "c",
         note: { k: "obs", date: last.date, metric: key },
         detach: isDetached("c")
@@ -14416,8 +15342,8 @@ function aggregate(key, op) {
       clipped: week.touchesEdge || void 0
     };
     return {
-      v: round2(value2),
-      band: [round2(low), round2(high)],
+      v: round22(value2),
+      band: [round22(low), round22(high)],
       q: regionalOnly ? "r" : parts.floored ? "f" : partial ? "p" : "w",
       note: derived ? { k: "obs", date: derived.date, metric: key } : { k: "week", p: parts },
       detach: regionalOnly
@@ -14455,8 +15381,8 @@ function aggregateBlockades() {
       vacation: weekTouchesHoliday(week.key) || void 0
     };
     return {
-      v: round2((top.obs.low + top.obs.high) / 2),
-      band: [round2(top.obs.low), round2(top.obs.high)],
+      v: round22((top.obs.low + top.obs.high) / 2),
+      band: [round22(top.obs.low), round22(top.obs.high)],
       q: regionalOnly ? "r" : wide ? "x" : top.q === "f" ? "f" : "w",
       note: wide ? { k: "obs", date: top.date, metric: "blockades" } : { k: "week", p: parts },
       detach: regionalOnly
@@ -14505,108 +15431,6 @@ var STUDENT_WEEKS = WEEKS.map((week, idx) => {
   }
   return out;
 });
-var SEVERITY_LEVELS = [
-  {
-    /* 1,167 / 1,233 = 94.65% → the 94.6% the file itself states. */
-    id: "crsOctober",
-    total: { s: "n", v: 1233 },
-    serious: { s: "x", why: "binaryFile" },
-    light: { s: "n", v: 1167 },
-    other: { s: "n", v: 66, d: true }
-  },
-  {
-    /* All forces, running total at the peak, consolidated. */
-    id: "forcesPeak",
-    total: { s: "n", v: 1144 },
-    serious: { s: "n", v: 7 },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" }
-  },
-  {
-    /* No total has ever been published, so no share can exist. */
-    id: "protesters",
-    total: { s: "x", why: "noDenominator" },
-    serious: { s: "x", why: "noTally" },
-    light: { s: "x", why: "noDenominator" },
-    other: { s: "x", why: "noDenominator" }
-  }
-];
-var SEVERITY_WEEKS = [
-  {
-    id: "week12oct",
-    total: { s: "n", v: 207, d: true },
-    serious: { s: "n", v: 7 },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" }
-  },
-  {
-    id: "week19oct",
-    total: { s: "n", v: 267, d: true },
-    serious: { s: "x", why: "notPublished" },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" }
-  },
-  {
-    id: "week26oct",
-    total: { s: "n", v: 116, d: true },
-    serious: { s: "x", why: "notPublished" },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" }
-  },
-  {
-    id: "week2nov",
-    total: { s: "n", v: 53 },
-    serious: { s: "x", why: "notPublished" },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" }
-  },
-  {
-    /* The month is the smallest window at which a split exists at all. */
-    id: "crsOctober",
-    total: { s: "n", v: 1233 },
-    serious: { s: "x", why: "binaryFile" },
-    light: { s: "n", v: 1167 },
-    other: { s: "n", v: 66, d: true }
-  }
-];
-var CASES = [
-  {
-    id: "forcesAccidental",
-    side: "forces",
-    kind: "accidental",
-    count: { s: "c", n: 4 },
-    cases: ["givors", "crsWrist", "crsAnkle"]
-  },
-  {
-    id: "forcesConflictual",
-    side: "forces",
-    kind: "conflictual",
-    count: { s: "x", why: "noTally" },
-    cases: ["helmet", "groin2023"]
-  },
-  {
-    id: "protesterConflictual",
-    side: "protesters",
-    kind: "conflictual",
-    count: { s: "x", why: "noTally" },
-    cases: ["mael", "alaric", "eyes"]
-  },
-  {
-    id: "protesterAccidental",
-    side: "protesters",
-    kind: "accidental",
-    count: { s: "x", why: "noneDocumented" },
-    cases: []
-  },
-  {
-    id: "sainteSoline",
-    side: "forces",
-    kind: "accidental",
-    count: { s: "c", n: 29 },
-    cases: ["sainteSoline"],
-    reference: true
-  }
-];
 
 // src/sections/context/context.ts
 var L = (o) => String(getLocale()).slice(0, 2) === "fr" ? o.fr : o.en;
@@ -14708,8 +15532,8 @@ function weekSpans(weeks) {
   return out;
 }
 var withAlpha = (hex2, a) => {
-  const n = Number.parseInt(hex2.slice(1), 16);
-  return `rgba(${n >> 16 & 255},${n >> 8 & 255},${n & 255},${a})`;
+  const n2 = Number.parseInt(hex2.slice(1), 16);
+  return `rgba(${n2 >> 16 & 255},${n2 >> 8 & 255},${n2 & 255},${a})`;
 };
 var contextBands = {
   id: "contextBands",
@@ -15209,8 +16033,8 @@ var ELLIPSE_RY = 7;
 var BRACE_CURL = 6;
 var BRACE_LIFT = 12;
 function withAlpha2(hex2, a) {
-  const n = Number.parseInt(hex2.slice(1), 16);
-  return `rgba(${n >> 16 & 255},${n >> 8 & 255},${n & 255},${a})`;
+  const n2 = Number.parseInt(hex2.slice(1), 16);
+  return `rgba(${n2 >> 16 & 255},${n2 >> 8 & 255},${n2 & 255},${a})`;
 }
 var spanMark = {
   id: "spanMark",
@@ -15351,8 +16175,8 @@ function compactFixed(v) {
 function niceCeil(v) {
   if (!Number.isFinite(v) || v <= 0) return 10;
   const base = 10 ** Math.floor(Math.log10(v));
-  const n = v / base;
-  const step = [1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].find((s) => n <= s + 1e-9) ?? 10;
+  const n2 = v / base;
+  const step = [1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].find((s) => n2 <= s + 1e-9) ?? 10;
   return step * base;
 }
 function axisMax(list, headroom = 1.08) {
@@ -15395,11 +16219,11 @@ function axisMin(list) {
 function yAxis(title, list, unit, position, log = false) {
   const max = axisMax(list);
   const floor = axisMin(list) * 0.9;
-  const tick = (n) => {
-    if (!log) return tickFormat(unit)(n);
-    const l = Math.log10(n);
+  const tick = (n2) => {
+    if (!log) return tickFormat(unit)(n2);
+    const l = Math.log10(n2);
     const decade = Math.abs(l - Math.round(l)) < 1e-9;
-    return decade || Math.abs(n - max) < 1e-9 ? tickFormat(unit)(n) : "";
+    return decade || Math.abs(n2 - max) < 1e-9 ? tickFormat(unit)(n2) : "";
   };
   const base = {
     position,
@@ -16217,12 +17041,12 @@ var GILETS = {
   id: "gj",
   start: "2018-11-12",
   end: "2019-09-09",
-  weeks: GJ_ACTS.map(([w, date, n]) => ({
+  weeks: GJ_ACTS.map(([w, date, n2]) => ({
     w,
     from: date,
     to: date,
     act: w + 1,
-    p: n,
+    p: n2,
     ...GJ_EXTRA[w] ?? {},
     flag: {
       ...w === 0 ? { p: "c" } : {},
@@ -16477,17 +17301,17 @@ function statsOf(points) {
   for (const p of points) if (Number.isFinite(p.y)) vs.push(p.y);
   if (vs.length === 0) return null;
   const sorted = [...vs].sort((a, b) => a - b);
-  const n = sorted.length;
-  const mid = n >> 1;
-  const median = n % 2 === 1 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+  const n2 = sorted.length;
+  const mid = n2 >> 1;
+  const median = n2 % 2 === 1 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
   let sum2 = 0;
   for (const v of vs) sum2 += v;
   const stats = {
     low: sorted[0],
-    high: sorted[n - 1],
-    mean: sum2 / n,
+    high: sorted[n2 - 1],
+    mean: sum2 / n2,
     median,
-    count: n
+    count: n2
   };
   statsCache.set(points, stats);
   return stats;
@@ -16609,7 +17433,7 @@ function shareLine(p, dataset) {
   const stats = statsOf(dataset.data);
   if (!stats) return null;
   const m = t().tooltip;
-  const part = (label, n) => `${pctOf(p.y, n)} (${label})`;
+  const part = (label, n2) => `${pctOf(p.y, n2)} (${label})`;
   const parts = [
     part(m.cmpHighest, stats.high),
     part(m.cmpMean, stats.mean),
@@ -16648,8 +17472,8 @@ function tooltipSpec(kind) {
         const p = item.raw;
         const lines = [];
         if (kind === "item") {
-          const n = nf().format(Math.round(p.base));
-          const text = Math.abs(p.y - p.base) / p.base < 1e-9 ? fill(m.tooltip.firstFigure, { n }) : shareLine(p, item.dataset);
+          const n2 = nf().format(Math.round(p.base));
+          const text = Math.abs(p.y - p.base) / p.base < 1e-9 ? fill(m.tooltip.firstFigure, { n: n2 }) : shareLine(p, item.dataset);
           if (text) lines.push(...wrapTooltipLines(text, item, "body"));
         }
         if (p.note) lines.push(...wrapTooltipLines(p.note, item, "body"));
@@ -16658,8 +17482,8 @@ function tooltipSpec(kind) {
       footer: (items) => {
         if (kind !== "episode") return [];
         const p = items[0].raw;
-        const n = nf().format(Math.round(p.base));
-        const text = Math.abs(p.y - p.base) / p.base < 1e-9 ? fill(m.tooltip.firstFigure, { n }) : shareLine(p, items[0].dataset);
+        const n2 = nf().format(Math.round(p.base));
+        const text = Math.abs(p.y - p.base) / p.base < 1e-9 ? fill(m.tooltip.firstFigure, { n: n2 }) : shareLine(p, items[0].dataset);
         return text ? wrapTooltipLines(text, items[0], "footer") : [];
       }
     }
@@ -16741,10 +17565,10 @@ function decoratePanel(chart, figure, title) {
 // src/charts/trellis/legend.ts
 var legendHidden = /* @__PURE__ */ new Map();
 var legendButtons = /* @__PURE__ */ new Map();
-function legendState(key, n) {
+function legendState(key, n2) {
   const s = legendHidden.get(key) ?? [];
-  while (s.length < n) s.push(false);
-  s.length = n;
+  while (s.length < n2) s.push(false);
+  s.length = n2;
   legendHidden.set(key, s);
   return s;
 }
@@ -18579,13 +19403,13 @@ var METRIC_KEYS = ["p", "a", "f", "i"];
 function meanMedian(values) {
   if (!values.length) return null;
   const sorted = [...values].sort((a, b) => a - b);
-  const n = sorted.length;
-  const mid = n >> 1;
+  const n2 = sorted.length;
+  const mid = n2 >> 1;
   let sum2 = 0;
   for (const v of values) sum2 += v;
   return {
-    mean: sum2 / n,
-    median: n % 2 === 1 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2
+    mean: sum2 / n2,
+    median: n2 % 2 === 1 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2
   };
 }
 function bestRatio(obs, base) {
@@ -18881,11 +19705,11 @@ var countBand = (r) => {
 function tickText(v) {
   const exp = Math.round(Math.log10(v));
   const d = Math.max(0, -exp);
-  const n = new Intl.NumberFormat(locale(), {
+  const n2 = new Intl.NumberFormat(locale(), {
     minimumFractionDigits: d,
     maximumFractionDigits: d
   }).format(v);
-  return locale() === "fr-FR" ? `${n} %` : `${n}%`;
+  return locale() === "fr-FR" ? `${n2} %` : `${n2}%`;
 }
 function dailyRows2() {
   const pop = population(KEY_2026);
@@ -21242,6 +22066,39 @@ var PRESS_SOURCES = [
       "la lecture pol\xE9mique des deux m\xEAmes chiffres \u2014 les 1 580 du minist\xE8re et les 94,6 % de \xAB petits bobos \xBB du fichier des CRS \u2014 avec les cas qu\u2019elle oppose au total : blessures accidentelles (deux policiers br\xFBl\xE9s dans leur voiture de patrouille \xE0 Givors par leur propre grenade, le 10 octobre) ou b\xE9nignes (un CRS avec le poignet contusionn\xE9 en fermant la porti\xE8re de son v\xE9hicule). \xC0 lire comme une th\xE8se sur la composition du total, non comme une source du total."
     ),
     "2026-11-13"
+  ),
+  src(
+    "lemonde-blessures-0511",
+    "press",
+    "Le Monde \u2014 \xAB Hands torn off, broken bones, blinded eye: a month of serious injuries at protests \xBB",
+    "https://www.lemonde.fr/en/france/article/2026/11/05/hands-torn-off-broken-bones-blinded-eye-le-monde-investigates-french-protesters-injuries_6772405_7.html",
+    both(
+      "the serious-injury register: 78 serious cases and one death by 5 November, 10 blinded, 9 cranio-facial injuries, 7 amputations. Serious cases only, built from press, militant blogs and IGPN referrals \u2014 a floor, and a non-independent list.",
+      "le registre des blessures graves : 78 cas graves et un d\xE9c\xE8s au 5 novembre, 10 \xE9borgn\xE9s, 9 traumatismes cr\xE2nio-faciaux, 7 amputations. Cas graves seulement, b\xE2ti sur la presse, les blogs militants et les saisines de l\u2019IGPN \u2014 un plancher, et une liste non ind\xE9pendante."
+    ),
+    "2026-11-05"
+  ),
+  src(
+    "lemonde-lycees-0610",
+    "press",
+    "Le Monde \u2014 \xAB French high school protests: what we know about injuries among demonstrators and police \xBB",
+    "https://www.lemonde.fr/en/france/article/2026/10/06/high-school-protests-what-we-know-about-injuries-among-demonstrators-and-police_6758279_7.html",
+    both(
+      "the education-ministry wording that keeps the student counts out of both series: injuries 'either due to accidental circumstances \u2026 or injuries caused by troublemakers'.",
+      "la formulation du minist\xE8re qui maintient les d\xE9comptes d\u2019\xE9l\xE8ves hors des deux s\xE9ries : blessures \xAB soit accidentelles \u2026 soit caus\xE9es par des fauteurs de troubles \xBB."
+    ),
+    "2026-10-06"
+  ),
+  src(
+    "lemonde-principaux-1210",
+    "press",
+    "Le Monde \u2014 \xAB French high school protests: exhausted principals struggle with violent clashes \xBB",
+    "https://www.lemonde.fr/en/france/article/2026/10/12/french-high-school-protests-exhausted-principals-struggle-to-deal-with-violent-clashes-at-their-schools_6758508_7.html",
+    both(
+      "that more than 210 students had been injured, 'some by police', alongside 88 staff including about 40 principals \u2014 the population behind the 'educationDeclared' tag.",
+      "que plus de 210 \xE9l\xE8ves avaient \xE9t\xE9 bless\xE9s, \xAB certains par la police \xBB, aux c\xF4t\xE9s de 88 personnels dont une quarantaine de chefs d\u2019\xE9tablissement \u2014 la population derri\xE8re l\u2019\xE9tiquette \xAB educationDeclared \xBB."
+    ),
+    "2026-10-12"
   )
 ];
 
@@ -21789,7 +22646,7 @@ function sourceGroup(id, summary, body) {
 function renderSources(page = "home", host = document.getElementById("sources")) {
   if (!host) return;
   const kept = [...host.children].filter(
-    (n) => /^H[1-6]$/.test(n.tagName)
+    (n2) => /^H[1-6]$/.test(n2.tagName)
   );
   if (kept[0]) kept[0].textContent = bi(BOX_TITLE);
   const box = el("div", "sources-box");
@@ -22028,9 +22885,9 @@ function mountSummary() {
                 minRotation: 60,
                 font: { size: 10 },
                 callback: (v) => {
-                  const n = Number(v);
-                  const i = Math.round(n);
-                  return Math.abs(n - i) < 1e-6 && EPISODES[i] ? m.episodes[EPISODES[i].id].short : "";
+                  const n2 = Number(v);
+                  const i = Math.round(n2);
+                  return Math.abs(n2 - i) < 1e-6 && EPISODES[i] ? m.episodes[EPISODES[i].id].short : "";
                 }
               },
               afterBuildTicks: (axis) => {
@@ -22054,9 +22911,9 @@ function mountSummary() {
                 padding: 6,
                 font: { size: 10 },
                 callback: (v) => {
-                  const n = Number(v);
-                  const dec = Math.abs(Math.log10(n) - Math.round(Math.log10(n))) < 1e-9;
-                  return dec ? compact().format(n) : "";
+                  const n2 = Number(v);
+                  const dec = Math.abs(Math.log10(n2) - Math.round(Math.log10(n2))) < 1e-9;
+                  return dec ? compact().format(n2) : "";
                 }
               },
               afterBuildTicks: (axis) => {
