@@ -12,11 +12,11 @@
     "check:casualties": "node scripts/check-casualties.ts"
   },
   "dependencies": {
-    "chart.js": "^4.5.0"
+    "chart.js": "^4.6.1"
   },
   "devDependencies": {
-    "@types/node": "^24.19.2",
-    "esbuild": "^0.25.0",
-    "typescript": "^5.9.0"
+    "@types/node": "^26.6.6",
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2"
   }
 }
