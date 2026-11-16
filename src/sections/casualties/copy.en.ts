@@ -41,7 +41,6 @@ export const CASUALTY_EN: CasualtyCopy = {
     week19oct: "Week of 19 October",
     week26oct: "Week of 26 October",
     week2nov: "Week of 2 November",
-    "montpellier-2026-10-17": "Montpellier, 17 October 2026",
   },
   side: { forces: "Police and gendarmerie", protesters: "Protesters" },
   kind: {
@@ -284,19 +283,4 @@ export const CASUALTY_EN: CasualtyCopy = {
     },
     { label: "Daily increments", window: "One day", weekly: "yes" },
   ],
-  capCity: "City-level counts by street medics",
-
-  colSource: "Collector",
-
-  breakdown: {
-    lbd: "by beanbag round",
-    baton: "by baton strike",
-    grenade: "by stun grenade",
-    gas: "by tear gas",
-    cranialTraumaSuspected: "suspected head injuries",
-  },
-
-  provisional: "provisional",
-
-  teams: "teams",
 };

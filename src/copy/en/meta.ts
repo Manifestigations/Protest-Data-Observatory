@@ -35,7 +35,7 @@ export const EN_META: LocaleMeta = {
     e: {
       title: "E · Median and peak",
       blurb:
-        "Each panel gathers one measure across the movements that published it. The dot is the median of the series — the typical week — and the triangle its peak, the largest single figure. The pale bar behind each pair spans the whole series, from its smallest figure to its largest, so a movement that was steady reads as a short bar and one that had a few enormous weeks as a long one. The axis is logarithmic, so a handful of mass marches and a routine week can share a panel. City-level counts by street medics are annotations, not observations.",
+        "Each panel gathers one measure across the movements that published it. The dot is the median of the series — the typical week — and the triangle its peak, the largest single figure. The pale bar behind each pair spans the whole series, from its smallest figure to its largest, so a movement that was steady reads as a short bar and one that had a few enormous weeks as a long one. The axis is logarithmic, so a handful of mass marches and a routine week can share a panel.",
       note: "Each figure is counted once, at the midpoint of its range where one was published. The count of published figures is in the tooltip: with a single figure the median and the peak are the same number.",
     },
   },

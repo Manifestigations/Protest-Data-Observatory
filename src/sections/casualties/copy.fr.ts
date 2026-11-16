@@ -38,7 +38,6 @@ export const CASUALTY_FR: CasualtyCopy = {
     week19oct: "Semaine du 19 octobre",
     week26oct: "Semaine du 26 octobre",
     week2nov: "Semaine du 2 novembre",
-    "montpellier-2026-10-17": "Montpellier, 17 octobre 2026",
   },
   side: { forces: "Police et gendarmerie", protesters: "Manifestant·es" },
   kind: {
@@ -287,19 +286,4 @@ export const CASUALTY_FR: CasualtyCopy = {
     { label: "Cumul des forces blessées", window: "Un jour", weekly: "oui" },
     { label: "Incréments quotidiens", window: "Un jour", weekly: "oui" },
   ],
-  capCity: "Décomptes à l’échelle d’une ville, par les street medics",
-
-  colSource: "Recueil",
-
-  breakdown: {
-    lbd: "par tir de LBD",
-    baton: "par coup de matraque",
-    grenade: "par grenade de désencerclement",
-    gas: "par gaz lacrymogène",
-    cranialTraumaSuspected: "suspicions de trauma crânien",
-  },
-
-  provisional: "provisoire",
-
-  teams: "équipes",
 };

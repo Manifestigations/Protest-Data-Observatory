@@ -24,7 +24,6 @@ import { spanMark } from "./plugins/span-mark.ts";
 import { buildChart, type Cfg } from "./shell.ts";
 import { CHARTS } from "./specs.ts";
 import { insertCostMethodology } from "../sections/costs/methodology.ts";
-import { cityMarks } from "./plugins/city-marks.ts";
 
 Chart.register(
   LineController,
@@ -69,7 +68,7 @@ export function mount(canvas: HTMLCanvasElement, cfg: Cfg): Chart<"line"> {
       type: "line",
       data,
       options,
-      plugins: [contextBands, errorBars, connectors, spanMark, cityMarks],
+      plugins: [contextBands, errorBars, connectors, spanMark],
     }),
   );
 }
