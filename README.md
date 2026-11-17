@@ -14,19 +14,38 @@ June 2023, pensions, Bloquons tout 2025).
 
 ---
 
+## Two repositories
+
+| Repository                                                              | Holds                                                                                                                         | You touch it to                           |
+| ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| [Manifestigations/Dataset](https://github.com/Manifestigations/Dataset) | **The data, and the authority over it.** Figures, sources, casualty data, historical series. TypeScript source, no build step | correct or add a number                   |
+| `Manifestigations/Protest-Data-Observatory` (this repo)                 | The site: charts, pages, copy in French and English, the build, the committed output in `docs/`                               | change a chart, a page, a word, the build |
+
+`Dataset` is the source of truth for every figure. This repository keeps a
+working copy under `src/data/` and `src/model/` so the bundle stays
+self-contained and the site can be built with one clone — but a number is
+**authored** in `Dataset`, never here. If you find yourself editing
+`src/data/facts.ts` or `src/data/episodes/*.ts` in this repository, stop and
+open the equivalent change in `Dataset` instead; otherwise the next sync
+silently reverts your correction.
+
+The two repositories are deliberately separate so the data can be cited,
+reviewed and reused without the site's code, and so prose about method sits
+next to the numbers it explains.
+
+---
+
 ## Three ways in
 
-| I want to…                               | Start here                                                                                                  | Skills needed                                                    |
-| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| Report a figure that is wrong or missing | [Open the figure form](https://github.com/Manifestigations/Dataset/issues/new?template=report-a-figure.yml) | none — a free GitHub account                                     |
-| Correct or add data in the repo          | [CONTRIBUTING.md § Editing data](CONTRIBUTING.md#editing-data)                                              | edit literal values in a TypeScript file; no framework knowledge |
-| Change charts, pages, copy or build      | [CONTRIBUTING.md § Editing code](CONTRIBUTING.md#editing-code)                                              | TypeScript                                                       |
-| Work in this repo as a coding agent      | [AGENTS.md](AGENTS.md)                                                                                      | —                                                                |
+| I want to…                               | Start here                                                                                                  | Skills needed                            |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| Report a figure that is wrong or missing | [Open the figure form](https://github.com/Manifestigations/Dataset/issues/new?template=report-a-figure.yml) | none — a free GitHub account             |
+| Correct or add data                      | [Dataset CONTRIBUTING](https://github.com/Manifestigations/Dataset/blob/main/CONTRIBUTING.md)               | edit literal values in a TypeScript file |
+| Change charts, pages, copy or build      | [CONTRIBUTING.md](CONTRIBUTING.md)                                                                          | TypeScript                               |
+| Work in this repo as a coding agent      | [AGENTS.md](AGENTS.md)                                                                                      | —                                        |
 
 You do not need to be a programmer, read the code, or install anything to
 report a figure. **One number, one date, one link** is the whole process.
-
-Data lives in the Dataset repo, pinned at a commit via `vendor/dataset`.
 
 ---
 
@@ -61,95 +80,56 @@ Requires **Node ≥ 22.18** (ESM, native TypeScript type stripping).
 ```bash
 npm install
 
-node scripts/build.ts # one-shot build → docs/bundle.js + docs/styles.css
-node scripts/build.ts --watch # rebuild on save + serve http://127.0.0.1:3000
-npm run typecheck # tsc --noEmit
-npm run lint # ESLint (flat config: eslint.config.js); `npm run lint:fix` for auto-fixes
-npm run format # Prettier — also organizes imports (.ts); `npm run format:check` is the CI gate
-npm run check:casualties # internal consistency check on the casualty data
+npm run build                # one-shot build → docs/bundle.js + docs/styles.css
+npm run dev                  # rebuild on save + serve http://127.0.0.1:3000
+npm run typecheck            # tsc --noEmit
+npm run lint                 # eslint .
+npm run check:comments       # comment/header conventions
+npm run check:casualties     # internal consistency check on the casualty data
 ```
 
-`node scripts/build.ts --watch` also spawns `server.ts`, which serves `docs/` on
-`127.0.0.1:3000` (`PORT` / `HOST` env vars, `Cache-Control: no-store`). If you
-prefer two terminals: `npm run dev:server` plus a build in watch mode.
+`npm run dev` runs `node scripts/build.ts --watch` and also spawns `server.ts`,
+which serves `docs/` on `127.0.0.1:3000` (`PORT` / `HOST` env vars,
+`Cache-Control: no-store`). If you prefer two terminals: `npm run dev:server`
+plus a build in watch mode.
 
 No framework, no test runner, no bundler config beyond the two esbuild
-configs in `scripts/build.ts`, and no style config beyond
-`eslint.config.js` and `.prettierrc.json` — the Style CI workflow
-(Prettier + ESLint, including automatic import organization for
-TypeScript files) blocks pull requests until both pass; see
-[CONTRIBUTING.md — Formatting and linting](CONTRIBUTING.md#formatting-and-linting-enforced-by-ci).
-
-## Architecture
-
-```mermaid
-flowchart TD
-  subgraph DS["Dataset repo (consumed as a git submodule)"]
-    direction TB
-    M["src/model/index.ts<br/>Metric · Flag · Band · Row · Episode"]
-    D["src/data/data.ts · aggregate.ts · calendar.ts<br/>+ population, notes, helicopters"]
-    E["src/data/episodes/*.ts<br/>one file per historical movement"]
-    S["src/data/sources/*.ts<br/>source catalogue"]
-    C["src/data/casualties/"]
-  end
-
-  subgraph APP["Protest-Data-Observatory"]
-    direction TB
-    CH["src/charts/ — specs · datasets · axes · tooltip<br/>plugins (error-bars, hatch, …) · trellis/"]
-    SS["src/sections/** — one folder per page area<br/>(kpis, summary, casualties, costs, …)"]
-    CO["src/copy/{en,fr}/ — all UI copy"]
-    CT["src/core/ — DOM · lang · theme · a11y"]
-    RT["src/site/routes.ts — page table, PAGES / PageId"]
-    EN["src/entry/main.ts — boot, data-page dispatch"]
-    ST["src/styles/index.css"]
-    BL["scripts/build.ts (esbuild)"]
-  end
-
-  SH["docs/*.html shells<br/>one per page, data-page attribute"]
-  OUT["docs/bundle.js + docs/styles.css<br/>committed — never hand-edit"]
-  GP[("GitHub Pages — no CI build step")]
-  BR["Browser · ?lang=en / ?lang=fr"]
-
-  M --> D
-  M --> E
-  M --> S
-  M --> C
-  D --> CH
-  E --> CH
-  S --> CH
-  CH --> EN
-  SS --> EN
-  CO --> SS
-  CT --> EN
-  RT --> SH
-  EN --> BL
-  ST --> BL
-  RT --> BL
-  BL --> OUT
-  SH --> GP
-  OUT --> GP
-  GP --> BR
-```
-
-> One esbuild bundle serves all pages; `docs/` is committed build output, so every `src/` change ships with its rebuilt artifacts.
+configs in `scripts/build.ts`. Runtime dependency for charts: `chart.js`
+(canvas). UI is plain DOM helpers in `src/core/dom.ts`.
 
 ---
 
 ## Repository map
 
-| Path                                  | What it is                                                                                                                                                         | Touch it when                |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------- |
-| `src/charts/`                         | Chart.js setup: specs, datasets, axes, tooltip, plugins (`error-bars`, `hatch`, `connectors`, `clip`, `span-mark`), `trellis/` engine for multi-panel              | drawing changes              |
-| `src/sections/`                       | One folder per page area: `kpis`, `summary`, `casualties`, `costs`, `percapita`, `context`, `sources`, `about`, `contribute`, `cards`, `trellis`, plus `chrome.ts` | page structure               |
-| `src/copy/{en,fr}/` + `src/copy/*.ts` | All UI copy, `Bi = { en, fr }`, lookup/format/interpolation helpers                                                                                                | any wording                  |
-| `src/core/`                           | DOM, lang switch, theme, colors, a11y, canvas registry                                                                                                             | infrastructure only          |
-| `src/site/`                           | `routes.ts` (page table), `media.ts` (hero images)                                                                                                                 | adding a page                |
-| `src/entry/main.ts`                   | Boot: locale, chrome, then guarded mounts                                                                                                                          | wiring a new section         |
-| `src/styles/index.css`                | All CSS, bundled to `docs/styles.css`                                                                                                                              | styling                      |
-| `scripts/`                            | `build.ts`, `check-casualties.ts`                                                                                                                                  | build/checks                 |
-| `server.ts`                           | Static dev server for `docs/`                                                                                                                                      | rarely                       |
-| `docs/`                               | **Committed build output** + HTML shells + images                                                                                                                  | rebuild after source changes |
-| `content/`                            | Long-form notes: `my-analysis.md`, `data-problems.md`, `how-i-made-this.md`                                                                                        | prose about method           |
+| Path                                                | What it is                                                                                                                                              | Touch it when                             |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| `src/data/facts.ts`                                 | The 2026 observations, keyed by ISO date — **a copy of the Dataset file; edit it in `Dataset`**                                                         | a 2026 number changes                     |
+| `src/data/data.ts`                                  | Entry point for the 2026 layer: a verification record plus `export *` re-exports. No logic                                                              | never — import from it, don't edit it     |
+| `src/data/{projections,aggregate,student-weeks}.ts` | Daily and weekly series **computed** from `facts.ts`                                                                                                    | only the arithmetic behind a series       |
+| `src/data/episodes/*.ts`                            | One file per historical movement (`mai68`, `cpe`, `gilets-jaunes`, `nahel`, `retraites`, `bloquons`, `students`) — copies of Dataset files              | a historical series changes               |
+| `src/data/sources/*.ts`                             | Source catalogue: publisher, verbatim headline, URL, date, what it is used for                                                                          | you cite anything new                     |
+| `src/data/sources/types.ts`                         | `Source`, `SourceGroup`, `GroupId`, `Mention`                                                                                                           | rarely — adding a new source group        |
+| `src/data/casualties/`                              | Case-level casualty data, levels, estimates, checks                                                                                                     | casualty figures                          |
+| `src/data/{population,policing,helicopters}.ts`     | Denominators, deployments and cost rate, helicopter series                                                                                              | rarely                                    |
+| `src/data/notes.ts`                                 | Structured note copy, rendered per locale and referenced by `noteRef`                                                                                   | a note needs new wording                  |
+| `src/model/index.ts`                                | Pure types and definitions: `Metric`, `Flag`, `Band`, `Row`, `Episode`, `isDetached`                                                                    | never casually — everything depends on it |
+| `src/charts/`                                       | Chart.js setup: specs, datasets, axes, tooltip, plugins (`error-bars`, `hatch`, `connectors`, `clip`, `span-mark`), `trellis/` engine for multi-panel   | drawing changes                           |
+| `src/sections/`                                     | One folder per page area: `kpis`, `summary`, `casualties`, `costs`, `percapita`, `context`, `sources`, `about`, `contribute`, `cards`, plus `chrome.ts` | page structure                            |
+| `src/copy/{en,fr}/` + `src/copy/*.ts`               | All UI copy, `Bi = { en, fr }`, lookup/format/interpolation helpers                                                                                     | any wording                               |
+| `src/core/`                                         | DOM, lang switch, theme, colors, a11y, canvas registry                                                                                                  | infrastructure only                       |
+| `src/site/`                                         | `routes.ts` (page table), `media.ts` (hero images)                                                                                                      | adding a page                             |
+| `src/entry/main.ts`                                 | Boot: locale, chrome, then guarded mounts                                                                                                               | wiring a new section                      |
+| `src/styles/index.css`                              | All CSS, bundled to `docs/styles.css`                                                                                                                   | styling                                   |
+| `scripts/`                                          | `build.ts`, `check-casualties.ts`, `check-comments.ts`                                                                                                  | build/checks                              |
+| `server.ts`                                         | Static dev server for `docs/`                                                                                                                           | rarely                                    |
+| `docs/`                                             | **Committed build output** + HTML shells + images + transcripts                                                                                         | rebuild after source changes              |
+| `content/`                                          | Long-form notes: `my-analysis.md`, `data-problems.md`, `how-i-made-this.md`                                                                             | prose about method                        |
+
+**The `src/data/` rows are the exception to "edit here".** Those files are a
+checked-in copy of `Manifestigations/Dataset`; the same paths exist there and
+are the ones under review. `content/data-problems.md` stays in **this**
+repository, because it is prose about method rather than data — but a decision
+recorded in it is applied by a commit in `Dataset`.
 
 ---
 
@@ -170,85 +150,46 @@ A figure is never a bare number. From `src/model/index.ts`:
 line": `r`, `p`, `e`, `c`. Charts draw detached points hollow instead of
 connecting them.
 
+2026 observations use a different shape from historical weeks: `Obs` =
+`{ low, high, q? }` in `src/data/facts.ts`, where a point figure has
+`low === high`, and `Pt` = `{ v, band, q, note, detach }` with `Series = Pt[]`
+once `projections.ts` has derived the daily series.
+
 Sources (`src/data/sources/types.ts`) are `Source { id, group, label, url,
 date?, dateEnd?, what }`. `label` is the publisher and headline **verbatim and
 never translated**; `what` is bilingual. Entries are created with the `src()`
 and `both()` helpers from `src/data/sources/record.ts`.
-
-```mermaid
-erDiagram
-    EPISODE {
-        EpisodeId id PK "may68 · cpe · gj · nahel · pensions · bt · students26"
-        string start "ISO date"
-        string end "ISO date"
-    }
-    WEEK_ROW {
-        int w PK "row index, sequential from 0"
-        string from "ISO, start of week"
-        string to "ISO, end of week"
-        int act "optional"
-        boolean partial "optional"
-        Band p "turnout — number or [low, high]"
-        Band a "arrests"
-        Band f "forces injured"
-        Band i "protesters injured"
-        Flag flag "per-metric, optional"
-        NoteRef noteRef "per-metric, optional"
-    }
-    SOURCE_GROUP {
-        GroupId id PK "official · press · cost · gj · …"
-        Bi title
-        Bi blurb
-    }
-    SOURCE {
-        string id PK
-        GroupId group FK
-        string label "verbatim publisher + headline — never translated"
-        string url
-        string date "ISO, optional"
-        string dateEnd "ISO, optional"
-        Bi what "what this page takes from the source"
-    }
-    MENTION {
-        string name
-        Bi note
-    }
-
-    EPISODE ||--o{ WEEK_ROW : "weeks: Row[]"
-    SOURCE_GROUP ||--o{ SOURCE : "contains"
-```
-
-> A missing metric on a Row means 'no published figure' — never zero. Flags `r`,
-> `p`, `e`, `c` are detached by definition (`isDetached()`) and drawn hollow, never joined to the national line.
 
 ---
 
 ## How a number travels
 
 1. **Source** — add or find an entry in `src/data/sources/<group>.ts`
-   (`label` verbatim, `url`, `date`, `what` in both languages).
-2. **Cell** — add the band in `src/data/data.ts` (2026) or
+   (`label` verbatim, `url`, `date`, `what` in both languages). In `Dataset`.
+2. **Cell** — add the band in `src/data/facts.ts` (2026) or
    `src/data/episodes/<movement>.ts` (historic), with a `flag` if it is not a
-   plain national count.
+   plain national count. In `Dataset`.
 3. **Note** — if the cell needs explaining, add a `noteRef`; the wording lives
    in `src/data/notes.ts` and is rendered per locale.
-4. **Spec** — charts read these through `src/charts/specs.ts` /
+4. **Sync** — the change lands in `Dataset`, then arrives here as its own
+   commit. Never hand-edit the copied data files in this repository as a way of
+   fixing the site.
+5. **Spec** — charts read these through `src/charts/specs.ts` /
    `datasets.ts`; only touch this if the measure is new.
-5. **Copy** — any new caption, axis label or legend entry is `{ en, fr }` in
+6. **Copy** — any new caption, axis label or legend entry is `{ en, fr }` in
    `src/copy/`.
-6. **Build** — `node scripts/build.ts`, commit `docs/bundle.js` and
-   `docs/styles.css` along with the source change.
+7. **Build** — `npm run build`, commit `docs/bundle.js` and `docs/styles.css`
+   along with the source change.
 
 ---
 
 ## Deployment
 
-GitHub Pages serves `docs/` exactly as committed (`.nojekyll`-free static
-output): `docs/bundle.js`, `docs/styles.css`, the HTML shells and the images.
-There is no CI build step. **If you change anything under `src/`, you must
-rebuild and commit the generated files** — otherwise the live site keeps
-serving the old bundle. Never hand-edit `docs/bundle.js` or
-`docs/styles.css`; edit the source and rebuild.
+GitHub Pages serves `docs/` exactly as committed: `docs/bundle.js`,
+`docs/styles.css`, the HTML shells and the images. There is no CI build step.
+**If you change anything under `src/`, you must rebuild and commit the generated
+files** — otherwise the live site keeps serving the old bundle. Never hand-edit
+`docs/bundle.js` or `docs/styles.css`; edit the source and rebuild.
 
 ---
 
@@ -262,23 +203,22 @@ serving the old bundle. Never hand-edit `docs/bundle.js` or
   the point is detached from the national series on purpose.
 - **Counts and estimates are different data.** Say which one you have.
 - **Always the denominator.** Injuries without a crowd size compare to nothing.
+- **One number, one home.** A figure is authored in `Dataset`; this repository
+  displays it.
 - **French is written, not translated.** French copy that reads like a
   translation is a bug worth reporting.
 - **Accessibility is part of the data's honesty**: canvas descriptions, tab
   order, contrast, and black-and-white maps under `prefers-contrast`.
 - **Consent, anonymity and safety come before the figure**, always.
-- **The formatter settles style.** Two spaces, double quotes, semicolons,
-  80 columns, trailing commas, LF, and Prettier's import ordering. If it
-  looks wrong, run `npm run format` and `npm run lint` rather than
-  reformatting by hand, and never inline-disable a lint rule without a
-  comment saying why.
 
 ---
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). For anything larger than a data cell or
-a typo, **open an issue first** — settling the data question usually halves the
-code. Coding agents should read [AGENTS.md](AGENTS.md) before editing.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for this repository, and the
+[Dataset CONTRIBUTING](https://github.com/Manifestigations/Dataset/blob/main/CONTRIBUTING.md)
+for a figure. For anything larger than a data cell or a typo, **open an issue
+first** — settling the data question usually halves the code. Coding agents
+should read [AGENTS.md](AGENTS.md) before editing.
 
 Site copy on contributing, in French: `docs/contribute.html`.
