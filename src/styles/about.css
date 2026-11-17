@@ -1,0 +1,151 @@
+/* ---- about -------------------------------------------------------------- */
+:is(#about, .about) {
+  margin-bottom: 2.75rem;
+  padding: clamp(0.75rem, 1.5vw, 1rem) clamp(0.8rem, 1.8vw, 1.1rem);
+  border: 1px solid var(--line-1);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.about-group {
+  margin-bottom: 0.5rem;
+  border: 1px solid var(--line-3);
+  border-radius: 6px;
+  background: var(--surface);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &[open] > .about-summary {
+    margin-bottom: 0.6rem;
+    border-bottom: 1px solid var(--line-3);
+  }
+}
+
+.about-summary {
+  padding: 0.55rem 0.8rem;
+}
+
+.about-title {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--ink-1);
+  text-wrap: balance;
+}
+
+.about-body {
+  max-width: 78ch;
+  padding: 0 0.9rem 0.85rem;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--ink-2);
+
+  & > * + * {
+    margin-top: 0.7rem;
+  }
+
+  & a {
+    color: var(--accent);
+  }
+}
+
+.about-quote {
+  margin-bottom: 0.8rem;
+  padding-left: 0.9rem;
+  border-left: 3px solid var(--line-1);
+  color: var(--ink-3);
+
+  & p + p {
+    margin-top: 0.45rem;
+  }
+
+  & footer {
+    margin-top: 0.4rem;
+    font-size: var(--fs-sm);
+    color: var(--ink-4);
+  }
+}
+
+/* The one section the author wrote by hand; the others are machine-drafted.
+   Thicker full border + a tinted summary header, no colour change to the text. */
+.about-group--featured {
+  border: 2px solid color-mix(in oklab, var(--accent) 45%, var(--line-3));
+  background: var(--surface);
+  /* compensates for the extra 1px so the body text stays aligned with the
+     other groups */
+  padding: calc(1rem - 1px) calc(1.1rem - 1px);
+}
+
+.about-group--featured > .about-summary {
+  background: color-mix(in oklab, var(--accent) 10%, var(--surface));
+  /* extra vertical padding, since the tint needs breathing room to read as a
+     header bar rather than as a highlighted line of text */
+  padding-block: 0.55rem;
+  border-radius: 6px;
+}
+
+.about-group--featured:not([open]) > .about-summary {
+  border-bottom: 0;
+}
+
+/* Sub-headings inside an About group (Policing, Costs, …) */
+.about-body .about-subhead {
+  margin: 1.75rem 0 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+}
+
+.about-body .about-subhead:first-child {
+  margin-top: 0;
+}
+
+.cost-method {
+  max-inline-size: 68ch;
+  margin-block-end: 1.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+.cost-method h3 {
+  margin-block: 0 0.75rem;
+  font-size: 1.0625rem;
+}
+
+.cost-method__intro {
+  margin-block-end: 1rem;
+  opacity: 0.85;
+}
+
+.cost-method__steps {
+  margin: 0 0 1rem;
+  padding-inline-start: 1.25rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.cost-method__steps li > strong {
+  display: block;
+  margin-block-end: 0.15rem;
+}
+
+.cost-method__steps li > p {
+  margin: 0;
+}
+
+.cost-method__summary {
+  padding: 0.75rem 1rem;
+  margin-block: 1rem;
+  border-inline-start: 3px solid currentColor;
+  background: color-mix(in oklab, currentColor 6%, transparent);
+  font-variant-numeric: tabular-nums;
+}
+
+.cost-method__caveat {
+  font-size: 0.875rem;
+  opacity: 0.75;
+  font-style: italic;
+}

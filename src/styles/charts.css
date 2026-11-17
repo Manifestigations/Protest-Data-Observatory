@@ -1,0 +1,145 @@
+/* ---- standalone charts (sections A / B) --------------------------------- */
+.card {
+  margin-bottom: clamp(20px, 2.5vw, 28px);
+}
+
+.canvas-box {
+  position: relative;
+  width: 100%;
+  height: var(--chart-h);
+
+  &.tall {
+    height: var(--chart-tall-h);
+  }
+
+  & > canvas {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/* ---- trellis (sections C / C′) ------------------------------------------ */
+.trellis,
+#summary,
+.pc-trellis {
+  container-type: inline-size;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+}
+
+.trellis {
+  gap: clamp(16px, 2vw, 22px) clamp(12px, 1.6vw, 16px);
+  margin-bottom: 10px;
+}
+
+.trellis-panel {
+  min-width: 0;
+  margin: 0;
+
+  & .strip {
+    display: block;
+    font-weight: 700;
+    color: var(--ink-1);
+  }
+
+  & .strip-meta {
+    display: block;
+    font-size: var(--fs-3xs);
+    color: var(--ink-4);
+  }
+
+  & .strip-note {
+    min-height: 1.6em;
+    margin: 3px 0 2px;
+    font-size: var(--fs-3xs);
+    line-height: 1.25;
+    color: var(--ink-4);
+  }
+}
+
+.panel-canvas {
+  position: relative;
+  width: 100%;
+  height: var(--panel-h);
+}
+
+/* Panel heights: the :root tokens (lines 136-137) are viewport-based, so
+   they tracked the screen, not the card. Redefine on the host in cqi — the
+   unit resolves where it's consumed (.panel-canvas), against its nearest
+   size container (the host). 14vw ≈ 15.5cqi (host ≈ 85–95% of viewport);
+   the clamp band is narrow, so the exact coefficient is cosmetic. */
+#trellis-episodes {
+  --panel-h: clamp(200px, 15.5cqi + 150px, 240px);
+}
+/* taller plots in C′, expressed as a token override instead of a 2nd rule */
+#trellis-items {
+  --panel-tall-h: clamp(212px, 16cqi + 155px, 252px);
+  --panel-h: var(--panel-tall-h);
+}
+
+/* ---- legends ------------------------------------------------------------ */
+.legend-title {
+  margin-bottom: 8px;
+  font-weight: 700;
+  color: var(--ink-1);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px clamp(10px, 1.2vw, 18px);
+  margin-bottom: 12px;
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+
+  & button {
+    all: unset;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 1.75rem; /* `all: unset` leaves a ~14px touch target */
+    cursor: default;
+
+    &:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+      border-radius: 3px;
+    }
+  }
+
+  & .swatch {
+    flex: none;
+    width: 14px;
+    height: 3px;
+    border-radius: 2px;
+  }
+}
+
+/* ---- interactive legend states ---- */
+.legend button {
+  cursor: pointer;
+  border-radius: 4px;
+  transition:
+    background-color 0.12s ease,
+    opacity 0.12s ease;
+}
+
+/* hovered or hovered-from-chart */
+.legend button.is-active {
+  background: color-mix(in oklab, var(--accent) 14%, transparent);
+  outline: 1px solid color-mix(in oklab, var(--accent) 40%, transparent);
+  outline-offset: 1px;
+}
+
+/* filtered out of the charts */
+.legend button.is-off {
+  opacity: 0.4;
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .legend button {
+    transition: none;
+  }
+}

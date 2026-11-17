@@ -1,0 +1,98 @@
+/* ---- adaptations -------------------------------------------------------- */
+
+@media print {
+  :root {
+    /* a dark page must not print dark canvases onto white paper */
+    color-scheme: only light;
+  }
+
+  .sec-card {
+    break-inside: avoid-page;
+    box-shadow: none;
+    border-color: var(--line-4);
+    margin-block: 1rem 0;
+  }
+  .sec-card > .sec-summary {
+    background: none;
+  }
+  .sec-card > .sec-summary::after,
+  .sec-tools {
+    display: none;
+  }
+}
+
+/* Short viewports (landscape phones): keep a chart and its heading on screen. */
+@media (height < 30rem) {
+  :root {
+    --chart-h: 300px;
+    --chart-tall-h: 340px;
+    --panel-h: 190px;
+    --panel-tall-h: 200px;
+  }
+}
+
+/* Killing the duration kills every transition in the file. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur: 0s;
+  }
+
+  .skip-link {
+    transition: none;
+  }
+
+  .card-hero img {
+    transition: filter var(--dur) ease;
+  }
+
+  .group-card:focus-within .card-hero img {
+    transform: none;
+  }
+
+  .cta-help {
+    transition: none;
+  }
+
+  .sec-card > .sec-summary::after {
+    transition: none;
+  }
+}
+
+/* ---- viewport adaptations ----------------------------------------------- */
+/* Mobile: tools get their own row so the h1 keeps the full measure. */
+@media (width < 40rem) {
+  .page-head {
+    grid-template-areas:
+      "tools  tools"
+      "kicker kicker"
+      "title  title"
+      "lede   lede";
+    row-gap: 0.15rem;
+  }
+
+  :is(.head-tools, .page-head > .lang-switch) {
+    margin-bottom: 0.6rem;
+  }
+
+  .theme-toggle {
+    width: 2.375rem;
+    height: 2.375rem;
+  }
+
+  .trellis-panel .strip-note {
+    min-height: 0;
+  }
+
+  .about-body {
+    padding-inline: 0.7rem;
+  }
+}
+
+@media (forced-colors: active) {
+  .card-hero img {
+    filter: none;
+  }
+  .group-card:focus-within {
+    outline-color: Highlight;
+  }
+}

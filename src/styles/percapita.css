@@ -1,0 +1,75 @@
+/* ---- per capita (sections A, B, C) ---- */
+.pc-block {
+  margin-bottom: clamp(18px, 2.4vw, 28px);
+}
+.pc-trellis {
+  display: grid;
+  gap: clamp(8px, 1.2vw, 14px);
+}
+.pc-trellis-head {
+  grid-column: 1 / -1;
+}
+.pc-panel {
+  min-width: 0;
+}
+
+.pc-figure {
+  margin: 0;
+}
+
+.pc-caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+  margin-bottom: 8px;
+}
+
+.pc-fig-title {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.pc-legend {
+  display: flex;
+  gap: 12px;
+}
+
+.pc-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--fs-2xs);
+  color: var(--ink-4);
+}
+
+.pc-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+/* Chart.js measures the parent: an auto-height parent collapses to 150px. */
+.pc-canvas {
+  position: relative;
+  height: clamp(220px, 28vw, 300px);
+}
+
+.pc-canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.pc-note {
+  max-width: 110ch;
+  margin: 8px 0 0;
+  font-size: var(--fs-2xs);
+  line-height: 1.45;
+  color: var(--ink-4);
+}

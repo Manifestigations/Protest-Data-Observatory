@@ -1,0 +1,61 @@
+/* ---- chart data tables: <details class="data-table"> ---- */
+/* No rule for this existed, so every chart table rendered with the browser
+   default marker. Mirrors the .about-group / .source-group disclosure. */
+details.data-table > summary {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding-block: 2px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  font-size: var(--fs-2xs);
+  color: var(--ink-4);
+}
+
+details.data-table > summary::-webkit-details-marker {
+  display: none;
+}
+
+details.data-table > summary::before {
+  content: "▸";
+  flex: none;
+  width: 1em;
+  font-size: 0.8em;
+  transform: translateY(-0.1em);
+}
+
+details.data-table[open] > summary::before {
+  content: "▾";
+}
+
+details.data-table > summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+details.data-table > table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 8px 0 14px;
+  font-size: var(--fs-2xs);
+}
+
+details.data-table th,
+details.data-table td {
+  padding: 6px 9px 6px 0;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line-1);
+}
+
+details.data-table th[scope="col"] {
+  font-weight: 600;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+details.data-table th[scope="row"] {
+  font-weight: 600;
+  color: var(--ink-1);
+}

@@ -1,0 +1,55 @@
+/* ---- base --------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  text-size-adjust: 100%;
+  background: var(--bg);
+}
+
+body {
+  max-width: 1420px;
+  margin-inline: auto;
+  padding: var(--gutter);
+  background: var(--bg);
+  color: var(--ink-1);
+  font-family: var(--font-ui);
+  font-size: var(--fs-body);
+  line-height: 1.45;
+}
+
+/* components opt back in to whatever margin they need */
+:where(h1, h2, h3, p, figure, ol, ul, dl, dd, blockquote) {
+  margin-block: 0;
+}
+
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: var(--accent);
+  text-underline-offset: 2px;
+}
+
+/* ---- visually hidden ----
+   a11y.ts and index.html both rely on .sr-only (canvas hints, #status,
+   #a11y-live, table captions) but the class was never defined, so those
+   paragraphs rendered in flow. Inside .panel-canvas that pushed the hint out of
+   the fixed-height box and over the next panel's note. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
