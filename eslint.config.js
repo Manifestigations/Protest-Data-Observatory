@@ -7,6 +7,13 @@ import tseslint from "typescript-eslint";
 
 export default defineConfig(
   {
+    parserOptions: {
+      // The Dataset submodule ships its own tsconfig.json; pin the parser to this
+      // repo's config so it can't pick the wrong root (see vendor/dataset).
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+  {
     ignores: ["node_modules/", "docs/bundle.js", "docs/*.map", "**/vendor/**"],
   },
   {
