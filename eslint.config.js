@@ -6,11 +6,11 @@ import tseslint from "typescript-eslint";
 
 export default defineConfig(
   {
-    ignores: ["node_modules/", "docs/bundle.js", "docs/*.map"],
+    ignores: ["node_modules/", "docs/bundle.js", "docs/*.map", "**/vendor/**"],
   },
   {
     name: "project/javascript-basics",
-    files: ["**/*.{ts,tsx,js,mjs}"],
+    files: ["**/*.{ts,js}"],
     plugins: { "@eslint/js": js },
     extends: [js.configs.recommended],
   },

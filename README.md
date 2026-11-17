@@ -26,6 +26,8 @@ June 2023, pensions, Bloquons tout 2025).
 You do not need to be a programmer, read the code, or install anything to
 report a figure. **One number, one date, one link** is the whole process.
 
+Data lives in the Dataset repo, pinned at a commit via `vendor/dataset`.
+
 ---
 
 ## What the site contains

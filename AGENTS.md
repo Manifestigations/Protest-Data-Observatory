@@ -51,12 +51,11 @@ npm run format                    # Prettier — also sorts imports
 
 | Need                                                                      | File                                                                                                                                                                                          |
 | ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Types: `Metric`, `Flag`, `Band`, `Row`, `Episode`, `MetricKey`, `NoteRef` | `src/model/index.ts`                                                                                                                                                                          |
-| 2026 figures (daily rows, weekly notes, projections)                      | `src/data/data.ts`                                                                                                                                                                            |
-| Historical episodes (one per movement)                                    | `src/data/episodes/{mai68,cpe,gilets-jaunes,nahel,retraites,bloquons,students}.ts`                                                                                                            |
-| Episode registry                                                          | `src/data/episodes/index.ts`                                                                                                                                                                  |
-| Source catalogue                                                          | `src/data/sources/*.ts`, types in `types.ts`, helpers `src()`/`both()` in `record.ts`, aggregate in `index.ts`, attribution in `mentions.ts`, page→source mapping in `page-map.ts`            |
-| Casualty cases/levels/estimates                                           | `src/data/casualties/*`                                                                                                                                                                       |
+| Types: `Metric`, `Flag`, `Band`, `Row`, `Episode`, `MetricKey`, `NoteRef` | `vendor/dataset/src/model/index.ts` (Dataset repo)                                                                                                                                            |
+| 2026 figures (daily rows, weekly notes, projections)                      | `vendor/dataset/src/data/data.ts` (Dataset repo)                                                                                                                                              |
+| Historical episodes                                                       | `vendor/dataset/src/data/episodes/*` (Dataset repo)                                                                                                                                           |
+| Source catalogue                                                          | `vendor/dataset/src/data/sources/*` (Dataset repo)                                                                                                                                            |
+| Casualty cases/levels/estimates                                           | `vendor/dataset/src/data/casualties/*` (Dataset repo)                                                                                                                                         |
 | Chart specs / datasets / axes / tooltip / plugins                         | `src/charts/{specs,datasets,axes,tooltip,chart-tooltip,mount,shell,series,format,palette}.ts`, `src/charts/plugins/*`                                                                         |
 | Multi-panel (trellis) engine                                              | `src/charts/trellis/*`                                                                                                                                                                        |
 | Page sections                                                             | `src/sections/**` (one folder per area: `kpis`, `summary`, `casualties`, `costs`, `percapita`, `context`, `sources`, `about`, `contribute`, `cards`, `trellis`, `chrome.ts`, `disclosure.ts`) |
@@ -72,19 +71,12 @@ npm run format                    # Prettier — also sorts imports
 
 ## Task recipes
 
-**Change a 2026 figure** — grep `src/data/facts.ts` for the ISO date; edit the
-`p|a|f|i` band; add/keep `flag`; add a `noteRef` if the cell needs explaining;
-add a `Source` in `src/data/sources/`; `node scripts/build.ts`; `npm run
-typecheck`; stage `docs/` artifacts.
-
-**Change a historical series** — edit `src/data/episodes/<movement>.ts` (a
-`Row` per week, `w` sequential, `from`/`to` ISO); ensure the supporting sources
-exist in `src/data/sources/<group>.ts`; rebuild.
-
-**Add a source group** — extend `GroupId` and add a `SourceGroup` in
-`src/data/sources/types.ts`; create `src/data/sources/<group>.ts`; register it
-in `src/data/sources/index.ts`; update `page-map.ts` if the page→source mapping
-needs it.
+**Change a 2026 figure** — in `vendor/dataset/`: branch; grep `src/data/facts.ts`
+for the ISO date; edit the `p|a|f|i` band; add/keep `flag`; add a `Source` in
+`src/data/sources/`; `npm run check:casualties && npm run typecheck`; push,
+merge, tag. Back in the Observatory: `git submodule update --remote vendor/dataset`,
+`git add vendor/dataset`, `node scripts/build.ts`, `npm run typecheck`, stage
+`docs/` artifacts.
 
 **Add a page** — add a `PageId` + `PageSpec` in `src/site/routes.ts`; create the
 HTML shell in `docs/` with the right `data-page` and relative links
