@@ -11229,7 +11229,7 @@ function parse(scale, input) {
     return null;
   }
   const adapter = scale._adapter;
-  const { parser, round: round3, isoWeekday } = scale._parseOpts;
+  const { parser, round: round4, isoWeekday } = scale._parseOpts;
   let value2 = input;
   if (typeof parser === "function") {
     value2 = parser(value2);
@@ -11240,8 +11240,8 @@ function parse(scale, input) {
   if (value2 === null) {
     return null;
   }
-  if (round3) {
-    value2 = round3 === "week" && (isNumber(isoWeekday) || isoWeekday === true) ? adapter.startOf(value2, "isoWeek", isoWeekday) : adapter.startOf(value2, round3);
+  if (round4) {
+    value2 = round4 === "week" && (isNumber(isoWeekday) || isoWeekday === true) ? adapter.startOf(value2, "isoWeek", isoWeekday) : adapter.startOf(value2, round4);
   }
   return +value2;
 }
@@ -14299,6 +14299,658 @@ var midOf = (b) => {
   return (lo2 + hi2) / 2;
 };
 
+// src/data/calendar.ts
+var START = "2026-09-15";
+var END = "2026-11-11";
+var utc = (s) => /* @__PURE__ */ new Date(`${s}T00:00:00Z`);
+var iso = (d) => d.toISOString().slice(0, 10);
+var addDays = (isoDate, n2) => {
+  const d = /* @__PURE__ */ new Date(`${isoDate}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + n2);
+  return d.toISOString().slice(0, 10);
+};
+var mondayOf = (isoDate) => {
+  const d = /* @__PURE__ */ new Date(`${isoDate}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() - (d.getUTCDay() + 6) % 7);
+  return d.toISOString().slice(0, 10);
+};
+function eachDay(start, end) {
+  const out = [];
+  const stop = utc(end);
+  for (const d = utc(start); d <= stop; d.setUTCDate(d.getUTCDate() + 1))
+    out.push(iso(d));
+  return out;
+}
+var DATES = eachDay(START, END);
+var WEEKS = (() => {
+  const byKey = /* @__PURE__ */ new Map();
+  for (const d of DATES) {
+    const k = mondayOf(d);
+    const list = byKey.get(k);
+    if (list) list.push(d);
+    else byKey.set(k, [d]);
+  }
+  return [...byKey].sort(([a], [b]) => a.localeCompare(b)).map(([key, dates2]) => {
+    const end = addDays(key, 6);
+    return { key, end, dates: dates2, touchesEdge: key < START || end > END };
+  });
+})();
+var HOLIDAY_START = "2026-10-18";
+var HOLIDAY_END = "2026-11-01";
+var weekTouchesHoliday = (weekStart) => weekStart <= HOLIDAY_END && addDays(weekStart, 6) >= HOLIDAY_START;
+
+// src/data/facts.ts
+var FACTS = {
+  /* ── School blockades ─────────────────────────────────────────────────
+         Metric: establishments where pupils could not attend normally —
+         blocked, or closed by decision. Band = official count (floor) to
+         union count (ceiling); the union's "à l'arrêt" also counts
+         administratively closed schools, so the ceiling is an upper bound.
+  
+         "x" = a wider measure than blockades (établissements perturbés,
+         cours suspendus, établissements fermés) — the only figure published
+         that day. "r" = regional count. "f" = publisher said "more than".
+  
+         Days with no published count stay empty. During the Toussaint
+         holiday (17 Oct – 1 Nov) no lycée was in session, so the metric did
+         not exist: those days are empty and the connector is dotted.       */
+  /* ── The movement's first fortnight ─────────────────────────────────────
+         The wave began after the rentrée: teachers and parents had been on
+         strike in Mayotte since 31 August (lycée Nord d'Acoua, blocked for
+         five weeks); in mainland France the lycée Théodore-Monod at Le Rheu
+         was blocked on 7 September, the lycée Queneau at Villeneuve-d'Ascq on
+         14 September and the lycée Victor-Hugo at Caen on 15 September. The
+         window opens on 15 September at the user's request, so the 7 and 14
+         September blockades fall outside it.
+  
+         NONE of 15–27 September carries a published turnout, arrest, injury or
+         damage figure, so the week of 14–20 September is empty rather than
+         estimated. The one exception is the Paris area on 25 September. */
+  "2026-09-15": { blockades: { low: 1, high: 1 } },
+  "2026-09-19": { blockades: { low: 1, high: 1 } },
+  "2026-09-23": { blockades: { low: 10, high: 10, q: "r" } },
+  /* Fri 25 Sep — the Île-de-France centre of gravity: ~60 franciliens
+     lycées disrupted over 24–25 Sep, mainly Seine-Saint-Denis and
+     Val-de-Marne (Saint-Denis, Sarcelles, Gonesse, Stains, Saint-Ouen,
+     Rosny-sous-Bois, La Courneuve); the Créteil rectorat counted a
+     "grosse dizaine" of new blockades that day.
+     21 interpellations by noon by the Préfecture de Police, in connection
+     with the Paris-area mobilisations — PARIS ONLY, hence "r". The
+     rectorat noted gatherings, crowd movements and material damage
+     without quantifying them. */
+  "2026-09-25": {
+    arrests: { low: 21, high: 21, q: "r" }
+  },
+  /* Mon 28 Sep — the movement goes national: actions in Marseille, Lille,
+     the Rhône, the Var and the Alpes-Maritimes. Interior Ministry: 180
+     establishments perturbed, 27 of them totally blocked, 164
+     interpellations that day.
+     First serious injury of the movement: a 14-year-old hit in the face
+     by a police projectile at the lycée professionnel Château-d'Epluches,
+     Saint-Ouen-l'Aumône (Val-d'Oise); the IGPN was seized. Flagged "f":
+     one documented casualty is a minimum, not a count. */
+  "2026-09-28": {
+    arrests: { low: 164, high: 164 },
+    protesterInjured: { low: 1, high: 1, q: "f" },
+    blockades: { low: 27, high: 27 }
+  },
+  /* Tue 29 Sep — national public-service mobilisation day, which the USL
+     called students to join; it is the movement's Act I.
+     Education ministry, end of day: 416 establishments touched since the
+     morning, 338 still affected, 45 blocked; Le Monde counted actions at
+     nearly 410 establishments; the USL claimed 400 blocked out of ~3,700
+     in France. 440 interpellations, two thirds of them leading to a garde
+     à vue, "essentially for degradations and attacks on officers"
+     (Nuñez, BFM-TV).
+     Turnout: the intersyndicale demonstration drew 206,000 (ministry) /
+     300,000 (CGT) nationwide and 30,000 / 70,000 in Paris, across 170+
+     demonstrations. The students marched with it, so the figure is
+     carried here — but it counts the public-service cortèges, not a
+     student crowd, for which no national count exists. Flagged "p".
+     The Education ministry counted 31 injured students and staff that
+     day. Strike rate: 11.47% weighted (12.74% second degree, 27.39%
+     life-schools staff; 13.71% of teachers). */
+  "2026-09-29": {
+    turnout: { low: 206e3, high: 3e5, q: "p" },
+    strikers: { low: 25e4, high: 25e4, q: "e" },
+    arrests: { low: 440, high: 440 },
+    protesterInjured: { low: 31, high: 31, q: "p" },
+    blockades: { low: 45, high: 45 }
+  },
+  /* Wed 30 Sep — 356 establishments perturbed; 625 interpellations that
+     day, which with 440 on the 29th makes the two-day total 1,065.
+     83 police and gendarmes injured.
+     The Education ministry's stock since the start of the blockades
+     reaches 119 injured students and staff (85 students, 34 staff) — a
+     cumulative level, hence "c". */
+  "2026-09-30": {
+    arrests: { low: 625, high: 625 },
+    protesterInjured: { low: 119, high: 119, q: "c" }
+  },
+  /* Thu 1 Oct — Acte II. More than 900 actions and blockages; AFP's police
+         returns counted 340 actions in the morning and 169 blockades, ending
+         the day at 900 actions including 400 closures; the Union étudiante
+         claimed 640 lycées and ~30 campuses blocked, a figure the authorities
+         do not confirm. Marseille: 18 high schools totally blocked, 3
+         partially, ~40 in Bouches-du-Rhône; Aix-en-Provence ~600 students;
+         Metz 6; Brest most; Épinal 2; Perpignan 11 interpellations and one
+         student injured. No national turnout figure was published.
+  
+         FIX 5: arrests 1,949 are THAT DAY ("1 949 interpellations ce jeudi"),
+         not a stock; the only stock is 6,059 "depuis le 28 septembre" on
+         5 Oct. The day was the peak of the first week.
+  
+         FIX 7: forces injured are bracketed [83, 300] — 83 is the
+         government level at the Wednesday cut-off (it is the same 83 that
+         appears in the 318-injury total of 1 Oct) and ~300 is Nuñez's
+         Thursday figure ("quelque 300 policiers et gendarmes blessés en
+         intervention jeudi"). The band spans a cumulative level and a daily
+         flow, so it is flagged "e" and the 83 is not counted twice.
+  
+         FIX 6: 235 = 170 students + 65 education staff, cumulative at the
+         1 Oct cut-off; the previous 119–235 band was two vintages of this
+         same series. Flagged "c".
+  
+         Damage: the hall of the lycée Nelson-Mandela in Nantes was destroyed
+         by a fire (several classrooms unusable for weeks), as was the main
+         entrance and a 35-classroom block at the lycée Henri-Moissan in
+         Meaux; the façade of the lycée Lumière in Lyon was burnt; in
+         Seine-Maritime two headteachers were hurt (Petit-Quevilly, Rouen) and
+         the prefecture counted eight injured and several intrusions. The €1M
+         cell is a local estimate from the original research and is a subset
+         of the larger Île-de-France and IFRAP totals, hence "c". */
+  "2026-10-01": {
+    arrests: { low: 1949, high: 1949 },
+    forcesInjured: { low: 300, high: 305, q: "e" },
+    protesterInjured: { low: 235, high: 235, q: "c" },
+    damagesCost: { low: 1, high: 1, q: "c" },
+    blockades: { low: 222, high: 640 }
+  },
+  /* Fri 2 Oct — 1,747 interpellations that day and "more than 5,000 since
+     Monday" (the daily series gives 4,925); 735 establishments perturbed,
+     30% fewer than the day before, with urban violence near 158 of them
+     (projectiles, attacks on officers, teachers, journalists and
+     passers-by). A young police lieutenant was assaulted in Paris's 20th
+     arrondissement. Geffray: 65 education staff injured since the start
+     of the movement, 40 of them headteachers. */
+  "2026-10-02": {
+    arrests: { low: 1747, high: 1747 },
+    blockades: { low: 400, high: 400, q: "f" }
+  },
+  /* Sat 3 Oct — the ministry's stock "6,059 interpellations since
+     28 September" (5 Oct) minus 984 on Monday 5 Oct leaves 5,075 through
+     Sunday 4 Oct; the daily figures for 28 Sep–2 Oct sum to 4,925. The
+     difference, 150, is the weekend of 3–4 October. It is a two-day total
+     derived by subtraction, not a Saturday figure — flagged "e" and
+     carried on the Saturday, with the derivation in this comment. */
+  "2026-10-03": {
+    arrests: { low: 150, high: 150, q: "e" },
+    blockades: { low: 735, high: 735, q: "x" }
+  },
+  /* Mon 5 Oct — 984 interpellations and 65 forces injured that day.
+     Stocks published the same day: 6,059 interpellations since 28 Sep;
+     715 police and gendarmes injured since the start of the movement;
+     Matignon: 215 students and 85 education staff injured since the
+     start, 34 of them headteachers. */
+  "2026-10-05": {
+    arrests: { low: 984, high: 984 },
+    forcesInjured: { low: 65, high: 65 },
+    blockades: { low: 400, high: 500, q: "x" }
+  },
+  /* Tue 6 Oct — "Acte III", first national school/student day.
+     256,000 ministry / 450,000 organisers; Paris 56,000 / 100,000.
+     488 interpellations and 43 forces injured that day; 215 students
+     injured since mid-September. The €6M is the Île-de-France damage
+     increment for the 1–8 Oct run and is therefore a subset, not an
+     increment unique to 6 Oct. Flagged "c"; the anchor of the run is
+     8 Oct. */
+  "2026-10-06": {
+    turnout: { low: 256e3, high: 45e4 },
+    arrests: { low: 488, high: 488 },
+    forcesInjured: { low: 43, high: 43 },
+    damagesCost: { low: 6, high: 6, q: "c" },
+    blockades: { low: 891, high: 1800, q: "x" }
+  },
+  /* Thu 8 Oct — Act IV. Education ministry: 0.82% weighted all staff
+     (teachers 0.99%, 1st degree 0.10%, 2nd degree 1.67%, vie scolaire
+     2.33%, other staff 0.45%), excluding Toulouse, Nantes and Corse.
+     The lowest rate of the whole sequence, in the middle of the
+     mobilisation — the school action had drained by 8 Oct. */
+  "2026-10-08": {
+    turnout: { low: 71500, high: 13e4 },
+    /* Education ministry 0.82% weighted; no function-wide rate that day,
+       so the education rate stands in for the civil service on the same
+       2,500,000-agent base: 20,500. Flagged "e" — the proxy runs low. */
+    strikers: { low: 20500, high: 20500, q: "e" },
+    damagesCost: { low: 6, high: 6, q: "e" },
+    blockades: { low: 224, high: 224, q: "x" }
+  },
+  /* Sat 10 Oct — national cumulative damage stock: "déjà estimées à
+     30 millions d'euros en France" since mid-September (CNEWS's own
+     compilation of regional figures — no ministry published a national
+     tally). Pannekoucke's parallel AURA estimate of €25–30M is NOT
+     included, so this is neither a floor nor additive with the regional
+     figures. Flagged "c": a stock, never summed with flows. */
+  "2026-10-10": {
+    damagesCost: { low: 30, high: 30, q: "c" },
+    blockades: { low: 40, high: 40, q: "f" }
+  },
+  /* Mon 12 Oct — three regional prefecture figures, all regional:
+       · Rhône: 27 établissements touchés (19 lycées, 6 universités,
+         2 collèges), 13 interpellations.
+       · Bas-Rhin/Strasbourg: 13 interpellations (préfecture), incl. 4
+         for preparing incendiary devices, 3 for mortar fire.
+     Two prefectures published 13 independently, so 13 is a FLOOR for the
+     day, not the day's regional total. NOT Paris — the old note was
+     wrong.
+     FIX 13 (third pass): the €1.5M moved here from 13 Oct. It is
+     NORMANDY (Hervé Morin, Conseil régional de Normandie, 12 Oct) and
+     it is a CUMULATIVE stock since mid-September — "atteint d'ores et
+     déjà 30 millions d'euros, dont 1,5 million en Normandie" — so the
+     flag moves from "e" to "c". Île-de-France's own revised total the
+     same day was €8.5M (110+ lycées, ~120 portails/sas out of service).
+     Both regional stocks are components of the €30M national stock and
+     must never be added to it.
+     The 3 injured are an Île-de-France figure and count education and
+     local-authority staff, not protesters: 1 proviseur, 1 parent
+     d'élève, 1 agent de la Région. */
+  "2026-10-12": {
+    arrests: { low: 13, high: 13, q: "r" },
+    damagesCost: { low: 1.5, high: 1.5, q: "c" },
+    blockades: { low: 19, high: 19, q: "r" }
+  },
+  /* Tue 13 Oct — "Acte V": 214 high schools closed (94.2% open), 161,500
+     ministry / 480,000 youth intersyndicate (41,500 Paris), 40 police
+     and gendarmes injured.
+     FIX 13 (third pass): the €1.5M cell is GONE from this date — it
+     was Normandy, and it was published on 12 October. */
+  "2026-10-13": {
+    turnout: { low: 161500, high: 48e4 },
+    /* 3.71% weighted education rate as proxy: 3.71% x 2,500,000 = 92,750. */
+    strikers: { low: 92750, high: 92750, q: "e" },
+    forcesInjured: { low: 40, high: 40 },
+    blockades: { low: 214, high: 214, q: "x" }
+  },
+  /* Sat 17 Oct — the peak of the episode.
+         110 → 430 → 441 actions; ~60,000 officers deployed.
+         550,000 ministry / 800,000 organisers; Paris 110,000.
+         Arrests 2,397 initial → 2,628 consolidated (2,513 gardes à vue;
+         108 in Paris). Forces injured 997 initial → 1,144 consolidated,
+         7 serious. One civilian death: Christophe M., 59, Paris.
+  
+         FIX 2 (first pass): no official protester-injury count exists. The
+         low bound is Laurent Thines's serious-injury register (54 seriously
+         injured — 5 eye, 5 cranio-facial, 2 amputations, 42 other — plus the
+         1 death, i.e. 55); the high bound is a reasoned ceiling from
+         Toulouse's 130+ street-medics treatments (~13 treated per serious
+         case) against 54 serious cases nationally. Wikipedia's "400+ civilians"
+         is an uncited infobox line and sits below the partial nine-city sum
+         (~204 across Bordeaux, Clermont-Ferrand, Dijon, Metz, Nancy, Rouen,
+         Strasbourg, Avignon, Toulouse), so it is a floor, not a ceiling.
+         Flagged "e": derived, drawn hollow.
+  
+         Damages: IFRAP conditional estimate for the 17–18 Oct weekend,
+         €244M low / €463M central / €866M high for MATERIAL damage; the
+         €294M–€1.1bn variant includes lost turnover and is a different measure.
+         IFRAP excludes marginal order-maintenance and curfew costs. */
+  "2026-10-17": {
+    turnout: { low: 55e4, high: 8e5 },
+    arrests: { low: 2397, high: 2628 },
+    forcesInjured: { low: 207, high: 207, q: "e" },
+    /* 54 x 13 = 702 — see E8/E10 in casualties/estimate.ts. */
+    protesterInjured: { low: 55, high: 702, q: "e" },
+    damagesCost: { low: 244, high: 866, q: "e" }
+  },
+  /* Sun 18 Oct — Paris curfew only, 108 interpellations.
+     FIX 3 (first pass): the €1.8–5M damage figure is a subset of the
+     17–18 Oct IFRAP weekend total, so it is flagged "c" and cannot be
+     added to it.
+     FIX 11 (third pass): "r", not "p" — the figure is Paris-only, and
+     "p" now means partial coverage. */
+  "2026-10-18": {
+    arrests: { low: 108, high: 108, q: "r" },
+    damagesCost: { low: 1.8, high: 5, q: "c" }
+  },
+  /* Tue 20 Oct — regional only: 13 interpellations overnight in Guadeloupe
+     (Basse-Terre, Saint-François, Goyave, Vieux-Habitants, Gosier). */
+  "2026-10-20": { arrests: { low: 13, high: 13, q: "r" } },
+  /* Sat 24 Oct — 289 actions, 70,000 officers, Centaure AFVs, water cannons,
+     14 aerial cameras in Paris. 410,000 ministry / 800,000+ CGT;
+     Paris 110,000 (préfecture) / 250,000 (CGT).
+     Arrests 1,314 initial → 1,435 final (142 Paris, 126 GàV).
+     Forces injured 53 at 7:30 a.m. — the ministry's own communiqué calls
+     this "provisoire" — then 267 on consolidation (Nuñez, 26 Oct), with
+     150 civilians injured, 3 seriously. 75 fire interventions.
+     La Réunion: ~80 Saint-Denis, 300 Saint-Pierre. Mayotte: Tsingoni.
+     FIX 4 (first pass): the national damage cell below replaces the earlier
+     local derivation. CCI France's 27 Oct tally — 2,488 shops hit after the
+     17th plus 50 after the 24th, 1,161 heavily damaged, 643 still shut —
+     puts the cost of the degradations at over €1bn on the IFRAP estimate,
+     for the 17–24 Oct period as a whole. That is a SUPERSET of the 17 Oct
+     cell, so it is flagged "c" and is never added to it. */
+  "2026-10-24": {
+    turnout: { low: 41e4, high: 8e5 },
+    arrests: { low: 1314, high: 1435 },
+    forcesInjured: { low: 267, high: 267 },
+    protesterInjured: { low: 150, high: 150 },
+    damagesCost: { low: 1e3, high: 1e3, q: "c" }
+  },
+  /* Sat 31 Oct — 291 actions → 227 consolidated.
+     320,000 ministry / ~500,000 youth organisations; Paris 70,000.
+     Arrests 565 at 21h → 779 cumulative (incl. 214 on the Halloween night).
+     Forces injured 116 by 21h + 43 that night = 159.
+     515 fires handled; 36 shops degraded, 3 pillaged — no cost figure. */
+  "2026-10-31": {
+    turnout: { low: 32e4, high: 5e5 },
+    arrests: { low: 565, high: 779 },
+    forcesInjured: { low: 116, high: 159 },
+    damagesCost: { low: 0.4, high: 3.3, q: "e" }
+  },
+  "2026-11-02": { blockades: { low: 41, high: 41 } },
+  "2026-11-03": { blockades: { low: 48, high: 500 } },
+  /* Thu 5 Nov — national strike day, 193 actions.
+     575,000 ministry (definitive) / 1.6M CGT; Paris 65,000 / 350,000.
+     Arrests 448 at 18h → 642 updated. Forces injured 53 at 18h → 112.
+     86 fire interventions. Marseille: 17 schools blocked, ~40 interpellations,
+     13 police wounded.
+     Protester injuries = 18, a FLOOR: the 18 who instructed lawyers to sue
+     Nuñez. Not a ministry count. */
+  "2026-11-05": {
+    turnout: { low: 575e3, high: 16e5 },
+    strikers: { low: 247250, high: 275e3, q: "e" },
+    arrests: { low: 448, high: 642 },
+    forcesInjured: { low: 53, high: 112 },
+    protesterInjured: { low: 18, high: 18, q: "f" },
+    blockades: { low: 81, high: 1e3 }
+  },
+  /* Sat 7 Nov — 141 actions; ~70,000 officers, 25 blindés, 15 water-cannon
+     trucks; ~40,000 preventive checks; Caen campus dispersed by 50 CRS.
+     146,000 ministry / 250,000 youth intersyndicate; Paris 46,000 / 75,000.
+     Arrests 232 at 18h → 360+ at 19h.
+     Security-force casualties acknowledged but no number published. */
+  "2026-11-07": {
+    turnout: { low: 146e3, high: 25e4 },
+    arrests: { low: 350, high: 360 }
+  },
+  /* Mon 9 Nov — regional only: Bègles 4, Lyon 8, Strasbourg 5 = 17.
+     ~50 Île-de-France schools disrupted with mortar fire; Rennes 2
+     evacuated; Brest rally; Guadeloupe: lycée blocked at Baie-Mahault. */
+  "2026-11-09": { arrests: { low: 17, high: 17, q: "r" } },
+  "2026-11-10": {
+    /* Education strike + student march. 1.55% weighted rate as proxy:
+       1.55% x 2,500,000 = 38,750. */
+    strikers: { low: 38750, high: 38750, q: "e" }
+  }
+};
+
+// src/data/types.ts
+var NIL = {
+  v: null,
+  band: null,
+  q: null,
+  note: null,
+  detach: false
+};
+var round2 = (v) => Number.isInteger(v) ? v : Math.round(v * 100) / 100;
+
+// src/data/aggregate.ts
+function aggregate(key, op) {
+  return WEEKS.map((week) => {
+    const cells = [];
+    for (const d of week.dates) {
+      const obs = FACTS[d]?.[key];
+      if (!obs) continue;
+      cells.push({ date: d, obs, q: obs.q ?? "n" });
+    }
+    if (!cells.length) return NIL;
+    const last = cells[cells.length - 1];
+    const othersHigh = Math.max(
+      ...cells.filter((c) => c !== last).map((c) => c.obs.high),
+      Number.NEGATIVE_INFINITY
+    );
+    if (last.q === "c" && last.obs.high >= othersHigh) {
+      return {
+        v: round2((last.obs.low + last.obs.high) / 2),
+        band: [round2(last.obs.low), round2(last.obs.high)],
+        q: "c",
+        note: { k: "obs", date: last.date, metric: key },
+        detach: isDetached("c")
+      };
+    }
+    const regional = cells.filter((c) => c.q === "r");
+    const subsets = cells.filter((c) => c.q === "c");
+    const flows = cells.filter((c) => c.q !== "c" && c.q !== "r");
+    const regionalOnly = flows.length === 0 && regional.length > 0;
+    let pool = regionalOnly ? regional : flows;
+    if (!pool.length) {
+      if (!subsets.length) return NIL;
+      pool = [
+        subsets.reduce((best, x) => x.obs.high > best.obs.high ? x : best)
+      ];
+    }
+    let low;
+    let high;
+    let value2;
+    let peak;
+    if (op === "sum") {
+      low = pool.reduce((a, x) => a + x.obs.low, 0);
+      high = pool.reduce((a, x) => a + x.obs.high, 0);
+      value2 = (low + high) / 2;
+    } else {
+      low = Math.max(...pool.map((x) => x.obs.low));
+      high = Math.max(...pool.map((x) => x.obs.high));
+      const top = pool.reduce(
+        (best, x) => (x.obs.low + x.obs.high) / 2 > (best.obs.low + best.obs.high) / 2 ? x : best
+      );
+      value2 = (top.obs.low + top.obs.high) / 2;
+      peak = top.date;
+    }
+    const derived = pool.filter((x) => x.q === "e").sort((a, b) => b.obs.high - a.obs.high)[0];
+    const excluded = cells.length - pool.length;
+    const partial = pool.some((x) => x.q === "p");
+    const parts = {
+      days: new Set(pool.map((x) => x.date)).size,
+      kind: regionalOnly ? "regional" : "national",
+      peak,
+      noNational: regionalOnly || void 0,
+      excluded: excluded > 0 ? excluded : void 0,
+      floored: pool.some((x) => x.q === "f") || void 0,
+      clipped: week.touchesEdge || void 0
+    };
+    return {
+      v: round2(value2),
+      band: [round2(low), round2(high)],
+      q: regionalOnly ? "r" : parts.floored ? "f" : partial ? "p" : "w",
+      note: derived ? { k: "obs", date: derived.date, metric: key } : { k: "week", p: parts },
+      detach: regionalOnly
+    };
+  });
+}
+function aggregateBlockades() {
+  return WEEKS.map((week) => {
+    const cells = [];
+    for (const date of week.dates) {
+      const obs = FACTS[date]?.blockades;
+      if (!obs) continue;
+      cells.push({ date, obs, q: obs.q ?? "n" });
+    }
+    if (!cells.length) return NIL;
+    const national = cells.filter((c) => c.q !== "r");
+    const pool = national.length ? national : cells;
+    const regionalOnly = national.length === 0;
+    const top = pool.reduce((best, c) => {
+      const mid = (c.obs.low + c.obs.high) / 2;
+      const bestMid = (best.obs.low + best.obs.high) / 2;
+      if (c.q === "c" && best.q !== "c") return c;
+      if (best.q === "c" && c.q !== "c") return best;
+      return mid > bestMid ? c : best;
+    });
+    const wide = top.q === "x";
+    const parts = {
+      days: new Set(pool.map((c) => c.date)).size,
+      kind: regionalOnly ? "regional" : "national",
+      peak: top.date,
+      noNational: regionalOnly || void 0,
+      excluded: cells.length - pool.length || void 0,
+      floored: pool.some((c) => c.q === "f") || void 0,
+      clipped: week.touchesEdge || void 0,
+      vacation: weekTouchesHoliday(week.key) || void 0
+    };
+    return {
+      v: round2((top.obs.low + top.obs.high) / 2),
+      band: [round2(top.obs.low), round2(top.obs.high)],
+      q: regionalOnly ? "r" : wide ? "x" : top.q === "f" ? "f" : "w",
+      note: wide ? { k: "obs", date: top.date, metric: "blockades" } : { k: "week", p: parts },
+      detach: regionalOnly
+    };
+  });
+}
+var WEEKLY = {
+  turnout: aggregate("turnout", "max"),
+  strikers: aggregate("strikers", "max").map(
+    (p) => p.q === "w" ? { ...p, q: "e" } : p
+  ),
+  arrests: aggregate("arrests", "sum"),
+  forcesInjured: aggregate("forcesInjured", "sum"),
+  protesterInjured: aggregate("protesterInjured", "sum"),
+  blockades: aggregateBlockades()
+};
+
+// src/data/policing.ts
+var DEPLOYMENT = {
+  /* September deployment is an ASSUMPTION … (verbatim) */
+};
+var FORCES_STOCK = {
+  /* … */
+};
+var FORCES_STOCK_DERIVED = {
+  /* … */
+};
+var RATE = { low: 136, high: 1133 };
+var costBand = (dep) => [
+  dep.low * RATE.low / 1e6,
+  dep.high * RATE.high / 1e6
+];
+
+// src/data/projections.ts
+function projectDaily(key) {
+  return DATES.map((date) => {
+    const obs = FACTS[date]?.[key];
+    if (!obs) return NIL;
+    const q = obs.q ?? "n";
+    return {
+      v: round2((obs.low + obs.high) / 2),
+      band: [obs.low, obs.high],
+      q,
+      note: { k: "obs", date, metric: key },
+      detach: isDetached(q)
+    };
+  });
+}
+var strikers = projectDaily("strikers").map((p) => ({
+  ...p,
+  detach: false
+}));
+function projectPolicingDaily() {
+  return DATES.map((date) => {
+    const dep = DEPLOYMENT[date];
+    if (!dep) return NIL;
+    const [lo2, hi2] = costBand(dep);
+    const q = dep.q ?? "n";
+    return {
+      v: round2((lo2 + hi2) / 2),
+      band: [round2(lo2), round2(hi2)],
+      q,
+      note: { k: "policing", low: dep.low, high: dep.high, date },
+      detach: isDetached(q)
+    };
+  });
+}
+function projectPolicingCumulative() {
+  let lo2 = 0;
+  let hi2 = 0;
+  let days = 0;
+  let started = false;
+  return DATES.map((date) => {
+    const dep = DEPLOYMENT[date];
+    if (dep) {
+      const [a, b] = costBand(dep);
+      lo2 += a;
+      hi2 += b;
+      days++;
+      started = true;
+    }
+    if (!started) return NIL;
+    return {
+      v: round2((lo2 + hi2) / 2),
+      band: [round2(lo2), round2(hi2)],
+      q: "e",
+      note: { k: "cumulative", days, added: Boolean(dep) },
+      detach: false
+      // always a line; its band is shaded, not barred
+    };
+  });
+}
+function projectForcesStock() {
+  return DATES.map((date) => {
+    const pub = FORCES_STOCK[date];
+    if (pub) {
+      return {
+        v: round2((pub.low + pub.high) / 2),
+        band: [pub.low, pub.high],
+        q: "c",
+        note: { k: "obs", date, metric: "forcesInjuredStock" },
+        detach: false
+      };
+    }
+    const der = FORCES_STOCK_DERIVED[date];
+    if (der) {
+      return {
+        v: round2((der.low + der.high) / 2),
+        band: [der.low, der.high],
+        q: "e",
+        note: { k: "obs", date, metric: "forcesInjuredStock" },
+        detach: false
+      };
+    }
+    return NIL;
+  });
+}
+var DAILY = {
+  turnout: projectDaily("turnout"),
+  strikers,
+  arrests: projectDaily("arrests"),
+  forcesInjured: projectDaily("forcesInjured"),
+  forcesInjuredStock: projectForcesStock(),
+  protesterInjured: projectDaily("protesterInjured"),
+  damagesCost: projectDaily("damagesCost"),
+  blockades: projectDaily("blockades"),
+  policing: projectPolicingDaily(),
+  policingCumulative: projectPolicingCumulative()
+};
+
+// src/data/student-weeks.ts
+var STUDENT_WEEKS = WEEKS.map((week, idx) => {
+  const out = {
+    key: week.key,
+    end: week.end,
+    touchesEdge: week.touchesEdge,
+    p: null,
+    a: null,
+    f: null,
+    i: null,
+    flags: {},
+    notes: {}
+  };
+  for (const m of METRICS) {
+    const pt = WEEKLY[METRIC_OF[m]][idx];
+    if (pt.band) out[m] = pt.band;
+    if (pt.band && pt.q && pt.q !== "n") out.flags[m] = pt.q;
+    if (pt.note) out.notes[m] = pt.note;
+  }
+  return out;
+});
+
 // src/data/casualties/inputs.ts
 var CRS_OCTOBER = {
   /** Médiapart 13 Nov 2026, internal CRS file, October 2026, CRS only. */
@@ -14345,7 +14997,7 @@ var TOULOUSE = {
 var EDUCATION = { d29: 31, d30: 119, d01: 235, d05: 300 };
 
 // src/data/casualties/estimate.ts
-var round2 = Math.round;
+var round3 = Math.round;
 var n = (x) => x.toLocaleString("en-GB");
 var NOT_LIGHT = CRS_OCTOBER.declared - CRS_OCTOBER.light;
 var POST_PEAK = FORCES.movement - FORCES.stock17Oct;
@@ -14361,19 +15013,19 @@ var SERIOUS_MOVEMENT = {
   /* Rate transfer: 1,580 × (7 / 1,144) = 9.67 → 10. Assumes the 0.61 %
      severity measured at the peak held all movement. Whether it did cannot be
      checked: the ministry published a severity split once, at the peak. */
-  central: round2(FORCES.movement * SERIOUS_SHARE_17),
+  central: round3(FORCES.movement * SERIOUS_SHARE_17),
   /* Ceiling: 7 + 436 × (66 / 1,233) = 7 + 23 = 30. Applies the not-light rate
      to the injuries after the peak as though every one could have been
      serious. It is the largest number the data does not exclude, not a
      plausible one: a ceiling, not an estimate. */
-  hi: FORCES.serious17Oct + round2(POST_PEAK * NOT_LIGHT_SHARE)
+  hi: FORCES.serious17Oct + round3(POST_PEAK * NOT_LIGHT_SHARE)
 };
 var NOT_LIGHT_MOVEMENT = {
   /** 66 is the CRS October actual, a subset of the movement total. */
   lo: NOT_LIGHT,
   /** Rate transfer: 1,580 × 5.35 % = 84.6 → 85. */
-  central: round2(FORCES.movement * NOT_LIGHT_SHARE),
-  hi: round2(FORCES.movement * NOT_LIGHT_SHARE)
+  central: round3(FORCES.movement * NOT_LIGHT_SHARE),
+  hi: round3(FORCES.movement * NOT_LIGHT_SHARE)
 };
 var MIX = [
   {
@@ -14407,7 +15059,7 @@ var MIX = [
 var LIGHT_CENTRAL_SHARE = MIX[0].central / FORCES.movement;
 var RATIO = {
   lo: 5,
-  mid: round2(TOULOUSE.treated / THINES.seriousAt17Oct),
+  mid: round3(TOULOUSE.treated / THINES.seriousAt17Oct),
   hi: 30
 };
 var SENSITIVITY = [5, 10, 13, 20, 30].map(
@@ -14937,678 +15589,6 @@ var FORCE_CARRIER = {
 
 // src/data/casualties/index.ts
 assertCasualties();
-
-// src/data/data.ts
-var NIL = { v: null, band: null, q: null, note: null, detach: false };
-var START = "2026-09-15";
-var END = "2026-11-11";
-var utc = (s) => /* @__PURE__ */ new Date(`${s}T00:00:00Z`);
-var iso = (d) => d.toISOString().slice(0, 10);
-var addDays = (isoDate, n2) => {
-  const d = /* @__PURE__ */ new Date(`${isoDate}T00:00:00Z`);
-  d.setUTCDate(d.getUTCDate() + n2);
-  return d.toISOString().slice(0, 10);
-};
-var mondayOf = (isoDate) => {
-  const d = /* @__PURE__ */ new Date(`${isoDate}T00:00:00Z`);
-  d.setUTCDate(d.getUTCDate() - (d.getUTCDay() + 6) % 7);
-  return d.toISOString().slice(0, 10);
-};
-function eachDay(start, end) {
-  const out = [];
-  const stop = utc(end);
-  for (const d = utc(start); d <= stop; d.setUTCDate(d.getUTCDate() + 1))
-    out.push(iso(d));
-  return out;
-}
-var DATES = eachDay(START, END);
-var WEEKS = (() => {
-  const byKey = /* @__PURE__ */ new Map();
-  for (const d of DATES) {
-    const k = mondayOf(d);
-    const list = byKey.get(k);
-    if (list) list.push(d);
-    else byKey.set(k, [d]);
-  }
-  return [...byKey].sort(([a], [b]) => a.localeCompare(b)).map(([key, dates2]) => {
-    const end = addDays(key, 6);
-    return { key, end, dates: dates2, touchesEdge: key < START || end > END };
-  });
-})();
-var HOLIDAY_START = "2026-10-18";
-var HOLIDAY_END = "2026-11-01";
-var weekTouchesHoliday = (weekStart) => weekStart <= HOLIDAY_END && addDays(weekStart, 6) >= HOLIDAY_START;
-var FACTS = {
-  /* ── School blockades ─────────────────────────────────────────────────
-         Metric: establishments where pupils could not attend normally —
-         blocked, or closed by decision. Band = official count (floor) to
-         union count (ceiling); the union's "à l'arrêt" also counts
-         administratively closed schools, so the ceiling is an upper bound.
-  
-         "x" = a wider measure than blockades (établissements perturbés,
-         cours suspendus, établissements fermés) — the only figure published
-         that day. "r" = regional count. "f" = publisher said "more than".
-  
-         Days with no published count stay empty. During the Toussaint
-         holiday (17 Oct – 1 Nov) no lycée was in session, so the metric did
-         not exist: those days are empty and the connector is dotted.       */
-  /* ── The movement's first fortnight ─────────────────────────────────────
-         The wave began after the rentrée: teachers and parents had been on
-         strike in Mayotte since 31 August (lycée Nord d'Acoua, blocked for
-         five weeks); in mainland France the lycée Théodore-Monod at Le Rheu
-         was blocked on 7 September, the lycée Queneau at Villeneuve-d'Ascq on
-         14 September and the lycée Victor-Hugo at Caen on 15 September. The
-         window opens on 15 September at the user's request, so the 7 and 14
-         September blockades fall outside it.
-  
-         NONE of 15–27 September carries a published turnout, arrest, injury or
-         damage figure, so the week of 14–20 September is empty rather than
-         estimated. The one exception is the Paris area on 25 September. */
-  "2026-09-15": { blockades: { low: 1, high: 1 } },
-  "2026-09-19": { blockades: { low: 1, high: 1 } },
-  "2026-09-23": { blockades: { low: 10, high: 10, q: "r" } },
-  /* Fri 25 Sep — the Île-de-France centre of gravity: ~60 franciliens
-     lycées disrupted over 24–25 Sep, mainly Seine-Saint-Denis and
-     Val-de-Marne (Saint-Denis, Sarcelles, Gonesse, Stains, Saint-Ouen,
-     Rosny-sous-Bois, La Courneuve); the Créteil rectorat counted a
-     "grosse dizaine" of new blockades that day.
-     21 interpellations by noon by the Préfecture de Police, in connection
-     with the Paris-area mobilisations — PARIS ONLY, hence "r". The
-     rectorat noted gatherings, crowd movements and material damage
-     without quantifying them. */
-  "2026-09-25": {
-    arrests: { low: 21, high: 21, q: "r" }
-  },
-  /* Mon 28 Sep — the movement goes national: actions in Marseille, Lille,
-     the Rhône, the Var and the Alpes-Maritimes. Interior Ministry: 180
-     establishments perturbed, 27 of them totally blocked, 164
-     interpellations that day.
-     First serious injury of the movement: a 14-year-old hit in the face
-     by a police projectile at the lycée professionnel Château-d'Epluches,
-     Saint-Ouen-l'Aumône (Val-d'Oise); the IGPN was seized. Flagged "f":
-     one documented casualty is a minimum, not a count. */
-  "2026-09-28": {
-    arrests: { low: 164, high: 164 },
-    protesterInjured: { low: 1, high: 1, q: "f" },
-    blockades: { low: 27, high: 27 }
-  },
-  /* Tue 29 Sep — national public-service mobilisation day, which the USL
-     called students to join; it is the movement's Act I.
-     Education ministry, end of day: 416 establishments touched since the
-     morning, 338 still affected, 45 blocked; Le Monde counted actions at
-     nearly 410 establishments; the USL claimed 400 blocked out of ~3,700
-     in France. 440 interpellations, two thirds of them leading to a garde
-     à vue, "essentially for degradations and attacks on officers"
-     (Nuñez, BFM-TV).
-     Turnout: the intersyndicale demonstration drew 206,000 (ministry) /
-     300,000 (CGT) nationwide and 30,000 / 70,000 in Paris, across 170+
-     demonstrations. The students marched with it, so the figure is
-     carried here — but it counts the public-service cortèges, not a
-     student crowd, for which no national count exists. Flagged "p".
-     The Education ministry counted 31 injured students and staff that
-     day. Strike rate: 11.47% weighted (12.74% second degree, 27.39%
-     life-schools staff; 13.71% of teachers). */
-  "2026-09-29": {
-    turnout: { low: 206e3, high: 3e5, q: "p" },
-    strikers: { low: 25e4, high: 25e4, q: "e" },
-    arrests: { low: 440, high: 440 },
-    protesterInjured: { low: 31, high: 31, q: "p" },
-    blockades: { low: 45, high: 45 }
-  },
-  /* Wed 30 Sep — 356 establishments perturbed; 625 interpellations that
-     day, which with 440 on the 29th makes the two-day total 1,065.
-     83 police and gendarmes injured.
-     The Education ministry's stock since the start of the blockades
-     reaches 119 injured students and staff (85 students, 34 staff) — a
-     cumulative level, hence "c". */
-  "2026-09-30": {
-    arrests: { low: 625, high: 625 },
-    protesterInjured: { low: 119, high: 119, q: "c" }
-  },
-  /* Thu 1 Oct — Acte II. More than 900 actions and blockages; AFP's police
-         returns counted 340 actions in the morning and 169 blockades, ending
-         the day at 900 actions including 400 closures; the Union étudiante
-         claimed 640 lycées and ~30 campuses blocked, a figure the authorities
-         do not confirm. Marseille: 18 high schools totally blocked, 3
-         partially, ~40 in Bouches-du-Rhône; Aix-en-Provence ~600 students;
-         Metz 6; Brest most; Épinal 2; Perpignan 11 interpellations and one
-         student injured. No national turnout figure was published.
-  
-         FIX 5: arrests 1,949 are THAT DAY ("1 949 interpellations ce jeudi"),
-         not a stock; the only stock is 6,059 "depuis le 28 septembre" on
-         5 Oct. The day was the peak of the first week.
-  
-         FIX 7: forces injured are bracketed [83, 300] — 83 is the
-         government level at the Wednesday cut-off (it is the same 83 that
-         appears in the 318-injury total of 1 Oct) and ~300 is Nuñez's
-         Thursday figure ("quelque 300 policiers et gendarmes blessés en
-         intervention jeudi"). The band spans a cumulative level and a daily
-         flow, so it is flagged "e" and the 83 is not counted twice.
-  
-         FIX 6: 235 = 170 students + 65 education staff, cumulative at the
-         1 Oct cut-off; the previous 119–235 band was two vintages of this
-         same series. Flagged "c".
-  
-         Damage: the hall of the lycée Nelson-Mandela in Nantes was destroyed
-         by a fire (several classrooms unusable for weeks), as was the main
-         entrance and a 35-classroom block at the lycée Henri-Moissan in
-         Meaux; the façade of the lycée Lumière in Lyon was burnt; in
-         Seine-Maritime two headteachers were hurt (Petit-Quevilly, Rouen) and
-         the prefecture counted eight injured and several intrusions. The €1M
-         cell is a local estimate from the original research and is a subset
-         of the larger Île-de-France and IFRAP totals, hence "c". */
-  "2026-10-01": {
-    arrests: { low: 1949, high: 1949 },
-    forcesInjured: { low: 300, high: 305, q: "e" },
-    protesterInjured: { low: 235, high: 235, q: "c" },
-    damagesCost: { low: 1, high: 1, q: "c" },
-    blockades: { low: 222, high: 640 }
-  },
-  /* Fri 2 Oct — 1,747 interpellations that day and "more than 5,000 since
-     Monday" (the daily series gives 4,925); 735 establishments perturbed,
-     30% fewer than the day before, with urban violence near 158 of them
-     (projectiles, attacks on officers, teachers, journalists and
-     passers-by). A young police lieutenant was assaulted in Paris's 20th
-     arrondissement. Geffray: 65 education staff injured since the start
-     of the movement, 40 of them headteachers. */
-  "2026-10-02": {
-    arrests: { low: 1747, high: 1747 },
-    blockades: { low: 400, high: 400, q: "f" }
-  },
-  /* Sat 3 Oct — the ministry's stock "6,059 interpellations since
-     28 September" (5 Oct) minus 984 on Monday 5 Oct leaves 5,075 through
-     Sunday 4 Oct; the daily figures for 28 Sep–2 Oct sum to 4,925. The
-     difference, 150, is the weekend of 3–4 October. It is a two-day total
-     derived by subtraction, not a Saturday figure — flagged "e" and
-     carried on the Saturday, with the derivation in this comment. */
-  "2026-10-03": {
-    arrests: { low: 150, high: 150, q: "e" },
-    blockades: { low: 735, high: 735, q: "x" }
-  },
-  /* Mon 5 Oct — 984 interpellations and 65 forces injured that day.
-     Stocks published the same day: 6,059 interpellations since 28 Sep;
-     715 police and gendarmes injured since the start of the movement;
-     Matignon: 215 students and 85 education staff injured since the
-     start, 34 of them headteachers. */
-  "2026-10-05": {
-    arrests: { low: 984, high: 984 },
-    forcesInjured: { low: 65, high: 65 },
-    blockades: { low: 400, high: 500, q: "x" }
-  },
-  /* Tue 6 Oct — "Acte III", first national school/student day.
-     256,000 ministry / 450,000 organisers; Paris 56,000 / 100,000.
-     488 interpellations and 43 forces injured that day; 215 students
-     injured since mid-September. The €6M is the Île-de-France damage
-     increment for the 1–8 Oct run and is therefore a subset, not an
-     increment unique to 6 Oct. Flagged "c"; the anchor of the run is
-     8 Oct. */
-  "2026-10-06": {
-    turnout: { low: 256e3, high: 45e4 },
-    arrests: { low: 488, high: 488 },
-    forcesInjured: { low: 43, high: 43 },
-    damagesCost: { low: 6, high: 6, q: "c" },
-    blockades: { low: 891, high: 1800, q: "x" }
-  },
-  /* Thu 8 Oct — Act IV. Education ministry: 0.82% weighted all staff
-     (teachers 0.99%, 1st degree 0.10%, 2nd degree 1.67%, vie scolaire
-     2.33%, other staff 0.45%), excluding Toulouse, Nantes and Corse.
-     The lowest rate of the whole sequence, in the middle of the
-     mobilisation — the school action had drained by 8 Oct. */
-  "2026-10-08": {
-    turnout: { low: 71500, high: 13e4 },
-    /* Education ministry 0.82% weighted; no function-wide rate that day,
-       so the education rate stands in for the civil service on the same
-       2,500,000-agent base: 20,500. Flagged "e" — the proxy runs low. */
-    strikers: { low: 20500, high: 20500, q: "e" },
-    damagesCost: { low: 6, high: 6, q: "e" },
-    blockades: { low: 224, high: 224, q: "x" }
-  },
-  /* Sat 10 Oct — national cumulative damage stock: "déjà estimées à
-     30 millions d'euros en France" since mid-September (CNEWS's own
-     compilation of regional figures — no ministry published a national
-     tally). Pannekoucke's parallel AURA estimate of €25–30M is NOT
-     included, so this is neither a floor nor additive with the regional
-     figures. Flagged "c": a stock, never summed with flows. */
-  "2026-10-10": {
-    damagesCost: { low: 30, high: 30, q: "c" },
-    blockades: { low: 40, high: 40, q: "f" }
-  },
-  /* Mon 12 Oct — three regional prefecture figures, all regional:
-       · Rhône: 27 établissements touchés (19 lycées, 6 universités,
-         2 collèges), 13 interpellations.
-       · Bas-Rhin/Strasbourg: 13 interpellations (préfecture), incl. 4
-         for preparing incendiary devices, 3 for mortar fire.
-     Two prefectures published 13 independently, so 13 is a FLOOR for the
-     day, not the day's regional total. NOT Paris — the old note was
-     wrong.
-     FIX 13 (third pass): the €1.5M moved here from 13 Oct. It is
-     NORMANDY (Hervé Morin, Conseil régional de Normandie, 12 Oct) and
-     it is a CUMULATIVE stock since mid-September — "atteint d'ores et
-     déjà 30 millions d'euros, dont 1,5 million en Normandie" — so the
-     flag moves from "e" to "c". Île-de-France's own revised total the
-     same day was €8.5M (110+ lycées, ~120 portails/sas out of service).
-     Both regional stocks are components of the €30M national stock and
-     must never be added to it.
-     The 3 injured are an Île-de-France figure and count education and
-     local-authority staff, not protesters: 1 proviseur, 1 parent
-     d'élève, 1 agent de la Région. */
-  "2026-10-12": {
-    arrests: { low: 13, high: 13, q: "r" },
-    damagesCost: { low: 1.5, high: 1.5, q: "c" },
-    blockades: { low: 19, high: 19, q: "r" }
-  },
-  /* Tue 13 Oct — "Acte V": 214 high schools closed (94.2% open), 161,500
-     ministry / 480,000 youth intersyndicate (41,500 Paris), 40 police
-     and gendarmes injured.
-     FIX 13 (third pass): the €1.5M cell is GONE from this date — it
-     was Normandy, and it was published on 12 October. */
-  "2026-10-13": {
-    turnout: { low: 161500, high: 48e4 },
-    /* 3.71% weighted education rate as proxy: 3.71% x 2,500,000 = 92,750. */
-    strikers: { low: 92750, high: 92750, q: "e" },
-    forcesInjured: { low: 40, high: 40 },
-    blockades: { low: 214, high: 214, q: "x" }
-  },
-  /* Sat 17 Oct — the peak of the episode.
-         110 → 430 → 441 actions; ~60,000 officers deployed.
-         550,000 ministry / 800,000 organisers; Paris 110,000.
-         Arrests 2,397 initial → 2,628 consolidated (2,513 gardes à vue;
-         108 in Paris). Forces injured 997 initial → 1,144 consolidated,
-         7 serious. One civilian death: Christophe M., 59, Paris.
-  
-         FIX 2 (first pass): no official protester-injury count exists. The
-         low bound is Laurent Thines's serious-injury register (54 seriously
-         injured — 5 eye, 5 cranio-facial, 2 amputations, 42 other — plus the
-         1 death, i.e. 55); the high bound is a reasoned ceiling from
-         Toulouse's 130+ street-medics treatments (~13 treated per serious
-         case) against 54 serious cases nationally. Wikipedia's "400+ civilians"
-         is an uncited infobox line and sits below the partial nine-city sum
-         (~204 across Bordeaux, Clermont-Ferrand, Dijon, Metz, Nancy, Rouen,
-         Strasbourg, Avignon, Toulouse), so it is a floor, not a ceiling.
-         Flagged "e": derived, drawn hollow.
-  
-         Damages: IFRAP conditional estimate for the 17–18 Oct weekend,
-         €244M low / €463M central / €866M high for MATERIAL damage; the
-         €294M–€1.1bn variant includes lost turnover and is a different measure.
-         IFRAP excludes marginal order-maintenance and curfew costs. */
-  "2026-10-17": {
-    turnout: { low: 55e4, high: 8e5 },
-    arrests: { low: 2397, high: 2628 },
-    forcesInjured: { low: 207, high: 207, q: "e" },
-    /* 54 x 13 = 702 — see E8/E10 in casualties/estimate.ts. */
-    protesterInjured: { low: 55, high: 702, q: "e" },
-    damagesCost: { low: 244, high: 866, q: "e" }
-  },
-  /* Sun 18 Oct — Paris curfew only, 108 interpellations.
-     FIX 3 (first pass): the €1.8–5M damage figure is a subset of the
-     17–18 Oct IFRAP weekend total, so it is flagged "c" and cannot be
-     added to it.
-     FIX 11 (third pass): "r", not "p" — the figure is Paris-only, and
-     "p" now means partial coverage. */
-  "2026-10-18": {
-    arrests: { low: 108, high: 108, q: "r" },
-    damagesCost: { low: 1.8, high: 5, q: "c" }
-  },
-  /* Tue 20 Oct — regional only: 13 interpellations overnight in Guadeloupe
-     (Basse-Terre, Saint-François, Goyave, Vieux-Habitants, Gosier). */
-  "2026-10-20": { arrests: { low: 13, high: 13, q: "r" } },
-  /* Sat 24 Oct — 289 actions, 70,000 officers, Centaure AFVs, water cannons,
-     14 aerial cameras in Paris. 410,000 ministry / 800,000+ CGT;
-     Paris 110,000 (préfecture) / 250,000 (CGT).
-     Arrests 1,314 initial → 1,435 final (142 Paris, 126 GàV).
-     Forces injured 53 at 7:30 a.m. — the ministry's own communiqué calls
-     this "provisoire" — then 267 on consolidation (Nuñez, 26 Oct), with
-     150 civilians injured, 3 seriously. 75 fire interventions.
-     La Réunion: ~80 Saint-Denis, 300 Saint-Pierre. Mayotte: Tsingoni.
-     FIX 4 (first pass): the national damage cell below replaces the earlier
-     local derivation. CCI France's 27 Oct tally — 2,488 shops hit after the
-     17th plus 50 after the 24th, 1,161 heavily damaged, 643 still shut —
-     puts the cost of the degradations at over €1bn on the IFRAP estimate,
-     for the 17–24 Oct period as a whole. That is a SUPERSET of the 17 Oct
-     cell, so it is flagged "c" and is never added to it. */
-  "2026-10-24": {
-    turnout: { low: 41e4, high: 8e5 },
-    arrests: { low: 1314, high: 1435 },
-    forcesInjured: { low: 267, high: 267 },
-    protesterInjured: { low: 150, high: 150 },
-    damagesCost: { low: 1e3, high: 1e3, q: "c" }
-  },
-  /* Sat 31 Oct — 291 actions → 227 consolidated.
-     320,000 ministry / ~500,000 youth organisations; Paris 70,000.
-     Arrests 565 at 21h → 779 cumulative (incl. 214 on the Halloween night).
-     Forces injured 116 by 21h + 43 that night = 159.
-     515 fires handled; 36 shops degraded, 3 pillaged — no cost figure. */
-  "2026-10-31": {
-    turnout: { low: 32e4, high: 5e5 },
-    arrests: { low: 565, high: 779 },
-    forcesInjured: { low: 116, high: 159 },
-    damagesCost: { low: 0.4, high: 3.3, q: "e" }
-  },
-  "2026-11-02": { blockades: { low: 41, high: 41 } },
-  "2026-11-03": { blockades: { low: 48, high: 500 } },
-  /* Thu 5 Nov — national strike day, 193 actions.
-     575,000 ministry (definitive) / 1.6M CGT; Paris 65,000 / 350,000.
-     Arrests 448 at 18h → 642 updated. Forces injured 53 at 18h → 112.
-     86 fire interventions. Marseille: 17 schools blocked, ~40 interpellations,
-     13 police wounded.
-     Protester injuries = 18, a FLOOR: the 18 who instructed lawyers to sue
-     Nuñez. Not a ministry count. */
-  "2026-11-05": {
-    turnout: { low: 575e3, high: 16e5 },
-    strikers: { low: 247250, high: 275e3, q: "e" },
-    arrests: { low: 448, high: 642 },
-    forcesInjured: { low: 53, high: 112 },
-    protesterInjured: { low: 18, high: 18, q: "f" },
-    blockades: { low: 81, high: 1e3 }
-  },
-  /* Sat 7 Nov — 141 actions; ~70,000 officers, 25 blindés, 15 water-cannon
-     trucks; ~40,000 preventive checks; Caen campus dispersed by 50 CRS.
-     146,000 ministry / 250,000 youth intersyndicate; Paris 46,000 / 75,000.
-     Arrests 232 at 18h → 360+ at 19h.
-     Security-force casualties acknowledged but no number published. */
-  "2026-11-07": {
-    turnout: { low: 146e3, high: 25e4 },
-    arrests: { low: 350, high: 360 }
-  },
-  /* Mon 9 Nov — regional only: Bègles 4, Lyon 8, Strasbourg 5 = 17.
-     ~50 Île-de-France schools disrupted with mortar fire; Rennes 2
-     evacuated; Brest rally; Guadeloupe: lycée blocked at Baie-Mahault. */
-  "2026-11-09": { arrests: { low: 17, high: 17, q: "r" } },
-  "2026-11-10": {
-    /* Education strike + student march. 1.55% weighted rate as proxy:
-       1.55% x 2,500,000 = 38,750. */
-    strikers: { low: 38750, high: 38750, q: "e" }
-  }
-};
-var DEPLOYMENT = {
-  /* September deployment is an ASSUMPTION, on the same basis as the early
-     October cells: no official headcount exists for these days. The band
-     spans the marginal cost of one CRS company-day to the Sainte-Soline
-     all-in benchmark. It is an order-of-magnitude placeholder for the
-     policing-cost series, not a measurement. */
-  "2026-09-28": { low: 5e3, high: 2e4, q: "e" },
-  "2026-09-29": { low: 5e3, high: 2e4, q: "e" },
-  "2026-09-30": { low: 5e3, high: 2e4, q: "e" },
-  "2026-10-01": { low: 5e3, high: 2e4, q: "e" },
-  "2026-10-02": { low: 1e4, high: 3e4, q: "e" },
-  "2026-10-05": { low: 1e4, high: 3e4, q: "e" },
-  "2026-10-06": { low: 5e3, high: 2e4, q: "e" },
-  "2026-10-08": { low: 5e3, high: 2e4, q: "e" },
-  /* 12 Oct: three cities at once — Île-de-France (~80 lycées perturbed),
-     Lyon/Rhône (27 établissements), Strasbourg. No headcount published:
-     the only concrete data is "une dizaine de camions de gendarmes
-     mobiles" at the Strasbourg schools and several CRS/police vans at
-     porte Dorée, Paris. */
-  "2026-10-12": { low: 2e3, high: 8e3, q: "e" },
-  "2026-10-13": { low: 5e3, high: 2e4, q: "e" },
-  "2026-10-17": {
-    low: 6e4,
-    high: 6e4
-  },
-  "2026-10-18": { low: 2e3, high: 8e3, q: "e" },
-  "2026-10-24": { low: 7e4, high: 7e4 },
-  "2026-10-31": { low: 7e4, high: 7e4 },
-  "2026-11-05": { low: 7e4, high: 7e4 },
-  "2026-11-07": { low: 7e4, high: 7e4 }
-};
-var FORCES_STOCK = {
-  "2026-09-30": { low: 83, high: 83 },
-  "2026-10-05": { low: 715, high: 715 },
-  "2026-10-08": { low: 761, high: 761 },
-  "2026-10-14": { low: 937, high: 937 },
-  "2026-10-17": { low: 997, high: 1144 },
-  "2026-11-05": { low: 1580, high: 1580 }
-};
-var FORCES_STOCK_DERIVED = {
-  "2026-10-01": { low: 383, high: 388 },
-  // 83 (30 Sep) + 300–305 (1 Oct)
-  "2026-10-24": { low: 1411, high: 1411 },
-  // 1,144 (17 Oct) + 267
-  "2026-10-31": { low: 1527, high: 1570 }
-  // + 116–159
-};
-var RATE = { low: 136, high: 1133 };
-var round22 = (v) => Number.isInteger(v) ? v : Math.round(v * 100) / 100;
-var costBand = (dep) => [
-  dep.low * RATE.low / 1e6,
-  dep.high * RATE.high / 1e6
-];
-function projectDaily(key) {
-  return DATES.map((date) => {
-    const obs = FACTS[date]?.[key];
-    if (!obs) return NIL;
-    const q = obs.q ?? "n";
-    return {
-      v: round22((obs.low + obs.high) / 2),
-      band: [obs.low, obs.high],
-      q,
-      note: { k: "obs", date, metric: key },
-      detach: isDetached(q)
-    };
-  });
-}
-var strikers = projectDaily("strikers").map((p) => ({
-  ...p,
-  detach: false
-}));
-function projectPolicingDaily() {
-  return DATES.map((date) => {
-    const dep = DEPLOYMENT[date];
-    if (!dep) return NIL;
-    const [lo2, hi2] = costBand(dep);
-    const q = dep.q ?? "n";
-    return {
-      v: round22((lo2 + hi2) / 2),
-      band: [round22(lo2), round22(hi2)],
-      q,
-      note: { k: "policing", low: dep.low, high: dep.high, date },
-      detach: isDetached(q)
-    };
-  });
-}
-function projectPolicingCumulative() {
-  let lo2 = 0;
-  let hi2 = 0;
-  let days = 0;
-  let started = false;
-  return DATES.map((date) => {
-    const dep = DEPLOYMENT[date];
-    if (dep) {
-      const [a, b] = costBand(dep);
-      lo2 += a;
-      hi2 += b;
-      days++;
-      started = true;
-    }
-    if (!started) return NIL;
-    return {
-      v: round22((lo2 + hi2) / 2),
-      band: [round22(lo2), round22(hi2)],
-      q: "e",
-      note: { k: "cumulative", days, added: Boolean(dep) },
-      detach: false
-      // always a line; its band is shaded, not barred
-    };
-  });
-}
-function projectForcesStock() {
-  return DATES.map((date) => {
-    const pub = FORCES_STOCK[date];
-    if (pub) {
-      return {
-        v: round22((pub.low + pub.high) / 2),
-        band: [pub.low, pub.high],
-        q: "c",
-        note: { k: "obs", date, metric: "forcesInjuredStock" },
-        detach: false
-      };
-    }
-    const der = FORCES_STOCK_DERIVED[date];
-    if (der) {
-      return {
-        v: round22((der.low + der.high) / 2),
-        band: [der.low, der.high],
-        q: "e",
-        note: { k: "obs", date, metric: "forcesInjuredStock" },
-        detach: false
-      };
-    }
-    return NIL;
-  });
-}
-function aggregate(key, op) {
-  return WEEKS.map((week) => {
-    const cells = [];
-    for (const d of week.dates) {
-      const obs = FACTS[d]?.[key];
-      if (!obs) continue;
-      cells.push({ date: d, obs, q: obs.q ?? "n" });
-    }
-    if (!cells.length) return NIL;
-    const last = cells[cells.length - 1];
-    const othersHigh = Math.max(
-      ...cells.filter((c) => c !== last).map((c) => c.obs.high),
-      Number.NEGATIVE_INFINITY
-    );
-    if (last.q === "c" && last.obs.high >= othersHigh) {
-      return {
-        v: round22((last.obs.low + last.obs.high) / 2),
-        band: [round22(last.obs.low), round22(last.obs.high)],
-        q: "c",
-        note: { k: "obs", date: last.date, metric: key },
-        detach: isDetached("c")
-      };
-    }
-    const regional = cells.filter((c) => c.q === "r");
-    const subsets = cells.filter((c) => c.q === "c");
-    const flows = cells.filter((c) => c.q !== "c" && c.q !== "r");
-    const regionalOnly = flows.length === 0 && regional.length > 0;
-    let pool = regionalOnly ? regional : flows;
-    if (!pool.length) {
-      if (!subsets.length) return NIL;
-      pool = [
-        subsets.reduce((best, x) => x.obs.high > best.obs.high ? x : best)
-      ];
-    }
-    let low;
-    let high;
-    let value2;
-    let peak;
-    if (op === "sum") {
-      low = pool.reduce((a, x) => a + x.obs.low, 0);
-      high = pool.reduce((a, x) => a + x.obs.high, 0);
-      value2 = (low + high) / 2;
-    } else {
-      low = Math.max(...pool.map((x) => x.obs.low));
-      high = Math.max(...pool.map((x) => x.obs.high));
-      const top = pool.reduce(
-        (best, x) => (x.obs.low + x.obs.high) / 2 > (best.obs.low + best.obs.high) / 2 ? x : best
-      );
-      value2 = (top.obs.low + top.obs.high) / 2;
-      peak = top.date;
-    }
-    const derived = pool.filter((x) => x.q === "e").sort((a, b) => b.obs.high - a.obs.high)[0];
-    const excluded = cells.length - pool.length;
-    const partial = pool.some((x) => x.q === "p");
-    const parts = {
-      days: new Set(pool.map((x) => x.date)).size,
-      kind: regionalOnly ? "regional" : "national",
-      peak,
-      noNational: regionalOnly || void 0,
-      excluded: excluded > 0 ? excluded : void 0,
-      floored: pool.some((x) => x.q === "f") || void 0,
-      clipped: week.touchesEdge || void 0
-    };
-    return {
-      v: round22(value2),
-      band: [round22(low), round22(high)],
-      q: regionalOnly ? "r" : parts.floored ? "f" : partial ? "p" : "w",
-      note: derived ? { k: "obs", date: derived.date, metric: key } : { k: "week", p: parts },
-      detach: regionalOnly
-    };
-  });
-}
-function aggregateBlockades() {
-  return WEEKS.map((week) => {
-    const cells = [];
-    for (const date of week.dates) {
-      const obs = FACTS[date]?.blockades;
-      if (!obs) continue;
-      cells.push({ date, obs, q: obs.q ?? "n" });
-    }
-    if (!cells.length) return NIL;
-    const national = cells.filter((c) => c.q !== "r");
-    const pool = national.length ? national : cells;
-    const regionalOnly = national.length === 0;
-    const top = pool.reduce((best, c) => {
-      const mid = (c.obs.low + c.obs.high) / 2;
-      const bestMid = (best.obs.low + best.obs.high) / 2;
-      if (c.q === "c" && best.q !== "c") return c;
-      if (best.q === "c" && c.q !== "c") return best;
-      return mid > bestMid ? c : best;
-    });
-    const wide = top.q === "x";
-    const parts = {
-      days: new Set(pool.map((c) => c.date)).size,
-      kind: regionalOnly ? "regional" : "national",
-      peak: top.date,
-      noNational: regionalOnly || void 0,
-      excluded: cells.length - pool.length || void 0,
-      floored: pool.some((c) => c.q === "f") || void 0,
-      clipped: week.touchesEdge || void 0,
-      vacation: weekTouchesHoliday(week.key) || void 0
-    };
-    return {
-      v: round22((top.obs.low + top.obs.high) / 2),
-      band: [round22(top.obs.low), round22(top.obs.high)],
-      q: regionalOnly ? "r" : wide ? "x" : top.q === "f" ? "f" : "w",
-      note: wide ? { k: "obs", date: top.date, metric: "blockades" } : { k: "week", p: parts },
-      detach: regionalOnly
-    };
-  });
-}
-var DAILY = {
-  turnout: projectDaily("turnout"),
-  strikers,
-  arrests: projectDaily("arrests"),
-  forcesInjured: projectDaily("forcesInjured"),
-  forcesInjuredStock: projectForcesStock(),
-  protesterInjured: projectDaily("protesterInjured"),
-  damagesCost: projectDaily("damagesCost"),
-  blockades: projectDaily("blockades"),
-  policing: projectPolicingDaily(),
-  policingCumulative: projectPolicingCumulative()
-};
-var WEEKLY = {
-  turnout: aggregate("turnout", "max"),
-  strikers: aggregate("strikers", "max").map(
-    (p) => p.q === "w" ? { ...p, q: "e" } : p
-  ),
-  arrests: aggregate("arrests", "sum"),
-  forcesInjured: aggregate("forcesInjured", "sum"),
-  protesterInjured: aggregate("protesterInjured", "sum"),
-  blockades: aggregateBlockades()
-};
-var STUDENT_WEEKS = WEEKS.map((week, idx) => {
-  const out = {
-    key: week.key,
-    end: week.end,
-    touchesEdge: week.touchesEdge,
-    p: null,
-    a: null,
-    f: null,
-    i: null,
-    flags: {},
-    notes: {}
-  };
-  for (const m of METRICS) {
-    const pt = WEEKLY[METRIC_OF[m]][idx];
-    if (pt.band) out[m] = pt.band;
-    if (pt.band && pt.q && pt.q !== "n") out.flags[m] = pt.q;
-    if (pt.note) out.notes[m] = pt.note;
-  }
-  return out;
-});
 
 // src/sections/context/context.ts
 var L = (o) => String(getLocale()).slice(0, 2) === "fr" ? o.fr : o.en;

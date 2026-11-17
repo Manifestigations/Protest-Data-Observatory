@@ -2,8 +2,9 @@
 
 Operational map for coding agents. Read this file, then
 `src/model/index.ts` → `src/data/sources/types.ts` → `src/site/routes.ts`.
-Do not read all of `src/data/data.ts` (1168 lines) unless the task is about a
-2026 figure; grep it.
+Do not read all of `src/data/facts.ts` (~470 lines of commented cells) unless the
+task is about a 2026 figure; grep it. `src/data/data.ts` is the barrel + the
+verification record.
 
 ## Ground truth
 
@@ -71,7 +72,7 @@ npm run format                    # Prettier — also sorts imports
 
 ## Task recipes
 
-**Change a 2026 figure** — grep `src/data/data.ts` for the ISO date; edit the
+**Change a 2026 figure** — grep `src/data/facts.ts` for the ISO date; edit the
 `p|a|f|i` band; add/keep `flag`; add a `noteRef` if the cell needs explaining;
 add a `Source` in `src/data/sources/`; `node scripts/build.ts`; `npm run
 typecheck`; stage `docs/` artifacts.
