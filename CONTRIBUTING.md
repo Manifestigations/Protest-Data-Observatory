@@ -186,6 +186,16 @@ Conventions:
 - Keep the bundle working without JavaScript for content that is in the HTML
   shells, and keep canvas descriptions in sync when a chart changes.
 
+Comments:
+
+- File header. Every module opens with a `/** */` block: what it is, what it may import, what it must not touch. One file, one job.
+- `/** */` for anything exported or non-obvious; `//` for a single line inside a function; `/* */` when a comment runs to more than one line. Never `// +`, never numbered `/* 3. …` lists.
+- Banners are `/* ── Title ───────── */` inside a file, `/* ====== path — purpose ====== */` only for the file header. No `-----`.
+- No change-log comments. "was 0.18", "now dims through `fade()`" belongs in the commit message. Keep the reason, drop the history.
+- A comment states a fact about the code next to it, including limits: a number in prose must match the literal below it, and every arithmetic comment (1,233 − 1,167 = 66) is checkable by hand.
+- Prose is a claim, not a wish. If the code does not do it, the comment is a bug report — file it, don't word it away.
+- Wrap at 80 columns, no trailing whitespace, `colors.ts` not `colours.ts`.
+
 ---
 
 ## 4. Pull request checklist

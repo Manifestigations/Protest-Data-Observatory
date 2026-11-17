@@ -38,7 +38,11 @@ export const THINES = {
   sources: ["lemonde-blessures-0511"],
 } as const;
 
-/* Interior Ministry, 26 Oct: 150 civilians injured, 3 seriously. One day. */
+/* Interior Ministry release dated 26 Oct: 150 civilians injured, 3 seriously,
+   one day only. The identifier says 24 Oct — either the name or the release
+   date is wrong, and no source id is recorded (sources is empty), so the
+   choice is unresolved. */
+
 export const CIVILIANS_24OCT = {
   injured: 150,
   serious: 3,

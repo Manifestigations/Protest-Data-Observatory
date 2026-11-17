@@ -69,17 +69,6 @@ npm run check:casualties         # internal consistency check on the casualty da
 `127.0.0.1:3000` (`PORT` / `HOST` env vars, `Cache-Control: no-store`). If you
 prefer two terminals: `npm run dev:server` plus a build in watch mode.
 
-> Note: `npm run build` in `package.json` points `build:js` at
-> `src/entry/main.tsx`, but the entry point is `src/entry/main.ts`. If that
-> script errors on a missing file, use `node scripts/build.ts` (the real
-> builder, which also emits sourcemaps and handles CSS) or call esbuild
-> directly:
->
-> ```bash
-> npx esbuild src/entry/main.ts --bundle --format=esm --target=es2022 \
->   --outfile=docs/bundle.js --sourcemap
-> ```
-
 No framework, no test runner, no bundler config beyond the two esbuild
 configs in `scripts/build.ts`. Runtime dependency for charts: `chart.js`
 (canvas). UI is plain DOM helpers in `src/core/dom.ts`.

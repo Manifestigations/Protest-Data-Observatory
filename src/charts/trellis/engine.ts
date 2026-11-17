@@ -23,7 +23,7 @@ import { hollow } from "../../core/colors.ts";
 
 export interface Pt {
   x: number;
-  y: number; // midpoint of the published range — this is what gets plotted
+  y: number; // plotted value: midpoint of the published range, never a bound
   low: number;
   high: number;
   flag: Flag;
@@ -42,7 +42,12 @@ export interface PanelDataset extends ChartDataset<"line", Pt[]> {
 export const datasetsOf = (chart: Chart<"line">): PanelDataset[] =>
   chart.data.datasets as PanelDataset[];
 
-/** Tooltip title: "16 – 22 Jan · 19 Jan", "Act 1 · 17 Nov 2018", "W3 · 12–18 Oct". */
+/**
+ * Row label, used as the tooltip title and the data-table index: the week
+ * span, prefixed by the action number when the week has one ("Act 1"), then
+ * suffixed by that action's name when the episode names one. students26 uses
+ * the partial-week wording instead.
+ */
 function rowTitle(ep: Episode, r: Row): string {
   const m = t();
   if (ep.id === "students26") {
@@ -91,8 +96,9 @@ export function seriesData(ep: Episode, key: Metric): Pt[] | null {
   }
 
   const flagOf = (r: Row): Flag => r.flag?.[key] ?? "n";
-  /* The index baseline skips detached cells — an actions-total must not become
-     the denominator for every other week. */
+  /* The baseline skips cumulative cells ("c") only — an actions-total must
+     not become the denominator for every other week. Other detached flags
+     (r/p/e) are legitimate baselines. */
   const baseRow = rows.find((r) => flagOf(r) !== "c") ?? rows[0];
   const base = midOf(baseRow[key]!);
 
@@ -142,6 +148,9 @@ export function buildDataset(
     pointHitRadius: 12,
     tension: 0,
     spanGaps: true,
+    /* TODO(draw): with spanGaps set, a pair-level segment test cannot see the
+       connector that is actually stroked; canvas-registry.ts's docstring
+       points at spanSegment() for this case. Kept as found. */
     segment: gapSegment(1, [5, 4]),
     __item: key,
     __ep: epIndex,

@@ -29,7 +29,7 @@ export type PanelHover = (
 
 export type TrellisKind = "episode" | "item";
 
-/* ----- scales */
+/* ── Scales ────────────────────────────────────────────────────────────────── */
 
 export function xScale(maxW: number) {
   const step = maxW <= 8 ? 1 : maxW <= 12 ? 2 : maxW <= 24 ? 4 : 8;
@@ -97,7 +97,7 @@ export function yScale(min: number, max: number, showLabels: boolean) {
   };
 }
 
-/* ----- tooltip */
+/* ── Tooltip ───────────────────────────────────────────────────────────────── */
 
 /** Share of a figure against the four reference points, in one sentence. */
 function shareLine(p: Pt, dataset: PanelDataset): string | null {
@@ -189,8 +189,13 @@ export function tooltipSpec(kind: TrellisKind) {
   };
 }
 
-/* ----- figure, options, table */
+/* ── Figure, options, table ────────────────────────────────────────────────── */
 
+/**
+ * Observation count per metric for one episode, as one localised string
+ * ("p 12 · a 9 · f 8 · i 9"). Counts weeks where the metric is defined, not
+ * weeks with a value, and both separators come from copy, not literals.
+ */
 export function observations(ep: Episode): string {
   const m = t();
   const counts = METRICS.map((k) => {
@@ -217,6 +222,11 @@ export function panelFigure(strip: string, meta: string, note?: string) {
   return { figure, canvas };
 }
 
+/**
+ * Trellis column count from the host width: 4 at ≥1180px, 2 at ≥620px, else 1.
+ * Falls back to 4 when the host is not laid out yet (clientWidth 0), so a
+ * hidden host does not silently render as a single column.
+ */
 export function columns(host: HTMLElement): number {
   const w = host.clientWidth || 1200;
   return w >= 1180 ? 4 : w >= 620 ? 2 : 1;
@@ -255,9 +265,12 @@ export const panelOptions = (
 const panelPoints = (ds: unknown): (Pt | null)[] =>
   (ds as { data?: (Pt | null)[] }).data ?? [];
 
-/** Data table + keyboard navigation for one trellis panel. Shared by both
- * grids: the row index is the week number (`Pt.t`), which every panel's
- * series carries, so the same decorate works for episodes and for items. */
+/**
+ * Data table + keyboard navigation for one trellis panel. Shared by both
+ * grids: the row index is `Pt.t`, the point's display label — the same string
+ * the tooltip shows as its title (a week span, an action line, or the
+ * partial-week wording). It is not a week number, so do not parse it as one.
+ */
 export function decoratePanel(
   chart: AnyChart,
   figure: HTMLElement,

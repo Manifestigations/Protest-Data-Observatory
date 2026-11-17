@@ -9,6 +9,7 @@
     "dev": "node scripts/build.ts --watch",
     "build": "node scripts/build.ts",
     "typecheck": "tsc --noEmit",
+    "check:comments": "node scripts/check-comments.ts",
     "check:casualties": "node scripts/check-casualties.ts"
   },
   "dependencies": {

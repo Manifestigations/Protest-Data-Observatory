@@ -1,11 +1,19 @@
 /* ==========================================================================
-   src/core/colours.ts — the semantic palette.
+   src/core/colors.ts — the semantic palette.
 
    Tokens are authored once in styles/index.css as --c-* (light-dark() pairs);
    this module resolves them to concrete colours for Chart.js, which bakes
    colours at create time and cannot read CSS variables.
+
+   Two caches exist: the token cache below, and canvas-registry.ts's THEME
+   cache. Both must be dropped on a theme change — theme.ts drops both.
    ========================================================================== */
 
+/**
+ * De-emphasis factor for hover/emphasis: a series is drawn as fade(c, DIM).
+ * This is the only definition — canvas-registry re-exports it, and chart-side
+ * palette code must import it rather than restating 0.45.
+ */
 export const DIM = 0.45;
 
 export const TONES = [
@@ -193,7 +201,9 @@ export const tones: Record<Tone, ToneColours> = {
   },
 };
 
-/* One invalidation path: the two writers that can change a token. */
+/* The only two things that can change a token: the OS colour-scheme switch
+   and a data-theme write on <html>. Both clear the cache; the next getter
+   re-probes. */
 if (typeof document !== "undefined") {
   matchMedia("(prefers-color-scheme: dark)").addEventListener(
     "change",

@@ -1,3 +1,8 @@
+/* ── Static dev server for docs/ ──────────────────────────────────────────
+   Serves the committed build output on 127.0.0.1:3000 with no-store, so a
+   rebuild shows up on reload. Not used in production: GitHub Pages serves
+   docs/ directly. GET/HEAD only; every path is resolved and checked to stay
+   inside docs/ before anything is read. */
 import { createServer } from "node:http";
 import { readFile, stat } from "node:fs/promises";
 import { resolve, sep } from "node:path";
@@ -37,6 +42,7 @@ const server = createServer(async (req, res) => {
     let pathname = decodeURIComponent(url.pathname);
     if (pathname.endsWith("/")) pathname += "index.html";
 
+    // Resolve the path before comparing it: ".." must not escape docs/.
     const filePath = resolve(ROOT, pathname.replace(/^\/+/, ""));
     if (filePath !== ROOT && !filePath.startsWith(ROOT + sep)) {
       res.writeHead(403).end("Forbidden");
@@ -59,6 +65,7 @@ const server = createServer(async (req, res) => {
     res.end(req.method === "HEAD" ? undefined : body);
   } catch (err) {
     const code = (err as NodeJS.ErrnoException).code;
+    // ENOENT/ENOTDIR are ordinary 404s; anything else is a real fault.
     if (code === "ENOENT" || code === "ENOTDIR") {
       res.writeHead(404).end("Not Found");
     } else {
@@ -68,6 +75,8 @@ const server = createServer(async (req, res) => {
   }
 });
 
+/* Headers are written once per request, after the file is known to be
+   readable. */
 server.listen(PORT, HOST, () => {
   console.log(`→ http://${HOST}:${PORT}`);
 });

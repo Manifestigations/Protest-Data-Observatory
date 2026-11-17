@@ -26,21 +26,25 @@ const VARS = {
   series7: "--chart-series-7",
 } as const;
 
-/* 3. regression: 0.18 was previously corrected to 0.45 for exactly this
-      reason. 0.45 keeps the series legible while de-emphasised. */
+/** De-emphasis factor, defined once in colors.ts and re-exported here.
+ *  0.18 measured ≈1.3:1 against both modes — too faint to read. */
 export { DIM } from "./colors.ts";
 
-/* 2. titles/subtitles were still #666 (Chart.js default) → ≈3.1:1 on dark. */
+/** Chart.js defaults title and subtitle to #666 (≈3.1:1 on dark), so both
+ *  are resolved from theme tokens instead. */
 export const TEXT = {
   get title() {
     return value("ink");
-  }, // 18.9:1 dark, 16.7:1 light
+  }, // ink — 18.9:1 dark, 16.7:1 light
   get subtitle() {
     return value("label");
-  }, // 8.8:1 dark
+  }, // label — 8.8:1 dark
 };
 
-/* 8. repaint without losing user state: read the hidden set first */
+/** Drop the resolved colours, then re-render.
+ *  `hidden` is read below but never re-applied: render() rebuilds the legend
+ *  from module state, so this call restores nothing on its own. Do not treat
+ *  `hidden` as a restore hook. */
 export function repaintPreservingState(): void {
   const hidden = new Set(
     [
@@ -145,7 +149,7 @@ export const THEME = {
   get tooltipInk() {
     return value("tooltipInk");
   },
-  dim: 0.45, // was 0.18 — ≈1.3:1 against both modes (WCAG 1.4.1)
+  dim: 0.45, // keep in sync with DIM (colors.ts); a literal here will drift
 };
 
 const SERIES_KEYS = [

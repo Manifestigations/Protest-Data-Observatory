@@ -25,15 +25,6 @@ npm run check:casualties          # casualty data self-consistency
 npm run dev:server                # serve docs/ only
 ```
 
-`npm run build` / `npm run build:js` target `src/entry/main.tsx`, which does not
-exist (entry is `src/entry/main.ts`). Prefer `node scripts/build.ts`. Manual
-equivalent:
-
-```bash
-npx esbuild src/entry/main.ts --bundle --format=esm --target=es2022 --outfile=docs/bundle.js --sourcemap
-npx esbuild src/styles/index.css --bundle --outfile=docs/styles.css --sourcemap
-```
-
 ## Invariants — do not violate
 
 1. **After any change under `src/`, rebuild and stage `docs/bundle.js`,

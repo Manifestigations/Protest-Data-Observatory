@@ -14203,7 +14203,7 @@ var THEME = {
     return value("tooltipInk");
   },
   dim: 0.45
-  // was 0.18 — ≈1.3:1 against both modes (WCAG 1.4.1)
+  // keep in sync with DIM (colors.ts); a literal here will drift
 };
 var SERIES_KEYS = [
   "series1",
@@ -17496,6 +17496,9 @@ function buildDataset(ep, epIndex, key, color2, maxX) {
     pointHitRadius: 12,
     tension: 0,
     spanGaps: true,
+    /* TODO(draw): with spanGaps set, a pair-level segment test cannot see the
+       connector that is actually stroked; canvas-registry.ts's docstring
+       points at spanSegment() for this case. Kept as found. */
     segment: gapSegment(1, [5, 4]),
     __item: key,
     __ep: epIndex,

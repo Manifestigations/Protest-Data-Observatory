@@ -1,6 +1,7 @@
-/* Boot: locale, chrome, then whatever this page actually hosts. Every mount
-   is guarded, so one bundle serves all eight pages. `data-page` on <html>
-   selects the page table entry; an unknown value falls back to the landing. */
+/* Boot: locale, chrome, then whatever this page actually hosts. Every mount is
+   guarded, so one bundle serves every page in PAGES (site/routes.ts).
+   `data-page` on <html> selects the page table entry; an unknown value falls
+   back to the landing page. */
 
 import { mountCharts } from "../charts/mount.ts";
 import { mountCrossEpisode } from "../charts/trellis/index.ts";
@@ -103,6 +104,11 @@ function mountPage(page: PageSpec): void {
 }
 
 const page2 = currentPage();
+/**
+ * Full repaint in dependency order: destroy charts, chrome, sources, page
+ * shell (header, crumbs, cards), guarded section mounts, then disclosure
+ * last. Safe to call repeatedly — each mount replaces its own children.
+ */
 export function render(): void {
   destroyAll();
   const page =
@@ -136,11 +142,11 @@ export function render(): void {
     }
   }
 
-  // + Sections are enhanced last: the <header> nodes that chrome.ts and
-  // + mountPage() create must exist before they move into <summary>, and the
-  // + canvases must exist before a reveal can need resizing.
-  // + Idempotent: already-wrapped sections are skipped, the old toolbar is
-  // + replaced so labels follow the locale.
+  /* Sections are enhanced last: the <header> nodes that chrome.ts and
+     mountPage() create must exist before they move into <summary>, and the
+     canvases must exist before a reveal can need resizing. Idempotent:
+     already-wrapped sections are skipped and the old toolbar is replaced, so
+     its labels follow the locale. */
   initDisclosure({
     onReveal: (card) => {
       // Chart.js is responsive and observes the canvas parent; one frame after

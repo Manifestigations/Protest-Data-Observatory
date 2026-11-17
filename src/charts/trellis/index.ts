@@ -37,16 +37,18 @@ import {
   yScale,
 } from "./panel.ts";
 
-/* ----- emphasis (shared by whichever grids this page hosts) */
+/* ── Emphasis (shared by whichever grids this page hosts) ──────────────────── */
 
 const episodePanels: Chart<"line">[] = [];
 const itemPanels: { chart: Chart<"line">; item: Metric }[] = [];
 let activeItem: Metric | null = null;
 let activeEvent: number | null = null;
 
-/** One recolour path for both emphasis modes. Hollow points are decided from the
- *  point's own flag at draw time, so nothing has to be kept in sync. */
-/* `restyle` now dims through fade(): tokens are rgb(), not hex. */
+/**
+ * One recolour path for both emphasis modes. Dimming goes through fade()
+ * because tokens are rgb(), not hex. Hollow points are decided from the
+ * point's own flag at draw time, so nothing has to be kept in sync.
+ */
 function restyle(d: PanelDataset, on: boolean, bold = false): void {
   const c = on ? d.__color : fade(d.__color, DIM);
   d.borderColor = c;
@@ -95,7 +97,7 @@ function emphasiseEvent(index: number | null): void {
   );
 }
 
-/* ----- hosts: one grid per page */
+/* ── Hosts: one grid per page ──────────────────────────────────────────────── */
 
 interface EpisodeHosts {
   episodeHost: HTMLElement;
@@ -142,7 +144,7 @@ function resolveHosts<T extends Record<string, string>>(
   return null;
 }
 
-/* ----- section C: one panel per movement */
+/* ── Section C: one panel per movement ─────────────────────────────────────── */
 
 export function mountEpisodeTrellis(): void {
   const hosts = resolveHosts(EPISODE_HOSTS);
@@ -220,7 +222,7 @@ export function mountEpisodeTrellis(): void {
   });
 }
 
-/* 3. section D — same, with the ordinal ramp resolved once */
+/* ── Section D: one panel per series, one line per movement ────────────────── */
 export function mountItemTrellis(): void {
   const hosts = resolveHosts(ITEM_HOSTS);
   if (!hosts) return;
@@ -309,7 +311,7 @@ export function mountItemTrellis(): void {
   );
 }
 
-/* ----- entry point kept for main.ts */
+/* ── Entry point kept for main.ts ──────────────────────────────────────────── */
 
 /** Mounts whichever grids this page hosts. Titles and notes are locale-bound, so
  *  the derivation cache is dropped once per render, before either grid rebuilds.

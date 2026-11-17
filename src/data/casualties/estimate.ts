@@ -27,7 +27,7 @@ import {
 const round = Math.round;
 const n = (x: number) => x.toLocaleString("en-GB");
 
-/* ----- primitives ----- */
+/* ── Primitives ────────────────────────────────────────────────────────────── */
 
 /** 1,233 − 1,167 = 66 */
 export const NOT_LIGHT = CRS_OCTOBER.declared - CRS_OCTOBER.light;
@@ -47,7 +47,7 @@ export const OCTOBER_ALL_FORCES = {
   hi: FORCES.stock31Oct.hi - FORCES.stock30Sep,
 } as const;
 
-/* ----- E3, E4: the movement-wide decomposition ----- */
+/* ── E3, E4: movement-wide decomposition ───────────────────────────────────── */
 
 export const SERIOUS_MOVEMENT = {
   /** Published: 7 serious at the 17 Oct consolidation. */
@@ -66,7 +66,7 @@ export const NOT_LIGHT_MOVEMENT = {
   hi: round(FORCES.movement * NOT_LIGHT_SHARE),
 } as const;
 
-/* ----- E6: the mix of the 1,580, three mutually exclusive bands ----- */
+/* ── E6: the mix of the 1,580 — three exclusive bands ──────────────────────── */
 
 export const MIX: readonly MixBand[] = [
   {
@@ -92,9 +92,15 @@ export const MIX: readonly MixBand[] = [
 /** 1,495 ÷ 1,580 = 94.62 % — reproduces the CRS file's own 94.6 %. */
 export const LIGHT_CENTRAL_SHARE = MIX[0].central / FORCES.movement;
 
-/* ----- E8, E10: the treated-per-serious sensitivity ----- */
+/* ── E8, E10: treated-per-serious sensitivity ──────────────────────────────── */
 
-/** r = people treated per serious case. 13 is Toulouse's 130+ against 54. */
+/**
+ * r = people treated per serious case. `mid` is Toulouse treated ÷ Thines
+ * serious cases at 17 Oct — two different sources, not a single ratio, and
+ * not the 13 this comment used to name (13 is one of SENSITIVITY's probes).
+ * `mid` is computed at module load inside a [lo, hi] band that nothing checks
+ * it against.
+ */
 export const RATIO = {
   lo: 5,
   mid: round(TOULOUSE.treated / THINES.seriousAt17Oct),
@@ -109,7 +115,7 @@ export const SENSITIVITY: readonly SensitivityRow[] = [5, 10, 13, 20, 30].map(
   }),
 );
 
-/* ----- the estimators ----- */
+/* ── The estimators ────────────────────────────────────────────────────────── */
 
 export const ESTIMATES: readonly Estimate[] = [
   {
@@ -250,6 +256,10 @@ export const ESTIMATES: readonly Estimate[] = [
   },
 ];
 
-/** (a) as a share, (b) as counts, plus the single-day civilian proxy. */
+/**
+ * Single-day civilian proxy: serious ÷ injured in the Interior Ministry's
+ * release, 3 / 150 = 2.0 %. One day, no register, no denominator beyond the
+ * injured count — compare with E8's register share, which has neither.
+ */
 export const CIVILIAN_PROXY_SHARE =
-  CIVILIANS_24OCT.serious / CIVILIANS_24OCT.injured; // 2.0 %
+  CIVILIANS_24OCT.serious / CIVILIANS_24OCT.injured; // 3 / 150 = 2.0 %

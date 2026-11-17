@@ -8,10 +8,14 @@ export type Metric = (typeof METRICS)[number];
  *  "x" = a wider measure than the metric's definition (perturbés, closed). */
 export type Flag = "n" | "r" | "p" | "f" | "e" | "c" | "w" | "x";
 
-/** A single figure, or a published range. */
+/** A single figure, or a published range. A range is kept as a range: never
+ *  collapsed to a midpoint or averaged with another publisher in this layer. */
 export type Band = number | [number, number];
 
-// MetricKey only. NOT METRICS/METRIC_OF — sections C/D/E stay four-measure.
+// A superset of the four short metrics. METRICS/METRIC_OF stay four-measure
+// because the trellis grids and the data table are built on them; add a key
+// here when a page needs a measure those four do not cover.
+
 export type MetricKey =
   | "turnout"
   | "strikers"
@@ -20,8 +24,8 @@ export type MetricKey =
   | "forcesInjuredStock"
   | "protesterInjured"
   | "damagesCost"
-  | "policingCost"    
-  | "heliCost"     
+  | "policingCost"
+  | "heliCost"
   | "blockades";
 
 /** Short code used by sections B/C → long key used by the dashboards. */
@@ -63,7 +67,7 @@ export interface WeekNoteParts {
 export type NoteRef =
   | { k: "obs"; date: string; metric: MetricKey }
   | { k: "policing"; low: number; high: number; date: string }
-  | { k: "heli"; hoursLow: number; hoursHigh: number; date: string } 
+  | { k: "heli"; hoursLow: number; hoursHigh: number; date: string }
   | { k: "cumulative"; days: number; added: boolean }
   | { k: "week"; p: WeekNoteParts };
 
@@ -76,6 +80,11 @@ export type EpisodeId =
   | "bt"
   | "students26";
 
+/**
+ * One week of one episode. `w` is the row index and must run sequentially from
+ * 0; `from`/`to` are ISO dates that bracket it. A missing metric means "no
+ * published figure" — never zero.
+ */
 export interface Row {
   w: number;
   from: string;

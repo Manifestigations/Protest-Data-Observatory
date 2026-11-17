@@ -90,7 +90,13 @@ export const hatchOf = (id: SeriesId): string | undefined => {
   return c.hatch;
 };
 
-/** A reporting break starts at 8 days. */
+/**
+ * Connector budget for daily charts, passed as `connectors.slots`: this many
+ * empty daily slots are bridged, so a reporting break starts one point later,
+ * at 8 days. Weekly charts use WEEKLY_GAP (one empty week) instead. Chart.js
+ * itself never connects (`spanGaps: false`); the connectors plugin draws
+ * every bridge, which is what makes solid/dashed/dotted a single decision.
+ */
 const DAILY_GAP = 7;
 /** One empty week. */
 const WEEKLY_GAP = 1;
