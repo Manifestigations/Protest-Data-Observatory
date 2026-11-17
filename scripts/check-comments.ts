@@ -47,7 +47,13 @@ function commentLines(src: string): Array<{ n: number; text: string }> {
   return out;
 }
 
-const RULES: ReadonlyArray<{ re: RegExp; level: Level; msg: string }> = [
+/** `raw` rules see the untrimmed line (trailing whitespace is the point). */
+const RULES: ReadonlyArray<{
+  re: RegExp;
+  level: Level;
+  msg: string;
+  raw?: boolean;
+}> = [
   {
     re: /^\/\*+\s*\d+\.\s/,
     level: "error",
@@ -64,11 +70,21 @@ const RULES: ReadonlyArray<{ re: RegExp; level: Level; msg: string }> = [
     msg: "banner: use `/* ── Title ─── */`, not dashes",
   },
   {
-    re: /\bcolours?\b/,
-    level: "warn",
-    msg: "file is colors.ts; `colour` survives only in CSS tokens",
+    re: /colours\.ts\b/,
+    level: "error",
+    msg: "the module is colors.ts — check the path being cited",
   },
-  { re: /\s+$/, level: "error", msg: "trailing whitespace in a comment" },
+  {
+    re: /\/\*\s*={3,}/,
+    level: "error",
+    msg: "banner: use the horizontal-rule form, not equals signs",
+  },
+  {
+    re: /\s+$/,
+    level: "error",
+    msg: "trailing whitespace in a comment",
+    raw: true,
+  },
 ];
 
 const findings: Finding[] = [];
@@ -92,10 +108,7 @@ for (const file of walk(SRC)) {
 
   for (const { n, text } of commentLines(src)) {
     for (const r of RULES) {
-      if (
-        r.re.test(text.trim()) ||
-        (r.re.source === "\\s+$" && r.re.test(text))
-      )
+      if (r.re.test(r.raw ? text : text.trim()))
         findings.push({ file: rel, line: n, level: r.level, msg: r.msg });
     }
     if (text.length > MAX_WIDTH) {

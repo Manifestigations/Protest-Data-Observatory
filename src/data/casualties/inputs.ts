@@ -1,6 +1,7 @@
-/* Every published input the severity work rests on, with the source id it came
- * from. Nothing here is derived: estimate.ts derives, checks.ts asserts the
- * derivations against these constants. */
+/* ── src/data/casualties/inputs.ts — published inputs ────────────────────────
+   Every published figure the severity work rests on, with the source id it
+   came from. Nothing here is derived: estimate.ts derives, checks.ts
+   asserts those derivations against these constants. */
 
 export const CRS_OCTOBER = {
   /** Médiapart 13 Nov 2026, internal CRS file, October 2026, CRS only. */
@@ -29,8 +30,9 @@ export const FORCES = {
   sources: ["bfmtv-bilan-17oct"],
 } as const;
 
-/* Thines's register: serious cases only, built from press, militant blogs and
- * IGPN referrals. No denominator, and the lists are not independent. */
+/* Thines's register: serious injuries and deaths, built from press, militant
+   blogs and IGPN referrals. No denominator, and the lists are not independent
+   — a case reported in the press can also arrive through an IGPN referral. */
 export const THINES = {
   seriousTo5Nov: 78,
   deathsTo5Nov: 1,
@@ -42,7 +44,6 @@ export const THINES = {
    one day only. The identifier says 24 Oct — either the name or the release
    date is wrong, and no source id is recorded (sources is empty), so the
    choice is unresolved. */
-
 export const CIVILIANS_24OCT = {
   injured: 150,
   serious: 3,
@@ -50,7 +51,7 @@ export const CIVILIANS_24OCT = {
 } as const;
 
 /* Toulouse street medics, 17 Oct: 130+ treated. The only treated-per-serious
- * anchor in the dataset. */
+   anchor in the dataset, and the numerator of RATIO.mid in estimate.ts. */
 export const TOULOUSE = {
   treated: 130,
   date: "2026-10-17",

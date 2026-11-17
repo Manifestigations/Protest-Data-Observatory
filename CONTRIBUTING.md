@@ -190,9 +190,15 @@ Conventions:
 
 Comments:
 
-- File header. Every module opens with a `/** */` block: what it is, what it may import, what it must not touch. One file, one job.
-- `/** */` for anything exported or non-obvious; `//` for a single line inside a function; `/* */` when a comment runs to more than one line. Never `// +`, never numbered `/* 3. …` lists.
-- Banners are `/* ── Title ───────── */` inside a file, `/* ====== path — purpose ====== */` only for the file header. No `-----`.
+- File header. Every module opens with `/* ── path — purpose ────────`: the
+  banner line names the module, the paragraph under it says what it is, what it
+  may import, what it must not touch. One file, one job. The paragraph sits
+  inside the same comment; the banner line does not close it.
+- `/** */` for anything exported or non-obvious; `//` for a single line inside
+  a function; `/* */` for a multi-line note, three-space continuation, no
+  leading asterisks. Never `// +`, never numbered `/* 3. …` lists.
+- Banners are `/* ── Title ───────── */`, padded to 79 columns with `─`. No
+  `-----`, no `====`, no `----- title -----`.
 - No change-log comments. "was 0.18", "now dims through `fade()`" belongs in the commit message. Keep the reason, drop the history.
 - A comment states a fact about the code next to it, including limits: a number in prose must match the literal below it, and every arithmetic comment (1,233 − 1,167 = 66) is checkable by hand.
 - Prose is a claim, not a wish. If the code does not do it, the comment is a bug report — file it, don't word it away.

@@ -1,13 +1,12 @@
-/* ==========================================================================
-   src/core/colors.ts — the semantic palette.
-
-   Tokens are authored once in styles/index.css as --c-* (light-dark() pairs);
-   this module resolves them to concrete colours for Chart.js, which bakes
-   colours at create time and cannot read CSS variables.
+/* ── src/core/colors.ts — the semantic palette ───────────────────────────────
+   Two token families live in styles/index.css: --c-* for semantic tones
+   (police, protest, cost …) and --chart-* for chart furniture and the
+   ordinal ramp. Both are resolved here, because Chart.js bakes colours at
+   create time and cannot read CSS variables.
 
    Two caches exist: the token cache below, and canvas-registry.ts's THEME
-   cache. Both must be dropped on a theme change — theme.ts drops both.
-   ========================================================================== */
+   cache. Both must be dropped on a theme change — theme.ts drops both, and
+   the listeners at the foot of this file drop this one directly. */
 
 /**
  * De-emphasis factor for hover/emphasis: a series is drawn as fade(c, DIM).

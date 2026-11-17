@@ -1,8 +1,8 @@
-/* ==========================================================================
-   src/charts/trellis/palette.ts — full replacement.
-   The four series colours become tone references, the ramp becomes tokens,
-   and DIM is re-exported so legend.ts keeps importing it from here.
-   ========================================================================== */
+/* ── src/charts/trellis/palette.ts — trellis series styles ───────────────────
+   Maps the four short metrics onto semantic tones, and re-exports DIM so
+   the legend has one import for emphasis constants. Every colour is
+   resolved per mount, because Chart.js bakes colours into a dataset at
+   create time. */
 
 import { DIM, hollow, ramp, tones, type Tone } from "../../core/colors.ts";
 import { METRICS, METRIC_OF, type Metric } from "../../model/index.ts";
@@ -37,8 +37,9 @@ export const movementRamp = (): string[] => ramp();
 
 /**
  * Low-alpha twin of a resolved colour. Tokens come back as `rgb(r g b)` or
- * `rgb(r, g, b)`, so the old hex-only helper in canvas-registry is not enough
- * here; hex is kept as a fallback so a stray literal dims instead of vanishing.
+ * `rgb(r, g, b)`, which alpha() in canvas-registry cannot parse — it accepts
+ * #rrggbb only. Hex is kept as a fallback so a stray literal dims instead of
+ * vanishing.
  */
 const RGB = /^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)/;
 

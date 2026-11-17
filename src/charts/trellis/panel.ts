@@ -1,6 +1,7 @@
 /* ── Trellis panel furniture ─────────────────────────────────────────────────
    Scales, the figure/canvas factory, the options factory and the per-panel
-   a11y table. Shared by section C, C′ and E; none of it holds state. */
+   a11y table. Shared by section C (one panel per episode) and section C′
+   (one panel per metric); none of it holds state. */
 
 import {
   Chart,

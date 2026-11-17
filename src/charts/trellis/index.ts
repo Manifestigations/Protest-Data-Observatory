@@ -141,7 +141,7 @@ export function mountEpisodeTrellis(): void {
   if (!hosts) return;
   const { episodeHost, itemLegend } = hosts;
 
-  const styles = seriesStyles(); // ← token lookup happens here, per mount
+  const styles = seriesStyles(); // per mount: resolved tokens, not literals
 
   episodePanels.length = 0;
   activeItem = null;
@@ -219,7 +219,7 @@ export function mountItemTrellis(): void {
   const { itemHost, eventLegend } = hosts;
 
   const styles = seriesStyles();
-  const steps = movementRamp(); // ← --chart-series-1..7, theme-aware, per mount
+  const steps = movementRamp(); // --chart-series-1..7, theme-aware, per mount
 
   itemPanels.length = 0;
   activeEvent = null;

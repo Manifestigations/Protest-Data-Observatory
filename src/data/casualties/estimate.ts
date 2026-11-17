@@ -1,13 +1,13 @@
-/* The estimators. Each one derives from inputs.ts and carries its own
- * arithmetic, its edge types and its assumptions, so the renderer can print the
- * derivation rather than the answer alone.
- *
- * Capture–recapture is deliberately absent: the lists (Thines, education
- * ministry, street medics) are not independent — the register is itself built
- * from press and IGPN referrals — and exactly one overlap case is identifiable.
- * The mix is therefore solved by constraint: nesting, subset relations and one
- * donor rate.
- */
+/* ── src/data/casualties/estimate.ts — the estimators ────────────────────────
+   Each one derives from inputs.ts and carries its own arithmetic, its edge
+   types and its assumptions, so the renderer can print the derivation
+   rather than the answer alone.
+
+   Capture–recapture is deliberately absent: the lists (Thines, education
+   ministry, street medics) are not independent — the register is itself
+   built from press and IGPN referrals — and exactly one overlap case is
+   identifiable. The mix is therefore solved by constraint: nesting, subset
+   relations and one donor rate. */
 
 import {
   CIVILIANS_24OCT,
@@ -89,11 +89,14 @@ export const LIGHT_CENTRAL_SHARE = MIX[0].central / FORCES.movement;
 /* ── E8, E10: treated-per-serious sensitivity ──────────────────────────────── */
 
 /**
- * r = people treated per serious case. `mid` is Toulouse treated ÷ Thines
- * serious cases at 17 Oct — two different sources, not a single ratio, and
- * not the 13 this comment used to name (13 is one of SENSITIVITY's probes).
- * `mid` is computed at module load inside a [lo, hi] band that nothing checks
- * it against.
+ * r = people treated per serious case.
+ *
+ * `mid` mixes two sources: Toulouse treated (130) ÷ Thines serious cases at
+ * 17 Oct (54) = 2.41 → 2. That is BELOW `lo` (5), so `mid` falls outside the
+ * band it belongs to — an inconsistency in the literature input, not a
+ * rounding effect. Nothing asserts lo ≤ mid ≤ hi, and E8 reads only the
+ * bounds, so the band is what gets published. Do not cite `mid` as a central
+ * estimate until the anchor is resolved.
  */
 export const RATIO = {
   lo: 5,

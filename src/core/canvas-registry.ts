@@ -1,3 +1,14 @@
+/* ── src/core/canvas-registry.ts — colours, segments, chart registry ─────────
+   What Chart.js needs and cannot read itself: resolved theme colours, the
+   ordinal ramp, connector geometry, and a registry so render() can destroy
+   every live chart before rebuilding.
+
+   Imports entry/main.ts for scheduleRender(). That cycle (registry → main
+   → registry) is safe only because scheduleRender() is called from handlers
+   and repaint paths, never at module init.
+
+   Must not import the data layer: colours and geometry know nothing about
+   rows, metrics or episodes. */
 import type { Chart } from "chart.js";
 import { scheduleRender } from "../entry/main";
 
@@ -26,9 +37,14 @@ const VARS = {
   series7: "--chart-series-7",
 } as const;
 
-/** De-emphasis factor, defined once in colors.ts and re-exported here.
- *  0.18 measured ≈1.3:1 against both modes — too faint to read. */
-export { DIM } from "./colors.ts";
+/**
+ * De-emphasis factor for hover/emphasis, defined once in colors.ts and
+ * re-exported so legend code keeps a single import for it. A dimmed series has
+ * to stay legible: much below 0.45 it falls to roughly 1.3:1 against either
+ * mode and reads as a missing line rather than a faded one.
+ */
+import { DIM } from "./colors.ts";
+export { DIM };
 
 /** Chart.js defaults title and subtitle to #666 (≈3.1:1 on dark), so both
  *  are resolved from theme tokens instead. */
@@ -101,7 +117,10 @@ function read(): Record<ThemeKey, string> {
 
 const value = (key: ThemeKey): string => ((cache ??= read()), cache[key]);
 
-/* 4. one ordered array for the trellis, so the ramp can never drift from CSS */
+/* Deprecated: resolved once at module load, so it does NOT follow a theme
+   switch. RAMP below resolves per access and colors.ramp() per mount; prefer
+   those. */
+
 export const SERIES: readonly string[] = [
   "series1",
   "series2",
@@ -142,7 +161,7 @@ export const THEME = {
   get tooltipInk() {
     return value("tooltipInk");
   },
-  dim: 0.45, // keep in sync with DIM (colors.ts); a literal here will drift
+  dim: DIM, // the same factor the legends and the emphasis paths use
 };
 
 const SERIES_KEYS = [

@@ -157,6 +157,15 @@ export function buildDataset(
   };
 }
 
+/**
+ * Min/max over every plotted value with `x <= maxX`, on the raw scale.
+ * `lo` only accepts positive lows, because the axis is logarithmic and cannot
+ * show zero; `hi` takes the top of each band. The axis therefore covers the
+ * widest published range, not the range of midpoints.
+ *
+ * Falls back to [1, 1e6] when the sweep finds nothing usable, which
+ * logBounds() then pads in log space.
+ */
 export function rawExtent(
   eps: readonly Episode[],
   keys: readonly Metric[],

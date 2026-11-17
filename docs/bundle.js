@@ -14199,8 +14199,8 @@ var THEME = {
   get tooltipInk() {
     return value("tooltipInk");
   },
-  dim: 0.45
-  // keep in sync with DIM (colors.ts); a literal here will drift
+  dim: DIM
+  // the same factor the legends and the emphasis paths use
 };
 var SERIES_KEYS = [
   "series1",
@@ -20047,7 +20047,7 @@ function disclaimer() {
   if (!host) return;
   host.textContent = t().disclaimer.body;
 }
-function currentPage() {
+function currentPage2() {
   const last = location.pathname.split("/").filter(Boolean).pop() ?? "index";
   const name = /\.[a-z]+$/i.test(last) ? last : `${last}.html`;
   const hits = Object.keys(PAGES).filter((k) => {
@@ -20058,7 +20058,7 @@ function currentPage() {
   const raw = document.documentElement.dataset.page ?? document.body?.dataset.page ?? "";
   return pageById(raw) ? raw : "home";
 }
-var asPage = (p) => p && pageById(p) ? p : currentPage();
+var asPage = (p) => p && pageById(p) ? p : currentPage2();
 var sec = (page, k) => PAGE_SECTIONS[lang()][`${page}:${k}`] ?? localeMeta().sections[k];
 function renderChrome(pageIn) {
   const page = asPage(pageIn);
@@ -23995,7 +23995,7 @@ function render2() {
   destroyAll();
   const page = pageById(document.documentElement.dataset.page ?? "") ?? PAGES.home;
   const id = pageKey(page);
-  renderChrome(page2);
+  renderChrome(page);
   renderSources(id);
   mountPage(page);
   fixPageLinks(page);

@@ -12,9 +12,9 @@ export type Flag = "n" | "r" | "p" | "f" | "e" | "c" | "w" | "x";
  *  collapsed to a midpoint or averaged with another publisher in this layer. */
 export type Band = number | [number, number];
 
-// A superset of the four short metrics. METRICS/METRIC_OF stay four-measure
-// because the trellis grids and the data table are built on them; add a key
-// here when a page needs a measure those four do not cover.
+/* A superset of the four short metrics. METRICS/METRIC_OF stay four-measure
+   because the trellis grids and the data table are built on them; add a key
+   here when a page needs a measure those four do not cover. */
 
 export type MetricKey =
   | "turnout"
