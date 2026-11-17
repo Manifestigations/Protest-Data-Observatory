@@ -219,7 +219,14 @@ export function rawExtent(
   return [lo, hi];
 }
 
-/** Padding in log space keeps every marker off the frame without inventing round bounds. */
+/**
+ * Pad an extent by 5 % of its log span (at least 0.06 decades) at each end.
+ *
+ * On a log axis equal distances are equal ratios, so padding has to be
+ * multiplicative: the frame grows by the same factor at both ends whatever the
+ * magnitude. Additive padding would vanish at 1,000,000 and swallow the plot
+ * at 1.
+ */
 export function logBounds(lo: number, hi: number): [number, number] {
   const l = Math.log10(Math.max(lo, 1e-6));
   const h = Math.log10(Math.max(hi, l + 0.1));
@@ -227,7 +234,13 @@ export function logBounds(lo: number, hi: number): [number, number] {
   return [10 ** (l - pad), 10 ** (h + pad)];
 }
 
-/** Decade ticks only; Chart.js would otherwise label every generated minor. */
+/**
+ * The decade ticks to label: 1, 10, 100 … inside the extent.
+ *
+ * Each decade is the same distance as the next on a log axis, so these are the
+ * only ticks whose value a reader can see without arithmetic. Chart.js would
+ * also label its generated minor steps, which across six decades is unreadable.
+ */
 export function decades(lo: number, hi: number): number[] {
   const out: number[] = [];
   const from = Math.floor(Math.log10(Math.max(lo, 1e-6)));
@@ -251,7 +264,32 @@ export interface SeriesStats {
 /** Datasets are rebuilt on every mount, so a WeakMap needs no invalidation. */
 const statsCache = new WeakMap<readonly Pt[], SeriesStats>();
 
-/** One pass per dataset, not per mousemove: the tooltip re-renders constantly. */
+/**
+ * Summary statistics for one series, computed on the plotted midpoints.
+ *
+ *   low, high  smallest and largest midpoint
+ *   median     the middle midpoint once sorted; with an even count, the mean
+ *              of the two middle ones
+ *   mean       the arithmetic average
+ *   count      how many weeks published a figure for this measure
+ *
+ * The median is the robust one: one huge week moves it barely at all, while it
+ * pulls the mean up by its full excess. That gap is the whole point of section
+ * E — a long mean-to-median distance means a few weeks dominate the series.
+ *
+ * Three things to know before quoting any of these:
+ *
+ *   · count is published figures, not a sample size. Weeks are not independent
+ *     draws from a population, so no confidence interval, standard error or
+ *     significance test can be derived from it.
+ *   · Every week counts once: a three-day partial week weighs as much as a
+ *     seven-day one.
+ *   · The values are midpoints, so each carries its band's width as
+ *     unmeasured uncertainty. Two series can share a median while one is
+ *     twice as uncertain as the other.
+ *
+ * Cached on the array identity; datasets are rebuilt per mount.
+ */
 export function statsOf(points: readonly Pt[]): SeriesStats | null {
   const cached = statsCache.get(points);
   if (cached) return cached;

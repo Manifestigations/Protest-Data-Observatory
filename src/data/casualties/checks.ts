@@ -1,7 +1,12 @@
-/* Invariants. `assertCasualties()` runs at import time, like the duplicate-id
- * check in sources/index.ts: a broken reconciliation is a build error, not a
- * runtime surprise. `scripts/check-casualties.ts` runs the same functions under
- * Node for CI. */
+/* ── src/data/casualties/checks.ts — invariants ─────────────────────────────
+   Assertions that keep the estimators honest. assertCasualties() runs at
+   import time, like the duplicate-id check in sources/index.ts: a broken
+   reconciliation is a build error, not a runtime surprise.
+   scripts/check-casualties.ts runs the same functions under Node for CI.
+
+   Most of what these catch is interval arithmetic, which fails quietly: a band
+   computed with the wrong end mixed in still looks plausible on the page. Each
+   check names the arithmetic it pins down. */
 
 import {
   LIGHT_CENTRAL_SHARE,
@@ -12,6 +17,9 @@ import {
 } from "./estimate.ts";
 import { CIVILIANS_24OCT, CRS_OCTOBER, FORCES, THINES } from "./inputs.ts";
 
+/* Equality with a tolerance: these recompute arithmetic that has already been
+   through a division or a rounding, so `===` would fail on the last bit rather
+   than on a real disagreement. */
 const close = (a: number, b: number, eps = 1e-9) => Math.abs(a - b) <= eps;
 
 export function casualtyFailures(): string[] {
@@ -23,7 +31,10 @@ export function casualtyFailures(): string[] {
     if (!cond) f.push(name);
   };
 
-  /* 1. the ministry's two reconciliations */
+  /* The ministry's two reconciliations: the weekly increments must rebuild the
+     movement total from 30 Sep, and from the 17 Oct stock plus only the weeks
+     that follow it. Two routes to one number — if they disagree, a week's
+     increment and the stock it was added to come from different editions. */
   eq(
     "83 + 854 + 207 + 267 + 116 + 53",
     FORCES.stock30Sep +
@@ -48,7 +59,9 @@ export function casualtyFailures(): string[] {
     FORCES.stock14Oct,
   );
 
-  /* 2. the CRS file's own share */
+  /* The CRS file's own share: 1,167 / 1,233 must reproduce the 94.65 % it
+     states. A published percentage and a published count are two separate
+     claims, and this is where they are held together. */
   eq(
     "1,167 / 1,233",
     Number(((CRS_OCTOBER.light / CRS_OCTOBER.declared) * 100).toFixed(2)),
@@ -56,7 +69,9 @@ export function casualtyFailures(): string[] {
   );
   eq("1,167 + 66", CRS_OCTOBER.light + NOT_LIGHT, CRS_OCTOBER.declared);
 
-  /* 3. nesting: serious ⊆ not-light, and the mix is exhaustive */
+  /* Nesting: serious is a subset of not-light, so its band must sit inside the
+     not-light band, and the three mix bands must partition the total. These are
+     exactly the constraints interval arithmetic breaks silently. */
   ok("serious lo ≥ 7", SERIOUS_MOVEMENT.lo >= FORCES.serious17Oct);
   ok("not-light lo ≥ 66", NOT_LIGHT_MOVEMENT.lo >= NOT_LIGHT);
   ok("serious hi ≤ not-light hi", SERIOUS_MOVEMENT.hi <= NOT_LIGHT_MOVEMENT.hi);
@@ -78,7 +93,9 @@ export function casualtyFailures(): string[] {
     FORCES.movement,
   );
 
-  /* 4. the edges that the brief fixes */
+  /* The edges the brief fixes: hi is a ceiling, central a rate transfer, and
+     both are recomputed here from the raw inputs rather than from the constants
+     that hold them. An estimator agreeing with itself proves nothing. */
   eq(
     "E3 hi",
     SERIOUS_MOVEMENT.hi,
@@ -112,7 +129,8 @@ export function casualtyFailures(): string[] {
     2.0,
   );
 
-  /* 5. a floor is never a total, and no band inverts */
+  /* A floor is never a total, and no band inverts: lo ≤ hi everywhere, and the
+     register's 79 is a minimum, not a count of all serious injuries. */
   ok("E7 is a floor", SERIOUS_MOVEMENT.lo >= 0);
   ok(
     "bands not inverted",

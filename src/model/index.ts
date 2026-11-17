@@ -8,8 +8,17 @@ export type Metric = (typeof METRICS)[number];
  *  "x" = a wider measure than the metric's definition (perturbés, closed). */
 export type Flag = "n" | "r" | "p" | "f" | "e" | "c" | "w" | "x";
 
-/** A single figure, or a published range. A range is kept as a range: never
- *  collapsed to a midpoint or averaged with another publisher in this layer. */
+/**
+ * A single published figure, or a published range [low, high].
+ *
+ * Storage never collapses a range: no midpoint, and never an average of two
+ * publishers. `low` is the figure its source stands behind, `high` the widest
+ * count any source supports, and both travel to the renderer so a caption can
+ * print the range a chart can only hint at.
+ *
+ * `midOf()` below does collapse, for plotting. The rule is about storage:
+ * anything that quotes a number rather than drawing one must read the band.
+ */
 export type Band = number | [number, number];
 
 /* A superset of the four short metrics. METRICS/METRIC_OF stay four-measure
@@ -42,9 +51,22 @@ const DETACHED: ReadonlySet<Flag> = new Set<Flag>(["r", "p", "e", "c"]);
 export const isDetached = (q: Flag | null | undefined): boolean =>
   q != null && q !== "n" && DETACHED.has(q);
 
+/** `[low, high]` for a scalar band, the band itself otherwise: the one place
+ *  that flattens the two shapes, so no caller has to test which it holds. */
 export const bandOf = (b: Band): [number, number] =>
   typeof b === "number" ? [b, b] : b;
 
+/**
+ * The plotting value of a band: the arithmetic middle, (low + high) / 2.
+ *
+ * This is a drawing convention, not an estimate. Nothing is known about where
+ * inside [low, high] the truth sits — a band is two published counts, not a
+ * distribution over outcomes — so the midpoint carries no probability and is
+ * not the most likely value. It exists because the line has to go somewhere.
+ *
+ * So never average midpoints to get a "typical" figure: that turns a drawing
+ * convention into an estimate nobody published.
+ */
 export const midOf = (b: Band): number => {
   const [lo, hi] = bandOf(b);
   return (lo + hi) / 2;

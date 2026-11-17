@@ -1,7 +1,8 @@
-/* Section A/B visuals. Bars never invent a denominator: what a source did not
- * publish is drawn as a hatch, what has no denominator is drawn as an empty
- * track. Exact published strings stay in the caption line and in the
- * <details> table fallback, so no precision is lost. */
+/* ── src/sections/casualties/visuals.ts — severity visuals ──────────────────
+   Section A/B. Bars never invent a denominator: what a source did not publish
+   is drawn as a hatch, and what has no denominator is drawn as an empty track.
+   Exact published strings stay in the caption line and in the <details> table
+   fallback, so no precision is lost by drawing. */
 
 import { t } from "../../copy";
 import { el } from "../../core/dom.ts";
@@ -12,7 +13,7 @@ import {
 } from "../../data/casualties/index.ts";
 import { cellView, pct, share } from "./model.ts";
 
-/* ---------- cell parsing ---------- */
+/* ── Cell parsing ───────────────────────────────────────────────────────── */
 
 const NUM = /\d[\d\s\u00a0\u202f]*(?:[.,]\d+)?/g;
 const clean = (s: string) =>
@@ -25,7 +26,7 @@ const nums = (c: Cell): number[] => {
 const lo = (c: Cell) => nums(c)[0] ?? null;
 const hi = (c: Cell) => nums(c).at(-1) ?? null;
 
-/* ---------- copy access ---------- */
+/* ── Copy access ────────────────────────────────────────────────────────── */
 
 /* Local lookups over CasualtyCopy. That interface has no legend / showCases
  * fields, so: the legend reuses the column heads, and the case-note label
@@ -61,7 +62,7 @@ function casCopy(): Labels {
   };
 }
 
-/* ---------- 1. severity strips ---------- */
+/* ── Severity strips ────────────────────────────────────────────────────── */
 
 interface Part {
   readonly cls: string;
@@ -72,7 +73,11 @@ interface Part {
  * a slice: on the CRS row it is a subset of the 66 unclassed cases
  * (1,167 + 66 = 1,233), so stacking it as a third segment produced 1,299 of
  * 1,233 and the browser had to drop or clip something. Whatever is unpublished
- * becomes the remainder; an over-budget row is reported, not drawn wrong. */
+ * becomes the remainder; an over-budget row is reported, not drawn wrong.
+ *
+ * Widths come from the fr grid, so a segment's share is its count over the sum
+ * of the parts — which equals the total except in the over-budget case, where
+ * it is the sum and the row warns. */
 function stackOf(row: SevRow): {
   parts: Part[];
   serious: readonly [number, number] | null;
@@ -189,7 +194,7 @@ export function severityStrips(
   return wrap;
 }
 
-/* ---------- 2. case tally (one dot = one documented case) ---------- */
+/* ── Case tally: one dot per documented case ────────────────────────────── */
 
 interface Tally {
   readonly kind: "n" | "zero" | "unknown";
@@ -284,7 +289,7 @@ export function caseTally(
   return wrap;
 }
 
-/* ---------- 3. table fallback wrapper ---------- */
+/* ── Table fallback wrapper ─────────────────────────────────────────────── */
 
 export function withTable(
   visual: HTMLElement,

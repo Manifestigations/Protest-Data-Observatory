@@ -14,7 +14,12 @@ import {
 } from "./series.ts";
 import type { View } from "./view.ts";
 
-/** 1 / 1.5 / 2 / 2.5 / 3 / 4 / 5 / 6 / 8 / 10 × 10^n — keeps bands inside the frame. */
+/**
+ * Round up to 1, 1.5, 2, 2.5, 3, 4, 5, 6, 8 or 10 × 10^n.
+ *
+ * Rounding up is what keeps a band inside the frame; rounding to the nearest
+ * would slice the top off the widest one.
+ */
 function niceCeil(v: number): number {
   if (!Number.isFinite(v) || v <= 0) return 10;
   const base = 10 ** Math.floor(Math.log10(v));
@@ -24,7 +29,13 @@ function niceCeil(v: number): number {
   return step * base;
 }
 
-/** Upper bound from the values AND bands actually present on this axis. */
+/**
+ * Upper bound from the values AND bands actually present on this axis.
+ *
+ * Bands count: an axis fitted to the point values alone clips the top of every
+ * uncertainty band, and the band is the part that has to be visible. The 8 %
+ * headroom gives a marker sitting on the maximum room to be drawn.
+ */
 function axisMax(list: readonly Series[], headroom = 1.08): number {
   let max = 0;
   for (const series of list) {
@@ -43,8 +54,15 @@ const Y_TICKS = {
   padding: 6,
 } as const;
 
-/** 1 / 10 / 100 / 1k / 2k. Eleven minor log ticks is what made the axis
- *  unreadable; Chart.js will not thin them itself once autoSkip is false. */
+/**
+ * Decade ticks, plus the axis max: 1, 10, 100 … Each decade is the same
+ * distance as the next on a log axis, so these are the only ticks a reader can
+ * convert to a value at a glance; minor ticks get no label. Chart.js will not
+ * thin them itself once autoSkip is false.
+ *
+ * Duplicates decades() in trellis/engine.ts, which does not append `max`. Two
+ * copies of one rule: change them together, or collapse them.
+ */
 function logTicks(min: number, max: number): number[] {
   const out: number[] = [];
   const from = Math.floor(Math.log10(Math.max(min, 1e-6)));
@@ -57,7 +75,11 @@ function logTicks(min: number, max: number): number[] {
   return out;
 }
 
-/** Lower bound for a log axis: the smallest positive value present. */
+/**
+ * Lower bound for a log axis: the smallest positive value present, bands
+ * included. Positive because a logarithm has no zero — a series containing 0
+ * would need a linear axis, and is left out rather than clamped.
+ */
 function axisMin(list: readonly Series[]): number {
   let min = Infinity;
   for (const series of list) {

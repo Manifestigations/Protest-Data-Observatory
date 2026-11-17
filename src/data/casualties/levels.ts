@@ -1,8 +1,11 @@
-/* Sections A and B: the severity rows.
- *
- * The 1,167 / 1,233 split is the only published light share in the dataset.
- * The movement-wide row is the decomposition computed in estimate.ts, and it is
- * the only row that is a distribution rather than a single population.
+/* ── src/data/casualties/levels.ts — severity rows ──────────────────────────
+   Sections A and B. The 1,167 / 1,233 split is the only published light share
+   in the dataset.
+
+   The movement-wide row is the decomposition from estimate.ts and the only row
+   whose cells are bands rather than counts. Its three cells partition the
+   1,580 because they are derived from one another, which is not the same as
+   being a distribution: no value inside a band is more likely than another.
  */
 
 import { NOT_LIGHT, NOT_LIGHT_MOVEMENT, SERIOUS_MOVEMENT } from "./estimate.ts";
@@ -71,8 +74,11 @@ export const SEVERITY_LEVELS: readonly SevRow[] = [
   },
 ];
 
+/* A literal, not THINES.seriousTo5Nov + THINES.deathsTo5Nov: the sum is
+   asserted in checks.ts, so an input edited without this line fails the build.
+   That check runs at import, not at compile time. */
 function THINES_FLOOR(): number {
-  return 79; // 78 serious + 1 death, register to 5 Nov — asserted in checks.ts
+  return 79; // 78 serious + 1 death, register to 5 Nov
 }
 
 export const SEVERITY_WEEKS: readonly SevRow[] = [

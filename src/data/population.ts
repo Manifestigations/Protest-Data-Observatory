@@ -1,26 +1,22 @@
-/* ================================================= population denominators
- *
- * Rules, and they are the whole file:
- *   1. Default geography is France ENTIÈRE. The ministry's national counts
- *      include overseas events, so a metropolitan base would shrink the
- *      denominator while the numerator kept them.
- *   2. A missing denominator returns null. Never a fallback to another
- *      geography or another year: 1968 has no France-entière row in this
- *      vintage, and a silent substitution is a wrong chart nobody sees.
- *   3. Population is a stock, turnout is a flow. A single day is compared
- *      with a 1 January figure. Standard — and the note says so.
- *
- * Vintage: INSEE, « Population au 1er janvier », January 2026 release.
- * The 2026 figures are provisional (frozen end-2025); INSEE revises this
- * series annually. Re-check and bump VINTAGE on each release.
- *
- * ── There is ONE population type ──────────────────────────────────────────
- * This file used to also declare a `Pop` interface whose metropolitan field
- * was spelled `metropole`. Nothing constructed it, `denominator()` read it,
- * and because esbuild does not type-check, the mismatch compiled cleanly and
- * made every 1968 share null at runtime. Deleted: `Population` is the only
- * shape, and its field is `metro`.
- */
+/* ── src/data/population.ts — population denominators ────────────────────────
+   Three rules, and they are the whole file:
+
+   1. Default geography is France ENTIÈRE. The ministry's national counts
+      include overseas events, so a metropolitan base would shrink the
+      denominator while the numerator kept them.
+   2. A missing denominator returns null. Never a fallback to another
+      geography or another year: 1968 has no France-entière row in this
+      vintage, and a silent substitution is a wrong chart nobody sees.
+   3. Population is a stock, turnout is a flow. A single day is compared
+      with a 1 January figure. Conventional — and every caption says so.
+
+   Vintage: INSEE, « Population au 1er janvier », January 2026 release.
+   The 2026 figures are provisional (frozen end-2025); INSEE revises this
+   series annually. Re-check and bump VINTAGE on each release.
+
+   One population shape exists, `Population`, and its metropolitan field
+   is `metro`. esbuild does not type-check, so a second shape with a
+   different field name would compile and yield null shares at runtime. */
 
 export const VINTAGE =
   "INSEE, « Population au 1er janvier » — édition janvier 2026";
@@ -99,7 +95,17 @@ export function denominator(pop: Population | null): number | null {
   return pop.metro > 0 ? pop.metro : null;
 }
 
-/** `v` is a head count, the return is a percentage (0.4023 = 0.40 %). */
+/**
+ * `v` is a head count, the return is a percentage (0.4023 = 0.40 %).
+ *
+ * Numerator and denominator are different kinds of quantity: `v` is a flow
+ * (people on one day) and the denominator a stock (residents on 1 January).
+ * The ratio is the conventional one, not the share of people who could have
+ * turned out that day, and no caption should read it that way.
+ *
+ * Null, never 0, when either side is missing or non-positive: a rate that
+ * cannot be computed is not a rate of zero.
+ */
 export function pctOfValue(
   v: number | null,
   pop: Population | null,

@@ -1,6 +1,7 @@
-/* ==========================================================================
-   src/charts/series.ts — DEF resolves its colours from tones, never literals.
-   ========================================================================== */
+/* ── src/charts/series.ts — the series table ─────────────────────────────────
+   DEF resolves its colours from tones, never literals. One entry per series:
+   what it plots, its tone, its axis, how it is drawn. No value is computed
+   here; the data is already in data.ts. */
 
 import type { PointStyle } from "chart.js";
 import { tones, type Tone } from "../core/colors.ts";

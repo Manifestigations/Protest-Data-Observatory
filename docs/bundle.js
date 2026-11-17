@@ -14356,11 +14356,16 @@ var OCTOBER_ALL_FORCES = {
   hi: FORCES.stock31Oct.hi - FORCES.stock30Sep
 };
 var SERIOUS_MOVEMENT = {
-  /** Published: 7 serious at the 17 Oct consolidation. */
+  /* Published: 7 serious at the 17 Oct consolidation. A count, not a rate. */
   lo: FORCES.serious17Oct,
-  /** Rate transfer: 1,580 × (7 ÷ 1,144) = 9.67 → 10. */
+  /* Rate transfer: 1,580 × (7 / 1,144) = 9.67 → 10. Assumes the 0.61 %
+     severity measured at the peak held all movement. Whether it did cannot be
+     checked: the ministry published a severity split once, at the peak. */
   central: round2(FORCES.movement * SERIOUS_SHARE_17),
-  /** Ceiling: 7 + 436 × (66 ÷ 1,233) = 7 + 23 = 30. Serious ⊆ not-light. */
+  /* Ceiling: 7 + 436 × (66 / 1,233) = 7 + 23 = 30. Applies the not-light rate
+     to the injuries after the peak as though every one could have been
+     serious. It is the largest number the data does not exclude, not a
+     plausible one: a ceiling, not an estimate. */
   hi: FORCES.serious17Oct + round2(POST_PEAK * NOT_LIGHT_SHARE)
 };
 var NOT_LIGHT_MOVEMENT = {
@@ -14505,6 +14510,10 @@ var ESTIMATES = [
     flag: "e"
   },
   {
+    /* A register count with no denominator: 79 documented cases is a floor.
+       The band is [79, 79] only because the renderer has no infinity, and
+       hiEdge "unbounded" is what says the top is unknown. These two numbers
+       are not a range and must never be printed as "79 to 79". */
     id: "E7",
     key: "protestersSeriousFloor",
     population: "protesters",

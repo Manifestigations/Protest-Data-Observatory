@@ -1,6 +1,12 @@
 /* ── Section E — mean vs median per series ───────────────────────────────────
-   One panel per measure, log y. The dumbbell carries the whole story: a long bar
-   means a few huge weeks dragged the mean away from the median. */
+   One panel per measure, log y, one column per episode. Each column carries
+   three layers: a min–max bar for the spread of published values, a dot at the
+   median for the typical week, a triangle at the peak for the largest one. A
+   column whose dot sits near the bottom of its bar is the signature of a few
+   huge weeks — where a mean would mislead and the median does not.
+
+   No mean is drawn. statsOf() computes one, but beside the median it reads as
+   an error bar, and the two differ by skew, not by uncertainty. */
 
 import {
   Chart,
@@ -27,7 +33,7 @@ import { alpha, THEME, track } from "../core/canvas-registry.ts";
 import { EPISODES } from "../data/episodes/index.ts";
 import type { Episode, Metric } from "../model/index.ts";
 
-/* ----- types */
+/* ── Types ─────────────────────────────────────────────────────────────────── */
 
 type Stat = "range" | "median" | "peak";
 
@@ -40,11 +46,18 @@ interface BandDataset extends StatDataset {
   readonly __bands: readonly (readonly [number, number])[];
 }
 
-/** One episode's figures for one measure, reduced to what the panel needs. */
+/**
+ * One episode's figures for one measure, reduced to what the panel needs.
+ *
+ * `n` is how many weeks published a figure, not a sample size. It says how
+ * much of the episode the median stands on, which is why the peak marker is
+ * dropped when n < 2: with one figure, "highest" and "middle" are the same
+ * number and the triangle would sit on the dot.
+ */
 interface Cell {
   x: number;
   t: string;
-  /** Published figures behind these statistics. */
+  /** Published figures behind these statistics. Not a sample size. */
   n: number;
   min: number;
   median: number;
@@ -59,7 +72,7 @@ interface StatPt extends Pt {
   max: number;
 }
 
-/* ----- constants */
+/* ── Constants ─────────────────────────────────────────────────────────────── */
 
 const MEDIAN_COLOR = "#334155";
 const PEAK_COLOR = "#b45309";
@@ -68,7 +81,7 @@ const RANGE_COLOR = "#64748b";
 const summaryPanels: Chart<"line">[] = [];
 let activeStat: Stat | null = null;
 
-/* ----- cells */
+/* ── Cells ─────────────────────────────────────────────────────────────────── */
 
 function cellOf(ep: Episode, i: number, key: Metric): Cell | null {
   const pts = seriesData(ep, key);
@@ -107,7 +120,7 @@ function statPt(c: Cell, which: "median" | "peak"): StatPt {
   };
 }
 
-/* ----- datasets */
+/* ── Datasets ──────────────────────────────────────────────────────────────── */
 
 function medianDataset(
   key: Metric,
@@ -225,7 +238,7 @@ const rangeBand: Plugin<"line"> = {
   },
 };
 
-/* ----- emphasis ----- */
+/* ── Emphasis ───────────────────────────────────────────────────────────── */
 
 /** `force` lets the legend re-apply a state the chart already set, so hovering a
  *  legend entry always has a visible effect. */
@@ -272,7 +285,7 @@ function setStatHidden(stat: Stat, hidden: boolean): void {
   applyStatVisibility();
 }
 
-/* ----- mount */
+/* ── Mount ─────────────────────────────────────────────────────────────────── */
 
 export function mountSummary(): void {
   const host = document.getElementById("summary");

@@ -1,17 +1,17 @@
-/* The universe layer. Every injury number the site holds is tagged with the
- * population it counts and how that population was selected.
- *
- * The rule applied here (from the brief):
- *   · injured WHILE protesting            → protesters
- *   · injured BY protesters or police
- *     while not participating              → bystanders
- *   · education-ministry counts            → educationDeclared, participation
- *                                            unknown, because the ministry's own
- *                                            wording splits them between
- *                                            accidental, caused by "troublemakers"
- *                                            and caused by police
- *   · one-day all-cause civilian counts    → mixed, participation unknown
- */
+/* ── src/data/casualties/universe.ts — populations and selection ─────────────
+   Every injury number the site holds is tagged with the population it
+   counts and how that population was selected. The tag is what makes two
+   counts comparable or not: two figures over the same people can be
+   added, two over different people cannot, and this file decides which.
+
+   The rule (from the brief):
+     · injured WHILE protesting → protesters
+     · injured BY protesters or police while not participating → bystanders
+     · education-ministry counts → educationDeclared, participation
+       unknown: the ministry's own wording splits them between accidental,
+       caused by "troublemakers" and caused by police, so no single
+       population fits
+     · one-day all-cause civilian counts → mixed, participation unknown */
 
 import {
   CIVILIANS_24OCT,
