@@ -20,6 +20,19 @@ import {
   type Row,
 } from "../../model/index.ts";
 
+/**
+ * One plotted point.
+ *
+ * `x` is the row's `w`, not the point's position in the array — seriesData()
+ * drops rows that lack the metric, so a series can be sparse in x (weeks 1, 2,
+ * 9 …) while its data indices stay adjacent. Never read an index as a week.
+ *
+ * `y` is the midpoint of the published band; `low`/`high` keep the bounds, so
+ * a consumer can print the range without going back to the rows.
+ * `base` is the first non-cumulative midpoint of the series and is carried on
+ * every point; nothing plots it.
+ * `t` is rowTitle() — the tooltip title and the data-table row label.
+ */
 export interface Pt {
   x: number;
   y: number; // plotted value: midpoint of the published range, never a bound
@@ -31,13 +44,28 @@ export interface Pt {
   t: string;
 }
 
+/**
+ * A trellis dataset plus the three fields the UI reasons about. The `__`
+ * prefix keeps them clear of Chart.js's own dataset options, and none of them
+ * is ever serialised — they exist for the lifetime of one mounted chart.
+ *
+ *   __item   metric plotted; the legend filter matches on it
+ *   __ep     index into EPISODES (not an id), so EPISODES must not be
+ *            reordered without re-checking every legend and hover handler
+ *   __color  the undimmed colour; restyle() fades from it, so it must never
+ *            be overwritten with a faded value or the alpha compounds
+ */
 export interface PanelDataset extends ChartDataset<"line", Pt[]> {
   __item: Metric;
   __ep: number;
   __color: string;
 }
 
-/** Datasets carry the trellis bookkeeping; every consumer wants the cast. */
+/**
+ * Datasets carry the trellis bookkeeping, so every consumer wants the cast.
+ * Chart.js types a dataset as ChartDataset<"line", Pt[]>, which has none of the
+ * `__*` fields; this is the single place that widening happens.
+ */
 export const datasetsOf = (chart: Chart<"line">): PanelDataset[] =>
   chart.data.datasets as PanelDataset[];
 

@@ -40,7 +40,7 @@ export interface ProtestDataset extends ChartDataset<
  * visible points, so a long dashed gap bleeds into the next short one. */
 export interface ConnectorSpec {
   readonly series: Series;
-  /** Dash a connector that skips more than this many x-slots. */
+  /** Largest spacing in x-slots that stays solid; one more is dashed. */
   readonly slots: number;
   /** Dotted instead, when the connector bridges the Toussaint holiday. */
   readonly holiday?: (a: number, b: number) => boolean;
@@ -91,14 +91,16 @@ export const hatchOf = (id: SeriesId): string | undefined => {
 };
 
 /**
- * Connector budget for daily charts, passed as `connectors.slots`: this many
- * empty daily slots are bridged, so a reporting break starts one point later,
- * at 8 days. Weekly charts use WEEKLY_GAP (one empty week) instead. Chart.js
- * itself never connects (`spanGaps: false`); the connectors plugin draws
- * every bridge, which is what makes solid/dashed/dotted a single decision.
+ * Largest connector spacing, in daily slots, still drawn solid. 7 means a
+ * point every seven days — six empty days between — stays solid, and an
+ * eight-day spacing is the first dashed one. Weekly charts use WEEKLY_GAP.
+ *
+ * Chart.js connects nothing itself (`spanGaps: false`); the connectors plugin
+ * draws every bridge from this single number, which is what makes
+ * solid/dashed a property of the connector rather than of a point pair.
  */
 const DAILY_GAP = 7;
-/** One empty week. */
+/** Weekly charts: adjacent weeks are solid, one empty week is dashed. */
 const WEEKLY_GAP = 1;
 
 /** A line plus, when the series contains any detached point, a hollow twin. */

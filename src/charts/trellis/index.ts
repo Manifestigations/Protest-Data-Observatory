@@ -111,8 +111,23 @@ const ITEM_HOSTS = {
   eventLegend: "legend-events",
 } as const;
 
-/** Absent everywhere = this page does not host the grid (no warning).
- *  Present but partial = a markup bug (warn, and mount nothing). */
+/**
+ * Look up one grid's hosts by id.
+ *
+ *   all present → the hosts
+ *   all absent  → null, silent: a paginated site legitimately lacks the grid
+ *   some absent → null, warned: markup bug, and nothing is mounted
+ *
+ * Partial must not mount. A figure with a host but no legend is unlabelled,
+ * and unlabelled data reads as data rather than as a fault — so the safer
+ * failure is to draw nothing.
+ *
+ * A grid whose ids are all misspelt is indistinguishable from an absent grid
+ * and stays silent; the two tables above are what to check when one vanishes.
+ *
+ * The mapped return type is the point: callers destructure every id or none,
+ * so no call site carries an `if (host)` guard for a host it declared.
+ */
 function resolveHosts<T extends Record<string, string>>(
   ids: T,
 ): { -readonly [K in keyof T]: HTMLElement } | null {
