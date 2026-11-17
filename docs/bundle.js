@@ -17991,6 +17991,16 @@ function emphasiseEvent(index) {
     (d) => index === null || d.__ep === index
   );
 }
+function hitDataset(chart, ev) {
+  const els = chart.getElementsAtEventForMode(
+    ev,
+    "nearest",
+    { intersect: false },
+    true
+  );
+  const hit = els.length ? nearestByY(chart, els, ev) : void 0;
+  return hit ? chart.data.datasets[hit.datasetIndex] : void 0;
+}
 var EPISODE_HOSTS = {
   episodeHost: "trellis-episodes",
   itemLegend: "legend-items"
@@ -18060,6 +18070,14 @@ function mountEpisodeTrellis() {
     );
     decoratePanel(chart, figure, text.strip);
     canvas.addEventListener("mouseleave", () => emphasiseItem(null));
+    canvas.addEventListener("mousemove", (ev) => {
+      const d = hitDataset(chart, ev);
+      emphasiseItem(d ? d.__item : null);
+      legendMark(
+        "items",
+        d ? styles.findIndex((s) => s.key === d.__item) : null
+      );
+    });
     episodePanels.push(chart);
   });
   legend(
@@ -18119,15 +18137,12 @@ function mountItemTrellis() {
     decoratePanel(chart, figure, m.items[s.key].short);
     canvas.addEventListener("mouseleave", () => emphasiseEvent(null));
     canvas.addEventListener("mousemove", (ev) => {
-      const pts = chart.getElementsAtEventForMode(
-        ev,
-        WEEK_MODE,
-        { intersect: false },
-        true
-      );
-      const hit = pts.length ? nearestByY(chart, pts, ev) : void 0;
-      const d = hit ? chart.data.datasets[hit.datasetIndex] : void 0;
+      const d = hitDataset(chart, ev);
       emphasiseEvent(d ? d.__ep : null);
+      legendMark(
+        "events",
+        d && d.__ep >= 0 && d.__ep < EPISODES.length ? d.__ep : null
+      );
     });
     itemPanels.push({ chart, item: s.key });
   });

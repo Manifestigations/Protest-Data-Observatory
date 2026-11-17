@@ -24,8 +24,13 @@ import {
   resetSeriesCache,
   type PanelDataset,
 } from "./engine.ts";
-import { nearestByY, WEEK_MODE } from "./interaction.ts";
-import { legend, toggleDatasets, wireLegendSync } from "./legend.ts";
+import { nearestByY } from "./interaction.ts";
+import {
+  legend,
+  legendMark,
+  toggleDatasets,
+  wireLegendSync,
+} from "./legend.ts";
 import { DIM, fade, movementRamp, seriesStyles } from "./palette.ts";
 import {
   decoratePanel,
@@ -95,6 +100,28 @@ function emphasiseEvent(index: number | null): void {
     itemPanels.map((p) => p.chart),
     (d) => index === null || d.__ep === index,
   );
+}
+
+/** The panel's own dataset under the pointer — a mode-independent hit test.
+ *
+ * panelOptions() names WEEK_MODE as the interaction mode, but nothing in
+ * the tree registers it, so getElementsAtEventForMode(ev, WEEK_MODE, …)
+ * resolves [] — which is why section D's old mousemove handler below
+ * never found a dataset. "nearest" is a built-in mode; nearestByY() then
+ * applies the same vertical-closeness rule the onHover callback uses. */
+function hitDataset(chart: Chart<"line">, ev: Event): PanelDataset | undefined {
+  const els = chart.getElementsAtEventForMode(
+    ev,
+    "nearest",
+    { intersect: false },
+    true,
+  );
+  const hit = els.length
+    ? nearestByY(chart, els, ev as unknown as ChartEvent)
+    : undefined;
+  return hit
+    ? (chart.data.datasets[hit.datasetIndex] as PanelDataset)
+    : undefined;
 }
 
 /* ── Hosts: one grid per page ──────────────────────────────────────────────── */
@@ -216,6 +243,16 @@ export function mountEpisodeTrellis(): void {
 
     decoratePanel(chart, figure, text.strip);
     canvas.addEventListener("mouseleave", () => emphasiseItem(null));
+    /* chart → legend (cc6db2d): same hit as the emphasis pass, marked on
+       the swatch row. The panelOptions() onHover callback stays as-is. */
+    canvas.addEventListener("mousemove", (ev) => {
+      const d = hitDataset(chart, ev);
+      emphasiseItem(d ? d.__item : null);
+      legendMark(
+        "items",
+        d ? styles.findIndex((s) => s.key === d.__item) : null,
+      );
+    });
     episodePanels.push(chart);
   });
 
@@ -288,19 +325,12 @@ export function mountItemTrellis(): void {
 
     canvas.addEventListener("mouseleave", () => emphasiseEvent(null));
     canvas.addEventListener("mousemove", (ev) => {
-      const pts = chart.getElementsAtEventForMode(
-        ev,
-        WEEK_MODE,
-        { intersect: false },
-        true,
-      );
-      const hit = pts.length
-        ? nearestByY(chart, pts, ev as unknown as ChartEvent)
-        : undefined;
-      const d = hit
-        ? (chart.data.datasets[hit.datasetIndex] as PanelDataset)
-        : undefined;
+      const d = hitDataset(chart, ev);
       emphasiseEvent(d ? d.__ep : null);
+      legendMark(
+        "events",
+        d && d.__ep >= 0 && d.__ep < EPISODES.length ? d.__ep : null,
+      );
     });
 
     itemPanels.push({ chart, item: s.key });
