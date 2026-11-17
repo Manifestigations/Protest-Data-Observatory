@@ -80,6 +80,58 @@ configs in `scripts/build.ts`, and no style config beyond
 TypeScript files) blocks pull requests until both pass; see
 [CONTRIBUTING.md — Formatting and linting](CONTRIBUTING.md#formatting-and-linting-enforced-by-ci).
 
+## Architecture
+
+```mermaid
+flowchart TD
+  subgraph DS["Dataset repo (consumed as a git submodule)"]
+    direction TB
+    M["src/model/index.ts<br/>Metric · Flag · Band · Row · Episode"]
+    D["src/data/data.ts · aggregate.ts · calendar.ts<br/>+ population, notes, helicopters"]
+    E["src/data/episodes/*.ts<br/>one file per historical movement"]
+    S["src/data/sources/*.ts<br/>source catalogue"]
+    C["src/data/casualties/"]
+  end
+
+  subgraph APP["Protest-Data-Observatory"]
+    direction TB
+    CH["src/charts/ — specs · datasets · axes · tooltip<br/>plugins (error-bars, hatch, …) · trellis/"]
+    SS["src/sections/** — one folder per page area<br/>(kpis, summary, casualties, costs, …)"]
+    CO["src/copy/{en,fr}/ — all UI copy"]
+    CT["src/core/ — DOM · lang · theme · a11y"]
+    RT["src/site/routes.ts — page table, PAGES / PageId"]
+    EN["src/entry/main.ts — boot, data-page dispatch"]
+    ST["src/styles/index.css"]
+    BL["scripts/build.ts (esbuild)"]
+  end
+
+  SH["docs/*.html shells<br/>one per page, data-page attribute"]
+  OUT["docs/bundle.js + docs/styles.css<br/>committed — never hand-edit"]
+  GP[("GitHub Pages — no CI build step")]
+  BR["Browser · ?lang=en / ?lang=fr"]
+
+  M --> D
+  M --> E
+  M --> S
+  M --> C
+  D --> CH
+  E --> CH
+  S --> CH
+  CH --> EN
+  SS --> EN
+  CO --> SS
+  CT --> EN
+  RT --> SH
+  EN --> BL
+  ST --> BL
+  RT --> BL
+  BL --> OUT
+  SH --> GP
+  OUT --> GP
+  GP --> BR
+```
+> One esbuild bundle serves all pages; `docs/` is committed build output, so every `src/` change ships with its rebuilt artifacts.
+
 ---
 
 ## Repository map
@@ -130,6 +182,51 @@ Sources (`src/data/sources/types.ts`) are `Source { id, group, label, url,
 date?, dateEnd?, what }`. `label` is the publisher and headline **verbatim and
 never translated**; `what` is bilingual. Entries are created with the `src()`
 and `both()` helpers from `src/data/sources/record.ts`.
+
+```mermaid
+erDiagram
+    EPISODE {
+        EpisodeId id PK "may68 · cpe · gj · nahel · pensions · bt · students26"
+        string start "ISO date"
+        string end "ISO date"
+    }
+    WEEK_ROW {
+        int w PK "row index, sequential from 0"
+        string from "ISO, start of week"
+        string to "ISO, end of week"
+        int act "optional"
+        boolean partial "optional"
+        Band p "turnout — number or [low, high]"
+        Band a "arrests"
+        Band f "forces injured"
+        Band i "protesters injured"
+        Flag flag "per-metric, optional"
+        NoteRef noteRef "per-metric, optional"
+    }
+    SOURCE_GROUP {
+        GroupId id PK "official · press · cost · gj · …"
+        Bi title
+        Bi blurb
+    }
+    SOURCE {
+        string id PK
+        GroupId group FK
+        string label "verbatim publisher + headline — never translated"
+        string url
+        string date "ISO, optional"
+        string dateEnd "ISO, optional"
+        Bi what "what this page takes from the source"
+    }
+    MENTION {
+        string name
+        Bi note
+    }
+
+    EPISODE ||--o{ WEEK_ROW : "weeks: Row[]"
+    SOURCE_GROUP ||--o{ SOURCE : "contains"
+```
+> A missing metric on a Row means 'no published figure' — never zero. Flags `r`,
+> `p`, `e`, `c` are detached by definition (`isDetached()`) and drawn hollow, never joined to the national line.
 
 ---
 
