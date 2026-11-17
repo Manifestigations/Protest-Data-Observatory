@@ -94,7 +94,7 @@ function wrap(host: HTMLElement, level: 1 | 2): HTMLDetailsElement | null {
   const card = document.createElement("details");
   card.className = level === 2 ? "sec-card sec-card--sub" : "sec-card";
 
-  const id = head.id || `sec-${Math.random().toString(36).slice(2, 8)}`;
+  const id = head.id || `sec-${crypto.randomUUID()}`;
   card.dataset.sec = id;
 
   const summary = document.createElement("summary");

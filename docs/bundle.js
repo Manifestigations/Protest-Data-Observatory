@@ -13898,12 +13898,11 @@ function readout(chart, i) {
   });
   return [label, ...parts].join(". ");
 }
-var seq = 0;
 function keyboardChart(chart, opts) {
   const canvas = chart.canvas;
   const n2 = chart.data.labels?.length ?? 0;
   if (!n2) return;
-  const hintId = canvas.id ? `kbd-${canvas.id}` : `kbd-chart-${++seq}`;
+  const hintId = canvas.id ? `kbd-${canvas.id}` : `kbd-chart-${crypto.randomUUID()}`;
   if (!document.getElementById(hintId)) {
     const hint = document.createElement("p");
     hint.id = hintId;
@@ -16958,7 +16957,7 @@ function view(weekly) {
 var shell = (v, subtitle, title, extra) => ({
   responsive: true,
   maintainAspectRatio: false,
-  resizeDelay: 0,
+  resizeDelay: 100,
   devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
   interaction: { mode: "index", intersect: false },
   layout: { padding: { top: 4, right: 16, bottom: 0, left: 4 } },
@@ -17892,10 +17891,6 @@ function panelFigure(strip2, meta, note2) {
   figure.append(caption, box);
   return { figure, canvas };
 }
-function columns(host) {
-  const w = host.clientWidth || 1200;
-  return w >= 1180 ? 4 : w >= 620 ? 2 : 1;
-}
 var panelOptions = (kind, x, y, onHover) => {
   const interaction = { mode: WEEK_MODE, intersect: false };
   return {
@@ -17942,6 +17937,18 @@ function decoratePanel(chart, figure, title) {
       return `${week}. ${rows.join(". ")}`;
     }
   });
+}
+var _colWatch = /* @__PURE__ */ new WeakSet();
+function watchColumnCount(host, remount) {
+  if (typeof ResizeObserver === "undefined" || _colWatch.has(host)) return;
+  _colWatch.add(host);
+  let n2 = resolvedColumns(host);
+  new ResizeObserver(() => {
+    const c = resolvedColumns(host);
+    if (c === n2) return;
+    n2 = c;
+    remount();
+  }).observe(host);
 }
 
 // src/charts/trellis/index.ts
@@ -18008,6 +18015,9 @@ function resolveHosts(ids) {
     );
   return null;
 }
+function resolvedColumns(host) {
+  return getComputedStyle(host).gridTemplateColumns.split(" ").filter(Boolean).length || 1;
+}
 function mountEpisodeTrellis() {
   const hosts = resolveHosts(EPISODE_HOSTS);
   if (!hosts) return;
@@ -18020,8 +18030,7 @@ function mountEpisodeTrellis() {
   const m = t2();
   const unbounded = Number.POSITIVE_INFINITY;
   const [yMin, yMax] = logBounds(...rawExtent(EPISODES, METRICS2, unbounded));
-  const cols = columns(episodeHost);
-  episodeHost.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+  const cols = resolvedColumns(episodeHost);
   EPISODES.forEach((ep, idx) => {
     const text = m.episodes[ep.id];
     const maxW = Math.max(...ep.weeks.map((r) => r.w), 1);
@@ -18080,8 +18089,6 @@ function mountItemTrellis() {
   itemHost.replaceChildren();
   eventLegend.replaceChildren();
   const m = t2();
-  const itemCols = columns(itemHost);
-  itemHost.style.gridTemplateColumns = `repeat(${itemCols}, minmax(0, 1fr))`;
   styles.forEach((s) => {
     const [rawLo, rawHi] = rawExtent(EPISODES, [s.key], ENFORCEMENT_LAST);
     const [lo2, hi2] = logBounds(rawLo, rawHi);
@@ -18145,6 +18152,13 @@ function mountCrossEpisode() {
   resetSeriesCache();
   mountEpisodeTrellis();
   mountItemTrellis();
+}
+for (const [id, remount] of [
+  ["trellis-episodes", mountEpisodeTrellis],
+  ["trellis-items", mountItemTrellis]
+]) {
+  const host = document.getElementById(id);
+  if (host) watchColumnCount(host, remount);
 }
 
 // src/core/lang.ts
@@ -20340,7 +20354,7 @@ function wrap(host, level) {
   if (!head2) return null;
   const card3 = document.createElement("details");
   card3.className = level === 2 ? "sec-card sec-card--sub" : "sec-card";
-  const id = head2.id || `sec-${Math.random().toString(36).slice(2, 8)}`;
+  const id = head2.id || `sec-${crypto.randomUUID()}`;
   card3.dataset.sec = id;
   const summary = document.createElement("summary");
   summary.className = "sec-summary";
@@ -21151,13 +21165,14 @@ function sectionB(host) {
 var spansFor = (ep) => ep.weeks.some((w) => w.to >= START && w.from <= END) ? [] : weekSpans(ep.weeks);
 function sectionC(host) {
   const m = t2();
-  const cols = host.clientWidth >= 1180 ? 4 : host.clientWidth >= 620 ? 2 : 1;
-  host.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+  host.replaceChildren();
+  host.style.gridTemplateColumns = "repeat(auto-fit, minmax(min(100%, 17.5rem), 1fr))";
   const panels = EPISODES.map((ep) => ({ ep, rows: episodeRows2(ep) }));
   const floor = axisFloor(
     panels.flatMap((p) => p.rows.map((r) => r.p === null ? 0 : r.p * 100))
   );
-  panels.forEach(({ ep, rows }, idx) => {
+  let cols = 1;
+  const renderPanel = (ep, rows, idx) => {
     const pop = population(popKeyFor(ep.id));
     const base = denominator(pop);
     const caption = base === null ? L2(COPY.noBase) : fill(L2(COPY.base), {
@@ -21180,7 +21195,10 @@ function sectionC(host) {
       L2(COPY.colWeek)
     );
     host.append(panel);
-  });
+  };
+  renderPanel(panels[0].ep, panels[0].rows, 0);
+  cols = resolvedColumns(host);
+  panels.slice(1).forEach(({ ep, rows }, i) => renderPanel(ep, rows, i + 1));
   const head2 = el("div", "pc-trellis-head");
   head2.append(el("p", "pc-note", L2(COPY.noteC)));
   host.append(head2);
@@ -21206,12 +21224,18 @@ function mountPerCapita() {
   }
   const c = byId("pc-c");
   if (c) {
-    c.replaceChildren();
     try {
       sectionC(c);
     } catch (e) {
       console.error("[percapita C]", e);
     }
+    watchColumnCount(c, () => {
+      try {
+        sectionC(c);
+      } catch (e) {
+        console.error("[percapita C]", e);
+      }
+    });
   }
 }
 
@@ -23799,8 +23823,7 @@ function mountSummary() {
   host.replaceChildren();
   legendHost.replaceChildren();
   const m = t2();
-  const cols = columns(host);
-  host.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+  const cols = resolvedColumns(host);
   for (const [panelIndex, series] of styles.entries()) {
     const cells = [];
     EPISODES.forEach((ep, i) => {
@@ -23964,6 +23987,8 @@ function mountSummary() {
     }
   ]);
 }
+var summaryHost = document.getElementById("summary");
+if (summaryHost) watchColumnCount(summaryHost, mountSummary);
 
 // src/entry/main.ts
 function fixPageLinks(page) {

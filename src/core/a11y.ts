@@ -141,7 +141,6 @@ export function readout(chart: Chart, i: number): string {
 }
 
 /* ---- keyboard navigation (2.1.1) ---- */
-let seq = 0;
 
 export function keyboardChart(
   chart: Chart,
@@ -155,7 +154,9 @@ export function keyboardChart(
   const n = chart.data.labels?.length ?? 0;
   if (!n) return;
 
-  const hintId = canvas.id ? `kbd-${canvas.id}` : `kbd-chart-${++seq}`;
+  const hintId = canvas.id
+    ? `kbd-${canvas.id}`
+    : `kbd-chart-${crypto.randomUUID()}`;
   if (!document.getElementById(hintId)) {
     const hint = document.createElement("p");
     hint.id = hintId;

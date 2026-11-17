@@ -25,9 +25,10 @@ import {
   type PanelDataset,
   type Pt,
 } from "../charts/trellis/engine.ts";
+import { resolvedColumns } from "../charts/trellis/index.ts";
 import { legend } from "../charts/trellis/legend.ts";
 import { DIM, seriesStyles } from "../charts/trellis/palette.ts";
-import { columns, panelFigure } from "../charts/trellis/panel.ts";
+import { panelFigure, watchColumnCount } from "../charts/trellis/panel.ts";
 import { compact, fill, nf, t } from "../copy";
 import { alpha, THEME, track } from "../core/canvas-registry.ts";
 import { EPISODES } from "../data/episodes/index.ts";
@@ -300,8 +301,7 @@ export function mountSummary(): void {
   legendHost.replaceChildren();
 
   const m = t();
-  const cols = columns(host);
-  host.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+  const cols = resolvedColumns(host);
 
   for (const [panelIndex, series] of styles.entries()) {
     /* One cell per episode that published something for this measure. Every
@@ -484,3 +484,6 @@ export function mountSummary(): void {
     },
   ]);
 }
+
+const summaryHost = document.getElementById("summary");
+if (summaryHost) watchColumnCount(summaryHost, mountSummary);

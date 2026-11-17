@@ -458,9 +458,14 @@ section {
     height: 100%;
   }
 }
-.trellis {
+.trellis,
+#summary,
+.pc-trellis {
+  container-type: inline-size;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)) !important;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+}
+.trellis {
   gap: clamp(16px, 2vw, 22px) clamp(12px, 1.6vw, 16px);
   margin-bottom: 10px;
 }
@@ -490,7 +495,11 @@ section {
   width: 100%;
   height: var(--panel-h);
 }
+#trellis-episodes {
+  --panel-h: clamp(200px, 15.5cqi + 150px, 240px);
+}
 #trellis-items {
+  --panel-tall-h: clamp(212px, 16cqi + 155px, 252px);
   --panel-h: var(--panel-tall-h);
 }
 .legend-title {

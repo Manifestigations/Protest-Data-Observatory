@@ -37,6 +37,8 @@ import {
 } from "chart.js";
 import { wrapTooltipLines } from "../../charts/tooltip.ts";
 import { seriesData } from "../../charts/trellis/engine.ts";
+import { resolvedColumns } from "../../charts/trellis/index.ts";
+import { watchColumnCount } from "../../charts/trellis/panel.ts";
 import {
   a11y,
   fill,
@@ -733,18 +735,32 @@ const spansFor = (ep: Episode) =>
 /* sectionC(): one shared floor for the whole trellis. A per-panel floor made
    two points at the same height mean different shares, which is the one thing
    a trellis must not do — and it is what put 1968 at 40 % while Nahel sat at
-   21 % on a different scale. */
+   21 % on a different scale.
+
+   Column count is read from the laid-out grid (resolvedColumns), not from a
+   clientWidth threshold, so the y-axis / x-title placement can never drift
+   from the template this function itself sets. */
 function sectionC(host: HTMLElement): void {
   const m = t();
-  const cols = host.clientWidth >= 1180 ? 4 : host.clientWidth >= 620 ? 2 : 1;
-  host.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+  host.replaceChildren();
+
+  /* The auto-fit rule on .trellis/#summary is min 22rem; #pc-c uses .pc-trellis,
+     which carries no template, so the JS-set template stays — but with a
+     narrower minimum (17.5rem) that reproduces the old 1180px/620px
+     breakpoints (4 → 2 → 1 columns). */
+  host.style.gridTemplateColumns =
+    "repeat(auto-fit, minmax(min(100%, 17.5rem), 1fr))";
 
   const panels = EPISODES.map((ep) => ({ ep, rows: episodeRows(ep) }));
   const floor = axisFloor(
     panels.flatMap((p) => p.rows.map((r) => (r.p === null ? 0 : r.p * 100))),
   );
 
-  panels.forEach(({ ep, rows }, idx) => {
+  /* The template's used value is only readable once the grid has an item, so
+     the first panel doubles as the probe: build it with full axes, read the
+     resolved column count, then fix the leftover panels against it. */
+  let cols = 1;
+  const renderPanel = (ep: Episode, rows: readonly Row[], idx: number) => {
     const pop = population(popKeyFor(ep.id));
     const base = denominator(pop);
     const caption =
@@ -771,8 +787,16 @@ function sectionC(host: HTMLElement): void {
       L(COPY.colWeek),
     );
     host.append(panel);
-  });
+  };
 
+  renderPanel(panels[0].ep, panels[0].rows, 0);
+  cols = resolvedColumns(host);
+
+  panels.slice(1).forEach(({ ep, rows }, i) => renderPanel(ep, rows, i + 1));
+
+  /* Last in the DOM, spanning every column: an auto-fit row that starts on
+     its own line, rather than a child that pushes the panels out of their
+     columns when it lands mid-row. */
   const head = el("div", "pc-trellis-head");
   head.append(el("p", "pc-note", L(COPY.noteC)));
   host.append(head);
@@ -803,11 +827,21 @@ export function mountPerCapita(): void {
 
   const c = byId("pc-c");
   if (c) {
-    c.replaceChildren();
     try {
       sectionC(c);
     } catch (e) {
       console.error("[percapita C]", e);
     }
+    /* Same remount-on-reflow contract as the C/D trellis (the loop at the
+       bottom of charts/trellis/index.ts). `replaceChildren` inside sectionC
+       clears the previous children, and watchColumnCount's WeakSet skips
+       re-attaching across locale/theme re-renders. */
+    watchColumnCount(c, () => {
+      try {
+        sectionC(c);
+      } catch (e) {
+        console.error("[percapita C]", e);
+      }
+    });
   }
 }

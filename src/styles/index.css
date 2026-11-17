@@ -9,6 +9,11 @@
 
 /* ---- palette ------------------------------------------------------------ */
 :root {
+  /* baseline:css-light-dark — review 2028-01-15 · Newly available
+     (Safari 17.5, Apr 2025; 30 months later ≈ Jan 2028 — verify the exact
+     date at web.dev/baseline). The @supports-not block below is the fallback
+     for browsers predating it; when it flips to Widely available, delete the
+     fallback block and this marker, and keep `color-scheme`. */
   color-scheme: light dark; /* default: follow the OS, light when unknown */
 
   --bg: light-dark(#fff, #0f1115);
@@ -596,15 +601,15 @@ section {
 }
 
 /* ---- trellis (sections C / C′) ------------------------------------------ */
-.trellis {
+.trellis,
+#summary,
+.pc-trellis {
+  container-type: inline-size;
   display: grid;
-  /* episodes.ts writes repeat(N, minmax(0,1fr)) inline from a clientWidth read
-     taken once at mount; auto-fit re-decides on every resize, so the inline
-     declaration has to lose. Drop the !important with that TS line. */
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(min(100%, 22rem), 1fr)
-  ) !important;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+}
+
+.trellis {
   gap: clamp(16px, 2vw, 22px) clamp(12px, 1.6vw, 16px);
   margin-bottom: 10px;
 }
@@ -640,8 +645,17 @@ section {
   height: var(--panel-h);
 }
 
+/* Panel heights: the :root tokens (lines 136-137) are viewport-based, so
+   they tracked the screen, not the card. Redefine on the host in cqi — the
+   unit resolves where it's consumed (.panel-canvas), against its nearest
+   size container (the host). 14vw ≈ 15.5cqi (host ≈ 85–95% of viewport);
+   the clamp band is narrow, so the exact coefficient is cosmetic. */
+#trellis-episodes {
+  --panel-h: clamp(200px, 15.5cqi + 150px, 240px);
+}
 /* taller plots in C′, expressed as a token override instead of a 2nd rule */
 #trellis-items {
+  --panel-tall-h: clamp(212px, 16cqi + 155px, 252px);
   --panel-h: var(--panel-tall-h);
 }
 

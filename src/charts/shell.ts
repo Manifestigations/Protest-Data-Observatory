@@ -20,7 +20,7 @@ const shell = (
 ) => ({
   responsive: true,
   maintainAspectRatio: false,
-  resizeDelay: 0,
+  resizeDelay: 100,
   devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
   interaction: { mode: "index" as const, intersect: false },
   layout: { padding: { top: 4, right: 16, bottom: 0, left: 4 } },

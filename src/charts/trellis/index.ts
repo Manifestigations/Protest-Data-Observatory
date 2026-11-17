@@ -28,11 +28,11 @@ import { nearestByY, WEEK_MODE } from "./interaction.ts";
 import { legend, toggleDatasets, wireLegendSync } from "./legend.ts";
 import { DIM, fade, movementRamp, seriesStyles } from "./palette.ts";
 import {
-  columns,
   decoratePanel,
   observations,
   panelFigure,
   panelOptions,
+  watchColumnCount,
   xScale,
   yScale,
 } from "./panel.ts";
@@ -149,6 +149,14 @@ function resolveHosts<T extends Record<string, string>>(
   return null;
 }
 
+/** Tracks actually laid out by the host's auto-fit grid ("1px 352px" → n). */
+export function resolvedColumns(host: HTMLElement): number {
+  return (
+    getComputedStyle(host).gridTemplateColumns.split(" ").filter(Boolean)
+      .length || 1
+  );
+}
+
 /* ── Section C: one panel per movement ─────────────────────────────────────── */
 
 export function mountEpisodeTrellis(): void {
@@ -167,8 +175,10 @@ export function mountEpisodeTrellis(): void {
   const unbounded = Number.POSITIVE_INFINITY;
 
   const [yMin, yMax] = logBounds(...rawExtent(EPISODES, METRICS, unbounded));
-  const cols = columns(episodeHost);
-  episodeHost.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+  // Column count is owned by the auto-fit grid on .trellis
+  // (src/styles/index.css); read the resolved value so y-axis labels land
+  // on each column's first panel only.
+  const cols = resolvedColumns(episodeHost);
 
   EPISODES.forEach((ep, idx) => {
     const text = m.episodes[ep.id];
@@ -242,9 +252,6 @@ export function mountItemTrellis(): void {
   eventLegend.replaceChildren();
 
   const m = t();
-
-  const itemCols = columns(itemHost);
-  itemHost.style.gridTemplateColumns = `repeat(${itemCols}, minmax(0, 1fr))`;
 
   styles.forEach((s) => {
     const [rawLo, rawHi] = rawExtent(EPISODES, [s.key], ENFORCEMENT_LAST);
@@ -325,4 +332,12 @@ export function mountCrossEpisode(): void {
   resetSeriesCache();
   mountEpisodeTrellis();
   mountItemTrellis();
+}
+
+for (const [id, remount] of [
+  ["trellis-episodes", mountEpisodeTrellis],
+  ["trellis-items", mountItemTrellis],
+] as const) {
+  const host = document.getElementById(id);
+  if (host) watchColumnCount(host, remount);
 }

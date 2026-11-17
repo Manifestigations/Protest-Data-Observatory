@@ -19,6 +19,7 @@ import { EPISODES } from "../../data/episodes/index.ts";
 import { METRICS, type Episode } from "../../model/index.ts";
 import { wrapTooltipLines } from "../tooltip.ts";
 import { statsOf, type PanelDataset, type Pt } from "./engine.ts";
+import { resolvedColumns } from "./index.ts";
 import { WEEK_MODE } from "./interaction.ts";
 
 /** Hover callback shared by panelOptions and every panel call site. */
@@ -223,16 +224,6 @@ export function panelFigure(strip: string, meta: string, note?: string) {
   return { figure, canvas };
 }
 
-/**
- * Trellis column count from the host width: 4 at ≥1180px, 2 at ≥620px, else 1.
- * Falls back to 4 when the host is not laid out yet (clientWidth 0), so a
- * hidden host does not silently render as a single column.
- */
-export function columns(host: HTMLElement): number {
-  const w = host.clientWidth || 1200;
-  return w >= 1180 ? 4 : w >= 620 ? 2 : 1;
-}
-
 /** One options factory for both trellises. */
 export const panelOptions = (
   kind: TrellisKind,
@@ -300,4 +291,19 @@ export function decoratePanel(
       return `${week}. ${rows.join(". ")}`;
     },
   });
+}
+
+// panel.ts — shared with summary.ts; host widths are CSS-driven, so a
+// rebuild of the children can't retrigger it.
+const _colWatch = new WeakSet<HTMLElement>();
+export function watchColumnCount(host: HTMLElement, remount: () => void): void {
+  if (typeof ResizeObserver === "undefined" || _colWatch.has(host)) return;
+  _colWatch.add(host);
+  let n = resolvedColumns(host);
+  new ResizeObserver(() => {
+    const c = resolvedColumns(host);
+    if (c === n) return;
+    n = c;
+    remount();
+  }).observe(host);
 }
