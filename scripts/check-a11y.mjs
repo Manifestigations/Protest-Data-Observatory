@@ -2,8 +2,9 @@
 /* ── Accessibility + viewport checks ─────────────────────────────────────
 Runs the built site in headless Chromium: axe-core with the WCAG 2.2 AA
 tags at mobile and desktop, and a no-horizontal-overflow assertion at
-360 / 768 / 1280 / 1920 px on every page. Needs a prior
-`npx playwright install --with-deps chromium`. */
+360 / 768 / 1280 / 1920 px on every page. mMbile runs with 
+`reduced-motion: reduce` so charts must paint correctly under both.
+Needs a prior `npx playwright install --with-deps chromium`. */
 import { resolve } from "node:path";
 import { chromium } from "playwright";
 
@@ -41,12 +42,13 @@ try {
     for (const vp of VIEWPORTS) {
       const context = await browser.newContext({
         viewport: { width: vp.width, height: vp.height },
+        reducedMotion: vp.name === "mobile" ? "reduce" : "no-preference",
       });
       const tab = await context.newPage();
       const pageErrors = [];
       tab.on("pageerror", (e) => pageErrors.push(String(e)));
       await tab.goto(`file://${resolve("docs", page)}`);
-      await tab.waitForTimeout(500); // let charts paint
+      await tab.waitForTimeout(750); // let charts paint
       const overflow = await tab.evaluate(
         () =>
           document.documentElement.scrollWidth -

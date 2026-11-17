@@ -11,7 +11,9 @@ verification record.
 - TypeScript, ESM, no framework. Charts: Chart.js on `<canvas>`. UI: plain DOM
   helpers (`src/core/dom.ts`). One esbuild bundle serves all pages.
 - Node ≥ 22.18 (native type stripping). No test runner.
-- `docs/` is **committed build output** served by GitHub Pages as-is. No CI.
+- There is no CI _build_ — a GitHub Actions gate (`style.yml`) checks PRs
+  (typecheck, lint, checks, axe), but `docs/` is still the committed
+  build output; Pages serves it as-is.
 - Not verified data: never present figures as fact in copy or docs.
 - Bilingual throughout. `Bi = { en: string; fr: string }`.
 
@@ -23,8 +25,8 @@ verification record.
   months past the newly-interoperable date). The `browserslist` field in
   `package.json` is the pinned snapshot of that set; the esbuild `target`
   and TS `target`/`lib` are set from it. Re-sync all three when Baseline
-  statuses move, and record the sync date in `package.json`'s
-  `"# baseline-synced"` comment.
+  statuses move; record the last sync date on this line:
+  **Last Baseline sync: <YYYY-MM-DD>.**
 - **Newly available / Limited availability features** may be used only
   with a marker comment on the line(s) that use the feature:
   `// baseline:<web.dev slug> — review <YYYY-MM-DD>` where the date is
@@ -107,6 +109,8 @@ npm run check:a11y                # axe-core WCAG 2.2 AA + no horizontal overflo
 | Dev server                                                                | `server.ts`                                                                                                                                                                                   |
 | HTML shells (static fallback, meta)                                       | `docs/*.html`, `docs/2026/*.html`, `docs/historic/*.html`                                                                                                                                     |
 | Method prose                                                              | `content/{my-analysis,data-problems,how-i-made-this}.md`                                                                                                                                      |
+| Quality checks                                                            | `scripts/check-baseline.ts`, `scripts/check-size.ts`, `scripts/check-a11y.mjs`                                                                                                                |
+| CI gate                                                                   | `.github/workflows/style.yml`                                                                                                                                                                 |
 
 ## Task recipes
 

@@ -11773,7 +11773,11 @@ function buildFormats(tag3) {
       year: "numeric",
       ...UTC
     }),
-    short: new Intl.DateTimeFormat(tag3, { day: "numeric", month: "short", ...UTC }),
+    short: new Intl.DateTimeFormat(tag3, {
+      day: "numeric",
+      month: "short",
+      ...UTC
+    }),
     day: new Intl.DateTimeFormat(tag3, { day: "numeric", ...UTC })
   };
 }
@@ -11839,8 +11843,6 @@ function fmtSpan(span, end) {
   if (span.end != null) return fmtDate(span.end);
   return "\u2014";
 }
-var MINUTE = 6e4;
-var HOUR = 60 * MINUTE;
 function pctOf(v, base) {
   const r = 100 * v / base;
   return r >= 10 ? `${Math.round(r)}%` : `${Number(r.toFixed(1))}%`;
@@ -16758,10 +16760,10 @@ function scalesFor(v, card3, ids) {
   return scales;
 }
 
-// vendor/dataset/src/data/notes.ts
+// src/data/notes.ts
 function noteText(ref) {
   if (!ref) return "";
-  const m = t().chart;
+  const m = t2().chart;
   switch (ref.k) {
     case "obs":
       return m.obsNotes[ref.date]?.[ref.metric] ?? "";
@@ -16799,9 +16801,9 @@ function noteText(ref) {
   }
 }
 function suffixFor(q, detached) {
-  const s = t().chart.suffix;
+  const s = t2().chart.suffix;
   const text = q === "c" ? s.c : q === "w" ? s.w : q === "e" ? s.e : q === "f" ? s.f : q === "x" ? s.x : detached ? s.regional : "";
-  return text ? fill(t().chart.suffixWrap, { text }) : "";
+  return text ? fill(t2().chart.suffixWrap, { text }) : "";
 }
 
 // src/charts/tooltip.ts
@@ -23512,7 +23514,7 @@ var GROUPS = [
   }
 ];
 
-// vendor/dataset/src/data/sources/page-map.ts
+// src/data/sources/page-map.ts
 var HISTORIC = ["historic/movements", "historic/series"];
 var PAGES_BY_GROUP = {
   /* 2026: state reports and press underpin every 2026 figure. */

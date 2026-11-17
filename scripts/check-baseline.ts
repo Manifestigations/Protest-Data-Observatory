@@ -16,7 +16,11 @@ const MARKER = /baseline:([a-z0-9][a-z0-9-]*)\s+review\s+(\d{4}-\d{2}-\d{2})/;
 const walk = (dir: string): string[] =>
   readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
     const p = join(dir, e.name);
-    return e.isDirectory() ? walk(p) : e.name.endsWith(".ts") ? [p] : [];
+    return e.isDirectory()
+      ? walk(p)
+      : e.name.endsWith(".ts") || e.name.endsWith(".css")
+        ? [p]
+        : [];
   });
 
 const today = new Date().toISOString().slice(0, 10);

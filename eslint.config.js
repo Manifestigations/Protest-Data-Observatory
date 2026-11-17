@@ -7,10 +7,12 @@ import tseslint from "typescript-eslint";
 
 export default defineConfig(
   {
-    parserOptions: {
-      // The Dataset submodule ships its own tsconfig.json; pin the parser to this
-      // repo's config so it can't pick the wrong root (see vendor/dataset).
-      tsconfigRootDir: import.meta.dirname,
+    languageOptions: {
+      parserOptions: {
+        // The Dataset submodule ships its own tsconfig.json; pin the parser to this
+        // repo's config so it can't pick the wrong root (see vendor/dataset).
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
   },
   {
@@ -26,13 +28,16 @@ export default defineConfig(
   {
     // Browser API usage must stay within the `browserslist` targets in
     // package.json (= Baseline Widely available). A false positive may be
-    // silenced per-line with an `eslint-disable compat/api` + reason.
+    // silenced per-line with an `eslint-disable compat/compat` + reason,
+    // and Baseline "Newly available" features must carry the
+    // `// baseline:<slug> — review <date>` marker (AGENTS.md).
     name: "project/baseline-compat",
     files: ["src/**/*.{ts,tsx}"],
+    languageOptions: { globals: { ...globals.browser } },
     plugins: { compat },
     rules: {
-      "compat/api": ["error", { checkSyntax: true, exceptions: [] }],
-      "compat/modules": "error",
+      "compat/compat": "error",
+      "compat/nav": "error",
     },
   },
   {

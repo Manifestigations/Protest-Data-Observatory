@@ -29,5 +29,9 @@ jobs:
     - run: npm run check:baseline
     - run: node scripts/build.ts
     - run: npm run check:size
+    - uses: actions/cache@v4
+      with:
+        path: ~/.cache/ms-playwright
+        key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
     - run: npx playwright install --with-deps chromium
     - run: npm run check:a11y
