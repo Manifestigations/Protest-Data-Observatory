@@ -15,6 +15,8 @@ import {
   type Point,
   type TooltipItem,
 } from "chart.js";
+import { EPISODES } from "../../vendor/dataset/src/data/episodes/index.ts";
+import type { Episode, Metric } from "../../vendor/dataset/src/model/index.ts";
 import { clipToArea } from "../charts/plugins/clip.ts";
 import { wrapTooltipLines } from "../charts/tooltip.ts";
 import {
@@ -31,8 +33,7 @@ import { DIM, seriesStyles } from "../charts/trellis/palette.ts";
 import { panelFigure, watchColumnCount } from "../charts/trellis/panel.ts";
 import { compact, fill, nf, t } from "../copy";
 import { alpha, THEME, track } from "../core/canvas-registry.ts";
-import { EPISODES } from "../data/episodes/index.ts";
-import type { Episode, Metric } from "../model/index.ts";
+import { closedCardOf, deferUntilReveal } from "./disclosure.ts";
 
 /* ── Types ─────────────────────────────────────────────────────────────────── */
 
@@ -292,6 +293,14 @@ export function mountSummary(): void {
   const host = document.getElementById("summary");
   const legendHost = document.getElementById("legend-summary");
   if (!host || !legendHost) return;
+
+  const card = closedCardOf(host);
+  if (card) {
+    deferUntilReveal(card, () => {
+      if (host.isConnected) mountSummary();
+    });
+    return;
+  }
 
   const styles = seriesStyles(); // ← ordered, resolved per mount
 

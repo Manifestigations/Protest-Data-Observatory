@@ -19,11 +19,12 @@ import { track } from "../core/canvas-registry.ts";
 import { byId } from "../core/dom.ts";
 import { contextBands } from "../sections/context/context.ts";
 import { insertCostMethodology } from "../sections/costs/methodology.ts";
+import { closedCardOf, deferUntilReveal } from "../sections/disclosure.ts";
 import { connectors } from "./plugins/connectors.ts";
 import { errorBars } from "./plugins/error-bars.ts";
 import { spanMark } from "./plugins/span-mark.ts";
 import { buildChart, type Cfg } from "./shell.ts";
-import { CHARTS } from "./specs.ts";
+import { CHARTS, type ChartSpec } from "./specs.ts";
 
 Chart.register(
   LineController,
@@ -76,52 +77,56 @@ export function mount(canvas: HTMLCanvasElement, cfg: Cfg): Chart<"line"> {
 export function mountCharts(): void {
   for (const spec of CHARTS) {
     const canvas = byId(spec.id);
-
-    // Absent = this page does not host the chart. Not a warning.
     if (!canvas) continue;
-
-    // Present but wrong tag = a real markup bug. Warn, keep going.
     if (!(canvas instanceof HTMLCanvasElement)) {
       console.warn(
         `[chart] #${spec.id} exists but is a <${canvas.tagName.toLowerCase()}>`,
       );
       continue;
     }
-
-    try {
-      const copy = t().chart.charts[spec.copy];
-      const name = copy.subtitle
-        ? `${copy.title}. ${copy.subtitle}`
-        : copy.title;
-
-      // Name = title + subtitle: the subtitle carries the caveats that make
-      // the figure honest, and it is otherwise invisible to AT.
-      canvas.setAttribute("aria-label", name);
-      canvas.setAttribute("role", "img");
-
-      const chart = mount(canvas, buildChart(spec));
-
-      const host = canvas.closest("figure") ?? canvas.parentElement;
-      host?.querySelector(".data-table")?.remove();
-
-      // mountCharts() re-runs on every locale change, so the block is rebuilt,
-      // not appended twice. Same remove-then-add discipline as the table above.
-      host?.querySelector('[data-role="cost-method"]')?.remove();
-      if (spec.id === "chart-costs" && host)
-        insertCostMethodology(host, canvas);
-
-      const table = fromChart(chart, {
-        caption: fill(a11y().tableCaption, { title: copy.title }),
-        indexHeader: a11y().dateHeader,
+    const card = closedCardOf(canvas);
+    if (card) {
+      // Locale re-renders remove these canvases; a stale flush must not build on them.
+      deferUntilReveal(card, () => {
+        if (canvas.isConnected) mountChart(spec, canvas);
       });
-      host?.append(table);
-
-      keyboardChart(chart, {
-        hint: a11y().chartHint,
-        roledescription: a11y().chartRole,
-      });
-    } catch (err) {
-      console.error(`[${spec.id}]`, err);
+      continue;
     }
+    mountChart(spec, canvas);
+  }
+}
+
+function mountChart(spec: ChartSpec, canvas: HTMLCanvasElement): void {
+  try {
+    const copy = t().chart.charts[spec.copy];
+    const name = copy.subtitle ? `${copy.title}. ${copy.subtitle}` : copy.title;
+
+    // Name = title + subtitle: the subtitle carries the caveats that make
+    // the figure honest, and it is otherwise invisible to AT.
+    canvas.setAttribute("aria-label", name);
+    canvas.setAttribute("role", "img");
+
+    const chart = mount(canvas, buildChart(spec));
+
+    const host = canvas.closest("figure") ?? canvas.parentElement;
+    host?.querySelector(".data-table")?.remove();
+
+    // mountCharts() re-runs on every locale change, so the block is rebuilt,
+    // not appended twice. Same remove-then-add discipline as the table above.
+    host?.querySelector('[data-role="cost-method"]')?.remove();
+    if (spec.id === "chart-costs" && host) insertCostMethodology(host, canvas);
+
+    const table = fromChart(chart, {
+      caption: fill(a11y().tableCaption, { title: copy.title }),
+      indexHeader: a11y().dateHeader,
+    });
+    host?.append(table);
+
+    keyboardChart(chart, {
+      hint: a11y().chartHint,
+      roledescription: a11y().chartRole,
+    });
+  } catch (err) {
+    console.error(`[${spec.id}]`, err);
   }
 }

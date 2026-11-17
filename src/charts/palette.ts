@@ -5,7 +5,7 @@
    ========================================================================== */
 
 import { tones, type Tone } from "../core/colors.ts";
-import type { MetricKey } from "../model/index.ts";
+import type { MetricKey } from "../../vendor/dataset/src/model/index.ts";
 
 export const TONE_OF: Readonly<Record<MetricKey, Tone>> = {
   turnout: "turnout",

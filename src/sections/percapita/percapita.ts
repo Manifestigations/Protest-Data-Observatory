@@ -61,8 +61,8 @@ import {
   WEEKLY,
   WEEKS,
   type Pt as DayPt,
-} from "../../data/data.ts";
-import { EPISODES } from "../../data/episodes/index.ts";
+} from "../../vendor/dataset/src/data/data.ts";
+import { EPISODES } from "../../vendor/dataset/src/data/episodes/index.ts";
 import {
   KEY_2026,
   basisOf,
@@ -70,8 +70,8 @@ import {
   pctOfValue,
   popKeyFor,
   population,
-} from "../../data/population.ts";
-import type { Episode } from "../../model/index.ts";
+} from "../../vendor/dataset/src/data/population.ts";
+import type { Episode } from "../../vendor/dataset/src/model/index.ts";
 import {
   contextBands,
   daySpans,

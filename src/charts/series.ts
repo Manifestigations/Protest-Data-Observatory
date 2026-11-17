@@ -5,7 +5,7 @@
 
 import type { PointStyle } from "chart.js";
 import { tones, type Tone } from "../core/colors.ts";
-import { DAILY, DATES, WEEKLY, type Series } from "../data/data.ts";
+import { DAILY, DATES, WEEKLY, type Series } from "../../vendor/dataset/src/data/data.ts";
 
 export type Unit = "count" | "eurM";
 

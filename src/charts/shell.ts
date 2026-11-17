@@ -3,7 +3,7 @@
 import type { ChartData, ChartOptions, LegendItem } from "chart.js";
 import { t } from "../copy";
 import { THEME } from "../core/canvas-registry.ts";
-import { WEEKS } from "../data/data.ts";
+import { WEEKS } from "../../vendor/dataset/src/data/data.ts";
 import { daySpans, weekSpans } from "../sections/context/context.ts";
 import { scalesFor } from "./axes.ts";
 import { tooltipCallbacks } from "./chart-tooltip.ts";

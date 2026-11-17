@@ -12,10 +12,18 @@
    page, hovering one still dims the other. */
 
 import { Chart, type ChartData, type ChartEvent } from "chart.js";
+import {
+  ENFORCEMENT_LAST,
+  EPISODES,
+} from "../../../vendor/dataset/src/data/episodes/index.ts";
+import {
+  isDetached,
+  METRICS,
+  type Metric,
+} from "../../../vendor/dataset/src/model/index.ts";
 import { compact, fill, fmtSpan, t } from "../../copy/index.ts";
 import { THEME, track } from "../../core/canvas-registry.ts";
-import { ENFORCEMENT_LAST, EPISODES } from "../../data/episodes/index.ts";
-import { isDetached, METRICS, type Metric } from "../../model/index.ts";
+import { closedCardOf, deferUntilReveal } from "../../sections/disclosure.ts";
 import {
   buildDataset,
   datasetsOf,
@@ -360,8 +368,19 @@ export function mountItemTrellis(): void {
  *  Callers that mount a single grid directly must call resetSeriesCache() first. */
 export function mountCrossEpisode(): void {
   resetSeriesCache();
-  mountEpisodeTrellis();
-  mountItemTrellis();
+  maybeMount("trellis-episodes", mountEpisodeTrellis);
+  maybeMount("trellis-items", mountItemTrellis);
+}
+
+function maybeMount(id: string, mount: () => void): void {
+  const host = document.getElementById(id);
+  if (!host) return;
+  const card = closedCardOf(host);
+  if (card)
+    deferUntilReveal(card, () => {
+      if (host.isConnected) mount();
+    });
+  else mount();
 }
 
 for (const [id, remount] of [

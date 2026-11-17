@@ -131,8 +131,7 @@ Beyond formatting and linting, the **Style** workflow runs:
 - [ ] Gaps left empty; derived cells flagged `e` with the arithmetic in the note.
 - [ ] Any new string exists in both `en` and `fr`.
 - [ ] `npm run typecheck` passes; `node scripts/build.ts` was run.
-- [ ] `docs/bundle.js`, `docs/bundle.js.map`, `docs/styles.css`,
-      `docs/styles.css.map` committed.
+- [ ] `docs/bundle.js` and `docs/styles.css` committed.
 - [ ] `content/data-problems.md` updated if you settled a known data problem.
 - [ ] No Baseline "Newly available"/"Limited" feature without a
       `baseline:… review …` marker; `npm run check:baseline` passes.

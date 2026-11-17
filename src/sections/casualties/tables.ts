@@ -19,7 +19,7 @@ import {
   type CaseRow,
   type Cell,
   type SevRow,
-} from "../../data/casualties/index.ts";
+} from "../../vendor/dataset/src/data/casualties/index.ts";
 import { cellView, estimateRange, pct, share, type CellView } from "./model.ts";
 
 function cell(c: Cell, extra = ""): HTMLElement {

@@ -1,5 +1,5 @@
-import { HELI_BY_DATE } from "../data/helicopters.ts";
-import type { Band } from "../model/index.ts";
+import { HELI_BY_DATE } from "../../vendor/dataset/src/data/helicopters.ts";
+import type { Band } from "../../vendor/dataset/src/model/index.ts";
 
 const pair = (b: Band): [number, number] =>
   typeof b === "number" ? [b, b] : b;

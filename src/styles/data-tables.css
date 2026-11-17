@@ -13,6 +13,14 @@ details.data-table > summary {
   color: var(--ink-4);
 }
 
+/* Cards clip (overflow: clip); wide tables scroll inside the card. */
+details.data-table .data-table-scroll {
+  max-inline-size: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
 details.data-table > summary::-webkit-details-marker {
   display: none;
 }

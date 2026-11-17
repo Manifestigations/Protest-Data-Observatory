@@ -31,6 +31,8 @@ const STATIC: Record<string, Bi> = {
     fr: "Afficher la page en anglais",
   },
   "ui.theme": { en: "Dark mode", fr: "Mode sombre" },
+  lang: { fr: "Langue", en: "Language" },
+  repo: { fr: "Code source sur GitHub", en: "Source code on GitHub" },
   "card.prot.title": { en: "Protesters", fr: "Manifestants" },
   "card.prot.sub": {
     en: "Ministry and organiser counts",

@@ -27,9 +27,8 @@ import { initTheme } from "../core/theme.ts";
 import { mountCards } from "../sections/cards/index.ts";
 import { mountCasualties } from "../sections/casualties/index.ts";
 import { currentPage, renderChrome } from "../sections/chrome.ts";
-import { mountContext } from "../sections/context/context.ts";
 import { mountContribute } from "../sections/contribute/index.ts";
-import { initDisclosure } from "../sections/disclosure.ts";
+import { flushPending, initDisclosure } from "../sections/disclosure.ts";
 import { mountKpiPresets, mountKpis } from "../sections/kpis.ts";
 import { mountPerCapita } from "../sections/percapita/percapita.ts";
 import { renderSources } from "../sections/sources/index.ts";
@@ -142,16 +141,36 @@ export function render(): void {
   applyStaticCopy();
   syncLangSwitch();
 
+  // Non-chart mounts first — they don't depend on the cards.
   for (const mount of [
-    mountCharts,
     mountKpis,
     mountKpiPresets,
     mountCasualties,
+    mountContribute,
+  ]) {
+    try {
+      mount();
+    } catch (err) {
+      console.error(`[${mount.name}]`, err);
+    }
+  }
+
+  initDisclosure({
+    onReveal: (card) => {
+      flushPending(card); // deferred charts build here, on first reveal
+      if (card.querySelector("canvas")) {
+        requestAnimationFrame(() => dispatchEvent(new Event("resize")));
+      }
+    },
+  });
+
+  // Charting mounts last: a closed card defers its build to first reveal
+  // instead of paying for it at 0×0.
+  for (const mount of [
+    mountCharts,
     mountPerCapita,
-    mountContext,
     mountCrossEpisode,
     mountSummary,
-    mountContribute,
   ]) {
     try {
       mount();

@@ -1,9 +1,9 @@
 import { bi, fmtDate, fmtDayMonth } from "../../copy";
 import { el } from "../../core/dom";
-import { SOURCES_BY_GROUP } from "../../data/sources";
-import { GROUPS } from "../../data/sources/groups";
-import { groupsForPage, mediaForPage } from "../../data/sources/page-map";
-import type { Source } from "../../data/sources/types";
+import { SOURCES_BY_GROUP } from "../../vendor/dataset/src/data/sources";
+import { GROUPS } from "../../vendor/dataset/src/data/sources/groups";
+import { groupsForPage, mediaForPage } from "../../vendor/dataset/src/data/sources/page-map";
+import type { Source } from "../../vendor/dataset/src/data/sources/types";
 import type { PageId } from "../../site/routes";
 import { BOX_TITLE, INTRO } from "./copy";
 

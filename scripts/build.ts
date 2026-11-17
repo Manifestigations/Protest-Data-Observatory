@@ -24,6 +24,12 @@ const configs = (): esbuild.BuildOptions[] => [
     minify: !dev,
     define: { "process.env.NODE_ENV": dev ? '"development"' : '"production"' },
     logLevel: "info",
+    alias: {
+      "@manifestigations/dataset": new URL(
+        "../vendor/dataset/src",
+        import.meta.url,
+      ).pathname,
+    },
   },
   {
     entryPoints: ["src/styles/index.css"],

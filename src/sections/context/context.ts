@@ -34,7 +34,7 @@ import {
   HOLIDAY_END,
   HOLIDAY_START,
   START,
-} from "../../data/data.ts";
+} from "../../vendor/dataset/src/data/data.ts";
 
 /* ----- copy */
 

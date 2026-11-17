@@ -8,7 +8,7 @@ import {
   KEY_2026,
   pctOfValue,
   population,
-} from "../data/population.ts";
+} from "../../vendor/dataset/src/data/population.ts";
 import type { Unit } from "./series.ts";
 
 export function fmt(v: number, unit: Unit): string {

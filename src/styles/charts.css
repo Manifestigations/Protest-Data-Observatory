@@ -138,8 +138,14 @@
   text-decoration-thickness: 1px;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .legend button {
-    transition: none;
-  }
+/* Tabbable canvases (keyboardChart) get the same ring as the other controls;
+   the :where() catch-all backstops anything added later. Zero specificity, so
+   every targeted rule above still wins (incl. .card-main's deliberate none). */
+canvas:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+:where(button, a, summary, canvas, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }

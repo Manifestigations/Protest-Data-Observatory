@@ -5,7 +5,7 @@ import {
   CASES,
   SEVERITY_LEVELS,
   SEVERITY_WEEKS,
-} from "../../data/casualties/index.ts";
+} from "../../vendor/dataset/src/data/casualties/index.ts";
 import {
   CIVILIAN_PROXY,
   bystanderTable,

@@ -1,5 +1,5 @@
 import { getLocale, HELI_COPY_EN, HELI_COPY_FR, type Lang } from "../../copy";
-import { HELI_TOTALS } from "../../data/helicopters.ts";
+import { HELI_TOTALS } from "../../vendor/dataset/src/data/helicopters.ts";
 
 const eur = (millions: number): string =>
   new Intl.NumberFormat("fr-FR", {

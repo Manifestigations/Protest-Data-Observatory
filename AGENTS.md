@@ -26,7 +26,7 @@ verification record.
   `package.json` is the pinned snapshot of that set; the esbuild `target`
   and TS `target`/`lib` are set from it. Re-sync all three when Baseline
   statuses move; record the last sync date on this line:
-  **Last Baseline sync: <YYYY-MM-DD>.**
+  **Last Baseline sync: 2026-11-17.**
 - **Newly available / Limited availability features** may be used only
   with a marker comment on the line(s) that use the feature:
   `// baseline:<web.dev slug> — review <YYYY-MM-DD>` where the date is
@@ -65,9 +65,8 @@ npm run check:a11y                # axe-core WCAG 2.2 AA + no horizontal overflo
 
 ## Invariants — do not violate
 
-1. **After any change under `src/`, rebuild and stage `docs/bundle.js`,
-   `docs/bundle.js.map`, `docs/styles.css`, `docs/styles.css.map`.** Never edit
-   those files by hand.
+1. **After any change under `src/`, rebuild and stage `docs/bundle.js` and
+   `docs/styles.css`. **Never edit those files by hand.**
 2. **`Band = number | [number, number]`.** A published range stays a range.
    Never average two publishers; never midpoint a band in the data layer.
 3. **Never change a `Flag` to make a series continuous.** `r|p|e|c` are
@@ -90,27 +89,27 @@ npm run check:a11y                # axe-core WCAG 2.2 AA + no horizontal overflo
 
 ## Where things are
 
-| Need                                                                      | File                                                                                                                                                                                          |
-| ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Types: `Metric`, `Flag`, `Band`, `Row`, `Episode`, `MetricKey`, `NoteRef` | `vendor/dataset/src/model/index.ts` (Dataset repo)                                                                                                                                            |
-| 2026 figures (daily rows, weekly notes, projections)                      | `vendor/dataset/src/data/data.ts` (Dataset repo)                                                                                                                                              |
-| Historical episodes                                                       | `vendor/dataset/src/data/episodes/*` (Dataset repo)                                                                                                                                           |
-| Source catalogue                                                          | `vendor/dataset/src/data/sources/*` (Dataset repo)                                                                                                                                            |
-| Casualty cases/levels/estimates                                           | `vendor/dataset/src/data/casualties/*` (Dataset repo)                                                                                                                                         |
-| Chart specs / datasets / axes / tooltip / plugins                         | `src/charts/{specs,datasets,axes,tooltip,chart-tooltip,mount,shell,series,format,palette}.ts`, `src/charts/plugins/*`                                                                         |
-| Multi-panel (trellis) engine                                              | `src/charts/trellis/*`                                                                                                                                                                        |
-| Page sections                                                             | `src/sections/**` (one folder per area: `kpis`, `summary`, `casualties`, `costs`, `percapita`, `context`, `sources`, `about`, `contribute`, `cards`, `trellis`, `chrome.ts`, `disclosure.ts`) |
-| Copy / i18n                                                               | `src/copy/{en,fr}/*.ts`, helpers `index.ts`, `lookup.ts`, `interpolate.ts`, `format.ts`, `types.ts`                                                                                           |
-| DOM / lang / theme / colors / a11y                                        | `src/core/*`                                                                                                                                                                                  |
-| Page table (`PAGES`, `PageId`, `relHref`, `pageHref`)                     | `src/site/routes.ts`; hero images `src/site/media.ts`                                                                                                                                         |
-| Boot / mount dispatch (`data-page`)                                       | `src/entry/main.ts`                                                                                                                                                                           |
-| CSS                                                                       | `src/styles/index.css`                                                                                                                                                                        |
-| Build / checks                                                            | `scripts/build.ts`, `scripts/check-casualties.ts`                                                                                                                                             |
-| Dev server                                                                | `server.ts`                                                                                                                                                                                   |
-| HTML shells (static fallback, meta)                                       | `docs/*.html`, `docs/2026/*.html`, `docs/historic/*.html`                                                                                                                                     |
-| Method prose                                                              | `content/{my-analysis,data-problems,how-i-made-this}.md`                                                                                                                                      |
-| Quality checks                                                            | `scripts/check-baseline.ts`, `scripts/check-size.ts`, `scripts/check-a11y.mjs`                                                                                                                |
-| CI gate                                                                   | `.github/workflows/style.yml`                                                                                                                                                                 |
+| Need                                                                      | File                                                                                                                                                                               |
+| ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Types: `Metric`, `Flag`, `Band`, `Row`, `Episode`, `MetricKey`, `NoteRef` | `vendor/dataset/src/model/index.ts` (Dataset repo)                                                                                                                                 |
+| 2026 figures (daily rows, weekly notes, projections)                      | `vendor/dataset/src/data/data.ts` (Dataset repo)                                                                                                                                   |
+| Historical episodes                                                       | `vendor/dataset/src/data/episodes/*` (Dataset repo)                                                                                                                                |
+| Source catalogue                                                          | `vendor/dataset/src/data/sources/*` (Dataset repo)                                                                                                                                 |
+| Casualty cases/levels/estimates                                           | `vendor/dataset/src/data/casualties/*` (Dataset repo)                                                                                                                              |
+| Chart specs / datasets / axes / tooltip / plugins                         | `src/charts/{specs,datasets,axes,tooltip,chart-tooltip,mount,shell,series,format,palette}.ts`, `src/charts/plugins/*`                                                              |
+| Multi-panel (trellis) engine                                              | `src/charts/trellis/*`                                                                                                                                                             |
+| Page sections                                                             | `src/sections/**` (one folder per area: `kpis`, `summary`, `casualties`, `costs`, `percapita`, `context`, `sources`, `about`, `contribute`, `cards`, `chrome.ts`, `disclosure.ts`) |
+| Copy / i18n                                                               | `src/copy/{en,fr}/*.ts`, helpers `index.ts`, `lookup.ts`, `interpolate.ts`, `format.ts`, `types.ts`                                                                                |
+| DOM / lang / theme / colors / a11y                                        | `src/core/*`                                                                                                                                                                       |
+| Page table (`PAGES`, `PageId`, `relHref`, `pageHref`)                     | `src/site/routes.ts`; hero images `src/site/media.ts`                                                                                                                              |
+| Boot / mount dispatch (`data-page`)                                       | `src/entry/main.ts`                                                                                                                                                                |
+| CSS                                                                       | `src/styles/index.css`                                                                                                                                                             |
+| Build / checks                                                            | `scripts/build.ts`                                                                                                                                                                 |
+| Dev server                                                                | `server.ts`                                                                                                                                                                        |
+| HTML shells (static fallback, meta)                                       | `docs/*.html`, `docs/2026/*.html`, `docs/historic/*.html`                                                                                                                          |
+| Method prose                                                              | `content/{my-analysis,data-problems,how-i-made-this}.md`                                                                                                                           |
+| Quality checks                                                            | `scripts/check-baseline.ts`, `scripts/check-size.ts`, `scripts/check-a11y.mjs`                                                                                                     |
+| CI gate                                                                   | `.github/workflows/style.yml`                                                                                                                                                      |
 
 ## Task recipes
 

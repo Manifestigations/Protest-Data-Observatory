@@ -3,7 +3,7 @@
    charts, so the shell and the tooltip never re-test `weekly`. */
 
 import { fill, fmtDate, fmtDayMonth, fmtWeek, t } from "../copy";
-import { DATES, WEEKS } from "../data/data.ts";
+import { DATES, WEEKS } from "../../vendor/dataset/src/data/data.ts";
 
 export interface View {
   labels: string[];

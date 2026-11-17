@@ -19,6 +19,9 @@ const MIME: Record<string, string> = {
   ".map": "application/json; charset=utf-8",
   ".png": "image/png",
   ".svg": "image/svg+xml",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".webp": "image/webp",
   ".ico": "image/x-icon",
   ".woff2": "font/woff2",
 };

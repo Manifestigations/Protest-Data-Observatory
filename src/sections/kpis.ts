@@ -26,8 +26,8 @@ import {
   type ChartCopy,
 } from "../copy";
 import { byId, el } from "../core/dom.ts";
-import { DATES, WEEKS } from "../data/data.ts";
-import { ENFORCEMENT_LAST, EPISODES } from "../data/episodes/index.ts";
+import { DATES, WEEKS } from "../../vendor/dataset/src/data/data.ts";
+import { ENFORCEMENT_LAST, EPISODES } from "../../vendor/dataset/src/data/episodes/index.ts";
 
 type SeriesCopyKey = keyof ChartCopy["series"];
 

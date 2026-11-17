@@ -5,7 +5,7 @@
    create time. */
 
 import { DIM, hollow, ramp, tones, type Tone } from "../../core/colors.ts";
-import { METRICS, METRIC_OF, type Metric } from "../../model/index.ts";
+import { METRICS, METRIC_OF, type Metric } from "../../vendor/dataset/src/model/index.ts";
 import { TONE_OF } from "../palette.ts";
 
 export { DIM };

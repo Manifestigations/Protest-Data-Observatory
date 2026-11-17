@@ -10,7 +10,10 @@
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "erasableSyntaxOnly": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "@manifestigations/dataset": ["./vendor/dataset/dist"]
+    }
   },
   "include": ["src", "scripts", "server.ts"]
 }

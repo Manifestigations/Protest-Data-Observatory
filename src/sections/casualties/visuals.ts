@@ -10,7 +10,7 @@ import {
   type CaseRow,
   type Cell,
   type SevRow,
-} from "../../data/casualties/index.ts";
+} from "../../vendor/dataset/src/data/casualties/index.ts";
 import { cellView, pct, share } from "./model.ts";
 
 /* ── Cell parsing ───────────────────────────────────────────────────────── */

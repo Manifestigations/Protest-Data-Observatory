@@ -11,16 +11,19 @@ let timer = 0;
 
 function region(): HTMLElement {
   if (live?.isConnected) return live;
-  live = document.getElementById("a11y-live");
+  live =
+    document.getElementById("status") ?? document.getElementById("a11y-live");
   if (!live) {
     live = document.createElement("p");
     live.id = "a11y-live";
     live.className = "sr-only";
     live.setAttribute("role", "status");
     live.setAttribute("aria-live", "polite");
-    live.setAttribute("aria-atomic", "true");
     document.body.append(live);
   }
+  live.setAttribute("role", "status");
+  live.setAttribute("aria-live", "polite");
+  live.setAttribute("aria-atomic", "true");
   return live;
 }
 
@@ -84,8 +87,10 @@ export function dataTable(spec: TableSpec): HTMLDetailsElement {
       tr.insertCell().textContent = c.values[i] ?? "—";
   });
 
-  table.append(); // no-op guard for older engines
-  details.append(summary, table);
+  const scroll = document.createElement("div");
+  scroll.className = "data-table-scroll";
+  scroll.append(table);
+  details.append(summary, scroll);
   return details;
 }
 

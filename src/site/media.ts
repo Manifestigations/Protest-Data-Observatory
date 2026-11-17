@@ -16,6 +16,12 @@ const FILE = {
 
 export type HeroFile = (typeof FILE)[keyof typeof FILE];
 
+/** 720px-wide WebP variant, committed beside the original in docs/img/.
+ *  Cards cap at ~21rem CSS px (≈672px at 2×), so this single variant covers
+ *  every viewport. */
+export const heroFile720 = (file: string): string =>
+  file.replace(/\.(jpe?g|png|webp)$/, "-720w.webp");
+
 export interface Hero {
   readonly file: HeroFile; // was: src (hotlink)
   readonly alt: Bi;

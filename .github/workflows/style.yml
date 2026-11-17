@@ -14,24 +14,26 @@ permissions:
 
 jobs:
   quality:
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 26
-        cache: npm
-    - run: npm ci
-    - run: npm run typecheck
-    - run: npm run format:check
-    - run: npm run lint
-    - run: npm run check:comments
-    - run: npm run check:baseline
-    - run: node scripts/build.ts
-    - run: npm run check:size
-    - uses: actions/cache@v4
-      with:
-        path: ~/.cache/ms-playwright
-        key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-    - run: npx playwright install --with-deps chromium
-    - run: npm run check:a11y
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npm run check:comments
+      - run: npm run check:baseline
+      - run: node scripts/build.ts
+      - run: npm run check:size
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - run: npx playwright install --with-deps chromium
+      - run: npm run check:a11y

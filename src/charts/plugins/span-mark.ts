@@ -2,7 +2,7 @@
 
 import type { Plugin } from "chart.js";
 import { fmtDayMonth } from "../../copy";
-import { DATES } from "../../data/data.ts";
+import { DATES } from "../../vendor/dataset/src/data/data.ts";
 import { styleOf } from "../datasets.ts";
 import { AXIS_LEFT, type SeriesId } from "../series.ts";
 import { clipToArea } from "./clip.ts";

@@ -8,7 +8,7 @@
 import type { Chart, ChartDataset } from "chart.js";
 import { fill, fmtWeek, t } from "../../copy/index.ts";
 import { gapSegment, THEME } from "../../core/canvas-registry.ts";
-import { noteText } from "../../data/notes.ts";
+import { noteText } from "../../vendor/dataset/src/data/notes.ts";
 import {
   bandOf,
   isDetached,
@@ -18,7 +18,7 @@ import {
   type Flag,
   type Metric,
   type Row,
-} from "../../model/index.ts";
+} from "../../vendor/dataset/src/model/index.ts";
 
 /**
  * One plotted point.

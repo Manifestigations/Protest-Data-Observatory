@@ -186,10 +186,8 @@ export function initDisclosure(opts: DisclosureOptions = {}): () => void {
   enhanceSections();
   const bar = toolbar();
 
-  // Printing a collapsed card would print only its summary.
-  const openForPrint = (): void => setAllCards(true);
-  addEventListener("beforeprint", openForPrint);
-
+  // Printing a collapsed card would print only its summary. Bound once for
+  // the module's life: initDisclosure() re-runs on every render().
   if (!printHookBound) {
     addEventListener("beforeprint", () => setAllCards(true));
     printHookBound = true;
@@ -198,6 +196,27 @@ export function initDisclosure(opts: DisclosureOptions = {}): () => void {
   return () => {
     reveal = undefined;
     bar?.remove();
-    removeEventListener("beforeprint", openForPrint);
   };
+}
+
+/* ---- deferred mounts for cards the user left closed ----- */
+const deferred = new WeakMap<HTMLDetailsElement, () => void>();
+
+export function deferUntilReveal(
+  card: HTMLDetailsElement,
+  fn: () => void,
+): void {
+  deferred.set(card, fn);
+}
+
+export function flushPending(card: HTMLDetailsElement): void {
+  const fn = deferred.get(card);
+  if (!fn) return;
+  deferred.delete(card);
+  fn();
+}
+
+export function closedCardOf(el: Element): HTMLDetailsElement | null {
+  const card = el.closest("details.sec-card");
+  return card && !card.open ? card : null;
 }

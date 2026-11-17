@@ -5,6 +5,7 @@
 
 import { bi } from "../../copy";
 import { byId, el } from "../../core/dom";
+import { heroFile720 } from "../../site/media";
 import type { CardSpec } from "../../site/routes";
 import {
   CREDIT_LABEL,
@@ -27,9 +28,13 @@ function creditId(card: CardSpec): string {
 function hero(card: CardSpec, fromPath: string): HTMLElement {
   const figure = el("figure", "card-hero");
   const img = el("img");
+  // src stays the full-size file: it is the fallback and the only candidate
+  // below the srcset breakpoint. srcset points at the 720w WebP variant.
   img.src = heroSrc(fromPath, card.hero.file);
+  img.srcset = `${heroSrc(fromPath, heroFile720(card.hero.file))} 720w`;
+  img.sizes = "(min-width: 40rem) 336px, 92vw";
   img.alt = bi(card.hero.alt);
-  img.width = 1200;
+  img.width = 1200; // 3:2, matching .card-hero's aspect-ratio; not intrinsic px
   img.height = 800;
   img.loading = "lazy";
   img.decoding = "async";

@@ -16,12 +16,12 @@ June 2023, pensions, Bloquons tout 2025).
 
 ## Three ways in
 
-| I want to…                               | Start here                                                                                                                   | Skills needed                                                    |
-| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| Report a figure that is wrong or missing | [Open the figure form](https://github.com/Manifestigations/Protest-Data-Observatory/issues/new?template=report-a-figure.yml) | none — a free GitHub account                                     |
-| Correct or add data in the repo          | [CONTRIBUTING.md § Editing data](CONTRIBUTING.md#editing-data)                                                               | edit literal values in a TypeScript file; no framework knowledge |
-| Change charts, pages, copy or build      | [CONTRIBUTING.md § Editing code](CONTRIBUTING.md#editing-code)                                                               | TypeScript                                                       |
-| Work in this repo as a coding agent      | [AGENTS.md](AGENTS.md)                                                                                                       | —                                                                |
+| I want to…                               | Start here                                                                                                  | Skills needed                                                    |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| Report a figure that is wrong or missing | [Open the figure form](https://github.com/Manifestigations/Dataset/issues/new?template=report-a-figure.yml) | none — a free GitHub account                                     |
+| Correct or add data in the repo          | [CONTRIBUTING.md § Editing data](CONTRIBUTING.md#editing-data)                                              | edit literal values in a TypeScript file; no framework knowledge |
+| Change charts, pages, copy or build      | [CONTRIBUTING.md § Editing code](CONTRIBUTING.md#editing-code)                                              | TypeScript                                                       |
+| Work in this repo as a coding agent      | [AGENTS.md](AGENTS.md)                                                                                      | —                                                                |
 
 You do not need to be a programmer, read the code, or install anything to
 report a figure. **One number, one date, one link** is the whole process.
@@ -130,34 +130,26 @@ flowchart TD
   OUT --> GP
   GP --> BR
 ```
+
 > One esbuild bundle serves all pages; `docs/` is committed build output, so every `src/` change ships with its rebuilt artifacts.
 
 ---
 
 ## Repository map
 
-| Path                                                               | What it is                                                                                                                                                         | Touch it when                             |
-| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------- |
-| `src/data/data.ts`                                                 | 2026 entry point: the verification record + barrel re-exporting the modules below; import from here                                                                | tracing where a figure lives              |
-| `src/data/{facts,policing}.ts`                                     | 2026 cells: daily figures (facts) and deployments / forces stock / cost rate (policing)                                                                            | a 2026 number changes                     |
-| `src/data/{calendar,types,projections,aggregate,student-weeks}.ts` | window & weeks, shared types, daily series, weekly aggregation, section C's table                                                                                  | rarely — the shape of the data layer      |
-| `src/data/episodes/*.ts`                                           | One file per historical movement (`mai68`, `cpe`, `gilets-jaunes`, `nahel`, `retraites`, `bloquons`, `students`)                                                   | a historical series changes               |
-| `src/data/sources/*.ts`                                            | Source catalogue: publisher, verbatim headline, URL, date, what it is used for                                                                                     | you cite anything new                     |
-| `src/data/sources/types.ts`                                        | `Source`, `SourceGroup`, `GroupId`, `Mention`                                                                                                                      | rarely — adding a new source group        |
-| `src/data/casualties/`                                             | Case-level casualty data, levels, estimates, checks                                                                                                                | casualty figures                          |
-| `src/data/{population,notes,helicopters}.ts`                       | Denominators, structured note copy, helicopter series                                                                                                              | rarely                                    |
-| `src/model/index.ts`                                               | Pure types and definitions: `Metric`, `Flag`, `Band`, `Row`, `Episode`, `isDetached`                                                                               | never casually — everything depends on it |
-| `src/charts/`                                                      | Chart.js setup: specs, datasets, axes, tooltip, plugins (`error-bars`, `hatch`, `connectors`, `clip`, `span-mark`), `trellis/` engine for multi-panel              | drawing changes                           |
-| `src/sections/`                                                    | One folder per page area: `kpis`, `summary`, `casualties`, `costs`, `percapita`, `context`, `sources`, `about`, `contribute`, `cards`, `trellis`, plus `chrome.ts` | page structure                            |
-| `src/copy/{en,fr}/` + `src/copy/*.ts`                              | All UI copy, `Bi = { en, fr }`, lookup/format/interpolation helpers                                                                                                | any wording                               |
-| `src/core/`                                                        | DOM, lang switch, theme, colors, a11y, canvas registry                                                                                                             | infrastructure only                       |
-| `src/site/`                                                        | `routes.ts` (page table), `media.ts` (hero images)                                                                                                                 | adding a page                             |
-| `src/entry/main.ts`                                                | Boot: locale, chrome, then guarded mounts                                                                                                                          | wiring a new section                      |
-| `src/styles/index.css`                                             | All CSS, bundled to `docs/styles.css`                                                                                                                              | styling                                   |
-| `scripts/`                                                         | `build.ts`, `check-casualties.ts`                                                                                                                                  | build/checks                              |
-| `server.ts`                                                        | Static dev server for `docs/`                                                                                                                                      | rarely                                    |
-| `docs/`                                                            | **Committed build output** + HTML shells + images + transcripts                                                                                                    | rebuild after source changes              |
-| `content/`                                                         | Long-form notes: `my-analysis.md`, `data-problems.md`, `how-i-made-this.md`                                                                                        | prose about method                        |
+| Path                                  | What it is                                                                                                                                                         | Touch it when                |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------- |
+| `src/charts/`                         | Chart.js setup: specs, datasets, axes, tooltip, plugins (`error-bars`, `hatch`, `connectors`, `clip`, `span-mark`), `trellis/` engine for multi-panel              | drawing changes              |
+| `src/sections/`                       | One folder per page area: `kpis`, `summary`, `casualties`, `costs`, `percapita`, `context`, `sources`, `about`, `contribute`, `cards`, `trellis`, plus `chrome.ts` | page structure               |
+| `src/copy/{en,fr}/` + `src/copy/*.ts` | All UI copy, `Bi = { en, fr }`, lookup/format/interpolation helpers                                                                                                | any wording                  |
+| `src/core/`                           | DOM, lang switch, theme, colors, a11y, canvas registry                                                                                                             | infrastructure only          |
+| `src/site/`                           | `routes.ts` (page table), `media.ts` (hero images)                                                                                                                 | adding a page                |
+| `src/entry/main.ts`                   | Boot: locale, chrome, then guarded mounts                                                                                                                          | wiring a new section         |
+| `src/styles/index.css`                | All CSS, bundled to `docs/styles.css`                                                                                                                              | styling                      |
+| `scripts/`                            | `build.ts`, `check-casualties.ts`                                                                                                                                  | build/checks                 |
+| `server.ts`                           | Static dev server for `docs/`                                                                                                                                      | rarely                       |
+| `docs/`                               | **Committed build output** + HTML shells + images                                                                                                                  | rebuild after source changes |
+| `content/`                            | Long-form notes: `my-analysis.md`, `data-problems.md`, `how-i-made-this.md`                                                                                        | prose about method           |
 
 ---
 
@@ -225,6 +217,7 @@ erDiagram
     EPISODE ||--o{ WEEK_ROW : "weeks: Row[]"
     SOURCE_GROUP ||--o{ SOURCE : "contains"
 ```
+
 > A missing metric on a Row means 'no published figure' — never zero. Flags `r`,
 > `p`, `e`, `c` are detached by definition (`isDetached()`) and drawn hollow, never joined to the national line.
 

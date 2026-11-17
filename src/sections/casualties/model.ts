@@ -1,7 +1,7 @@
 /* Cell → text, and the one share rule the section has always had. */
 
 import { fill, nf, t } from "../../copy";
-import type { Cell, Estimate } from "../../data/casualties/index.ts";
+import type { Cell, Estimate } from "../../vendor/dataset/src/data/casualties/index.ts";
 
 export interface CellView {
   readonly text: string;
