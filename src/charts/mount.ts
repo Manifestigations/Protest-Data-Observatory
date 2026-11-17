@@ -18,12 +18,12 @@ import { fromChart, keyboardChart } from "../core/a11y.ts";
 import { track } from "../core/canvas-registry.ts";
 import { byId } from "../core/dom.ts";
 import { contextBands } from "../sections/context/context.ts";
+import { insertCostMethodology } from "../sections/costs/methodology.ts";
 import { connectors } from "./plugins/connectors.ts";
 import { errorBars } from "./plugins/error-bars.ts";
 import { spanMark } from "./plugins/span-mark.ts";
 import { buildChart, type Cfg } from "./shell.ts";
 import { CHARTS } from "./specs.ts";
-import { insertCostMethodology } from "../sections/costs/methodology.ts";
 
 Chart.register(
   LineController,

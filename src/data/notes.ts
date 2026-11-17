@@ -19,8 +19,8 @@
    the same { k: "obs" } branch. */
 
 import { fill, fmtDayMonth, nf, t } from "../copy";
-import { RATE } from "./data.ts";
 import type { Flag, NoteRef } from "../model/index.ts";
+import { RATE } from "./data.ts";
 
 /** Resolve a stored note reference into copy, in the active locale. */
 export function noteText(ref: NoteRef | null | undefined): string {

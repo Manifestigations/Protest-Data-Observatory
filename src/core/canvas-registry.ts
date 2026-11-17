@@ -46,13 +46,6 @@ export const TEXT = {
  *  from module state, so this call restores nothing on its own. Do not treat
  *  `hidden` as a restore hook. */
 export function repaintPreservingState(): void {
-  const hidden = new Set(
-    [
-      ...document.querySelectorAll<HTMLButtonElement>(
-        '.legend button[aria-pressed="false"]',
-      ),
-    ].map((b) => b.dataset.series ?? ""),
-  );
   refreshTheme();
   scheduleRender();
 }
@@ -232,8 +225,7 @@ export function segIndex(ctx: SegmentCtx, which: 0 | 1): number | undefined {
   }
 
   const pt = (which === 0 ? ctx.p0 : ctx.p1) as
-    | { x?: unknown; parsed?: { x?: unknown } }
-    | undefined;
+    { x?: unknown; parsed?: { x?: unknown } } | undefined;
 
   const parsed = pt?.parsed?.x;
   if (typeof parsed === "number" && Number.isInteger(parsed)) return parsed;
@@ -311,8 +303,9 @@ export const gapSegment = (slots = 1, dash: number[] = [6, 4]) => ({
   },
 });
 
-/** Permissive chart handle for host code that does not care about TType/TData. */
-export type AnyChart = Chart<any, any, any>;
+/** Permissive chart handle for host code that does not care about TType/TData:
+ *  the Chart class with all its type parameters defaulted. */
+export type AnyChart = Chart;
 
 const live = new Set<AnyChart>();
 

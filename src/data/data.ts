@@ -666,9 +666,10 @@ function projectDaily(key: MetricKey): Series {
    split the series into a line plus an empty points-only twin. Striking is a
    different population from marching, not a doubt about the figure: one
    solid line, with the "modelled" suffix in the tooltip. */
-const strikers = projectDaily("strikers").map(
-  (p): Pt => ({ ...p, detach: false }),
-);
+const strikers = projectDaily("strikers").map((p): Pt => ({
+  ...p,
+  detach: false,
+}));
 
 function projectPolicingDaily(): Series {
   return DATES.map((date) => {
@@ -933,8 +934,8 @@ export const DAILY: Readonly<Record<string, Series>> = {
    `detach` is left alone so the point stays solid. */
 export const WEEKLY: Readonly<Record<string, Series>> = {
   turnout: aggregate("turnout", "max"),
-  strikers: aggregate("strikers", "max").map(
-    (p): Pt => (p.q === "w" ? { ...p, q: "e" } : p),
+  strikers: aggregate("strikers", "max").map((p): Pt =>
+    p.q === "w" ? { ...p, q: "e" } : p,
   ),
   arrests: aggregate("arrests", "sum"),
   forcesInjured: aggregate("forcesInjured", "sum"),

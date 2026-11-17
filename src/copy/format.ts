@@ -1,7 +1,7 @@
 /* ============================================================== number/date */
 
 import { t } from "./lookup";
-import { current, localeMeta } from "./state";
+import { current } from "./state";
 
 const UTC = { timeZone: "UTC" } as const;
 
@@ -136,12 +136,6 @@ export function fmtSpan(
   if (span.end != null) return fmtDate(span.end);
   return "—";
 }
-
-const DATE_ONLY = /^\d{4}-\d{2}-\d{2}$/;
-const HAS_CLOCK = /[T ]\d{2}:\d{2}/;
-const MINUTE = 60_000;
-const HOUR = 60 * MINUTE;
-const DAY = 24 * HOUR;
 
 /**
  * Share, for tooltips: "12%" at 10 and above, "4.5%" below, so a small share

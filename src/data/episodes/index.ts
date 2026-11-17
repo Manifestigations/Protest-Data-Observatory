@@ -4,17 +4,17 @@
    reorder, and never sort by date. */
 
 import type { Episode } from "../../model/index.ts";
-import { MAY68 } from "./mai68.ts";
+import { BLOQUONS } from "./bloquons.ts";
 import { CPE } from "./cpe.ts";
 import { GILETS } from "./gilets-jaunes.ts";
+import { MAY68 } from "./mai68.ts";
 import { NAHEL } from "./nahel.ts";
 import { PENSIONS } from "./retraites.ts";
-import { BLOQUONS } from "./bloquons.ts";
 import { STUDENTS } from "./students.ts";
+export { BLOQUONS } from "./bloquons.ts";
 export { GILETS, GJ_ACTS, GJ_EXTRA } from "./gilets-jaunes.ts";
 export { NAHEL } from "./nahel.ts";
 export { PENSIONS } from "./retraites.ts";
-export { BLOQUONS } from "./bloquons.ts";
 export { STUDENTS } from "./students.ts";
 
 export const EPISODES: readonly Episode[] = [

@@ -1,13 +1,11 @@
 import { bi, fmtDate, fmtDayMonth } from "../../copy";
-import { MARKERS } from "../../copy/markers";
 import { el } from "../../core/dom";
 import { SOURCES_BY_GROUP } from "../../data/sources";
 import { GROUPS } from "../../data/sources/groups";
-import { MENTIONS } from "../../data/sources/mentions";
 import { groupsForPage, mediaForPage } from "../../data/sources/page-map";
 import type { Source } from "../../data/sources/types";
 import type { PageId } from "../../site/routes";
-import { BOX_TITLE, FOOT, INTRO, MENTIONS_BLURB, MENTIONS_TITLE } from "./copy";
+import { BOX_TITLE, INTRO } from "./copy";
 
 function dateLabel(s: Source): string | null {
   if (!s.date) return null;

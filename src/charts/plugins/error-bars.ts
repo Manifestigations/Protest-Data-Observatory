@@ -1,6 +1,5 @@
 /* ── Error bars and shaded bands ───────────────────────────────────────────── */
 
-import type { Band } from "../../model/index.ts";
 import type { Plugin } from "chart.js";
 import { THEME } from "../../core/canvas-registry.ts";
 import type { ProtestDataset } from "../datasets.ts";

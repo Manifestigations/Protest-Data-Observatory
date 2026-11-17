@@ -9,13 +9,6 @@
  * donor rate.
  */
 
-import type {
-  AssumptionKey,
-  EdgeKind,
-  Estimate,
-  MixBand,
-  SensitivityRow,
-} from "./types.ts";
 import {
   CIVILIANS_24OCT,
   CRS_OCTOBER,
@@ -23,6 +16,7 @@ import {
   THINES,
   TOULOUSE,
 } from "./inputs.ts";
+import type { Estimate, MixBand, SensitivityRow } from "./types.ts";
 
 const round = Math.round;
 const n = (x: number) => x.toLocaleString("en-GB");

@@ -4,36 +4,10 @@
    filled idempotently by chrome.ts, which keeps working inside the moved node.
    ========================================================================== */
 
-import { PAGES } from "../site/routes.ts";
 import { getLocale } from "../copy/index.ts";
-import type { Tone } from "../core/colors.ts";
+import { PAGES } from "../site/routes.ts";
 
 const OPEN_KEY = "pdo-open";
-const SEC_LETTERS = ["a", "b", "c", "d", "e"] as const;
-type SecKey = (typeof SEC_LETTERS)[number] | "sources" | "page";
-
-/** Which tone each section carries. Everything not listed falls back to blue. */
-const PAGE_TONES: Readonly<Record<string, Partial<Record<SecKey, Tone>>>> = {
-  "2026": { a: "turnout", b: "police", c: "cost" },
-  "2026/turnout": { a: "turnout", b: "turnout" },
-  "2026/violence": { a: "arrest", b: "police" },
-  "2026/costs": { a: "policeCost" },
-  historic: { a: "turnout", b: "arrest" },
-  "historic/movements": {
-    a: "turnout",
-    b: "arrest",
-    c: "police",
-    d: "protest",
-    e: "bystander",
-  },
-  "historic/series": {
-    a: "turnout",
-    b: "arrest",
-    c: "police",
-    d: "protest",
-    e: "cost",
-  },
-};
 
 const LABEL = {
   en: {
@@ -101,14 +75,6 @@ function saveOpen(id: string, open: boolean): void {
   } catch {
     /* private mode: session-only */
   }
-}
-
-/* ---- tone --------------------------------------------------------------- */
-
-function secKeyOf(head: HTMLElement): SecKey {
-  if (head.id === "sources-title") return "sources";
-  const m = /^hdr-([a-e])$/.exec(head.id);
-  return (m?.[1] as SecKey) ?? "page";
 }
 
 /* ---- the wrapper -------------------------------------------------------- */

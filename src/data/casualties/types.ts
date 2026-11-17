@@ -46,11 +46,7 @@ export type Cell =
   | { readonly s: "x"; readonly why: Why };
 
 export type Population =
-  | "forces"
-  | "protesters"
-  | "bystanders"
-  | "educationDeclared"
-  | "mixed";
+  "forces" | "protesters" | "bystanders" | "educationDeclared" | "mixed";
 
 export type Participation = "participating" | "non-participating" | "unknown";
 
@@ -58,12 +54,7 @@ export type Participation = "participating" | "non-participating" | "unknown";
  *  can ever have a denominator. A register and a declaration are not the same
  *  statistic even when their numbers look alike. */
 export type Selection =
-  | "official"
-  | "declared"
-  | "register"
-  | "treated"
-  | "legal"
-  | "regional";
+  "official" | "declared" | "register" | "treated" | "legal" | "regional";
 
 export interface SevRow {
   /** Key in casualties.scope. */

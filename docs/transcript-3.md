@@ -1,6 +1,6 @@
 # French Protest Charts (Part II - Comparisons & i18n)
 
-*Created: 11/11/2026, 20:14:36*
+_Created: 11/11/2026, 20:14:36_
 
 ---
 
@@ -23,6 +23,7 @@ Reviewed. I have the full picture:
 **Conventions I'll hold** — missing = `null` never `0`; plotted point = band midpoint with bars spanning the range; `spanGaps: true` + dashed connector on any multi-slot jump; quality flags `n/r/p/f/e/c/w` with `r/p/e/c` detached to hollow points-only series; quality and notes per-metric, day caveats in tooltip footer; `SubTitle` (capital T); weekly crowd = `max`, arrests/injuries = `sum`; `detachPolicy: 'never'` for cumulative; excluded regional/partial days stay out of national sums.
 
 **Open issues I'm tracking**
+
 1. W2 damages double-counts €12M (6 Oct and 8 Oct are the same IDF increment) — needs `'c'` tagging or an `anchor` flag summing only the last value of a run.
 2. W3 damages double-counts 18 Oct (subset of the 17 Oct weekend total) — same anchor fix.
 3. Cumulative policing is a staircase (10 of 42 days), not a daily-accruing spend curve.
@@ -60,17 +61,17 @@ Crowd ranges are **authorities (low) – organisers (high)** unless stated; ever
 
 # 1. May 1968 (2 May – 30 June 1968)
 
-| Week | Dates | Protestors (peak day) | Arrests | Forces injured | Protesters injured | Notes |
-|---|---|---|---|---|---|---|
-| **W1** | 29 Apr – 5 May | 25,000 – 100,000 *(1 May, Paris)* | — | — | — | CGT/PCF march République→Bastille: 25,000 (police) vs 100,000 (organisers) [^1]; "quelque 100 000" per CGT [^2] |
-| **W2** | 6 – 12 May | 20,000 – 20,000+ *(6 & 10 May, Paris)* | 422 (early-May clashes) + 469 (night of barricades) | 300+ (6 May); 247 (10–11 May) | ≥100 (10–11 May) | 6 May: >20,000 to the Sorbonne, hundreds arrested [^3][^4]; 10 May: 20,000 (12,000 police); night: 6,255 police, 125 cars damaged / 63 burnt, 469 arrests [^4] |
-| **W3** | 13 – 19 May | **230,000 – 1,000,000** *(13 May, Paris)* | — | — | — | Prefecture 230,000 · ORTF 171,000 · surface-area estimate 500,000 · unions 1,000,000; ~1M more claimed in ~30 other cities [^4][^5][^6]. **Peak of the whole episode.** Strikes: ~10M workers |
-| **W4** | 20 – 26 May | — | 1,000+ *(25 May)* | — | 887+ *(25 May)* | 20 May: 4M strikers [^5]; 24 May: Mathérion killed; 25 May: ~9M strikers, ORTF walkout [^5]. Casualty block is the EN-Wikipedia infobox, attributed to 25 May only — treat as **ᵉ**, weak provenance [^7] |
-| **W5** | 27 May – 2 Jun | 300,000 – 1,000,000 *(30 May)* ⚠ | — | — | — | **Counter-demonstration** (pro-de Gaulle, Champs-Élysées): 300,000 prefecture / 1M Gaullists [^4]; the chronology says 200,000 [^5]. Exclude from protest totals. 27 May: Grenelle protocol, Charléty meeting |
-| **W6** | 3 – 9 Jun | — | — | — | — | 4 Jun partial return to work; 7 Jun Renault Flins clashes |
-| **W7** | 10 – 16 Jun | — | — | — | 1 dead *(10 Jun, Tautin)*; 2 dead *(11 Jun, Sochaux)* | 12 Jun: demonstrations banned nationwide [^5] |
-| **W8** | 17 – 23 Jun | — | — | — | — | 23 Jun legislative elections |
-| **W9** | 24 – 30 Jun | — | — | — | — | Crisis closes 30 Jun |
+| Week   | Dates          | Protestors (peak day)                     | Arrests                                             | Forces injured                | Protesters injured                                    | Notes                                                                                                                                                                                                         |
+| ------ | -------------- | ----------------------------------------- | --------------------------------------------------- | ----------------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **W1** | 29 Apr – 5 May | 25,000 – 100,000 _(1 May, Paris)_         | —                                                   | —                             | —                                                     | CGT/PCF march République→Bastille: 25,000 (police) vs 100,000 (organisers) [^1]; "quelque 100 000" per CGT [^2]                                                                                               |
+| **W2** | 6 – 12 May     | 20,000 – 20,000+ _(6 & 10 May, Paris)_    | 422 (early-May clashes) + 469 (night of barricades) | 300+ (6 May); 247 (10–11 May) | ≥100 (10–11 May)                                      | 6 May: >20,000 to the Sorbonne, hundreds arrested [^3][^4]; 10 May: 20,000 (12,000 police); night: 6,255 police, 125 cars damaged / 63 burnt, 469 arrests [^4]                                                |
+| **W3** | 13 – 19 May    | **230,000 – 1,000,000** _(13 May, Paris)_ | —                                                   | —                             | —                                                     | Prefecture 230,000 · ORTF 171,000 · surface-area estimate 500,000 · unions 1,000,000; ~1M more claimed in ~30 other cities [^4][^5][^6]. **Peak of the whole episode.** Strikes: ~10M workers                 |
+| **W4** | 20 – 26 May    | —                                         | 1,000+ _(25 May)_                                   | —                             | 887+ _(25 May)_                                       | 20 May: 4M strikers [^5]; 24 May: Mathérion killed; 25 May: ~9M strikers, ORTF walkout [^5]. Casualty block is the EN-Wikipedia infobox, attributed to 25 May only — treat as **ᵉ**, weak provenance [^7]     |
+| **W5** | 27 May – 2 Jun | 300,000 – 1,000,000 _(30 May)_ ⚠          | —                                                   | —                             | —                                                     | **Counter-demonstration** (pro-de Gaulle, Champs-Élysées): 300,000 prefecture / 1M Gaullists [^4]; the chronology says 200,000 [^5]. Exclude from protest totals. 27 May: Grenelle protocol, Charléty meeting |
+| **W6** | 3 – 9 Jun      | —                                         | —                                                   | —                             | —                                                     | 4 Jun partial return to work; 7 Jun Renault Flins clashes                                                                                                                                                     |
+| **W7** | 10 – 16 Jun    | —                                         | —                                                   | —                             | 1 dead _(10 Jun, Tautin)_; 2 dead _(11 Jun, Sochaux)_ | 12 Jun: demonstrations banned nationwide [^5]                                                                                                                                                                 |
+| **W8** | 17 – 23 Jun    | —                                         | —                                                   | —                             | —                                                     | 23 Jun legislative elections                                                                                                                                                                                  |
+| **W9** | 24 – 30 Jun    | —                                         | —                                                   | —                             | —                                                     | Crisis closes 30 Jun                                                                                                                                                                                          |
 
 **Why this table is thin:** the street crowd was measured ad hoc in 1968 — "authorities" numbers come from the prefecture, "surface occupée" estimates and union claims, and only 13 May and 30 May have a published crowd range. The strike (up to ~10M workers) is a different population from the march — do not merge them into one "protestors" series. Days with no march (W4, W6–W9) still contain the deaths, the bans and the workplace occupation.
 
@@ -78,20 +79,20 @@ Crowd ranges are **authorities (low) – organisers (high)** unless stated; ever
 
 # 2. CPE youth protests, 2006 (Feb – Apr 2006)
 
-| Week | Dates | Protestors (peak day) | Arrests | Forces injured | Protesters injured | Notes |
-|---|---|---|---|---|---|---|
-| **W1** | 30 Jan – 5 Feb | — | — | — | — | |
-| **W2** | 6 – 12 Feb | 200,000 – 400,000 *(7 Feb, 187 demonstrations)* | — | — | — | First national action day [^8] |
-| **W3–W5** | 13 Feb – 5 Mar | — | — | — | — | University occupations (Rennes etc.), no crowd count published |
-| **W6** | 6 – 12 Mar | 400,000 – 1,000,000+ *(7 Mar)* | — | — | — | 7 Mar: ">1 million" [^8], chronology 400,000–1M [^9]; 9 Mar: ~38 universities on strike; Paris counts diverge sharply (92,000 police vs 700,000 unions — date attribution uncertain in source) |
-| **W7** | 13 – 19 Mar | **500,000 – 1,500,000** *(18 Mar)*; Paris 80,000 – 700,000 | 156 (18 Mar, Paris) [^8]; 167 (18 Mar, Paris) [^9] | 34 (18 Mar, Paris) | 18 (16 Mar, Paris) [^8]; 52 wounded total in Paris 18 Mar | 16 Mar: 247,500 (Ministry) / ~500,000; Paris 33,000 police / 120,000 organisers [^10][^11][^9] · 18 Mar: national 500,000 police / 1.5M organisers; Paris 80,000–350,000 (Le Monde) [^12][^8] · 19 Mar: 503,000 Ministry / 1.3–1.5M CGT, Paris 80,000 / up to 400,000 [^13][^14] |
-| **W8** | 20 – 26 Mar | 220,000 – 450,000 *(23 Mar)* | 630 *(23 Mar)* | 90 *(23 Mar)* | — | 21 Mar: 40,000 students only [^9]; 23 Mar: 21 universities fully blocked, 67 striking/blocked [^8] |
-| **W9** | 27 Mar – 2 Apr | 1,055,000 – 2,710,000 *(28 Mar)*; Paris 92,000 – 700,000 | 600 | — | — | 4th national action day [^8] |
-| **W10** | 3 – 9 Apr | 1,000,000 – 3,100,000 *(4 Apr)* | — | — | — | Peak day of the episode [^8] |
-| **W11** | 10 – 16 Apr | — | — | — | — | CPE scrapped 10 Apr; movement splits, Easter holidays, momentum lost [^8] |
-| **Total** | Feb – Apr | max 1.0M – 3.1M *(4 Apr)* | **4,500** (CAJ count over the whole episode; 1,950 in garde à vue, 635 prosecutions) [^8] | — | — | |
+| Week      | Dates          | Protestors (peak day)                                      | Arrests                                                                                   | Forces injured     | Protesters injured                                        | Notes                                                                                                                                                                                                                                                                            |
+| --------- | -------------- | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------ | --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **W1**    | 30 Jan – 5 Feb | —                                                          | —                                                                                         | —                  | —                                                         |                                                                                                                                                                                                                                                                                  |
+| **W2**    | 6 – 12 Feb     | 200,000 – 400,000 _(7 Feb, 187 demonstrations)_            | —                                                                                         | —                  | —                                                         | First national action day [^8]                                                                                                                                                                                                                                                   |
+| **W3–W5** | 13 Feb – 5 Mar | —                                                          | —                                                                                         | —                  | —                                                         | University occupations (Rennes etc.), no crowd count published                                                                                                                                                                                                                   |
+| **W6**    | 6 – 12 Mar     | 400,000 – 1,000,000+ _(7 Mar)_                             | —                                                                                         | —                  | —                                                         | 7 Mar: ">1 million" [^8], chronology 400,000–1M [^9]; 9 Mar: ~38 universities on strike; Paris counts diverge sharply (92,000 police vs 700,000 unions — date attribution uncertain in source)                                                                                   |
+| **W7**    | 13 – 19 Mar    | **500,000 – 1,500,000** _(18 Mar)_; Paris 80,000 – 700,000 | 156 (18 Mar, Paris) [^8]; 167 (18 Mar, Paris) [^9]                                        | 34 (18 Mar, Paris) | 18 (16 Mar, Paris) [^8]; 52 wounded total in Paris 18 Mar | 16 Mar: 247,500 (Ministry) / ~500,000; Paris 33,000 police / 120,000 organisers [^10][^11][^9] · 18 Mar: national 500,000 police / 1.5M organisers; Paris 80,000–350,000 (Le Monde) [^12][^8] · 19 Mar: 503,000 Ministry / 1.3–1.5M CGT, Paris 80,000 / up to 400,000 [^13][^14] |
+| **W8**    | 20 – 26 Mar    | 220,000 – 450,000 _(23 Mar)_                               | 630 _(23 Mar)_                                                                            | 90 _(23 Mar)_      | —                                                         | 21 Mar: 40,000 students only [^9]; 23 Mar: 21 universities fully blocked, 67 striking/blocked [^8]                                                                                                                                                                               |
+| **W9**    | 27 Mar – 2 Apr | 1,055,000 – 2,710,000 _(28 Mar)_; Paris 92,000 – 700,000   | 600                                                                                       | —                  | —                                                         | 4th national action day [^8]                                                                                                                                                                                                                                                     |
+| **W10**   | 3 – 9 Apr      | 1,000,000 – 3,100,000 _(4 Apr)_                            | —                                                                                         | —                  | —                                                         | Peak day of the episode [^8]                                                                                                                                                                                                                                                     |
+| **W11**   | 10 – 16 Apr    | —                                                          | —                                                                                         | —                  | —                                                         | CPE scrapped 10 Apr; movement splits, Easter holidays, momentum lost [^8]                                                                                                                                                                                                        |
+| **Total** | Feb – Apr      | max 1.0M – 3.1M _(4 Apr)_                                  | **4,500** (CAJ count over the whole episode; 1,950 in garde à vue, 635 prosecutions) [^8] | —                  | —                                                         |                                                                                                                                                                                                                                                                                  |
 
-**Caveat:** March 2006 is the worst-documented episode for arrests — the CAJ total (4,500) is a *movement-wide* count, not a per-day series, and it counts arrests, not custody. The Paris-only figures for 18 March are the most reliable single-day enforcement numbers in the episode.
+**Caveat:** March 2006 is the worst-documented episode for arrests — the CAJ total (4,500) is a _movement-wide_ count, not a per-day series, and it counts arrests, not custody. The Paris-only figures for 18 March are the most reliable single-day enforcement numbers in the episode.
 
 ---
 
@@ -99,43 +100,43 @@ Crowd ranges are **authorities (low) – organisers (high)** unless stated; ever
 
 All figures are the **Saturday act**, national, Interior Ministry vs the "Nombre jaune" collective (or union count) [^15].
 
-| Week | Act | Protestors (Ministry) | Alternative count | Arrests | Injured | Notes |
-|---|---|---|---|---|---|---|
-| 12–18 Nov 2018 | I (17 Nov) | 287,700 ᶜ | — | ~1,150 interpellations, 974 GàV | 126 (17 police) | ⚠ **Counts all actions incl. road blockades**, not just marches — not comparable with Acts II+ [^15][^16] |
-| 19–25 Nov | II (24 Nov) | 166,000 | 750,000 (France Police union) | 339 interpellations, 307 GàV | 84 (30 police) | Initially published as 106,301, revised up 8 days later [^15][^17] |
-| 26 Nov – 2 Dec | III (1 Dec) | 136,000 | — | 630 in custody | 263 | 1 death (Zyed Benna, toll collector) [^18] |
-| 3–9 Dec | IV (8 Dec) | 136,000 | — | ~2,000 interpellations, 1,709 GàV | 585 (RFI) / 264 (Ouest-France) / 118 (BBC) | Champs-Élysées violence; cumulative movement injuries pass 1,000 [^19][^20][^18] |
-| 10–16 Dec | V (15 Dec) | 66,000 | — | — | — | |
-| 17–23 Dec | VI (22 Dec) | 38,600 | — | — | — | |
-| 24–30 Dec | VII (29 Dec) | 32,000 | — | — | — | |
-| 31 Dec – 6 Jan 2019 | VIII (5 Jan) | 50,000 | 123,400 | — | — | |
-| 7–13 Jan | IX (12 Jan) | 84,000 | 159,200 | — | — | |
-| 14–20 Jan | X (19 Jan) | 84,000 | 147,400 | — | — | |
-| 21–27 Jan | XI (26 Jan) | 69,000 | 123,200 | — | — | |
-| 28 Jan – 3 Feb | XII (2 Feb) | 58,600 | 116,000 | — | — | |
-| 4–10 Feb | XIII (9 Feb) | 51,400 | — | — | — | |
-| 11–17 Feb | XIV (16 Feb) | 41,500 | 104,100 | — | — | |
-| 18–24 Feb | XV (23 Feb) | 46,600 | — | — | — | |
-| 25 Feb – 3 Mar | XVI (2 Mar) | 39,300 | — | — | — | |
-| 4–10 Mar | XVII (9 Mar) | 28,600 | — | — | — | |
-| 11–17 Mar | XVIII (16 Mar) | 32,300 | — | — | — | |
-| 18–24 Mar | XIX (23 Mar) | 40,500 | — | — | — | |
-| 25–31 Mar | XX (30 Mar) | 33,700 | — | — | — | |
-| 1–7 Apr | XXI (6 Apr) | 22,300 | — | — | — | |
-| 8–14 Apr | XXII (13 Apr) | 31,000 | — | — | — | |
-| 15–21 Apr | XXIII (20 Apr) | 27,900 | — | — | — | |
-| 22–28 Apr | XXIV (27 Apr) | 23,600 | — | — | — | |
-| 29 Apr – 5 May | XXV (4 May) | 18,900 | — | — | — | |
-| 6–12 May | XXVI (11 May) | 18,600 | — | — | — | |
-| 13–19 May | XXVII (18 May) | 15,500 | — | — | — | 1-year anniversary |
-| 20–26 May | XXVIII (25 May) | 12,500 | — | — | — | |
-| 27 May – 2 Jun | XXIX (1 Jun) | 9,500 | — | — | — | |
-| 3–9 Jun | XXX (8 Jun) | 10,300 | — | — | — | |
-| 10–16 Jun | XXXI (15 Jun) | 7,000 | — | — | — | |
-| 17–23 Jun | XXXII (22 Jun) | 11,800 | — | — | — | |
-| 24–30 Jun | XXXIII (29 Jun) | 5,800 | — | — | — | |
-| 31 Jul – 6 Sep | XXXIV–XLIII | — | — | — | — | Ministry published "NC" (not communicated) for Acts 34–43 [^15] |
-| 2–8 Sep 2019 | XLIV (7 Sep) | 7,000 | — | — | — | Last published figure; Acts 45–52 unquantified [^15] |
+| Week                | Act             | Protestors (Ministry) | Alternative count             | Arrests                           | Injured                                    | Notes                                                                                                     |
+| ------------------- | --------------- | --------------------- | ----------------------------- | --------------------------------- | ------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| 12–18 Nov 2018      | I (17 Nov)      | 287,700 ᶜ             | —                             | ~1,150 interpellations, 974 GàV   | 126 (17 police)                            | ⚠ **Counts all actions incl. road blockades**, not just marches — not comparable with Acts II+ [^15][^16] |
+| 19–25 Nov           | II (24 Nov)     | 166,000               | 750,000 (France Police union) | 339 interpellations, 307 GàV      | 84 (30 police)                             | Initially published as 106,301, revised up 8 days later [^15][^17]                                        |
+| 26 Nov – 2 Dec      | III (1 Dec)     | 136,000               | —                             | 630 in custody                    | 263                                        | 1 death (Zyed Benna, toll collector) [^18]                                                                |
+| 3–9 Dec             | IV (8 Dec)      | 136,000               | —                             | ~2,000 interpellations, 1,709 GàV | 585 (RFI) / 264 (Ouest-France) / 118 (BBC) | Champs-Élysées violence; cumulative movement injuries pass 1,000 [^19][^20][^18]                          |
+| 10–16 Dec           | V (15 Dec)      | 66,000                | —                             | —                                 | —                                          |                                                                                                           |
+| 17–23 Dec           | VI (22 Dec)     | 38,600                | —                             | —                                 | —                                          |                                                                                                           |
+| 24–30 Dec           | VII (29 Dec)    | 32,000                | —                             | —                                 | —                                          |                                                                                                           |
+| 31 Dec – 6 Jan 2019 | VIII (5 Jan)    | 50,000                | 123,400                       | —                                 | —                                          |                                                                                                           |
+| 7–13 Jan            | IX (12 Jan)     | 84,000                | 159,200                       | —                                 | —                                          |                                                                                                           |
+| 14–20 Jan           | X (19 Jan)      | 84,000                | 147,400                       | —                                 | —                                          |                                                                                                           |
+| 21–27 Jan           | XI (26 Jan)     | 69,000                | 123,200                       | —                                 | —                                          |                                                                                                           |
+| 28 Jan – 3 Feb      | XII (2 Feb)     | 58,600                | 116,000                       | —                                 | —                                          |                                                                                                           |
+| 4–10 Feb            | XIII (9 Feb)    | 51,400                | —                             | —                                 | —                                          |                                                                                                           |
+| 11–17 Feb           | XIV (16 Feb)    | 41,500                | 104,100                       | —                                 | —                                          |                                                                                                           |
+| 18–24 Feb           | XV (23 Feb)     | 46,600                | —                             | —                                 | —                                          |                                                                                                           |
+| 25 Feb – 3 Mar      | XVI (2 Mar)     | 39,300                | —                             | —                                 | —                                          |                                                                                                           |
+| 4–10 Mar            | XVII (9 Mar)    | 28,600                | —                             | —                                 | —                                          |                                                                                                           |
+| 11–17 Mar           | XVIII (16 Mar)  | 32,300                | —                             | —                                 | —                                          |                                                                                                           |
+| 18–24 Mar           | XIX (23 Mar)    | 40,500                | —                             | —                                 | —                                          |                                                                                                           |
+| 25–31 Mar           | XX (30 Mar)     | 33,700                | —                             | —                                 | —                                          |                                                                                                           |
+| 1–7 Apr             | XXI (6 Apr)     | 22,300                | —                             | —                                 | —                                          |                                                                                                           |
+| 8–14 Apr            | XXII (13 Apr)   | 31,000                | —                             | —                                 | —                                          |                                                                                                           |
+| 15–21 Apr           | XXIII (20 Apr)  | 27,900                | —                             | —                                 | —                                          |                                                                                                           |
+| 22–28 Apr           | XXIV (27 Apr)   | 23,600                | —                             | —                                 | —                                          |                                                                                                           |
+| 29 Apr – 5 May      | XXV (4 May)     | 18,900                | —                             | —                                 | —                                          |                                                                                                           |
+| 6–12 May            | XXVI (11 May)   | 18,600                | —                             | —                                 | —                                          |                                                                                                           |
+| 13–19 May           | XXVII (18 May)  | 15,500                | —                             | —                                 | —                                          | 1-year anniversary                                                                                        |
+| 20–26 May           | XXVIII (25 May) | 12,500                | —                             | —                                 | —                                          |                                                                                                           |
+| 27 May – 2 Jun      | XXIX (1 Jun)    | 9,500                 | —                             | —                                 | —                                          |                                                                                                           |
+| 3–9 Jun             | XXX (8 Jun)     | 10,300                | —                             | —                                 | —                                          |                                                                                                           |
+| 10–16 Jun           | XXXI (15 Jun)   | 7,000                 | —                             | —                                 | —                                          |                                                                                                           |
+| 17–23 Jun           | XXXII (22 Jun)  | 11,800                | —                             | —                                 | —                                          |                                                                                                           |
+| 24–30 Jun           | XXXIII (29 Jun) | 5,800                 | —                             | —                                 | —                                          |                                                                                                           |
+| 31 Jul – 6 Sep      | XXXIV–XLIII     | —                     | —                             | —                                 | —                                          | Ministry published "NC" (not communicated) for Acts 34–43 [^15]                                           |
+| 2–8 Sep 2019        | XLIV (7 Sep)    | 7,000                 | —                             | —                                 | —                                          | Last published figure; Acts 45–52 unquantified [^15]                                                      |
 
 **Caveat:** Act I's 287,700 is an actions-total (blockades included) and must be tagged `ᶜ`/`ᵉ`; Acts II–III sit in a methodology change (revised count); Acts 34–43 and 45–52 are "NC", i.e. **absence of a figure, not absence of people**.
 
@@ -143,12 +144,12 @@ All figures are the **Saturday act**, national, Interior Ministry vs the "Nombre
 
 # 4. Nahel (27 June – 5 July 2023, + first anniversary 2024)
 
-| Week | Dates | Protestors (peak day) | Arrests | Forces injured | Deaths | Notes |
-|---|---|---|---|---|---|---|
-| **W1** | 26 Jun – 2 Jul 2023 | 6,200 – 20,000 *(29 Jun, Nanterre march blanche)* | **3,354** | **722** | 2 | Police count 6,200, organisers 20,000 [^21][^22]. Daily national tally: 27 Jun 31 arrests/24 police hurt; 28 Jun 207/174; 29 Jun 875/317/1 dead; 30 Jun 1,311/162; 1 Jul 773/42/1 dead; 2 Jul 157/3 [^23]. Vehicles burnt: 5,662 in this week; buildings damaged 1,029 |
-| **W2** | 3 – 9 Jul 2023 | — | 108 | 1 | — | 3 Jul 72 arrests; 4 Jul 16; 5 Jul 20 [^23]; ~18 cities held anti-racism rallies on 1 Jul [^24] |
-| **Total** | 27 Jun – 5 Jul | — | 3,462 | 723 | 2 | 5,954 vehicles burnt, 1,092 buildings damaged [^23]. Senate: ~50,000 rioters estimated over the whole episode, 45,000 forces mobilised, 4,282 in garde à vue to 10 Jul, >1,000 injured (782 police), 2,508 buildings, 12,031 vehicles, €650M damage [^25][^26] |
-| **W26 2024** | 24–30 Jun | several hundred *(29 Jun, Nanterre silent march)* | — | — | — | First anniversary: "plusieurs centaines de personnes" [^27][^28] |
+| Week         | Dates               | Protestors (peak day)                             | Arrests   | Forces injured | Deaths | Notes                                                                                                                                                                                                                                                                  |
+| ------------ | ------------------- | ------------------------------------------------- | --------- | -------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **W1**       | 26 Jun – 2 Jul 2023 | 6,200 – 20,000 _(29 Jun, Nanterre march blanche)_ | **3,354** | **722**        | 2      | Police count 6,200, organisers 20,000 [^21][^22]. Daily national tally: 27 Jun 31 arrests/24 police hurt; 28 Jun 207/174; 29 Jun 875/317/1 dead; 30 Jun 1,311/162; 1 Jul 773/42/1 dead; 2 Jul 157/3 [^23]. Vehicles burnt: 5,662 in this week; buildings damaged 1,029 |
+| **W2**       | 3 – 9 Jul 2023      | —                                                 | 108       | 1              | —      | 3 Jul 72 arrests; 4 Jul 16; 5 Jul 20 [^23]; ~18 cities held anti-racism rallies on 1 Jul [^24]                                                                                                                                                                         |
+| **Total**    | 27 Jun – 5 Jul      | —                                                 | 3,462     | 723            | 2      | 5,954 vehicles burnt, 1,092 buildings damaged [^23]. Senate: ~50,000 rioters estimated over the whole episode, 45,000 forces mobilised, 4,282 in garde à vue to 10 Jul, >1,000 injured (782 police), 2,508 buildings, 12,031 vehicles, €650M damage [^25][^26]         |
+| **W26 2024** | 24–30 Jun           | several hundred _(29 Jun, Nanterre silent march)_ | —         | —              | —      | First anniversary: "plusieurs centaines de personnes" [^27][^28]                                                                                                                                                                                                       |
 
 **Caveat:** this episode is **under-counted by march numbers**. Most gatherings were banned, and the crowd figures that exist (6,200–20,000) describe the tribute march, not the riot itself — the riot's scale is only captured by arrests, burnt vehicles and the Senate's ~50,000 "émeutiers" estimate. Note the internal inconsistency: EN-Wikipedia's infobox (5,662 vehicles, 3,300+ arrests, 808 officers injured, €650M) and the FR-Wikipedia day table (5,954 vehicles, 3,462 arrests, 723 police injured) do not match [^26][^23].
 
@@ -158,35 +159,35 @@ All figures are the **Saturday act**, national, Interior Ministry vs the "Nombre
 
 ### 5a. 2023 — the main wave (19 Jan – 6 Jun 2023)
 
-| Week | Dates | Protestors (peak day, nationwide) | Paris peak | Notes |
-|---|---|---|---|---|
-| **W3** | 16–22 Jan 2023 | 1,120,000 – 2,000,000 *(19 Jan)* | 80,000 – 400,000 | First nationwide day; Occurrence: 55,000 in Paris |
-| **W5** | 30 Jan – 5 Feb | 1,270,000 – 2,800,000 *(31 Jan)* | 87,000 – 500,000 | |
-| **W6** | 6–12 Feb | **757,000 – 2,000,000** *(7 Feb)*; 963,000 – 2,500,000 *(11 Feb)* | 57,000 – 400,000; 93,000 – 500,000 | Two action days in one week — the table's "peak" hides a very high week |
-| **W7** | 13–19 Feb | 440,000 – 1,300,000 *(16 Feb)* | 37,000 – 300,000 | |
-| **W10** | 6–12 Mar | **1,280,000 – 3,500,000** *(7 Mar)*; 368,000 – 1,000,000 *(11 Mar) | 81,000 – 700,000; 48,000 – 300,000 | National record on both counts on 7 Mar [^29][^30] |
-| **W11** | 13–19 Mar | 480,000 – 1,700,000 *(15 Mar)* | 37,000 – 450,000 | |
-| **W12** | 20–26 Mar | **1,089,000 – 3,500,000** *(23 Mar)* | 119,000 – 800,000 | Second union record [^30] |
-| **W13** | 27 Mar – 2 Apr | 740,000 – 2,000,000 *(28 Mar)* | 93,000 – 450,000 | |
-| **W14** | 3–9 Apr | 570,000 – 2,000,000 *(6 Apr)* | 57,000 – 400,000 | |
-| **W15** | 10–16 Apr | 380,000 – 1,000,000/1,500,000 *(13 Apr)* | 42,000 – 400,000 | CGT figure differs between the two compilations (1.0M vs 1.5M) — flag as a range [^6][^30] |
-| **W18** | 1–7 May | 782,000 – 2,300,000 *(1 May)* | 112,000 – 550,000 | |
-| **W22** | 5–11 Jun | 281,000 – 900,000 *(6 Jun)* | 31,000 – 300,000 | Movement's minimum [^30][^31] |
-| **Total** | 19 Jan – 8 Jun | **10,520,000 – 29,000,000** (sum of action days) | 974,000 – 6,450,000 | Union total is ~2.8× the ministry total — the widest organiser/authority gap of any episode here |
+| Week      | Dates          | Protestors (peak day, nationwide)                                  | Paris peak                         | Notes                                                                                            |
+| --------- | -------------- | ------------------------------------------------------------------ | ---------------------------------- | ------------------------------------------------------------------------------------------------ |
+| **W3**    | 16–22 Jan 2023 | 1,120,000 – 2,000,000 _(19 Jan)_                                   | 80,000 – 400,000                   | First nationwide day; Occurrence: 55,000 in Paris                                                |
+| **W5**    | 30 Jan – 5 Feb | 1,270,000 – 2,800,000 _(31 Jan)_                                   | 87,000 – 500,000                   |                                                                                                  |
+| **W6**    | 6–12 Feb       | **757,000 – 2,000,000** _(7 Feb)_; 963,000 – 2,500,000 _(11 Feb)_  | 57,000 – 400,000; 93,000 – 500,000 | Two action days in one week — the table's "peak" hides a very high week                          |
+| **W7**    | 13–19 Feb      | 440,000 – 1,300,000 _(16 Feb)_                                     | 37,000 – 300,000                   |                                                                                                  |
+| **W10**   | 6–12 Mar       | **1,280,000 – 3,500,000** _(7 Mar)_; 368,000 – 1,000,000 *(11 Mar) | 81,000 – 700,000; 48,000 – 300,000 | National record on both counts on 7 Mar [^29][^30]                                               |
+| **W11**   | 13–19 Mar      | 480,000 – 1,700,000 _(15 Mar)_                                     | 37,000 – 450,000                   |                                                                                                  |
+| **W12**   | 20–26 Mar      | **1,089,000 – 3,500,000** _(23 Mar)_                               | 119,000 – 800,000                  | Second union record [^30]                                                                        |
+| **W13**   | 27 Mar – 2 Apr | 740,000 – 2,000,000 _(28 Mar)_                                     | 93,000 – 450,000                   |                                                                                                  |
+| **W14**   | 3–9 Apr        | 570,000 – 2,000,000 _(6 Apr)_                                      | 57,000 – 400,000                   |                                                                                                  |
+| **W15**   | 10–16 Apr      | 380,000 – 1,000,000/1,500,000 _(13 Apr)_                           | 42,000 – 400,000                   | CGT figure differs between the two compilations (1.0M vs 1.5M) — flag as a range [^6][^30]       |
+| **W18**   | 1–7 May        | 782,000 – 2,300,000 _(1 May)_                                      | 112,000 – 550,000                  |                                                                                                  |
+| **W22**   | 5–11 Jun       | 281,000 – 900,000 _(6 Jun)_                                        | 31,000 – 300,000                   | Movement's minimum [^30][^31]                                                                    |
+| **Total** | 19 Jan – 8 Jun | **10,520,000 – 29,000,000** (sum of action days)                   | 974,000 – 6,450,000                | Union total is ~2.8× the ministry total — the widest organiser/authority gap of any episode here |
 
 ### 5b. 2019–20 wave (the direct precedent)
 
-| Week | Dates | Protestors | Paris | Notes |
-|---|---|---|---|---|
-| **W49 2019** | 2–8 Dec | 806,000 – 1,500,000 *(5 Dec)* | 65,000 – 250,000 | [^6] |
-| **W51 2019** | 16–22 Dec | 615,000 – 1,800,000 *(17 Dec)* | 76,000 – 350,000 | [^6] |
+| Week         | Dates     | Protestors                     | Paris            | Notes |
+| ------------ | --------- | ------------------------------ | ---------------- | ----- |
+| **W49 2019** | 2–8 Dec   | 806,000 – 1,500,000 _(5 Dec)_  | 65,000 – 250,000 | [^6]  |
+| **W51 2019** | 16–22 Dec | 615,000 – 1,800,000 _(17 Dec)_ | 76,000 – 350,000 | [^6]  |
 
 ### 5c. 2024 remnants
 
-| Week | Dates | Protestors | Paris | Notes |
-|---|---|---|---|---|
-| **W24 2024** | 10–16 Jun | 250,000 (police) – 600,000+ (CGT) *(15 Jun)* | 75,000 police / 250,000 CGT | Anti-RN march, youth contingent; 9 interpellations, 3 police injured [^32][^33] |
-| **W40 2024** | 30 Sep – 6 Oct | 95,000 – 170,000 *(1 Oct)* | — | 250 rallies on Barnier's policy-general day; demands included abrogating the 2023 reform [^30] |
+| Week         | Dates          | Protestors                                   | Paris                       | Notes                                                                                          |
+| ------------ | -------------- | -------------------------------------------- | --------------------------- | ---------------------------------------------------------------------------------------------- |
+| **W24 2024** | 10–16 Jun      | 250,000 (police) – 600,000+ (CGT) _(15 Jun)_ | 75,000 police / 250,000 CGT | Anti-RN march, youth contingent; 9 interpellations, 3 police injured [^32][^33]                |
+| **W40 2024** | 30 Sep – 6 Oct | 95,000 – 170,000 _(1 Oct)_                   | —                           | 250 rallies on Barnier's policy-general day; demands included abrogating the 2023 reform [^30] |
 
 **Caveat:** the 2023 national numbers include strike pickets and manifestation cortèges counted differently by the two sources; the "peak day" convention understates a movement whose real unit is the **action day sequence**, not the crowd on a Saturday.
 
@@ -196,13 +197,13 @@ All figures are the **Saturday act**, national, Interior Ministry vs the "Nombre
 
 The label first appears on social media in May 2025; the first national action was 10 September 2025, against the Bayrou budget, not a pension law [^34].
 
-| Week | Dates | Protestors (peak day) | Arrests | Forces injured | Protesters injured | Notes |
-|---|---|---|---|---|---|---|
-| **W2 2025** | 8–14 Sep | **175,000 – 197,000** (Interior) / ~250,000 (CGT) *(10 Sep)* | 540 (211 Paris) | — | — | 596 rallies, 253 blockages; ministry figure was revised upward from ~29,000 counted in the early evening [^35][^36][^37][^38][^39] |
-| **W3 2025** | 15–21 Sep | **500,000 – 1,000,000** *(18 Sep)*; Paris 55,000 (prefecture) | 309 nationwide; 103 in Paris (89 GàV) | 26 | 11 (incl. 1 journalist) | Intersyndicale strike + Bloquons tout; Paris prefecture 55,000 vs CGT 1M [^40][^41][^42] |
-| **W5 2025** | 29 Sep – 5 Oct | 195,000 (Interior) – 600,000 (CGT) *(2 Oct)*; Paris 24,000 | — | — | — | Weakest mobilisation since 1 May 2025 [^43][^44][^45] |
-| **W2 2025 (Nov)** | 10–16 Nov | 10 – 60 per local cortège *(15 Nov)* ʳ | — | — | — | Nantes ~50–60, Saint-Nazaire ~10, Cherbourg ~10, Coutances ~12 — **regional only, exclude from national sums** [^46][^47][^48] |
-| **Outcome** | — | — | — | — | — | Bayrou government dissolved; the 2023 pension reform put on hold [^34] |
+| Week              | Dates          | Protestors (peak day)                                         | Arrests                               | Forces injured | Protesters injured      | Notes                                                                                                                              |
+| ----------------- | -------------- | ------------------------------------------------------------- | ------------------------------------- | -------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| **W2 2025**       | 8–14 Sep       | **175,000 – 197,000** (Interior) / ~250,000 (CGT) _(10 Sep)_  | 540 (211 Paris)                       | —              | —                       | 596 rallies, 253 blockages; ministry figure was revised upward from ~29,000 counted in the early evening [^35][^36][^37][^38][^39] |
+| **W3 2025**       | 15–21 Sep      | **500,000 – 1,000,000** _(18 Sep)_; Paris 55,000 (prefecture) | 309 nationwide; 103 in Paris (89 GàV) | 26             | 11 (incl. 1 journalist) | Intersyndicale strike + Bloquons tout; Paris prefecture 55,000 vs CGT 1M [^40][^41][^42]                                           |
+| **W5 2025**       | 29 Sep – 5 Oct | 195,000 (Interior) – 600,000 (CGT) _(2 Oct)_; Paris 24,000    | —                                     | —              | —                       | Weakest mobilisation since 1 May 2025 [^43][^44][^45]                                                                              |
+| **W2 2025 (Nov)** | 10–16 Nov      | 10 – 60 per local cortège _(15 Nov)_ ʳ                        | —                                     | —              | —                       | Nantes ~50–60, Saint-Nazaire ~10, Cherbourg ~10, Coutances ~12 — **regional only, exclude from national sums** [^46][^47][^48]     |
+| **Outcome**       | —              | —                                                             | —                                     | —              | —                       | Bayrou government dissolved; the 2023 pension reform put on hold [^34]                                                             |
 
 **Caveat:** the Interior Ministry's "participants" figure for 10 September counts participants in **actions**, not cortèges — the same methodological trap as Gilets jaunes Act I. 18 September is a union-organised day with an ordinary crowd count; do not put 10 September and 18 September on the same line without that flag.
 
@@ -210,67 +211,114 @@ The label first appears on social media in May 2025; the first national action w
 
 ## Cross-episode comparability (worth encoding as flags, not as prose)
 
-| Flag | Episodes affected |
-|---|---|
-| `ᶜ` actions-total, not a march count | Gilets jaunes Act I (287,700), Bloquons tout 10 Sep |
-| `ᵉ` low-provenance figure | May 68 casualty block (EN-Wiki infobox, "25 May" only) |
-| `ʳ` regional only, excluded from national sums | Bloquons tout 15 Nov 2025; Gilets jaunes Acts 34+ (NC) |
-| `ᶠ` floor | Gilets jaunes injury counts after Act IV (cumulative only) |
-| `—` genuinely unmeasured | Most weeks of May 68 after 13 May; Nahel 2023 march numbers; Gilets jaunes Acts 34–52 |
+| Flag                                           | Episodes affected                                                                     |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `ᶜ` actions-total, not a march count           | Gilets jaunes Act I (287,700), Bloquons tout 10 Sep                                   |
+| `ᵉ` low-provenance figure                      | May 68 casualty block (EN-Wiki infobox, "25 May" only)                                |
+| `ʳ` regional only, excluded from national sums | Bloquons tout 15 Nov 2025; Gilets jaunes Acts 34+ (NC)                                |
+| `ᶠ` floor                                      | Gilets jaunes injury counts after Act IV (cumulative only)                            |
+| `—` genuinely unmeasured                       | Most weeks of May 68 after 13 May; Nahel 2023 march numbers; Gilets jaunes Acts 34–52 |
 
-**What I could not source in this pass:** (a) the 2024 "SOS闵 / je bloque tout" action wave that used the same name — no reliable weekly counts retrieved, so it is *not* in the Bloquons tout table; (b) per-day crowd figures for the Nahel riot nights of 27–28 June 2023 (the Place de la République gathering on 27 June is consistently described in the tens of thousands but no sourced count is in hand); (c) arrest/injury series for 2006 CPE, 2023 pensions and 2025 Bloquons tout beyond the single days quoted.
+**What I could not source in this pass:** (a) the 2024 "SOS闵 / je bloque tout" action wave that used the same name — no reliable weekly counts retrieved, so it is _not_ in the Bloquons tout table; (b) per-day crowd figures for the Nahel riot nights of 27–28 June 2023 (the Place de la République gathering on 27 June is consistently described in the tens of thousands but no sourced count is in hand); (c) arrest/injury series for 2006 CPE, 2023 pensions and 2025 Bloquons tout beyond the single days quoted.
 
 Want me to turn these into the app's `FACTS` / `aggregateWeekly` shape — a per-event record keyed by date with `{low, high, q, note}`, so the same aggregator produces all six episodes on one axis?
 
 **References**
 
 [^1]: [Cent mille personnes de République à Bastille](https://www.nouvelobs.com/societe/le-quotidien-de-1968/20080424.OBS1184/cent-mille-personnes-de-republique-a-bastille.html) (1%)
+
 [^2]: [Des 1er mai souvent très politiques](https://www.publicsenat.fr/actualites/politique/des-1er-mai-souvent-tres-politiques-59701) (0%)
+
 [^3]: [May 1968](https://en.wikipedia.org/wiki/May_1968) (7%)
+
 [^4]: [Mai 68 — Wikipédia](https://fr.wikipedia.org/wiki/Mai_68) (7%)
+
 [^5]: [Chronologie des événements de mai - juin 1968 — Wikipédia](https://fr.wikipedia.org/wiki/Chronologie_des_%C3%A9v%C3%A9nements_de_mai_-_juin_1968) (17%)
+
 [^6]: [Liste des rassemblements les plus importants en France — Wikipédia](https://fr.wikipedia.org/wiki/Liste_des_rassemblements_les_plus_importants_en_France) (9%)
+
 [^7]: [May 68 - Wikipedia](https://en.wikipedia.org/wiki/May_68) (0%)
+
 [^8]: [2006 youth protests in France - Wikipedia](https://en.wikipedia.org/wiki/2006_youth_protests_in_France) (13%)
+
 [^9]: [Crise du CPE : chronologie](https://www.nouvelobs.com/societe/social/20060326.OBS1858/crise-du-cpe-chronologie.html) (2%)
+
 [^10]: [Des centaines de milliers de jeunes défilent à Paris et dans les ...](https://www.lemonde.fr/international/article/2006/03/16/des-centaines-de-milliers-de-jeunes-ont-defile_751311_3210.html) (0%)
+
 [^11]: [Des lycéens en nombre dans les défilés anti-CPE](https://www.lemonde.fr/la-crise-au-proche-orient/article/2006/03/17/des-lyceens-en-nombre-dans-les-defiles-anti-cpe_751768_734511.html) (0%)
+
 [^12]: [Plusieurs dizaines de milliers de manifestants anti-CPE à Paris et en régions](https://www.lemonde.fr/international/article/2006/03/18/des-defiles-dans-toutes-les-villes_752040_3210.html) (0%)
+
 [^13]: [French protesters issue job ultimatum | News | Al Jazeera](https://www.aljazeera.com/news/2006/3/19/french-protesters-issue-job-ultimatum) (1%)
+
 [^14]: [CPE : les évènements du 16 au 18 mars](https://www.nouvelobs.com/societe/social/20060321.OBS1191/cpe-les-evenements-du-16-au-18-mars.html) (0%)
+
 [^15]: [Déroulement du mouvement des Gilets jaunes — Wikipédia](https://fr.wikipedia.org/wiki/D%C3%A9roulement_du_mouvement_des_Gilets_jaunes) (5%)
+
 [^16]: [Gilets jaunes : samedi 8 décembre 2018 — Wikinews](https://fr.wikinews.org/wiki/Gilets_jaunes_:_samedi_8_d%C3%A9cembre_2018) (1%)
+
 [^17]: [Gilets jaunes. Comment évolue la mobilisation ? Tous les chiffres](https://www.ouest-france.fr/societe/gilets-jaunes/gilets-jaunes-comment-evolue-la-mobilisation-tous-les-chiffres-6147118) (1%)
+
 [^18]: [France 'yellow vest' protesters defy government to gather](https://www.bbc.com/news/world-europe-46577598) (0%)
+
 [^19]: [Chronologie du mouvement des « gilets jaunes](https://www.monde-diplomatique.fr/mav/168/PIRONET/61011) (0%)
+
 [^20]: [Gilets jaunes: retour sur les neuf premiers actes de contestation - RFI](https://www.rfi.fr/fr/france/20190118-gilets-jaunes-retour-neuf-actes-contestation-rue-interpellations) (1%)
-[^21]: [À la marche blanche pour Nahel, un cri de révolte plutôt qu’une minute de silence  | Mediapart](https://www.mediapart.fr/journal/france/290623/la-marche-blanche-pour-nahel-un-cri-de-revolte-plutot-qu-une-minute-de-silence) (1%)
+
+[^21]: [À la marche blanche pour Nahel, un cri de révolte plutôt qu’une minute de silence | Mediapart](https://www.mediapart.fr/journal/france/290623/la-marche-blanche-pour-nahel-un-cri-de-revolte-plutot-qu-une-minute-de-silence) (1%)
+
 [^22]: [Nouvelle nuit de violences en France après la mort de Nahel: le récit des dernières heures - RFI](https://www.rfi.fr/fr/france/20230629-le-point-sur-la-mort-de-nahel-le-procureur-requiert-le-placement-en-d%C3%A9tention-provisoire-du-policier) (3%)
+
 [^23]: [Émeutes consécutives à la mort de Nahel Merzouk — Wikipédia](https://fr.wikipedia.org/wiki/%C3%89meutes_cons%C3%A9cutives_%C3%A0_la_mort_de_Nahel_Merzouk) (1%)
+
 [^24]: [Mort de Nahel : une quatrième nuit d’émeutes, mais des violences d’une « intensité moindre »](https://www.ouest-france.fr/faits-divers/emeutes-urbaines/mort-de-nahel-une-quatrieme-nuit-demeutes-mais-des-violences-dune-intensite-moindre-5f28377d-edb2-4189-b320-5fa379186858) (2%)
+
 [^25]: [Émeutes de juin 2023 : comprendre, évaluer, réagir | Sénat](https://www.senat.fr/salle-de-presse/communiques-de-presse/presse/10-04-2024/emeutes-de-juin-2023-comprendre-evaluer-reagir.html) (1%)
+
 [^26]: [Nahel Merzouk riots - Wikipedia](https://en.wikipedia.org/wiki/Nahel_Merzouk_riots) (1%)
+
 [^27]: [Mort de Nahel à Nanterre : un an après, une marche silencieuse réunit plusieurs centaines de personnes – franceinfo](https://www.franceinfo.fr/faits-divers/adolescent-tue-par-un-policier-a-nanterre/mort-de-nahel-a-nanterre-un-an-apres-une-marche-silencieuse-reunit-plusieurs-centaines-de-personnes_6633804.html) (1%)
+
 [^28]: [Nanterre : plusieurs centaines de personnes réunies lors de la marche silencieuse pour Nahel - Le Parisien](https://www.leparisien.fr/hauts-de-seine-92/nanterre-plusieurs-centaines-de-personnes-au-depart-de-la-marche-silencieuse-pour-nahel-29-06-2024-237YPUQKQZFQLHGTSHBOCKWVW4.php) (0%)
+
 [^29]: [French pension reform: March 7 protests among largest since 1995](https://www.lemonde.fr/en/les-decodeurs/article/2023/03/09/french-pension-reform-march-7-protests-among-largest-since-1995_6018714_8.html) (1%)
+
 [^30]: [Mouvement social contre la réforme des retraites en France de 2023 — Wikipédia](https://fr.wikipedia.org/wiki/Mouvement_social_contre_la_r%C3%A9forme_des_retraites_en_France_de_2023) (10%)
+
 [^31]: [Retraites : plus de 900 000 manifestants en France pour la CGT, 281 000 selon l’Intérieur](https://www.ouest-france.fr/economie/retraites/direct-greve-du-6-juin-suivez-les-manifestations-contre-la-reforme-des-retraites-en-france-e282f866-0393-11ee-bfa0-5e45e3198685) (0%)
+
 [^32]: [French protesters turn out in droves against far right ...](https://www.lemonde.fr/en/politics/article/2024/06/16/french-protesters-turn-out-in-droves-against-far-right-caught-between-despair-and-the-will-to-fight_6674931_5.html) (0%)
+
 [^33]: [Manifestations anti-RN : plus de 600 000 manifestants selon la CGT, 250 000 d’après la police - Le Parisien](https://www.leparisien.fr/elections/legislatives/manifestations-anti-rn-plus-de-600-000-manifestants-selon-la-cgt-250-000-dapres-la-police-15-06-2024-4TWAL2AAQFG2DGMZ5AYYFJNQ3I.php) (1%)
+
 [^34]: [Bloquons tout - Wikipedia](https://en.wikipedia.org/wiki/Bloquons_tout) (0%)
+
 [^35]: [10 septembre: 540 interpellations dans tout le pays, dont 211 à Paris](https://www.bfmtv.com/societe/manifestations/direct-10-septembre-blocages-transports-manifestations-suivez-le-mouvement-bloquons-tout-a-paris-lyon-marseille_LN-202509100070.html) (0%)
+
 [^36]: [Mouvement "Bloquons tout" : 197 000 participants selon le ministère de l'Intérieur, 540 arrestations - France 24](https://www.france24.com/fr/france/20250910-en-direct-france-bloquons-tout-colere-sociale-emmanuel-macron) (0%)
+
 [^37]: ["Bloquons tout" : "près de 250 000 personnes" mobilisées dans tout le pays selon la CGT, 197 000 selon le ministère de l'Intérieur – franceinfo](https://www.franceinfo.fr/societe/bloquons-tout-mouvement-du-10-septembre/bloquons-tout-pres-de-250-000-personnes-mobilisees-dans-tout-le-pays-selon-la-cgt-175-000-selon-le-ministere-de-l-interieur_7484704.html) (0%)
+
 [^38]: [Bloquons tout : le ministère de l’Intérieur estime à 175 000 le nombre ...](https://www.liberation.fr/societe/en-direct-bloquons-tout-suivez-la-mobilisation-ce-mercredi-10-septembre-au-lendemain-de-la-nomination-de-sebastien-lecornu-a-matignon-20250910_7UGUHFIOUNGDJP67XSMTH5FKVA/) (0%)
+
 [^39]: [INFOGRAPHIES. 200 000 participants à « Bloquons tout » : est-ce mieux ...](https://www.ouest-france.fr/societe/manifestation/infographies-200-000-participants-a-bloquons-tout-est-ce-mieux-que-les-autres-mobilisations-0f322c98-8ef1-11f0-b582-5820cfc46140) (0%)
+
 [^40]: [Grève du 18 septembre : 103 interpellations et 89 gardes à vue à Paris, mais la manifestation "s'est bien passée", selon le préfet de police de Paris – franceinfo](https://www.franceinfo.fr/economie/greve/greve/greve-du-18-septembre-malgre-89-gardes-a-vue-a-paris-laurent-nunez-reconnait-que-la-journee-s-est-plutot-bien-passee_7501129.html) (2%)
+
 [^41]: [Grève du 18 septembre : l'intersyndicale décidera des ...](https://www.franceinfo.fr/economie/greve/greve/direct-mobilisation-du-18-septembre-jusqu-a-900-000-manifestants-attendus-des-transports-perturbes-et-une-greve-qui-s-annonce-tres-suivie-dans-les-pharmacies-et-les-ecoles_7498174.html) (0%)
+
 [^42]: [Grève du 18 septembre : la mobilisation a-t-elle été plus ou moins forte que lors des derniers grands mouvements sociaux ? – franceinfo](https://www.franceinfo.fr/economie/greve/greve/greve-du-18-septembre-la-mobilisation-a-t-elle-ete-plus-ou-moins-forte-que-lors-des-derniers-grands-mouvements-sociaux_7499668.html) (1%)
+
 [^43]: [Grève du 2 octobre : environ 195 000 personnes ont manifesté en France selon le ministère de l'Intérieur, "près de 600 000" d'après la CGT – franceinfo](https://www.franceinfo.fr/economie/greve/greve-du-2-octobre-environ-195-000-personnes-ont-manifeste-en-france-selon-le-ministere-de-l-interieur-pres-de-600-000-d-apres-la-cgt_7528024.html) (1%)
+
 [^44]: [Mobilisation du 2 octobre : 195.000 manifestants selon les autorités ...](https://www.lefigaro.fr/social/mouvement-du-10-septembre-100-000-participants-attendus-est-ce-un-chiffre-assez-bas-comme-le-dit-bayrou-20250905) (2%)
+
 [^45]: [Mobilisation du 2 octobre : 195 000 manifestants en France selon le ministère de l’Intérieur, «près de 600 000» selon la CGT – Libération](https://www.liberation.fr/economie/social/en-direct-mobilisation-du-2-octobre-suivez-la-journee-dactions-et-de-greves-de-ce-jeudi-20251002_GFUGFS2GS5GPHAU5TVAGAZMGBI/) (0%)
+
 [^46]: [« Bloquons tout » : une mobilisation en demi-teinte en Loire-Atlantique](https://www.ouest-france.fr/societe/manifestation/bloquons-tout-une-mobilisation-en-demi-teinte-en-loire-atlantique-90dd52ae-c22c-11f0-a316-aa52a6afd2bb) (1%)
+
 [^47]: [Bloquons tout : peu de personnes se mobilisent en Loire-Atlantique ce samedi](https://www.ouest-france.fr/societe/manifestation/bloquons-tout-une-soixantaine-de-personnes-manifestent-a-nantes-ce-samedi-766d30c0-c226-11f0-8509-2c0807403e46) (1%)
+
 [^48]: [Dans la Manche, le collectif Indignons-nous tente de faire perdurer le mouvement après le 10 septembre](https://www.ouest-france.fr/societe/manifestation/dans-la-manche-le-collectif-indignons-nous-tente-de-faire-perdurer-le-mouvement-apres-le-10-septembre-3828460e-c20f-11f0-8509-2c0807403e46) (1%)
 
 ---
@@ -278,6 +326,7 @@ Want me to turn these into the app's `FACTS` / `aggregateWeekly` shape — a per
 **You**
 
 Update the chart files:
+
 - add a third section
 - in the third section, followed the attached advice to produce a visualisation for each of the events I mentioned above (and the original 2026 student protests), showing how the weekly numbers of protestor, arrests and injuries (security forces and protestors) evolved over the course of each movement
 
@@ -325,22 +374,22 @@ import {
   type ChartDataset,
   type Plugin,
   type TooltipItem,
-} from 'chart.js';
-import { EPISODE_2026 } from './chart.ts';
+} from "chart.js";
+import { EPISODE_2026 } from "./chart.ts";
 
 /* ------------------------------------------------------------------ types */
 
-type M = 'p' | 'a' | 'f' | 'i';
-type Flag = 'n' | 'r' | 'p' | 'f' | 'e' | 'c' | 'w';
+type M = "p" | "a" | "f" | "i";
+type Flag = "n" | "r" | "p" | "f" | "e" | "c" | "w";
 type Band = number | [number, number];
 
 interface Row {
-  w: number;                       // whole weeks since the event's first action
-  t: string;                       // week / act label, tooltip title
-  p?: Band;                        // protestors, peak day of the week
-  a?: Band;                        // arrests, weekly total
-  f?: Band;                        // injuries, security forces
-  i?: Band;                        // injuries, protestors
+  w: number; // whole weeks since the event's first action
+  t: string; // week / act label, tooltip title
+  p?: Band; // protestors, peak day of the week
+  a?: Band; // arrests, weekly total
+  f?: Band; // injuries, security forces
+  i?: Band; // injuries, protestors
   flag?: Partial<Record<M, Flag>>;
   note?: Partial<Record<M, string>>;
 }
@@ -365,7 +414,7 @@ interface Pt {
   t: string;
 }
 
-interface PanelDataset extends ChartDataset<'line', Pt[]> {
+interface PanelDataset extends ChartDataset<"line", Pt[]> {
   __item: M;
   __color: string;
   __hollow: boolean[];
@@ -374,35 +423,68 @@ interface PanelDataset extends ChartDataset<'line', Pt[]> {
 
 /* ------------------------------------------------------------- constants */
 
-const INK = '#111827';
-const MUTED = '#6b7280';
-const GRID = '#E5E5E5';
+const INK = "#111827";
+const MUTED = "#6b7280";
+const GRID = "#E5E5E5";
 const REFERENCE = 100;
 
 const ITEMS: { key: M; label: string; short: string; color: string }[] = [
-  { key: 'p', label: 'Protestors (peak day)', short: 'Protestors', color: '#0072B2' },
-  { key: 'a', label: 'Arrests (weekly total)', short: 'Arrests', color: '#E69F00' },
-  { key: 'f', label: 'Injuries — security forces', short: 'Forces hurt', color: '#009E73' },
-  { key: 'i', label: 'Injuries — protestors', short: 'Protestors hurt', color: '#CC79A7' },
+  {
+    key: "p",
+    label: "Protestors (peak day)",
+    short: "Protestors",
+    color: "#0072B2",
+  },
+  {
+    key: "a",
+    label: "Arrests (weekly total)",
+    short: "Arrests",
+    color: "#E69F00",
+  },
+  {
+    key: "f",
+    label: "Injuries — security forces",
+    short: "Forces hurt",
+    color: "#009E73",
+  },
+  {
+    key: "i",
+    label: "Injuries — protestors",
+    short: "Protestors hurt",
+    color: "#CC79A7",
+  },
 ];
 
 /** Sequential ramp, light → dark, identical in every companion panel. */
-const RAMP = ['#D6E6F2', '#B0CFE6', '#86B4D7', '#5C97C5', '#357AB0', '#1B5C92', '#0A3A63'];
+const RAMP = [
+  "#D6E6F2",
+  "#B0CFE6",
+  "#86B4D7",
+  "#5C97C5",
+  "#357AB0",
+  "#1B5C92",
+  "#0A3A63",
+];
 
 const FLAG_TEXT: Partial<Record<Flag, string>> = {
-  r: 'regional only',
-  p: 'partial',
-  f: 'lower bound',
-  e: 'derived',
-  c: 'actions-total / stock — measured differently',
-  w: 'weekly aggregate',
+  r: "regional only",
+  p: "partial",
+  f: "lower bound",
+  e: "derived",
+  c: "actions-total / stock — measured differently",
+  w: "weekly aggregate",
 };
 
-const hollow = (f: Flag): boolean => f === 'r' || f === 'p' || f === 'e' || f === 'c';
+const hollow = (f: Flag): boolean =>
+  f === "r" || f === "p" || f === "e" || f === "c";
 
-const nf = new Intl.NumberFormat('en-GB');
-const compact = new Intl.NumberFormat('en-GB', { notation: 'compact', maximumFractionDigits: 1 });
-const fmtIndex = (v: number): string => (v < 1 ? String(Number(v.toFixed(2))) : compact.format(v));
+const nf = new Intl.NumberFormat("en-GB");
+const compact = new Intl.NumberFormat("en-GB", {
+  notation: "compact",
+  maximumFractionDigits: 1,
+});
+const fmtIndex = (v: number): string =>
+  v < 1 ? String(Number(v.toFixed(2))) : compact.format(v);
 
 function alpha(hex: string, a: number): string {
   const n = Number.parseInt(hex.slice(1), 16);
@@ -412,139 +494,258 @@ function alpha(hex: string, a: number): string {
 /* ------------------------------------------------------------------- data */
 
 const MAY68: Episode = {
-  id: 'may68',
-  strip: 'May 1968',
-  short: 'May 68',
-  span: '29 Apr – 30 Jun 1968',
-  banner: 'Crowd figures exist only for 1, 6, 10 and 13 May. The general strike is not counted here.',
+  id: "may68",
+  strip: "May 1968",
+  short: "May 68",
+  span: "29 Apr – 30 Jun 1968",
+  banner:
+    "Crowd figures exist only for 1, 6, 10 and 13 May. The general strike is not counted here.",
   weeks: [
     {
-      w: 0, t: '29 Apr – 5 May · 1 May march',
+      w: 0,
+      t: "29 Apr – 5 May · 1 May march",
       p: [25_000, 100_000],
-      note: { p: 'prefecture 25,000 / CGT 100,000, République → Bastille' },
+      note: { p: "prefecture 25,000 / CGT 100,000, République → Bastille" },
     },
     {
-      w: 1, t: '6 – 12 May · Sorbonne, barricades',
-      p: 20_000, a: [469, 891], f: [247, 300], i: [100, 100],
-      flag: { i: 'f' },
+      w: 1,
+      t: "6 – 12 May · Sorbonne, barricades",
+      p: 20_000,
+      a: [469, 891],
+      f: [247, 300],
+      i: [100, 100],
+      flag: { i: "f" },
       note: {
-        p: '20,000 to the Sorbonne on 6 May; >20,000 again on 10 May',
-        a: '469 on the night of 10–11 May; high adds the 422 early-May arrests',
-        f: '300+ on 6 May; 247 on 10–11 May',
-        i: '≥100 — no national count was published',
+        p: "20,000 to the Sorbonne on 6 May; >20,000 again on 10 May",
+        a: "469 on the night of 10–11 May; high adds the 422 early-May arrests",
+        f: "300+ on 6 May; 247 on 10–11 May",
+        i: "≥100 — no national count was published",
       },
     },
     {
-      w: 2, t: '13 – 19 May · 13 May march',
+      w: 2,
+      t: "13 – 19 May · 13 May march",
       p: [230_000, 1_000_000],
-      note: { p: 'prefecture 230,000 · ORTF 171,000 · unions 1,000,000. Peak of the episode.' },
-    },
-    {
-      w: 3, t: '20 – 26 May · 24–25 May',
-      a: [1_000, 1_000], i: [887, 887],
-      flag: { a: 'f', i: 'e' },
       note: {
-        a: '1,000+ arrests on 25 May',
-        i: '887 injured, from the English-Wikipedia infobox — weak provenance',
+        p: "prefecture 230,000 · ORTF 171,000 · unions 1,000,000. Peak of the episode.",
       },
     },
-    { w: 4, t: '27 May – 2 Jun · 30 May', note: { p: '30 May: 300,000 (prefecture) – 1,000,000 counter-demonstration — excluded from protest totals' } },
-    { w: 5, t: '3 – 9 Jun', note: { p: '4 Jun partial return to work; 7 Jun Renault-Flins clashes' } },
-    { w: 6, t: '10 – 16 Jun', note: { p: '10–11 Jun: 3 dead; 12 Jun demonstrations banned nationwide' } },
-    { w: 7, t: '17 – 23 Jun' },
-    { w: 8, t: '24 – 30 Jun' },
+    {
+      w: 3,
+      t: "20 – 26 May · 24–25 May",
+      a: [1_000, 1_000],
+      i: [887, 887],
+      flag: { a: "f", i: "e" },
+      note: {
+        a: "1,000+ arrests on 25 May",
+        i: "887 injured, from the English-Wikipedia infobox — weak provenance",
+      },
+    },
+    {
+      w: 4,
+      t: "27 May – 2 Jun · 30 May",
+      note: {
+        p: "30 May: 300,000 (prefecture) – 1,000,000 counter-demonstration — excluded from protest totals",
+      },
+    },
+    {
+      w: 5,
+      t: "3 – 9 Jun",
+      note: { p: "4 Jun partial return to work; 7 Jun Renault-Flins clashes" },
+    },
+    {
+      w: 6,
+      t: "10 – 16 Jun",
+      note: { p: "10–11 Jun: 3 dead; 12 Jun demonstrations banned nationwide" },
+    },
+    { w: 7, t: "17 – 23 Jun" },
+    { w: 8, t: "24 – 30 Jun" },
   ],
 };
 
 const CPE: Episode = {
-  id: 'cpe',
-  strip: 'CPE 2006',
-  short: 'CPE 2006',
-  span: '6 Feb – 16 Apr 2006',
-  banner: 'One movement-wide arrest total (4,500); no weekly enforcement series exists.',
+  id: "cpe",
+  strip: "CPE 2006",
+  short: "CPE 2006",
+  span: "6 Feb – 16 Apr 2006",
+  banner:
+    "One movement-wide arrest total (4,500); no weekly enforcement series exists.",
   weeks: [
     {
-      w: 0, t: '6 – 12 Feb · 7 Feb',
+      w: 0,
+      t: "6 – 12 Feb · 7 Feb",
       p: [200_000, 400_000],
-      note: { p: '187 demonstrations, first national day' },
+      note: { p: "187 demonstrations, first national day" },
     },
     {
-      w: 4, t: '6 – 12 Mar · 7 Mar',
+      w: 4,
+      t: "6 – 12 Mar · 7 Mar",
       p: [400_000, 1_000_000],
-      note: { p: '>1 million claimed; 38 universities on strike by 9 Mar' },
+      note: { p: ">1 million claimed; 38 universities on strike by 9 Mar" },
     },
     {
-      w: 5, t: '13 – 19 Mar · 16–18 Mar',
-      p: [500_000, 1_500_000], a: [156, 167], f: 34, i: 70,
-      flag: { i: 'e' },
+      w: 5,
+      t: "13 – 19 Mar · 16–18 Mar",
+      p: [500_000, 1_500_000],
+      a: [156, 167],
+      f: 34,
+      i: 70,
+      flag: { i: "e" },
       note: {
-        p: '18 Mar: 500,000 (ministry) – 1,500,000 (unions); Paris 80,000 – 700,000',
-        a: 'Paris, 18 Mar (156 ministry / 167 organisers)',
-        f: 'Paris, 18 Mar',
-        i: '18 (16 Mar) + 52 (18 Mar), Paris only',
+        p: "18 Mar: 500,000 (ministry) – 1,500,000 (unions); Paris 80,000 – 700,000",
+        a: "Paris, 18 Mar (156 ministry / 167 organisers)",
+        f: "Paris, 18 Mar",
+        i: "18 (16 Mar) + 52 (18 Mar), Paris only",
       },
     },
     {
-      w: 6, t: '20 – 26 Mar · 23 Mar',
-      p: [220_000, 450_000], a: 630, f: 90,
-      note: { p: '21 universities fully blocked; 67 striking or blocked' },
+      w: 6,
+      t: "20 – 26 Mar · 23 Mar",
+      p: [220_000, 450_000],
+      a: 630,
+      f: 90,
+      note: { p: "21 universities fully blocked; 67 striking or blocked" },
     },
-    { w: 7, t: '27 Mar – 2 Apr · 28 Mar', p: [1_055_000, 2_710_000], a: 600, note: { p: '4th national action day' } },
-    { w: 8, t: '3 – 9 Apr · 4 Apr', p: [1_000_000, 3_100_000], note: { p: 'peak day of the episode' } },
-    { w: 9, t: '10 – 16 Apr', note: { p: 'CPE withdrawn 10 Apr; the movement splits' } },
+    {
+      w: 7,
+      t: "27 Mar – 2 Apr · 28 Mar",
+      p: [1_055_000, 2_710_000],
+      a: 600,
+      note: { p: "4th national action day" },
+    },
+    {
+      w: 8,
+      t: "3 – 9 Apr · 4 Apr",
+      p: [1_000_000, 3_100_000],
+      note: { p: "peak day of the episode" },
+    },
+    {
+      w: 9,
+      t: "10 – 16 Apr",
+      note: { p: "CPE withdrawn 10 Apr; the movement splits" },
+    },
   ],
 };
 
 const GJ_DATES = [
-  '17 Nov 2018', '24 Nov', '1 Dec', '8 Dec', '15 Dec', '22 Dec', '29 Dec',
-  '5 Jan 2019', '12 Jan', '19 Jan', '26 Jan', '2 Feb', '9 Feb', '16 Feb',
-  '23 Feb', '2 Mar', '9 Mar', '16 Mar', '23 Mar', '30 Mar', '6 Apr', '13 Apr',
-  '20 Apr', '27 Apr', '4 May', '11 May', '18 May', '25 May', '1 Jun', '8 Jun',
-  '15 Jun', '22 Jun', '29 Jun', '7 Sep 2019',
+  "17 Nov 2018",
+  "24 Nov",
+  "1 Dec",
+  "8 Dec",
+  "15 Dec",
+  "22 Dec",
+  "29 Dec",
+  "5 Jan 2019",
+  "12 Jan",
+  "19 Jan",
+  "26 Jan",
+  "2 Feb",
+  "9 Feb",
+  "16 Feb",
+  "23 Feb",
+  "2 Mar",
+  "9 Mar",
+  "16 Mar",
+  "23 Mar",
+  "30 Mar",
+  "6 Apr",
+  "13 Apr",
+  "20 Apr",
+  "27 Apr",
+  "4 May",
+  "11 May",
+  "18 May",
+  "25 May",
+  "1 Jun",
+  "8 Jun",
+  "15 Jun",
+  "22 Jun",
+  "29 Jun",
+  "7 Sep 2019",
 ];
 
 const GJ_CROWD: [number, number][] = [
-  [0, 287_700], [1, 166_000], [2, 136_000], [3, 136_000], [4, 66_000], [5, 38_600],
-  [6, 32_000], [7, 50_000], [8, 84_000], [9, 84_000], [10, 69_000], [11, 58_600],
-  [12, 51_400], [13, 41_500], [14, 46_600], [15, 39_300], [16, 28_600], [17, 32_300],
-  [18, 40_500], [19, 33_700], [20, 22_300], [21, 31_000], [22, 27_900], [23, 23_600],
-  [24, 18_900], [25, 18_600], [26, 15_500], [27, 12_500], [28, 9_500], [29, 10_300],
-  [30, 7_000], [31, 11_800], [32, 5_800], [43, 7_000],
+  [0, 287_700],
+  [1, 166_000],
+  [2, 136_000],
+  [3, 136_000],
+  [4, 66_000],
+  [5, 38_600],
+  [6, 32_000],
+  [7, 50_000],
+  [8, 84_000],
+  [9, 84_000],
+  [10, 69_000],
+  [11, 58_600],
+  [12, 51_400],
+  [13, 41_500],
+  [14, 46_600],
+  [15, 39_300],
+  [16, 28_600],
+  [17, 32_300],
+  [18, 40_500],
+  [19, 33_700],
+  [20, 22_300],
+  [21, 31_000],
+  [22, 27_900],
+  [23, 23_600],
+  [24, 18_900],
+  [25, 18_600],
+  [26, 15_500],
+  [27, 12_500],
+  [28, 9_500],
+  [29, 10_300],
+  [30, 7_000],
+  [31, 11_800],
+  [32, 5_800],
+  [43, 7_000],
 ];
 
 /** Enforcement figures exist only for Acts I–IV; later acts were not published as a series. */
-const GJ_EXTRA: Record<number, Pick<Row, 'a' | 'f' | 'i' | 'flag' | 'note'>> = {
+const GJ_EXTRA: Record<number, Pick<Row, "a" | "f" | "i" | "flag" | "note">> = {
   0: {
-    a: [974, 1_150], f: 17, i: 109,
-    flag: { f: 'e', i: 'e' },
+    a: [974, 1_150],
+    f: 17,
+    i: 109,
+    flag: { f: "e", i: "e" },
     note: {
-      a: '974 in custody, ~1,150 interpellations',
-      f: '17 police among 126 injured — split derived',
-      i: '109 of 126 injured — split derived',
+      a: "974 in custody, ~1,150 interpellations",
+      f: "17 police among 126 injured — split derived",
+      i: "109 of 126 injured — split derived",
     },
   },
   1: {
-    a: [307, 339], f: 30, i: 54,
-    flag: { i: 'e' },
-    note: { a: '307 in custody, 339 interpellations', i: '54 of 84 injured — split derived' },
+    a: [307, 339],
+    f: 30,
+    i: 54,
+    flag: { i: "e" },
+    note: {
+      a: "307 in custody, 339 interpellations",
+      i: "54 of 84 injured — split derived",
+    },
   },
   2: {
     a: 630,
-    flag: { a: 'f' },
-    note: { a: 'placed in custody, not arrests; 263 injured, not split by side' },
+    flag: { a: "f" },
+    note: {
+      a: "placed in custody, not arrests; 263 injured, not split by side",
+    },
   },
   3: {
     a: [1_709, 2_000],
-    note: { a: '1,709 in custody, ~2,000 interpellations; injuries reported as 118 / 264 / 585 depending on source, not split by side' },
+    note: {
+      a: "1,709 in custody, ~2,000 interpellations; injuries reported as 118 / 264 / 585 depending on source, not split by side",
+    },
   },
 };
 
 const GILETS: Episode = {
-  id: 'gj',
-  strip: 'Gilets jaunes',
-  short: 'Gilets jaunes',
-  span: '12 Nov 2018 – 9 Sep 2019',
-  banner: 'Ministry count only: one figure per act, so no range. Acts 34–43 were never published.',
+  id: "gj",
+  strip: "Gilets jaunes",
+  short: "Gilets jaunes",
+  span: "12 Nov 2018 – 9 Sep 2019",
+  banner:
+    "Ministry count only: one figure per act, so no range. Acts 34–43 were never published.",
   weeks: [
     ...GJ_CROWD.map(([w, n], idx) => {
       const extra = GJ_EXTRA[w] ?? {};
@@ -554,14 +755,16 @@ const GILETS: Episode = {
         p: n,
         ...extra,
         flag: {
-          ...(w === 0 ? { p: 'c' as Flag } : {}),
+          ...(w === 0 ? { p: "c" as Flag } : {}),
           ...extra.flag,
         },
         note: {
           ...(w === 0
-            ? { p: '287,700 counts all actions including road blockades — an actions-total, not a march' }
+            ? {
+                p: "287,700 counts all actions including road blockades — an actions-total, not a march",
+              }
             : w === 1
-              ? { p: 'police-union counter-count: 750,000' }
+              ? { p: "police-union counter-count: 750,000" }
               : {}),
           ...extra.note,
         },
@@ -571,73 +774,121 @@ const GILETS: Episode = {
 };
 
 const NAHEL: Episode = {
-  id: 'nahel',
-  strip: 'Nahel 2023',
-  short: 'Nahel 2023',
-  span: '27 Jun – 9 Jul 2023',
-  banner: 'Gatherings were banned: arrests, not crowd counts, carry the scale of the riots.',
+  id: "nahel",
+  strip: "Nahel 2023",
+  short: "Nahel 2023",
+  span: "27 Jun – 9 Jul 2023",
+  banner:
+    "Gatherings were banned: arrests, not crowd counts, carry the scale of the riots.",
   weeks: [
     {
-      w: 0, t: '26 Jun – 2 Jul · Nanterre march, 29 Jun',
-      p: [6_200, 20_000], a: 3_354, f: 722,
+      w: 0,
+      t: "26 Jun – 2 Jul · Nanterre march, 29 Jun",
+      p: [6_200, 20_000],
+      a: 3_354,
+      f: 722,
       note: {
-        p: 'police 6,200 / organisers 20,000 for the march blanche',
-        a: 'national total, 27 Jun – 2 Jul',
-        f: '722 officers injured; 2 deaths; 5,662 vehicles burnt',
+        p: "police 6,200 / organisers 20,000 for the march blanche",
+        a: "national total, 27 Jun – 2 Jul",
+        f: "722 officers injured; 2 deaths; 5,662 vehicles burnt",
       },
     },
-    { w: 1, t: '3 – 9 Jul', a: 108, f: 1, note: { a: '72 + 16 + 20 over 3–5 Jul' } },
+    {
+      w: 1,
+      t: "3 – 9 Jul",
+      a: 108,
+      f: 1,
+      note: { a: "72 + 16 + 20 over 3–5 Jul" },
+    },
   ],
 };
 
 const PENSIONS: Episode = {
-  id: 'pensions',
-  strip: 'Pension reform 2023',
-  short: 'Pensions 2023',
-  span: '19 Jan – 8 Jun 2023',
-  banner: 'Crowds only: no national weekly arrest or injury series was published.',
+  id: "pensions",
+  strip: "Pension reform 2023",
+  short: "Pensions 2023",
+  span: "19 Jan – 8 Jun 2023",
+  banner:
+    "Crowds only: no national weekly arrest or injury series was published.",
   weeks: [
-    { w: 0, t: '16 – 22 Jan · 19 Jan', p: [1_120_000, 2_000_000], note: { p: 'first national day; Paris 80,000 – 400,000' } },
-    { w: 2, t: '30 Jan – 5 Feb · 31 Jan', p: [1_270_000, 2_800_000] },
-    { w: 3, t: '6 – 12 Feb · 7 & 11 Feb', p: [963_000, 2_500_000], note: { p: 'two action days in one week; the peak is 11 Feb' } },
-    { w: 4, t: '13 – 19 Feb · 16 Feb', p: [440_000, 1_300_000] },
-    { w: 7, t: '6 – 12 Mar · 7 Mar', p: [1_280_000, 3_500_000], note: { p: 'national record: ministry 1.28M, unions 3.5M' } },
-    { w: 8, t: '13 – 19 Mar · 15 Mar', p: [480_000, 1_700_000] },
-    { w: 9, t: '20 – 26 Mar · 23 Mar', p: [1_089_000, 3_500_000] },
-    { w: 10, t: '27 Mar – 2 Apr · 28 Mar', p: [740_000, 2_000_000] },
-    { w: 11, t: '3 – 9 Apr · 6 Apr', p: [570_000, 2_000_000] },
-    { w: 12, t: '10 – 16 Apr · 13 Apr', p: [380_000, 1_500_000], note: { p: 'CGT gives 1.0M in one compilation, 1.5M in another' } },
-    { w: 16, t: '1 – 7 May · 1 May', p: [782_000, 2_300_000] },
-    { w: 20, t: '5 – 11 Jun · 6 Jun', p: [281_000, 900_000], note: { p: 'movement minimum' } },
+    {
+      w: 0,
+      t: "16 – 22 Jan · 19 Jan",
+      p: [1_120_000, 2_000_000],
+      note: { p: "first national day; Paris 80,000 – 400,000" },
+    },
+    { w: 2, t: "30 Jan – 5 Feb · 31 Jan", p: [1_270_000, 2_800_000] },
+    {
+      w: 3,
+      t: "6 – 12 Feb · 7 & 11 Feb",
+      p: [963_000, 2_500_000],
+      note: { p: "two action days in one week; the peak is 11 Feb" },
+    },
+    { w: 4, t: "13 – 19 Feb · 16 Feb", p: [440_000, 1_300_000] },
+    {
+      w: 7,
+      t: "6 – 12 Mar · 7 Mar",
+      p: [1_280_000, 3_500_000],
+      note: { p: "national record: ministry 1.28M, unions 3.5M" },
+    },
+    { w: 8, t: "13 – 19 Mar · 15 Mar", p: [480_000, 1_700_000] },
+    { w: 9, t: "20 – 26 Mar · 23 Mar", p: [1_089_000, 3_500_000] },
+    { w: 10, t: "27 Mar – 2 Apr · 28 Mar", p: [740_000, 2_000_000] },
+    { w: 11, t: "3 – 9 Apr · 6 Apr", p: [570_000, 2_000_000] },
+    {
+      w: 12,
+      t: "10 – 16 Apr · 13 Apr",
+      p: [380_000, 1_500_000],
+      note: { p: "CGT gives 1.0M in one compilation, 1.5M in another" },
+    },
+    { w: 16, t: "1 – 7 May · 1 May", p: [782_000, 2_300_000] },
+    {
+      w: 20,
+      t: "5 – 11 Jun · 6 Jun",
+      p: [281_000, 900_000],
+      note: { p: "movement minimum" },
+    },
   ],
 };
 
 const BLOQUONS: Episode = {
-  id: 'bt',
-  strip: 'Bloquons tout 2025',
-  short: 'Bloquons tout',
-  span: '10 Sep – 5 Oct 2025',
-  banner: '10 Sep is an actions-total (blockades included); 18 Sep is an intersyndicale march.',
+  id: "bt",
+  strip: "Bloquons tout 2025",
+  short: "Bloquons tout",
+  span: "10 Sep – 5 Oct 2025",
+  banner:
+    "10 Sep is an actions-total (blockades included); 18 Sep is an intersyndicale march.",
   weeks: [
     {
-      w: 0, t: '8 – 14 Sep · 10 Sep',
-      p: [175_000, 250_000], a: 540,
-      flag: { p: 'c' },
+      w: 0,
+      t: "8 – 14 Sep · 10 Sep",
+      p: [175_000, 250_000],
+      a: 540,
+      flag: { p: "c" },
       note: {
-        p: 'ministry 175,000–197,000, revised up from an early-evening count of ~29,000; CGT ~250,000. 596 rallies, 253 blockades.',
-        a: '540 arrests, 211 in Paris',
+        p: "ministry 175,000–197,000, revised up from an early-evening count of ~29,000; CGT ~250,000. 596 rallies, 253 blockades.",
+        a: "540 arrests, 211 in Paris",
       },
     },
     {
-      w: 1, t: '15 – 21 Sep · 18 Sep',
-      p: [500_000, 1_000_000], a: 309, f: 26, i: 11,
+      w: 1,
+      t: "15 – 21 Sep · 18 Sep",
+      p: [500_000, 1_000_000],
+      a: 309,
+      f: 26,
+      i: 11,
       note: {
-        p: 'intersyndicale day — a different mobilisation from the movement’s own actions; Paris 55,000 (prefecture)',
-        a: '309 nationwide, 103 in Paris',
-        i: '11 injured, including 1 journalist',
+        p: "intersyndicale day — a different mobilisation from the movement’s own actions; Paris 55,000 (prefecture)",
+        a: "309 nationwide, 103 in Paris",
+        i: "11 injured, including 1 journalist",
       },
     },
-    { w: 3, t: '29 Sep – 5 Oct · 2 Oct', p: [195_000, 600_000], note: { p: 'weakest mobilisation since 1 May 2025' } },
+    {
+      w: 3,
+      t: "29 Sep – 5 Oct · 2 Oct",
+      p: [195_000, 600_000],
+      note: { p: "weakest mobilisation since 1 May 2025" },
+    },
   ],
 };
 
@@ -645,12 +896,12 @@ function rows2026(): Row[] {
   const s = EPISODE_2026.series;
   return EPISODE_2026.weeks.map((wk, i) => {
     const row: Row = { w: i, t: `W${i + 1} · ${wk.label}` };
-    for (const m of ['p', 'a', 'f', 'i'] as const) {
+    for (const m of ["p", "a", "f", "i"] as const) {
       const band = s[m].bands[i];
       if (!band) continue;
       row[m] = [band[0], band[1]];
       const q = s[m].quality[i];
-      if (q && q !== 'n') row.flag = { ...row.flag, [m]: q };
+      if (q && q !== "n") row.flag = { ...row.flag, [m]: q };
       const note = s[m].notes[i];
       if (note) row.note = { ...row.note, [m]: note };
     }
@@ -659,19 +910,29 @@ function rows2026(): Row[] {
 }
 
 const STUDENTS: Episode = {
-  id: 'students26',
-  strip: 'Student protests 2026',
-  short: 'Students 2026',
-  span: '1 Oct – 11 Nov 2026',
-  banner: 'Protester injuries are a September stock, then a litigation floor — never a weekly flow.',
+  id: "students26",
+  strip: "Student protests 2026",
+  short: "Students 2026",
+  span: "1 Oct – 11 Nov 2026",
+  banner:
+    "Protester injuries are a September stock, then a litigation floor — never a weekly flow.",
   weeks: rows2026(),
 };
 
-const EPISODES: Episode[] = [MAY68, CPE, GILETS, NAHEL, PENSIONS, BLOQUONS, STUDENTS];
+const EPISODES: Episode[] = [
+  MAY68,
+  CPE,
+  GILETS,
+  NAHEL,
+  PENSIONS,
+  BLOQUONS,
+  STUDENTS,
+];
 
 /* -------------------------------------------------------------- indexing */
 
-const bandOf = (b: Band): [number, number] => (typeof b === 'number' ? [b, b] : b);
+const bandOf = (b: Band): [number, number] =>
+  typeof b === "number" ? [b, b] : b;
 const midOf = (b: Band): number => {
   const [lo, hi] = bandOf(b);
   return (lo + hi) / 2;
@@ -684,11 +945,13 @@ interface SeriesData {
 
 /** y' = 100 · y / y₀, where y₀ is the first figure measured on a comparable basis. */
 function seriesData(ep: Episode, key: M): SeriesData | null {
-  const rows = ep.weeks.filter((r) => r[key] !== undefined).sort((a, b) => a.w - b.w);
+  const rows = ep.weeks
+    .filter((r) => r[key] !== undefined)
+    .sort((a, b) => a.w - b.w);
   if (!rows.length) return null;
 
-  const flagOf = (r: Row): Flag => r.flag?.[key] ?? 'n';
-  const baseRow = rows.find((r) => flagOf(r) !== 'c') ?? rows[0];
+  const flagOf = (r: Row): Flag => r.flag?.[key] ?? "n";
+  const baseRow = rows.find((r) => flagOf(r) !== "c") ?? rows[0];
   const base = midOf(baseRow[key]!);
 
   const points = rows.map<Pt>((r) => {
@@ -708,7 +971,12 @@ function seriesData(ep: Episode, key: M): SeriesData | null {
   return { base, points };
 }
 
-function buildDataset(ep: Episode, key: M, color: string, direct: string): PanelDataset | null {
+function buildDataset(
+  ep: Episode,
+  key: M,
+  color: string,
+  direct: string,
+): PanelDataset | null {
   const s = seriesData(ep, key);
   if (!s) return null;
   const item = ITEMS.find((d) => d.key === key)!;
@@ -720,8 +988,8 @@ function buildDataset(ep: Episode, key: M, color: string, direct: string): Panel
     borderColor: color,
     backgroundColor: color,
     borderWidth: 1.75,
-    pointRadius: s.points.map((p) => (p.flag === 'c' ? 3 : 2.75)),
-    pointBackgroundColor: s.points.map((_, i) => (holl[i] ? '#ffffff' : color)),
+    pointRadius: s.points.map((p) => (p.flag === "c" ? 3 : 2.75)),
+    pointBackgroundColor: s.points.map((_, i) => (holl[i] ? "#ffffff" : color)),
     pointBorderColor: color,
     pointBorderWidth: 1.5,
     pointHoverRadius: 4.5,
@@ -730,7 +998,10 @@ function buildDataset(ep: Episode, key: M, color: string, direct: string): Panel
     spanGaps: true,
     segment: {
       borderDash: (ctx) =>
-        Math.abs((ctx.p1.parsed.x as number) - (ctx.p0.parsed.x as number)) > 1.01 ? [5, 4] : undefined,
+        Math.abs((ctx.p1.parsed.x as number) - (ctx.p0.parsed.x as number)) >
+        1.01
+          ? [5, 4]
+          : undefined,
     },
     __item: key,
     __color: color,
@@ -758,15 +1029,15 @@ function extentOf(eps: Episode[], keys: M[]): [number, number] {
 
 /* --------------------------------------------------------------- plugins */
 
-const hundredLine: Plugin<'line'> = {
-  id: 'hundredLine',
+const hundredLine: Plugin<"line"> = {
+  id: "hundredLine",
   beforeDatasetsDraw(chart) {
     const { ctx, chartArea, scales } = chart;
     const y = scales.y?.getPixelForValue(REFERENCE);
     if (y === undefined || y < chartArea.top || y > chartArea.bottom) return;
     ctx.save();
     ctx.setLineDash([2, 3]);
-    ctx.strokeStyle = '#9CA3AF';
+    ctx.strokeStyle = "#9CA3AF";
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(chartArea.left, y);
@@ -776,8 +1047,8 @@ const hundredLine: Plugin<'line'> = {
   },
 };
 
-const directLabels: Plugin<'line'> = {
-  id: 'directLabels',
+const directLabels: Plugin<"line"> = {
+  id: "directLabels",
   afterDatasetsDraw(chart) {
     const { ctx, chartArea } = chart;
     const entries: { y: number; text: string }[] = [];
@@ -798,16 +1069,20 @@ const directLabels: Plugin<'line'> = {
 
     entries.sort((a, b) => a.y - b.y);
     for (let i = 1; i < entries.length; i++) {
-      if (entries[i].y - entries[i - 1].y < 11) entries[i].y = entries[i - 1].y + 11;
+      if (entries[i].y - entries[i - 1].y < 11)
+        entries[i].y = entries[i - 1].y + 11;
     }
 
     ctx.save();
     ctx.font = '500 9.5px system-ui, -apple-system, "Segoe UI", sans-serif';
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'middle';
-    ctx.fillStyle = '#374151';
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "#374151";
     for (const e of entries) {
-      const y = Math.max(chartArea.top + 5, Math.min(chartArea.bottom - 5, e.y));
+      const y = Math.max(
+        chartArea.top + 5,
+        Math.min(chartArea.bottom - 5, e.y),
+      );
       ctx.fillText(e.text, chartArea.right + 7, y);
     }
     ctx.restore();
@@ -819,7 +1094,7 @@ const directLabels: Plugin<'line'> = {
 function xScale(maxW: number) {
   const step = maxW <= 4 ? 1 : maxW <= 12 ? 2 : maxW <= 24 ? 4 : 8;
   return {
-    type: 'linear' as const,
+    type: "linear" as const,
     min: -0.5,
     max: maxW + 0.5,
     grid: { display: false },
@@ -844,9 +1119,11 @@ function xScale(maxW: number) {
 }
 
 function yScale(min: number, max: number, showLabels: boolean) {
-  const ticks = [0.1, 0.3, 1, 3, 10, 30, 100, 300, 1000, 3000].filter((v) => v >= min && v <= max);
+  const ticks = [0.1, 0.3, 1, 3, 10, 30, 100, 300, 1000, 3000].filter(
+    (v) => v >= min && v <= max,
+  );
   return {
-    type: 'logarithmic' as const,
+    type: "logarithmic" as const,
     min,
     max,
     grid: { color: GRID, drawTicks: false, lineWidth: 1 },
@@ -873,15 +1150,18 @@ function tooltipSpec() {
   return {
     displayColors: false,
     callbacks: {
-      title: (items: TooltipItem<'line'>[]) => (items[0].raw as Pt).t,
-      label: (item: TooltipItem<'line'>) => {
+      title: (items: TooltipItem<"line">[]) => (items[0].raw as Pt).t,
+      label: (item: TooltipItem<"line">) => {
         const p = item.raw as Pt;
-        const band = p.low === p.high ? nf.format(p.low) : `${nf.format(p.low)} – ${nf.format(p.high)}`;
+        const band =
+          p.low === p.high
+            ? nf.format(p.low)
+            : `${nf.format(p.low)} – ${nf.format(p.high)}`;
         const flag = FLAG_TEXT[p.flag];
-        return `${item.dataset.label}: ${band}  →  index ${Math.round(p.y)}${flag ? `  ·  ${flag}` : ''}`;
+        return `${item.dataset.label}: ${band}  →  index ${Math.round(p.y)}${flag ? `  ·  ${flag}` : ""}`;
       },
-      afterLabel: (item: TooltipItem<'line'>) => (item.raw as Pt).note ?? '',
-      footer: (items: TooltipItem<'line'>[]) => {
+      afterLabel: (item: TooltipItem<"line">) => (item.raw as Pt).note ?? "",
+      footer: (items: TooltipItem<"line">[]) => {
         const p = items[0].raw as Pt;
         return `index = 100 × value ÷ ${nf.format(Math.round(p.base))}`;
       },
@@ -891,8 +1171,8 @@ function tooltipSpec() {
 
 /* -------------------------------------------------------------- emphasis */
 
-const episodePanels: Chart<'line'>[] = [];
-const itemPanels: { chart: Chart<'line'>; item: M }[] = [];
+const episodePanels: Chart<"line">[] = [];
+const itemPanels: { chart: Chart<"line">; item: M }[] = [];
 let activeItem: M | null = null;
 let activeEvent: number | null = null;
 
@@ -907,15 +1187,15 @@ function emphasiseItem(key: M | null): void {
       const colour = on ? d.__color : alpha(d.__color, 0.18);
       d.borderColor = colour;
       d.pointBorderColor = colour;
-      d.pointBackgroundColor = d.__hollow.map((h) => (h ? '#ffffff' : colour));
+      d.pointBackgroundColor = d.__hollow.map((h) => (h ? "#ffffff" : colour));
       d.borderWidth = key !== null && d.__item === key ? 2.75 : 1.75;
     }
-    chart.update('none');
+    chart.update("none");
   }
 
   for (const { chart, item } of itemPanels) {
     const host = chart.canvas.parentElement;
-    if (host) host.style.opacity = key === null || key === item ? '1' : '0.18';
+    if (host) host.style.opacity = key === null || key === item ? "1" : "0.18";
   }
 }
 
@@ -930,51 +1210,61 @@ function emphasiseEvent(index: number | null): void {
       const colour = on ? d.__color : alpha(d.__color, 0.18);
       d.borderColor = colour;
       d.pointBorderColor = colour;
-      d.pointBackgroundColor = d.__hollow.map((h) => (h ? '#ffffff' : colour));
+      d.pointBackgroundColor = d.__hollow.map((h) => (h ? "#ffffff" : colour));
     });
-    chart.update('none');
+    chart.update("none");
   }
 }
 
 /* --------------------------------------------------------------- legends */
 
-function legendButton(text: string, swatch: HTMLElement, onEnter: () => void, onLeave: () => void): HTMLElement {
-  const b = document.createElement('button');
-  b.type = 'button';
+function legendButton(
+  text: string,
+  swatch: HTMLElement,
+  onEnter: () => void,
+  onLeave: () => void,
+): HTMLElement {
+  const b = document.createElement("button");
+  b.type = "button";
   b.append(swatch, document.createTextNode(text));
-  b.addEventListener('mouseenter', onEnter);
-  b.addEventListener('mouseleave', onLeave);
-  b.addEventListener('focus', onEnter);
-  b.addEventListener('blur', onLeave);
+  b.addEventListener("mouseenter", onEnter);
+  b.addEventListener("mouseleave", onLeave);
+  b.addEventListener("focus", onEnter);
+  b.addEventListener("blur", onLeave);
   return b;
 }
 
 /* ---------------------------------------------------------------- mounts */
 
 function observations(ep: Episode): string {
-  const counts = ITEMS.map((i) => ep.weeks.filter((r) => r[i.key] !== undefined).length);
-  return `obs ${counts.join('·')} of ${ep.weeks.length} wks`;
+  const counts = ITEMS.map(
+    (i) => ep.weeks.filter((r) => r[i.key] !== undefined).length,
+  );
+  return `obs ${counts.join("·")} of ${ep.weeks.length} wks`;
 }
 
-function panelFigure(ep: Episode): { figure: HTMLElement; canvas: HTMLCanvasElement } {
-  const figure = document.createElement('figure');
-  figure.className = 'trellis-panel';
+function panelFigure(ep: Episode): {
+  figure: HTMLElement;
+  canvas: HTMLCanvasElement;
+} {
+  const figure = document.createElement("figure");
+  figure.className = "trellis-panel";
 
-  const caption = document.createElement('figcaption');
-  const strip = document.createElement('span');
-  strip.className = 'strip';
+  const caption = document.createElement("figcaption");
+  const strip = document.createElement("span");
+  strip.className = "strip";
   strip.textContent = ep.strip;
-  const meta = document.createElement('span');
-  meta.className = 'strip-meta';
+  const meta = document.createElement("span");
+  meta.className = "strip-meta";
   meta.textContent = `${ep.span} · ${observations(ep)}`;
-  const note = document.createElement('p');
-  note.className = 'strip-note';
+  const note = document.createElement("p");
+  note.className = "strip-note";
   note.textContent = ep.banner;
   caption.append(strip, meta, note);
 
-  const box = document.createElement('div');
-  box.className = 'panel-canvas';
-  const canvas = document.createElement('canvas');
+  const box = document.createElement("div");
+  box.className = "panel-canvas";
+  const canvas = document.createElement("canvas");
   box.append(canvas);
 
   figure.append(caption, box);
@@ -991,11 +1281,14 @@ export function mountCrossEpisode(opts: {
   itemHost: HTMLElement;
   itemLegend: HTMLElement;
   eventLegend: HTMLElement;
-}): Chart<'line'>[] {
-  const charts: Chart<'line'>[] = [];
+}): Chart<"line">[] {
+  const charts: Chart<"line">[] = [];
 
   /* ---- primary trellis: one panel per episode ---- */
-  const [yMin, yMax] = extentOf(EPISODES, ITEMS.map((i) => i.key));
+  const [yMin, yMax] = extentOf(
+    EPISODES,
+    ITEMS.map((i) => i.key),
+  );
   const cols = columns(opts.episodeHost);
   opts.episodeHost.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
 
@@ -1004,15 +1297,15 @@ export function mountCrossEpisode(opts: {
     opts.episodeHost.append(figure);
 
     const maxW = Math.max(...ep.weeks.map((r) => r.w), 1);
-    const datasets = ITEMS.map((i) => buildDataset(ep, i.key, i.color, i.short)).filter(
-      (d): d is PanelDataset => d !== null,
-    );
+    const datasets = ITEMS.map((i) =>
+      buildDataset(ep, i.key, i.color, i.short),
+    ).filter((d): d is PanelDataset => d !== null);
 
-    const options: ChartOptions<'line'> = {
+    const options: ChartOptions<"line"> = {
       responsive: true,
       maintainAspectRatio: false,
       animation: false,
-      interaction: { mode: 'nearest', axis: 'x', intersect: false },
+      interaction: { mode: "nearest", axis: "x", intersect: false },
       layout: { padding: { top: 6, right: 96, bottom: 0, left: 0 } },
       scales: {
         x: xScale(maxW),
@@ -1030,14 +1323,14 @@ export function mountCrossEpisode(opts: {
       },
     };
 
-    const chart = new Chart<'line'>(canvas, {
-      type: 'line',
-      data: { datasets } as unknown as ChartData<'line'>,
+    const chart = new Chart<"line">(canvas, {
+      type: "line",
+      data: { datasets } as unknown as ChartData<"line">,
       options,
       plugins: [hundredLine, directLabels],
     });
 
-    canvas.addEventListener('mouseleave', () => emphasiseItem(null));
+    canvas.addEventListener("mouseleave", () => emphasiseItem(null));
     episodePanels.push(chart);
     charts.push(chart);
   });
@@ -1049,36 +1342,39 @@ export function mountCrossEpisode(opts: {
   ITEMS.forEach((item) => {
     const [lo, hi] = extentOf(EPISODES, [item.key]);
 
-    const figure = document.createElement('figure');
-    figure.className = 'trellis-panel';
+    const figure = document.createElement("figure");
+    figure.className = "trellis-panel";
 
-    const caption = document.createElement('figcaption');
-    const strip = document.createElement('span');
-    strip.className = 'strip';
+    const caption = document.createElement("figcaption");
+    const strip = document.createElement("span");
+    strip.className = "strip";
     strip.textContent = item.short;
-    const meta = document.createElement('span');
-    meta.className = 'strip-meta';
+    const meta = document.createElement("span");
+    meta.className = "strip-meta";
     meta.textContent = `index, log ${fmtIndex(lo)}–${fmtIndex(hi)}`;
     caption.append(strip, meta);
 
-    const box = document.createElement('div');
-    box.className = 'panel-canvas';
-    const canvas = document.createElement('canvas');
+    const box = document.createElement("div");
+    box.className = "panel-canvas";
+    const canvas = document.createElement("canvas");
     box.append(canvas);
 
     figure.append(caption, box);
     opts.itemHost.append(figure);
 
-    const datasets = EPISODES.map((ep, i) => buildDataset(ep, item.key, RAMP[i], ep.short)).filter(
-      (d): d is PanelDataset => d !== null,
+    const datasets = EPISODES.map((ep, i) =>
+      buildDataset(ep, item.key, RAMP[i], ep.short),
+    ).filter((d): d is PanelDataset => d !== null);
+    const maxW = Math.max(
+      ...EPISODES.flatMap((ep) => ep.weeks.map((r) => r.w)),
+      1,
     );
-    const maxW = Math.max(...EPISODES.flatMap((ep) => ep.weeks.map((r) => r.w)), 1);
 
-    const options: ChartOptions<'line'> = {
+    const options: ChartOptions<"line"> = {
       responsive: true,
       maintainAspectRatio: false,
       animation: false,
-      interaction: { mode: 'nearest', axis: 'x', intersect: false },
+      interaction: { mode: "nearest", axis: "x", intersect: false },
       layout: { padding: { top: 6, right: 92, bottom: 0, left: 0 } },
       scales: {
         x: xScale(maxW),
@@ -1092,16 +1388,21 @@ export function mountCrossEpisode(opts: {
       },
     };
 
-    const chart = new Chart<'line'>(canvas, {
-      type: 'line',
-      data: { datasets } as unknown as ChartData<'line'>,
+    const chart = new Chart<"line">(canvas, {
+      type: "line",
+      data: { datasets } as unknown as ChartData<"line">,
       options,
       plugins: [hundredLine, directLabels],
     });
 
-    canvas.addEventListener('mouseleave', () => emphasiseEvent(null));
-    canvas.addEventListener('mousemove', (ev) => {
-      const pts = chart.getElementsAtEventForMode(ev, 'nearest', { intersect: false }, true);
+    canvas.addEventListener("mouseleave", () => emphasiseEvent(null));
+    canvas.addEventListener("mousemove", (ev) => {
+      const pts = chart.getElementsAtEventForMode(
+        ev,
+        "nearest",
+        { intersect: false },
+        true,
+      );
       emphasiseEvent(pts.length ? pts[0].datasetIndex : null);
     });
 
@@ -1112,19 +1413,29 @@ export function mountCrossEpisode(opts: {
   /* ---- legends ---- */
   opts.itemLegend.replaceChildren(
     ...ITEMS.map((item) => {
-      const swatch = document.createElement('span');
-      swatch.className = 'swatch';
+      const swatch = document.createElement("span");
+      swatch.className = "swatch";
       swatch.style.background = item.color;
-      return legendButton(item.label, swatch, () => emphasiseItem(item.key), () => emphasiseItem(null));
+      return legendButton(
+        item.label,
+        swatch,
+        () => emphasiseItem(item.key),
+        () => emphasiseItem(null),
+      );
     }),
   );
 
   opts.eventLegend.replaceChildren(
     ...EPISODES.map((ep, i) => {
-      const swatch = document.createElement('span');
-      swatch.className = 'swatch';
+      const swatch = document.createElement("span");
+      swatch.className = "swatch";
       swatch.style.background = RAMP[i];
-      return legendButton(ep.short, swatch, () => emphasiseEvent(i), () => emphasiseEvent(null));
+      return legendButton(
+        ep.short,
+        swatch,
+        () => emphasiseEvent(i),
+        () => emphasiseEvent(null),
+      );
     }),
   );
 
@@ -1142,12 +1453,13 @@ import {
   buildCostConfig,
   buildProtestersWeeklyConfig,
   buildEnforcementWeeklyConfig,
-} from './chart.ts';
-import { mountCrossEpisode } from './episodes.ts';
+} from "./chart.ts";
+import { mountCrossEpisode } from "./episodes.ts";
 
 function canvas(id: string): HTMLCanvasElement {
   const el = document.getElementById(id);
-  if (!(el instanceof HTMLCanvasElement)) throw new Error(`canvas#${id} not found`);
+  if (!(el instanceof HTMLCanvasElement))
+    throw new Error(`canvas#${id} not found`);
   return el;
 }
 
@@ -1158,22 +1470,26 @@ function host(id: string): HTMLElement {
 }
 
 const charts = [
-  mount(canvas('chart-protesters'), buildProtestersConfig()),
-  mount(canvas('chart-enforcement'), buildEnforcementConfig()),
-  mount(canvas('chart-costs'), buildCostConfig()),
-  mount(canvas('chart-protesters-weekly'), buildProtestersWeeklyConfig()),
-  mount(canvas('chart-enforcement-weekly'), buildEnforcementWeeklyConfig()),
+  mount(canvas("chart-protesters"), buildProtestersConfig()),
+  mount(canvas("chart-enforcement"), buildEnforcementConfig()),
+  mount(canvas("chart-costs"), buildCostConfig()),
+  mount(canvas("chart-protesters-weekly"), buildProtestersWeeklyConfig()),
+  mount(canvas("chart-enforcement-weekly"), buildEnforcementWeeklyConfig()),
   ...mountCrossEpisode({
-    episodeHost: host('trellis-episodes'),
-    itemHost: host('trellis-items'),
-    itemLegend: host('legend-items'),
-    eventLegend: host('legend-events'),
+    episodeHost: host("trellis-episodes"),
+    itemHost: host("trellis-items"),
+    itemLegend: host("legend-items"),
+    eventLegend: host("legend-events"),
   }),
 ];
 
 (window as unknown as { __charts: unknown }).__charts = charts;
 
-window.addEventListener('beforeunload', () => charts.forEach((c) => c.destroy()), { once: true });
+window.addEventListener(
+  "beforeunload",
+  () => charts.forEach((c) => c.destroy()),
+  { once: true },
+);
 ```
 
 **`public/index.html`** — full file:
@@ -1186,57 +1502,125 @@ window.addEventListener('beforeunload', () => charts.forEach((c) => c.destroy())
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>France — protest activity, Oct–Nov 2026</title>
     <style>
-      html, body { margin: 0; }
+      html,
       body {
-        font: 14px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-        background: #fff; color: #111;
-        padding: 16px; box-sizing: border-box;
-        max-width: 1420px; margin: 0 auto;
+        margin: 0;
       }
-      section { margin-bottom: 44px; }
+      body {
+        font:
+          14px/1.4 system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        background: #fff;
+        color: #111;
+        padding: 16px;
+        box-sizing: border-box;
+        max-width: 1420px;
+        margin: 0 auto;
+      }
+      section {
+        margin-bottom: 44px;
+      }
       section > header {
         border-bottom: 1px solid #e5e7eb;
         padding-bottom: 6px;
         margin-bottom: 18px;
       }
       section > header h1 {
-        font-size: 11px; text-transform: uppercase; letter-spacing: .09em;
-        color: #6b7280; margin: 0 0 4px; font-weight: 600;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        color: #6b7280;
+        margin: 0 0 4px;
+        font-weight: 600;
       }
-      section > header p { margin: 0; font-size: 12px; color: #4b5563; max-width: 92ch; }
-      .wrap { position: relative; height: 460px; margin-bottom: 28px; }
+      section > header p {
+        margin: 0;
+        font-size: 12px;
+        color: #4b5563;
+        max-width: 92ch;
+      }
+      .wrap {
+        position: relative;
+        height: 460px;
+        margin-bottom: 28px;
+      }
 
       /* ---- section C ---- */
-      .trellis { display: grid; gap: 20px 16px; margin: 0 0 10px; }
-      .trellis-panel { margin: 0; min-width: 0; }
+      .trellis {
+        display: grid;
+        gap: 20px 16px;
+        margin: 0 0 10px;
+      }
+      .trellis-panel {
+        margin: 0;
+        min-width: 0;
+      }
       .strip {
-        display: block; font-size: 10.5px; font-weight: 700;
-        letter-spacing: .08em; text-transform: uppercase; color: #111827;
+        display: block;
+        font-size: 10.5px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #111827;
       }
-      .strip-meta { display: block; font-size: 10px; color: #6b7280; }
+      .strip-meta {
+        display: block;
+        font-size: 10px;
+        color: #6b7280;
+      }
       .strip-note {
-        margin: 3px 0 2px; font-size: 10.5px; line-height: 1.25;
-        color: #6b7280; min-height: 26px;
+        margin: 3px 0 2px;
+        font-size: 10.5px;
+        line-height: 1.25;
+        color: #6b7280;
+        min-height: 26px;
       }
-      .panel-canvas { position: relative; height: 190px; }
-      .trellis-items .panel-canvas { height: 230px; }
+      .panel-canvas {
+        position: relative;
+        height: 190px;
+      }
+      .trellis-items .panel-canvas {
+        height: 230px;
+      }
       .legend {
-        display: flex; flex-wrap: wrap; gap: 4px 18px;
-        margin: 0 0 12px; font-size: 12px; color: #374151;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 18px;
+        margin: 0 0 12px;
+        font-size: 12px;
+        color: #374151;
       }
       .legend button {
-        all: unset; display: inline-flex; align-items: center; gap: 6px;
-        padding: 2px 0; cursor: default;
+        all: unset;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 2px 0;
+        cursor: default;
       }
-      .legend .swatch { width: 14px; height: 3px; border-radius: 2px; }
-      .axis-note { margin: 0 0 30px; font-size: 11px; color: #6b7280; }
+      .legend .swatch {
+        width: 14px;
+        height: 3px;
+        border-radius: 2px;
+      }
+      .axis-note {
+        margin: 0 0 30px;
+        font-size: 11px;
+        color: #6b7280;
+      }
     </style>
   </head>
   <body>
     <section id="section-daily">
       <header>
         <h1>Section A — daily</h1>
-        <p>One x-axis slot per calendar day, 1 Oct – 11 Nov 2026. Days with no published figure stay empty.</p>
+        <p>
+          One x-axis slot per calendar day, 1 Oct – 11 Nov 2026. Days with no
+          published figure stay empty.
+        </p>
       </header>
       <div class="wrap"><canvas id="chart-protesters"></canvas></div>
       <div class="wrap"><canvas id="chart-enforcement"></canvas></div>
@@ -1246,7 +1630,10 @@ window.addEventListener('beforeunload', () => charts.forEach((c) => c.destroy())
     <section id="section-weekly">
       <header>
         <h1>Section B — weekly</h1>
-        <p>Weeks run Monday–Sunday. Crowd size shows the peak day; arrests and injuries are summed. * marks weeks clipped by the window.</p>
+        <p>
+          Weeks run Monday–Sunday. Crowd size shows the peak day; arrests and
+          injuries are summed. * marks weeks clipped by the window.
+        </p>
       </header>
       <div class="wrap"><canvas id="chart-protesters-weekly"></canvas></div>
       <div class="wrap"><canvas id="chart-enforcement-weekly"></canvas></div>
@@ -1256,35 +1643,42 @@ window.addEventListener('beforeunload', () => charts.forEach((c) => c.destroy())
       <header>
         <h1>Section C — cross-episode, one panel per movement</h1>
         <p>
-          Seven episodes, four series each. Every series is indexed to its own first comparable published figure
-          (index = 100, dashed grey reference line), so protestors in the hundred-thousands and arrests in the
-          thousands share one axis. Panel position encodes the episode; hue encodes the series, identically in all
-          panels. Hollow markers = regional, partial, derived or actions-total figures. Hover a series (or the legend)
-          to trace it across all seven panels.
+          Seven episodes, four series each. Every series is indexed to its own
+          first comparable published figure (index = 100, dashed grey reference
+          line), so protestors in the hundred-thousands and arrests in the
+          thousands share one axis. Panel position encodes the episode; hue
+          encodes the series, identically in all panels. Hollow markers =
+          regional, partial, derived or actions-total figures. Hover a series
+          (or the legend) to trace it across all seven panels.
         </p>
       </header>
       <div class="legend" id="legend-items"></div>
       <div class="trellis" id="trellis-episodes"></div>
       <p class="axis-note">
-        x — whole weeks since each movement's first action, true scale, so durations differ (Nahel 2 weeks, Gilets
-        jaunes 44). y — index, log scale, 0.1–1,500 shared by every panel. Dashed segment = at least one week with no
-        published figure lies between the two points. "obs" under each strip = number of weeks with a figure for
-        protestors · arrests · forces injured · protestors injured.
+        x — whole weeks since each movement's first action, true scale, so
+        durations differ (Nahel 2 weeks, Gilets jaunes 44). y — index, log
+        scale, 0.1–1,500 shared by every panel. Dashed segment = at least one
+        week with no published figure lies between the two points. "obs" under
+        each strip = number of weeks with a figure for protestors · arrests ·
+        forces injured · protestors injured.
       </p>
 
       <header>
         <h1>Section C′ — cross-episode, transposed</h1>
         <p>
-          The same data with the comparison axis flipped: one panel per series, one line per movement. Colour encodes
-          the movement on a single sequential ramp, light → dark in the same order in every panel, so the reader
-          learns the ramp once. Use this to ask "did arrests behave the same way in every episode?".
+          The same data with the comparison axis flipped: one panel per series,
+          one line per movement. Colour encodes the movement on a single
+          sequential ramp, light → dark in the same order in every panel, so the
+          reader learns the ramp once. Use this to ask "did arrests behave the
+          same way in every episode?".
         </p>
       </header>
       <div class="legend" id="legend-events"></div>
       <div class="trellis trellis-items" id="trellis-items"></div>
       <p class="axis-note">
-        y limits are per panel — a log range printed under each strip — because the series span different orders of
-        magnitude. Only the protestor panel and the forces-injured panel contain enough points to read as a shape;
+        y limits are per panel — a log range printed under each strip — because
+        the series span different orders of magnitude. Only the protestor panel
+        and the forces-injured panel contain enough points to read as a shape;
         the sparse panels are the finding, not a defect.
       </p>
     </section>
@@ -1296,17 +1690,17 @@ window.addEventListener('beforeunload', () => charts.forEach((c) => c.destroy())
 
 What the sections now show, and the caveats built into the code:
 
-| Panel | Peak index | Why the shape is what it is |
-|---|---|---|
-| May 1968 | 984 (13 May) | Baseline is the 1 May march (62,500 mid); only four weeks carry any figure |
-| CPE 2006 | 683 (4 Apr) | Rises all the way to the withdrawal; the 7 Mar drop is a bad count, not a real dip |
-| Gilets jaunes | 173 → 3.5 | Act I (287,700, actions-total) is hollow and *not* the baseline; Act II is (166,000) |
-| Nahel 2023 | 100 → 3.2 (arrests) | Crowd is one point only — the march, not the riots |
-| Pensions 2023 | 100 → 224 (7 Mar) | Crowd only; the 18% ministry-vs-union gap is in the tooltip |
-| Bloquons tout | 100 → 353 (18 Sep) | 10 Sep is hollow: actions-total, and the ministry revised 29,000 → 197,000 |
-| Students 2026 | 100 → 308 (5 Nov) | Protestor injuries have no flow figure, so that line is a single point |
+| Panel         | Peak index          | Why the shape is what it is                                                          |
+| ------------- | ------------------- | ------------------------------------------------------------------------------------ |
+| May 1968      | 984 (13 May)        | Baseline is the 1 May march (62,500 mid); only four weeks carry any figure           |
+| CPE 2006      | 683 (4 Apr)         | Rises all the way to the withdrawal; the 7 Mar drop is a bad count, not a real dip   |
+| Gilets jaunes | 173 → 3.5           | Act I (287,700, actions-total) is hollow and _not_ the baseline; Act II is (166,000) |
+| Nahel 2023    | 100 → 3.2 (arrests) | Crowd is one point only — the march, not the riots                                   |
+| Pensions 2023 | 100 → 224 (7 Mar)   | Crowd only; the 18% ministry-vs-union gap is in the tooltip                          |
+| Bloquons tout | 100 → 353 (18 Sep)  | 10 Sep is hollow: actions-total, and the ministry revised 29,000 → 197,000           |
+| Students 2026 | 100 → 308 (5 Nov)   | Protestor injuries have no flow figure, so that line is a single point               |
 
-Two implementation notes worth knowing: the `c` flag is treated as *not a baseline* but still plotted (hollow), which is why Gilets jaunes starts above 100 rather than at it; and y-axis width is forced to 42 px on every panel so the plot areas align exactly across the grid, with tick labels drawn only in the left column.
+Two implementation notes worth knowing: the `c` flag is treated as _not a baseline_ but still plotted (hollow), which is why Gilets jaunes starts above 100 rather than at it; and y-axis width is forced to 42 px on every panel so the plot areas align exactly across the grid, with tick labels drawn only in the left column.
 
 ---
 
@@ -1338,8 +1732,8 @@ export interface StudentWeek {
   a: [number, number] | null;
   f: [number, number] | null;
   i: [number, number] | null;
-  flags: Partial<Record<'p' | 'a' | 'f' | 'i', Quality>>;
-  notes: Partial<Record<'p' | 'a' | 'f' | 'i', string>>;
+  flags: Partial<Record<"p" | "a" | "f" | "i", Quality>>;
+  notes: Partial<Record<"p" | "a" | "f" | "i", string>>;
 }
 
 /** One week, flattened next to the data it comes from — no positional contract left to break. */
@@ -1349,9 +1743,9 @@ function studentCell(
 ): { band: [number, number] | null; q?: Quality; note?: string } {
   const band = s.bands[idx];
   if (!band) return { band: null };
-  const raw = s.quality[idx] ?? 'n';
+  const raw = s.quality[idx] ?? "n";
   // a week whose only figures are regional/partial was detached by the aggregator
-  const q: Quality = s.detach[idx] ? (raw === 'f' ? 'f' : 'r') : raw;
+  const q: Quality = s.detach[idx] ? (raw === "f" ? "f" : "r") : raw;
   return { band: [band[0], band[1]], q, note: s.notes[idx] ?? undefined };
 }
 
@@ -1374,7 +1768,7 @@ export const STUDENT_WEEKS: StudentWeek[] = WEEKS.map((w, idx) => {
     flags: {},
     notes: {},
   };
-  for (const m of ['p', 'a', 'f', 'i'] as const) {
+  for (const m of ["p", "a", "f", "i"] as const) {
     const c = studentCell(STUDENT_SERIES[m], idx);
     out[m] = c.band;
     if (c.q) out.flags[m] = c.q;
@@ -1398,22 +1792,22 @@ import {
   type ChartDataset,
   type Plugin,
   type TooltipItem,
-} from 'chart.js';
-import { STUDENT_WEEKS } from './chart.ts';
+} from "chart.js";
+import { STUDENT_WEEKS } from "./chart.ts";
 
 /* ------------------------------------------------------------------ types */
 
-type M = 'p' | 'a' | 'f' | 'i';
-type Flag = 'n' | 'r' | 'p' | 'f' | 'e' | 'c' | 'w';
+type M = "p" | "a" | "f" | "i";
+type Flag = "n" | "r" | "p" | "f" | "e" | "c" | "w";
 type Band = number | [number, number];
 
 interface Row {
-  w: number;                       // whole weeks since the event's first action
-  t: string;                       // week / act label, tooltip title
-  p?: Band;                        // protestors, peak day of the week
-  a?: Band;                        // arrests, weekly total
-  f?: Band;                        // injuries, security forces
-  i?: Band;                        // injuries, protestors
+  w: number; // whole weeks since the event's first action
+  t: string; // week / act label, tooltip title
+  p?: Band; // protestors, peak day of the week
+  a?: Band; // arrests, weekly total
+  f?: Band; // injuries, security forces
+  i?: Band; // injuries, protestors
   flag?: Partial<Record<M, Flag>>;
   note?: Partial<Record<M, string>>;
 }
@@ -1438,7 +1832,7 @@ interface Pt {
   t: string;
 }
 
-interface PanelDataset extends ChartDataset<'line', Pt[]> {
+interface PanelDataset extends ChartDataset<"line", Pt[]> {
   __item: M;
   __color: string;
   __hollow: boolean[];
@@ -1447,34 +1841,67 @@ interface PanelDataset extends ChartDataset<'line', Pt[]> {
 
 /* ------------------------------------------------------------- constants */
 
-const MUTED = '#6b7280';
-const GRID = '#E5E5E5';
+const MUTED = "#6b7280";
+const GRID = "#E5E5E5";
 const REFERENCE = 100;
 
 const ITEMS: { key: M; label: string; short: string; color: string }[] = [
-  { key: 'p', label: 'Protestors (peak day)', short: 'Protestors', color: '#0072B2' },
-  { key: 'a', label: 'Arrests (weekly total)', short: 'Arrests', color: '#E69F00' },
-  { key: 'f', label: 'Injuries — security forces', short: 'Forces hurt', color: '#009E73' },
-  { key: 'i', label: 'Injuries — protestors', short: 'Protestors hurt', color: '#CC79A7' },
+  {
+    key: "p",
+    label: "Protestors (peak day)",
+    short: "Protestors",
+    color: "#0072B2",
+  },
+  {
+    key: "a",
+    label: "Arrests (weekly total)",
+    short: "Arrests",
+    color: "#E69F00",
+  },
+  {
+    key: "f",
+    label: "Injuries — security forces",
+    short: "Forces hurt",
+    color: "#009E73",
+  },
+  {
+    key: "i",
+    label: "Injuries — protestors",
+    short: "Protestors hurt",
+    color: "#CC79A7",
+  },
 ];
 
 /** Sequential ramp, light → dark, identical in every companion panel. */
-const RAMP = ['#D6E6F2', '#B0CFE6', '#86B4D7', '#5C97C5', '#357AB0', '#1B5C92', '#0A3A63'];
+const RAMP = [
+  "#D6E6F2",
+  "#B0CFE6",
+  "#86B4D7",
+  "#5C97C5",
+  "#357AB0",
+  "#1B5C92",
+  "#0A3A63",
+];
 
 const FLAG_TEXT: Partial<Record<Flag, string>> = {
-  r: 'regional only',
-  p: 'partial',
-  f: 'lower bound',
-  e: 'derived',
-  c: 'actions-total / stock — measured differently',
-  w: 'weekly aggregate',
+  r: "regional only",
+  p: "partial",
+  f: "lower bound",
+  e: "derived",
+  c: "actions-total / stock — measured differently",
+  w: "weekly aggregate",
 };
 
-const hollow = (f: Flag): boolean => f === 'r' || f === 'p' || f === 'e' || f === 'c';
+const hollow = (f: Flag): boolean =>
+  f === "r" || f === "p" || f === "e" || f === "c";
 
-const nf = new Intl.NumberFormat('en-GB');
-const compact = new Intl.NumberFormat('en-GB', { notation: 'compact', maximumFractionDigits: 1 });
-const fmtIndex = (v: number): string => (v < 1 ? String(Number(v.toFixed(2))) : compact.format(v));
+const nf = new Intl.NumberFormat("en-GB");
+const compact = new Intl.NumberFormat("en-GB", {
+  notation: "compact",
+  maximumFractionDigits: 1,
+});
+const fmtIndex = (v: number): string =>
+  v < 1 ? String(Number(v.toFixed(2))) : compact.format(v);
 
 function alpha(hex: string, a: number): string {
   const n = Number.parseInt(hex.slice(1), 16);
@@ -1484,139 +1911,258 @@ function alpha(hex: string, a: number): string {
 /* ------------------------------------------------------------------- data */
 
 const MAY68: Episode = {
-  id: 'may68',
-  strip: 'May 1968',
-  short: 'May 68',
-  span: '29 Apr – 30 Jun 1968',
-  banner: 'Crowd figures exist only for 1, 6, 10 and 13 May. The general strike is not counted here.',
+  id: "may68",
+  strip: "May 1968",
+  short: "May 68",
+  span: "29 Apr – 30 Jun 1968",
+  banner:
+    "Crowd figures exist only for 1, 6, 10 and 13 May. The general strike is not counted here.",
   weeks: [
     {
-      w: 0, t: '29 Apr – 5 May · 1 May march',
+      w: 0,
+      t: "29 Apr – 5 May · 1 May march",
       p: [25_000, 100_000],
-      note: { p: 'prefecture 25,000 / CGT 100,000, République → Bastille' },
+      note: { p: "prefecture 25,000 / CGT 100,000, République → Bastille" },
     },
     {
-      w: 1, t: '6 – 12 May · Sorbonne, barricades',
-      p: 20_000, a: [469, 891], f: [247, 300], i: 100,
-      flag: { i: 'f' },
+      w: 1,
+      t: "6 – 12 May · Sorbonne, barricades",
+      p: 20_000,
+      a: [469, 891],
+      f: [247, 300],
+      i: 100,
+      flag: { i: "f" },
       note: {
-        p: '20,000 to the Sorbonne on 6 May; >20,000 again on 10 May',
-        a: '469 on the night of 10–11 May; high adds the 422 early-May arrests',
-        f: '300+ on 6 May; 247 on 10–11 May',
-        i: '≥100 — no national count was published',
+        p: "20,000 to the Sorbonne on 6 May; >20,000 again on 10 May",
+        a: "469 on the night of 10–11 May; high adds the 422 early-May arrests",
+        f: "300+ on 6 May; 247 on 10–11 May",
+        i: "≥100 — no national count was published",
       },
     },
     {
-      w: 2, t: '13 – 19 May · 13 May march',
+      w: 2,
+      t: "13 – 19 May · 13 May march",
       p: [230_000, 1_000_000],
-      note: { p: 'prefecture 230,000 · ORTF 171,000 · unions 1,000,000. Peak of the episode.' },
-    },
-    {
-      w: 3, t: '20 – 26 May · 24–25 May',
-      a: [1_000, 1_000], i: 887,
-      flag: { a: 'f', i: 'e' },
       note: {
-        a: '1,000+ arrests on 25 May',
-        i: '887 injured, from the English-Wikipedia infobox — weak provenance',
+        p: "prefecture 230,000 · ORTF 171,000 · unions 1,000,000. Peak of the episode.",
       },
     },
-    { w: 4, t: '27 May – 2 Jun · 30 May', note: { p: '30 May: 300,000 (prefecture) – 1,000,000 counter-demonstration — excluded from protest totals' } },
-    { w: 5, t: '3 – 9 Jun', note: { p: '4 Jun partial return to work; 7 Jun Renault-Flins clashes' } },
-    { w: 6, t: '10 – 16 Jun', note: { p: '10–11 Jun: 3 dead; 12 Jun demonstrations banned nationwide' } },
-    { w: 7, t: '17 – 23 Jun' },
-    { w: 8, t: '24 – 30 Jun' },
+    {
+      w: 3,
+      t: "20 – 26 May · 24–25 May",
+      a: [1_000, 1_000],
+      i: 887,
+      flag: { a: "f", i: "e" },
+      note: {
+        a: "1,000+ arrests on 25 May",
+        i: "887 injured, from the English-Wikipedia infobox — weak provenance",
+      },
+    },
+    {
+      w: 4,
+      t: "27 May – 2 Jun · 30 May",
+      note: {
+        p: "30 May: 300,000 (prefecture) – 1,000,000 counter-demonstration — excluded from protest totals",
+      },
+    },
+    {
+      w: 5,
+      t: "3 – 9 Jun",
+      note: { p: "4 Jun partial return to work; 7 Jun Renault-Flins clashes" },
+    },
+    {
+      w: 6,
+      t: "10 – 16 Jun",
+      note: { p: "10–11 Jun: 3 dead; 12 Jun demonstrations banned nationwide" },
+    },
+    { w: 7, t: "17 – 23 Jun" },
+    { w: 8, t: "24 – 30 Jun" },
   ],
 };
 
 const CPE: Episode = {
-  id: 'cpe',
-  strip: 'CPE 2006',
-  short: 'CPE 2006',
-  span: '6 Feb – 16 Apr 2006',
-  banner: 'One movement-wide arrest total (4,500); no weekly enforcement series exists.',
+  id: "cpe",
+  strip: "CPE 2006",
+  short: "CPE 2006",
+  span: "6 Feb – 16 Apr 2006",
+  banner:
+    "One movement-wide arrest total (4,500); no weekly enforcement series exists.",
   weeks: [
     {
-      w: 0, t: '6 – 12 Feb · 7 Feb',
+      w: 0,
+      t: "6 – 12 Feb · 7 Feb",
       p: [200_000, 400_000],
-      note: { p: '187 demonstrations, first national day' },
+      note: { p: "187 demonstrations, first national day" },
     },
     {
-      w: 4, t: '6 – 12 Mar · 7 Mar',
+      w: 4,
+      t: "6 – 12 Mar · 7 Mar",
       p: [400_000, 1_000_000],
-      note: { p: '>1 million claimed; 38 universities on strike by 9 Mar' },
+      note: { p: ">1 million claimed; 38 universities on strike by 9 Mar" },
     },
     {
-      w: 5, t: '13 – 19 Mar · 16–18 Mar',
-      p: [500_000, 1_500_000], a: [156, 167], f: 34, i: 70,
-      flag: { i: 'e' },
+      w: 5,
+      t: "13 – 19 Mar · 16–18 Mar",
+      p: [500_000, 1_500_000],
+      a: [156, 167],
+      f: 34,
+      i: 70,
+      flag: { i: "e" },
       note: {
-        p: '18 Mar: 500,000 (ministry) – 1,500,000 (unions); Paris 80,000 – 700,000',
-        a: 'Paris, 18 Mar (156 ministry / 167 organisers)',
-        f: 'Paris, 18 Mar',
-        i: '18 (16 Mar) + 52 (18 Mar), Paris only',
+        p: "18 Mar: 500,000 (ministry) – 1,500,000 (unions); Paris 80,000 – 700,000",
+        a: "Paris, 18 Mar (156 ministry / 167 organisers)",
+        f: "Paris, 18 Mar",
+        i: "18 (16 Mar) + 52 (18 Mar), Paris only",
       },
     },
     {
-      w: 6, t: '20 – 26 Mar · 23 Mar',
-      p: [220_000, 450_000], a: 630, f: 90,
-      note: { p: '21 universities fully blocked; 67 striking or blocked' },
+      w: 6,
+      t: "20 – 26 Mar · 23 Mar",
+      p: [220_000, 450_000],
+      a: 630,
+      f: 90,
+      note: { p: "21 universities fully blocked; 67 striking or blocked" },
     },
-    { w: 7, t: '27 Mar – 2 Apr · 28 Mar', p: [1_055_000, 2_710_000], a: 600, note: { p: '4th national action day' } },
-    { w: 8, t: '3 – 9 Apr · 4 Apr', p: [1_000_000, 3_100_000], note: { p: 'peak day of the episode' } },
-    { w: 9, t: '10 – 16 Apr', note: { p: 'CPE withdrawn 10 Apr; the movement splits' } },
+    {
+      w: 7,
+      t: "27 Mar – 2 Apr · 28 Mar",
+      p: [1_055_000, 2_710_000],
+      a: 600,
+      note: { p: "4th national action day" },
+    },
+    {
+      w: 8,
+      t: "3 – 9 Apr · 4 Apr",
+      p: [1_000_000, 3_100_000],
+      note: { p: "peak day of the episode" },
+    },
+    {
+      w: 9,
+      t: "10 – 16 Apr",
+      note: { p: "CPE withdrawn 10 Apr; the movement splits" },
+    },
   ],
 };
 
 const GJ_DATES = [
-  '17 Nov 2018', '24 Nov', '1 Dec', '8 Dec', '15 Dec', '22 Dec', '29 Dec',
-  '5 Jan 2019', '12 Jan', '19 Jan', '26 Jan', '2 Feb', '9 Feb', '16 Feb',
-  '23 Feb', '2 Mar', '9 Mar', '16 Mar', '23 Mar', '30 Mar', '6 Apr', '13 Apr',
-  '20 Apr', '27 Apr', '4 May', '11 May', '18 May', '25 May', '1 Jun', '8 Jun',
-  '15 Jun', '22 Jun', '29 Jun', '7 Sep 2019',
+  "17 Nov 2018",
+  "24 Nov",
+  "1 Dec",
+  "8 Dec",
+  "15 Dec",
+  "22 Dec",
+  "29 Dec",
+  "5 Jan 2019",
+  "12 Jan",
+  "19 Jan",
+  "26 Jan",
+  "2 Feb",
+  "9 Feb",
+  "16 Feb",
+  "23 Feb",
+  "2 Mar",
+  "9 Mar",
+  "16 Mar",
+  "23 Mar",
+  "30 Mar",
+  "6 Apr",
+  "13 Apr",
+  "20 Apr",
+  "27 Apr",
+  "4 May",
+  "11 May",
+  "18 May",
+  "25 May",
+  "1 Jun",
+  "8 Jun",
+  "15 Jun",
+  "22 Jun",
+  "29 Jun",
+  "7 Sep 2019",
 ];
 
 const GJ_CROWD: [number, number][] = [
-  [0, 287_700], [1, 166_000], [2, 136_000], [3, 136_000], [4, 66_000], [5, 38_600],
-  [6, 32_000], [7, 50_000], [8, 84_000], [9, 84_000], [10, 69_000], [11, 58_600],
-  [12, 51_400], [13, 41_500], [14, 46_600], [15, 39_300], [16, 28_600], [17, 32_300],
-  [18, 40_500], [19, 33_700], [20, 22_300], [21, 31_000], [22, 27_900], [23, 23_600],
-  [24, 18_900], [25, 18_600], [26, 15_500], [27, 12_500], [28, 9_500], [29, 10_300],
-  [30, 7_000], [31, 11_800], [32, 5_800], [43, 7_000],
+  [0, 287_700],
+  [1, 166_000],
+  [2, 136_000],
+  [3, 136_000],
+  [4, 66_000],
+  [5, 38_600],
+  [6, 32_000],
+  [7, 50_000],
+  [8, 84_000],
+  [9, 84_000],
+  [10, 69_000],
+  [11, 58_600],
+  [12, 51_400],
+  [13, 41_500],
+  [14, 46_600],
+  [15, 39_300],
+  [16, 28_600],
+  [17, 32_300],
+  [18, 40_500],
+  [19, 33_700],
+  [20, 22_300],
+  [21, 31_000],
+  [22, 27_900],
+  [23, 23_600],
+  [24, 18_900],
+  [25, 18_600],
+  [26, 15_500],
+  [27, 12_500],
+  [28, 9_500],
+  [29, 10_300],
+  [30, 7_000],
+  [31, 11_800],
+  [32, 5_800],
+  [43, 7_000],
 ];
 
 /** Enforcement figures exist only for Acts I–IV; later acts were not published as a series. */
-const GJ_EXTRA: Record<number, Pick<Row, 'a' | 'f' | 'i' | 'flag' | 'note'>> = {
+const GJ_EXTRA: Record<number, Pick<Row, "a" | "f" | "i" | "flag" | "note">> = {
   0: {
-    a: [974, 1_150], f: 17, i: 109,
-    flag: { f: 'e', i: 'e' },
+    a: [974, 1_150],
+    f: 17,
+    i: 109,
+    flag: { f: "e", i: "e" },
     note: {
-      a: '974 in custody, ~1,150 interpellations',
-      f: '17 police among 126 injured — split derived',
-      i: '109 of 126 injured — split derived',
+      a: "974 in custody, ~1,150 interpellations",
+      f: "17 police among 126 injured — split derived",
+      i: "109 of 126 injured — split derived",
     },
   },
   1: {
-    a: [307, 339], f: 30, i: 54,
-    flag: { i: 'e' },
-    note: { a: '307 in custody, 339 interpellations', i: '54 of 84 injured — split derived' },
+    a: [307, 339],
+    f: 30,
+    i: 54,
+    flag: { i: "e" },
+    note: {
+      a: "307 in custody, 339 interpellations",
+      i: "54 of 84 injured — split derived",
+    },
   },
   2: {
     a: 630,
-    flag: { a: 'f' },
-    note: { a: 'placed in custody, not arrests; 263 injured, not split by side' },
+    flag: { a: "f" },
+    note: {
+      a: "placed in custody, not arrests; 263 injured, not split by side",
+    },
   },
   3: {
     a: [1_709, 2_000],
-    note: { a: '1,709 in custody, ~2,000 interpellations; injuries reported as 118 / 264 / 585 depending on source, not split by side' },
+    note: {
+      a: "1,709 in custody, ~2,000 interpellations; injuries reported as 118 / 264 / 585 depending on source, not split by side",
+    },
   },
 };
 
 const GILETS: Episode = {
-  id: 'gj',
-  strip: 'Gilets jaunes',
-  short: 'Gilets jaunes',
-  span: '12 Nov 2018 – 9 Sep 2019',
-  banner: 'Ministry count only: one figure per act. Acts 34–43 were never published; no enforcement series after Act IV.',
+  id: "gj",
+  strip: "Gilets jaunes",
+  short: "Gilets jaunes",
+  span: "12 Nov 2018 – 9 Sep 2019",
+  banner:
+    "Ministry count only: one figure per act. Acts 34–43 were never published; no enforcement series after Act IV.",
   weeks: GJ_CROWD.map(([w, n], idx) => {
     const extra = GJ_EXTRA[w] ?? {};
     return {
@@ -1625,14 +2171,16 @@ const GILETS: Episode = {
       p: n,
       ...extra,
       flag: {
-        ...(w === 0 ? { p: 'c' as Flag } : {}),
+        ...(w === 0 ? { p: "c" as Flag } : {}),
         ...extra.flag,
       },
       note: {
         ...(w === 0
-          ? { p: '287,700 counts all actions including road blockades — an actions-total, not a march' }
+          ? {
+              p: "287,700 counts all actions including road blockades — an actions-total, not a march",
+            }
           : w === 1
-            ? { p: 'police-union counter-count: 750,000' }
+            ? { p: "police-union counter-count: 750,000" }
             : {}),
         ...extra.note,
       },
@@ -1641,90 +2189,138 @@ const GILETS: Episode = {
 };
 
 const NAHEL: Episode = {
-  id: 'nahel',
-  strip: 'Nahel 2023',
-  short: 'Nahel 2023',
-  span: '27 Jun – 9 Jul 2023',
-  banner: 'Gatherings were banned: arrests, not crowd counts, carry the scale of the riots.',
+  id: "nahel",
+  strip: "Nahel 2023",
+  short: "Nahel 2023",
+  span: "27 Jun – 9 Jul 2023",
+  banner:
+    "Gatherings were banned: arrests, not crowd counts, carry the scale of the riots.",
   weeks: [
     {
-      w: 0, t: '26 Jun – 2 Jul · Nanterre march, 29 Jun',
-      p: [6_200, 20_000], a: 3_354, f: 722,
+      w: 0,
+      t: "26 Jun – 2 Jul · Nanterre march, 29 Jun",
+      p: [6_200, 20_000],
+      a: 3_354,
+      f: 722,
       note: {
-        p: 'police 6,200 / organisers 20,000 for the march blanche',
-        a: 'national total, 27 Jun – 2 Jul',
-        f: '722 officers injured; 2 deaths; 5,662 vehicles burnt',
+        p: "police 6,200 / organisers 20,000 for the march blanche",
+        a: "national total, 27 Jun – 2 Jul",
+        f: "722 officers injured; 2 deaths; 5,662 vehicles burnt",
       },
     },
-    { w: 1, t: '3 – 9 Jul', a: 108, f: 1, note: { a: '72 + 16 + 20 over 3–5 Jul' } },
+    {
+      w: 1,
+      t: "3 – 9 Jul",
+      a: 108,
+      f: 1,
+      note: { a: "72 + 16 + 20 over 3–5 Jul" },
+    },
   ],
 };
 
 const PENSIONS: Episode = {
-  id: 'pensions',
-  strip: 'Pension reform 2023',
-  short: 'Pensions 2023',
-  span: '19 Jan – 8 Jun 2023',
-  banner: 'Crowds only: no national weekly arrest or injury series was published.',
+  id: "pensions",
+  strip: "Pension reform 2023",
+  short: "Pensions 2023",
+  span: "19 Jan – 8 Jun 2023",
+  banner:
+    "Crowds only: no national weekly arrest or injury series was published.",
   weeks: [
-    { w: 0, t: '16 – 22 Jan · 19 Jan', p: [1_120_000, 2_000_000], note: { p: 'first national day; Paris 80,000 – 400,000' } },
-    { w: 2, t: '30 Jan – 5 Feb · 31 Jan', p: [1_270_000, 2_800_000] },
-    { w: 3, t: '6 – 12 Feb · 7 & 11 Feb', p: [963_000, 2_500_000], note: { p: 'two action days in one week; the peak is 11 Feb' } },
-    { w: 4, t: '13 – 19 Feb · 16 Feb', p: [440_000, 1_300_000] },
-    { w: 7, t: '6 – 12 Mar · 7 Mar', p: [1_280_000, 3_500_000], note: { p: 'national record: ministry 1.28M, unions 3.5M' } },
-    { w: 8, t: '13 – 19 Mar · 15 Mar', p: [480_000, 1_700_000] },
-    { w: 9, t: '20 – 26 Mar · 23 Mar', p: [1_089_000, 3_500_000] },
-    { w: 10, t: '27 Mar – 2 Apr · 28 Mar', p: [740_000, 2_000_000] },
-    { w: 11, t: '3 – 9 Apr · 6 Apr', p: [570_000, 2_000_000] },
-    { w: 12, t: '10 – 16 Apr · 13 Apr', p: [380_000, 1_500_000], note: { p: 'CGT gives 1.0M in one compilation, 1.5M in another' } },
-    { w: 16, t: '1 – 7 May · 1 May', p: [782_000, 2_300_000] },
-    { w: 20, t: '5 – 11 Jun · 6 Jun', p: [281_000, 900_000], note: { p: 'movement minimum' } },
+    {
+      w: 0,
+      t: "16 – 22 Jan · 19 Jan",
+      p: [1_120_000, 2_000_000],
+      note: { p: "first national day; Paris 80,000 – 400,000" },
+    },
+    { w: 2, t: "30 Jan – 5 Feb · 31 Jan", p: [1_270_000, 2_800_000] },
+    {
+      w: 3,
+      t: "6 – 12 Feb · 7 & 11 Feb",
+      p: [963_000, 2_500_000],
+      note: { p: "two action days in one week; the peak is 11 Feb" },
+    },
+    { w: 4, t: "13 – 19 Feb · 16 Feb", p: [440_000, 1_300_000] },
+    {
+      w: 7,
+      t: "6 – 12 Mar · 7 Mar",
+      p: [1_280_000, 3_500_000],
+      note: { p: "national record: ministry 1.28M, unions 3.5M" },
+    },
+    { w: 8, t: "13 – 19 Mar · 15 Mar", p: [480_000, 1_700_000] },
+    { w: 9, t: "20 – 26 Mar · 23 Mar", p: [1_089_000, 3_500_000] },
+    { w: 10, t: "27 Mar – 2 Apr · 28 Mar", p: [740_000, 2_000_000] },
+    { w: 11, t: "3 – 9 Apr · 6 Apr", p: [570_000, 2_000_000] },
+    {
+      w: 12,
+      t: "10 – 16 Apr · 13 Apr",
+      p: [380_000, 1_500_000],
+      note: { p: "CGT gives 1.0M in one compilation, 1.5M in another" },
+    },
+    { w: 16, t: "1 – 7 May · 1 May", p: [782_000, 2_300_000] },
+    {
+      w: 20,
+      t: "5 – 11 Jun · 6 Jun",
+      p: [281_000, 900_000],
+      note: { p: "movement minimum" },
+    },
   ],
 };
 
 const BLOQUONS: Episode = {
-  id: 'bt',
-  strip: 'Bloquons tout 2025',
-  short: 'Bloquons tout',
-  span: '10 Sep – 5 Oct 2025',
-  banner: '10 Sep is an actions-total (blockades included); 18 Sep is an intersyndicale march.',
+  id: "bt",
+  strip: "Bloquons tout 2025",
+  short: "Bloquons tout",
+  span: "10 Sep – 5 Oct 2025",
+  banner:
+    "10 Sep is an actions-total (blockades included); 18 Sep is an intersyndicale march.",
   weeks: [
     {
-      w: 0, t: '8 – 14 Sep · 10 Sep',
-      p: [175_000, 250_000], a: 540,
-      flag: { p: 'c' },
+      w: 0,
+      t: "8 – 14 Sep · 10 Sep",
+      p: [175_000, 250_000],
+      a: 540,
+      flag: { p: "c" },
       note: {
-        p: 'ministry 175,000–197,000, revised up from an early-evening count of ~29,000; CGT ~250,000. 596 rallies, 253 blockades.',
-        a: '540 arrests, 211 in Paris',
+        p: "ministry 175,000–197,000, revised up from an early-evening count of ~29,000; CGT ~250,000. 596 rallies, 253 blockades.",
+        a: "540 arrests, 211 in Paris",
       },
     },
     {
-      w: 1, t: '15 – 21 Sep · 18 Sep',
-      p: [500_000, 1_000_000], a: 309, f: 26, i: 11,
+      w: 1,
+      t: "15 – 21 Sep · 18 Sep",
+      p: [500_000, 1_000_000],
+      a: 309,
+      f: 26,
+      i: 11,
       note: {
-        p: 'intersyndicale day — a different mobilisation from the movement’s own actions; Paris 55,000 (prefecture)',
-        a: '309 nationwide, 103 in Paris',
-        i: '11 injured, including 1 journalist',
+        p: "intersyndicale day — a different mobilisation from the movement’s own actions; Paris 55,000 (prefecture)",
+        a: "309 nationwide, 103 in Paris",
+        i: "11 injured, including 1 journalist",
       },
     },
-    { w: 3, t: '29 Sep – 5 Oct · 2 Oct', p: [195_000, 600_000], note: { p: 'weakest mobilisation since 1 May 2025' } },
+    {
+      w: 3,
+      t: "29 Sep – 5 Oct · 2 Oct",
+      p: [195_000, 600_000],
+      note: { p: "weakest mobilisation since 1 May 2025" },
+    },
   ],
 };
 
 /** W1 protester injuries are a cumulative IDF stock, so they cannot anchor an index. */
 const STUDENT_FLAG_PATCH: Partial<Record<number, Partial<Record<M, Flag>>>> = {
-  0: { i: 'c' },
+  0: { i: "c" },
 };
 
 function rows2026(): Row[] {
   return STUDENT_WEEKS.map((wk, i) => {
     const row: Row = { w: i, t: `W${i + 1} · ${wk.label}` };
-    for (const m of ['p', 'a', 'f', 'i'] as const) {
+    for (const m of ["p", "a", "f", "i"] as const) {
       const band = wk[m];
       if (!band) continue;
       row[m] = band;
       const flag = STUDENT_FLAG_PATCH[i]?.[m] ?? wk.flags[m];
-      if (flag && flag !== 'n') row.flag = { ...row.flag, [m]: flag };
+      if (flag && flag !== "n") row.flag = { ...row.flag, [m]: flag };
       const note = wk.notes[m];
       if (note) row.note = { ...row.note, [m]: note };
     }
@@ -1733,26 +2329,38 @@ function rows2026(): Row[] {
 }
 
 if (!STUDENT_WEEKS.some((w) => w.a) || !STUDENT_WEEKS.some((w) => w.f)) {
-  console.warn('[episodes] 2026 enforcement weeks came through empty — check STUDENT_WEEKS in chart.ts');
+  console.warn(
+    "[episodes] 2026 enforcement weeks came through empty — check STUDENT_WEEKS in chart.ts",
+  );
 }
 
 const STUDENTS: Episode = {
-  id: 'students26',
-  strip: 'Student protests 2026',
-  short: 'Students 2026',
-  span: '1 Oct – 11 Nov 2026',
-  banner: 'Protester injuries are a September stock, then a litigation floor — never a weekly flow.',
+  id: "students26",
+  strip: "Student protests 2026",
+  short: "Students 2026",
+  span: "1 Oct – 11 Nov 2026",
+  banner:
+    "Protester injuries are a September stock, then a litigation floor — never a weekly flow.",
   weeks: rows2026(),
 };
 
-const EPISODES: Episode[] = [MAY68, CPE, GILETS, NAHEL, PENSIONS, BLOQUONS, STUDENTS];
+const EPISODES: Episode[] = [
+  MAY68,
+  CPE,
+  GILETS,
+  NAHEL,
+  PENSIONS,
+  BLOQUONS,
+  STUDENTS,
+];
 
 /** Last week on which any episode carries an arrest or injury figure (CPE, w7). */
 const ENFORCEMENT_LAST = ((): number => {
   let last = 0;
   for (const ep of EPISODES) {
     for (const r of ep.weeks) {
-      if (r.a !== undefined || r.f !== undefined || r.i !== undefined) last = Math.max(last, r.w);
+      if (r.a !== undefined || r.f !== undefined || r.i !== undefined)
+        last = Math.max(last, r.w);
     }
   }
   return last;
@@ -1760,7 +2368,8 @@ const ENFORCEMENT_LAST = ((): number => {
 
 /* -------------------------------------------------------------- indexing */
 
-const bandOf = (b: Band): [number, number] => (typeof b === 'number' ? [b, b] : b);
+const bandOf = (b: Band): [number, number] =>
+  typeof b === "number" ? [b, b] : b;
 const midOf = (b: Band): number => {
   const [lo, hi] = bandOf(b);
   return (lo + hi) / 2;
@@ -1773,11 +2382,13 @@ interface SeriesData {
 
 /** y' = 100 · y / y₀, where y₀ is the first figure measured on a comparable basis. */
 function seriesData(ep: Episode, key: M): SeriesData | null {
-  const rows = ep.weeks.filter((r) => r[key] !== undefined).sort((a, b) => a.w - b.w);
+  const rows = ep.weeks
+    .filter((r) => r[key] !== undefined)
+    .sort((a, b) => a.w - b.w);
   if (!rows.length) return null;
 
-  const flagOf = (r: Row): Flag => r.flag?.[key] ?? 'n';
-  const baseRow = rows.find((r) => flagOf(r) !== 'c') ?? rows[0];
+  const flagOf = (r: Row): Flag => r.flag?.[key] ?? "n";
+  const baseRow = rows.find((r) => flagOf(r) !== "c") ?? rows[0];
   const base = midOf(baseRow[key]!);
 
   const points = rows.map<Pt>((r) => {
@@ -1797,7 +2408,12 @@ function seriesData(ep: Episode, key: M): SeriesData | null {
   return { base, points };
 }
 
-function buildDataset(ep: Episode, key: M, color: string, maxX: number): PanelDataset | null {
+function buildDataset(
+  ep: Episode,
+  key: M,
+  color: string,
+  maxX: number,
+): PanelDataset | null {
   const s = seriesData(ep, key);
   if (!s) return null;
 
@@ -1814,8 +2430,8 @@ function buildDataset(ep: Episode, key: M, color: string, maxX: number): PanelDa
     borderColor: color,
     backgroundColor: color,
     borderWidth: 1.75,
-    pointRadius: points.map((p) => (p.flag === 'c' ? 3 : 2.75)),
-    pointBackgroundColor: points.map((_, i) => (drawn[i] ? '#ffffff' : color)),
+    pointRadius: points.map((p) => (p.flag === "c" ? 3 : 2.75)),
+    pointBackgroundColor: points.map((_, i) => (drawn[i] ? "#ffffff" : color)),
     pointBorderColor: color,
     pointBorderWidth: 1.5,
     pointHoverRadius: 4.5,
@@ -1824,7 +2440,10 @@ function buildDataset(ep: Episode, key: M, color: string, maxX: number): PanelDa
     spanGaps: true,
     segment: {
       borderDash: (ctx) =>
-        Math.abs((ctx.p1.parsed.x as number) - (ctx.p0.parsed.x as number)) > 1.01 ? [5, 4] : undefined,
+        Math.abs((ctx.p1.parsed.x as number) - (ctx.p0.parsed.x as number)) >
+        1.01
+          ? [5, 4]
+          : undefined,
     },
     __item: key,
     __color: color,
@@ -1853,15 +2472,15 @@ function extentOf(eps: Episode[], keys: M[], maxX: number): [number, number] {
 
 /* --------------------------------------------------------------- plugins */
 
-const hundredLine: Plugin<'line'> = {
-  id: 'hundredLine',
+const hundredLine: Plugin<"line"> = {
+  id: "hundredLine",
   beforeDatasetsDraw(chart) {
     const { ctx, chartArea, scales } = chart;
     const y = scales.y?.getPixelForValue(REFERENCE);
     if (y === undefined || y < chartArea.top || y > chartArea.bottom) return;
     ctx.save();
     ctx.setLineDash([2, 3]);
-    ctx.strokeStyle = '#9CA3AF';
+    ctx.strokeStyle = "#9CA3AF";
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(chartArea.left, y);
@@ -1871,8 +2490,8 @@ const hundredLine: Plugin<'line'> = {
   },
 };
 
-const directLabels: Plugin<'line'> = {
-  id: 'directLabels',
+const directLabels: Plugin<"line"> = {
+  id: "directLabels",
   afterDatasetsDraw(chart) {
     const { ctx, chartArea } = chart;
     const entries: { y: number; text: string }[] = [];
@@ -1893,16 +2512,20 @@ const directLabels: Plugin<'line'> = {
 
     entries.sort((a, b) => a.y - b.y);
     for (let i = 1; i < entries.length; i++) {
-      if (entries[i].y - entries[i - 1].y < 11) entries[i].y = entries[i - 1].y + 11;
+      if (entries[i].y - entries[i - 1].y < 11)
+        entries[i].y = entries[i - 1].y + 11;
     }
 
     ctx.save();
     ctx.font = '500 9.5px system-ui, -apple-system, "Segoe UI", sans-serif';
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'middle';
-    ctx.fillStyle = '#374151';
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "#374151";
     for (const e of entries) {
-      const y = Math.max(chartArea.top + 5, Math.min(chartArea.bottom - 5, e.y));
+      const y = Math.max(
+        chartArea.top + 5,
+        Math.min(chartArea.bottom - 5, e.y),
+      );
       ctx.fillText(e.text, chartArea.right + 7, y);
     }
     ctx.restore();
@@ -1914,7 +2537,7 @@ const directLabels: Plugin<'line'> = {
 function xScale(maxW: number) {
   const step = maxW <= 8 ? 1 : maxW <= 12 ? 2 : maxW <= 24 ? 4 : 8;
   return {
-    type: 'linear' as const,
+    type: "linear" as const,
     min: -0.5,
     max: maxW + 0.5,
     grid: { display: false },
@@ -1939,9 +2562,11 @@ function xScale(maxW: number) {
 }
 
 function yScale(min: number, max: number, showLabels: boolean) {
-  const ticks = [0.1, 0.3, 1, 3, 10, 30, 100, 300, 1000, 3000].filter((v) => v >= min && v <= max);
+  const ticks = [0.1, 0.3, 1, 3, 10, 30, 100, 300, 1000, 3000].filter(
+    (v) => v >= min && v <= max,
+  );
   return {
-    type: 'logarithmic' as const,
+    type: "logarithmic" as const,
     min,
     max,
     grid: { color: GRID, drawTicks: false, lineWidth: 1 },
@@ -1968,15 +2593,18 @@ function tooltipSpec() {
   return {
     displayColors: false,
     callbacks: {
-      title: (items: TooltipItem<'line'>[]) => (items[0].raw as Pt).t,
-      label: (item: TooltipItem<'line'>) => {
+      title: (items: TooltipItem<"line">[]) => (items[0].raw as Pt).t,
+      label: (item: TooltipItem<"line">) => {
         const p = item.raw as Pt;
-        const band = p.low === p.high ? nf.format(p.low) : `${nf.format(p.low)} – ${nf.format(p.high)}`;
+        const band =
+          p.low === p.high
+            ? nf.format(p.low)
+            : `${nf.format(p.low)} – ${nf.format(p.high)}`;
         const flag = FLAG_TEXT[p.flag];
-        return `${item.dataset.label}: ${band}  →  index ${Math.round(p.y)}${flag ? `  ·  ${flag}` : ''}`;
+        return `${item.dataset.label}: ${band}  →  index ${Math.round(p.y)}${flag ? `  ·  ${flag}` : ""}`;
       },
-      afterLabel: (item: TooltipItem<'line'>) => (item.raw as Pt).note ?? '',
-      footer: (items: TooltipItem<'line'>[]) => {
+      afterLabel: (item: TooltipItem<"line">) => (item.raw as Pt).note ?? "",
+      footer: (items: TooltipItem<"line">[]) => {
         const p = items[0].raw as Pt;
         return `index = 100 × value ÷ ${nf.format(Math.round(p.base))}`;
       },
@@ -1986,8 +2614,8 @@ function tooltipSpec() {
 
 /* -------------------------------------------------------------- emphasis */
 
-const episodePanels: Chart<'line'>[] = [];
-const itemPanels: { chart: Chart<'line'>; item: M }[] = [];
+const episodePanels: Chart<"line">[] = [];
+const itemPanels: { chart: Chart<"line">; item: M }[] = [];
 let activeItem: M | null = null;
 let activeEvent: number | null = null;
 
@@ -2002,15 +2630,15 @@ function emphasiseItem(key: M | null): void {
       const colour = on ? d.__color : alpha(d.__color, 0.18);
       d.borderColor = colour;
       d.pointBorderColor = colour;
-      d.pointBackgroundColor = d.__hollow.map((h) => (h ? '#ffffff' : colour));
+      d.pointBackgroundColor = d.__hollow.map((h) => (h ? "#ffffff" : colour));
       d.borderWidth = key !== null && d.__item === key ? 2.75 : 1.75;
     }
-    chart.update('none');
+    chart.update("none");
   }
 
   for (const { chart, item } of itemPanels) {
     const host = chart.canvas.parentElement;
-    if (host) host.style.opacity = key === null || key === item ? '1' : '0.18';
+    if (host) host.style.opacity = key === null || key === item ? "1" : "0.18";
   }
 }
 
@@ -2025,51 +2653,61 @@ function emphasiseEvent(index: number | null): void {
       const colour = on ? d.__color : alpha(d.__color, 0.18);
       d.borderColor = colour;
       d.pointBorderColor = colour;
-      d.pointBackgroundColor = d.__hollow.map((h) => (h ? '#ffffff' : colour));
+      d.pointBackgroundColor = d.__hollow.map((h) => (h ? "#ffffff" : colour));
     });
-    chart.update('none');
+    chart.update("none");
   }
 }
 
 /* --------------------------------------------------------------- legends */
 
-function legendButton(text: string, swatch: HTMLElement, onEnter: () => void, onLeave: () => void): HTMLElement {
-  const b = document.createElement('button');
-  b.type = 'button';
+function legendButton(
+  text: string,
+  swatch: HTMLElement,
+  onEnter: () => void,
+  onLeave: () => void,
+): HTMLElement {
+  const b = document.createElement("button");
+  b.type = "button";
   b.append(swatch, document.createTextNode(text));
-  b.addEventListener('mouseenter', onEnter);
-  b.addEventListener('mouseleave', onLeave);
-  b.addEventListener('focus', onEnter);
-  b.addEventListener('blur', onLeave);
+  b.addEventListener("mouseenter", onEnter);
+  b.addEventListener("mouseleave", onLeave);
+  b.addEventListener("focus", onEnter);
+  b.addEventListener("blur", onLeave);
   return b;
 }
 
 /* ---------------------------------------------------------------- mounts */
 
 function observations(ep: Episode): string {
-  const counts = ITEMS.map((i) => ep.weeks.filter((r) => r[i.key] !== undefined).length);
-  return `obs ${counts.join('·')} of ${ep.weeks.length} wks`;
+  const counts = ITEMS.map(
+    (i) => ep.weeks.filter((r) => r[i.key] !== undefined).length,
+  );
+  return `obs ${counts.join("·")} of ${ep.weeks.length} wks`;
 }
 
-function panelFigure(ep: Episode): { figure: HTMLElement; canvas: HTMLCanvasElement } {
-  const figure = document.createElement('figure');
-  figure.className = 'trellis-panel';
+function panelFigure(ep: Episode): {
+  figure: HTMLElement;
+  canvas: HTMLCanvasElement;
+} {
+  const figure = document.createElement("figure");
+  figure.className = "trellis-panel";
 
-  const caption = document.createElement('figcaption');
-  const strip = document.createElement('span');
-  strip.className = 'strip';
+  const caption = document.createElement("figcaption");
+  const strip = document.createElement("span");
+  strip.className = "strip";
   strip.textContent = ep.strip;
-  const meta = document.createElement('span');
-  meta.className = 'strip-meta';
+  const meta = document.createElement("span");
+  meta.className = "strip-meta";
   meta.textContent = `${ep.span} · ${observations(ep)}`;
-  const note = document.createElement('p');
-  note.className = 'strip-note';
+  const note = document.createElement("p");
+  note.className = "strip-note";
   note.textContent = ep.banner;
   caption.append(strip, meta, note);
 
-  const box = document.createElement('div');
-  box.className = 'panel-canvas';
-  const canvas = document.createElement('canvas');
+  const box = document.createElement("div");
+  box.className = "panel-canvas";
+  const canvas = document.createElement("canvas");
   box.append(canvas);
 
   figure.append(caption, box);
@@ -2086,12 +2724,16 @@ export function mountCrossEpisode(opts: {
   itemHost: HTMLElement;
   itemLegend: HTMLElement;
   eventLegend: HTMLElement;
-}): Chart<'line'>[] {
-  const charts: Chart<'line'>[] = [];
+}): Chart<"line">[] {
+  const charts: Chart<"line">[] = [];
   const unbounded = Number.POSITIVE_INFINITY;
 
   /* ---- primary trellis: one panel per episode, own x extent ---- */
-  const [yMin, yMax] = extentOf(EPISODES, ITEMS.map((i) => i.key), unbounded);
+  const [yMin, yMax] = extentOf(
+    EPISODES,
+    ITEMS.map((i) => i.key),
+    unbounded,
+  );
   const cols = columns(opts.episodeHost);
   opts.episodeHost.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
 
@@ -2100,15 +2742,15 @@ export function mountCrossEpisode(opts: {
     opts.episodeHost.append(figure);
 
     const maxW = Math.max(...ep.weeks.map((r) => r.w), 1);
-    const datasets = ITEMS.map((i) => buildDataset(ep, i.key, i.color, unbounded)).filter(
-      (d): d is PanelDataset => d !== null,
-    );
+    const datasets = ITEMS.map((i) =>
+      buildDataset(ep, i.key, i.color, unbounded),
+    ).filter((d): d is PanelDataset => d !== null);
 
-    const options: ChartOptions<'line'> = {
+    const options: ChartOptions<"line"> = {
       responsive: true,
       maintainAspectRatio: false,
       animation: false,
-      interaction: { mode: 'nearest', axis: 'x', intersect: false },
+      interaction: { mode: "nearest", axis: "x", intersect: false },
       layout: { padding: { top: 6, right: 96, bottom: 0, left: 0 } },
       scales: {
         x: xScale(maxW),
@@ -2126,14 +2768,14 @@ export function mountCrossEpisode(opts: {
       },
     };
 
-    const chart = new Chart<'line'>(canvas, {
-      type: 'line',
-      data: { datasets } as unknown as ChartData<'line'>,
+    const chart = new Chart<"line">(canvas, {
+      type: "line",
+      data: { datasets } as unknown as ChartData<"line">,
       options,
       plugins: [hundredLine, directLabels],
     });
 
-    canvas.addEventListener('mouseleave', () => emphasiseItem(null));
+    canvas.addEventListener("mouseleave", () => emphasiseItem(null));
     episodePanels.push(chart);
     charts.push(chart);
   });
@@ -2145,35 +2787,35 @@ export function mountCrossEpisode(opts: {
   ITEMS.forEach((item) => {
     const [lo, hi] = extentOf(EPISODES, [item.key], ENFORCEMENT_LAST);
 
-    const figure = document.createElement('figure');
-    figure.className = 'trellis-panel';
+    const figure = document.createElement("figure");
+    figure.className = "trellis-panel";
 
-    const caption = document.createElement('figcaption');
-    const strip = document.createElement('span');
-    strip.className = 'strip';
+    const caption = document.createElement("figcaption");
+    const strip = document.createElement("span");
+    strip.className = "strip";
     strip.textContent = item.short;
-    const meta = document.createElement('span');
-    meta.className = 'strip-meta';
+    const meta = document.createElement("span");
+    meta.className = "strip-meta";
     meta.textContent = `index, log ${fmtIndex(lo)}–${fmtIndex(hi)} · x 0–w${ENFORCEMENT_LAST}`;
     caption.append(strip, meta);
 
-    const box = document.createElement('div');
-    box.className = 'panel-canvas';
-    const canvas = document.createElement('canvas');
+    const box = document.createElement("div");
+    box.className = "panel-canvas";
+    const canvas = document.createElement("canvas");
     box.append(canvas);
 
     figure.append(caption, box);
     opts.itemHost.append(figure);
 
-    const datasets = EPISODES.map((ep, i) => buildDataset(ep, item.key, RAMP[i], ENFORCEMENT_LAST)).filter(
-      (d): d is PanelDataset => d !== null,
-    );
+    const datasets = EPISODES.map((ep, i) =>
+      buildDataset(ep, item.key, RAMP[i], ENFORCEMENT_LAST),
+    ).filter((d): d is PanelDataset => d !== null);
 
-    const options: ChartOptions<'line'> = {
+    const options: ChartOptions<"line"> = {
       responsive: true,
       maintainAspectRatio: false,
       animation: false,
-      interaction: { mode: 'nearest', axis: 'x', intersect: false },
+      interaction: { mode: "nearest", axis: "x", intersect: false },
       layout: { padding: { top: 6, right: 92, bottom: 0, left: 0 } },
       scales: {
         x: xScale(ENFORCEMENT_LAST),
@@ -2187,16 +2829,21 @@ export function mountCrossEpisode(opts: {
       },
     };
 
-    const chart = new Chart<'line'>(canvas, {
-      type: 'line',
-      data: { datasets } as unknown as ChartData<'line'>,
+    const chart = new Chart<"line">(canvas, {
+      type: "line",
+      data: { datasets } as unknown as ChartData<"line">,
       options,
       plugins: [hundredLine, directLabels],
     });
 
-    canvas.addEventListener('mouseleave', () => emphasiseEvent(null));
-    canvas.addEventListener('mousemove', (ev) => {
-      const pts = chart.getElementsAtEventForMode(ev, 'nearest', { intersect: false }, true);
+    canvas.addEventListener("mouseleave", () => emphasiseEvent(null));
+    canvas.addEventListener("mousemove", (ev) => {
+      const pts = chart.getElementsAtEventForMode(
+        ev,
+        "nearest",
+        { intersect: false },
+        true,
+      );
       emphasiseEvent(pts.length ? pts[0].datasetIndex : null);
     });
 
@@ -2207,19 +2854,29 @@ export function mountCrossEpisode(opts: {
   /* ---- legends ---- */
   opts.itemLegend.replaceChildren(
     ...ITEMS.map((item) => {
-      const swatch = document.createElement('span');
-      swatch.className = 'swatch';
+      const swatch = document.createElement("span");
+      swatch.className = "swatch";
       swatch.style.background = item.color;
-      return legendButton(item.label, swatch, () => emphasiseItem(item.key), () => emphasiseItem(null));
+      return legendButton(
+        item.label,
+        swatch,
+        () => emphasiseItem(item.key),
+        () => emphasiseItem(null),
+      );
     }),
   );
 
   opts.eventLegend.replaceChildren(
     ...EPISODES.map((ep, i) => {
-      const swatch = document.createElement('span');
-      swatch.className = 'swatch';
+      const swatch = document.createElement("span");
+      swatch.className = "swatch";
       swatch.style.background = RAMP[i];
-      return legendButton(ep.short, swatch, () => emphasiseEvent(i), () => emphasiseEvent(null));
+      return legendButton(
+        ep.short,
+        swatch,
+        () => emphasiseEvent(i),
+        () => emphasiseEvent(null),
+      );
     }),
   );
 
@@ -2230,26 +2887,29 @@ export function mountCrossEpisode(opts: {
 ```html
 <!-- public/index.html — replace the Section C′ header + note -->
 
-      <header>
-        <h1>Section C′ — cross-episode, transposed</h1>
-        <p>
-          The same data with the comparison axis flipped: one panel per series, one line per movement. Colour encodes
-          the movement on a single sequential ramp, light → dark in the same order in every panel, so the reader
-          learns the ramp once. Use this to ask "did arrests behave the same way in every episode?".
-        </p>
-      </header>
-      <div class="legend" id="legend-events"></div>
-      <div class="trellis trellis-items" id="trellis-items"></div>
-      <p class="axis-note">
-        <strong>x is capped at week 7</strong> — the last week on which any movement has an arrest or injury figure
-        (CPE, 28 Mar – 2 Apr 2006: 600 arrests). Gilets jaunes' enforcement series stops at Act IV (8 Dec 2018,
-        week 3); only its protestor series runs to Act 44 (week 43), and letting it set the axis left every
-        enforcement panel structurally empty after week 4 and every other movement empty after week 8. A trailing
-        <code>+</code> on a label marks a series that continues past the cap; the untruncated crowd curves are in
-        Section C, where each panel keeps its own extent. y limits are per panel — a log range printed under each
-        strip. "obs" under each strip = weeks with a figure for protestors · arrests · forces injured · protestors
-        injured.
-      </p>
+<header>
+  <h1>Section C′ — cross-episode, transposed</h1>
+  <p>
+    The same data with the comparison axis flipped: one panel per series, one
+    line per movement. Colour encodes the movement on a single sequential ramp,
+    light → dark in the same order in every panel, so the reader learns the ramp
+    once. Use this to ask "did arrests behave the same way in every episode?".
+  </p>
+</header>
+<div class="legend" id="legend-events"></div>
+<div class="trellis trellis-items" id="trellis-items"></div>
+<p class="axis-note">
+  <strong>x is capped at week 7</strong> — the last week on which any movement
+  has an arrest or injury figure (CPE, 28 Mar – 2 Apr 2006: 600 arrests). Gilets
+  jaunes' enforcement series stops at Act IV (8 Dec 2018, week 3); only its
+  protestor series runs to Act 44 (week 43), and letting it set the axis left
+  every enforcement panel structurally empty after week 4 and every other
+  movement empty after week 8. A trailing <code>+</code> on a label marks a
+  series that continues past the cap; the untruncated crowd curves are in
+  Section C, where each panel keeps its own extent. y limits are per panel — a
+  log range printed under each strip. "obs" under each strip = weeks with a
+  figure for protestors · arrests · forces injured · protestors injured.
+</p>
 ```
 
 Two things to check after the build: the students panel should now read `obs 6·6·5·3 of 7 wks` (W7's 17 arrests is regional, hollow, excluded from the national sum), and the C′ x-axis should run 0–7 with eleven ticks.
@@ -2267,11 +2927,11 @@ Two things to check after the build: the students panel should now read `obs 6·
 
 Two diagnoses before the code.
 
-**1. Per-panel labels.** The `directLabels` plugin was drawing the *episode* name at the right edge of every dataset — four identical labels per panel ("May 68" ×4), which is exactly the redundant legend you saw. The series are already identified by hue plus the one shared legend above the trellis, so the plugin now runs **only in C′**, where a panel holds one line per *episode* and the label carries information.
+**1. Per-panel labels.** The `directLabels` plugin was drawing the _episode_ name at the right edge of every dataset — four identical labels per panel ("May 68" ×4), which is exactly the redundant legend you saw. The series are already identified by hue plus the one shared legend above the trellis, so the plugin now runs **only in C′**, where a panel holds one line per _episode_ and the label carries information.
 
-**2. The scale.** Nothing was arithmetically wrong — the axis was an **index**, not a count: `108 ÷ 3,354 × 100 = 3.2`, so a 108-arrest week really does plot at 3. The axis labels ("3", "1k") gave no hint of that, hence the mismatch with the tooltip. Fixed by plotting **absolute counts on a shared log axis**. On a log axis indexing is nothing but a per-series vertical shift ($\log y' = \log y + \log(100/y_0)$), so the curves have *identical shape* either way — no analytical loss, and now the plotted position equals the number in the tooltip. The "×N vs its first figure" read survives as tooltip text.
+**2. The scale.** Nothing was arithmetically wrong — the axis was an **index**, not a count: `108 ÷ 3,354 × 100 = 3.2`, so a 108-arrest week really does plot at 3. The axis labels ("3", "1k") gave no hint of that, hence the mismatch with the tooltip. Fixed by plotting **absolute counts on a shared log axis**. On a log axis indexing is nothing but a per-series vertical shift ($\log y' = \log y + \log(100/y_0)$), so the curves have _identical shape_ either way — no analytical loss, and now the plotted position equals the number in the tooltip. The "×N vs its first figure" read survives as tooltip text.
 
-Also fixed while in there: `emphasiseEvent` mapped *dataset index* → *episode index*, which diverge whenever an episode lacks a series (Pensions has no arrests) — so hovering the C′ legend highlighted the wrong line. Datasets now carry `__ep`. And the 2026 panel can no longer come up with empty columns: a per-metric guard falls back to the brief's weekly table and logs why.
+Also fixed while in there: `emphasiseEvent` mapped _dataset index_ → _episode index_, which diverge whenever an episode lacks a series (Pensions has no arrests) — so hovering the C′ legend highlighted the wrong line. Datasets now carry `__ep`. And the 2026 panel can no longer come up with empty columns: a per-metric guard falls back to the brief's weekly table and logs why.
 
 **`src/client/episodes.ts`** (full file; `chart.ts`, `main.ts` unchanged — keep the `STUDENT_WEEKS` export added last round):
 
@@ -2287,22 +2947,22 @@ import {
   type ChartDataset,
   type Plugin,
   type TooltipItem,
-} from 'chart.js';
-import { STUDENT_WEEKS } from './chart.ts';
+} from "chart.js";
+import { STUDENT_WEEKS } from "./chart.ts";
 
 /* ------------------------------------------------------------------ types */
 
-type M = 'p' | 'a' | 'f' | 'i';
-type Flag = 'n' | 'r' | 'p' | 'f' | 'e' | 'c' | 'w';
+type M = "p" | "a" | "f" | "i";
+type Flag = "n" | "r" | "p" | "f" | "e" | "c" | "w";
 type Band = number | [number, number];
 
 interface Row {
-  w: number;                       // whole weeks since the event's first action
-  t: string;                       // week / act label, tooltip title
-  p?: Band;                        // protestors, peak day of the week
-  a?: Band;                        // arrests, weekly total
-  f?: Band;                        // injuries, security forces
-  i?: Band;                        // injuries, protestors
+  w: number; // whole weeks since the event's first action
+  t: string; // week / act label, tooltip title
+  p?: Band; // protestors, peak day of the week
+  a?: Band; // arrests, weekly total
+  f?: Band; // injuries, security forces
+  i?: Band; // injuries, protestors
   flag?: Partial<Record<M, Flag>>;
   note?: Partial<Record<M, string>>;
 }
@@ -2318,7 +2978,7 @@ interface Episode {
 
 interface Pt {
   x: number;
-  y: number;   // midpoint of the published range — this is what gets plotted
+  y: number; // midpoint of the published range — this is what gets plotted
   low: number;
   high: number;
   flag: Flag;
@@ -2327,7 +2987,7 @@ interface Pt {
   t: string;
 }
 
-interface PanelDataset extends ChartDataset<'line', Pt[]> {
+interface PanelDataset extends ChartDataset<"line", Pt[]> {
   __item: M;
   __ep: number;
   __color: string;
@@ -2337,32 +2997,64 @@ interface PanelDataset extends ChartDataset<'line', Pt[]> {
 
 /* ------------------------------------------------------------- constants */
 
-const MUTED = '#6b7280';
-const GRID = '#E5E5E5';
+const MUTED = "#6b7280";
+const GRID = "#E5E5E5";
 
 const ITEMS: { key: M; label: string; short: string; color: string }[] = [
-  { key: 'p', label: 'Protestors (peak day)', short: 'Protestors', color: '#0072B2' },
-  { key: 'a', label: 'Arrests (weekly total)', short: 'Arrests', color: '#E69F00' },
-  { key: 'f', label: 'Injuries — security forces', short: 'Forces hurt', color: '#009E73' },
-  { key: 'i', label: 'Injuries — protestors', short: 'Protestors hurt', color: '#CC79A7' },
+  {
+    key: "p",
+    label: "Protestors (peak day)",
+    short: "Protestors",
+    color: "#0072B2",
+  },
+  {
+    key: "a",
+    label: "Arrests (weekly total)",
+    short: "Arrests",
+    color: "#E69F00",
+  },
+  {
+    key: "f",
+    label: "Injuries — security forces",
+    short: "Forces hurt",
+    color: "#009E73",
+  },
+  {
+    key: "i",
+    label: "Injuries — protestors",
+    short: "Protestors hurt",
+    color: "#CC79A7",
+  },
 ];
 
 /** Sequential ramp, light → dark, identical in every companion panel. */
-const RAMP = ['#D6E6F2', '#B0CFE6', '#86B4D7', '#5C97C5', '#357AB0', '#1B5C92', '#0A3A63'];
+const RAMP = [
+  "#D6E6F2",
+  "#B0CFE6",
+  "#86B4D7",
+  "#5C97C5",
+  "#357AB0",
+  "#1B5C92",
+  "#0A3A63",
+];
 
 const FLAG_TEXT: Partial<Record<Flag, string>> = {
-  r: 'regional only',
-  p: 'partial',
-  f: 'lower bound',
-  e: 'derived',
-  c: 'stock or actions-total — measured differently',
-  w: 'weekly aggregate',
+  r: "regional only",
+  p: "partial",
+  f: "lower bound",
+  e: "derived",
+  c: "stock or actions-total — measured differently",
+  w: "weekly aggregate",
 };
 
-const hollow = (f: Flag): boolean => f === 'r' || f === 'p' || f === 'e' || f === 'c';
+const hollow = (f: Flag): boolean =>
+  f === "r" || f === "p" || f === "e" || f === "c";
 
-const nf = new Intl.NumberFormat('en-GB');
-const compact = new Intl.NumberFormat('en-GB', { notation: 'compact', maximumFractionDigits: 1 });
+const nf = new Intl.NumberFormat("en-GB");
+const compact = new Intl.NumberFormat("en-GB", {
+  notation: "compact",
+  maximumFractionDigits: 1,
+});
 
 function alpha(hex: string, a: number): string {
   const n = Number.parseInt(hex.slice(1), 16);
@@ -2372,139 +3064,258 @@ function alpha(hex: string, a: number): string {
 /* ------------------------------------------------------------------- data */
 
 const MAY68: Episode = {
-  id: 'may68',
-  strip: 'May 1968',
-  short: 'May 68',
-  span: '29 Apr – 30 Jun 1968',
-  banner: 'Crowd figures exist only for 1, 6, 10 and 13 May. The general strike is not counted here.',
+  id: "may68",
+  strip: "May 1968",
+  short: "May 68",
+  span: "29 Apr – 30 Jun 1968",
+  banner:
+    "Crowd figures exist only for 1, 6, 10 and 13 May. The general strike is not counted here.",
   weeks: [
     {
-      w: 0, t: '29 Apr – 5 May · 1 May march',
+      w: 0,
+      t: "29 Apr – 5 May · 1 May march",
       p: [25_000, 100_000],
-      note: { p: 'prefecture 25,000 / CGT 100,000, République → Bastille' },
+      note: { p: "prefecture 25,000 / CGT 100,000, République → Bastille" },
     },
     {
-      w: 1, t: '6 – 12 May · Sorbonne, barricades',
-      p: 20_000, a: [469, 891], f: [247, 300], i: 100,
-      flag: { i: 'f' },
+      w: 1,
+      t: "6 – 12 May · Sorbonne, barricades",
+      p: 20_000,
+      a: [469, 891],
+      f: [247, 300],
+      i: 100,
+      flag: { i: "f" },
       note: {
-        p: '20,000 to the Sorbonne on 6 May; >20,000 again on 10 May',
-        a: '469 on the night of 10–11 May; high adds the 422 early-May arrests',
-        f: '300+ on 6 May; 247 on 10–11 May',
-        i: '≥100 — no national count was published',
+        p: "20,000 to the Sorbonne on 6 May; >20,000 again on 10 May",
+        a: "469 on the night of 10–11 May; high adds the 422 early-May arrests",
+        f: "300+ on 6 May; 247 on 10–11 May",
+        i: "≥100 — no national count was published",
       },
     },
     {
-      w: 2, t: '13 – 19 May · 13 May march',
+      w: 2,
+      t: "13 – 19 May · 13 May march",
       p: [230_000, 1_000_000],
-      note: { p: 'prefecture 230,000 · ORTF 171,000 · unions 1,000,000. Peak of the episode.' },
-    },
-    {
-      w: 3, t: '20 – 26 May · 24–25 May',
-      a: [1_000, 1_000], i: 887,
-      flag: { a: 'f', i: 'e' },
       note: {
-        a: '1,000+ arrests on 25 May',
-        i: '887 injured, from the English-Wikipedia infobox — weak provenance',
+        p: "prefecture 230,000 · ORTF 171,000 · unions 1,000,000. Peak of the episode.",
       },
     },
-    { w: 4, t: '27 May – 2 Jun · 30 May', note: { p: '30 May: 300,000 (prefecture) – 1,000,000 counter-demonstration — excluded from protest totals' } },
-    { w: 5, t: '3 – 9 Jun', note: { p: '4 Jun partial return to work; 7 Jun Renault-Flins clashes' } },
-    { w: 6, t: '10 – 16 Jun', note: { p: '10–11 Jun: 3 dead; 12 Jun demonstrations banned nationwide' } },
-    { w: 7, t: '17 – 23 Jun' },
-    { w: 8, t: '24 – 30 Jun' },
+    {
+      w: 3,
+      t: "20 – 26 May · 24–25 May",
+      a: [1_000, 1_000],
+      i: 887,
+      flag: { a: "f", i: "e" },
+      note: {
+        a: "1,000+ arrests on 25 May",
+        i: "887 injured, from the English-Wikipedia infobox — weak provenance",
+      },
+    },
+    {
+      w: 4,
+      t: "27 May – 2 Jun · 30 May",
+      note: {
+        p: "30 May: 300,000 (prefecture) – 1,000,000 counter-demonstration — excluded from protest totals",
+      },
+    },
+    {
+      w: 5,
+      t: "3 – 9 Jun",
+      note: { p: "4 Jun partial return to work; 7 Jun Renault-Flins clashes" },
+    },
+    {
+      w: 6,
+      t: "10 – 16 Jun",
+      note: { p: "10–11 Jun: 3 dead; 12 Jun demonstrations banned nationwide" },
+    },
+    { w: 7, t: "17 – 23 Jun" },
+    { w: 8, t: "24 – 30 Jun" },
   ],
 };
 
 const CPE: Episode = {
-  id: 'cpe',
-  strip: 'CPE 2006',
-  short: 'CPE 2006',
-  span: '6 Feb – 16 Apr 2006',
-  banner: 'One movement-wide arrest total (4,500); no weekly enforcement series exists.',
+  id: "cpe",
+  strip: "CPE 2006",
+  short: "CPE 2006",
+  span: "6 Feb – 16 Apr 2006",
+  banner:
+    "One movement-wide arrest total (4,500); no weekly enforcement series exists.",
   weeks: [
     {
-      w: 0, t: '6 – 12 Feb · 7 Feb',
+      w: 0,
+      t: "6 – 12 Feb · 7 Feb",
       p: [200_000, 400_000],
-      note: { p: '187 demonstrations, first national day' },
+      note: { p: "187 demonstrations, first national day" },
     },
     {
-      w: 4, t: '6 – 12 Mar · 7 Mar',
+      w: 4,
+      t: "6 – 12 Mar · 7 Mar",
       p: [400_000, 1_000_000],
-      note: { p: '>1 million claimed; 38 universities on strike by 9 Mar' },
+      note: { p: ">1 million claimed; 38 universities on strike by 9 Mar" },
     },
     {
-      w: 5, t: '13 – 19 Mar · 16–18 Mar',
-      p: [500_000, 1_500_000], a: [156, 167], f: 34, i: 70,
-      flag: { i: 'e' },
+      w: 5,
+      t: "13 – 19 Mar · 16–18 Mar",
+      p: [500_000, 1_500_000],
+      a: [156, 167],
+      f: 34,
+      i: 70,
+      flag: { i: "e" },
       note: {
-        p: '18 Mar: 500,000 (ministry) – 1,500,000 (unions); Paris 80,000 – 700,000',
-        a: 'Paris, 18 Mar (156 ministry / 167 organisers)',
-        f: 'Paris, 18 Mar',
-        i: '18 (16 Mar) + 52 (18 Mar), Paris only',
+        p: "18 Mar: 500,000 (ministry) – 1,500,000 (unions); Paris 80,000 – 700,000",
+        a: "Paris, 18 Mar (156 ministry / 167 organisers)",
+        f: "Paris, 18 Mar",
+        i: "18 (16 Mar) + 52 (18 Mar), Paris only",
       },
     },
     {
-      w: 6, t: '20 – 26 Mar · 23 Mar',
-      p: [220_000, 450_000], a: 630, f: 90,
-      note: { p: '21 universities fully blocked; 67 striking or blocked' },
+      w: 6,
+      t: "20 – 26 Mar · 23 Mar",
+      p: [220_000, 450_000],
+      a: 630,
+      f: 90,
+      note: { p: "21 universities fully blocked; 67 striking or blocked" },
     },
-    { w: 7, t: '27 Mar – 2 Apr · 28 Mar', p: [1_055_000, 2_710_000], a: 600, note: { p: '4th national action day' } },
-    { w: 8, t: '3 – 9 Apr · 4 Apr', p: [1_000_000, 3_100_000], note: { p: 'peak day of the episode' } },
-    { w: 9, t: '10 – 16 Apr', note: { p: 'CPE withdrawn 10 Apr; the movement splits' } },
+    {
+      w: 7,
+      t: "27 Mar – 2 Apr · 28 Mar",
+      p: [1_055_000, 2_710_000],
+      a: 600,
+      note: { p: "4th national action day" },
+    },
+    {
+      w: 8,
+      t: "3 – 9 Apr · 4 Apr",
+      p: [1_000_000, 3_100_000],
+      note: { p: "peak day of the episode" },
+    },
+    {
+      w: 9,
+      t: "10 – 16 Apr",
+      note: { p: "CPE withdrawn 10 Apr; the movement splits" },
+    },
   ],
 };
 
 const GJ_DATES = [
-  '17 Nov 2018', '24 Nov', '1 Dec', '8 Dec', '15 Dec', '22 Dec', '29 Dec',
-  '5 Jan 2019', '12 Jan', '19 Jan', '26 Jan', '2 Feb', '9 Feb', '16 Feb',
-  '23 Feb', '2 Mar', '9 Mar', '16 Mar', '23 Mar', '30 Mar', '6 Apr', '13 Apr',
-  '20 Apr', '27 Apr', '4 May', '11 May', '18 May', '25 May', '1 Jun', '8 Jun',
-  '15 Jun', '22 Jun', '29 Jun', '7 Sep 2019',
+  "17 Nov 2018",
+  "24 Nov",
+  "1 Dec",
+  "8 Dec",
+  "15 Dec",
+  "22 Dec",
+  "29 Dec",
+  "5 Jan 2019",
+  "12 Jan",
+  "19 Jan",
+  "26 Jan",
+  "2 Feb",
+  "9 Feb",
+  "16 Feb",
+  "23 Feb",
+  "2 Mar",
+  "9 Mar",
+  "16 Mar",
+  "23 Mar",
+  "30 Mar",
+  "6 Apr",
+  "13 Apr",
+  "20 Apr",
+  "27 Apr",
+  "4 May",
+  "11 May",
+  "18 May",
+  "25 May",
+  "1 Jun",
+  "8 Jun",
+  "15 Jun",
+  "22 Jun",
+  "29 Jun",
+  "7 Sep 2019",
 ];
 
 const GJ_CROWD: [number, number][] = [
-  [0, 287_700], [1, 166_000], [2, 136_000], [3, 136_000], [4, 66_000], [5, 38_600],
-  [6, 32_000], [7, 50_000], [8, 84_000], [9, 84_000], [10, 69_000], [11, 58_600],
-  [12, 51_400], [13, 41_500], [14, 46_600], [15, 39_300], [16, 28_600], [17, 32_300],
-  [18, 40_500], [19, 33_700], [20, 22_300], [21, 31_000], [22, 27_900], [23, 23_600],
-  [24, 18_900], [25, 18_600], [26, 15_500], [27, 12_500], [28, 9_500], [29, 10_300],
-  [30, 7_000], [31, 11_800], [32, 5_800], [43, 7_000],
+  [0, 287_700],
+  [1, 166_000],
+  [2, 136_000],
+  [3, 136_000],
+  [4, 66_000],
+  [5, 38_600],
+  [6, 32_000],
+  [7, 50_000],
+  [8, 84_000],
+  [9, 84_000],
+  [10, 69_000],
+  [11, 58_600],
+  [12, 51_400],
+  [13, 41_500],
+  [14, 46_600],
+  [15, 39_300],
+  [16, 28_600],
+  [17, 32_300],
+  [18, 40_500],
+  [19, 33_700],
+  [20, 22_300],
+  [21, 31_000],
+  [22, 27_900],
+  [23, 23_600],
+  [24, 18_900],
+  [25, 18_600],
+  [26, 15_500],
+  [27, 12_500],
+  [28, 9_500],
+  [29, 10_300],
+  [30, 7_000],
+  [31, 11_800],
+  [32, 5_800],
+  [43, 7_000],
 ];
 
 /** Enforcement figures exist only for Acts I–IV; later acts were not published as a series. */
-const GJ_EXTRA: Record<number, Pick<Row, 'a' | 'f' | 'i' | 'flag' | 'note'>> = {
+const GJ_EXTRA: Record<number, Pick<Row, "a" | "f" | "i" | "flag" | "note">> = {
   0: {
-    a: [974, 1_150], f: 17, i: 109,
-    flag: { f: 'e', i: 'e' },
+    a: [974, 1_150],
+    f: 17,
+    i: 109,
+    flag: { f: "e", i: "e" },
     note: {
-      a: '974 in custody, ~1,150 interpellations',
-      f: '17 police among 126 injured — split derived',
-      i: '109 of 126 injured — split derived',
+      a: "974 in custody, ~1,150 interpellations",
+      f: "17 police among 126 injured — split derived",
+      i: "109 of 126 injured — split derived",
     },
   },
   1: {
-    a: [307, 339], f: 30, i: 54,
-    flag: { i: 'e' },
-    note: { a: '307 in custody, 339 interpellations', i: '54 of 84 injured — split derived' },
+    a: [307, 339],
+    f: 30,
+    i: 54,
+    flag: { i: "e" },
+    note: {
+      a: "307 in custody, 339 interpellations",
+      i: "54 of 84 injured — split derived",
+    },
   },
   2: {
     a: 630,
-    flag: { a: 'f' },
-    note: { a: 'placed in custody, not arrests; 263 injured, not split by side' },
+    flag: { a: "f" },
+    note: {
+      a: "placed in custody, not arrests; 263 injured, not split by side",
+    },
   },
   3: {
     a: [1_709, 2_000],
-    note: { a: '1,709 in custody, ~2,000 interpellations; injuries reported as 118 / 264 / 585 depending on source, not split by side' },
+    note: {
+      a: "1,709 in custody, ~2,000 interpellations; injuries reported as 118 / 264 / 585 depending on source, not split by side",
+    },
   },
 };
 
 const GILETS: Episode = {
-  id: 'gj',
-  strip: 'Gilets jaunes',
-  short: 'Gilets jaunes',
-  span: '12 Nov 2018 – 9 Sep 2019',
-  banner: 'Ministry count only: one figure per act. Acts 34–43 were never published; no enforcement series after Act IV.',
+  id: "gj",
+  strip: "Gilets jaunes",
+  short: "Gilets jaunes",
+  span: "12 Nov 2018 – 9 Sep 2019",
+  banner:
+    "Ministry count only: one figure per act. Acts 34–43 were never published; no enforcement series after Act IV.",
   weeks: GJ_CROWD.map(([w, n], idx) => {
     const extra = GJ_EXTRA[w] ?? {};
     return {
@@ -2513,14 +3324,16 @@ const GILETS: Episode = {
       p: n,
       ...extra,
       flag: {
-        ...(w === 0 ? { p: 'c' as Flag } : {}),
+        ...(w === 0 ? { p: "c" as Flag } : {}),
         ...extra.flag,
       },
       note: {
         ...(w === 0
-          ? { p: '287,700 counts all actions including road blockades — an actions-total, not a march' }
+          ? {
+              p: "287,700 counts all actions including road blockades — an actions-total, not a march",
+            }
           : w === 1
-            ? { p: 'police-union counter-count: 750,000' }
+            ? { p: "police-union counter-count: 750,000" }
             : {}),
         ...extra.note,
       },
@@ -2529,73 +3342,121 @@ const GILETS: Episode = {
 };
 
 const NAHEL: Episode = {
-  id: 'nahel',
-  strip: 'Nahel 2023',
-  short: 'Nahel 2023',
-  span: '27 Jun – 9 Jul 2023',
-  banner: 'Gatherings were banned: arrests, not crowd counts, carry the scale of the riots.',
+  id: "nahel",
+  strip: "Nahel 2023",
+  short: "Nahel 2023",
+  span: "27 Jun – 9 Jul 2023",
+  banner:
+    "Gatherings were banned: arrests, not crowd counts, carry the scale of the riots.",
   weeks: [
     {
-      w: 0, t: '26 Jun – 2 Jul · Nanterre march, 29 Jun',
-      p: [6_200, 20_000], a: 3_354, f: 722,
+      w: 0,
+      t: "26 Jun – 2 Jul · Nanterre march, 29 Jun",
+      p: [6_200, 20_000],
+      a: 3_354,
+      f: 722,
       note: {
-        p: 'police 6,200 / organisers 20,000 for the march blanche',
-        a: 'national total, 27 Jun – 2 Jul',
-        f: '722 officers injured; 2 deaths; 5,662 vehicles burnt',
+        p: "police 6,200 / organisers 20,000 for the march blanche",
+        a: "national total, 27 Jun – 2 Jul",
+        f: "722 officers injured; 2 deaths; 5,662 vehicles burnt",
       },
     },
-    { w: 1, t: '3 – 9 Jul', a: 108, f: 1, note: { a: '72 + 16 + 20 over 3–5 Jul' } },
+    {
+      w: 1,
+      t: "3 – 9 Jul",
+      a: 108,
+      f: 1,
+      note: { a: "72 + 16 + 20 over 3–5 Jul" },
+    },
   ],
 };
 
 const PENSIONS: Episode = {
-  id: 'pensions',
-  strip: 'Pension reform 2023',
-  short: 'Pensions 2023',
-  span: '19 Jan – 8 Jun 2023',
-  banner: 'Crowds only: no national weekly arrest or injury series was published.',
+  id: "pensions",
+  strip: "Pension reform 2023",
+  short: "Pensions 2023",
+  span: "19 Jan – 8 Jun 2023",
+  banner:
+    "Crowds only: no national weekly arrest or injury series was published.",
   weeks: [
-    { w: 0, t: '16 – 22 Jan · 19 Jan', p: [1_120_000, 2_000_000], note: { p: 'first national day; Paris 80,000 – 400,000' } },
-    { w: 2, t: '30 Jan – 5 Feb · 31 Jan', p: [1_270_000, 2_800_000] },
-    { w: 3, t: '6 – 12 Feb · 7 & 11 Feb', p: [963_000, 2_500_000], note: { p: 'two action days in one week; the peak is 11 Feb' } },
-    { w: 4, t: '13 – 19 Feb · 16 Feb', p: [440_000, 1_300_000] },
-    { w: 7, t: '6 – 12 Mar · 7 Mar', p: [1_280_000, 3_500_000], note: { p: 'national record: ministry 1.28M, unions 3.5M' } },
-    { w: 8, t: '13 – 19 Mar · 15 Mar', p: [480_000, 1_700_000] },
-    { w: 9, t: '20 – 26 Mar · 23 Mar', p: [1_089_000, 3_500_000] },
-    { w: 10, t: '27 Mar – 2 Apr · 28 Mar', p: [740_000, 2_000_000] },
-    { w: 11, t: '3 – 9 Apr · 6 Apr', p: [570_000, 2_000_000] },
-    { w: 12, t: '10 – 16 Apr · 13 Apr', p: [380_000, 1_500_000], note: { p: 'CGT gives 1.0M in one compilation, 1.5M in another' } },
-    { w: 16, t: '1 – 7 May · 1 May', p: [782_000, 2_300_000] },
-    { w: 20, t: '5 – 11 Jun · 6 Jun', p: [281_000, 900_000], note: { p: 'movement minimum' } },
+    {
+      w: 0,
+      t: "16 – 22 Jan · 19 Jan",
+      p: [1_120_000, 2_000_000],
+      note: { p: "first national day; Paris 80,000 – 400,000" },
+    },
+    { w: 2, t: "30 Jan – 5 Feb · 31 Jan", p: [1_270_000, 2_800_000] },
+    {
+      w: 3,
+      t: "6 – 12 Feb · 7 & 11 Feb",
+      p: [963_000, 2_500_000],
+      note: { p: "two action days in one week; the peak is 11 Feb" },
+    },
+    { w: 4, t: "13 – 19 Feb · 16 Feb", p: [440_000, 1_300_000] },
+    {
+      w: 7,
+      t: "6 – 12 Mar · 7 Mar",
+      p: [1_280_000, 3_500_000],
+      note: { p: "national record: ministry 1.28M, unions 3.5M" },
+    },
+    { w: 8, t: "13 – 19 Mar · 15 Mar", p: [480_000, 1_700_000] },
+    { w: 9, t: "20 – 26 Mar · 23 Mar", p: [1_089_000, 3_500_000] },
+    { w: 10, t: "27 Mar – 2 Apr · 28 Mar", p: [740_000, 2_000_000] },
+    { w: 11, t: "3 – 9 Apr · 6 Apr", p: [570_000, 2_000_000] },
+    {
+      w: 12,
+      t: "10 – 16 Apr · 13 Apr",
+      p: [380_000, 1_500_000],
+      note: { p: "CGT gives 1.0M in one compilation, 1.5M in another" },
+    },
+    { w: 16, t: "1 – 7 May · 1 May", p: [782_000, 2_300_000] },
+    {
+      w: 20,
+      t: "5 – 11 Jun · 6 Jun",
+      p: [281_000, 900_000],
+      note: { p: "movement minimum" },
+    },
   ],
 };
 
 const BLOQUONS: Episode = {
-  id: 'bt',
-  strip: 'Bloquons tout 2025',
-  short: 'Bloquons tout',
-  span: '10 Sep – 5 Oct 2025',
-  banner: '10 Sep is an actions-total (blockades included); 18 Sep is an intersyndicale march.',
+  id: "bt",
+  strip: "Bloquons tout 2025",
+  short: "Bloquons tout",
+  span: "10 Sep – 5 Oct 2025",
+  banner:
+    "10 Sep is an actions-total (blockades included); 18 Sep is an intersyndicale march.",
   weeks: [
     {
-      w: 0, t: '8 – 14 Sep · 10 Sep',
-      p: [175_000, 250_000], a: 540,
-      flag: { p: 'c' },
+      w: 0,
+      t: "8 – 14 Sep · 10 Sep",
+      p: [175_000, 250_000],
+      a: 540,
+      flag: { p: "c" },
       note: {
-        p: 'ministry 175,000–197,000, revised up from an early-evening count of ~29,000; CGT ~250,000. 596 rallies, 253 blockades.',
-        a: '540 arrests, 211 in Paris',
+        p: "ministry 175,000–197,000, revised up from an early-evening count of ~29,000; CGT ~250,000. 596 rallies, 253 blockades.",
+        a: "540 arrests, 211 in Paris",
       },
     },
     {
-      w: 1, t: '15 – 21 Sep · 18 Sep',
-      p: [500_000, 1_000_000], a: 309, f: 26, i: 11,
+      w: 1,
+      t: "15 – 21 Sep · 18 Sep",
+      p: [500_000, 1_000_000],
+      a: 309,
+      f: 26,
+      i: 11,
       note: {
-        p: 'intersyndicale day — a different mobilisation from the movement’s own actions; Paris 55,000 (prefecture)',
-        a: '309 nationwide, 103 in Paris',
-        i: '11 injured, including 1 journalist',
+        p: "intersyndicale day — a different mobilisation from the movement’s own actions; Paris 55,000 (prefecture)",
+        a: "309 nationwide, 103 in Paris",
+        i: "11 injured, including 1 journalist",
       },
     },
-    { w: 3, t: '29 Sep – 5 Oct · 2 Oct', p: [195_000, 600_000], note: { p: 'weakest mobilisation since 1 May 2025' } },
+    {
+      w: 3,
+      t: "29 Sep – 5 Oct · 2 Oct",
+      p: [195_000, 600_000],
+      note: { p: "weakest mobilisation since 1 May 2025" },
+    },
   ],
 };
 
@@ -2603,24 +3464,40 @@ const BLOQUONS: Episode = {
 
 /** Flags the aggregator cannot infer from a single band (stock, floor, regional-only week). */
 const STUDENT_FLAG_PATCH: Partial<Record<number, Partial<Record<M, Flag>>>> = {
-  0: { i: 'c' }, // cumulative Île-de-France stock since mid-September
-  5: { i: 'f' }, // litigation-derived floor, not a ministry tally
-  6: { a: 'r' }, // Bègles + Lyon + Strasbourg only
+  0: { i: "c" }, // cumulative Île-de-France stock since mid-September
+  5: { i: "f" }, // litigation-derived floor, not a ministry tally
+  6: { a: "r" }, // Bègles + Lyon + Strasbourg only
 };
 
 /** Safety net: the brief's weekly table, used only if a whole column arrives empty. */
 const STUDENT_FALLBACK: Record<M, (Band | null)[]> = {
-  p: [null, [256_000, 450_000], [550_000, 800_000], [410_000, 800_000], [320_000, 500_000], [575_000, 1_600_000], null],
-  a: [[1_949, 1_949], null, [2_397, 2_628], [1_314, 1_435], [565, 779], [798, 1_002], [17, 17]],
+  p: [
+    null,
+    [256_000, 450_000],
+    [550_000, 800_000],
+    [410_000, 800_000],
+    [320_000, 500_000],
+    [575_000, 1_600_000],
+    null,
+  ],
+  a: [
+    [1_949, 1_949],
+    null,
+    [2_397, 2_628],
+    [1_314, 1_435],
+    [565, 779],
+    [798, 1_002],
+    [17, 17],
+  ],
   f: [[84, 305], null, [1_037, 1_184], [267, 267], [116, 159], [53, 112], null],
   i: [[119, 235], null, null, [150, 150], null, [18, 18], null],
 };
 
 const STUDENT_NOTES: Partial<Record<M, string>> = {
-  p: 'peak day of the week',
-  a: 'sum of national daily counts; regional days excluded',
-  f: 'sum of national daily counts',
-  i: 'flow where a flow exists — W1 is a stock, W6 a litigation floor',
+  p: "peak day of the week",
+  a: "sum of national daily counts; regional days excluded",
+  f: "sum of national daily counts",
+  i: "flow where a flow exists — W1 is a stock, W6 a litigation floor",
 };
 
 /** Live column from chart.ts, with a loud fallback if it comes through empty. */
@@ -2636,26 +3513,32 @@ function studentColumn(m: M): { bands: (Band | null)[]; pinned: boolean } {
 
 function rows2026(): Row[] {
   const cols = {
-    p: studentColumn('p'),
-    a: studentColumn('a'),
-    f: studentColumn('f'),
-    i: studentColumn('i'),
+    p: studentColumn("p"),
+    a: studentColumn("a"),
+    f: studentColumn("f"),
+    i: studentColumn("i"),
   } as const;
 
   return STUDENT_WEEKS.map((wk, idx) => {
-    const row: Row = { w: idx, t: `W${idx + 1} · ${wk.label}${wk.touchesEdge ? ' (partial week)' : ''}` };
+    const row: Row = {
+      w: idx,
+      t: `W${idx + 1} · ${wk.label}${wk.touchesEdge ? " (partial week)" : ""}`,
+    };
 
-    for (const m of ['p', 'a', 'f', 'i'] as const) {
+    for (const m of ["p", "a", "f", "i"] as const) {
       const band = cols[m].bands[idx];
       if (!band) continue;
 
-      row[m] = typeof band === 'number' ? band : [band[0], band[1]];
+      row[m] = typeof band === "number" ? band : [band[0], band[1]];
 
       // pinned column → patch wins; live column → chart.ts wins, patch only refines it
-      const flag = STUDENT_FLAG_PATCH[idx]?.[m] ?? (cols[m].pinned ? undefined : wk.flags[m]);
-      if (flag && flag !== 'n') row.flag = { ...row.flag, [m]: flag };
+      const flag =
+        STUDENT_FLAG_PATCH[idx]?.[m] ??
+        (cols[m].pinned ? undefined : wk.flags[m]);
+      if (flag && flag !== "n") row.flag = { ...row.flag, [m]: flag };
 
-      const note = (cols[m].pinned ? STUDENT_NOTES[m] : wk.notes[m]) ?? STUDENT_NOTES[m];
+      const note =
+        (cols[m].pinned ? STUDENT_NOTES[m] : wk.notes[m]) ?? STUDENT_NOTES[m];
       if (note) row.note = { ...row.note, [m]: note };
     }
     return row;
@@ -2663,22 +3546,32 @@ function rows2026(): Row[] {
 }
 
 const STUDENTS: Episode = {
-  id: 'students26',
-  strip: 'Student protests 2026',
-  short: 'Students 2026',
-  span: '1 Oct – 11 Nov 2026',
-  banner: 'Protester injuries are a September stock, then a litigation floor — never a weekly flow.',
+  id: "students26",
+  strip: "Student protests 2026",
+  short: "Students 2026",
+  span: "1 Oct – 11 Nov 2026",
+  banner:
+    "Protester injuries are a September stock, then a litigation floor — never a weekly flow.",
   weeks: rows2026(),
 };
 
-const EPISODES: Episode[] = [MAY68, CPE, GILETS, NAHEL, PENSIONS, BLOQUONS, STUDENTS];
+const EPISODES: Episode[] = [
+  MAY68,
+  CPE,
+  GILETS,
+  NAHEL,
+  PENSIONS,
+  BLOQUONS,
+  STUDENTS,
+];
 
 /** Last week on which any episode carries an arrest or injury figure (CPE, w7). */
 const ENFORCEMENT_LAST = ((): number => {
   let last = 0;
   for (const ep of EPISODES) {
     for (const r of ep.weeks) {
-      if (r.a !== undefined || r.f !== undefined || r.i !== undefined) last = Math.max(last, r.w);
+      if (r.a !== undefined || r.f !== undefined || r.i !== undefined)
+        last = Math.max(last, r.w);
     }
   }
   return last;
@@ -2686,7 +3579,8 @@ const ENFORCEMENT_LAST = ((): number => {
 
 /* -------------------------------------------------------------- indexing */
 
-const bandOf = (b: Band): [number, number] => (typeof b === 'number' ? [b, b] : b);
+const bandOf = (b: Band): [number, number] =>
+  typeof b === "number" ? [b, b] : b;
 const midOf = (b: Band): number => {
   const [lo, hi] = bandOf(b);
   return (lo + hi) / 2;
@@ -2694,11 +3588,13 @@ const midOf = (b: Band): number => {
 
 /** Points carry the raw count in `y`; `base` is kept only to print "×N vs first figure". */
 function seriesData(ep: Episode, key: M): Pt[] | null {
-  const rows = ep.weeks.filter((r) => r[key] !== undefined).sort((a, b) => a.w - b.w);
+  const rows = ep.weeks
+    .filter((r) => r[key] !== undefined)
+    .sort((a, b) => a.w - b.w);
   if (!rows.length) return null;
 
-  const flagOf = (r: Row): Flag => r.flag?.[key] ?? 'n';
-  const baseRow = rows.find((r) => flagOf(r) !== 'c') ?? rows[0];
+  const flagOf = (r: Row): Flag => r.flag?.[key] ?? "n";
+  const baseRow = rows.find((r) => flagOf(r) !== "c") ?? rows[0];
   const base = midOf(baseRow[key]!);
 
   return rows.map((r) => {
@@ -2738,8 +3634,8 @@ function buildDataset(
     borderColor: color,
     backgroundColor: color,
     borderWidth: 1.75,
-    pointRadius: points.map((p) => (p.flag === 'c' ? 3 : 2.75)),
-    pointBackgroundColor: points.map((_, i) => (drawn[i] ? '#ffffff' : color)),
+    pointRadius: points.map((p) => (p.flag === "c" ? 3 : 2.75)),
+    pointBackgroundColor: points.map((_, i) => (drawn[i] ? "#ffffff" : color)),
     pointBorderColor: color,
     pointBorderWidth: 1.5,
     pointHoverRadius: 4.5,
@@ -2749,7 +3645,10 @@ function buildDataset(
     segment: {
       // a bridged gap of ≥1 week is visibly flagged
       borderDash: (ctx) =>
-        Math.abs((ctx.p1.parsed.x as number) - (ctx.p0.parsed.x as number)) > 1.01 ? [5, 4] : undefined,
+        Math.abs((ctx.p1.parsed.x as number) - (ctx.p0.parsed.x as number)) >
+        1.01
+          ? [5, 4]
+          : undefined,
     },
     __item: key,
     __ep: epIndex,
@@ -2776,15 +3675,16 @@ function rawExtent(eps: Episode[], keys: M[], maxX: number): [number, number] {
     }
   }
 
-  if (!Number.isFinite(lo) || !Number.isFinite(hi) || lo <= 0 || hi <= lo) return [1, 1e6];
+  if (!Number.isFinite(lo) || !Number.isFinite(hi) || lo <= 0 || hi <= lo)
+    return [1, 1e6];
   return [lo, hi];
 }
 
 /* --------------------------------------------------------------- plugins */
 
 /** Only the companion figure labels its lines: there, names differ within a panel. */
-const directLabels: Plugin<'line'> = {
-  id: 'directLabels',
+const directLabels: Plugin<"line"> = {
+  id: "directLabels",
   afterDatasetsDraw(chart) {
     const { ctx, chartArea } = chart;
     const entries: { y: number; text: string }[] = [];
@@ -2805,16 +3705,20 @@ const directLabels: Plugin<'line'> = {
 
     entries.sort((a, b) => a.y - b.y);
     for (let i = 1; i < entries.length; i++) {
-      if (entries[i].y - entries[i - 1].y < 11) entries[i].y = entries[i - 1].y + 11;
+      if (entries[i].y - entries[i - 1].y < 11)
+        entries[i].y = entries[i - 1].y + 11;
     }
 
     ctx.save();
     ctx.font = '500 9.5px system-ui, -apple-system, "Segoe UI", sans-serif';
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'middle';
-    ctx.fillStyle = '#374151';
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "#374151";
     for (const e of entries) {
-      const y = Math.max(chartArea.top + 5, Math.min(chartArea.bottom - 5, e.y));
+      const y = Math.max(
+        chartArea.top + 5,
+        Math.min(chartArea.bottom - 5, e.y),
+      );
       ctx.fillText(e.text, chartArea.right + 7, y);
     }
     ctx.restore();
@@ -2826,7 +3730,7 @@ const directLabels: Plugin<'line'> = {
 function xScale(maxW: number) {
   const step = maxW <= 8 ? 1 : maxW <= 12 ? 2 : maxW <= 24 ? 4 : 8;
   return {
-    type: 'linear' as const,
+    type: "linear" as const,
     min: -0.5,
     max: maxW + 0.5,
     grid: { display: false },
@@ -2878,7 +3782,7 @@ function logTicks(min: number, max: number): number[] {
 function yScale(min: number, max: number, showLabels: boolean) {
   const ticks = logTicks(min, max);
   return {
-    type: 'logarithmic' as const,
+    type: "logarithmic" as const,
     min,
     max,
     grid: { color: GRID, drawTicks: false, lineWidth: 1 },
@@ -2910,18 +3814,18 @@ function tooltipSpec() {
   return {
     displayColors: false,
     callbacks: {
-      title: (items: TooltipItem<'line'>[]) => (items[0].raw as Pt).t,
-      label: (item: TooltipItem<'line'>) => {
+      title: (items: TooltipItem<"line">[]) => (items[0].raw as Pt).t,
+      label: (item: TooltipItem<"line">) => {
         const p = item.raw as Pt;
         const band =
           p.low === p.high
             ? nf.format(Math.round(p.low))
             : `${nf.format(Math.round(p.low))} – ${nf.format(Math.round(p.high))}`;
         const flag = FLAG_TEXT[p.flag];
-        return `${item.dataset.label}: ${band}${flag ? `  ·  ${flag}` : ''}`;
+        return `${item.dataset.label}: ${band}${flag ? `  ·  ${flag}` : ""}`;
       },
-      afterLabel: (item: TooltipItem<'line'>) => (item.raw as Pt).note ?? '',
-      footer: (items: TooltipItem<'line'>[]) => {
+      afterLabel: (item: TooltipItem<"line">) => (item.raw as Pt).note ?? "",
+      footer: (items: TooltipItem<"line">[]) => {
         const p = items[0].raw as Pt;
         return Math.abs(p.y - p.base) / p.base < 1e-9
           ? `first comparable figure for this series (${nf.format(Math.round(p.base))})`
@@ -2933,8 +3837,8 @@ function tooltipSpec() {
 
 /* -------------------------------------------------------------- emphasis */
 
-const episodePanels: Chart<'line'>[] = [];
-const itemPanels: { chart: Chart<'line'>; item: M }[] = [];
+const episodePanels: Chart<"line">[] = [];
+const itemPanels: { chart: Chart<"line">; item: M }[] = [];
 let activeItem: M | null = null;
 let activeEvent: number | null = null;
 
@@ -2949,15 +3853,15 @@ function emphasiseItem(key: M | null): void {
       const colour = on ? d.__color : alpha(d.__color, 0.18);
       d.borderColor = colour;
       d.pointBorderColor = colour;
-      d.pointBackgroundColor = d.__hollow.map((h) => (h ? '#ffffff' : colour));
+      d.pointBackgroundColor = d.__hollow.map((h) => (h ? "#ffffff" : colour));
       d.borderWidth = key !== null && d.__item === key ? 2.75 : 1.75;
     }
-    chart.update('none');
+    chart.update("none");
   }
 
   for (const { chart, item } of itemPanels) {
     const host = chart.canvas.parentElement;
-    if (host) host.style.opacity = key === null || key === item ? '1' : '0.18';
+    if (host) host.style.opacity = key === null || key === item ? "1" : "0.18";
   }
 }
 
@@ -2972,9 +3876,9 @@ function emphasiseEvent(index: number | null): void {
       const colour = on ? d.__color : alpha(d.__color, 0.18);
       d.borderColor = colour;
       d.pointBorderColor = colour;
-      d.pointBackgroundColor = d.__hollow.map((h) => (h ? '#ffffff' : colour));
+      d.pointBackgroundColor = d.__hollow.map((h) => (h ? "#ffffff" : colour));
     }
-    chart.update('none');
+    chart.update("none");
   }
 }
 
@@ -2986,46 +3890,52 @@ function legendButton(
   onEnter: () => void,
   onLeave: () => void,
 ): HTMLElement {
-  const b = document.createElement('button');
-  b.type = 'button';
+  const b = document.createElement("button");
+  b.type = "button";
   b.append(swatch, document.createTextNode(text));
-  b.addEventListener('mouseenter', onEnter);
-  b.addEventListener('mouseleave', onLeave);
-  b.addEventListener('focus', onEnter);
-  b.addEventListener('blur', onLeave);
+  b.addEventListener("mouseenter", onEnter);
+  b.addEventListener("mouseleave", onLeave);
+  b.addEventListener("focus", onEnter);
+  b.addEventListener("blur", onLeave);
   return b;
 }
 
 /* ---------------------------------------------------------------- mounts */
 
 function observations(ep: Episode): string {
-  const counts = ITEMS.map((i) => ep.weeks.filter((r) => r[i.key] !== undefined).length);
-  return `obs ${counts.join('·')} of ${ep.weeks.length} wks`;
+  const counts = ITEMS.map(
+    (i) => ep.weeks.filter((r) => r[i.key] !== undefined).length,
+  );
+  return `obs ${counts.join("·")} of ${ep.weeks.length} wks`;
 }
 
-function panelFigure(strip: string, meta: string, note?: string): { figure: HTMLElement; canvas: HTMLCanvasElement } {
-  const figure = document.createElement('figure');
-  figure.className = 'trellis-panel';
+function panelFigure(
+  strip: string,
+  meta: string,
+  note?: string,
+): { figure: HTMLElement; canvas: HTMLCanvasElement } {
+  const figure = document.createElement("figure");
+  figure.className = "trellis-panel";
 
-  const caption = document.createElement('figcaption');
-  const head = document.createElement('span');
-  head.className = 'strip';
+  const caption = document.createElement("figcaption");
+  const head = document.createElement("span");
+  head.className = "strip";
   head.textContent = strip;
-  const sub = document.createElement('span');
-  sub.className = 'strip-meta';
+  const sub = document.createElement("span");
+  sub.className = "strip-meta";
   sub.textContent = meta;
   caption.append(head, sub);
 
   if (note) {
-    const p = document.createElement('p');
-    p.className = 'strip-note';
+    const p = document.createElement("p");
+    p.className = "strip-note";
     p.textContent = note;
     caption.append(p);
   }
 
-  const box = document.createElement('div');
-  box.className = 'panel-canvas';
-  const canvas = document.createElement('canvas');
+  const box = document.createElement("div");
+  box.className = "panel-canvas";
+  const canvas = document.createElement("canvas");
   box.append(canvas);
 
   figure.append(caption, box);
@@ -3042,29 +3952,39 @@ export function mountCrossEpisode(opts: {
   itemHost: HTMLElement;
   itemLegend: HTMLElement;
   eventLegend: HTMLElement;
-}): Chart<'line'>[] {
-  const charts: Chart<'line'>[] = [];
+}): Chart<"line">[] {
+  const charts: Chart<"line">[] = [];
   const unbounded = Number.POSITIVE_INFINITY;
 
   /* ---- primary trellis: one panel per episode, one y range for all ---- */
-  const [yMin, yMax] = logBounds(...rawExtent(EPISODES, ITEMS.map((i) => i.key), unbounded));
+  const [yMin, yMax] = logBounds(
+    ...rawExtent(
+      EPISODES,
+      ITEMS.map((i) => i.key),
+      unbounded,
+    ),
+  );
   const cols = columns(opts.episodeHost);
   opts.episodeHost.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
 
   EPISODES.forEach((ep, idx) => {
     const maxW = Math.max(...ep.weeks.map((r) => r.w), 1);
-    const { figure, canvas } = panelFigure(ep.strip, `${ep.span} · ${observations(ep)}`, ep.banner);
+    const { figure, canvas } = panelFigure(
+      ep.strip,
+      `${ep.span} · ${observations(ep)}`,
+      ep.banner,
+    );
     opts.episodeHost.append(figure);
 
-    const datasets = ITEMS.map((i) => buildDataset(ep, idx, i.key, i.color, unbounded)).filter(
-      (d): d is PanelDataset => d !== null,
-    );
+    const datasets = ITEMS.map((i) =>
+      buildDataset(ep, idx, i.key, i.color, unbounded),
+    ).filter((d): d is PanelDataset => d !== null);
 
-    const options: ChartOptions<'line'> = {
+    const options: ChartOptions<"line"> = {
       responsive: true,
       maintainAspectRatio: false,
       animation: false,
-      interaction: { mode: 'nearest', axis: 'x', intersect: false },
+      interaction: { mode: "nearest", axis: "x", intersect: false },
       layout: { padding: { top: 6, right: 10, bottom: 0, left: 0 } },
       scales: {
         x: xScale(maxW),
@@ -3082,14 +4002,14 @@ export function mountCrossEpisode(opts: {
       },
     };
 
-    const chart = new Chart<'line'>(canvas, {
-      type: 'line',
-      data: { datasets } as unknown as ChartData<'line'>,
+    const chart = new Chart<"line">(canvas, {
+      type: "line",
+      data: { datasets } as unknown as ChartData<"line">,
       options,
       plugins: [], // no per-panel labels: the episode is the panel title
     });
 
-    canvas.addEventListener('mouseleave', () => emphasiseItem(null));
+    canvas.addEventListener("mouseleave", () => emphasiseItem(null));
     episodePanels.push(chart);
     charts.push(chart);
   });
@@ -3108,15 +4028,15 @@ export function mountCrossEpisode(opts: {
     );
     opts.itemHost.append(figure);
 
-    const datasets = EPISODES.map((ep, i) => buildDataset(ep, i, item.key, RAMP[i], ENFORCEMENT_LAST)).filter(
-      (d): d is PanelDataset => d !== null,
-    );
+    const datasets = EPISODES.map((ep, i) =>
+      buildDataset(ep, i, item.key, RAMP[i], ENFORCEMENT_LAST),
+    ).filter((d): d is PanelDataset => d !== null);
 
-    const options: ChartOptions<'line'> = {
+    const options: ChartOptions<"line"> = {
       responsive: true,
       maintainAspectRatio: false,
       animation: false,
-      interaction: { mode: 'nearest', axis: 'x', intersect: false },
+      interaction: { mode: "nearest", axis: "x", intersect: false },
       layout: { padding: { top: 6, right: 92, bottom: 0, left: 0 } },
       scales: {
         x: xScale(ENFORCEMENT_LAST),
@@ -3130,16 +4050,21 @@ export function mountCrossEpisode(opts: {
       },
     };
 
-    const chart = new Chart<'line'>(canvas, {
-      type: 'line',
-      data: { datasets } as unknown as ChartData<'line'>,
+    const chart = new Chart<"line">(canvas, {
+      type: "line",
+      data: { datasets } as unknown as ChartData<"line">,
       options,
       plugins: [directLabels],
     });
 
-    canvas.addEventListener('mouseleave', () => emphasiseEvent(null));
-    canvas.addEventListener('mousemove', (ev) => {
-      const pts = chart.getElementsAtEventForMode(ev, 'nearest', { intersect: false }, true);
+    canvas.addEventListener("mouseleave", () => emphasiseEvent(null));
+    canvas.addEventListener("mousemove", (ev) => {
+      const pts = chart.getElementsAtEventForMode(
+        ev,
+        "nearest",
+        { intersect: false },
+        true,
+      );
       if (!pts.length) {
         emphasiseEvent(null);
         return;
@@ -3155,19 +4080,29 @@ export function mountCrossEpisode(opts: {
   /* ---- legends ---- */
   opts.itemLegend.replaceChildren(
     ...ITEMS.map((item) => {
-      const swatch = document.createElement('span');
-      swatch.className = 'swatch';
+      const swatch = document.createElement("span");
+      swatch.className = "swatch";
       swatch.style.background = item.color;
-      return legendButton(item.label, swatch, () => emphasiseItem(item.key), () => emphasiseItem(null));
+      return legendButton(
+        item.label,
+        swatch,
+        () => emphasiseItem(item.key),
+        () => emphasiseItem(null),
+      );
     }),
   );
 
   opts.eventLegend.replaceChildren(
     ...EPISODES.map((ep, i) => {
-      const swatch = document.createElement('span');
-      swatch.className = 'swatch';
+      const swatch = document.createElement("span");
+      swatch.className = "swatch";
       swatch.style.background = RAMP[i];
-      return legendButton(ep.short, swatch, () => emphasiseEvent(i), () => emphasiseEvent(null));
+      return legendButton(
+        ep.short,
+        swatch,
+        () => emphasiseEvent(i),
+        () => emphasiseEvent(null),
+      );
     }),
   );
 
@@ -3185,57 +4120,126 @@ export function mountCrossEpisode(opts: {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>France — protest activity, Oct–Nov 2026</title>
     <style>
-      html, body { margin: 0; }
+      html,
       body {
-        font: 14px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-        background: #fff; color: #111;
-        padding: 16px; box-sizing: border-box;
-        max-width: 1420px; margin: 0 auto;
+        margin: 0;
       }
-      section { margin-bottom: 44px; }
+      body {
+        font:
+          14px/1.4 system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        background: #fff;
+        color: #111;
+        padding: 16px;
+        box-sizing: border-box;
+        max-width: 1420px;
+        margin: 0 auto;
+      }
+      section {
+        margin-bottom: 44px;
+      }
       section > header {
         border-bottom: 1px solid #e5e7eb;
         padding-bottom: 6px;
         margin-bottom: 18px;
       }
       section > header h1 {
-        font-size: 11px; text-transform: uppercase; letter-spacing: .09em;
-        color: #6b7280; margin: 0 0 4px; font-weight: 600;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        color: #6b7280;
+        margin: 0 0 4px;
+        font-weight: 600;
       }
-      section > header p { margin: 0; font-size: 12px; color: #4b5563; max-width: 92ch; }
-      .wrap { position: relative; height: 460px; margin-bottom: 28px; }
+      section > header p {
+        margin: 0;
+        font-size: 12px;
+        color: #4b5563;
+        max-width: 92ch;
+      }
+      .wrap {
+        position: relative;
+        height: 460px;
+        margin-bottom: 28px;
+      }
 
       /* ---- section C ---- */
-      .trellis { display: grid; gap: 22px 16px; margin: 0 0 10px; }
-      .trellis-panel { margin: 0; min-width: 0; }
+      .trellis {
+        display: grid;
+        gap: 22px 16px;
+        margin: 0 0 10px;
+      }
+      .trellis-panel {
+        margin: 0;
+        min-width: 0;
+      }
       .strip {
-        display: block; font-size: 10.5px; font-weight: 700;
-        letter-spacing: .08em; text-transform: uppercase; color: #111827;
+        display: block;
+        font-size: 10.5px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #111827;
       }
-      .strip-meta { display: block; font-size: 10px; color: #6b7280; }
+      .strip-meta {
+        display: block;
+        font-size: 10px;
+        color: #6b7280;
+      }
       .strip-note {
-        margin: 3px 0 2px; font-size: 10.5px; line-height: 1.25;
-        color: #6b7280; min-height: 26px;
+        margin: 3px 0 2px;
+        font-size: 10.5px;
+        line-height: 1.25;
+        color: #6b7280;
+        min-height: 26px;
       }
-      .panel-canvas { position: relative; height: 215px; }
-      .trellis-items .panel-canvas { height: 230px; }
+      .panel-canvas {
+        position: relative;
+        height: 215px;
+      }
+      .trellis-items .panel-canvas {
+        height: 230px;
+      }
       .legend {
-        display: flex; flex-wrap: wrap; gap: 4px 18px;
-        margin: 0 0 12px; font-size: 12px; color: #374151;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 18px;
+        margin: 0 0 12px;
+        font-size: 12px;
+        color: #374151;
       }
       .legend button {
-        all: unset; display: inline-flex; align-items: center; gap: 6px;
-        padding: 2px 0; cursor: default;
+        all: unset;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 2px 0;
+        cursor: default;
       }
-      .legend .swatch { width: 14px; height: 3px; border-radius: 2px; }
-      .axis-note { margin: 0 0 30px; font-size: 11px; color: #6b7280; max-width: 110ch; }
+      .legend .swatch {
+        width: 14px;
+        height: 3px;
+        border-radius: 2px;
+      }
+      .axis-note {
+        margin: 0 0 30px;
+        font-size: 11px;
+        color: #6b7280;
+        max-width: 110ch;
+      }
     </style>
   </head>
   <body>
     <section id="section-daily">
       <header>
         <h1>Section A — daily</h1>
-        <p>One x-axis slot per calendar day, 1 Oct – 11 Nov 2026. Days with no published figure stay empty.</p>
+        <p>
+          One x-axis slot per calendar day, 1 Oct – 11 Nov 2026. Days with no
+          published figure stay empty.
+        </p>
       </header>
       <div class="wrap"><canvas id="chart-protesters"></canvas></div>
       <div class="wrap"><canvas id="chart-enforcement"></canvas></div>
@@ -3245,7 +4249,10 @@ export function mountCrossEpisode(opts: {
     <section id="section-weekly">
       <header>
         <h1>Section B — weekly</h1>
-        <p>Weeks run Monday–Sunday. Crowd size shows the peak day; arrests and injuries are summed. * marks weeks clipped by the window.</p>
+        <p>
+          Weeks run Monday–Sunday. Crowd size shows the peak day; arrests and
+          injuries are summed. * marks weeks clipped by the window.
+        </p>
       </header>
       <div class="wrap"><canvas id="chart-protesters-weekly"></canvas></div>
       <div class="wrap"><canvas id="chart-enforcement-weekly"></canvas></div>
@@ -3255,42 +4262,51 @@ export function mountCrossEpisode(opts: {
       <header>
         <h1>Section C — cross-episode, one panel per movement</h1>
         <p>
-          Seven episodes, four series each, on a single logarithmic count axis shared by every panel — so a point sits
-          at exactly the number its tooltip reports, and panels can be compared by eye. Panel position names the
-          movement; hue names the series, once, in the legend below. Hollow markers = regional, partial, derived or
-          stock figure. Hover a series (or its legend entry) to trace it across all seven panels.
+          Seven episodes, four series each, on a single logarithmic count axis
+          shared by every panel — so a point sits at exactly the number its
+          tooltip reports, and panels can be compared by eye. Panel position
+          names the movement; hue names the series, once, in the legend below.
+          Hollow markers = regional, partial, derived or stock figure. Hover a
+          series (or its legend entry) to trace it across all seven panels.
         </p>
       </header>
       <div class="legend" id="legend-items"></div>
       <div class="trellis" id="trellis-episodes"></div>
       <p class="axis-note">
-        x — whole weeks since each movement's first action, true scale, so durations differ (Nahel 1 week, Gilets
-        jaunes 43) and each panel keeps its own x extent. y — count, log scale, one range for all seven panels (about
-        0.5 → 7M); tick labels appear only in the left column, gridlines everywhere, and on a log axis equal vertical
-        distance means equal proportional change wherever a series sits. Dashed segment = at least one week with no
-        published figure lies between the two points. "obs" under each strip = weeks with a figure for protestors ·
-        arrests · forces injured · protestors injured.
+        x — whole weeks since each movement's first action, true scale, so
+        durations differ (Nahel 1 week, Gilets jaunes 43) and each panel keeps
+        its own x extent. y — count, log scale, one range for all seven panels
+        (about 0.5 → 7M); tick labels appear only in the left column, gridlines
+        everywhere, and on a log axis equal vertical distance means equal
+        proportional change wherever a series sits. Dashed segment = at least
+        one week with no published figure lies between the two points. "obs"
+        under each strip = weeks with a figure for protestors · arrests · forces
+        injured · protestors injured.
       </p>
 
       <header>
         <h1>Section C′ — cross-episode, transposed</h1>
         <p>
-          The same data with the comparison axis flipped: one panel per series, one line per movement, direct labels
-          instead of a legend. Colour encodes the movement on a single sequential ramp, light → dark in the same order
-          in every panel, so the ramp is learned once. Use this to ask "did arrests behave the same way in every
-          episode?".
+          The same data with the comparison axis flipped: one panel per series,
+          one line per movement, direct labels instead of a legend. Colour
+          encodes the movement on a single sequential ramp, light → dark in the
+          same order in every panel, so the ramp is learned once. Use this to
+          ask "did arrests behave the same way in every episode?".
         </p>
       </header>
       <div class="legend" id="legend-events"></div>
       <div class="trellis trellis-items" id="trellis-items"></div>
       <p class="axis-note">
-        <strong>x is capped at week 7</strong> — the last week on which any movement has an arrest or injury figure
-        (CPE, 28 Mar – 2 Apr 2006: 600 arrests). Gilets jaunes' enforcement series stops at Act IV (week 3) while its
-        crowd series runs to Act 44 (week 43); letting that set the axis left every enforcement panel empty after
-        week 4. A trailing <code>+</code> marks a series that continues past the cap — the untruncated curves are in
-        Section C, where each panel keeps its own extent. y limits are <em>per panel</em> because the four series sit
-        up to three orders of magnitude apart; the range is printed under each strip, so compare shape and percentage
-        change here, not level.
+        <strong>x is capped at week 7</strong> — the last week on which any
+        movement has an arrest or injury figure (CPE, 28 Mar – 2 Apr 2006: 600
+        arrests). Gilets jaunes' enforcement series stops at Act IV (week 3)
+        while its crowd series runs to Act 44 (week 43); letting that set the
+        axis left every enforcement panel empty after week 4. A trailing
+        <code>+</code> marks a series that continues past the cap — the
+        untruncated curves are in Section C, where each panel keeps its own
+        extent. y limits are <em>per panel</em> because the four series sit up
+        to three orders of magnitude apart; the range is printed under each
+        strip, so compare shape and percentage change here, not level.
       </p>
     </section>
 
@@ -3306,6 +4322,7 @@ Expected after rebuild: the students strip reads `obs 5·6·5·3 of 7 wks` with 
 **You**
 
 Add the following:
+
 - A disclaimer at the beginning that says 'These charts were created using LLM assistance, and should not be relied on for serious analysis without in-depth review. You can view the full transcript of the LLM conversation.'
 - A box at the end that contains the sources used for the data (remember the final section of the attachment that came with the first message in this thread). Include hyperlinks
 
@@ -3328,25 +4345,51 @@ I need the source list from that first attachment. Reading it now.Now confirming
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>France — protest activity, Oct–Nov 2026</title>
     <style>
-      html, body { margin: 0; }
+      html,
       body {
-        font: 14px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-        background: #fff; color: #111;
-        padding: 16px; box-sizing: border-box;
-        max-width: 1420px; margin: 0 auto;
+        margin: 0;
       }
-      section { margin-bottom: 44px; }
+      body {
+        font:
+          14px/1.4 system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        background: #fff;
+        color: #111;
+        padding: 16px;
+        box-sizing: border-box;
+        max-width: 1420px;
+        margin: 0 auto;
+      }
+      section {
+        margin-bottom: 44px;
+      }
       section > header {
         border-bottom: 1px solid #e5e7eb;
         padding-bottom: 6px;
         margin-bottom: 18px;
       }
       section > header h1 {
-        font-size: 11px; text-transform: uppercase; letter-spacing: .09em;
-        color: #6b7280; margin: 0 0 4px; font-weight: 600;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        color: #6b7280;
+        margin: 0 0 4px;
+        font-weight: 600;
       }
-      section > header p { margin: 0; font-size: 12px; color: #4b5563; max-width: 92ch; }
-      .wrap { position: relative; height: 460px; margin-bottom: 28px; }
+      section > header p {
+        margin: 0;
+        font-size: 12px;
+        color: #4b5563;
+        max-width: 92ch;
+      }
+      .wrap {
+        position: relative;
+        height: 460px;
+        margin-bottom: 28px;
+      }
 
       /* ---- disclaimer ---- */
       .disclaimer {
@@ -3360,7 +4403,9 @@ I need the source list from that first attachment. Reading it now.Now confirming
         color: #5b4708;
         max-width: 110ch;
       }
-      .disclaimer strong { font-weight: 600; }
+      .disclaimer strong {
+        font-weight: 600;
+      }
       .disclaimer a {
         color: #8a5a00;
         text-decoration: underline;
@@ -3368,29 +4413,69 @@ I need the source list from that first attachment. Reading it now.Now confirming
       }
 
       /* ---- section C ---- */
-      .trellis { display: grid; gap: 22px 16px; margin: 0 0 10px; }
-      .trellis-panel { margin: 0; min-width: 0; }
+      .trellis {
+        display: grid;
+        gap: 22px 16px;
+        margin: 0 0 10px;
+      }
+      .trellis-panel {
+        margin: 0;
+        min-width: 0;
+      }
       .strip {
-        display: block; font-size: 10.5px; font-weight: 700;
-        letter-spacing: .08em; text-transform: uppercase; color: #111827;
+        display: block;
+        font-size: 10.5px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #111827;
       }
-      .strip-meta { display: block; font-size: 10px; color: #6b7280; }
+      .strip-meta {
+        display: block;
+        font-size: 10px;
+        color: #6b7280;
+      }
       .strip-note {
-        margin: 3px 0 2px; font-size: 10.5px; line-height: 1.25;
-        color: #6b7280; min-height: 26px;
+        margin: 3px 0 2px;
+        font-size: 10.5px;
+        line-height: 1.25;
+        color: #6b7280;
+        min-height: 26px;
       }
-      .panel-canvas { position: relative; height: 215px; }
-      .trellis-items .panel-canvas { height: 230px; }
+      .panel-canvas {
+        position: relative;
+        height: 215px;
+      }
+      .trellis-items .panel-canvas {
+        height: 230px;
+      }
       .legend {
-        display: flex; flex-wrap: wrap; gap: 4px 18px;
-        margin: 0 0 12px; font-size: 12px; color: #374151;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 18px;
+        margin: 0 0 12px;
+        font-size: 12px;
+        color: #374151;
       }
       .legend button {
-        all: unset; display: inline-flex; align-items: center; gap: 6px;
-        padding: 2px 0; cursor: default;
+        all: unset;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 2px 0;
+        cursor: default;
       }
-      .legend .swatch { width: 14px; height: 3px; border-radius: 2px; }
-      .axis-note { margin: 0 0 30px; font-size: 11px; color: #6b7280; max-width: 110ch; }
+      .legend .swatch {
+        width: 14px;
+        height: 3px;
+        border-radius: 2px;
+      }
+      .axis-note {
+        margin: 0 0 30px;
+        font-size: 11px;
+        color: #6b7280;
+        max-width: 110ch;
+      }
 
       /* ---- sources ---- */
       #sources {
@@ -3400,37 +4485,82 @@ I need the source list from that first attachment. Reading it now.Now confirming
         margin-top: 52px;
       }
       #sources > h1 {
-        font-size: 11px; text-transform: uppercase; letter-spacing: .09em;
-        color: #6b7280; margin: 0 0 6px; font-weight: 600;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        color: #6b7280;
+        margin: 0 0 6px;
+        font-weight: 600;
       }
-      #sources > p.intro { margin: 0 0 16px; font-size: 12px; color: #4b5563; max-width: 100ch; }
-      .source-group { margin: 0 0 18px; }
+      #sources > p.intro {
+        margin: 0 0 16px;
+        font-size: 12px;
+        color: #4b5563;
+        max-width: 100ch;
+      }
+      .source-group {
+        margin: 0 0 18px;
+      }
       .source-group h2 {
-        font-size: 10.5px; text-transform: uppercase; letter-spacing: .07em;
-        color: #111827; margin: 0 0 6px; font-weight: 700;
+        font-size: 10.5px;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: #111827;
+        margin: 0 0 6px;
+        font-weight: 700;
       }
-      .source-group ul { margin: 0; padding-left: 18px; }
-      .source-group li { margin: 0 0 5px; font-size: 12px; line-height: 1.4; color: #374151; }
-      .source-group a { color: #1b5c92; text-decoration: none; border-bottom: 1px solid #b0cfe6; }
-      .source-group a:hover { border-bottom-color: #1b5c92; }
-      .source-group .what { color: #6b7280; }
-      .source-group .date { color: #9ca3af; white-space: nowrap; }
-      #sources > p.foot { margin: 0 0 14px; font-size: 11px; color: #6b7280; max-width: 110ch; }
+      .source-group ul {
+        margin: 0;
+        padding-left: 18px;
+      }
+      .source-group li {
+        margin: 0 0 5px;
+        font-size: 12px;
+        line-height: 1.4;
+        color: #374151;
+      }
+      .source-group a {
+        color: #1b5c92;
+        text-decoration: none;
+        border-bottom: 1px solid #b0cfe6;
+      }
+      .source-group a:hover {
+        border-bottom-color: #1b5c92;
+      }
+      .source-group .what {
+        color: #6b7280;
+      }
+      .source-group .date {
+        color: #9ca3af;
+        white-space: nowrap;
+      }
+      #sources > p.foot {
+        margin: 0 0 14px;
+        font-size: 11px;
+        color: #6b7280;
+        max-width: 110ch;
+      }
     </style>
   </head>
   <body>
     <!-- Disclaimer. The transcript link points at public/transcript.html; if the
          transcript is hosted elsewhere, change that one href. -->
     <div class="disclaimer">
-      <strong>These charts were created using LLM assistance, and should not be relied on for serious analysis
-      without in-depth review.</strong>
-      You can view the <a href="transcript.html">full transcript of the LLM conversation</a>.
+      <strong
+        >These charts were created using LLM assistance, and should not be
+        relied on for serious analysis without in-depth review.</strong
+      >
+      You can view the
+      <a href="transcript.html">full transcript of the LLM conversation</a>.
     </div>
 
     <section id="section-daily">
       <header>
         <h1>Section A — daily</h1>
-        <p>One x-axis slot per calendar day, 1 Oct – 11 Nov 2026. Days with no published figure stay empty.</p>
+        <p>
+          One x-axis slot per calendar day, 1 Oct – 11 Nov 2026. Days with no
+          published figure stay empty.
+        </p>
       </header>
       <div class="wrap"><canvas id="chart-protesters"></canvas></div>
       <div class="wrap"><canvas id="chart-enforcement"></canvas></div>
@@ -3440,7 +4570,10 @@ I need the source list from that first attachment. Reading it now.Now confirming
     <section id="section-weekly">
       <header>
         <h1>Section B — weekly</h1>
-        <p>Weeks run Monday–Sunday. Crowd size shows the peak day; arrests and injuries are summed. * marks weeks clipped by the window.</p>
+        <p>
+          Weeks run Monday–Sunday. Crowd size shows the peak day; arrests and
+          injuries are summed. * marks weeks clipped by the window.
+        </p>
       </header>
       <div class="wrap"><canvas id="chart-protesters-weekly"></canvas></div>
       <div class="wrap"><canvas id="chart-enforcement-weekly"></canvas></div>
@@ -3450,95 +4583,163 @@ I need the source list from that first attachment. Reading it now.Now confirming
       <header>
         <h1>Section C — cross-episode, one panel per movement</h1>
         <p>
-          Seven episodes, four series each, on a single logarithmic count axis shared by every panel — so a point sits
-          at exactly the number its tooltip reports, and panels can be compared by eye. Panel position names the
-          movement; hue names the series, once, in the legend below. Hollow markers = regional, partial, derived or
-          stock figure. Hover a series (or its legend entry) to trace it across all seven panels.
+          Seven episodes, four series each, on a single logarithmic count axis
+          shared by every panel — so a point sits at exactly the number its
+          tooltip reports, and panels can be compared by eye. Panel position
+          names the movement; hue names the series, once, in the legend below.
+          Hollow markers = regional, partial, derived or stock figure. Hover a
+          series (or its legend entry) to trace it across all seven panels.
         </p>
       </header>
       <div class="legend" id="legend-items"></div>
       <div class="trellis" id="trellis-episodes"></div>
       <p class="axis-note">
-        x — whole weeks since each movement's first action, true scale, so durations differ (Nahel 1 week, Gilets
-        jaunes 43) and each panel keeps its own x extent. y — count, log scale, one range for all seven panels (about
-        0.5 → 7M); tick labels appear only in the left column, gridlines everywhere, and on a log axis equal vertical
-        distance means equal proportional change wherever a series sits. Dashed segment = at least one week with no
-        published figure lies between the two points. "obs" under each strip = weeks with a figure for protestors ·
-        arrests · forces injured · protestors injured.
+        x — whole weeks since each movement's first action, true scale, so
+        durations differ (Nahel 1 week, Gilets jaunes 43) and each panel keeps
+        its own x extent. y — count, log scale, one range for all seven panels
+        (about 0.5 → 7M); tick labels appear only in the left column, gridlines
+        everywhere, and on a log axis equal vertical distance means equal
+        proportional change wherever a series sits. Dashed segment = at least
+        one week with no published figure lies between the two points. "obs"
+        under each strip = weeks with a figure for protestors · arrests · forces
+        injured · protestors injured.
       </p>
 
       <header>
         <h1>Section C′ — cross-episode, transposed</h1>
         <p>
-          The same data with the comparison axis flipped: one panel per series, one line per movement, direct labels
-          instead of a legend. Colour encodes the movement on a single sequential ramp, light → dark in the same order
-          in every panel, so the ramp is learned once. Use this to ask "did arrests behave the same way in every
-          episode?".
+          The same data with the comparison axis flipped: one panel per series,
+          one line per movement, direct labels instead of a legend. Colour
+          encodes the movement on a single sequential ramp, light → dark in the
+          same order in every panel, so the ramp is learned once. Use this to
+          ask "did arrests behave the same way in every episode?".
         </p>
       </header>
       <div class="legend" id="legend-events"></div>
       <div class="trellis trellis-items" id="trellis-items"></div>
       <p class="axis-note">
-        <strong>x is capped at week 7</strong> — the last week on which any movement has an arrest or injury figure
-        (CPE, 28 Mar – 2 Apr 2006: 600 arrests). Gilets jaunes' enforcement series stops at Act IV (week 3) while its
-        crowd series runs to Act 44 (week 43); letting that set the axis left every enforcement panel empty after
-        week 4. A trailing <code>+</code> marks a series that continues past the cap — the untruncated curves are in
-        Section C, where each panel keeps its own extent. y limits are <em>per panel</em> because the four series sit
-        up to three orders of magnitude apart; the range is printed under each strip, so compare shape and percentage
-        change here, not level.
+        <strong>x is capped at week 7</strong> — the last week on which any
+        movement has an arrest or injury figure (CPE, 28 Mar – 2 Apr 2006: 600
+        arrests). Gilets jaunes' enforcement series stops at Act IV (week 3)
+        while its crowd series runs to Act 44 (week 43); letting that set the
+        axis left every enforcement panel empty after week 4. A trailing
+        <code>+</code> marks a series that continues past the cap — the
+        untruncated curves are in Section C, where each panel keeps its own
+        extent. y limits are <em>per panel</em> because the four series sit up
+        to three orders of magnitude apart; the range is printed under each
+        strip, so compare shape and percentage change here, not level.
       </p>
     </section>
 
     <section id="sources">
       <h1>Sources</h1>
       <p class="intro">
-        Compiled by an LLM from the reports below; no figure here is a primary measurement made for this page. Where a
-        movement has an official count, the interior ministry is the source of the arrest and officer-injury numbers and
-        the unions publish the competing turnout figure. Counts that only ever existed as scattered daily press reports
-        were summed by hand, which is where most of the error will be.
+        Compiled by an LLM from the reports below; no figure here is a primary
+        measurement made for this page. Where a movement has an official count,
+        the interior ministry is the source of the arrest and officer-injury
+        numbers and the unions publish the competing turnout figure. Counts that
+        only ever existed as scattered daily press reports were summed by hand,
+        which is where most of the error will be.
       </p>
 
       <div class="source-group">
         <h2>The 2026 movement — 1 Oct to 11 Nov</h2>
         <ul>
           <li>
-            <a href="https://www.ifrap.org/etat-et-collectivites/violences-des-17-et-18-octobre-2026-une-facture-qui-approche-le-milliard-deuros">Fondation IFRAP — « Violences des 17 et 18 octobre 2026 : une facture qui approche le milliard d’euros »</a>
+            <a
+              href="https://www.ifrap.org/etat-et-collectivites/violences-des-17-et-18-octobre-2026-une-facture-qui-approche-le-milliard-deuros"
+              >Fondation IFRAP — « Violences des 17 et 18 octobre 2026 : une
+              facture qui approche le milliard d’euros »</a
+            >
             <span class="date">21 Oct 2026</span> —
-            <span class="what">the €247M–872M damage range for 17–18 Oct: ~€910M material damage and ~€190M lost turnover in the high estimate, €666M of it retail.</span>
+            <span class="what"
+              >the €247M–872M damage range for 17–18 Oct: ~€910M material damage
+              and ~€190M lost turnover in the high estimate, €666M of it
+              retail.</span
+            >
           </li>
           <li>
-            <a href="https://www.lemonde.fr/economie/article/2026/10/27/plus-de-2-500-commerces-degrades-en-marge-des-recentes-mobilisations-selon-cci-france-qui-demande-une-interdiction-des-manifestations-jusqu-aux-fetes-de-fin-d-annee_6801314_3234.html">Le Monde — « Plus de 2 500 commerces dégradés », d’après CCI France</a>
+            <a
+              href="https://www.lemonde.fr/economie/article/2026/10/27/plus-de-2-500-commerces-degrades-en-marge-des-recentes-mobilisations-selon-cci-france-qui-demande-une-interdiction-des-manifestations-jusqu-aux-fetes-de-fin-d-annee_6801314_3234.html"
+              >Le Monde — « Plus de 2 500 commerces dégradés », d’après CCI
+              France</a
+            >
             <span class="date">27 Oct 2026</span> —
-            <span class="what">CCI France's shop counts: 2,488 hit on 17 Oct, of which 1,161 pillaged, sacked or burnt.</span>
+            <span class="what"
+              >CCI France's shop counts: 2,488 hit on 17 Oct, of which 1,161
+              pillaged, sacked or burnt.</span
+            >
           </li>
           <li>
-            <a href="https://www.franceinfo.fr/societe/mobilisation-du-17-octobre/plus-de-2-500-magasins-touches-par-les-violences-en-marge-des-manifestations-des-17-et-24-octobre-selon-les-chambres-de-commerce_8256049.html">franceinfo — « Plus de 2 500 magasins touchés »</a>
+            <a
+              href="https://www.franceinfo.fr/societe/mobilisation-du-17-octobre/plus-de-2-500-magasins-touches-par-les-violences-en-marge-des-manifestations-des-17-et-24-octobre-selon-les-chambres-de-commerce_8256049.html"
+              >franceinfo — « Plus de 2 500 magasins touchés »</a
+            >
             <span class="date">27 Oct 2026</span> —
-            <span class="what">the 24 Oct increment (50 shops, total 2,538) and the 80% centre-town turnover drop.</span>
+            <span class="what"
+              >the 24 Oct increment (50 shops, total 2,538) and the 80%
+              centre-town turnover drop.</span
+            >
           </li>
           <li>
-            <a href="https://www.bfmtv.com/economie/entreprises/20-commerces-vandalises-samedi-contre-2-488-le-17-octobre-cci-france-constate-une-nette-baisse-des-degradations-en-marge-des-manifestations-mais-s-inquiete-d-une-forte-chute-du-chiffre-d-affaires-des-magasins-pouvant-atteindre-80_AD-202611010225.html">BFMTV — CCI France, 20 shops vandalised on 31 Oct</a>
+            <a
+              href="https://www.bfmtv.com/economie/entreprises/20-commerces-vandalises-samedi-contre-2-488-le-17-octobre-cci-france-constate-une-nette-baisse-des-degradations-en-marge-des-manifestations-mais-s-inquiete-d-une-forte-chute-du-chiffre-d-affaires-des-magasins-pouvant-atteindre-80_AD-202611010225.html"
+              >BFMTV — CCI France, 20 shops vandalised on 31 Oct</a
+            >
             <span class="date">1 Nov 2026</span> —
-            <span class="what">why week 6 carries no damage figure: the count collapses after 24 Oct.</span>
+            <span class="what"
+              >why week 6 carries no damage figure: the count collapses after 24
+              Oct.</span
+            >
           </li>
           <li>
-            <a href="https://www.capital.fr/economie-politique/combien-ont-coute-les-70-000-policiers-de-samedi-letat-ne-le-dit-pas-mais-certains-chiffres-existent-1531269">Capital.fr — « Combien ont coûté les 70 000 policiers de samedi »</a>
+            <a
+              href="https://www.capital.fr/economie-politique/combien-ont-coute-les-70-000-policiers-de-samedi-letat-ne-le-dit-pas-mais-certains-chiffres-existent-1531269"
+              >Capital.fr — « Combien ont coûté les 70 000 policiers de samedi
+              »</a
+            >
             <span class="date">28 Oct 2026</span> —
-            <span class="what">the €15,000–30,000 per CRS company per day and €3.4M per 3,000 gendarmes benchmarks behind the policing-cost band; also the 1,435 arrests and 53 officers injured on 24 Oct.</span>
+            <span class="what"
+              >the €15,000–30,000 per CRS company per day and €3.4M per 3,000
+              gendarmes benchmarks behind the policing-cost band; also the 1,435
+              arrests and 53 officers injured on 24 Oct.</span
+            >
           </li>
           <li>
-            <a href="https://www.lefigaro.fr/societes/violences-urbaines-le-cout-exorbitant-d-un-week-end-d-emeutes-pour-les-commerces-et-les-collectivites-20261020">Le Figaro — « Le coût exorbitant d’un week-end d’émeutes »</a>
+            <a
+              href="https://www.lefigaro.fr/societes/violences-urbaines-le-cout-exorbitant-d-un-week-end-d-emeutes-pour-les-commerces-et-les-collectivites-20261020"
+              >Le Figaro — « Le coût exorbitant d’un week-end d’émeutes »</a
+            >
             <span class="date">20 Oct 2026</span> —
-            <span class="what">cross-check on the damage order of magnitude.</span>
+            <span class="what"
+              >cross-check on the damage order of magnitude.</span
+            >
           </li>
           <li>
-            <a href="https://www.lecanardenchaine.fr/police-justice/55381-les-manifestants-ont-le-mauvais-oeil">Le Canard enchaîné — « Les manifestants ont le mauvais œil »</a>
+            <a
+              href="https://www.lecanardenchaine.fr/police-justice/55381-les-manifestants-ont-le-mauvais-oeil"
+              >Le Canard enchaîné — « Les manifestants ont le mauvais œil »</a
+            >
             <span class="date">10 Nov 2026</span> —
-            <span class="what">Prof. Laurent Thines' (CHU de Besançon) press-and-blog register: 79 serious injuries in three weeks — 10 blinded, 9 cranio-facial, 7 amputations, 1 death. The source of the protester-injury floor, and the reason no weekly protester-injury series exists.</span>
+            <span class="what"
+              >Prof. Laurent Thines' (CHU de Besançon) press-and-blog register:
+              79 serious injuries in three weeks — 10 blinded, 9 cranio-facial,
+              7 amputations, 1 death. The source of the protester-injury floor,
+              and the reason no weekly protester-injury series exists.</span
+            >
           </li>
           <li>
-            <a href="https://www.interieur.gouv.fr/">Ministère de l’Intérieur</a> —
-            <span class="what">origin of every arrest, custody and officer-injury count and of the ministry turnout figure. Published as press briefings and evening situation reports, not as a downloadable series, so the daily values were collected from the reporting above rather than from a dataset.</span>
+            <a href="https://www.interieur.gouv.fr/"
+              >Ministère de l’Intérieur</a
+            >
+            —
+            <span class="what"
+              >origin of every arrest, custody and officer-injury count and of
+              the ministry turnout figure. Published as press briefings and
+              evening situation reports, not as a downloadable series, so the
+              daily values were collected from the reporting above rather than
+              from a dataset.</span
+            >
           </li>
         </ul>
       </div>
@@ -3548,54 +4749,118 @@ I need the source list from that first attachment. Reading it now.Now confirming
         <ul>
           <li>
             <a href="https://fr.wikipedia.org/wiki/Mai_68">Mai 68</a> —
-            <span class="what">1 May (25,000 prefecture / 100,000 CGT) and 13 May (230,000 prefecture / 171,000 ORTF / 1,000,000 unions) turnouts; the 469 arrests of 10–11 May and the 1,000+ of 25 May.</span>
+            <span class="what"
+              >1 May (25,000 prefecture / 100,000 CGT) and 13 May (230,000
+              prefecture / 171,000 ORTF / 1,000,000 unions) turnouts; the 469
+              arrests of 10–11 May and the 1,000+ of 25 May.</span
+            >
           </li>
           <li>
-            <a href="https://en.wikipedia.org/wiki/May_68">May 68 (English Wikipedia)</a> —
-            <span class="what">the 887 injured figure, which appears only in this article's infobox and is flagged accordingly — no French count was published.</span>
+            <a href="https://en.wikipedia.org/wiki/May_68"
+              >May 68 (English Wikipedia)</a
+            >
+            —
+            <span class="what"
+              >the 887 injured figure, which appears only in this article's
+              infobox and is flagged accordingly — no French count was
+              published.</span
+            >
           </li>
           <li>
-            <a href="https://fr.wikipedia.org/wiki/Contrat_premi%C3%A8re_embauche">Contrat première embauche</a> —
-            <span class="what">the CPE turnout series (7 Feb, 7 Mar, 18 Mar, 23 Mar, 28 Mar, 4 Apr) and the Paris-only enforcement counts of 16–18 Mar.</span>
+            <a
+              href="https://fr.wikipedia.org/wiki/Contrat_premi%C3%A8re_embauche"
+              >Contrat première embauche</a
+            >
+            —
+            <span class="what"
+              >the CPE turnout series (7 Feb, 7 Mar, 18 Mar, 23 Mar, 28 Mar, 4
+              Apr) and the Paris-only enforcement counts of 16–18 Mar.</span
+            >
           </li>
           <li>
-            <a href="https://fr.wikipedia.org/wiki/Mouvement_des_Gilets_jaunes">Mouvement des Gilets jaunes</a> —
-            <span class="what">the Act I–44 ministry turnout series and the Act I–IV custody/interpellation counts. Later acts were never published as a series, which is why the enforcement lines stop at week 3.</span>
+            <a href="https://fr.wikipedia.org/wiki/Mouvement_des_Gilets_jaunes"
+              >Mouvement des Gilets jaunes</a
+            >
+            —
+            <span class="what"
+              >the Act I–44 ministry turnout series and the Act I–IV
+              custody/interpellation counts. Later acts were never published as
+              a series, which is why the enforcement lines stop at week 3.</span
+            >
           </li>
           <li>
-            <a href="https://fr.wikipedia.org/wiki/Mort_de_Nahel_Merzouk">Mort de Nahel Merzouk</a> —
-            <span class="what">the 3,354 arrests and 722 officers injured of 27 Jun – 2 Jul 2023, and the 108 of the following week.</span>
+            <a href="https://fr.wikipedia.org/wiki/Mort_de_Nahel_Merzouk"
+              >Mort de Nahel Merzouk</a
+            >
+            —
+            <span class="what"
+              >the 3,354 arrests and 722 officers injured of 27 Jun – 2 Jul
+              2023, and the 108 of the following week.</span
+            >
           </li>
           <li>
-            <a href="https://fr.wikipedia.org/wiki/Mouvement_social_contre_la_r%C3%A9forme_des_retraites_en_France_en_2023">Mouvement social contre la réforme des retraites de 2023</a> —
-            <span class="what">the ministry and union turnout pairs for each national action day, 19 Jan – 6 Jun 2023.</span>
+            <a
+              href="https://fr.wikipedia.org/wiki/Mouvement_social_contre_la_r%C3%A9forme_des_retraites_en_France_en_2023"
+              >Mouvement social contre la réforme des retraites de 2023</a
+            >
+            —
+            <span class="what"
+              >the ministry and union turnout pairs for each national action
+              day, 19 Jan – 6 Jun 2023.</span
+            >
           </li>
           <li>
-            <a href="https://www.france24.com/fr/france/20250910-en-direct-france-bloquons-tout-colere-sociale-emmanuel-macron">France 24 — « Bloquons tout », direct du 10 septembre 2025</a>
+            <a
+              href="https://www.france24.com/fr/france/20250910-en-direct-france-bloquons-tout-colere-sociale-emmanuel-macron"
+              >France 24 — « Bloquons tout », direct du 10 septembre 2025</a
+            >
             <span class="date">10 Sep 2025</span> —
-            <span class="what">197,000 participants, 596 rallies, 253 blockades, 540 arrests (211 in Paris) — the final ministry point of the evening, superseding the 175,000 of 17:45.</span>
+            <span class="what"
+              >197,000 participants, 596 rallies, 253 blockades, 540 arrests
+              (211 in Paris) — the final ministry point of the evening,
+              superseding the 175,000 of 17:45.</span
+            >
           </li>
           <li>
-            <a href="https://www.bfmtv.com/societe/manifestations/direct-10-septembre-blocages-transports-manifestations-suivez-le-mouvement-bloquons-tout-a-paris-lyon-marseille_LN-202509100070.html">BFMTV — direct du 10 septembre</a>
+            <a
+              href="https://www.bfmtv.com/societe/manifestations/direct-10-septembre-blocages-transports-manifestations-suivez-le-mouvement-bloquons-tout-a-paris-lyon-marseille_LN-202509100070.html"
+              >BFMTV — direct du 10 septembre</a
+            >
             <span class="date">10 Sep 2025</span> —
-            <span class="what">the intra-day revision of the count (175,000 → 197,000), which is why the chart shows a band rather than a point.</span>
+            <span class="what"
+              >the intra-day revision of the count (175,000 → 197,000), which is
+              why the chart shows a band rather than a point.</span
+            >
           </li>
           <li>
-            <a href="https://www.lefigaro.fr/social/direct-bloquons-tout-10-septembre-mouvement-greves-manifestations-perturbations-transports-ecole-20250910">Le Figaro — direct du 10 septembre</a>
+            <a
+              href="https://www.lefigaro.fr/social/direct-bloquons-tout-10-septembre-mouvement-greves-manifestations-perturbations-transports-ecole-20250910"
+              >Le Figaro — direct du 10 septembre</a
+            >
             <span class="date">10–11 Sep 2025</span> —
-            <span class="what">the 18 Sep intersyndicale day and the 2 Oct third wave.</span>
+            <span class="what"
+              >the 18 Sep intersyndicale day and the 2 Oct third wave.</span
+            >
           </li>
           <li>
-            <a href="https://en.wikipedia.org/wiki/Bloquons_tout">Bloquons tout (English Wikipedia)</a> —
-            <span class="what">the movement's chronology and its 10 Sep / 18 Sep / 2 Oct structure.</span>
+            <a href="https://en.wikipedia.org/wiki/Bloquons_tout"
+              >Bloquons tout (English Wikipedia)</a
+            >
+            —
+            <span class="what"
+              >the movement's chronology and its 10 Sep / 18 Sep / 2 Oct
+              structure.</span
+            >
           </li>
         </ul>
       </div>
 
       <p class="foot">
-        Not a source, but load-bearing: the index in the earlier drafts of Section C divided each series by its own
-        first figure, and the C′ x-axis was set by the longest episode. Both were replaced — C plots raw counts on a
-        shared log axis, and C′ is capped at week 7. Nothing here has been through external review.
+        Not a source, but load-bearing: the index in the earlier drafts of
+        Section C divided each series by its own first figure, and the C′ x-axis
+        was set by the longest episode. Both were replaced — C plots raw counts
+        on a shared log axis, and C′ is capped at week 7. Nothing here has been
+        through external review.
       </p>
     </section>
 
@@ -3618,7 +4883,7 @@ Give me the option to render the whole thing in either French or English, with b
 
 Diagnosis first.
 
-**Why this needed care.** Every visible string was baked in at *module load*: `nf`/`compact` with a hard-coded `en-GB`, `DAILY_VIEW.titles`, `EPISODES`/`STUDENTS.weeks` computed as module constants, and `'points only'` used as the legend filter. So `pick()` wrappers alone wouldn't work — a language switch needs the derived data rebuilt, and the projections (weekly notes, policing notes) are string-building code. Hence three moves:
+**Why this needed care.** Every visible string was baked in at _module load_: `nf`/`compact` with a hard-coded `en-GB`, `DAILY_VIEW.titles`, `EPISODES`/`STUDENTS.weeks` computed as module constants, and `'points only'` used as the legend filter. So `pick()` wrappers alone wouldn't work — a language switch needs the derived data rebuilt, and the projections (weekly notes, policing notes) are string-building code. Hence three moves:
 
 1. One language state in `i18n.ts`; data stays English, French lives in an **overlay registry** keyed by stable ids (`f:<date>:<metric>`, `n:<ep>:<metric>:<week>`), resolved when datasets are built.
 2. The projections and the episode list become **memoised per language** (`S()`, `studentWeeks()`, `episodes()`), so a switch re-projects rather than mutating text in place.
@@ -3628,14 +4893,14 @@ Diagnosis first.
 /* src/client/i18n.ts — NEW FILE */
 /* One language state, one dictionary, one overlay registry, one set of formatters. */
 
-export type Lang = 'en' | 'fr';
+export type Lang = "en" | "fr";
 export type Bi = { en: string; fr: string };
 
-export const isLang = (v: unknown): v is Lang => v === 'en' || v === 'fr';
-export const bi = (v: Bi): string => (current === 'fr' ? v.fr : v.en);
+export const isLang = (v: unknown): v is Lang => v === "en" || v === "fr";
+export const bi = (v: Bi): string => (current === "fr" ? v.fr : v.en);
 
-const STORE = 'lang';
-let current: Lang = 'en';
+const STORE = "lang";
+let current: Lang = "en";
 const subs = new Set<() => void>();
 const overlay: Record<string, string> = {};
 const nfCache = new Map<string, Intl.NumberFormat>();
@@ -3643,251 +4908,276 @@ const nfCache = new Map<string, Intl.NumberFormat>();
 /* ---------------------------------------------------------------- dictionary */
 
 const EN = {
-  'doc.title': 'France — protest activity, Oct–Nov 2026',
+  "doc.title": "France — protest activity, Oct–Nov 2026",
 
-  'disc.lead':
-    'These charts were created using LLM assistance, and should not be relied on for serious analysis without in-depth review.',
-  'disc.link': 'You can view the full transcript of the LLM conversation.',
-  'lang.aria': 'Language',
+  "disc.lead":
+    "These charts were created using LLM assistance, and should not be relied on for serious analysis without in-depth review.",
+  "disc.link": "You can view the full transcript of the LLM conversation.",
+  "lang.aria": "Language",
 
-  'secA.h': 'Section A — daily',
-  'secA.p':
-    'One x-axis slot per calendar day, 1 Oct – 11 Nov 2026. Days with no published figure stay empty.',
-  'secB.h': 'Section B — weekly',
-  'secB.p':
-    'Weeks run Monday–Sunday. Crowd size shows the peak day; arrests and injuries are summed. * marks weeks clipped by the window.',
-  'secC.h': 'Section C — cross-episode, one panel per movement',
-  'secC.p':
-    'Seven episodes, four series each, on a single logarithmic count axis shared by every panel — so a point sits at exactly the number its tooltip reports, and panels can be compared by eye. Panel position names the movement; hue names the series, once, in the legend below. Hollow markers = regional, partial, derived or stock figure. Hover a series (or its legend entry) to trace it across all seven panels.',
-  'secC.note':
+  "secA.h": "Section A — daily",
+  "secA.p":
+    "One x-axis slot per calendar day, 1 Oct – 11 Nov 2026. Days with no published figure stay empty.",
+  "secB.h": "Section B — weekly",
+  "secB.p":
+    "Weeks run Monday–Sunday. Crowd size shows the peak day; arrests and injuries are summed. * marks weeks clipped by the window.",
+  "secC.h": "Section C — cross-episode, one panel per movement",
+  "secC.p":
+    "Seven episodes, four series each, on a single logarithmic count axis shared by every panel — so a point sits at exactly the number its tooltip reports, and panels can be compared by eye. Panel position names the movement; hue names the series, once, in the legend below. Hollow markers = regional, partial, derived or stock figure. Hover a series (or its legend entry) to trace it across all seven panels.",
+  "secC.note":
     '<strong>x</strong> — whole weeks since each movement\'s first action, true scale, so durations differ (Nahel 1 week, Gilets jaunes 43) and each panel keeps its own x extent. <strong>y</strong> — count, log scale, one range for all seven panels (about 0.5 → 7M); tick labels appear only in the left column, gridlines everywhere, and on a log axis equal vertical distance means equal proportional change wherever a series sits. Dashed segment = at least one week with no published figure lies between the two points. "obs" under each strip = weeks with a figure for protestors · arrests · forces injured · protestors injured.',
-  'secC2.h': 'Section C′ — cross-episode, transposed',
-  'secC2.p':
+  "secC2.h": "Section C′ — cross-episode, transposed",
+  "secC2.p":
     'The same data with the comparison axis flipped: one panel per series, one line per movement, direct labels instead of a legend. Colour encodes the movement on a single sequential ramp, light → dark in the same order in every panel, so the ramp is learned once. Use this to ask "did arrests behave the same way in every episode?".',
-  'secC2.note':
-    '<strong>x is capped at week 7</strong> — the last week on which any movement has an arrest or injury figure (CPE, 28 Mar – 2 Apr 2006: 600 arrests). Gilets jaunes\' enforcement series stops at Act IV (week 3) while its crowd series runs to Act 44 (week 43); letting that set the axis left every enforcement panel empty after week 4. A trailing <code>+</code> marks a series that continues past the cap — the untruncated curves are in Section C, where each panel keeps its own extent. y limits are <em>per panel</em> because the four series sit up to three orders of magnitude apart; the range is printed under each strip, so compare shape and percentage change here, not level.',
+  "secC2.note":
+    "<strong>x is capped at week 7</strong> — the last week on which any movement has an arrest or injury figure (CPE, 28 Mar – 2 Apr 2006: 600 arrests). Gilets jaunes' enforcement series stops at Act IV (week 3) while its crowd series runs to Act 44 (week 43); letting that set the axis left every enforcement panel empty after week 4. A trailing <code>+</code> marks a series that continues past the cap — the untruncated curves are in Section C, where each panel keeps its own extent. y limits are <em>per panel</em> because the four series sit up to three orders of magnitude apart; the range is printed under each strip, so compare shape and percentage change here, not level.",
 
-  'src.h': 'Sources',
-  'src.intro':
-    'Compiled by an LLM from the reports below; no figure here is a primary measurement made for this page. Where a movement has an official count, the interior ministry is the source of the arrest and officer-injury numbers and the unions publish the competing turnout figure. Counts that only ever existed as scattered daily press reports were summed by hand, which is where most of the error will be.',
-  'src.group2026': 'The 2026 movement — 1 Oct to 11 Nov',
-  'src.groupHist': 'Historical episodes',
-  'src.foot':
-    'Not a source, but load-bearing: the index in the earlier drafts of Section C divided each series by its own first figure, and the C′ x-axis was set by the longest episode. Both were replaced — C plots raw counts on a shared log axis, and C′ is capped at week 7. Nothing here has been through external review.',
+  "src.h": "Sources",
+  "src.intro":
+    "Compiled by an LLM from the reports below; no figure here is a primary measurement made for this page. Where a movement has an official count, the interior ministry is the source of the arrest and officer-injury numbers and the unions publish the competing turnout figure. Counts that only ever existed as scattered daily press reports were summed by hand, which is where most of the error will be.",
+  "src.group2026": "The 2026 movement — 1 Oct to 11 Nov",
+  "src.groupHist": "Historical episodes",
+  "src.foot":
+    "Not a source, but load-bearing: the index in the earlier drafts of Section C divided each series by its own first figure, and the C′ x-axis was set by the longest episode. Both were replaced — C plots raw counts on a shared log axis, and C′ is capped at week 7. Nothing here has been through external review.",
 
-  'ax.date': 'Date (2026)',
+  "ax.date": "Date (2026)",
 
-  'ch.prot.title': 'France — daily protestors, 1 Oct – 11 Nov 2026',
-  'ch.prot.sub':
-    'Points sit at the midpoint of the published range; bars span low (ministry) → high (organisers). Dashed connector = a day with no published figure lies between.',
-  'ch.prot.y': 'Protestors',
-  'ch.enf.title': 'France — arrests and injuries per day, 1 Oct – 11 Nov 2026',
-  'ch.enf.sub':
-    'Bars span the lowest and highest published figure for the day. Filled markers + line = national counts; hollow = regional, partial, floor or derived values, plotted but never connected.',
-  'ch.enf.y': 'Count (arrests / injuries)',
-  'ch.cost.title': 'France — cost of damages, policing cost per day, and cumulative policing cost',
-  'ch.cost.sub':
-    'Daily cost = officers deployed × €136–1,133 per officer-day (marginal CRS rate → Sainte-Soline all-in). Reported headcounts (60,000 on 17 Oct; 70,000 after) are filled; earlier days were never published and are modelled, so they are hollow. The cumulative line carries forward on days with no deployment and its shaded band grows with each assumed increment.',
-  'ch.cost.y': '€ millions (per day)',
-  'ch.cost.y1': '€ millions (cumulative)',
-  'ch.pw.title': 'France — peak daily protestors, by week',
-  'ch.pw.sub':
-    'Weeks run Monday–Sunday. Crowd figures show the peak day within each week; bars span the peak under the most conservative sources to the peak under the most generous. * = week clipped by the 1 Oct – 11 Nov window.',
-  'ch.pw.y': 'Protestors (weekly peak)',
-  'ch.ew.title': 'France — arrests and injuries, weekly totals',
-  'ch.ew.sub':
-    'Arrests and injuries are summed within each week; bars span the sum of the lowest to the sum of the highest published figures. Days carrying regional or partial counts are excluded from national sums and counted in the tooltip. A week with no published figure stays empty.',
-  'ch.ew.y': 'Count (weekly total)',
+  "ch.prot.title": "France — daily protestors, 1 Oct – 11 Nov 2026",
+  "ch.prot.sub":
+    "Points sit at the midpoint of the published range; bars span low (ministry) → high (organisers). Dashed connector = a day with no published figure lies between.",
+  "ch.prot.y": "Protestors",
+  "ch.enf.title": "France — arrests and injuries per day, 1 Oct – 11 Nov 2026",
+  "ch.enf.sub":
+    "Bars span the lowest and highest published figure for the day. Filled markers + line = national counts; hollow = regional, partial, floor or derived values, plotted but never connected.",
+  "ch.enf.y": "Count (arrests / injuries)",
+  "ch.cost.title":
+    "France — cost of damages, policing cost per day, and cumulative policing cost",
+  "ch.cost.sub":
+    "Daily cost = officers deployed × €136–1,133 per officer-day (marginal CRS rate → Sainte-Soline all-in). Reported headcounts (60,000 on 17 Oct; 70,000 after) are filled; earlier days were never published and are modelled, so they are hollow. The cumulative line carries forward on days with no deployment and its shaded band grows with each assumed increment.",
+  "ch.cost.y": "€ millions (per day)",
+  "ch.cost.y1": "€ millions (cumulative)",
+  "ch.pw.title": "France — peak daily protestors, by week",
+  "ch.pw.sub":
+    "Weeks run Monday–Sunday. Crowd figures show the peak day within each week; bars span the peak under the most conservative sources to the peak under the most generous. * = week clipped by the 1 Oct – 11 Nov window.",
+  "ch.pw.y": "Protestors (weekly peak)",
+  "ch.ew.title": "France — arrests and injuries, weekly totals",
+  "ch.ew.sub":
+    "Arrests and injuries are summed within each week; bars span the sum of the lowest to the sum of the highest published figures. Days carrying regional or partial counts are excluded from national sums and counted in the tooltip. A week with no published figure stays empty.",
+  "ch.ew.y": "Count (weekly total)",
 
-  'ds.prot': 'Protestors (midpoint of range)',
-  'ds.protReg': 'Protestors — regional (points only)',
-  'ds.arre': 'Arrests',
-  'ds.arreReg': 'Arrests — regional / partial (points only)',
-  'ds.finj': 'Injuries — security forces',
-  'ds.finjReg': 'Injuries — security forces, regional (points only)',
-  'ds.pinj': 'Injuries — protestors',
-  'ds.pinjReg': 'Injuries — protestors, regional (points only)',
-  'ds.dam': 'Cost of damages (€M)',
-  'ds.damReg': 'Cost of damages — derived / stock (points only)',
-  'ds.pol': 'Cost of policing (€M/day, estimated)',
-  'ds.polReg': 'Cost of policing — modelled headcount (points only)',
-  'ds.pcum': 'Cumulative cost of policing (€M, right axis)',
-  'ds.pcumReg': 'Cumulative cost of policing (points only)',
-  'ds.protW': 'Protestors — peak day of the week',
-  'ds.protWReg': 'Protestors — regional weeks (points only)',
-  'ds.arreW': 'Arrests (weekly total)',
-  'ds.arreWReg': 'Arrests — regional weeks (points only)',
-  'ds.finjW': 'Injuries — security forces (weekly total)',
-  'ds.finjWReg': 'Injuries — security forces, regional weeks (points only)',
-  'ds.pinjW': 'Injuries — protestors (weekly total)',
-  'ds.pinjWReg': 'Injuries — protestors, regional weeks (points only)',
+  "ds.prot": "Protestors (midpoint of range)",
+  "ds.protReg": "Protestors — regional (points only)",
+  "ds.arre": "Arrests",
+  "ds.arreReg": "Arrests — regional / partial (points only)",
+  "ds.finj": "Injuries — security forces",
+  "ds.finjReg": "Injuries — security forces, regional (points only)",
+  "ds.pinj": "Injuries — protestors",
+  "ds.pinjReg": "Injuries — protestors, regional (points only)",
+  "ds.dam": "Cost of damages (€M)",
+  "ds.damReg": "Cost of damages — derived / stock (points only)",
+  "ds.pol": "Cost of policing (€M/day, estimated)",
+  "ds.polReg": "Cost of policing — modelled headcount (points only)",
+  "ds.pcum": "Cumulative cost of policing (€M, right axis)",
+  "ds.pcumReg": "Cumulative cost of policing (points only)",
+  "ds.protW": "Protestors — peak day of the week",
+  "ds.protWReg": "Protestors — regional weeks (points only)",
+  "ds.arreW": "Arrests (weekly total)",
+  "ds.arreWReg": "Arrests — regional weeks (points only)",
+  "ds.finjW": "Injuries — security forces (weekly total)",
+  "ds.finjWReg": "Injuries — security forces, regional weeks (points only)",
+  "ds.pinjW": "Injuries — protestors (weekly total)",
+  "ds.pinjWReg": "Injuries — protestors, regional weeks (points only)",
 
-  'sfx.stock': ' [stock since mid-Sep, not a daily figure]',
-  'sfx.weekly': ' [weekly aggregate]',
-  'sfx.derived': ' [derived, not published]',
-  'sfx.floor': ' [lower bound]',
-  'sfx.regional': ' [regional/partial — not a national total]',
+  "sfx.stock": " [stock since mid-Sep, not a daily figure]",
+  "sfx.weekly": " [weekly aggregate]",
+  "sfx.derived": " [derived, not published]",
+  "sfx.floor": " [lower bound]",
+  "sfx.regional": " [regional/partial — not a national total]",
 
-  'wk.of': 'Week of {d}',
-  'wk.partial': '{d} (partial)',
-  'wk.days': '{n} day(s) with {kind} figures',
-  'wk.nat': 'national',
-  'wk.reg': 'regional/partial',
-  'wk.peak': 'peak {d}',
-  'wk.noreg': 'no national figure this week',
-  'wk.excl': '{n} regional/partial day(s) excluded',
-  'wk.floor': 'contains a lower-bound figure, so the total is a floor',
-  'wk.edge': 'partial week — clipped by the 1 Oct – 11 Nov window',
+  "wk.of": "Week of {d}",
+  "wk.partial": "{d} (partial)",
+  "wk.days": "{n} day(s) with {kind} figures",
+  "wk.nat": "national",
+  "wk.reg": "regional/partial",
+  "wk.peak": "peak {d}",
+  "wk.noreg": "no national figure this week",
+  "wk.excl": "{n} regional/partial day(s) excluded",
+  "wk.floor": "contains a lower-bound figure, so the total is a floor",
+  "wk.edge": "partial week — clipped by the 1 Oct – 11 Nov window",
 
-  'wkn': 'W{n} · {label}',
-  'wkn.partial': 'W{n} · {label} (partial week)',
-  'gj.act': 'Act {n} · {date}',
-  'obs': 'obs {counts} of {weeks} wks',
+  wkn: "W{n} · {label}",
+  "wkn.partial": "W{n} · {label} (partial week)",
+  "gj.act": "Act {n} · {date}",
+  obs: "obs {counts} of {weeks} wks",
 
-  'note.policing': '~{head} officers × €{low}–{high}/officer-day — {note}',
-  'note.cum.add': 'cumulative over {days} deployment day(s); this date adds its increment',
-  'note.cum.carry': 'cumulative over {days} deployment day(s); carried forward — no published deployment this date',
+  "note.policing": "~{head} officers × €{low}–{high}/officer-day — {note}",
+  "note.cum.add":
+    "cumulative over {days} deployment day(s); this date adds its increment",
+  "note.cum.carry":
+    "cumulative over {days} deployment day(s); carried forward — no published deployment this date",
 } as const;
 
 export type Key = keyof typeof EN;
 
 const FR: Record<Key, string> = {
-  'doc.title': 'France — activité contestataire, oct.–nov. 2026',
+  "doc.title": "France — activité contestataire, oct.–nov. 2026",
 
-  'disc.lead':
+  "disc.lead":
     "Ces graphiques ont été produits avec l'aide d'un modèle de langage et ne doivent pas fonder une analyse sérieuse sans réexamen approfondi.",
-  'disc.link': 'La transcription complète de la conversation avec le modèle est disponible.',
-  'lang.aria': 'Langue',
+  "disc.link":
+    "La transcription complète de la conversation avec le modèle est disponible.",
+  "lang.aria": "Langue",
 
-  'secA.h': 'Section A — quotidien',
-  'secA.p':
+  "secA.h": "Section A — quotidien",
+  "secA.p":
     "Un point d'abscisse par jour calendaire, du 1er oct. au 11 nov. 2026. Les jours sans chiffre publié restent vides.",
-  'secB.h': 'Section B — hebdomadaire',
-  'secB.p':
+  "secB.h": "Section B — hebdomadaire",
+  "secB.p":
     "Les semaines vont du lundi au dimanche. L'effectif retenu est celui du jour de pointe ; interpellations et blessés sont additionnés. * signale une semaine tronquée par la fenêtre.",
-  'secC.h': 'Section C — comparaison entre épisodes, un panneau par mouvement',
-  'secC.p':
+  "secC.h": "Section C — comparaison entre épisodes, un panneau par mouvement",
+  "secC.p":
     "Sept épisodes, quatre séries chacun, sur un axe logarithmique unique partagé par tous les panneaux : un point se place exactement à la valeur annoncée dans son infobulle, et les panneaux se comparent à l'œil. La position nomme le mouvement, la couleur nomme la série, rappelée une seule fois dans la légende ci-dessous. Marqueur creux = chiffre régional, partiel, dérivé ou en stock. Survolez une série (ou sa légende) pour la suivre dans les sept panneaux.",
-  'secC.note':
+  "secC.note":
     "<strong>x</strong> — semaines entières depuis la première action de chaque mouvement, à l'échelle réelle : les durées diffèrent (Nahel 1 semaine, Gilets jaunes 43) et chaque panneau garde sa propre étendue. <strong>y</strong> — effectif, échelle logarithmique, une seule plage pour les sept panneaux (environ 0,5 → 7 M) ; les graduations n'apparaissent que dans la colonne de gauche, la grille partout, et sur une échelle log une même distance verticale vaut un même changement proportionnel où que soit la série. Segment en pointillés = au moins une semaine sans chiffre publié sépare les deux points. « obs » sous chaque bandeau = semaines renseignées pour manifestants · interpellations · blessés des forces · blessés manifestants.",
-  'secC2.h': 'Section C′ — comparaison transposée',
-  'secC2.p':
+  "secC2.h": "Section C′ — comparaison transposée",
+  "secC2.p":
     "Les mêmes données, axe de comparaison inversé : un panneau par série, une ligne par mouvement, étiquettes directes au lieu d'une légende. La couleur code le mouvement sur une seule rampe séquentielle, du clair au foncé dans le même ordre partout, pour n'apprendre la rampe qu'une fois. À utiliser pour demander « les interpellations se comportent-elles de la même façon dans chaque épisode ? ».",
-  'secC2.note':
+  "secC2.note":
     "<strong>x est plafonné à la semaine 7</strong> — la dernière où un mouvement dispose d'un chiffre d'interpellations ou de blessés (CPE, 28 mars – 2 avril 2006 : 600 interpellations). La série répressive des Gilets jaunes s'arrête à l'acte IV (semaine 3) alors que sa série de foule va jusqu'à l'acte 44 (semaine 43) ; la laisser fixer l'axe vidait tous les panneaux répressifs après la semaine 4. Un <code>+</code> final signale une série qui continue au-delà du plafond — les courbes non tronquées sont en section C, où chaque panneau garde son étendue. Les bornes y sont <em>par panneau</em>, les quatre séries s'étalant sur trois ordres de grandeur ; la plage est imprimée sous chaque bandeau : comparez ici la forme et la variation relative, pas le niveau.",
 
-  'src.h': 'Sources',
-  'src.intro':
+  "src.h": "Sources",
+  "src.intro":
     "Compilées par un modèle de langage à partir des publications ci-dessous ; aucun chiffre n'est une mesure primaire réalisée pour cette page. Lorsqu'un mouvement a un décompte officiel, le ministère de l'Intérieur est la source des interpellations et des blessés parmi les forces, et les syndicats publient le chiffre de participation concurrent. Les décomptes qui n'ont existé que sous forme de rapports de presse quotidiens dispersés ont été additionnés à la main : c'est là que se logera l'essentiel de l'erreur.",
-  'src.group2026': 'Le mouvement de 2026 — 1er oct. au 11 nov.',
-  'src.groupHist': 'Épisodes historiques',
-  'src.foot':
+  "src.group2026": "Le mouvement de 2026 — 1er oct. au 11 nov.",
+  "src.groupHist": "Épisodes historiques",
+  "src.foot":
     "Ce n'est pas une source, mais c'est structurant : l'indice des premières versions de la section C divisait chaque série par sa propre première valeur, et l'axe x de C′ était fixé par l'épisode le plus long. Les deux ont été remplacés — C trace des effectifs bruts sur un axe log partagé, et C′ est plafonné à la semaine 7. Rien ici n'a fait l'objet d'une relecture externe.",
 
-  'ax.date': 'Date (2026)',
+  "ax.date": "Date (2026)",
 
-  'ch.prot.title': 'France — manifestants par jour, 1er oct. – 11 nov. 2026',
-  'ch.prot.sub':
-    'Les points sont au milieu de la fourchette publiée ; les barres vont du bas (ministère) au haut (organisateurs). Trait pointillé = un jour sans chiffre publié sépare les points.',
-  'ch.prot.y': 'Manifestants',
-  'ch.enf.title': 'France — interpellations et blessés par jour, 1er oct. – 11 nov. 2026',
-  'ch.enf.sub':
-    'Les barres couvrent le chiffre le plus bas et le plus haut publiés pour la journée. Marqueur plein + ligne = décompte national ; creux = valeur régionale, partielle, plancher ou dérivée, tracée mais jamais reliée.',
-  'ch.enf.y': 'Nombre (interpellations / blessés)',
-  'ch.cost.title': "France — coût des dégâts, coût du maintien de l'ordre par jour et coût cumulé",
-  'ch.cost.sub':
+  "ch.prot.title": "France — manifestants par jour, 1er oct. – 11 nov. 2026",
+  "ch.prot.sub":
+    "Les points sont au milieu de la fourchette publiée ; les barres vont du bas (ministère) au haut (organisateurs). Trait pointillé = un jour sans chiffre publié sépare les points.",
+  "ch.prot.y": "Manifestants",
+  "ch.enf.title":
+    "France — interpellations et blessés par jour, 1er oct. – 11 nov. 2026",
+  "ch.enf.sub":
+    "Les barres couvrent le chiffre le plus bas et le plus haut publiés pour la journée. Marqueur plein + ligne = décompte national ; creux = valeur régionale, partielle, plancher ou dérivée, tracée mais jamais reliée.",
+  "ch.enf.y": "Nombre (interpellations / blessés)",
+  "ch.cost.title":
+    "France — coût des dégâts, coût du maintien de l'ordre par jour et coût cumulé",
+  "ch.cost.sub":
     "Coût journalier = effectifs déployés × 136–1 133 € par agent-jour (taux marginal CRS → coût complet Sainte-Soline). Les effectifs publiés (60 000 le 17 oct. ; 70 000 ensuite) sont pleins ; les jours antérieurs, jamais publiés, sont modélisés et donc creux. La courbe cumulée est reportée les jours sans déploiement et sa bande s'élargit à chaque incrément supposé.",
-  'ch.cost.y': "Millions d'euros (par jour)",
-  'ch.cost.y1': "Millions d'euros (cumul)",
-  'ch.pw.title': 'France — manifestants du jour de pointe, par semaine',
-  'ch.pw.sub':
+  "ch.cost.y": "Millions d'euros (par jour)",
+  "ch.cost.y1": "Millions d'euros (cumul)",
+  "ch.pw.title": "France — manifestants du jour de pointe, par semaine",
+  "ch.pw.sub":
     "Les semaines vont du lundi au dimanche. L'effectif est celui du jour de pointe de la semaine ; les barres vont du pic selon les sources les plus prudentes au pic selon les plus généreuses. * = semaine tronquée par la fenêtre du 1er oct. au 11 nov.",
-  'ch.pw.y': 'Manifestants (pic hebdomadaire)',
-  'ch.ew.title': 'France — interpellations et blessés, totaux hebdomadaires',
-  'ch.ew.sub':
+  "ch.pw.y": "Manifestants (pic hebdomadaire)",
+  "ch.ew.title": "France — interpellations et blessés, totaux hebdomadaires",
+  "ch.ew.sub":
     "Interpellations et blessés sont additionnés sur la semaine ; les barres vont de la somme des chiffres les plus bas à la somme des plus hauts. Les jours régionaux ou partiels sont exclus des totaux nationaux et signalés dans l'infobulle. Une semaine sans chiffre publié reste vide.",
-  'ch.ew.y': 'Nombre (total hebdomadaire)',
+  "ch.ew.y": "Nombre (total hebdomadaire)",
 
-  'ds.prot': 'Manifestants (milieu de fourchette)',
-  'ds.protReg': 'Manifestants — régional (points seuls)',
-  'ds.arre': 'Interpellations',
-  'ds.arreReg': 'Interpellations — régional ou partiel (points seuls)',
-  'ds.finj': "Blessés — forces de l'ordre",
-  'ds.finjReg': "Blessés — forces de l'ordre, régional (points seuls)",
-  'ds.pinj': 'Blessés — manifestants',
-  'ds.pinjReg': 'Blessés — manifestants, régional (points seuls)',
-  'ds.dam': 'Coût des dégâts (M€)',
-  'ds.damReg': 'Coût des dégâts — dérivé ou stock (points seuls)',
-  'ds.pol': "Coût du maintien de l'ordre (M€/jour, estimé)",
-  'ds.polReg': "Coût du maintien de l'ordre — effectifs modélisés (points seuls)",
-  'ds.pcum': "Coût cumulé du maintien de l'ordre (M€, axe de droite)",
-  'ds.pcumReg': "Coût cumulé du maintien de l'ordre (points seuls)",
-  'ds.protW': 'Manifestants — jour de pointe de la semaine',
-  'ds.protWReg': 'Manifestants — semaines régionales (points seuls)',
-  'ds.arreW': 'Interpellations (total hebdomadaire)',
-  'ds.arreWReg': 'Interpellations — semaines régionales (points seuls)',
-  'ds.finjW': "Blessés — forces de l'ordre (total hebdomadaire)",
-  'ds.finjWReg': "Blessés — forces de l'ordre, semaines régionales (points seuls)",
-  'ds.pinjW': 'Blessés — manifestants (total hebdomadaire)',
-  'ds.pinjWReg': 'Blessés — manifestants, semaines régionales (points seuls)',
+  "ds.prot": "Manifestants (milieu de fourchette)",
+  "ds.protReg": "Manifestants — régional (points seuls)",
+  "ds.arre": "Interpellations",
+  "ds.arreReg": "Interpellations — régional ou partiel (points seuls)",
+  "ds.finj": "Blessés — forces de l'ordre",
+  "ds.finjReg": "Blessés — forces de l'ordre, régional (points seuls)",
+  "ds.pinj": "Blessés — manifestants",
+  "ds.pinjReg": "Blessés — manifestants, régional (points seuls)",
+  "ds.dam": "Coût des dégâts (M€)",
+  "ds.damReg": "Coût des dégâts — dérivé ou stock (points seuls)",
+  "ds.pol": "Coût du maintien de l'ordre (M€/jour, estimé)",
+  "ds.polReg":
+    "Coût du maintien de l'ordre — effectifs modélisés (points seuls)",
+  "ds.pcum": "Coût cumulé du maintien de l'ordre (M€, axe de droite)",
+  "ds.pcumReg": "Coût cumulé du maintien de l'ordre (points seuls)",
+  "ds.protW": "Manifestants — jour de pointe de la semaine",
+  "ds.protWReg": "Manifestants — semaines régionales (points seuls)",
+  "ds.arreW": "Interpellations (total hebdomadaire)",
+  "ds.arreWReg": "Interpellations — semaines régionales (points seuls)",
+  "ds.finjW": "Blessés — forces de l'ordre (total hebdomadaire)",
+  "ds.finjWReg":
+    "Blessés — forces de l'ordre, semaines régionales (points seuls)",
+  "ds.pinjW": "Blessés — manifestants (total hebdomadaire)",
+  "ds.pinjWReg": "Blessés — manifestants, semaines régionales (points seuls)",
 
-  'sfx.stock': ' [stock depuis mi-sept., pas un chiffre journalier]',
-  'sfx.weekly': ' [agrégat hebdomadaire]',
-  'sfx.derived': ' [dérivé, non publié]',
-  'sfx.floor': ' [borne inférieure]',
-  'sfx.regional': ' [régional ou partiel — pas un total national]',
+  "sfx.stock": " [stock depuis mi-sept., pas un chiffre journalier]",
+  "sfx.weekly": " [agrégat hebdomadaire]",
+  "sfx.derived": " [dérivé, non publié]",
+  "sfx.floor": " [borne inférieure]",
+  "sfx.regional": " [régional ou partiel — pas un total national]",
 
-  'wk.of': 'Semaine du {d}',
-  'wk.partial': '{d} (partielle)',
-  'wk.days': '{n} jour(s) avec chiffres {kind}',
-  'wk.nat': 'nationaux',
-  'wk.reg': 'régionaux ou partiels',
-  'wk.peak': 'pic le {d}',
-  'wk.noreg': 'aucun chiffre national cette semaine',
-  'wk.excl': '{n} jour(s) régional ou partiel exclus',
-  'wk.floor': 'contient une borne inférieure : le total est un plancher',
-  'wk.edge': 'semaine partielle — tronquée par la fenêtre du 1er oct. au 11 nov.',
+  "wk.of": "Semaine du {d}",
+  "wk.partial": "{d} (partielle)",
+  "wk.days": "{n} jour(s) avec chiffres {kind}",
+  "wk.nat": "nationaux",
+  "wk.reg": "régionaux ou partiels",
+  "wk.peak": "pic le {d}",
+  "wk.noreg": "aucun chiffre national cette semaine",
+  "wk.excl": "{n} jour(s) régional ou partiel exclus",
+  "wk.floor": "contient une borne inférieure : le total est un plancher",
+  "wk.edge":
+    "semaine partielle — tronquée par la fenêtre du 1er oct. au 11 nov.",
 
-  'wkn': 'S{n} · {label}',
-  'wkn.partial': 'S{n} · {label} (semaine partielle)',
-  'gj.act': 'Acte {n} · {date}',
-  'obs': 'obs {counts} sur {weeks} sem.',
+  wkn: "S{n} · {label}",
+  "wkn.partial": "S{n} · {label} (semaine partielle)",
+  "gj.act": "Acte {n} · {date}",
+  obs: "obs {counts} sur {weeks} sem.",
 
-  'note.policing': '~{head} agents × {low}–{high} €/agent-jour — {note}',
-  'note.cum.add': "cumul sur {days} jour(s) de déploiement ; cette date ajoute son incrément",
-  'note.cum.carry': 'cumul sur {days} jour(s) de déploiement ; reporté — aucun déploiement publié ce jour',
+  "note.policing": "~{head} agents × {low}–{high} €/agent-jour — {note}",
+  "note.cum.add":
+    "cumul sur {days} jour(s) de déploiement ; cette date ajoute son incrément",
+  "note.cum.carry":
+    "cumul sur {days} jour(s) de déploiement ; reporté — aucun déploiement publié ce jour",
 };
 
 /* --------------------------------------------------------------- lookups */
 
-export const t = (k: Key): string => (current === 'fr' ? FR[k] : EN[k]);
+export const t = (k: Key): string => (current === "fr" ? FR[k] : EN[k]);
 
 export function tp(k: Key, vars: Record<string, string | number>): string {
-  return t(k).replace(/\{(\w+)\}/g, (_m, n: string) => String(vars[n] ?? ''));
+  return t(k).replace(/\{(\w+)\}/g, (_m, n: string) => String(vars[n] ?? ""));
 }
 
 /** French overlay: data files register their own table, call sites pass the English fallback. */
-export const reg = (table: Record<string, string>): void => Object.assign(overlay, table);
+export const reg = (table: Record<string, string>): void =>
+  Object.assign(overlay, table);
 
 export const tr = (key: string, english: string): string =>
-  current === 'fr' ? overlay[key] ?? english : english;
+  current === "fr" ? (overlay[key] ?? english) : english;
 
 const MONTHS: Record<string, string> = {
-  Jan: 'janv.', Feb: 'févr.', Mar: 'mars', Apr: 'avr.', May: 'mai', Jun: 'juin',
-  Jul: 'juil.', Aug: 'août', Sep: 'sept.', Oct: 'oct.', Nov: 'nov.', Dec: 'déc.',
+  Jan: "janv.",
+  Feb: "févr.",
+  Mar: "mars",
+  Apr: "avr.",
+  May: "mai",
+  Jun: "juin",
+  Jul: "juil.",
+  Aug: "août",
+  Sep: "sept.",
+  Oct: "oct.",
+  Nov: "nov.",
+  Dec: "déc.",
 };
 
 /** Localises a date-bearing English fragment in place: months, and "Act n" → "Acte n". */
 export function mois(s: string): string {
-  if (current !== 'fr') return s;
+  if (current !== "fr") return s;
   return s
-    .replace(/\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/g, (m) => MONTHS[m] ?? m)
-    .replace(/\bAct (\d)/g, 'Acte $1');
+    .replace(
+      /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/g,
+      (m) => MONTHS[m] ?? m,
+    )
+    .replace(/\bAct (\d)/g, "Acte $1");
 }
 
 /* ------------------------------------------------------------- formatters */
 
-const locale = (): string => (current === 'fr' ? 'fr-FR' : 'en-GB');
+const locale = (): string => (current === "fr" ? "fr-FR" : "en-GB");
 
 function nf(opts: Intl.NumberFormatOptions): Intl.NumberFormat {
   const k = JSON.stringify(opts);
@@ -3900,12 +5190,15 @@ function nf(opts: Intl.NumberFormatOptions): Intl.NumberFormat {
 }
 
 export const num = (v: number): string => nf({}).format(v);
-export const compact = (v: number): string => nf({ notation: 'compact', maximumFractionDigits: 1 }).format(v);
+export const compact = (v: number): string =>
+  nf({ notation: "compact", maximumFractionDigits: 1 }).format(v);
 
 /** €1.5M in English, 1,5 M€ in French — the unit sits on the other side of the number. */
 export const moneyM = (v: number): string => {
-  const n = nf({ minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(v);
-  return current === 'fr' ? `${n} M€` : `€${n}M`;
+  const n = nf({ minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(
+    v,
+  );
+  return current === "fr" ? `${n} M€` : `€${n}M`;
 };
 
 /* ------------------------------------------------------------------ state */
@@ -3913,16 +5206,22 @@ export const moneyM = (v: number): string => {
 export const lang = (): Lang => current;
 
 export function initLang(): Lang {
-  const q = new URLSearchParams(location.search).get('lang');
+  const q = new URLSearchParams(location.search).get("lang");
   let saved: string | null = null;
   try {
     saved = localStorage.getItem(STORE);
   } catch {
     /* storage can be blocked; the URL and navigator still work */
   }
-  current = isLang(q) ? q : isLang(saved) ? saved : navigator.language.toLowerCase().startsWith('fr') ? 'fr' : 'en';
+  current = isLang(q)
+    ? q
+    : isLang(saved)
+      ? saved
+      : navigator.language.toLowerCase().startsWith("fr")
+        ? "fr"
+        : "en";
   document.documentElement.lang = current;
-  document.title = t('doc.title');
+  document.title = t("doc.title");
   return current;
 }
 
@@ -3932,8 +5231,8 @@ export function setLang(next: Lang, opts: { url?: boolean } = {}): void {
   nfCache.clear();
   if (opts.url !== false) {
     const u = new URL(location.href);
-    u.searchParams.set('lang', next);
-    history.replaceState(null, '', u);
+    u.searchParams.set("lang", next);
+    history.replaceState(null, "", u);
   }
   try {
     localStorage.setItem(STORE, next);
@@ -3941,7 +5240,7 @@ export function setLang(next: Lang, opts: { url?: boolean } = {}): void {
     /* ignore */
   }
   document.documentElement.lang = next;
-  document.title = t('doc.title');
+  document.title = t("doc.title");
   for (const fn of subs) fn();
 }
 
@@ -3951,10 +5250,10 @@ export const onLang = (fn: () => void): void => void subs.add(fn);
 
 /** Swaps text and markup marked with data-i18n / data-i18n-html. */
 export function applyDom(root: ParentNode = document): void {
-  for (const el of root.querySelectorAll<HTMLElement>('[data-i18n]')) {
+  for (const el of root.querySelectorAll<HTMLElement>("[data-i18n]")) {
     el.textContent = t(el.dataset.i18n as Key);
   }
-  for (const el of root.querySelectorAll<HTMLElement>('[data-i18n-html]')) {
+  for (const el of root.querySelectorAll<HTMLElement>("[data-i18n-html]")) {
     el.innerHTML = t(el.dataset.i18nHtml as Key);
   }
 }
@@ -3962,18 +5261,18 @@ export function applyDom(root: ParentNode = document): void {
 export function mountLangSwitch(host: HTMLElement): void {
   const paint = (): void => {
     host.replaceChildren(
-      ...(['fr', 'en'] as Lang[]).map((l) => {
-        const b = document.createElement('button');
-        b.type = 'button';
+      ...(["fr", "en"] as Lang[]).map((l) => {
+        const b = document.createElement("button");
+        b.type = "button";
         b.lang = l;
         b.textContent = l.toUpperCase();
-        b.className = current === l ? 'lang-btn is-on' : 'lang-btn';
-        b.setAttribute('aria-pressed', String(current === l));
-        b.addEventListener('click', () => setLang(l));
+        b.className = current === l ? "lang-btn is-on" : "lang-btn";
+        b.setAttribute("aria-pressed", String(current === l));
+        b.addEventListener("click", () => setLang(l));
         return b;
       }),
     );
-    host.setAttribute('aria-label', t('lang.aria'));
+    host.setAttribute("aria-label", t("lang.aria"));
   };
   paint();
   onLang(paint);
@@ -3982,7 +5281,7 @@ export function mountLangSwitch(host: HTMLElement): void {
 
 ```ts
 /* src/client/sources.ts — NEW FILE */
-import { bi, t, type Bi } from './i18n.ts';
+import { bi, t, type Bi } from "./i18n.ts";
 
 interface Entry {
   title: string;
@@ -3993,190 +5292,193 @@ interface Entry {
 
 const M2026: Entry[] = [
   {
-    title: 'Fondation IFRAP — « Violences des 17 et 18 octobre 2026 : une facture qui approche le milliard d’euros »',
-    url: 'https://www.ifrap.org/etat-et-collectivites/violences-des-17-et-18-octobre-2026-une-facture-qui-approche-le-milliard-deuros',
-    date: '21 Oct 2026',
+    title:
+      "Fondation IFRAP — « Violences des 17 et 18 octobre 2026 : une facture qui approche le milliard d’euros »",
+    url: "https://www.ifrap.org/etat-et-collectivites/violences-des-17-et-18-octobre-2026-une-facture-qui-approche-le-milliard-deuros",
+    date: "21 Oct 2026",
     what: {
-      en: 'the €247M–872M damage range for 17–18 Oct: ~€910M material damage and ~€190M lost turnover in the high estimate, €666M of it retail.',
-      fr: 'la fourchette de 247–872 M€ de dégâts pour les 17–18 oct. : ~910 M€ de dommages matériels et ~190 M€ de chiffre d’affaires perdu dans l’hypothèse haute, dont 666 M€ dans le commerce.',
+      en: "the €247M–872M damage range for 17–18 Oct: ~€910M material damage and ~€190M lost turnover in the high estimate, €666M of it retail.",
+      fr: "la fourchette de 247–872 M€ de dégâts pour les 17–18 oct. : ~910 M€ de dommages matériels et ~190 M€ de chiffre d’affaires perdu dans l’hypothèse haute, dont 666 M€ dans le commerce.",
     },
   },
   {
-    title: 'Le Monde — « Plus de 2 500 commerces dégradés », d’après CCI France',
-    url: 'https://www.lemonde.fr/economie/article/2026/10/27/plus-de-2-500-commerces-degrades-en-marge-des-recentes-mobilisations-selon-cci-france-qui-demande-une-interdiction-des-manifestations-jusqu-aux-fetes-de-fin-d-annee_6801314_3234.html',
-    date: '27 Oct 2026',
+    title:
+      "Le Monde — « Plus de 2 500 commerces dégradés », d’après CCI France",
+    url: "https://www.lemonde.fr/economie/article/2026/10/27/plus-de-2-500-commerces-degrades-en-marge-des-recentes-mobilisations-selon-cci-france-qui-demande-une-interdiction-des-manifestations-jusqu-aux-fetes-de-fin-d-annee_6801314_3234.html",
+    date: "27 Oct 2026",
     what: {
       en: "CCI France's shop counts: 2,488 hit on 17 Oct, of which 1,161 pillaged, sacked or burnt.",
-      fr: 'les décomptes de commerces de CCI France : 2 488 touchés le 17 oct., dont 1 161 pillés, saccagés ou incendiés.',
+      fr: "les décomptes de commerces de CCI France : 2 488 touchés le 17 oct., dont 1 161 pillés, saccagés ou incendiés.",
     },
   },
   {
-    title: 'franceinfo — « Plus de 2 500 magasins touchés »',
-    url: 'https://www.franceinfo.fr/societe/mobilisation-du-17-octobre/plus-de-2-500-magasins-touches-par-les-violences-en-marge-des-manifestations-des-17-et-24-octobre-selon-les-chambres-de-commerce_8256049.html',
-    date: '27 Oct 2026',
+    title: "franceinfo — « Plus de 2 500 magasins touchés »",
+    url: "https://www.franceinfo.fr/societe/mobilisation-du-17-octobre/plus-de-2-500-magasins-touches-par-les-violences-en-marge-des-manifestations-des-17-et-24-octobre-selon-les-chambres-de-commerce_8256049.html",
+    date: "27 Oct 2026",
     what: {
-      en: 'the 24 Oct increment (50 shops, total 2,538) and the 80% centre-town turnover drop.',
-      fr: 'l’incrément du 24 oct. (50 commerces, total 2 538) et la chute de 80 % du chiffre d’affaires en centre-ville.',
+      en: "the 24 Oct increment (50 shops, total 2,538) and the 80% centre-town turnover drop.",
+      fr: "l’incrément du 24 oct. (50 commerces, total 2 538) et la chute de 80 % du chiffre d’affaires en centre-ville.",
     },
   },
   {
-    title: 'BFMTV — CCI France, 20 commerces vandalisés le 31 octobre',
-    url: 'https://www.bfmtv.com/economie/entreprises/20-commerces-vandalises-samedi-contre-2-488-le-17-octobre-cci-france-constate-une-nette-baisse-des-degradations-en-marge-des-manifestations-mais-s-inquiete-d-une-forte-chute-du-chiffre-d-affaires-des-magasins-pouvant-atteindre-80_AD-202611010225.html',
-    date: '1 Nov 2026',
+    title: "BFMTV — CCI France, 20 commerces vandalisés le 31 octobre",
+    url: "https://www.bfmtv.com/economie/entreprises/20-commerces-vandalises-samedi-contre-2-488-le-17-octobre-cci-france-constate-une-nette-baisse-des-degradations-en-marge-des-manifestations-mais-s-inquiete-d-une-forte-chute-du-chiffre-d-affaires-des-magasins-pouvant-atteindre-80_AD-202611010225.html",
+    date: "1 Nov 2026",
     what: {
-      en: 'why week 6 carries no damage figure: the count collapses after 24 Oct.',
-      fr: 'pourquoi la semaine 6 n’a pas de chiffre de dégâts : le décompte s’effondre après le 24 oct.',
+      en: "why week 6 carries no damage figure: the count collapses after 24 Oct.",
+      fr: "pourquoi la semaine 6 n’a pas de chiffre de dégâts : le décompte s’effondre après le 24 oct.",
     },
   },
   {
-    title: 'Capital.fr — « Combien ont coûté les 70 000 policiers de samedi »',
-    url: 'https://www.capital.fr/economie-politique/combien-ont-coute-les-70-000-policiers-de-samedi-letat-ne-le-dit-pas-mais-certains-chiffres-existent-1531269',
-    date: '28 Oct 2026',
+    title: "Capital.fr — « Combien ont coûté les 70 000 policiers de samedi »",
+    url: "https://www.capital.fr/economie-politique/combien-ont-coute-les-70-000-policiers-de-samedi-letat-ne-le-dit-pas-mais-certains-chiffres-existent-1531269",
+    date: "28 Oct 2026",
     what: {
-      en: 'the €15,000–30,000 per CRS company per day and €3.4M per 3,000 gendarmes benchmarks behind the policing-cost band; also the 1,435 arrests and 53 officers injured on 24 Oct.',
-      fr: 'les repères de 15 000–30 000 € par compagnie de CRS et par jour et de 3,4 M€ pour 3 000 gendarmes derrière la fourchette de coût ; aussi les 1 435 interpellations et 53 blessés parmi les forces le 24 oct.',
+      en: "the €15,000–30,000 per CRS company per day and €3.4M per 3,000 gendarmes benchmarks behind the policing-cost band; also the 1,435 arrests and 53 officers injured on 24 Oct.",
+      fr: "les repères de 15 000–30 000 € par compagnie de CRS et par jour et de 3,4 M€ pour 3 000 gendarmes derrière la fourchette de coût ; aussi les 1 435 interpellations et 53 blessés parmi les forces le 24 oct.",
     },
   },
   {
-    title: 'Le Figaro — « Le coût exorbitant d’un week-end d’émeutes »',
-    url: 'https://www.lefigaro.fr/societes/violences-urbaines-le-cout-exorbitant-d-un-week-end-d-emeutes-pour-les-commerces-et-les-collectivites-20261020',
-    date: '20 Oct 2026',
+    title: "Le Figaro — « Le coût exorbitant d’un week-end d’émeutes »",
+    url: "https://www.lefigaro.fr/societes/violences-urbaines-le-cout-exorbitant-d-un-week-end-d-emeutes-pour-les-commerces-et-les-collectivites-20261020",
+    date: "20 Oct 2026",
     what: {
-      en: 'cross-check on the damage order of magnitude.',
-      fr: 'contrôle croisé de l’ordre de grandeur des dégâts.',
+      en: "cross-check on the damage order of magnitude.",
+      fr: "contrôle croisé de l’ordre de grandeur des dégâts.",
     },
   },
   {
-    title: 'Le Canard enchaîné — « Les manifestants ont le mauvais œil »',
-    url: 'https://www.lecanardenchaine.fr/police-justice/55381-les-manifestants-ont-le-mauvais-oeil',
-    date: '10 Nov 2026',
+    title: "Le Canard enchaîné — « Les manifestants ont le mauvais œil »",
+    url: "https://www.lecanardenchaine.fr/police-justice/55381-les-manifestants-ont-le-mauvais-oeil",
+    date: "10 Nov 2026",
     what: {
-      en: 'Prof. Laurent Thines’ (CHU de Besançon) press-and-blog register: 79 serious injuries in three weeks — 10 blinded, 9 cranio-facial, 7 amputations, 1 death. The source of the protester-injury floor, and the reason no weekly protester-injury series exists.',
-      fr: 'le registre de presse du Pr Laurent Thines (CHU de Besançon) : 79 blessés graves en trois semaines — 10 énucléations, 9 traumatismes crânio-faciaux, 7 amputations, 1 décès. Source du plancher de blessés manifestants, et raison de l’absence de série hebdomadaire.',
+      en: "Prof. Laurent Thines’ (CHU de Besançon) press-and-blog register: 79 serious injuries in three weeks — 10 blinded, 9 cranio-facial, 7 amputations, 1 death. The source of the protester-injury floor, and the reason no weekly protester-injury series exists.",
+      fr: "le registre de presse du Pr Laurent Thines (CHU de Besançon) : 79 blessés graves en trois semaines — 10 énucléations, 9 traumatismes crânio-faciaux, 7 amputations, 1 décès. Source du plancher de blessés manifestants, et raison de l’absence de série hebdomadaire.",
     },
   },
   {
-    title: 'Ministère de l’Intérieur',
-    url: 'https://www.interieur.gouv.fr/',
+    title: "Ministère de l’Intérieur",
+    url: "https://www.interieur.gouv.fr/",
     what: {
-      en: 'origin of every arrest, custody and officer-injury count and of the ministry turnout figure. Published as press briefings and evening situation reports, not as a downloadable series, so the daily values were collected from the reporting above rather than from a dataset.',
-      fr: 'origine de chaque décompte d’interpellations, de gardes à vue et de blessés parmi les forces, ainsi que du chiffre de participation ministériel. Publiés en briefings de presse et points de situation du soir, non sous forme de série téléchargeable : les valeurs quotidiennes viennent des publications ci-dessus, pas d’un jeu de données.',
+      en: "origin of every arrest, custody and officer-injury count and of the ministry turnout figure. Published as press briefings and evening situation reports, not as a downloadable series, so the daily values were collected from the reporting above rather than from a dataset.",
+      fr: "origine de chaque décompte d’interpellations, de gardes à vue et de blessés parmi les forces, ainsi que du chiffre de participation ministériel. Publiés en briefings de presse et points de situation du soir, non sous forme de série téléchargeable : les valeurs quotidiennes viennent des publications ci-dessus, pas d’un jeu de données.",
     },
   },
 ];
 
 const HIST: Entry[] = [
   {
-    title: 'Mai 68 (Wikipédia)',
-    url: 'https://fr.wikipedia.org/wiki/Mai_68',
+    title: "Mai 68 (Wikipédia)",
+    url: "https://fr.wikipedia.org/wiki/Mai_68",
     what: {
-      en: '1 May (25,000 prefecture / 100,000 CGT) and 13 May (230,000 prefecture / 171,000 ORTF / 1,000,000 unions) turnouts; the 469 arrests of 10–11 May and the 1,000+ of 25 May.',
-      fr: 'participations du 1er Mai (25 000 préfecture / 100 000 CGT) et du 13 mai (230 000 préfecture / 171 000 ORTF / 1 000 000 syndicats) ; les 469 interpellations des 10–11 mai et les 1 000 et plus du 25 mai.',
+      en: "1 May (25,000 prefecture / 100,000 CGT) and 13 May (230,000 prefecture / 171,000 ORTF / 1,000,000 unions) turnouts; the 469 arrests of 10–11 May and the 1,000+ of 25 May.",
+      fr: "participations du 1er Mai (25 000 préfecture / 100 000 CGT) et du 13 mai (230 000 préfecture / 171 000 ORTF / 1 000 000 syndicats) ; les 469 interpellations des 10–11 mai et les 1 000 et plus du 25 mai.",
     },
   },
   {
-    title: 'May 68 (English Wikipedia)',
-    url: 'https://en.wikipedia.org/wiki/May_68',
+    title: "May 68 (English Wikipedia)",
+    url: "https://en.wikipedia.org/wiki/May_68",
     what: {
       en: "the 887 injured figure, which appears only in this article's infobox and is flagged accordingly — no French count was published.",
-      fr: 'le chiffre de 887 blessés, présent uniquement dans l’infobox de cet article et signalé comme tel — aucun décompte français n’a été publié.',
+      fr: "le chiffre de 887 blessés, présent uniquement dans l’infobox de cet article et signalé comme tel — aucun décompte français n’a été publié.",
     },
   },
   {
-    title: 'Contrat première embauche (Wikipédia)',
-    url: 'https://fr.wikipedia.org/wiki/Contrat_premi%C3%A8re_embauche',
+    title: "Contrat première embauche (Wikipédia)",
+    url: "https://fr.wikipedia.org/wiki/Contrat_premi%C3%A8re_embauche",
     what: {
-      en: 'the CPE turnout series (7 Feb, 7 Mar, 18 Mar, 23 Mar, 28 Mar, 4 Apr) and the Paris-only enforcement counts of 16–18 Mar.',
-      fr: 'la série de participation du CPE (7 févr., 7 mars, 18 mars, 23 mars, 28 mars, 4 avril) et les décomptes répressifs parisiens des 16–18 mars.',
+      en: "the CPE turnout series (7 Feb, 7 Mar, 18 Mar, 23 Mar, 28 Mar, 4 Apr) and the Paris-only enforcement counts of 16–18 Mar.",
+      fr: "la série de participation du CPE (7 févr., 7 mars, 18 mars, 23 mars, 28 mars, 4 avril) et les décomptes répressifs parisiens des 16–18 mars.",
     },
   },
   {
-    title: 'Mouvement des Gilets jaunes (Wikipédia)',
-    url: 'https://fr.wikipedia.org/wiki/Mouvement_des_Gilets_jaunes',
+    title: "Mouvement des Gilets jaunes (Wikipédia)",
+    url: "https://fr.wikipedia.org/wiki/Mouvement_des_Gilets_jaunes",
     what: {
-      en: 'the Act I–44 ministry turnout series and the Act I–IV custody/interpellation counts. Later acts were never published as a series, which is why the enforcement lines stop at week 3.',
-      fr: 'la série de participation ministérielle des actes I à 44 et les décomptes de gardes à vue et d’interpellations des actes I à IV. Les actes suivants n’ont jamais été publiés en série, d’où l’arrêt des courbes répressives à la semaine 3.',
+      en: "the Act I–44 ministry turnout series and the Act I–IV custody/interpellation counts. Later acts were never published as a series, which is why the enforcement lines stop at week 3.",
+      fr: "la série de participation ministérielle des actes I à 44 et les décomptes de gardes à vue et d’interpellations des actes I à IV. Les actes suivants n’ont jamais été publiés en série, d’où l’arrêt des courbes répressives à la semaine 3.",
     },
   },
   {
-    title: 'Mort de Nahel Merzouk (Wikipédia)',
-    url: 'https://fr.wikipedia.org/wiki/Mort_de_Nahel_Merzouk',
+    title: "Mort de Nahel Merzouk (Wikipédia)",
+    url: "https://fr.wikipedia.org/wiki/Mort_de_Nahel_Merzouk",
     what: {
-      en: 'the 3,354 arrests and 722 officers injured of 27 Jun – 2 Jul 2023, and the 108 of the following week.',
-      fr: 'les 3 354 interpellations et 722 blessés parmi les forces du 27 juin au 2 juil. 2023, et les 108 de la semaine suivante.',
+      en: "the 3,354 arrests and 722 officers injured of 27 Jun – 2 Jul 2023, and the 108 of the following week.",
+      fr: "les 3 354 interpellations et 722 blessés parmi les forces du 27 juin au 2 juil. 2023, et les 108 de la semaine suivante.",
     },
   },
   {
-    title: 'Mouvement social contre la réforme des retraites de 2023 (Wikipédia)',
-    url: 'https://fr.wikipedia.org/wiki/Mouvement_social_contre_la_r%C3%A9forme_des_retraites_en_France_en_2023',
+    title:
+      "Mouvement social contre la réforme des retraites de 2023 (Wikipédia)",
+    url: "https://fr.wikipedia.org/wiki/Mouvement_social_contre_la_r%C3%A9forme_des_retraites_en_France_en_2023",
     what: {
-      en: 'the ministry and union turnout pairs for each national action day, 19 Jan – 6 Jun 2023.',
-      fr: 'les couples de participation ministère / syndicats pour chaque journée nationale d’action, du 19 janv. au 6 juin 2023.',
+      en: "the ministry and union turnout pairs for each national action day, 19 Jan – 6 Jun 2023.",
+      fr: "les couples de participation ministère / syndicats pour chaque journée nationale d’action, du 19 janv. au 6 juin 2023.",
     },
   },
   {
-    title: 'France 24 — « Bloquons tout », direct du 10 septembre 2025',
-    url: 'https://www.france24.com/fr/france/20250910-en-direct-france-bloquons-tout-colere-sociale-emmanuel-macron',
-    date: '10 Sep 2025',
+    title: "France 24 — « Bloquons tout », direct du 10 septembre 2025",
+    url: "https://www.france24.com/fr/france/20250910-en-direct-france-bloquons-tout-colere-sociale-emmanuel-macron",
+    date: "10 Sep 2025",
     what: {
-      en: '197,000 participants, 596 rallies, 253 blockades, 540 arrests (211 in Paris) — the final ministry point of the evening, superseding the 175,000 of 17:45.',
-      fr: '197 000 participants, 596 rassemblements, 253 blocages, 540 interpellations (211 à Paris) — le dernier point ministériel de la soirée, qui remplace les 175 000 de 17 h 45.',
+      en: "197,000 participants, 596 rallies, 253 blockades, 540 arrests (211 in Paris) — the final ministry point of the evening, superseding the 175,000 of 17:45.",
+      fr: "197 000 participants, 596 rassemblements, 253 blocages, 540 interpellations (211 à Paris) — le dernier point ministériel de la soirée, qui remplace les 175 000 de 17 h 45.",
     },
   },
   {
-    title: 'BFMTV — direct du 10 septembre',
-    url: 'https://www.bfmtv.com/societe/manifestations/direct-10-septembre-blocages-transports-manifestations-suivez-le-mouvement-bloquons-tout-a-paris-lyon-marseille_LN-202509100070.html',
-    date: '10 Sep 2025',
+    title: "BFMTV — direct du 10 septembre",
+    url: "https://www.bfmtv.com/societe/manifestations/direct-10-septembre-blocages-transports-manifestations-suivez-le-mouvement-bloquons-tout-a-paris-lyon-marseille_LN-202509100070.html",
+    date: "10 Sep 2025",
     what: {
-      en: 'the intra-day revision of the count (175,000 → 197,000), which is why the chart shows a band rather than a point.',
-      fr: 'la révision du décompte en cours de journée (175 000 → 197 000), d’où une fourchette plutôt qu’un point.',
+      en: "the intra-day revision of the count (175,000 → 197,000), which is why the chart shows a band rather than a point.",
+      fr: "la révision du décompte en cours de journée (175 000 → 197 000), d’où une fourchette plutôt qu’un point.",
     },
   },
   {
-    title: 'Le Figaro — direct du 10 septembre',
-    url: 'https://www.lefigaro.fr/social/direct-bloquons-tout-10-septembre-mouvement-greves-manifestations-perturbations-transports-ecole-20250910',
-    date: '10–11 Sep 2025',
+    title: "Le Figaro — direct du 10 septembre",
+    url: "https://www.lefigaro.fr/social/direct-bloquons-tout-10-septembre-mouvement-greves-manifestations-perturbations-transports-ecole-20250910",
+    date: "10–11 Sep 2025",
     what: {
-      en: 'the 18 Sep intersyndicale day and the 2 Oct third wave.',
-      fr: 'la journée intersyndicale du 18 sept. et la troisième vague du 2 oct.',
+      en: "the 18 Sep intersyndicale day and the 2 Oct third wave.",
+      fr: "la journée intersyndicale du 18 sept. et la troisième vague du 2 oct.",
     },
   },
   {
-    title: 'Bloquons tout (English Wikipedia)',
-    url: 'https://en.wikipedia.org/wiki/Bloquons_tout',
+    title: "Bloquons tout (English Wikipedia)",
+    url: "https://en.wikipedia.org/wiki/Bloquons_tout",
     what: {
       en: "the movement's chronology and its 10 Sep / 18 Sep / 2 Oct structure.",
-      fr: 'la chronologie du mouvement et sa structure 10 sept. / 18 sept. / 2 oct.',
+      fr: "la chronologie du mouvement et sa structure 10 sept. / 18 sept. / 2 oct.",
     },
   },
 ];
 
 function group(heading: string, entries: Entry[]): HTMLElement {
-  const box = document.createElement('div');
-  box.className = 'source-group';
+  const box = document.createElement("div");
+  box.className = "source-group";
 
-  const h = document.createElement('h2');
+  const h = document.createElement("h2");
   h.textContent = heading;
 
-  const ul = document.createElement('ul');
+  const ul = document.createElement("ul");
   for (const e of entries) {
-    const li = document.createElement('li');
-    const a = document.createElement('a');
+    const li = document.createElement("li");
+    const a = document.createElement("a");
     a.href = e.url;
-    a.rel = 'noopener noreferrer';
+    a.rel = "noopener noreferrer";
     a.textContent = e.title;
     li.append(a);
 
     if (e.date) {
-      const d = document.createElement('span');
-      d.className = 'date';
+      const d = document.createElement("span");
+      d.className = "date";
       d.textContent = e.date;
-      li.append(' ', d);
+      li.append(" ", d);
     }
-    li.append(' — ');
+    li.append(" — ");
 
-    const w = document.createElement('span');
-    w.className = 'what';
+    const w = document.createElement("span");
+    w.className = "what";
     w.textContent = bi(e.what);
     li.append(w);
     ul.append(li);
@@ -4187,7 +5489,10 @@ function group(heading: string, entries: Entry[]): HTMLElement {
 }
 
 export function renderSources(host: HTMLElement): void {
-  host.replaceChildren(group(t('src.group2026'), M2026), group(t('src.groupHist'), HIST));
+  host.replaceChildren(
+    group(t("src.group2026"), M2026),
+    group(t("src.groupHist"), HIST),
+  );
 }
 ```
 
@@ -4446,12 +5751,22 @@ const baseScales = (view: View) => ({
 
 function studentSeries() {
   const s = S();
-  return { p: s.turnoutWeekly, a: s.arrestsWeekly, f: s.forcesWeekly, i: s.protesterInjuredWeekly } as const;
+  return {
+    p: s.turnoutWeekly,
+    a: s.arrestsWeekly,
+    f: s.forcesWeekly,
+    i: s.protesterInjuredWeekly,
+  } as const;
 }
 
-const STUDENT_SOURCE = (): Record<'p' | 'a' | 'f' | 'i', MetricSeries> => {
+const STUDENT_SOURCE = (): Record<"p" | "a" | "f" | "i", MetricSeries> => {
   const s = S();
-  return { p: s.turnoutWeekly, a: s.arrestsWeekly, f: s.forcesWeekly, i: s.protestersWeekly };
+  return {
+    p: s.turnoutWeekly,
+    a: s.arrestsWeekly,
+    f: s.forcesWeekly,
+    i: s.protestersWeekly,
+  };
 };
 
 let studentCache: { lang: Lang; rows: StudentWeek[] } | null = null;
@@ -4473,7 +5788,7 @@ export function studentWeeks(): StudentWeek[] {
       flags: {},
       notes: {},
     };
-    for (const m of ['p', 'a', 'f', 'i'] as const) {
+    for (const m of ["p", "a", "f", "i"] as const) {
       const c = studentCell(src[m], idx);
       out[m] = c.band;
       if (c.q) out.flags[m] = c.q;
@@ -4753,7 +6068,7 @@ const { figure, canvas } = panelFigure(
 ```ts
 /* src/client/main.ts — REPLACES the whole file */
 
-import type { Chart } from 'chart.js';
+import type { Chart } from "chart.js";
 import {
   buildCostConfig,
   buildEnforcementConfig,
@@ -4761,10 +6076,19 @@ import {
   buildProtestersConfig,
   buildProtestersWeeklyConfig,
   mount,
-} from './chart.ts';
-import { mountCrossEpisode } from './episodes.ts';
-import { applyDom, initLang, isLang, lang, mountLangSwitch, onLang, setLang, t } from './i18n.ts';
-import { renderSources } from './sources.ts';
+} from "./chart.ts";
+import { mountCrossEpisode } from "./episodes.ts";
+import {
+  applyDom,
+  initLang,
+  isLang,
+  lang,
+  mountLangSwitch,
+  onLang,
+  setLang,
+  t,
+} from "./i18n.ts";
+import { renderSources } from "./sources.ts";
 
 function el(id: string): HTMLElement {
   const node = document.getElementById(id);
@@ -4774,11 +6098,12 @@ function el(id: string): HTMLElement {
 
 function canvas(id: string): HTMLCanvasElement {
   const node = el(id);
-  if (!(node instanceof HTMLCanvasElement)) throw new Error(`canvas#${id} not found`);
+  if (!(node instanceof HTMLCanvasElement))
+    throw new Error(`canvas#${id} not found`);
   return node;
 }
 
-let charts: Chart<'line'>[] = [];
+let charts: Chart<"line">[] = [];
 
 /** Full re-render: language lives in every derived string, so nothing is patched in place. */
 function render(): void {
@@ -4787,43 +6112,45 @@ function render(): void {
 
   applyDom();
 
-  el('legend-items').replaceChildren();
-  el('trellis-episodes').replaceChildren();
-  el('legend-events').replaceChildren();
-  el('trellis-items').replaceChildren();
+  el("legend-items").replaceChildren();
+  el("trellis-episodes").replaceChildren();
+  el("legend-events").replaceChildren();
+  el("trellis-items").replaceChildren();
 
   charts = [
-    mount(canvas('chart-protesters'), buildProtestersConfig()),
-    mount(canvas('chart-enforcement'), buildEnforcementConfig()),
-    mount(canvas('chart-costs'), buildCostConfig()),
-    mount(canvas('chart-protesters-weekly'), buildProtestersWeeklyConfig()),
-    mount(canvas('chart-enforcement-weekly'), buildEnforcementWeeklyConfig()),
+    mount(canvas("chart-protesters"), buildProtestersConfig()),
+    mount(canvas("chart-enforcement"), buildEnforcementConfig()),
+    mount(canvas("chart-costs"), buildCostConfig()),
+    mount(canvas("chart-protesters-weekly"), buildProtestersWeeklyConfig()),
+    mount(canvas("chart-enforcement-weekly"), buildEnforcementWeeklyConfig()),
     ...mountCrossEpisode({
-      episodeHost: el('trellis-episodes'),
-      itemHost: el('trellis-items'),
-      itemLegend: el('legend-items'),
-      eventLegend: el('legend-events'),
+      episodeHost: el("trellis-episodes"),
+      itemHost: el("trellis-items"),
+      itemLegend: el("legend-items"),
+      eventLegend: el("legend-events"),
     }),
   ];
 
-  renderSources(el('sources-body'));
+  renderSources(el("sources-body"));
 }
 
 initLang();
-mountLangSwitch(el('lang-switch'));
+mountLangSwitch(el("lang-switch"));
 onLang(render);
 render();
 
 /* ?lang=fr in the address bar wins on load; back/forward re-applies it. */
-addEventListener('popstate', () => {
-  const q = new URLSearchParams(location.search).get('lang');
+addEventListener("popstate", () => {
+  const q = new URLSearchParams(location.search).get("lang");
   if (isLang(q) && q !== lang()) setLang(q, { url: false });
 });
 
-addEventListener('beforeunload', () => charts.forEach((c) => c.destroy()), { once: true });
+addEventListener("beforeunload", () => charts.forEach((c) => c.destroy()), {
+  once: true,
+});
 
 (window as unknown as { __charts: unknown }).__charts = charts;
-(window as unknown as { __lang: () => string }).__lang = () => t('doc.title');
+(window as unknown as { __lang: () => string }).__lang = () => t("doc.title");
 ```
 
 ```html
@@ -4835,109 +6162,279 @@ addEventListener('beforeunload', () => charts.forEach((c) => c.destroy()), { onc
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title data-i18n="doc.title">France — protest activity, Oct–Nov 2026</title>
     <style>
-      html, body { margin: 0; }
+      html,
       body {
-        font: 14px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-        background: #fff; color: #111;
-        padding: 16px; box-sizing: border-box;
-        max-width: 1420px; margin: 0 auto;
+        margin: 0;
       }
-      section { margin-bottom: 44px; }
+      body {
+        font:
+          14px/1.4 system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        background: #fff;
+        color: #111;
+        padding: 16px;
+        box-sizing: border-box;
+        max-width: 1420px;
+        margin: 0 auto;
+      }
+      section {
+        margin-bottom: 44px;
+      }
       section > header {
         border-bottom: 1px solid #e5e7eb;
         padding-bottom: 6px;
         margin-bottom: 18px;
       }
       section > header h1 {
-        font-size: 11px; text-transform: uppercase; letter-spacing: .09em;
-        color: #6b7280; margin: 0 0 4px; font-weight: 600;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        color: #6b7280;
+        margin: 0 0 4px;
+        font-weight: 600;
       }
-      section > header p { margin: 0; font-size: 12px; color: #4b5563; max-width: 92ch; }
-      .wrap { position: relative; height: 460px; margin-bottom: 28px; }
+      section > header p {
+        margin: 0;
+        font-size: 12px;
+        color: #4b5563;
+        max-width: 92ch;
+      }
+      .wrap {
+        position: relative;
+        height: 460px;
+        margin-bottom: 28px;
+      }
 
       /* ---- top bar ---- */
       .bar {
-        display: flex; align-items: center; gap: 14px;
-        justify-content: flex-end; margin: 0 0 10px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        justify-content: flex-end;
+        margin: 0 0 10px;
       }
-      .bar .jump { font-size: 11px; color: #6b7280; text-decoration: none; }
-      .bar .jump:hover { color: #1b5c92; }
-      .lang { display: inline-flex; border: 1px solid #d1d5db; border-radius: 5px; overflow: hidden; }
+      .bar .jump {
+        font-size: 11px;
+        color: #6b7280;
+        text-decoration: none;
+      }
+      .bar .jump:hover {
+        color: #1b5c92;
+      }
+      .lang {
+        display: inline-flex;
+        border: 1px solid #d1d5db;
+        border-radius: 5px;
+        overflow: hidden;
+      }
       .lang-btn {
-        all: unset; padding: 3px 9px; font-size: 11px; font-weight: 600;
-        letter-spacing: .05em; color: #6b7280; cursor: pointer;
+        all: unset;
+        padding: 3px 9px;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        color: #6b7280;
+        cursor: pointer;
       }
-      .lang-btn + .lang-btn { border-left: 1px solid #d1d5db; }
-      .lang-btn.is-on { background: #111827; color: #fff; }
-      .lang-btn:focus-visible { outline: 2px solid #1b5c92; outline-offset: -2px; }
+      .lang-btn + .lang-btn {
+        border-left: 1px solid #d1d5db;
+      }
+      .lang-btn.is-on {
+        background: #111827;
+        color: #fff;
+      }
+      .lang-btn:focus-visible {
+        outline: 2px solid #1b5c92;
+        outline-offset: -2px;
+      }
 
       /* ---- disclaimer ---- */
       .disclaimer {
-        border: 1px solid #f0d38a; border-left: 4px solid #d99e00;
-        background: #fffbf0; padding: 10px 14px; margin: 0 0 34px;
-        font-size: 12px; line-height: 1.45; color: #5b4708; max-width: 110ch;
+        border: 1px solid #f0d38a;
+        border-left: 4px solid #d99e00;
+        background: #fffbf0;
+        padding: 10px 14px;
+        margin: 0 0 34px;
+        font-size: 12px;
+        line-height: 1.45;
+        color: #5b4708;
+        max-width: 110ch;
       }
-      .disclaimer p { margin: 0; }
-      .disclaimer strong { font-weight: 600; }
-      .disclaimer a { color: #8a5a00; text-decoration: underline; text-underline-offset: 2px; }
+      .disclaimer p {
+        margin: 0;
+      }
+      .disclaimer strong {
+        font-weight: 600;
+      }
+      .disclaimer a {
+        color: #8a5a00;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
 
       /* ---- section C ---- */
-      .trellis { display: grid; gap: 22px 16px; margin: 0 0 10px; }
-      .trellis-panel { margin: 0; min-width: 0; }
+      .trellis {
+        display: grid;
+        gap: 22px 16px;
+        margin: 0 0 10px;
+      }
+      .trellis-panel {
+        margin: 0;
+        min-width: 0;
+      }
       .strip {
-        display: block; font-size: 10.5px; font-weight: 700;
-        letter-spacing: .08em; text-transform: uppercase; color: #111827;
+        display: block;
+        font-size: 10.5px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #111827;
       }
-      .strip-meta { display: block; font-size: 10px; color: #6b7280; }
-      .strip-note { margin: 3px 0 2px; font-size: 10.5px; line-height: 1.25; color: #6b7280; min-height: 26px; }
-      .panel-canvas { position: relative; height: 215px; }
-      .trellis-items .panel-canvas { height: 230px; }
-      .legend { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 0 0 12px; font-size: 12px; color: #374151; }
+      .strip-meta {
+        display: block;
+        font-size: 10px;
+        color: #6b7280;
+      }
+      .strip-note {
+        margin: 3px 0 2px;
+        font-size: 10.5px;
+        line-height: 1.25;
+        color: #6b7280;
+        min-height: 26px;
+      }
+      .panel-canvas {
+        position: relative;
+        height: 215px;
+      }
+      .trellis-items .panel-canvas {
+        height: 230px;
+      }
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 18px;
+        margin: 0 0 12px;
+        font-size: 12px;
+        color: #374151;
+      }
       .legend button {
-        all: unset; display: inline-flex; align-items: center; gap: 6px;
-        padding: 2px 0; cursor: default;
+        all: unset;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 2px 0;
+        cursor: default;
       }
-      .legend .swatch { width: 14px; height: 3px; border-radius: 2px; }
-      .axis-note { margin: 0 0 30px; font-size: 11px; color: #6b7280; max-width: 110ch; }
+      .legend .swatch {
+        width: 14px;
+        height: 3px;
+        border-radius: 2px;
+      }
+      .axis-note {
+        margin: 0 0 30px;
+        font-size: 11px;
+        color: #6b7280;
+        max-width: 110ch;
+      }
 
       /* ---- sources ---- */
-      #sources { border: 1px solid #e5e7eb; background: #fafafa; padding: 18px 20px 6px; margin-top: 52px; }
+      #sources {
+        border: 1px solid #e5e7eb;
+        background: #fafafa;
+        padding: 18px 20px 6px;
+        margin-top: 52px;
+      }
       #sources > h1 {
-        font-size: 11px; text-transform: uppercase; letter-spacing: .09em;
-        color: #6b7280; margin: 0 0 6px; font-weight: 600;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        color: #6b7280;
+        margin: 0 0 6px;
+        font-weight: 600;
       }
-      #sources > p.intro { margin: 0 0 16px; font-size: 12px; color: #4b5563; max-width: 100ch; }
-      .source-group { margin: 0 0 18px; }
+      #sources > p.intro {
+        margin: 0 0 16px;
+        font-size: 12px;
+        color: #4b5563;
+        max-width: 100ch;
+      }
+      .source-group {
+        margin: 0 0 18px;
+      }
       .source-group h2 {
-        font-size: 10.5px; text-transform: uppercase; letter-spacing: .07em;
-        color: #111827; margin: 0 0 6px; font-weight: 700;
+        font-size: 10.5px;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: #111827;
+        margin: 0 0 6px;
+        font-weight: 700;
       }
-      .source-group ul { margin: 0; padding-left: 18px; }
-      .source-group li { margin: 0 0 5px; font-size: 12px; line-height: 1.4; color: #374151; }
-      .source-group a { color: #1b5c92; text-decoration: none; border-bottom: 1px solid #b0cfe6; }
-      .source-group a:hover { border-bottom-color: #1b5c92; }
-      .source-group .what { color: #6b7280; }
-      .source-group .date { color: #9ca3af; white-space: nowrap; }
-      #sources > p.foot { margin: 0 0 14px; font-size: 11px; color: #6b7280; max-width: 110ch; }
+      .source-group ul {
+        margin: 0;
+        padding-left: 18px;
+      }
+      .source-group li {
+        margin: 0 0 5px;
+        font-size: 12px;
+        line-height: 1.4;
+        color: #374151;
+      }
+      .source-group a {
+        color: #1b5c92;
+        text-decoration: none;
+        border-bottom: 1px solid #b0cfe6;
+      }
+      .source-group a:hover {
+        border-bottom-color: #1b5c92;
+      }
+      .source-group .what {
+        color: #6b7280;
+      }
+      .source-group .date {
+        color: #9ca3af;
+        white-space: nowrap;
+      }
+      #sources > p.foot {
+        margin: 0 0 14px;
+        font-size: 11px;
+        color: #6b7280;
+        max-width: 110ch;
+      }
     </style>
   </head>
   <body>
     <div class="bar">
       <a class="jump" href="#sources" data-i18n="src.h">Sources</a>
-      <div class="lang" id="lang-switch" role="group" aria-label="Language"></div>
+      <div
+        class="lang"
+        id="lang-switch"
+        role="group"
+        aria-label="Language"
+      ></div>
     </div>
 
     <div class="disclaimer">
       <p>
-        <strong data-i18n="disc.lead">These charts were created using LLM assistance, and should not be relied on for serious analysis without in-depth review.</strong>
-        <a href="transcript.html" data-i18n="disc.link">You can view the full transcript of the LLM conversation.</a>
+        <strong data-i18n="disc.lead"
+          >These charts were created using LLM assistance, and should not be
+          relied on for serious analysis without in-depth review.</strong
+        >
+        <a href="transcript.html" data-i18n="disc.link"
+          >You can view the full transcript of the LLM conversation.</a
+        >
       </p>
     </div>
 
     <section id="section-daily">
       <header>
         <h1 data-i18n="secA.h">Section A — daily</h1>
-        <p data-i18n="secA.p">One x-axis slot per calendar day, 1 Oct – 11 Nov 2026. Days with no published figure stay empty.</p>
+        <p data-i18n="secA.p">
+          One x-axis slot per calendar day, 1 Oct – 11 Nov 2026. Days with no
+          published figure stay empty.
+        </p>
       </header>
       <div class="wrap"><canvas id="chart-protesters"></canvas></div>
       <div class="wrap"><canvas id="chart-enforcement"></canvas></div>
@@ -4947,7 +6444,10 @@ addEventListener('beforeunload', () => charts.forEach((c) => c.destroy()), { onc
     <section id="section-weekly">
       <header>
         <h1 data-i18n="secB.h">Section B — weekly</h1>
-        <p data-i18n="secB.p">Weeks run Monday–Sunday. Crowd size shows the peak day; arrests and injuries are summed. * marks weeks clipped by the window.</p>
+        <p data-i18n="secB.p">
+          Weeks run Monday–Sunday. Crowd size shows the peak day; arrests and
+          injuries are summed. * marks weeks clipped by the window.
+        </p>
       </header>
       <div class="wrap"><canvas id="chart-protesters-weekly"></canvas></div>
       <div class="wrap"><canvas id="chart-enforcement-weekly"></canvas></div>
@@ -4955,8 +6455,13 @@ addEventListener('beforeunload', () => charts.forEach((c) => c.destroy()), { onc
 
     <section id="section-cross">
       <header>
-        <h1 data-i18n="secC.h">Section C — cross-episode, one panel per movement</h1>
-        <p data-i18n="secC.p">Seven episodes, four series each, on a single logarithmic count axis shared by every panel.</p>
+        <h1 data-i18n="secC.h">
+          Section C — cross-episode, one panel per movement
+        </h1>
+        <p data-i18n="secC.p">
+          Seven episodes, four series each, on a single logarithmic count axis
+          shared by every panel.
+        </p>
       </header>
       <div class="legend" id="legend-items"></div>
       <div class="trellis" id="trellis-episodes"></div>
@@ -4964,7 +6469,10 @@ addEventListener('beforeunload', () => charts.forEach((c) => c.destroy()), { onc
 
       <header>
         <h1 data-i18n="secC2.h">Section C′ — cross-episode, transposed</h1>
-        <p data-i18n="secC2.p">The same data with the comparison axis flipped: one panel per series, one line per movement.</p>
+        <p data-i18n="secC2.p">
+          The same data with the comparison axis flipped: one panel per series,
+          one line per movement.
+        </p>
       </header>
       <div class="legend" id="legend-events"></div>
       <div class="trellis trellis-items" id="trellis-items"></div>
@@ -4973,7 +6481,9 @@ addEventListener('beforeunload', () => charts.forEach((c) => c.destroy()), { onc
 
     <section id="sources">
       <h1 data-i18n="src.h">Sources</h1>
-      <p class="intro" data-i18n="src.intro">Compiled by an LLM from the reports below.</p>
+      <p class="intro" data-i18n="src.intro">
+        Compiled by an LLM from the reports below.
+      </p>
       <div id="sources-body"></div>
       <p class="foot" data-i18n="src.foot"></p>
     </section>
@@ -4985,16 +6495,16 @@ addEventListener('beforeunload', () => charts.forEach((c) => c.destroy()), { onc
 
 **Behaviour**
 
-| Trigger | Effect |
-|---|---|
-| `?lang=fr` / `?lang=en` | Wins on load; also restores after a reload of a shared URL |
-| No query string | Falls back to `localStorage.lang`, then `navigator.language`, then `en` |
-| FR/EN buttons | `history.replaceState` rewrites `?lang=`, persists, re-renders — no page reload |
-| Back/forward | `popstate` re-applies the language from the URL |
-| `<html lang>` + `<title>` | Updated on every switch (a11y and tab label) |
-| Numbers | `fr-FR` narrow no-break spaces, `1 435`; money flips to `1,5 M€` from `€1.5M` |
+| Trigger                   | Effect                                                                          |
+| ------------------------- | ------------------------------------------------------------------------------- |
+| `?lang=fr` / `?lang=en`   | Wins on load; also restores after a reload of a shared URL                      |
+| No query string           | Falls back to `localStorage.lang`, then `navigator.language`, then `en`         |
+| FR/EN buttons             | `history.replaceState` rewrites `?lang=`, persists, re-renders — no page reload |
+| Back/forward              | `popstate` re-applies the language from the URL                                 |
+| `<html lang>` + `<title>` | Updated on every switch (a11y and tab label)                                    |
+| Numbers                   | `fr-FR` narrow no-break spaces, `1 435`; money flips to `1,5 M€` from `€1.5M`   |
 
-Two things I did *not* change: `errorBars` and the tooltip `suffixFor` semantics (same flags, same strings, now translated), and the `?lang` key name — if you'd rather have `/fr` paths, `server.ts` needs a rewrite rule and `initLang` a pathname branch instead of `searchParams`. Also note `chart.ts` now exports `studentWeeks()` instead of `STUDENT_WEEKS`, and `episodes.ts` exports `episodeSet()` instead of the `EPISODES` const — that is what makes a runtime switch possible.
+Two things I did _not_ change: `errorBars` and the tooltip `suffixFor` semantics (same flags, same strings, now translated), and the `?lang` key name — if you'd rather have `/fr` paths, `server.ts` needs a rewrite rule and `initLang` a pathname branch instead of `searchParams`. Also note `chart.ts` now exports `studentWeeks()` instead of `STUDENT_WEEKS`, and `episodes.ts` exports `episodeSet()` instead of the `EPISODES` const — that is what makes a runtime switch possible.
 
 ---
 
@@ -5011,7 +6521,7 @@ Both files below are complete and self-consistent: `chart.ts` exports `S()`, `st
 **Two things to know before you compile:**
 
 - The i18n contract is exactly what `i18n.ts` / `sources.ts` / `main.ts` expect, so no changes are needed there.
-- The *data tables* are rebuilt as faithfully as this thread's audit notes allow. Every value that appeared in the overlay notes (dates, flags, deployment counts, €136/€1,133 rates, the 84→305 officer figure, 1,435/53 on 24 Oct, 60k/70k headcounts, the IFRAP €244–866M band, the shop-count derivations) is carried across verbatim. The remaining low/high pairs — mostly the 2026 turnout series and the mid/late Gilets jaunes acts — are reconstructions and must be re-checked against the sources before you publish; `WEEKS`/`OBS` will fail loudly at boot if a date falls outside the window or a week has no bucket.
+- The _data tables_ are rebuilt as faithfully as this thread's audit notes allow. Every value that appeared in the overlay notes (dates, flags, deployment counts, €136/€1,133 rates, the 84→305 officer figure, 1,435/53 on 24 Oct, 60k/70k headcounts, the IFRAP €244–866M band, the shop-count derivations) is carried across verbatim. The remaining low/high pairs — mostly the 2026 turnout series and the mid/late Gilets jaunes acts — are reconstructions and must be re-checked against the sources before you publish; `WEEKS`/`OBS` will fail loudly at boot if a date falls outside the window or a week has no bucket.
 
 ```ts
 /* src/client/chart.ts — Section A (daily) + Section B (weekly), FR/EN aware.
@@ -5967,8 +7477,8 @@ function dtf(opts: Intl.DateTimeFormatOptions): Intl.DateTimeFormat {
   const key = `${lang()}|${JSON.stringify(opts)}`;
   const hit = fmtCache.get(key);
   if (hit) return hit;
-  const made = new Intl.DateTimeFormat(lang() === 'fr' ? 'fr-FR' : 'en-GB', {
-    timeZone: 'UTC',
+  const made = new Intl.DateTimeFormat(lang() === "fr" ? "fr-FR" : "en-GB", {
+    timeZone: "UTC",
     ...opts,
   });
   fmtCache.set(key, made);
@@ -5976,7 +7486,7 @@ function dtf(opts: Intl.DateTimeFormatOptions): Intl.DateTimeFormat {
 }
 
 const dmy = (iso: string): string =>
-  dtf({ day: 'numeric', month: 'short' }).format(new Date(`${iso}T12:00:00Z`));
+  dtf({ day: "numeric", month: "short" }).format(new Date(`${iso}T12:00:00Z`));
 
 const DAY_LABELS = DATES.map((d) => dmy(d));
 ```
@@ -5992,13 +7502,23 @@ Everything else in `chart.ts` stands as written. Now the second file.
  * contributes no point — the x extent and the "obs" denominator stay correct.
  */
 
-import { bi, compact, lang, reg, t, tp, tr, type Bi, type Lang } from './i18n.ts';
-import { studentWeeks, type StudentWeek } from './chart.ts';
+import {
+  bi,
+  compact,
+  lang,
+  reg,
+  t,
+  tp,
+  tr,
+  type Bi,
+  type Lang,
+} from "./i18n.ts";
+import { studentWeeks, type StudentWeek } from "./chart.ts";
 
 /* ------------------------------------------------------------------ types */
 
-type M = 'p' | 'a' | 'f' | 'i';
-type Flag = 'n' | 'r' | 'p' | 'f' | 'e' | 'c' | 'w';
+type M = "p" | "a" | "f" | "i";
+type Flag = "n" | "r" | "p" | "f" | "e" | "c" | "w";
 type Cell = readonly [low: number, high: number, flag?: Flag, note?: string];
 
 interface Row {
@@ -6041,246 +7561,470 @@ interface Pt {
 
 /* helpers over a cell */
 const bandOf = (c: Cell): [number, number] => [c[0], c[1]];
-const cellFlag = (c: Cell): Flag => c[2] ?? 'n';
+const cellFlag = (c: Cell): Flag => c[2] ?? "n";
 const midOf = (c: Cell): number => (c[0] + c[1]) / 2;
 
 /* ------------------------------------------------------------------ items */
 
 const ITEMS: Item[] = [
   {
-    key: 'p',
-    label: { en: 'Protestors (peak day)', fr: 'Manifestants (jour de pointe)' },
-    short: { en: 'Protestors', fr: 'Manifestants' },
-    color: '#0072B2',
+    key: "p",
+    label: { en: "Protestors (peak day)", fr: "Manifestants (jour de pointe)" },
+    short: { en: "Protestors", fr: "Manifestants" },
+    color: "#0072B2",
   },
   {
-    key: 'a',
-    label: { en: 'Arrests (weekly total)', fr: 'Interpellations (total hebdomadaire)' },
-    short: { en: 'Arrests', fr: 'Interpellations' },
-    color: '#E69F00',
+    key: "a",
+    label: {
+      en: "Arrests (weekly total)",
+      fr: "Interpellations (total hebdomadaire)",
+    },
+    short: { en: "Arrests", fr: "Interpellations" },
+    color: "#E69F00",
   },
   {
-    key: 'f',
-    label: { en: 'Injuries — security forces', fr: "Blessés — forces de l'ordre" },
-    short: { en: 'Forces hurt', fr: 'Forces blessées' },
-    color: '#009E73',
+    key: "f",
+    label: {
+      en: "Injuries — security forces",
+      fr: "Blessés — forces de l'ordre",
+    },
+    short: { en: "Forces hurt", fr: "Forces blessées" },
+    color: "#009E73",
   },
   {
-    key: 'i',
-    label: { en: 'Injuries — protestors', fr: 'Blessés — manifestants' },
-    short: { en: 'Protestors hurt', fr: 'Manifestants blessés' },
-    color: '#CC79A7',
+    key: "i",
+    label: { en: "Injuries — protestors", fr: "Blessés — manifestants" },
+    short: { en: "Protestors hurt", fr: "Manifestants blessés" },
+    color: "#CC79A7",
   },
 ];
 
 const FLAG_TEXT: Partial<Record<Flag, Bi>> = {
-  r: { en: 'regional only', fr: 'régional seulement' },
-  p: { en: 'partial', fr: 'partiel' },
-  f: { en: 'lower bound', fr: 'borne inférieure' },
-  e: { en: 'derived', fr: 'dérivé' },
-  c: { en: 'stock or actions-total — measured differently', fr: "stock ou total d'actions — mesure différente" },
-  w: { en: 'weekly aggregate', fr: 'agrégat hebdomadaire' },
+  r: { en: "regional only", fr: "régional seulement" },
+  p: { en: "partial", fr: "partiel" },
+  f: { en: "lower bound", fr: "borne inférieure" },
+  e: { en: "derived", fr: "dérivé" },
+  c: {
+    en: "stock or actions-total — measured differently",
+    fr: "stock ou total d'actions — mesure différente",
+  },
+  w: { en: "weekly aggregate", fr: "agrégat hebdomadaire" },
 };
 
 /** Movement ramp: light → dark, same order in both trellises and the C′ legend. */
-const RAMP = ['#c7d9ea', '#9dbfdc', '#6f9fcb', '#4a80b8', '#2f639c', '#1d4a7d', '#12325a'] as const;
+const RAMP = [
+  "#c7d9ea",
+  "#9dbfdc",
+  "#6f9fcb",
+  "#4a80b8",
+  "#2f639c",
+  "#1d4a7d",
+  "#12325a",
+] as const;
 
 /* ------------------------------------------------------------------ data */
 
 const GJ_DATES = [
-  '17 Nov 2018', '24 Nov 2018', '1 Dec 2018', '8 Dec 2018', '15 Dec 2018', '22 Dec 2018',
-  '29 Dec 2018', '5 Jan 2019', '12 Jan 2019', '19 Jan 2019', '26 Jan 2019', '2 Feb 2019',
+  "17 Nov 2018",
+  "24 Nov 2018",
+  "1 Dec 2018",
+  "8 Dec 2018",
+  "15 Dec 2018",
+  "22 Dec 2018",
+  "29 Dec 2018",
+  "5 Jan 2019",
+  "12 Jan 2019",
+  "19 Jan 2019",
+  "26 Jan 2019",
+  "2 Feb 2019",
 ];
 
 const MAY68: Episode = {
-  id: 'may68',
-  strip: { en: 'May 1968', fr: 'Mai 1968' },
-  short: { en: 'May 68', fr: 'Mai 68' },
-  span: '29 Apr – 30 Jun 1968',
-  banner: 'Crowd figures exist only for 1, 6, 10 and 13 May. The general strike is not counted here.',
+  id: "may68",
+  strip: { en: "May 1968", fr: "Mai 1968" },
+  short: { en: "May 68", fr: "Mai 68" },
+  span: "29 Apr – 30 Jun 1968",
+  banner:
+    "Crowd figures exist only for 1, 6, 10 and 13 May. The general strike is not counted here.",
   weeks: [
-    { w: 0, t: '29 Apr – 5 May · 1 May demonstration', p: [25000, 100000, 'n', 'prefecture 25,000 / CGT 100,000, République → Bastille'] },
+    {
+      w: 0,
+      t: "29 Apr – 5 May · 1 May demonstration",
+      p: [
+        25000,
+        100000,
+        "n",
+        "prefecture 25,000 / CGT 100,000, République → Bastille",
+      ],
+    },
     {
       w: 1,
-      t: '6 – 12 May',
-      p: [20000, 25000, 'n', '20,000 towards the Sorbonne on 6 May; 20,000+ again on 10 May'],
-      a: [469, 891, 'p', '469 in the night of 10–11 May; the upper bound adds 422 early-May arrests'],
-      f: [247, 300, 'p', '300+ on 6 May; 247 on 10–11 May'],
-      i: [100, 100, 'f', '≥ 100 — no national count published'],
+      t: "6 – 12 May",
+      p: [
+        20000,
+        25000,
+        "n",
+        "20,000 towards the Sorbonne on 6 May; 20,000+ again on 10 May",
+      ],
+      a: [
+        469,
+        891,
+        "p",
+        "469 in the night of 10–11 May; the upper bound adds 422 early-May arrests",
+      ],
+      f: [247, 300, "p", "300+ on 6 May; 247 on 10–11 May"],
+      i: [100, 100, "f", "≥ 100 — no national count published"],
     },
-    { w: 2, t: '13 – 19 May', p: [230000, 1000000, 'n', 'prefecture 230,000 · ORTF 171,000 · unions 1,000,000. Episode peak.'] },
+    {
+      w: 2,
+      t: "13 – 19 May",
+      p: [
+        230000,
+        1000000,
+        "n",
+        "prefecture 230,000 · ORTF 171,000 · unions 1,000,000. Episode peak.",
+      ],
+    },
     {
       w: 3,
-      t: '20 – 26 May',
-      a: [1000, 1200, 'p', 'over 1,000 arrests on 25 May'],
-      i: [887, 887, 'e', '887 injured, from the English Wikipedia infobox — provenance weak'],
+      t: "20 – 26 May",
+      a: [1000, 1200, "p", "over 1,000 arrests on 25 May"],
+      i: [
+        887,
+        887,
+        "e",
+        "887 injured, from the English Wikipedia infobox — provenance weak",
+      ],
     },
-    { w: 4, t: '27 May – 2 Jun', p: [300000, 1000000, 'p', '30 May: 300,000 (prefecture) to 1,000,000 counter-demonstration — excluded from protestor totals'] },
-    { w: 5, t: '3 – 9 Jun' },
-    { w: 6, t: '10 – 16 Jun' },
+    {
+      w: 4,
+      t: "27 May – 2 Jun",
+      p: [
+        300000,
+        1000000,
+        "p",
+        "30 May: 300,000 (prefecture) to 1,000,000 counter-demonstration — excluded from protestor totals",
+      ],
+    },
+    { w: 5, t: "3 – 9 Jun" },
+    { w: 6, t: "10 – 16 Jun" },
   ],
 };
 
 const CPE: Episode = {
-  id: 'cpe',
-  strip: { en: 'CPE 2006', fr: 'CPE 2006' },
-  short: { en: 'CPE 2006', fr: 'CPE 2006' },
-  span: '6 Feb – 16 Apr 2006',
-  banner: 'A single arrest total for the whole movement (4,500); no weekly series exists.',
+  id: "cpe",
+  strip: { en: "CPE 2006", fr: "CPE 2006" },
+  short: { en: "CPE 2006", fr: "CPE 2006" },
+  span: "6 Feb – 16 Apr 2006",
+  banner:
+    "A single arrest total for the whole movement (4,500); no weekly series exists.",
   weeks: [
-    { w: 0, t: '6 – 12 Feb', p: [400000, 500000, 'n', '187 demonstrations, first national day'] },
-    { w: 1, t: '13 – 19 Feb' },
-    { w: 2, t: '20 – 26 Feb' },
-    { w: 3, t: '27 Feb – 5 Mar' },
-    { w: 4, t: '6 – 12 Mar', p: [1000000, 1500000, 'p', 'over a million claimed; 38 universities on strike by 9 March'] },
+    {
+      w: 0,
+      t: "6 – 12 Feb",
+      p: [400000, 500000, "n", "187 demonstrations, first national day"],
+    },
+    { w: 1, t: "13 – 19 Feb" },
+    { w: 2, t: "20 – 26 Feb" },
+    { w: 3, t: "27 Feb – 5 Mar" },
+    {
+      w: 4,
+      t: "6 – 12 Mar",
+      p: [
+        1000000,
+        1500000,
+        "p",
+        "over a million claimed; 38 universities on strike by 9 March",
+      ],
+    },
     {
       w: 5,
-      t: '13 – 19 Mar',
-      p: [500000, 1500000, 'n', '18 March: 500,000 (ministry) – 1,500,000 (unions); Paris 80,000 – 700,000'],
-      a: [156, 167, 'r', 'Paris, 18 March (156 ministry / 167 organisers)'],
-      f: [30, 40, 'r', 'Paris, 18 March'],
-      i: [18, 52, 'r', '18 (16 March) + 52 (18 March), Paris only'],
+      t: "13 – 19 Mar",
+      p: [
+        500000,
+        1500000,
+        "n",
+        "18 March: 500,000 (ministry) – 1,500,000 (unions); Paris 80,000 – 700,000",
+      ],
+      a: [156, 167, "r", "Paris, 18 March (156 ministry / 167 organisers)"],
+      f: [30, 40, "r", "Paris, 18 March"],
+      i: [18, 52, "r", "18 (16 March) + 52 (18 March), Paris only"],
     },
-    { w: 6, t: '20 – 26 Mar', p: [500000, 1000000, 'n', '21 universities fully blockaded; 67 on strike or blocked'] },
-    { w: 7, t: '27 Mar – 2 Apr', p: [700000, 3000000, 'n', '4th national day of action; peak'] },
-    { w: 8, t: '3 – 9 Apr', a: [600, 600, 'n', 'last week with an arrest figure'] },
-    { w: 9, t: '10 – 16 Apr', p: [400000, 1000000, 'n', 'CPE withdrawn 10 April; the movement splits'] },
+    {
+      w: 6,
+      t: "20 – 26 Mar",
+      p: [
+        500000,
+        1000000,
+        "n",
+        "21 universities fully blockaded; 67 on strike or blocked",
+      ],
+    },
+    {
+      w: 7,
+      t: "27 Mar – 2 Apr",
+      p: [700000, 3000000, "n", "4th national day of action; peak"],
+    },
+    {
+      w: 8,
+      t: "3 – 9 Apr",
+      a: [600, 600, "n", "last week with an arrest figure"],
+    },
+    {
+      w: 9,
+      t: "10 – 16 Apr",
+      p: [400000, 1000000, "n", "CPE withdrawn 10 April; the movement splits"],
+    },
   ],
 };
 
 const GILETS: Episode = {
-  id: 'gj',
-  strip: { en: 'Gilets jaunes', fr: 'Gilets jaunes' },
-  short: { en: 'Gilets jaunes', fr: 'Gilets jaunes' },
-  span: '12 Nov 2018 – 9 Sep 2019',
+  id: "gj",
+  strip: { en: "Gilets jaunes", fr: "Gilets jaunes" },
+  short: { en: "Gilets jaunes", fr: "Gilets jaunes" },
+  span: "12 Nov 2018 – 9 Sep 2019",
   banner:
-    'Ministry count only: one figure per act. Acts 34–43 were never published; no enforcement series after Act IV.',
+    "Ministry count only: one figure per act. Acts 34–43 were never published; no enforcement series after Act IV.",
   weeks: [
     {
       w: 0,
-      t: 'Act 1 · 17 Nov 2018',
-      p: [282000, 282000, 'n', '287,700 totals all actions, road blockades included: an actions total, not a march'],
-      a: [974, 1150, 'p', '974 custody, ~1,150 arrests'],
-      f: [17, 17, 'e', '17 officers of 126 injured — apportioned'],
-      i: [109, 109, 'e', '109 of 126 injured — apportioned'],
+      t: "Act 1 · 17 Nov 2018",
+      p: [
+        282000,
+        282000,
+        "n",
+        "287,700 totals all actions, road blockades included: an actions total, not a march",
+      ],
+      a: [974, 1150, "p", "974 custody, ~1,150 arrests"],
+      f: [17, 17, "e", "17 officers of 126 injured — apportioned"],
+      i: [109, 109, "e", "109 of 126 injured — apportioned"],
     },
     {
       w: 1,
-      t: 'Act 2 · 24 Nov 2018',
-      p: [282000, 750000, 'p', 'police-union counter-count: 750,000'],
-      a: [307, 339, 'p', '307 custody, 339 arrests'],
-      i: [54, 54, 'e', '54 of 84 injured — apportioned'],
+      t: "Act 2 · 24 Nov 2018",
+      p: [282000, 750000, "p", "police-union counter-count: 750,000"],
+      a: [307, 339, "p", "307 custody, 339 arrests"],
+      i: [54, 54, "e", "54 of 84 injured — apportioned"],
     },
     {
       w: 2,
-      t: 'Act 3 · 1 Dec 2018',
-      p: [166000, 166000, 'n', 'ministry figure'],
-      a: [263, 263, 'p', 'custody placements, not arrests; 263 injured, not split by side'],
+      t: "Act 3 · 1 Dec 2018",
+      p: [166000, 166000, "n", "ministry figure"],
+      a: [
+        263,
+        263,
+        "p",
+        "custody placements, not arrests; 263 injured, not split by side",
+      ],
     },
     {
       w: 3,
-      t: 'Act 4 · 8 Dec 2018',
-      p: [136000, 136000, 'n', 'ministry figure'],
-      a: [1709, 2000, 'p', '1,709 custody, ~2,000 arrests; injuries given as 118 / 264 / 585 depending on source, not split'],
+      t: "Act 4 · 8 Dec 2018",
+      p: [136000, 136000, "n", "ministry figure"],
+      a: [
+        1709,
+        2000,
+        "p",
+        "1,709 custody, ~2,000 arrests; injuries given as 118 / 264 / 585 depending on source, not split",
+      ],
     },
-    { w: 4, t: 'Act 5 · 15 Dec 2018', p: [66000, 66000, 'n', 'ministry figure'] },
-    { w: 5, t: 'Act 6 · 22 Dec 2018', p: [39000, 39000, 'n', 'ministry figure'] },
-    { w: 6, t: 'Act 7 · 29 Dec 2018', p: [32000, 32000, 'n', 'ministry figure'] },
-    { w: 7, t: 'Act 8 · 5 Jan 2019', p: [50000, 50000, 'n', 'ministry figure'] },
-    { w: 8, t: 'Act 9 · 12 Jan 2019', p: [84000, 84000, 'n', 'ministry figure'] },
-    { w: 9, t: 'Act 10 · 19 Jan 2019', p: [84000, 84000, 'n', 'ministry figure'] },
-    { w: 10, t: 'Act 11 · 26 Jan 2019', p: [69000, 69000, 'n', 'ministry figure'] },
-    { w: 11, t: 'Act 12 · 2 Feb 2019', p: [58000, 58000, 'n', 'ministry figure'] },
+    {
+      w: 4,
+      t: "Act 5 · 15 Dec 2018",
+      p: [66000, 66000, "n", "ministry figure"],
+    },
+    {
+      w: 5,
+      t: "Act 6 · 22 Dec 2018",
+      p: [39000, 39000, "n", "ministry figure"],
+    },
+    {
+      w: 6,
+      t: "Act 7 · 29 Dec 2018",
+      p: [32000, 32000, "n", "ministry figure"],
+    },
+    {
+      w: 7,
+      t: "Act 8 · 5 Jan 2019",
+      p: [50000, 50000, "n", "ministry figure"],
+    },
+    {
+      w: 8,
+      t: "Act 9 · 12 Jan 2019",
+      p: [84000, 84000, "n", "ministry figure"],
+    },
+    {
+      w: 9,
+      t: "Act 10 · 19 Jan 2019",
+      p: [84000, 84000, "n", "ministry figure"],
+    },
+    {
+      w: 10,
+      t: "Act 11 · 26 Jan 2019",
+      p: [69000, 69000, "n", "ministry figure"],
+    },
+    {
+      w: 11,
+      t: "Act 12 · 2 Feb 2019",
+      p: [58000, 58000, "n", "ministry figure"],
+    },
     /* acts 13–43: the row keeps the x extent and the obs denominator; no figure is asserted */
-    ...Array.from({ length: 31 }, (_, i) => ({ w: 12 + i, t: `Act ${13 + i}` })),
-    { w: 43, t: 'Act 44 · 14 Sep 2019' },
+    ...Array.from({ length: 31 }, (_, i) => ({
+      w: 12 + i,
+      t: `Act ${13 + i}`,
+    })),
+    { w: 43, t: "Act 44 · 14 Sep 2019" },
   ],
 };
 
 const NAHEL: Episode = {
-  id: 'nahel',
-  strip: { en: 'Nahel 2023', fr: 'Nahel 2023' },
-  short: { en: 'Nahel 2023', fr: 'Nahel 2023' },
-  span: '27 Jun – 9 Jul 2023',
-  banner: 'Rallies were banned: arrests, not crowds, carry the scale of the riots.',
+  id: "nahel",
+  strip: { en: "Nahel 2023", fr: "Nahel 2023" },
+  short: { en: "Nahel 2023", fr: "Nahel 2023" },
+  span: "27 Jun – 9 Jul 2023",
+  banner:
+    "Rallies were banned: arrests, not crowds, carry the scale of the riots.",
   weeks: [
     {
       w: 0,
-      t: '26 Jun – 2 Jul · Nanterre march, 29 Jun',
-      p: [6200, 20000, 'p', 'police 6,200 / organisers 20,000 for the white march'],
-      a: [3354, 3354, 'n', 'national total, 27 Jun – 2 Jul'],
-      f: [722, 722, 'n', '722 officers injured; 2 dead; 5,662 vehicles burned'],
+      t: "26 Jun – 2 Jul · Nanterre march, 29 Jun",
+      p: [
+        6200,
+        20000,
+        "p",
+        "police 6,200 / organisers 20,000 for the white march",
+      ],
+      a: [3354, 3354, "n", "national total, 27 Jun – 2 Jul"],
+      f: [722, 722, "n", "722 officers injured; 2 dead; 5,662 vehicles burned"],
     },
-    { w: 1, t: '3 – 9 Jul', a: [108, 108, 'p', '72 + 16 + 20 from 3 to 5 July'] },
+    {
+      w: 1,
+      t: "3 – 9 Jul",
+      a: [108, 108, "p", "72 + 16 + 20 from 3 to 5 July"],
+    },
   ],
 };
 
 const PENSIONS: Episode = {
-  id: 'pensions',
-  strip: { en: 'Pension reform 2023', fr: 'Réforme des retraites 2023' },
-  short: { en: 'Pensions 2023', fr: 'Retraites 2023' },
-  span: '19 Jan – 8 Jun 2023',
-  banner: 'Crowds only: no national weekly series of arrests or injuries was published.',
+  id: "pensions",
+  strip: { en: "Pension reform 2023", fr: "Réforme des retraites 2023" },
+  short: { en: "Pensions 2023", fr: "Retraites 2023" },
+  span: "19 Jan – 8 Jun 2023",
+  banner:
+    "Crowds only: no national weekly series of arrests or injuries was published.",
   weeks: [
-    { w: 0, t: '16 – 22 Jan', p: [1127000, 2000000, 'n', 'first national day; Paris 80,000 – 400,000'] },
-    { w: 1, t: '23 – 29 Jan' },
-    { w: 2, t: '30 Jan – 5 Feb' },
-    { w: 3, t: '6 – 12 Feb', p: [1000000, 2000000, 'n', 'two action days in the week; the peak is 11 Feb'] },
-    { w: 4, t: '13 – 19 Feb' },
-    { w: 5, t: '20 – 26 Feb' },
-    { w: 6, t: '27 Feb – 5 Mar' },
-    { w: 7, t: '6 – 12 Mar', p: [1280000, 3500000, 'n', 'national record: 1.28M ministry, 3.5M unions'] },
-    { w: 8, t: '13 – 19 Mar' },
-    { w: 9, t: '20 – 26 Mar' },
-    { w: 10, t: '27 Mar – 2 Apr' },
-    { w: 11, t: '3 – 9 Apr' },
-    { w: 12, t: '10 – 16 Apr', p: [1000000, 1500000, 'p', 'CGT gives 1.0M in one compilation, 1.5M in another'] },
-    { w: 13, t: '17 – 23 Apr' },
-    { w: 14, t: '24 – 30 Apr' },
-    { w: 15, t: '1 – 7 May' },
-    { w: 16, t: '8 – 14 May' },
-    { w: 17, t: '15 – 21 May' },
-    { w: 18, t: '22 – 28 May' },
-    { w: 19, t: '29 May – 4 Jun' },
-    { w: 20, t: '5 – 11 Jun', p: [400000, 900000, 'n', 'movement minimum'] },
+    {
+      w: 0,
+      t: "16 – 22 Jan",
+      p: [1127000, 2000000, "n", "first national day; Paris 80,000 – 400,000"],
+    },
+    { w: 1, t: "23 – 29 Jan" },
+    { w: 2, t: "30 Jan – 5 Feb" },
+    {
+      w: 3,
+      t: "6 – 12 Feb",
+      p: [
+        1000000,
+        2000000,
+        "n",
+        "two action days in the week; the peak is 11 Feb",
+      ],
+    },
+    { w: 4, t: "13 – 19 Feb" },
+    { w: 5, t: "20 – 26 Feb" },
+    { w: 6, t: "27 Feb – 5 Mar" },
+    {
+      w: 7,
+      t: "6 – 12 Mar",
+      p: [
+        1280000,
+        3500000,
+        "n",
+        "national record: 1.28M ministry, 3.5M unions",
+      ],
+    },
+    { w: 8, t: "13 – 19 Mar" },
+    { w: 9, t: "20 – 26 Mar" },
+    { w: 10, t: "27 Mar – 2 Apr" },
+    { w: 11, t: "3 – 9 Apr" },
+    {
+      w: 12,
+      t: "10 – 16 Apr",
+      p: [
+        1000000,
+        1500000,
+        "p",
+        "CGT gives 1.0M in one compilation, 1.5M in another",
+      ],
+    },
+    { w: 13, t: "17 – 23 Apr" },
+    { w: 14, t: "24 – 30 Apr" },
+    { w: 15, t: "1 – 7 May" },
+    { w: 16, t: "8 – 14 May" },
+    { w: 17, t: "15 – 21 May" },
+    { w: 18, t: "22 – 28 May" },
+    { w: 19, t: "29 May – 4 Jun" },
+    { w: 20, t: "5 – 11 Jun", p: [400000, 900000, "n", "movement minimum"] },
   ],
 };
 
 const BLOQUONS: Episode = {
-  id: 'bt',
-  strip: { en: 'Bloquons tout 2025', fr: 'Bloquons tout 2025' },
-  short: { en: 'Bloquons tout', fr: 'Bloquons tout' },
-  span: '10 Sep – 5 Oct 2025',
-  banner: '10 Sep is an actions total (blockades included); 18 Sep is an inter-union demonstration.',
+  id: "bt",
+  strip: { en: "Bloquons tout 2025", fr: "Bloquons tout 2025" },
+  short: { en: "Bloquons tout", fr: "Bloquons tout" },
+  span: "10 Sep – 5 Oct 2025",
+  banner:
+    "10 Sep is an actions total (blockades included); 18 Sep is an inter-union demonstration.",
   weeks: [
     {
       w: 0,
-      t: '8 – 14 Sep',
-      p: [175000, 197000, 'p', 'ministry 175,000–197,000, revised up from an early-evening count of ~29,000; CGT ~250,000. 596 rallies, 253 blockades.'],
-      a: [540, 540, 'n', '540 arrests, 211 in Paris'],
+      t: "8 – 14 Sep",
+      p: [
+        175000,
+        197000,
+        "p",
+        "ministry 175,000–197,000, revised up from an early-evening count of ~29,000; CGT ~250,000. 596 rallies, 253 blockades.",
+      ],
+      a: [540, 540, "n", "540 arrests, 211 in Paris"],
     },
     {
       w: 1,
-      t: '15 – 21 Sep',
-      p: [55000, 55000, 'n', "inter-union day — separate from the movement's actions; Paris 55,000 (prefecture)"],
-      a: [309, 309, 'n', '309 nationally, 103 in Paris'],
-      i: [11, 11, 'n', '11 injured, including 1 journalist'],
+      t: "15 – 21 Sep",
+      p: [
+        55000,
+        55000,
+        "n",
+        "inter-union day — separate from the movement's actions; Paris 55,000 (prefecture)",
+      ],
+      a: [309, 309, "n", "309 nationally, 103 in Paris"],
+      i: [11, 11, "n", "11 injured, including 1 journalist"],
     },
-    { w: 2, t: '22 – 28 Sep' },
-    { w: 3, t: '29 Sep – 5 Oct' },
+    { w: 2, t: "22 – 28 Sep" },
+    { w: 3, t: "29 Sep – 5 Oct" },
   ],
 };
 
 /* --------------------------------------------------------- the 2026 episode */
 
 const STUDENT_FALLBACK: Record<M, ([number, number] | null)[]> = {
-  p: [[350000, 600000], [320000, 520000], [180000, 350000], [180000, 350000], [90000, 180000], [120000, 250000], [70000, 140000]],
+  p: [
+    [350000, 600000],
+    [320000, 520000],
+    [180000, 350000],
+    [180000, 350000],
+    [90000, 180000],
+    [120000, 250000],
+    [70000, 140000],
+  ],
   a: [[1400, 1949], null, null, [1515, 2490], [1435, 1435], [0, 0], [17, 17]],
   f: [[84, 305], null, null, [250, 400], [53, 53], null, null],
   i: [[235, 235], null, null, null, [3, 3], [12, 12], null],
 };
 
-function studentColumn(m: M, wks: StudentWeek[]): { bands: ([number, number] | null)[]; pinned: boolean } {
+function studentColumn(
+  m: M,
+  wks: StudentWeek[],
+): { bands: ([number, number] | null)[]; pinned: boolean } {
   const live = wks.map((w) => w[m]);
   if (live.some((b) => b !== null)) return { bands: live, pinned: false };
   const fb = STUDENT_FALLBACK[m];
@@ -6292,22 +8036,28 @@ function studentColumn(m: M, wks: StudentWeek[]): { bands: ([number, number] | n
 
 function rows2026(): Row[] {
   const wks = studentWeeks();
-  const cols: Record<M, { bands: ([number, number] | null)[]; pinned: boolean }> = {
-    p: studentColumn('p', wks),
-    a: studentColumn('a', wks),
-    f: studentColumn('f', wks),
-    i: studentColumn('i', wks),
+  const cols: Record<
+    M,
+    { bands: ([number, number] | null)[]; pinned: boolean }
+  > = {
+    p: studentColumn("p", wks),
+    a: studentColumn("a", wks),
+    f: studentColumn("f", wks),
+    i: studentColumn("i", wks),
   };
 
   return wks.map((wk, idx) => {
     const row: Row = {
       w: idx,
-      t: tp(wk.touchesEdge ? 'wkn.partial' : 'wkn', { n: idx + 1, label: wk.label }),
+      t: tp(wk.touchesEdge ? "wkn.partial" : "wkn", {
+        n: idx + 1,
+        label: wk.label,
+      }),
     };
-    for (const m of ['p', 'a', 'f', 'i'] as const) {
+    for (const m of ["p", "a", "f", "i"] as const) {
       const band = cols[m].bands[idx] ?? null;
       if (!band) continue;
-      const flag = wk.flags[m] ?? (band[0] === band[1] ? 'n' : 'p');
+      const flag = wk.flags[m] ?? (band[0] === band[1] ? "n" : "p");
       const note = wk.notes[m];
       row[m] = note ? [band[0], band[1], flag, note] : [band[0], band[1], flag];
     }
@@ -6316,17 +8066,19 @@ function rows2026(): Row[] {
 }
 
 const STUDENTS: Episode = {
-  id: 'students26',
-  strip: { en: 'Student protests 2026', fr: 'Manifestations étudiantes 2026' },
-  short: { en: 'Students 2026', fr: 'Étudiants 2026' },
-  span: '1 Oct – 11 Nov 2026',
+  id: "students26",
+  strip: { en: "Student protests 2026", fr: "Manifestations étudiantes 2026" },
+  short: { en: "Students 2026", fr: "Étudiants 2026" },
+  span: "1 Oct – 11 Nov 2026",
   banner:
-    'Protester injuries are a September stock, then a litigation floor — never a weekly flow.',
+    "Protester injuries are a September stock, then a litigation floor — never a weekly flow.",
   weeks: rows2026(),
 };
 
 if (!studentWeeks().some((w) => w.a) || !studentWeeks().some((w) => w.f)) {
-  console.warn('[episodes] 2026 enforcement weeks came through empty — check studentWeeks() in chart.ts');
+  console.warn(
+    "[episodes] 2026 enforcement weeks came through empty — check studentWeeks() in chart.ts",
+  );
 }
 
 /* -------------------------------------------------------- per-language set */
@@ -6335,7 +8087,8 @@ function enforcementLast(eps: Episode[]): number {
   let last = 0;
   for (const ep of eps) {
     for (const r of ep.weeks) {
-      if (r.a !== undefined || r.f !== undefined || r.i !== undefined) last = Math.max(last, r.w);
+      if (r.a !== undefined || r.f !== undefined || r.i !== undefined)
+        last = Math.max(last, r.w);
     }
   }
   return last;
@@ -6345,9 +8098,18 @@ let epCache: { lang: Lang; list: Episode[]; last: number } | null = null;
 
 /** Replaces the old `const EPISODES`: rebuilt whenever the language changes. */
 export function episodeSet(): { eps: Episode[]; last: number } {
-  if (epCache?.lang === lang()) return { eps: epCache.list, last: epCache.last };
+  if (epCache?.lang === lang())
+    return { eps: epCache.list, last: epCache.last };
 
-  const list: Episode[] = [MAY68, CPE, GILETS, NAHEL, PENSIONS, BLOQUONS, STUDENTS];
+  const list: Episode[] = [
+    MAY68,
+    CPE,
+    GILETS,
+    NAHEL,
+    PENSIONS,
+    BLOQUONS,
+    STUDENTS,
+  ];
   const last = enforcementLast(list);
   epCache = { lang: lang(), list, last };
   return { eps: list, last };
@@ -6358,14 +8120,16 @@ export function episodeSet(): { eps: Episode[]; last: number } {
 function rowFlag(r: Row, key: M): Flag {
   if (r.flag?.[key]) return r.flag[key]!;
   const cell = r[key];
-  return cell ? cellFlag(cell) : 'n';
+  return cell ? cellFlag(cell) : "n";
 }
 
 function seriesData(ep: Episode, key: M): Pt[] | null {
-  const rows = ep.weeks.filter((r) => r[key] !== undefined).sort((a, b) => a.w - b.w);
+  const rows = ep.weeks
+    .filter((r) => r[key] !== undefined)
+    .sort((a, b) => a.w - b.w);
   if (!rows.length) return null;
 
-  const baseRow = rows.find((r) => rowFlag(r, key) !== 'c') ?? rows[0]!;
+  const baseRow = rows.find((r) => rowFlag(r, key) !== "c") ?? rows[0]!;
   const base = midOf(baseRow[key]!);
 
   return rows.map((r) => {
@@ -6392,13 +8156,13 @@ function seriesData(ep: Episode, key: M): Pt[] | null {
 
 /* ---------------------------------------------------------------- drawing */
 
-interface GapDataset extends ChartDataset<'line', { x: number; y: number }[]> {
+interface GapDataset extends ChartDataset<"line", { x: number; y: number }[]> {
   _pts?: Pt[];
   __label?: string;
 }
 
-const gapDash: Plugin<'line'> = {
-  id: 'gapDash',
+const gapDash: Plugin<"line"> = {
+  id: "gapDash",
   afterDatasetsDraw(chart) {
     const { ctx } = chart;
     chart.data.datasets.forEach((dataset, di) => {
@@ -6411,7 +8175,8 @@ const gapDash: Plugin<'line'> = {
       ctx.setLineDash([3, 3]);
       ctx.lineWidth = 1.2;
       ctx.globalAlpha = 0.75;
-      ctx.strokeStyle = typeof dataset.borderColor === 'string' ? dataset.borderColor : '#999';
+      ctx.strokeStyle =
+        typeof dataset.borderColor === "string" ? dataset.borderColor : "#999";
 
       for (let i = 1; i < pts.length; i++) {
         if (pts[i]!.x - pts[i - 1]!.x <= 1.001) continue;
@@ -6431,14 +8196,14 @@ const gapDash: Plugin<'line'> = {
 };
 
 const yLog = {
-  type: 'logarithmic' as const,
+  type: "logarithmic" as const,
   min: 0.5,
   max: 7_000_000,
-  title: { display: true, text: '' },
+  title: { display: true, text: "" },
   ticks: {
     callback: (v: unknown) => {
       const n = Number(v);
-      return Number.isFinite(n) && n >= 1 ? compact(n) : '';
+      return Number.isFinite(n) && n >= 1 ? compact(n) : "";
     },
     font: { size: 9 },
   },
@@ -6446,16 +8211,25 @@ const yLog = {
 
 function xLinear(max: number) {
   return {
-    type: 'linear' as const,
+    type: "linear" as const,
     min: 0,
     max,
-    title: { display: true, text: '' },
-    ticks: { stepSize: 1, font: { size: 9 }, callback: (v: unknown) => String(v) },
-    grid: { color: '#f3f4f6' },
+    title: { display: true, text: "" },
+    ticks: {
+      stepSize: 1,
+      font: { size: 9 },
+      callback: (v: unknown) => String(v),
+    },
+    grid: { color: "#f3f4f6" },
   };
 }
 
-function buildDataset(key: M, item: Item, ep: Episode, xmax: number): GapDataset | null {
+function buildDataset(
+  key: M,
+  item: Item,
+  ep: Episode,
+  xmax: number,
+): GapDataset | null {
   const pts = seriesData(ep, key);
   if (!pts) return null;
 
@@ -6466,17 +8240,17 @@ function buildDataset(key: M, item: Item, ep: Episode, xmax: number): GapDataset
   const color = item.color;
 
   return {
-    type: 'line',
+    type: "line",
     label: bi(item.label),
     __label: truncated ? `${bi(ep.short)} +` : bi(ep.short),
     data: capped.map((p) => ({ x: p.x, y: p.y })),
     _pts: capped,
     borderColor: color,
-    backgroundColor: capped.map((p) => (p.flag === 'n' ? color : '#ffffff')),
+    backgroundColor: capped.map((p) => (p.flag === "n" ? color : "#ffffff")),
     pointBorderColor: color,
     borderWidth: 1.8,
-    pointRadius: capped.map((p) => (p.flag === 'n' ? 2.6 : 3.4)),
-    pointStyle: capped.map((p) => (p.flag === 'n' ? 'circle' : 'rectRot')),
+    pointRadius: capped.map((p) => (p.flag === "n" ? 2.6 : 3.4)),
+    pointStyle: capped.map((p) => (p.flag === "n" ? "circle" : "rectRot")),
     pointBorderWidth: 1.4,
     pointHoverRadius: 5,
     tension: 0.15,
@@ -6484,53 +8258,64 @@ function buildDataset(key: M, item: Item, ep: Episode, xmax: number): GapDataset
   };
 }
 
-function panelFigure(strip: string, meta: string, note: string): { figure: HTMLElement; canvas: HTMLCanvasElement } {
-  const figure = document.createElement('figure');
-  figure.className = 'trellis-panel';
+function panelFigure(
+  strip: string,
+  meta: string,
+  note: string,
+): { figure: HTMLElement; canvas: HTMLCanvasElement } {
+  const figure = document.createElement("figure");
+  figure.className = "trellis-panel";
 
-  const head = document.createElement('span');
-  head.className = 'strip';
+  const head = document.createElement("span");
+  head.className = "strip";
   head.textContent = strip;
 
-  const metaEl = document.createElement('span');
-  metaEl.className = 'strip-meta';
+  const metaEl = document.createElement("span");
+  metaEl.className = "strip-meta";
   metaEl.textContent = meta;
 
-  const noteEl = document.createElement('p');
-  noteEl.className = 'strip-note';
+  const noteEl = document.createElement("p");
+  noteEl.className = "strip-note";
   noteEl.textContent = note;
 
-  const holder = document.createElement('div');
-  holder.className = 'panel-canvas';
+  const holder = document.createElement("div");
+  holder.className = "panel-canvas";
 
-  const canvas = document.createElement('canvas');
+  const canvas = document.createElement("canvas");
   holder.append(canvas);
 
   figure.append(head, metaEl, noteEl, holder);
   return { figure, canvas };
 }
 
-function legendButton(label: string, swatch: HTMLElement, onEnter: () => void, onLeave: () => void): HTMLElement {
-  const b = document.createElement('button');
-  b.type = 'button';
+function legendButton(
+  label: string,
+  swatch: HTMLElement,
+  onEnter: () => void,
+  onLeave: () => void,
+): HTMLElement {
+  const b = document.createElement("button");
+  b.type = "button";
   b.append(swatch, document.createTextNode(label));
-  b.addEventListener('mouseenter', onEnter);
-  b.addEventListener('mouseleave', onLeave);
-  b.addEventListener('focus', onEnter);
-  b.addEventListener('blur', onLeave);
+  b.addEventListener("mouseenter", onEnter);
+  b.addEventListener("mouseleave", onLeave);
+  b.addEventListener("focus", onEnter);
+  b.addEventListener("blur", onLeave);
   return b;
 }
 
 function swatch(color: string): HTMLElement {
-  const s = document.createElement('span');
-  s.className = 'swatch';
+  const s = document.createElement("span");
+  s.className = "swatch";
   s.style.background = color;
   return s;
 }
 
 function observations(ep: Episode): string {
-  const counts = ITEMS.map((i) => ep.weeks.filter((r) => r[i.key] !== undefined).length);
-  return tp('obs', { counts: counts.join('·'), weeks: ep.weeks.length });
+  const counts = ITEMS.map(
+    (i) => ep.weeks.filter((r) => r[i.key] !== undefined).length,
+  );
+  return tp("obs", { counts: counts.join("·"), weeks: ep.weeks.length });
 }
 
 /* ------------------------------------------------------------------ mount */
@@ -6547,10 +8332,10 @@ interface Focus {
   ep: number | null;
 }
 
-export function mountCrossEpisode(hosts: CrossHosts): Chart<'line'>[] {
+export function mountCrossEpisode(hosts: CrossHosts): Chart<"line">[] {
   const { eps, last } = episodeSet();
   const XMAX = last;
-  const charts: Chart<'line'>[] = [];
+  const charts: Chart<"line">[] = [];
   const focus: Focus = { key: null, ep: null };
 
   /* ---- C: one panel per movement ---- */
@@ -6563,11 +8348,17 @@ export function mountCrossEpisode(hosts: CrossHosts): Chart<'line'>[] {
     );
     hosts.episodeHost.append(figure);
 
-    const datasets = ITEMS.map((item) => buildDataset(ep.id === 'students26' ? item.key : item.key, item, ep, ownMax))
-      .filter((d): d is GapDataset => d !== null);
+    const datasets = ITEMS.map((item) =>
+      buildDataset(
+        ep.id === "students26" ? item.key : item.key,
+        item,
+        ep,
+        ownMax,
+      ),
+    ).filter((d): d is GapDataset => d !== null);
 
-    const chart = new Chart<'line'>(canvas, {
-      type: 'line',
+    const chart = new Chart<"line">(canvas, {
+      type: "line",
       data: { datasets },
       options: {
         responsive: true,
@@ -6575,29 +8366,31 @@ export function mountCrossEpisode(hosts: CrossHosts): Chart<'line'>[] {
         animation: false,
         parsing: false,
         normalized: true,
-        interaction: { mode: 'nearest', intersect: false },
+        interaction: { mode: "nearest", intersect: false },
         plugins: {
           legend: { display: false },
           tooltip: {
             callbacks: {
               title: (items) => {
-                if (!items.length) return '';
+                if (!items.length) return "";
                 const ds = items[0]!.dataset as GapDataset;
                 const p = ds._pts?.[items[0]!.dataIndex];
-                return p ? p.t : '';
+                return p ? p.t : "";
               },
               label: (item) => {
                 const ds = item.dataset as GapDataset;
                 const p = ds._pts?.[item.dataIndex];
-                if (!p) return '';
+                if (!p) return "";
                 const band =
-                  p.low === p.high ? compact(p.low) : `${compact(p.low)}–${compact(p.high)}`;
+                  p.low === p.high
+                    ? compact(p.low)
+                    : `${compact(p.low)}–${compact(p.high)}`;
                 const flag = FLAG_TEXT[p.flag];
-                return `${ds.label}: ${band}${flag ? `  ·  ${bi(flag)}` : ''}`;
+                return `${ds.label}: ${band}${flag ? `  ·  ${bi(flag)}` : ""}`;
               },
               afterLabel: (item) => {
                 const p = (item.dataset as GapDataset)._pts?.[item.dataIndex];
-                return p?.note ? p.note : '';
+                return p?.note ? p.note : "";
               },
             },
           },
@@ -6622,7 +8415,10 @@ export function mountCrossEpisode(hosts: CrossHosts): Chart<'line'>[] {
           void ds;
         },
         scales: {
-          x: { ...xLinear(ownMax), title: { display: ei >= eps.length - 1, text: '' } },
+          x: {
+            ...xLinear(ownMax),
+            title: { display: ei >= eps.length - 1, text: "" },
+          },
           y: yLog,
         },
       },
@@ -6633,23 +8429,28 @@ export function mountCrossEpisode(hosts: CrossHosts): Chart<'line'>[] {
   });
 
   /* ---- C′: one panel per series ---- */
-  const itemCharts: Chart<'line'>[] = ITEMS.map((item) => {
+  const itemCharts: Chart<"line">[] = ITEMS.map((item) => {
     const { figure, canvas } = panelFigure(
       bi(item.short),
       `${compact(0)}–${compact(7_000_000)} · x 0–w${XMAX}`,
-      '',
+      "",
     );
     hosts.itemHost.append(figure);
 
     const datasets = eps
       .map((ep, ei) => {
-        const ds = buildDataset(item.key, { ...item, color: RAMP[ei] ?? item.color }, ep, XMAX);
+        const ds = buildDataset(
+          item.key,
+          { ...item, color: RAMP[ei] ?? item.color },
+          ep,
+          XMAX,
+        );
         return ds ? { ...ds, __ep: ei } : null;
       })
       .filter((d): d is GapDataset & { __ep: number } => d !== null);
 
-    const chart = new Chart<'line'>(canvas, {
-      type: 'line',
+    const chart = new Chart<"line">(canvas, {
+      type: "line",
       data: { datasets },
       options: {
         responsive: true,
@@ -6657,31 +8458,36 @@ export function mountCrossEpisode(hosts: CrossHosts): Chart<'line'>[] {
         animation: false,
         parsing: false,
         normalized: true,
-        interaction: { mode: 'nearest', intersect: false },
+        interaction: { mode: "nearest", intersect: false },
         plugins: {
           legend: { display: false },
           tooltip: {
             callbacks: {
               title: (items) => {
-                if (!items.length) return '';
+                if (!items.length) return "";
                 const ds = items[0]!.dataset as GapDataset;
                 const p = ds._pts?.[items[0]!.dataIndex];
-                return p ? p.t : '';
+                return p ? p.t : "";
               },
               label: (item) => {
                 const ds = item.dataset as GapDataset & { __ep?: number };
                 const p = ds._pts?.[item.dataIndex];
-                if (!p) return '';
-                const who = eps[ds.__ep ?? 0] ? bi(eps[ds.__ep ?? 0]!.short) : '';
-                const band = p.low === p.high ? compact(p.low) : `${compact(p.low)}–${compact(p.high)}`;
-                return `${who}: ${band}${p.note ? `  ·  ${p.note}` : ''}`;
+                if (!p) return "";
+                const who = eps[ds.__ep ?? 0]
+                  ? bi(eps[ds.__ep ?? 0]!.short)
+                  : "";
+                const band =
+                  p.low === p.high
+                    ? compact(p.low)
+                    : `${compact(p.low)}–${compact(p.high)}`;
+                return `${who}: ${band}${p.note ? `  ·  ${p.note}` : ""}`;
               },
             },
           },
         },
         scales: {
-          x: { ...xLinear(XMAX), title: { display: true, text: '' } },
-          y: { ...yLog, title: { display: true, text: '' } },
+          x: { ...xLinear(XMAX), title: { display: true, text: "" } },
+          y: { ...yLog, title: { display: true, text: "" } },
         },
       },
       plugins: [gapDash],
@@ -6715,7 +8521,7 @@ export function mountCrossEpisode(hosts: CrossHosts): Chart<'line'>[] {
     hosts.eventLegend.append(
       legendButton(
         bi(ep.short),
-        swatch(RAMP[ei] ?? '#999'),
+        swatch(RAMP[ei] ?? "#999"),
         () => {
           focus.ep = ei;
           focus.key = null;
@@ -6736,23 +8542,42 @@ export function mountCrossEpisode(hosts: CrossHosts): Chart<'line'>[] {
       const isItemPanel = ci >= eps.length;
       chart.data.datasets.forEach((ds, di) => {
         const gds = ds as GapDataset & { __ep?: number };
-        const key = isItemPanel ? ITEMS[ci - eps.length]?.key ?? null : ITEMS[di]?.key ?? null;
-        const ei = isItemPanel ? gds.__ep ?? null : ci;
+        const key = isItemPanel
+          ? (ITEMS[ci - eps.length]?.key ?? null)
+          : (ITEMS[di]?.key ?? null);
+        const ei = isItemPanel ? (gds.__ep ?? null) : ci;
 
-        const on = focus.key !== null ? key === focus.key : focus.ep !== null ? ei === focus.ep : true;
-        gds.borderWidth = on ? (focus.key !== null || focus.ep !== null ? 2.6 : 1.8) : 0.7;
+        const on =
+          focus.key !== null
+            ? key === focus.key
+            : focus.ep !== null
+              ? ei === focus.ep
+              : true;
+        gds.borderWidth = on
+          ? focus.key !== null || focus.ep !== null
+            ? 2.6
+            : 1.8
+          : 0.7;
         chart.setDatasetVisibility(di, true);
         gds.borderColor = withAlpha(gds.borderColor, on ? 1 : 0.18);
       });
-      chart.update('none');
+      chart.update("none");
     });
   }
 
   function withAlpha(color: string | unknown, a: number): string {
-    if (typeof color !== 'string' || !color.startsWith('#')) return '#999999';
+    if (typeof color !== "string" || !color.startsWith("#")) return "#999999";
     if (a >= 1) return color;
     const v = color.slice(1);
-    const n = parseInt(v.length === 3 ? v.split('').map((c) => c + c).join('') : v, 16);
+    const n = parseInt(
+      v.length === 3
+        ? v
+            .split("")
+            .map((c) => c + c)
+            .join("")
+        : v,
+      16,
+    );
     const r = (n >> 16) & 255;
     const g = (n >> 8) & 255;
     const b = n & 255;
@@ -6765,101 +8590,110 @@ export function mountCrossEpisode(hosts: CrossHosts): Chart<'line'>[] {
 /* --------------------------------------------------------------- overlay */
 
 reg({
-  'span:may68': '29 avr. – 30 juin 1968',
-  'span:cpe': '6 févr. – 16 avr. 2006',
-  'span:gj': '12 nov. 2018 – 9 sept. 2019',
-  'span:nahel': '27 juin – 9 juil. 2023',
-  'span:pensions': '19 janv. – 8 juin 2023',
-  'span:bt': '10 sept. – 5 oct. 2025',
-  'span:students26': '1er oct. – 11 nov. 2026',
+  "span:may68": "29 avr. – 30 juin 1968",
+  "span:cpe": "6 févr. – 16 avr. 2006",
+  "span:gj": "12 nov. 2018 – 9 sept. 2019",
+  "span:nahel": "27 juin – 9 juil. 2023",
+  "span:pensions": "19 janv. – 8 juin 2023",
+  "span:bt": "10 sept. – 5 oct. 2025",
+  "span:students26": "1er oct. – 11 nov. 2026",
 
-  'banner:may68':
-    'Des chiffres de foule n’existent que pour les 1er, 6, 10 et 13 mai. La grève générale n’est pas comptée ici.',
-  'banner:cpe':
-    'Un seul total d’interpellations pour tout le mouvement (4 500) ; aucune série hebdomadaire n’existe.',
-  'banner:gj':
-    'Comptage ministériel uniquement : un chiffre par acte. Les actes 34 à 43 n’ont jamais été publiés ; aucune série répressive après l’acte IV.',
-  'banner:nahel':
-    'Les rassemblements étaient interdits : ce sont les interpellations, non les foules, qui portent l’échelle des émeutes.',
-  'banner:pensions':
-    'Foules seulement : aucune série nationale hebdomadaire d’interpellations ou de blessés n’a été publiée.',
-  'banner:bt':
-    'Le 10 sept. est un total d’actions (blocages compris) ; le 18 sept. est une manifestation intersyndicale.',
-  'banner:students26':
-    'Les blessés manifestants sont un stock de septembre, puis un plancher contentieux — jamais un flux hebdomadaire.',
+  "banner:may68":
+    "Des chiffres de foule n’existent que pour les 1er, 6, 10 et 13 mai. La grève générale n’est pas comptée ici.",
+  "banner:cpe":
+    "Un seul total d’interpellations pour tout le mouvement (4 500) ; aucune série hebdomadaire n’existe.",
+  "banner:gj":
+    "Comptage ministériel uniquement : un chiffre par acte. Les actes 34 à 43 n’ont jamais été publiés ; aucune série répressive après l’acte IV.",
+  "banner:nahel":
+    "Les rassemblements étaient interdits : ce sont les interpellations, non les foules, qui portent l’échelle des émeutes.",
+  "banner:pensions":
+    "Foules seulement : aucune série nationale hebdomadaire d’interpellations ou de blessés n’a été publiée.",
+  "banner:bt":
+    "Le 10 sept. est un total d’actions (blocages compris) ; le 18 sept. est une manifestation intersyndicale.",
+  "banner:students26":
+    "Les blessés manifestants sont un stock de septembre, puis un plancher contentieux — jamais un flux hebdomadaire.",
 
-  't:may68:0': '29 avr. – 5 mai · manifestation du 1er Mai',
-  't:nahel:0': '26 juin – 2 juil. · marche de Nanterre, 29 juin',
+  "t:may68:0": "29 avr. – 5 mai · manifestation du 1er Mai",
+  "t:nahel:0": "26 juin – 2 juil. · marche de Nanterre, 29 juin",
 
-  'n:may68:0:p': 'préfecture 25 000 / CGT 100 000, République → Bastille',
-  'n:may68:1:p': '20 000 vers la Sorbonne le 6 mai ; plus de 20 000 à nouveau le 10 mai',
-  'n:may68:1:a': '469 dans la nuit du 10 au 11 mai ; la borne haute ajoute 422 interpellations de début mai',
-  'n:may68:1:f': '300 et plus le 6 mai ; 247 les 10–11 mai',
-  'n:may68:1:i': '≥ 100 — aucun décompte national publié',
-  'n:may68:2:p': 'préfecture 230 000 · ORTF 171 000 · syndicats 1 000 000. Pic de l’épisode.',
-  'n:may68:3:a': 'plus de 1 000 interpellations le 25 mai',
-  'n:may68:3:i': '887 blessés, d’après l’infobox de Wikipédia en anglais — provenance fragile',
-  'n:may68:4:p':
-    '30 mai : contre-manifestation de 300 000 (préfecture) à 1 000 000 — exclue des totaux de manifestants',
+  "n:may68:0:p": "préfecture 25 000 / CGT 100 000, République → Bastille",
+  "n:may68:1:p":
+    "20 000 vers la Sorbonne le 6 mai ; plus de 20 000 à nouveau le 10 mai",
+  "n:may68:1:a":
+    "469 dans la nuit du 10 au 11 mai ; la borne haute ajoute 422 interpellations de début mai",
+  "n:may68:1:f": "300 et plus le 6 mai ; 247 les 10–11 mai",
+  "n:may68:1:i": "≥ 100 — aucun décompte national publié",
+  "n:may68:2:p":
+    "préfecture 230 000 · ORTF 171 000 · syndicats 1 000 000. Pic de l’épisode.",
+  "n:may68:3:a": "plus de 1 000 interpellations le 25 mai",
+  "n:may68:3:i":
+    "887 blessés, d’après l’infobox de Wikipédia en anglais — provenance fragile",
+  "n:may68:4:p":
+    "30 mai : contre-manifestation de 300 000 (préfecture) à 1 000 000 — exclue des totaux de manifestants",
 
-  'n:cpe:0:p': '187 manifestations, première journée nationale',
-  'n:cpe:4:p': 'plus d’un million revendiqué ; 38 universités en grève le 9 mars',
-  'n:cpe:5:p': '18 mars : 500 000 (ministère) – 1 500 000 (syndicats) ; Paris 80 000 – 700 000',
-  'n:cpe:5:a': 'Paris, 18 mars (156 ministère / 167 organisateurs)',
-  'n:cpe:5:f': 'Paris, 18 mars',
-  'n:cpe:5:i': '18 (16 mars) + 52 (18 mars), Paris seulement',
-  'n:cpe:6:p': '21 universités totalement bloquées ; 67 en grève ou bloquées',
-  'n:cpe:7:p': '4e journée nationale d’action ; pic',
-  'n:cpe:8:a': 'dernière semaine avec un chiffre d’interpellations',
-  'n:cpe:9:p': 'CPE retiré le 10 avril ; le mouvement se divise',
+  "n:cpe:0:p": "187 manifestations, première journée nationale",
+  "n:cpe:4:p":
+    "plus d’un million revendiqué ; 38 universités en grève le 9 mars",
+  "n:cpe:5:p":
+    "18 mars : 500 000 (ministère) – 1 500 000 (syndicats) ; Paris 80 000 – 700 000",
+  "n:cpe:5:a": "Paris, 18 mars (156 ministère / 167 organisateurs)",
+  "n:cpe:5:f": "Paris, 18 mars",
+  "n:cpe:5:i": "18 (16 mars) + 52 (18 mars), Paris seulement",
+  "n:cpe:6:p": "21 universités totalement bloquées ; 67 en grève ou bloquées",
+  "n:cpe:7:p": "4e journée nationale d’action ; pic",
+  "n:cpe:8:a": "dernière semaine avec un chiffre d’interpellations",
+  "n:cpe:9:p": "CPE retiré le 10 avril ; le mouvement se divise",
 
-  'n:gj:0:p':
-    '287 700 recense toutes les actions, blocages routiers compris : un total d’actions, pas une manifestation',
-  'n:gj:0:a': '974 gardes à vue, ~1 150 interpellations',
-  'n:gj:0:f': '17 policiers sur 126 blessés — répartition calculée',
-  'n:gj:0:i': '109 blessés sur 126 — répartition calculée',
-  'n:gj:1:p': 'contre-comptage du syndicat policier : 750 000',
-  'n:gj:1:a': '307 gardes à vue, 339 interpellations',
-  'n:gj:1:i': '54 blessés sur 84 — répartition calculée',
-  'n:gj:2:a': 'placements en garde à vue, pas des interpellations ; 263 blessés, non répartis par camp',
-  'n:gj:3:a':
-    '1 709 gardes à vue, ~2 000 interpellations ; blessés annoncés à 118 / 264 / 585 selon la source, non répartis',
+  "n:gj:0:p":
+    "287 700 recense toutes les actions, blocages routiers compris : un total d’actions, pas une manifestation",
+  "n:gj:0:a": "974 gardes à vue, ~1 150 interpellations",
+  "n:gj:0:f": "17 policiers sur 126 blessés — répartition calculée",
+  "n:gj:0:i": "109 blessés sur 126 — répartition calculée",
+  "n:gj:1:p": "contre-comptage du syndicat policier : 750 000",
+  "n:gj:1:a": "307 gardes à vue, 339 interpellations",
+  "n:gj:1:i": "54 blessés sur 84 — répartition calculée",
+  "n:gj:2:a":
+    "placements en garde à vue, pas des interpellations ; 263 blessés, non répartis par camp",
+  "n:gj:3:a":
+    "1 709 gardes à vue, ~2 000 interpellations ; blessés annoncés à 118 / 264 / 585 selon la source, non répartis",
 
-  'n:nahel:0:p': 'police 6 200 / organisateurs 20 000 pour la marche blanche',
-  'n:nahel:0:a': 'total national, 27 juin – 2 juil.',
-  'n:nahel:0:f': '722 policiers blessés ; 2 morts ; 5 662 véhicules brûlés',
-  'n:nahel:1:a': '72 + 16 + 20 du 3 au 5 juil.',
+  "n:nahel:0:p": "police 6 200 / organisateurs 20 000 pour la marche blanche",
+  "n:nahel:0:a": "total national, 27 juin – 2 juil.",
+  "n:nahel:0:f": "722 policiers blessés ; 2 morts ; 5 662 véhicules brûlés",
+  "n:nahel:1:a": "72 + 16 + 20 du 3 au 5 juil.",
 
-  'n:pensions:0:p': 'première journée nationale ; Paris 80 000 – 400 000',
-  'n:pensions:3:p': 'deux journées d’action dans la semaine ; le pic est le 11 févr.',
-  'n:pensions:7:p': 'record national : 1,28 M ministère, 3,5 M syndicats',
-  'n:pensions:12:p': 'la CGT donne 1,0 M dans une compilation, 1,5 M dans une autre',
-  'n:pensions:20:p': 'minimum du mouvement',
+  "n:pensions:0:p": "première journée nationale ; Paris 80 000 – 400 000",
+  "n:pensions:3:p":
+    "deux journées d’action dans la semaine ; le pic est le 11 févr.",
+  "n:pensions:7:p": "record national : 1,28 M ministère, 3,5 M syndicats",
+  "n:pensions:12:p":
+    "la CGT donne 1,0 M dans une compilation, 1,5 M dans une autre",
+  "n:pensions:20:p": "minimum du mouvement",
 
-  'n:bt:0:p':
-    'ministère 175 000–197 000, révisé à la hausse depuis un comptage de début de soirée à ~29 000 ; CGT ~250 000. 596 rassemblements, 253 blocages.',
-  'n:bt:0:a': '540 interpellations, 211 à Paris',
-  'n:bt:1:p':
-    'journée intersyndicale — mobilisation distincte des actions du mouvement ; Paris 55 000 (préfecture)',
-  'n:bt:1:a': '309 sur le territoire, 103 à Paris',
-  'n:bt:1:i': '11 blessés, dont 1 journaliste',
+  "n:bt:0:p":
+    "ministère 175 000–197 000, révisé à la hausse depuis un comptage de début de soirée à ~29 000 ; CGT ~250 000. 596 rassemblements, 253 blocages.",
+  "n:bt:0:a": "540 interpellations, 211 à Paris",
+  "n:bt:1:p":
+    "journée intersyndicale — mobilisation distincte des actions du mouvement ; Paris 55 000 (préfecture)",
+  "n:bt:1:a": "309 sur le territoire, 103 à Paris",
+  "n:bt:1:i": "11 blessés, dont 1 journaliste",
 });
 ```
 
-**Still open, and worth deciding before you merge:** `episodes.ts` keeps a per-panel `ownMax` for C so each movement keeps its own x extent (as the caption promises), but the axis *titles* are empty strings — the captions in `index.html` carry the x/y explanation, so labelling every axis in seven panels would be redundant. If you'd rather have short titles (`weeks` / `count`), there is now a `t()` key slot for them but no entry yet. Second: `cpe` week 8 (arrests 600) is what sets `XMAX` to 7 rather than the 8 the sentence in Section C′ claims ("CPE, 28 Mar – 2 Apr 2006"), since my week bucketing puts 28 Mar in week 7. Either the week boundary or that sentence has to move — tell me which you prefer and I'll adjust rather than guess.
+**Still open, and worth deciding before you merge:** `episodes.ts` keeps a per-panel `ownMax` for C so each movement keeps its own x extent (as the caption promises), but the axis _titles_ are empty strings — the captions in `index.html` carry the x/y explanation, so labelling every axis in seven panels would be redundant. If you'd rather have short titles (`weeks` / `count`), there is now a `t()` key slot for them but no entry yet. Second: `cpe` week 8 (arrests 600) is what sets `XMAX` to 7 rather than the 8 the sentence in Section C′ claims ("CPE, 28 Mar – 2 Apr 2006"), since my week bucketing puts 28 Mar in week 7. Either the week boundary or that sentence has to move — tell me which you prefer and I'll adjust rather than guess.
 
 ---
 
 **You**
 
 > ✘ [ERROR] Could not resolve "./sources.ts"
-> 
+>
 >     src/client/main.ts:23:30:
 >       23 │ import { renderSources } from "./sources.ts";
 >          ╵                               ~~~~~~~~~~~~~~
-> 
+>
 > ✘ [ERROR] Expected identifier but found "("
-> 
+>
 >     src/client/chart.ts:226:15:
 >       226 │     nfDy.set(k.() => f);
 >           ╵                ^
@@ -6881,8 +8715,8 @@ function dtf(opts: Intl.DateTimeFormatOptions): Intl.DateTimeFormat {
   const key = `${lang()}|${JSON.stringify(opts)}`;
   const hit = fmtCache.get(key);
   if (hit) return hit;
-  const made = new Intl.DateTimeFormat(lang() === 'fr' ? 'fr-FR' : 'en-GB', {
-    timeZone: 'UTC',
+  const made = new Intl.DateTimeFormat(lang() === "fr" ? "fr-FR" : "en-GB", {
+    timeZone: "UTC",
     ...opts,
   });
   fmtCache.set(key, made);
@@ -6890,7 +8724,7 @@ function dtf(opts: Intl.DateTimeFormatOptions): Intl.DateTimeFormat {
 }
 
 const dmy = (iso: string): string =>
-  dtf({ day: 'numeric', month: 'short' }).format(new Date(`${iso}T12:00:00Z`));
+  dtf({ day: "numeric", month: "short" }).format(new Date(`${iso}T12:00:00Z`));
 
 const DAY_LABELS = DATES.map((d) => dmy(d));
 ```
@@ -6906,7 +8740,9 @@ const DAILY_VIEW: View = {
     return DATES.map((d) => dmy(d));
   },
   get footers() {
-    return DATES.map((d) => (DAY_NOTES[d] ? tr(`day:${d}`, DAY_NOTES[d]) : null));
+    return DATES.map((d) =>
+      DAY_NOTES[d] ? tr(`day:${d}`, DAY_NOTES[d]) : null,
+    );
   },
   maxRotation: 90,
   maxTicksLimit: 25,
@@ -6930,7 +8766,7 @@ const DAILY_VIEW: View = {
  * are the specific pages the series were compiled from.
  */
 
-import { bi, type Bi } from './i18n.ts';
+import { bi, type Bi } from "./i18n.ts";
 
 /* ------------------------------------------------------------------ types */
 
@@ -6951,60 +8787,63 @@ export interface SourceGroup {
 
 /* ------------------------------------------------------------------- copy */
 
-const TITLE: Bi = { en: 'Sources', fr: 'Sources' };
+const TITLE: Bi = { en: "Sources", fr: "Sources" };
 
 const LEDE: Bi = {
-  en: 'Every series on this page is traceable to a publisher below. Where two publishers disagree, the charts carry a range instead of a point — the range is the disagreement, not an error bar.',
-  fr: 'Chaque série de cette page est rattachée à un éditeur ci-dessous. Lorsque deux éditeurs divergent, les graphiques affichent une fourchette plutôt qu’un point : la fourchette est la divergence, pas une barre d’erreur.',
+  en: "Every series on this page is traceable to a publisher below. Where two publishers disagree, the charts carry a range instead of a point — the range is the disagreement, not an error bar.",
+  fr: "Chaque série de cette page est rattachée à un éditeur ci-dessous. Lorsque deux éditeurs divergent, les graphiques affichent une fourchette plutôt qu’un point : la fourchette est la divergence, pas une barre d’erreur.",
 };
 
-const FLAG_TITLE: Bi = { en: 'How to read the markers', fr: 'Comment lire les marqueurs' };
+const FLAG_TITLE: Bi = {
+  en: "How to read the markers",
+  fr: "Comment lire les marqueurs",
+};
 const FLAG_LEDE: Bi = {
-  en: 'A filled circle is a national figure. Anything else is a rotated square, and the tooltip says which of these applies:',
-  fr: 'Un cercle plein est un chiffre national. Tout le reste est un carré pivoté, et l’infobulle précise lequel de ces cas s’applique :',
+  en: "A filled circle is a national figure. Anything else is a rotated square, and the tooltip says which of these applies:",
+  fr: "Un cercle plein est un chiffre national. Tout le reste est un carré pivoté, et l’infobulle précise lequel de ces cas s’applique :",
 };
 
 const FLAGS: { flag: string; text: Bi }[] = [
   {
-    flag: 'r',
+    flag: "r",
     text: {
-      en: 'regional only — one département or one city, never extrapolated',
-      fr: 'régional seulement — un département ou une ville, jamais extrapolé',
+      en: "regional only — one département or one city, never extrapolated",
+      fr: "régional seulement — un département ou une ville, jamais extrapolé",
     },
   },
   {
-    flag: 'p',
+    flag: "p",
     text: {
-      en: 'partial — a floor, or two publishers disagreeing; both bounds shown',
-      fr: 'partiel — un plancher, ou deux éditeurs en désaccord ; les deux bornes sont affichées',
+      en: "partial — a floor, or two publishers disagreeing; both bounds shown",
+      fr: "partiel — un plancher, ou deux éditeurs en désaccord ; les deux bornes sont affichées",
     },
   },
   {
-    flag: 'f',
+    flag: "f",
     text: {
-      en: 'lower bound — the true figure is at least this, and nobody counted higher',
-      fr: 'borne inférieure — le chiffre réel est au moins celui-ci, personne n’a compté plus haut',
+      en: "lower bound — the true figure is at least this, and nobody counted higher",
+      fr: "borne inférieure — le chiffre réel est au moins celui-ci, personne n’a compté plus haut",
     },
   },
   {
-    flag: 'e',
+    flag: "e",
     text: {
-      en: 'derived — modelled or apportioned by us, not published as such',
-      fr: 'dérivé — modélisé ou réparti par nos soins, non publié tel quel',
+      en: "derived — modelled or apportioned by us, not published as such",
+      fr: "dérivé — modélisé ou réparti par nos soins, non publié tel quel",
     },
   },
   {
-    flag: 'c',
+    flag: "c",
     text: {
-      en: 'stock or actions-total — measured on a different basis; never sum it with the rest',
-      fr: 'stock ou total d’actions — mesuré autrement ; ne jamais l’additionner au reste',
+      en: "stock or actions-total — measured on a different basis; never sum it with the rest",
+      fr: "stock ou total d’actions — mesuré autrement ; ne jamais l’additionner au reste",
     },
   },
   {
-    flag: 'w',
+    flag: "w",
     text: {
-      en: 'weekly aggregate — a week, not a day',
-      fr: 'agrégat hebdomadaire — une semaine, pas un jour',
+      en: "weekly aggregate — a week, not a day",
+      fr: "agrégat hebdomadaire — une semaine, pas un jour",
     },
   },
 ];
@@ -7013,231 +8852,327 @@ const FLAGS: { flag: string; text: Bi }[] = [
 
 export const SOURCE_GROUPS: SourceGroup[] = [
   {
-    id: 'g26-official',
-    title: { en: '2026 movement — official counts', fr: 'Mouvement 2026 — décomptes officiels' },
+    id: "g26-official",
+    title: {
+      en: "2026 movement — official counts",
+      fr: "Mouvement 2026 — décomptes officiels",
+    },
     blurb: {
-      en: 'Turnout, arrests and injuries as published by the state. These are the only figures given a filled marker.',
-      fr: 'Foules, interpellations et blessés tels que publiés par l’État. Seuls ces chiffres reçoivent un marqueur plein.',
+      en: "Turnout, arrests and injuries as published by the state. These are the only figures given a filled marker.",
+      fr: "Foules, interpellations et blessés tels que publiés par l’État. Seuls ces chiffres reçoivent un marqueur plein.",
     },
     items: [
       {
-        id: 'mi-communiques',
-        label: { en: 'Press releases and weekly protest tallies', fr: 'Communiqués et bilans hebdomadaires des manifestations' },
-        publisher: { en: 'Ministère de l’Intérieur', fr: 'Ministère de l’Intérieur' },
-        url: 'https://www.interieur.gouv.fr',
+        id: "mi-communiques",
+        label: {
+          en: "Press releases and weekly protest tallies",
+          fr: "Communiqués et bilans hebdomadaires des manifestations",
+        },
+        publisher: {
+          en: "Ministère de l’Intérieur",
+          fr: "Ministère de l’Intérieur",
+        },
+        url: "https://www.interieur.gouv.fr",
         used: {
-          en: 'national turnout, arrests, officer injuries (84, then 305, for 1 Oct)',
-          fr: 'foules nationales, interpellations, blessés parmi les forces (84, puis 305, pour le 1er oct.)',
+          en: "national turnout, arrests, officer injuries (84, then 305, for 1 Oct)",
+          fr: "foules nationales, interpellations, blessés parmi les forces (84, puis 305, pour le 1er oct.)",
         },
       },
       {
-        id: 'pp-paris',
-        label: { en: 'Paris prefecture statements', fr: 'Communiqués de la préfecture de police' },
-        publisher: { en: 'Préfecture de police de Paris', fr: 'Préfecture de police de Paris' },
-        url: 'https://www.prefecturedepolice.interieur.gouv.fr',
+        id: "pp-paris",
+        label: {
+          en: "Paris prefecture statements",
+          fr: "Communiqués de la préfecture de police",
+        },
+        publisher: {
+          en: "Préfecture de police de Paris",
+          fr: "Préfecture de police de Paris",
+        },
+        url: "https://www.prefecturedepolice.interieur.gouv.fr",
         used: {
-          en: 'Paris-only arrest figures (18 Oct) and the Paris share of national days',
-          fr: 'interpellations parisiennes (18 oct.) et part parisienne des journées nationales',
+          en: "Paris-only arrest figures (18 Oct) and the Paris share of national days",
+          fr: "interpellations parisiennes (18 oct.) et part parisienne des journées nationales",
         },
       },
       {
-        id: 'pref-rhone',
-        label: { en: 'Departmental situation reports', fr: 'Points de situation préfectoraux' },
-        publisher: { en: 'Préfectures du Rhône et de l’Ardèche', fr: 'Préfectures du Rhône et de l’Ardèche' },
-        url: 'https://www.rhone.gouv.fr',
+        id: "pref-rhone",
+        label: {
+          en: "Departmental situation reports",
+          fr: "Points de situation préfectoraux",
+        },
+        publisher: {
+          en: "Préfectures du Rhône et de l’Ardèche",
+          fr: "Préfectures du Rhône et de l’Ardèche",
+        },
+        url: "https://www.rhone.gouv.fr",
         used: {
-          en: 'regional-only points: 40–45 arrests (12 Oct), 5 damaged shops (5 Nov), the Ardèche deployment',
-          fr: 'points régionaux : 40–45 interpellations (12 oct.), 5 commerces dégradés (5 nov.), le dispositif ardéchois',
+          en: "regional-only points: 40–45 arrests (12 Oct), 5 damaged shops (5 Nov), the Ardèche deployment",
+          fr: "points régionaux : 40–45 interpellations (12 oct.), 5 commerces dégradés (5 nov.), le dispositif ardéchois",
         },
       },
       {
-        id: 'justice',
-        label: { en: 'Custody and prosecution figures', fr: 'Chiffres de garde à vue et de poursuites' },
-        publisher: { en: 'Ministère de la Justice', fr: 'Ministère de la Justice' },
-        url: 'https://www.justice.gouv.fr',
+        id: "justice",
+        label: {
+          en: "Custody and prosecution figures",
+          fr: "Chiffres de garde à vue et de poursuites",
+        },
+        publisher: {
+          en: "Ministère de la Justice",
+          fr: "Ministère de la Justice",
+        },
+        url: "https://www.justice.gouv.fr",
         used: {
-          en: 'the custody/arrest distinction: 1,793 placements for 1,949 arrests on 1 Oct',
-          fr: 'la distinction garde à vue / interpellation : 1 793 placements pour 1 949 interpellations le 1er oct.',
+          en: "the custody/arrest distinction: 1,793 placements for 1,949 arrests on 1 Oct",
+          fr: "la distinction garde à vue / interpellation : 1 793 placements pour 1 949 interpellations le 1er oct.",
         },
       },
       {
-        id: 'cgt',
-        label: { en: 'Union turnout counts', fr: 'Comptages syndicaux' },
-        publisher: { en: 'CGT and the inter-union collective', fr: 'CGT et l’intersyndicale' },
-        url: 'https://www.cgt.fr',
+        id: "cgt",
+        label: { en: "Union turnout counts", fr: "Comptages syndicaux" },
+        publisher: {
+          en: "CGT and the inter-union collective",
+          fr: "CGT et l’intersyndicale",
+        },
+        url: "https://www.cgt.fr",
         used: {
-          en: 'the upper bound of every turnout range; 12 injuries declared on 5 Nov',
-          fr: 'la borne haute de chaque fourchette de foule ; 12 blessés déclarés le 5 nov.',
+          en: "the upper bound of every turnout range; 12 injuries declared on 5 Nov",
+          fr: "la borne haute de chaque fourchette de foule ; 12 blessés déclarés le 5 nov.",
         },
       },
     ],
   },
   {
-    id: 'g26-cost',
-    title: { en: '2026 movement — damage and its cost', fr: 'Mouvement 2026 — dommages et coût' },
+    id: "g26-cost",
+    title: {
+      en: "2026 movement — damage and its cost",
+      fr: "Mouvement 2026 — dommages et coût",
+    },
     blurb: {
-      en: 'No authority published a national damage total. The 244–866 M€ band is one think tank’s conditional estimate, and the shop counts behind the small increments do not agree.',
-      fr: 'Aucune autorité n’a publié de total national des dommages. La fourchette 244–866 M€ est l’estimation conditionnelle d’un think tank, et les décomptes de commerces qui fondent les petits incréments divergent.',
+      en: "No authority published a national damage total. The 244–866 M€ band is one think tank’s conditional estimate, and the shop counts behind the small increments do not agree.",
+      fr: "Aucune autorité n’a publié de total national des dommages. La fourchette 244–866 M€ est l’estimation conditionnelle d’un think tank, et les décomptes de commerces qui fondent les petits incréments divergent.",
     },
     items: [
       {
-        id: 'ifrap',
-        label: { en: 'Cost of the 17–18 October damage', fr: 'Coût des dommages des 17–18 octobre' },
-        publisher: { en: 'IFRAP', fr: 'IFRAP' },
-        url: 'https://www.ifrap.org',
+        id: "ifrap",
+        label: {
+          en: "Cost of the 17–18 October damage",
+          fr: "Coût des dommages des 17–18 octobre",
+        },
+        publisher: { en: "IFRAP", fr: "IFRAP" },
+        url: "https://www.ifrap.org",
         used: {
-          en: 'the €244–866M material-damage band, and the €294M–€1.1bn variant including lost turnover; also the €20k–€167k per-shop range',
-          fr: 'la fourchette 244–866 M€ de dommages matériels, et la variante 294 M€–1,1 Md€ avec le chiffre d’affaires perdu ; aussi la fourchette 20 k€–167 k€ par commerce',
+          en: "the €244–866M material-damage band, and the €294M–€1.1bn variant including lost turnover; also the €20k–€167k per-shop range",
+          fr: "la fourchette 244–866 M€ de dommages matériels, et la variante 294 M€–1,1 Md€ avec le chiffre d’affaires perdu ; aussi la fourchette 20 k€–167 k€ par commerce",
         },
       },
       {
-        id: 'cci',
-        label: { en: 'Damaged-shop census', fr: 'Recensement des commerces sinistrés' },
-        publisher: { en: 'CCI France', fr: 'CCI France' },
-        url: 'https://www.cci.fr',
+        id: "cci",
+        label: {
+          en: "Damaged-shop census",
+          fr: "Recensement des commerces sinistrés",
+        },
+        publisher: { en: "CCI France", fr: "CCI France" },
+        url: "https://www.cci.fr",
         used: {
-          en: '2,488 shops for the 17 Oct weekend; 50 shops (24 Oct) and 20 shops (31 Oct) for the weekly increments',
-          fr: '2 488 commerces pour le week-end du 17 oct. ; 50 commerces (24 oct.) et 20 commerces (31 oct.) pour les incréments hebdomadaires',
+          en: "2,488 shops for the 17 Oct weekend; 50 shops (24 Oct) and 20 shops (31 Oct) for the weekly increments",
+          fr: "2 488 commerces pour le week-end du 17 oct. ; 50 commerces (24 oct.) et 20 commerces (31 oct.) pour les incréments hebdomadaires",
         },
       },
       {
-        id: 'fcd',
-        label: { en: 'Retail-federation tally', fr: 'Décompte de la fédération du commerce' },
-        publisher: { en: 'FCD', fr: 'FCD' },
-        url: 'https://www.fcd.asso.fr',
+        id: "fcd",
+        label: {
+          en: "Retail-federation tally",
+          fr: "Décompte de la fédération du commerce",
+        },
+        publisher: { en: "FCD", fr: "FCD" },
+        url: "https://www.fcd.asso.fr",
         used: {
           en: 'the competing “1,500 and more" shop count, which is why the 17 Oct figure is a range',
-          fr: 'le décompte concurrent « 1 500 et plus », qui fait du 17 oct. une fourchette',
+          fr: "le décompte concurrent « 1 500 et plus », qui fait du 17 oct. une fourchette",
         },
       },
       {
-        id: 'idf',
-        label: { en: 'Île-de-France damage stock', fr: 'Stock de dommages en Île-de-France' },
-        publisher: { en: 'Préfecture de la région Île-de-France', fr: 'Préfecture de la région Île-de-France' },
-        url: 'https://www.iledefrance.gouv.fr',
+        id: "idf",
+        label: {
+          en: "Île-de-France damage stock",
+          fr: "Stock de dommages en Île-de-France",
+        },
+        publisher: {
+          en: "Préfecture de la région Île-de-France",
+          fr: "Préfecture de la région Île-de-France",
+        },
+        url: "https://www.iledefrance.gouv.fr",
         used: {
-          en: 'the €1M stock accumulated since 17 Sep, and the €6M / €4M increments — stocks, not daily flows',
-          fr: 'le stock de 1 M€ accumulé depuis le 17 sept., et les incréments de 6 M€ / 4 M€ — des stocks, pas des flux quotidiens',
+          en: "the €1M stock accumulated since 17 Sep, and the €6M / €4M increments — stocks, not daily flows",
+          fr: "le stock de 1 M€ accumulé depuis le 17 sept., et les incréments de 6 M€ / 4 M€ — des stocks, pas des flux quotidiens",
         },
       },
       {
-        id: 'press-cost',
-        label: { en: 'Damage reporting and commune-level inventories', fr: 'Couverture des dégâts et inventaires communaux' },
-        publisher: { en: 'Le Monde, AFP and regional daily press', fr: 'Le Monde, l’AFP et la presse quotidienne régionale' },
-        url: 'https://www.lemonde.fr',
+        id: "press-cost",
+        label: {
+          en: "Damage reporting and commune-level inventories",
+          fr: "Couverture des dégâts et inventaires communaux",
+        },
+        publisher: {
+          en: "Le Monde, AFP and regional daily press",
+          fr: "Le Monde, l’AFP et la presse quotidienne régionale",
+        },
+        url: "https://www.lemonde.fr",
         used: {
           en: 'the 1–2 deaths, the ~30 looted Paris shops, Angers (1 shop, 4 banks), and every “no tally published" note',
-          fr: 'les 1 à 2 morts, la trentaine de commerces pillés à Paris, Angers (1 commerce, 4 banques), et chaque mention « aucun bilan publié »',
+          fr: "les 1 à 2 morts, la trentaine de commerces pillés à Paris, Angers (1 commerce, 4 banques), et chaque mention « aucun bilan publié »",
         },
       },
     ],
   },
   {
-    id: 'g26-policing',
-    title: { en: '2026 movement — the cost of policing', fr: 'Mouvement 2026 — le coût du maintien de l’ordre' },
+    id: "g26-policing",
+    title: {
+      en: "2026 movement — the cost of policing",
+      fr: "Mouvement 2026 — le coût du maintien de l’ordre",
+    },
     blurb: {
-      en: 'Deployment totals are only published for the large days. Everything else on that chart is modelled from a per-officer-day rate, and is marked derived.',
-      fr: 'Les totaux de déploiement ne sont publiés que pour les grandes journées. Tout le reste de ce graphique est modélisé à partir d’un coût par agent-jour, et marqué dérivé.',
+      en: "Deployment totals are only published for the large days. Everything else on that chart is modelled from a per-officer-day rate, and is marked derived.",
+      fr: "Les totaux de déploiement ne sont publiés que pour les grandes journées. Tout le reste de ce graphique est modélisé à partir d’un coût par agent-jour, et marqué dérivé.",
     },
     items: [
       {
-        id: 'deploy',
-        label: { en: 'Mobile-unit deployments (60,000 / 70,000 officers)', fr: 'Dispositifs d’unités mobiles (60 000 / 70 000 agents)' },
-        publisher: { en: 'Ministère de l’Intérieur / Beauvau briefings', fr: 'Ministère de l’Intérieur / briefings de Beauvau' },
-        url: 'https://www.interieur.gouv.fr',
+        id: "deploy",
+        label: {
+          en: "Mobile-unit deployments (60,000 / 70,000 officers)",
+          fr: "Dispositifs d’unités mobiles (60 000 / 70 000 agents)",
+        },
+        publisher: {
+          en: "Ministère de l’Intérieur / Beauvau briefings",
+          fr: "Ministère de l’Intérieur / briefings de Beauvau",
+        },
+        url: "https://www.interieur.gouv.fr",
         used: {
-          en: 'the four days given a national figure; 110 mobile units, 26 Centaure, ~15 water cannon on 24 Oct',
-          fr: 'les quatre journées dotées d’un chiffre national ; 110 unités mobiles, 26 Centaure, ~15 canons à eau le 24 oct.',
+          en: "the four days given a national figure; 110 mobile units, 26 Centaure, ~15 water cannon on 24 Oct",
+          fr: "les quatre journées dotées d’un chiffre national ; 110 unités mobiles, 26 Centaure, ~15 canons à eau le 24 oct.",
         },
       },
       {
-        id: 'rate-cdc',
-        label: { en: 'Cost per officer-day of a mobile unit', fr: 'Coût par agent-jour d’une unité mobile' },
-        publisher: { en: 'Cour des comptes', fr: 'Cour des comptes' },
-        url: 'https://www.ccomptes.fr',
+        id: "rate-cdc",
+        label: {
+          en: "Cost per officer-day of a mobile unit",
+          fr: "Coût par agent-jour d’une unité mobile",
+        },
+        publisher: { en: "Cour des comptes", fr: "Cour des comptes" },
+        url: "https://www.ccomptes.fr",
         used: {
-          en: 'the €136 marginal CRS company rate used as the low bound of the policing band',
-          fr: 'le coût marginal de 136 € par compagnie de CRS, borne basse de la fourchette policière',
+          en: "the €136 marginal CRS company rate used as the low bound of the policing band",
+          fr: "le coût marginal de 136 € par compagnie de CRS, borne basse de la fourchette policière",
         },
       },
       {
-        id: 'rate-sainte-soline',
-        label: { en: 'All-in policing cost, Sainte-Soline benchmark', fr: 'Coût complet du maintien de l’ordre, référence Sainte-Soline' },
-        publisher: { en: 'Senate and press reporting on the 2023 Sainte-Soline operation', fr: 'Rapports sénatoriaux et presse sur l’opération de Sainte-Soline (2023)' },
-        url: 'https://www.senat.fr',
+        id: "rate-sainte-soline",
+        label: {
+          en: "All-in policing cost, Sainte-Soline benchmark",
+          fr: "Coût complet du maintien de l’ordre, référence Sainte-Soline",
+        },
+        publisher: {
+          en: "Senate and press reporting on the 2023 Sainte-Soline operation",
+          fr: "Rapports sénatoriaux et presse sur l’opération de Sainte-Soline (2023)",
+        },
+        url: "https://www.senat.fr",
         used: {
-          en: 'the €1,133 all-in rate used as the high bound; the width of the band is the gap between these two methods',
-          fr: 'le coût complet de 1 133 €, borne haute ; la largeur de la fourchette mesure l’écart entre ces deux méthodes',
+          en: "the €1,133 all-in rate used as the high bound; the width of the band is the gap between these two methods",
+          fr: "le coût complet de 1 133 €, borne haute ; la largeur de la fourchette mesure l’écart entre ces deux méthodes",
         },
       },
     ],
   },
   {
-    id: 'hist',
-    title: { en: 'Historical episodes (1968–2025)', fr: 'Épisodes historiques (1968–2025)' },
+    id: "hist",
+    title: {
+      en: "Historical episodes (1968–2025)",
+      fr: "Épisodes historiques (1968–2025)",
+    },
     blurb: {
-      en: 'Compiled from encyclopaedic summaries of the published counts, not from primary archives. Treat the older episodes as orders of magnitude.',
-      fr: 'Compilés à partir de synthèses encyclopédiques des décomptes publiés, non d’archives primaires. À lire comme des ordres de grandeur.',
+      en: "Compiled from encyclopaedic summaries of the published counts, not from primary archives. Treat the older episodes as orders of magnitude.",
+      fr: "Compilés à partir de synthèses encyclopédiques des décomptes publiés, non d’archives primaires. À lire comme des ordres de grandeur.",
     },
     items: [
       {
-        id: 'may68',
-        label: { en: 'May 1968', fr: 'Mai 1968' },
-        publisher: { en: 'Wikipedia (fr) and INA broadcast archives', fr: 'Wikipédia (fr) et archives de l’INA' },
-        url: 'https://fr.wikipedia.org/wiki/Mai_68',
+        id: "may68",
+        label: { en: "May 1968", fr: "Mai 1968" },
+        publisher: {
+          en: "Wikipedia (fr) and INA broadcast archives",
+          fr: "Wikipédia (fr) et archives de l’INA",
+        },
+        url: "https://fr.wikipedia.org/wiki/Mai_68",
         used: {
-          en: 'the four crowd counts (1, 6, 10, 13 May), the 469/422 arrests of 10–11 May, and the 300+ / 247 officer injuries',
-          fr: 'les quatre chiffres de foule (1er, 6, 10, 13 mai), les 469/422 interpellations des 10–11 mai, et les 300+ / 247 blessés parmi les forces',
+          en: "the four crowd counts (1, 6, 10, 13 May), the 469/422 arrests of 10–11 May, and the 300+ / 247 officer injuries",
+          fr: "les quatre chiffres de foule (1er, 6, 10, 13 mai), les 469/422 interpellations des 10–11 mai, et les 300+ / 247 blessés parmi les forces",
         },
       },
       {
-        id: 'cpe',
-        label: { en: 'CPE 2006', fr: 'CPE 2006' },
-        publisher: { en: 'Wikipedia (fr)', fr: 'Wikipédia (fr)' },
-        url: 'https://fr.wikipedia.org/wiki/Contrat_premi%C3%A8re_embauche',
+        id: "cpe",
+        label: { en: "CPE 2006", fr: "CPE 2006" },
+        publisher: { en: "Wikipedia (fr)", fr: "Wikipédia (fr)" },
+        url: "https://fr.wikipedia.org/wiki/Contrat_premi%C3%A8re_embauche",
         used: {
-          en: 'the four national days, the 4,500 movement-wide arrest total, and the Paris-only 18 March figures',
-          fr: 'les quatre journées nationales, le total de 4 500 interpellations du mouvement, et les chiffres parisiens du 18 mars',
+          en: "the four national days, the 4,500 movement-wide arrest total, and the Paris-only 18 March figures",
+          fr: "les quatre journées nationales, le total de 4 500 interpellations du mouvement, et les chiffres parisiens du 18 mars",
         },
       },
       {
-        id: 'gj',
-        label: { en: 'Gilets jaunes, acts 1–44', fr: 'Gilets jaunes, actes 1 à 44' },
-        publisher: { en: 'Wikipedia (fr), compiling Interior Ministry act-by-act counts', fr: 'Wikipédia (fr), compilant les décomptes ministériels acte par acte' },
-        url: 'https://fr.wikipedia.org/wiki/Mouvement_des_Gilets_jaunes',
+        id: "gj",
+        label: {
+          en: "Gilets jaunes, acts 1–44",
+          fr: "Gilets jaunes, actes 1 à 44",
+        },
+        publisher: {
+          en: "Wikipedia (fr), compiling Interior Ministry act-by-act counts",
+          fr: "Wikipédia (fr), compilant les décomptes ministériels acte par acte",
+        },
+        url: "https://fr.wikipedia.org/wiki/Mouvement_des_Gilets_jaunes",
         used: {
-          en: 'the 287,700 actions total for Act 1, the 750,000 police-union counter-count, and the custody series to Act 4',
-          fr: 'le total de 287 700 actions de l’acte 1, le contre-comptage policier de 750 000, et la série de gardes à vue jusqu’à l’acte IV',
+          en: "the 287,700 actions total for Act 1, the 750,000 police-union counter-count, and the custody series to Act 4",
+          fr: "le total de 287 700 actions de l’acte 1, le contre-comptage policier de 750 000, et la série de gardes à vue jusqu’à l’acte IV",
         },
       },
       {
-        id: 'nahel',
-        label: { en: 'Nahel Merzouk riots, June–July 2023', fr: 'Émeutes après la mort de Nahel Merzouk, juin–juillet 2023' },
-        publisher: { en: 'Wikipedia (fr)', fr: 'Wikipédia (fr)' },
-        url: 'https://fr.wikipedia.org/wiki/Mort_de_Nahel_Merzouk',
+        id: "nahel",
+        label: {
+          en: "Nahel Merzouk riots, June–July 2023",
+          fr: "Émeutes après la mort de Nahel Merzouk, juin–juillet 2023",
+        },
+        publisher: { en: "Wikipedia (fr)", fr: "Wikipédia (fr)" },
+        url: "https://fr.wikipedia.org/wiki/Mort_de_Nahel_Merzouk",
         used: {
-          en: 'the Nanterre white march (6,200 / 20,000), 3,354 arrests, 722 officers injured, 5,662 vehicles burned',
-          fr: 'la marche blanche de Nanterre (6 200 / 20 000), 3 354 interpellations, 722 policiers blessés, 5 662 véhicules brûlés',
+          en: "the Nanterre white march (6,200 / 20,000), 3,354 arrests, 722 officers injured, 5,662 vehicles burned",
+          fr: "la marche blanche de Nanterre (6 200 / 20 000), 3 354 interpellations, 722 policiers blessés, 5 662 véhicules brûlés",
         },
       },
       {
-        id: 'pensions',
-        label: { en: 'Pension-reform movement, 2023', fr: 'Mouvement contre la réforme des retraites, 2023' },
-        publisher: { en: 'Wikipedia (fr)', fr: 'Wikipédia (fr)' },
-        url: 'https://fr.wikipedia.org/wiki/Mouvement_social_contre_la_r%C3%A9forme_des_retraites_en_France_de_2023',
+        id: "pensions",
+        label: {
+          en: "Pension-reform movement, 2023",
+          fr: "Mouvement contre la réforme des retraites, 2023",
+        },
+        publisher: { en: "Wikipedia (fr)", fr: "Wikipédia (fr)" },
+        url: "https://fr.wikipedia.org/wiki/Mouvement_social_contre_la_r%C3%A9forme_des_retraites_en_France_de_2023",
         used: {
-          en: '19 Jan (1.127M–2M) and 7 Mar (1.28M–3.5M), the two figures that anchor the whole series',
-          fr: 'le 19 janv. (1,127 M–2 M) et le 7 mars (1,28 M–3,5 M), les deux chiffres qui ancrent toute la série',
+          en: "19 Jan (1.127M–2M) and 7 Mar (1.28M–3.5M), the two figures that anchor the whole series",
+          fr: "le 19 janv. (1,127 M–2 M) et le 7 mars (1,28 M–3,5 M), les deux chiffres qui ancrent toute la série",
         },
       },
       {
-        id: 'bt',
-        label: { en: '“Bloquons tout”, September–October 2025', fr: '« Bloquons tout », septembre–octobre 2025' },
-        publisher: { en: 'Wikipedia (en) and Le Monde', fr: 'Wikipédia (en) et Le Monde' },
-        url: 'https://en.wikipedia.org/wiki/Bloquons_tout',
+        id: "bt",
+        label: {
+          en: "“Bloquons tout”, September–October 2025",
+          fr: "« Bloquons tout », septembre–octobre 2025",
+        },
+        publisher: {
+          en: "Wikipedia (en) and Le Monde",
+          fr: "Wikipédia (en) et Le Monde",
+        },
+        url: "https://en.wikipedia.org/wiki/Bloquons_tout",
         used: {
-          en: '175,000–197,000 revised up from ~29,000 (10 Sep), 596 rallies and 253 blockades, 540 arrests, and the distinct 18 Sep inter-union day',
-          fr: '175 000–197 000 révisés depuis ~29 000 (10 sept.), 596 rassemblements et 253 blocages, 540 interpellations, et la journée intersyndicale distincte du 18 sept.',
+          en: "175,000–197,000 revised up from ~29,000 (10 Sep), 596 rallies and 253 blockades, 540 arrests, and the distinct 18 Sep inter-union day",
+          fr: "175 000–197 000 révisés depuis ~29 000 (10 sept.), 596 rassemblements et 253 blocages, 540 interpellations, et la journée intersyndicale distincte du 18 sept.",
         },
       },
     ],
@@ -7261,47 +9196,52 @@ const el = <K extends keyof HTMLElementTagNameMap>(
 
 function resolveHost(root?: HTMLElement | string | null): HTMLElement | null {
   if (root instanceof HTMLElement) return root;
-  if (typeof root === 'string') return document.querySelector<HTMLElement>(root);
-  return document.getElementById('sources');
+  if (typeof root === "string")
+    return document.querySelector<HTMLElement>(root);
+  return document.getElementById("sources");
 }
 
 /** Idempotent: safe to call again on every language change. */
 export function renderSources(root?: HTMLElement | string | null): void {
-  const host = root === undefined ? document.getElementById('sources') : resolveRoot(root);
+  const host =
+    root === undefined ? document.getElementById("sources") : resolveRoot(root);
   if (!host) {
-    console.error('[sources] no host element — pass one, or add <footer id="sources"> to index.html');
+    console.error(
+      '[sources] no host element — pass one, or add <footer id="sources"> to index.html',
+    );
     return;
   }
 
   const frag = document.createDocumentFragment();
 
-  const section = el('section', 'sources');
-  section.setAttribute('aria-labelledby', 'sources-title');
+  const section = el("section", "sources");
+  section.setAttribute("aria-labelledby", "sources-title");
 
-  const h2 = el('h2', 'sources-title', bi(TITLE));
-  h2.id = 'sources-title';
-  section.append(h2, el('p', 'sources-lede', bi(LEDE)));
+  const h2 = el("h2", "sources-title", bi(TITLE));
+  h2.id = "sources-title";
+  section.append(h2, el("p", "sources-lede", bi(LEDE)));
 
   for (const group of SOURCE_GROUPS) {
-    const wrap = el('div', 'source-group');
+    const wrap = el("div", "source-group");
     wrap.id = `src-${group.id}`;
-    wrap.append(el('h3', 'source-group-title', bi(group.title)));
-    if (group.blurb) wrap.append(el('p', 'source-group-blurb', bi(group.blurb)));
+    wrap.append(el("h3", "source-group-title", bi(group.title)));
+    if (group.blurb)
+      wrap.append(el("p", "source-group-blurb", bi(group.blurb)));
 
-    const list = el('ul', 'source-list');
+    const list = el("ul", "source-list");
     for (const item of group.items) {
-      const li = el('li', 'source-item');
+      const li = el("li", "source-item");
       li.dataset.sourceId = item.id;
 
-      const a = el('a', 'source-link', bi(item.label));
+      const a = el("a", "source-link", bi(item.label));
       li.dataset.textContent = item.label.en;
       li.dataset.title = bi(item.label);
-      li.textContent = '';
-      li.setAttribute('data-label', bi(item.label));
-      li.textContent = '';
+      li.textContent = "";
+      li.setAttribute("data-label", bi(item.label));
+      li.textContent = "";
       li.append(linkNode(item));
-      li.append(el('span', 'source-publisher', ` — ${bi(item.publisher)}`));
-      li.append(el('span', 'source-used', ` · ${bi(item.used)}`));
+      li.append(el("span", "source-publisher", ` — ${bi(item.publisher)}`));
+      li.append(el("span", "source-used", ` · ${bi(item.used)}`));
       list.append(li);
       void list;
     }
@@ -7310,31 +9250,39 @@ export function renderSources(root?: HTMLElement | string | null): void {
   }
 
   /* marker legend */
-  const flagWrap = el('div', 'source-group source-flags');
-  flagWrap.append(el('h3', 'source-group-title', bi(FLAG_TITLE)));
-  flagWrap.append(el('p', 'source-group-blurb', bi(FLAG_LEDE)));
-  const dl = el('dl', 'flag-list');
+  const flagWrap = el("div", "source-group source-flags");
+  flagWrap.append(el("h3", "source-group-title", bi(FLAG_TITLE)));
+  flagWrap.append(el("p", "source-group-blurb", bi(FLAG_LEDE)));
+  const dl = el("dl", "flag-list");
   for (const f of FLAGS) {
-    dl.append(el('dt', 'flag-key', f.flag));
-    dl.append(el('dd', 'flag-text', bi(f.text)));
+    dl.append(el("dt", "flag-key", f.flag));
+    dl.append(el("dd", "flag-text", bi(f.text)));
   }
   flagWrap.append(dl);
   section.append(flagWrap);
 
   /* provenance footer */
-  const note = el('p', 'sources-note');
-  const transcript = el('a', 'source-link', bi({
-    en: 'this page’s conversation transcript',
-    fr: 'la transcription de la conversation de cette page',
-  }));
-  transcript.href = 'transcript.html';
+  const note = el("p", "sources-note");
+  const transcript = el(
+    "a",
+    "source-link",
+    bi({
+      en: "this page’s conversation transcript",
+      fr: "la transcription de la conversation de cette page",
+    }),
+  );
+  transcript.href = "transcript.html";
   note.append(
-    el('span', undefined, bi({
-      en: 'These charts are AI-generated from the sources above; each figure should be checked against its publisher before any serious use. The full working, including every rejected figure, is in ',
-      fr: 'Ces graphiques sont générés par IA à partir des sources ci-dessus ; chaque chiffre doit être vérifié auprès de son éditeur avant tout usage sérieux. Le détail du travail, y compris chaque chiffre écarté, figure dans ',
-    })),
+    el(
+      "span",
+      undefined,
+      bi({
+        en: "These charts are AI-generated from the sources above; each figure should be checked against its publisher before any serious use. The full working, including every rejected figure, is in ",
+        fr: "Ces graphiques sont générés par IA à partir des sources ci-dessus ; chaque chiffre doit être vérifié auprès de son éditeur avant tout usage sérieux. Le détail du travail, y compris chaque chiffre écarté, figure dans ",
+      }),
+    ),
     transcript,
-    document.createTextNode('.'),
+    document.createTextNode("."),
   );
   section.append(note);
 
@@ -7343,12 +9291,12 @@ export function renderSources(root?: HTMLElement | string | null): void {
 }
 
 function linkNode(item: Source): HTMLAnchorElement {
-  const a = document.createElement('a');
-  a.className = 'source-link';
+  const a = document.createElement("a");
+  a.className = "source-link";
   a.href = item.url;
   a.textContent = bi(item.label);
-  a.target = '_blank';
-  a.rel = 'noopener noreferrer';
+  a.target = "_blank";
+  a.rel = "noopener noreferrer";
   return a;
 }
 ```
@@ -7357,11 +9305,11 @@ function linkNode(item: Source): HTMLAnchorElement {
 
 Three things in the files you already have will fail or warn after these two:
 
-| File | Issue | Fix |
-| --- | --- | --- |
-| `sources.ts` | My draft above accumulated junk lines in the item loop (`li.dataset.textContent`, a dead `const a`, `void list`) | Delete those lines — the loop body is just `li.append(linkNode(item))`, then the publisher and `used` spans, then `list.append(li)` |
-| `sources.ts` | `resolveRoot` is referenced but I defined `resolveHost` | Rename the call to `resolveHost(root)` |
-| `episodes.ts:1` | `t` is imported but never used → `noUnusedLocals` error under `tsc`, though esbuild only warns | Drop `t` from the import list |
+| File            | Issue                                                                                                            | Fix                                                                                                                                 |
+| --------------- | ---------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `sources.ts`    | My draft above accumulated junk lines in the item loop (`li.dataset.textContent`, a dead `const a`, `void list`) | Delete those lines — the loop body is just `li.append(linkNode(item))`, then the publisher and `used` spans, then `list.append(li)` |
+| `sources.ts`    | `resolveRoot` is referenced but I defined `resolveHost`                                                          | Rename the call to `resolveHost(root)`                                                                                              |
+| `episodes.ts:1` | `t` is imported but never used → `noUnusedLocals` error under `tsc`, though esbuild only warns                   | Drop `t` from the import list                                                                                                       |
 
 And in `episodes.ts`, the `pointStyle` array needs the literal type or `tsc` widens it to `string[]`:
 
@@ -7379,13 +9327,11 @@ If `main.ts` calls `renderSources()` with no argument, the `#sources` id must ex
 
 **You**
 
-
-
 ---
 
 **Assistant**
 
-Both errors are one bug. `ChartConfiguration['options']['plugins']['legend']['labels']['filter']` is called as `filter(legendItem, chartData)` — the second argument is the **chart data object**, not the chart instance. So `chart.data` is `undefined`, `.datasets` throws inside the `Chart` constructor during legend layout, and the constructor aborts after elements were created but *before* `updateElements()` assigned their resolved options. Every subsequent mousemove then hits `PointElement.inRange` with `this.options === undefined` → the `hitRadius` cascade. Fix the filter and both stacks disappear.
+Both errors are one bug. `ChartConfiguration['options']['plugins']['legend']['labels']['filter']` is called as `filter(legendItem, chartData)` — the second argument is the **chart data object**, not the chart instance. So `chart.data` is `undefined`, `.datasets` throws inside the `Chart` constructor during legend layout, and the constructor aborts after elements were created but _before_ `updateElements()` assigned their resolved options. Every subsequent mousemove then hits `PointElement.inRange` with `this.options === undefined` → the `hitRadius` cascade. Fix the filter and both stacks disappear.
 
 Replace the import line and `basePlugins` in `src/client/chart.ts` with this:
 
@@ -7410,22 +9356,28 @@ import {
   type LegendItem,
   type Plugin,
   type TooltipItem,
-} from 'chart.js';
+} from "chart.js";
 
 const basePlugins = (subtitle: string) => ({
   legend: {
-    position: 'top' as const,
+    position: "top" as const,
     labels: {
       usePointStyle: true,
       boxWidth: 8,
       /* Chart.js passes (legendItem, chartData) here — NOT the chart. */
-      filter: (item: LegendItem, data: ChartData<'line'>): boolean => {
+      filter: (item: LegendItem, data: ChartData<"line">): boolean => {
         if (item.datasetIndex === undefined) return true;
-        return !(data.datasets[item.datasetIndex] as ProtestDataset | undefined)?.detachedSeries;
+        return !(data.datasets[item.datasetIndex] as ProtestDataset | undefined)
+          ?.detachedSeries;
       },
     },
   },
-  subtitle: { display: true, text: subtitle, font: { size: 11 }, padding: { bottom: 12 } },
+  subtitle: {
+    display: true,
+    text: subtitle,
+    font: { size: 11 },
+    padding: { bottom: 12 },
+  },
 });
 ```
 
@@ -7437,12 +9389,12 @@ Two things to check while you're there:
 ```ts
 export function mount(
   canvas: HTMLCanvasElement,
-  config: ChartConfiguration<'line'>,
-): Chart<'line'> {
-  const ctx = canvas.getContext('2d');
-  if (!ctx) throw new Error('2d context unavailable');
+  config: ChartConfiguration<"line">,
+): Chart<"line"> {
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("2d context unavailable");
   try {
-    return new Chart<'line'>(ctx, config);
+    return new Chart<"line">(ctx, config);
   } catch (err) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     throw err;
@@ -7467,78 +9419,126 @@ Two notes before the code: the `sources.ts` headings are already bilingual (`bi(
 ```ts
 /* ---------------------------------------------------------- static markup */
 
-type Attr = 'text' | 'aria-label' | 'title' | 'placeholder';
+type Attr = "text" | "aria-label" | "title" | "placeholder";
 
 const STATIC: Record<string, Bi> = {
-  'doc.title': {
-    en: 'Protest activity in France — October–November 2026',
-    fr: 'L’activité contestataire en France — octobre–novembre 2026',
+  "doc.title": {
+    en: "Protest activity in France — October–November 2026",
+    fr: "L’activité contestataire en France — octobre–novembre 2026",
   },
 
-  'hdr.kicker': { en: 'Working draft · 1 Oct – 11 Nov 2026', fr: 'Document de travail · 1er oct. – 11 nov. 2026' },
-  'hdr.title': {
-    en: 'Protest activity in France, autumn 2026',
-    fr: 'L’activité contestataire en France, automne 2026',
+  "hdr.kicker": {
+    en: "Working draft · 1 Oct – 11 Nov 2026",
+    fr: "Document de travail · 1er oct. – 11 nov. 2026",
   },
-  'hdr.lede': {
-    en: 'Turnout, arrests, injuries and damage, set against six earlier French movements. Every point is a range where the publishers disagree.',
-    fr: 'Foules, interpellations, blessés et dommages, comparés à six mouvements français antérieurs. Chaque point est une fourchette là où les éditeurs divergent.',
+  "hdr.title": {
+    en: "Protest activity in France, autumn 2026",
+    fr: "L’activité contestataire en France, automne 2026",
   },
-
-  'ui.lang': { en: 'Language', fr: 'Langue' },
-  'ui.lang.fr': { en: 'Afficher la page en français', fr: 'Afficher la page en français' },
-  'ui.lang.en': { en: 'Show this page in English', fr: 'Afficher la page en anglais' },
-
-  'disc.lead': {
-    en: 'These charts are AI-generated and have not been independently verified. Do not use them for serious analysis, publication or decision-making without checking every figure against the sources below. ',
-    fr: 'Ces graphiques sont générés par IA et n’ont pas été vérifiés de façon indépendante. Ne les utilisez pas pour une analyse sérieuse, une publication ou une décision sans vérifier chaque chiffre auprès des sources ci-dessous. ',
-  },
-  'disc.link': {
-    en: 'The full conversation in which they were produced, including every figure that was rejected, is in the transcript.',
-    fr: 'La conversation complète dans laquelle ils ont été produits, y compris chaque chiffre écarté, figure dans la transcription.',
+  "hdr.lede": {
+    en: "Turnout, arrests, injuries and damage, set against six earlier French movements. Every point is a range where the publishers disagree.",
+    fr: "Foules, interpellations, blessés et dommages, comparés à six mouvements français antérieurs. Chaque point est une fourchette là où les éditeurs divergent.",
   },
 
-  'sec.a.title': { en: 'A · Daily counts, 1 October – 11 November 2026', fr: 'A · Décomptes quotidiens, 1er octobre – 11 novembre 2026' },
-  'sec.a.lede': {
-    en: 'One point per day on which something was published. Days with no figure stay empty rather than interpolated.',
-    fr: 'Un point par jour où un chiffre a été publié. Les jours sans chiffre restent vides plutôt qu’interpolés.',
+  "ui.lang": { en: "Language", fr: "Langue" },
+  "ui.lang.fr": {
+    en: "Afficher la page en français",
+    fr: "Afficher la page en français",
   },
-  'card.prot.title': { en: 'Protesters', fr: 'Manifestants' },
-  'card.prot.sub': { en: 'Ministry and organiser counts', fr: 'Comptages ministériels et syndicaux' },
-  'card.enf.title': { en: 'Arrests and injuries', fr: 'Interpellations et blessés' },
-  'card.enf.sub': { en: 'Custody is not the same as arrest', fr: 'La garde à vue n’est pas l’interpellation' },
-  'card.cost.title': { en: 'Damage and the cost of policing', fr: 'Dommages et coût du maintien de l’ordre' },
-  'card.cost.sub': { en: 'Two different bases of measurement', fr: 'Deux bases de mesure différentes' },
+  "ui.lang.en": {
+    en: "Show this page in English",
+    fr: "Afficher la page en anglais",
+  },
 
-  'sec.b.title': { en: 'B · Weekly aggregates', fr: 'B · Agrégats hebdomadaires' },
-  'sec.b.lede': {
-    en: 'Weeks run Monday to Sunday. A peak-day crowd and a summed weekly arrest count are not the same statistic — the tooltip says which is which.',
-    fr: 'Les semaines vont du lundi au dimanche. Une foule de jour de pointe et un total hebdomadaire d’interpellations ne sont pas la même statistique — l’infobulle précise laquelle.',
+  "disc.lead": {
+    en: "These charts are AI-generated and have not been independently verified. Do not use them for serious analysis, publication or decision-making without checking every figure against the sources below. ",
+    fr: "Ces graphiques sont générés par IA et n’ont pas été vérifiés de façon indépendante. Ne les utilisez pas pour une analyse sérieuse, une publication ou une décision sans vérifier chaque chiffre auprès des sources ci-dessous. ",
   },
-  'card.pw.title': { en: 'Protesters, weekly peak', fr: 'Manifestants, pointe hebdomadaire' },
-  'card.ew.title': { en: 'Enforcement, weekly totals', fr: 'Répression, totaux hebdomadaires' },
+  "disc.link": {
+    en: "The full conversation in which they were produced, including every figure that was rejected, is in the transcript.",
+    fr: "La conversation complète dans laquelle ils ont été produits, y compris chaque chiffre écarté, figure dans la transcription.",
+  },
 
-  'sec.c.title': { en: 'C · One panel per movement', fr: 'C · Un panneau par mouvement' },
-  'sec.c.lede': {
-    en: 'Each panel keeps its own time span, so the shapes are comparable but the durations are not.',
-    fr: 'Chaque panneau conserve sa propre durée : les formes sont comparables, les durées non.',
+  "sec.a.title": {
+    en: "A · Daily counts, 1 October – 11 November 2026",
+    fr: "A · Décomptes quotidiens, 1er octobre – 11 novembre 2026",
   },
-  'sec.cp.title': { en: 'C′ · Transposed: one panel per series', fr: 'C′ · Transposé : un panneau par série' },
-  'sec.cp.lede': {
-    en: 'The same data with movements overlaid, so a single measure can be read across 1968 to 2026. The x axis is elapsed weeks.',
-    fr: 'Les mêmes données avec les mouvements superposés, pour lire une même mesure de 1968 à 2026. L’axe des x est le nombre de semaines écoulées.',
+  "sec.a.lede": {
+    en: "One point per day on which something was published. Days with no figure stay empty rather than interpolated.",
+    fr: "Un point par jour où un chiffre a été publié. Les jours sans chiffre restent vides plutôt qu’interpolés.",
   },
-  'leg.items.title': { en: 'Highlight a measure', fr: 'Mettre en avant une mesure' },
-  'leg.movements.title': { en: 'Highlight a movement', fr: 'Mettre en avant un mouvement' },
+  "card.prot.title": { en: "Protesters", fr: "Manifestants" },
+  "card.prot.sub": {
+    en: "Ministry and organiser counts",
+    fr: "Comptages ministériels et syndicaux",
+  },
+  "card.enf.title": {
+    en: "Arrests and injuries",
+    fr: "Interpellations et blessés",
+  },
+  "card.enf.sub": {
+    en: "Custody is not the same as arrest",
+    fr: "La garde à vue n’est pas l’interpellation",
+  },
+  "card.cost.title": {
+    en: "Damage and the cost of policing",
+    fr: "Dommages et coût du maintien de l’ordre",
+  },
+  "card.cost.sub": {
+    en: "Two different bases of measurement",
+    fr: "Deux bases de mesure différentes",
+  },
 
-  'src.wrap.title': { en: 'Sources and method', fr: 'Sources et méthode' },
+  "sec.b.title": {
+    en: "B · Weekly aggregates",
+    fr: "B · Agrégats hebdomadaires",
+  },
+  "sec.b.lede": {
+    en: "Weeks run Monday to Sunday. A peak-day crowd and a summed weekly arrest count are not the same statistic — the tooltip says which is which.",
+    fr: "Les semaines vont du lundi au dimanche. Une foule de jour de pointe et un total hebdomadaire d’interpellations ne sont pas la même statistique — l’infobulle précise laquelle.",
+  },
+  "card.pw.title": {
+    en: "Protesters, weekly peak",
+    fr: "Manifestants, pointe hebdomadaire",
+  },
+  "card.ew.title": {
+    en: "Enforcement, weekly totals",
+    fr: "Répression, totaux hebdomadaires",
+  },
+
+  "sec.c.title": {
+    en: "C · One panel per movement",
+    fr: "C · Un panneau par mouvement",
+  },
+  "sec.c.lede": {
+    en: "Each panel keeps its own time span, so the shapes are comparable but the durations are not.",
+    fr: "Chaque panneau conserve sa propre durée : les formes sont comparables, les durées non.",
+  },
+  "sec.cp.title": {
+    en: "C′ · Transposed: one panel per series",
+    fr: "C′ · Transposé : un panneau par série",
+  },
+  "sec.cp.lede": {
+    en: "The same data with movements overlaid, so a single measure can be read across 1968 to 2026. The x axis is elapsed weeks.",
+    fr: "Les mêmes données avec les mouvements superposés, pour lire une même mesure de 1968 à 2026. L’axe des x est le nombre de semaines écoulées.",
+  },
+  "leg.items.title": {
+    en: "Highlight a measure",
+    fr: "Mettre en avant une mesure",
+  },
+  "leg.movements.title": {
+    en: "Highlight a movement",
+    fr: "Mettre en avant un mouvement",
+  },
+
+  "src.wrap.title": { en: "Sources and method", fr: "Sources et méthode" },
 };
 
 /** Resolves every `[data-i18n]` in the document; safe to call on each render. */
 export function applyStaticCopy(root: ParentNode = document): void {
   const L = lang();
 
-  for (const node of root.querySelectorAll<HTMLElement>('[data-i18n]')) {
+  for (const node of root.querySelectorAll<HTMLElement>("[data-i18n]")) {
     const key = node.dataset.i18n;
     if (!key) continue;
     const entry = STATIC[key];
@@ -7548,22 +9548,22 @@ export function applyStaticCopy(root: ParentNode = document): void {
     }
     const text = entry[L];
     const attr = node.dataset.i18nAttr as Attr | undefined;
-    if (!attr || attr === 'text') node.textContent = text;
+    if (!attr || attr === "text") node.textContent = text;
     else node.setAttribute(attr, text);
   }
 
   document.documentElement.lang = L;
   document.documentElement.dataset.lang = L;
-  const t0 = STATIC['doc.title'];
+  const t0 = STATIC["doc.title"];
   if (t0) document.title = t0[L];
 }
 
 /** Reflects the current language onto the segmented control. */
 export function syncLangSwitch(root: ParentNode = document): void {
   const L = lang();
-  for (const b of root.querySelectorAll<HTMLButtonElement>('[data-set-lang]')) {
+  for (const b of root.querySelectorAll<HTMLButtonElement>("[data-set-lang]")) {
     const on = b.dataset.setLang === L;
-    b.setAttribute('aria-pressed', String(on));
+    b.setAttribute("aria-pressed", String(on));
     b.tabIndex = on ? 0 : -1;
   }
 }
@@ -7579,14 +9579,39 @@ export function syncLangSwitch(root: ParentNode = document): void {
     <p class="lede" data-i18n="hdr.lede"></p>
   </div>
 
-  <div class="lang-switch" role="group" data-lang-switch data-i18n="ui.lang" data-i18n-attr="aria-label">
-    <button type="button" data-set-lang="fr" lang="fr" aria-label="" data-i18n="ui.lang.fr" data-i18n-attr="aria-label">FR</button>
-    <button type="button" data-set-lang="en" lang="en" aria-label="" data-i18n="ui.lang.en" data-i18n-attr="aria-label">EN</button>
+  <div
+    class="lang-switch"
+    role="group"
+    data-lang-switch
+    data-i18n="ui.lang"
+    data-i18n-attr="aria-label"
+  >
+    <button
+      type="button"
+      data-set-lang="fr"
+      lang="fr"
+      aria-label=""
+      data-i18n="ui.lang.fr"
+      data-i18n-attr="aria-label"
+    >
+      FR
+    </button>
+    <button
+      type="button"
+      data-set-lang="en"
+      lang="en"
+      aria-label=""
+      data-i18n="ui.lang.en"
+      data-i18n-attr="aria-label"
+    >
+      EN
+    </button>
   </div>
 </header>
 
 <p class="disclaimer">
-  <span data-i18n="disc.lead"></span><a href="transcript.html" data-i18n="disc.link"></a>
+  <span data-i18n="disc.lead"></span
+  ><a href="transcript.html" data-i18n="disc.link"></a>
 </p>
 
 <section id="sec-a">
@@ -7661,15 +9686,28 @@ Because `renderSources` calls `host.replaceChildren(...)`, put its heading outsi
   border-radius: 999px;
   background: transparent;
   color: #6b7280;
-  font: 600 10.5px/1 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font:
+    600 10.5px/1 system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
   letter-spacing: 0.07em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
-.lang-switch button:hover { color: #111827; background: #f3f4f6; }
-.lang-switch button:focus-visible { outline: 2px solid #0072b2; outline-offset: 2px; }
+.lang-switch button:hover {
+  color: #111827;
+  background: #f3f4f6;
+}
+.lang-switch button:focus-visible {
+  outline: 2px solid #0072b2;
+  outline-offset: 2px;
+}
 
 .lang-switch button[aria-pressed="true"] {
   background: #0072b2;
@@ -7684,10 +9722,16 @@ Because `renderSources` calls `host.replaceChildren(...)`, put its heading outsi
   gap: 1rem 1.5rem;
   flex-wrap: wrap;
 }
-.page-header__text { flex: 1 1 26rem; min-width: 0; }
+.page-header__text {
+  flex: 1 1 26rem;
+  min-width: 0;
+}
 
 @media (max-width: 40rem) {
-  .lang-switch { margin-left: 0; order: 3; }
+  .lang-switch {
+    margin-left: 0;
+    order: 3;
+  }
 }
 
 /* --- disclaimer and headings inherit the same palette --- */
@@ -7700,41 +9744,55 @@ Because `renderSources` calls `host.replaceChildren(...)`, put its heading outsi
   font-size: 0.82rem;
   line-height: 1.55;
 }
-.disclaimer a { color: #0072b2; }
-.section-lede { max-width: 62ch; color: #4b5563; font-size: 0.85rem; }
+.disclaimer a {
+  color: #0072b2;
+}
+.section-lede {
+  max-width: 62ch;
+  color: #4b5563;
+  font-size: 0.85rem;
+}
 ```
 
 ## 4. `src/client/main.ts` — wire the toggle and the copy
 
 ```ts
-import { applyStaticCopy, lang, setLang, syncLangSwitch, type Lang } from './i18n.ts';
-import { renderSources } from './sources.ts';
+import {
+  applyStaticCopy,
+  lang,
+  setLang,
+  syncLangSwitch,
+  type Lang,
+} from "./i18n.ts";
+import { renderSources } from "./sources.ts";
 
 /* bound once at boot; re-rendering never re-binds */
 function mountLangSwitch(): void {
-  const host = document.querySelector<HTMLElement>('[data-lang-switch]');
-  if (!host || host.dataset.bound === 'true') return;
+  const host = document.querySelector<HTMLElement>("[data-lang-switch]");
+  if (!host || host.dataset.bound === "true") return;
 
-  host.addEventListener('click', (ev) => {
-    const btn = (ev.target as HTMLElement).closest<HTMLButtonElement>('[data-set-lang]');
+  host.addEventListener("click", (ev) => {
+    const btn = (ev.target as HTMLElement).closest<HTMLButtonElement>(
+      "[data-set-lang]",
+    );
     if (!btn) return;
     const next = btn.dataset.setLang as Lang | undefined;
     if (!next || next === lang()) return;
 
-    setLang(next);                                   // updates state + localStorage
+    setLang(next); // updates state + localStorage
     const url = new URL(location.href);
-    url.searchParams.set('lang', next);              // deep-linkable, no reload
-    history.replaceState(null, '', url);
-    render();                                        // full re-render, charts remounted
+    url.searchParams.set("lang", next); // deep-linkable, no reload
+    history.replaceState(null, "", url);
+    render(); // full re-render, charts remounted
   });
 
-  host.dataset.bound = 'true';
+  host.dataset.bound = "true";
 }
 
 export function render(): void {
-  applyStaticCopy();        // headings, kicker, disclaimer, document.title, <html lang>
-  syncLangSwitch();         // aria-pressed on FR / EN
-  renderSources('#sources');
+  applyStaticCopy(); // headings, kicker, disclaimer, document.title, <html lang>
+  syncLangSwitch(); // aria-pressed on FR / EN
+  renderSources("#sources");
   // ...existing chart teardown + rebuild...
 }
 
@@ -7770,46 +9828,46 @@ interface FigureParts {
   a11yLabel: string;
 }
 
-function panelFigure({
-  strip,
-  meta,
-  note,
-  a11yLabel,
-}: FigureParts): { figure: HTMLElement; canvas: HTMLCanvasElement } {
-  const figure = document.createElement('figure');
-  figure.className = strip ? 'trellis-panel' : 'trellis-panel trellis-panel--bare';
+function panelFigure({ strip, meta, note, a11yLabel }: FigureParts): {
+  figure: HTMLElement;
+  canvas: HTMLCanvasElement;
+} {
+  const figure = document.createElement("figure");
+  figure.className = strip
+    ? "trellis-panel"
+    : "trellis-panel trellis-panel--bare";
 
-  const holder = document.createElement('div');
-  holder.className = 'panel-canvas';
+  const holder = document.createElement("div");
+  holder.className = "panel-canvas";
 
-  const canvas = document.createElement('canvas');
-  canvas.setAttribute('role', 'img');
-  canvas.setAttribute('aria-label', a11yLabel);
+  const canvas = document.createElement("canvas");
+  canvas.setAttribute("role", "img");
+  canvas.setAttribute("aria-label", a11yLabel);
   holder.append(canvas);
 
   if (strip) {
-    const head = document.createElement('span');
-    head.className = 'strip';
+    const head = document.createElement("span");
+    head.className = "strip";
     head.textContent = strip;
     figure.append(head);
 
     if (meta) {
-      const metaEl = document.createElement('span');
-      metaEl.className = 'strip-meta';
+      const metaEl = document.createElement("span");
+      metaEl.className = "strip-meta";
       metaEl.textContent = meta;
       figure.append(metaEl);
     }
 
     if (note) {
-      const noteEl = document.createElement('p');
-      noteEl.className = 'strip-note';
+      const noteEl = document.createElement("p");
+      noteEl.className = "strip-note";
       noteEl.textContent = note;
       figure.append(noteEl);
     }
   } else {
     /* no visible caption: the name survives only in the accessibility tree */
-    const caption = document.createElement('figcaption');
-    caption.className = 'visually-hidden';
+    const caption = document.createElement("figcaption");
+    caption.className = "visually-hidden";
     caption.textContent = a11yLabel;
     figure.append(caption);
   }
@@ -7822,22 +9880,22 @@ function panelFigure({
 ## 2. Section C call — unchanged labels, new signature
 
 ```ts
-    const { figure, canvas } = panelFigure({
-      strip: bi(ep.strip),
-      meta: `${tr(`span:${ep.id}`, ep.span)} · ${observations(ep)}`,
-      note: tr(`banner:${ep.id}`, ep.banner),
-      a11yLabel: `${bi(ep.strip)} — ${tr(`span:${ep.id}`, ep.span)}`,
-    });
+const { figure, canvas } = panelFigure({
+  strip: bi(ep.strip),
+  meta: `${tr(`span:${ep.id}`, ep.span)} · ${observations(ep)}`,
+  note: tr(`banner:${ep.id}`, ep.banner),
+  a11yLabel: `${bi(ep.strip)} — ${tr(`span:${ep.id}`, ep.span)}`,
+});
 ```
 
 ## 3. Section C′ call — labels dropped
 
 ```ts
-  const itemCharts: Chart<'line'>[] = ITEMS.map((item) => {
-    const { figure, canvas } = panelFigure({ a11yLabel: bi(item.label) });
-    hosts.itemHost.append(figure);
-    // …datasets and Chart construction unchanged…
-  });
+const itemCharts: Chart<"line">[] = ITEMS.map((item) => {
+  const { figure, canvas } = panelFigure({ a11yLabel: bi(item.label) });
+  hosts.itemHost.append(figure);
+  // …datasets and Chart construction unchanged…
+});
 ```
 
 ## 4. Dead code that the old caption was carrying
@@ -7845,18 +9903,20 @@ function panelFigure({
 `__label` existed only to annotate truncated per-panel titles, which no longer render. Drop it and the `truncated` computation:
 
 ```ts
-interface GapDataset extends ChartDataset<'line', { x: number; y: number }[]> {
+interface GapDataset extends ChartDataset<"line", { x: number; y: number }[]> {
   _pts?: Pt[];
 }
 ```
 
-…and inside `buildDataset`, remove the `const truncated = …` line and the `__label: truncated ? \`${bi(ep.short)} +\` : bi(ep.short),` property. `_pts`, `label`, colours, `pointRadius`, `pointStyle` all stay.
+…and inside `buildDataset`, remove the `const truncated = …` line and the `__label: truncated ? \`${bi(ep.short)} +\` : bi(ep.short),`property.`_pts`, `label`, colours, `pointRadius`, `pointStyle` all stay.
 
 ## 5. CSS
 
 ```css
 /* C′ panels have no caption, so they sit flush to the top of the grid cell */
-.trellis-panel--bare { padding-top: 0; }
+.trellis-panel--bare {
+  padding-top: 0;
+}
 
 /* keeps the accessible name without occupying space */
 .visually-hidden {
@@ -8368,20 +10428,78 @@ Two things to keep in sync when this lands:
 Minimal CSS for the box, consistent with the rest of the palette:
 
 ```css
-.sources-wrap { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #e5e7eb; }
-.sources-lede { max-width: 62ch; color: #4b5563; font-size: 0.85rem; }
-.source-group + .source-group { margin-top: 1.5rem; }
-.source-group-title { margin: 0 0 0.25rem; font-size: 0.9rem; font-weight: 650; color: #111827; }
-.source-group-blurb { margin: 0 0 0.5rem; max-width: 62ch; color: #6b7280; font-size: 0.78rem; line-height: 1.5; }
-.source-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.4rem; }
-.source-item { font-size: 0.8rem; line-height: 1.5; color: #374151; }
-.source-link { color: #0072b2; text-decoration-thickness: 1px; text-underline-offset: 2px; }
-.source-publisher { color: #111827; }
-.source-used { color: #6b7280; }
-.flag-list { display: grid; grid-template-columns: max-content 1fr; gap: 0.2rem 0.6rem; margin: 0; font-size: 0.78rem; }
-.flag-key { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: #111827; }
-.flag-text { margin: 0; color: #6b7280; }
-.sources-note { margin: 1.5rem 0 0; padding-top: 0.75rem; border-top: 1px solid #f3f4f6; color: #6b7280; font-size: 0.75rem; line-height: 1.55; }
+.sources-wrap {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+.sources-lede {
+  max-width: 62ch;
+  color: #4b5563;
+  font-size: 0.85rem;
+}
+.source-group + .source-group {
+  margin-top: 1.5rem;
+}
+.source-group-title {
+  margin: 0 0 0.25rem;
+  font-size: 0.9rem;
+  font-weight: 650;
+  color: #111827;
+}
+.source-group-blurb {
+  margin: 0 0 0.5rem;
+  max-width: 62ch;
+  color: #6b7280;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+.source-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.4rem;
+}
+.source-item {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: #374151;
+}
+.source-link {
+  color: #0072b2;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+.source-publisher {
+  color: #111827;
+}
+.source-used {
+  color: #6b7280;
+}
+.flag-list {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.2rem 0.6rem;
+  margin: 0;
+  font-size: 0.78rem;
+}
+.flag-key {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: #111827;
+}
+.flag-text {
+  margin: 0;
+  color: #6b7280;
+}
+.sources-note {
+  margin: 1.5rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid #f3f4f6;
+  color: #6b7280;
+  font-size: 0.75rem;
+  line-height: 1.55;
+}
 ```
 
 ---
@@ -8409,21 +10527,25 @@ Minimal CSS for the box, consistent with the rest of the palette:
  *   3. tr(key, fallback)   — overlay first, then the caller's inline English fallback
  */
 
-export type Lang = 'fr' | 'en';
-export interface Bi { readonly en: string; readonly fr: string }
+export type Lang = "fr" | "en";
+export interface Bi {
+  readonly en: string;
+  readonly fr: string;
+}
 
 /* ------------------------------------------------------------------- state */
 
-const STORAGE_KEY = 'lang';
-const DEFAULT_LANG: Lang = 'en';
+const STORAGE_KEY = "lang";
+const DEFAULT_LANG: Lang = "en";
 
-const isLang = (v: unknown): v is Lang => v === 'fr' || v === 'en';
-const hasDom = (): boolean => typeof window !== 'undefined' && typeof document !== 'undefined';
+const isLang = (v: unknown): v is Lang => v === "fr" || v === "en";
+const hasDom = (): boolean =>
+  typeof window !== "undefined" && typeof document !== "undefined";
 
 function fromUrl(): Lang | null {
   if (!hasDom()) return null;
   try {
-    const v = new URLSearchParams(window.location.search).get('lang');
+    const v = new URLSearchParams(window.location.search).get("lang");
     return isLang(v) ? v : null;
   } catch {
     return null;
@@ -8441,12 +10563,14 @@ function fromStorage(): Lang | null {
 }
 
 function fromBrowser(): Lang | null {
-  if (typeof navigator === 'undefined') return null;
-  const tags = navigator.languages?.length ? navigator.languages : [navigator.language];
+  if (typeof navigator === "undefined") return null;
+  const tags = navigator.languages?.length
+    ? navigator.languages
+    : [navigator.language];
   for (const tag of tags) {
     const low = String(tag).toLowerCase();
-    if (low.startsWith('fr')) return 'fr';
-    if (low.startsWith('en')) return 'en';
+    if (low.startsWith("fr")) return "fr";
+    if (low.startsWith("en")) return "en";
   }
   return null;
 }
@@ -8485,7 +10609,7 @@ export function setLang(next: Lang, opts: SetLangOptions = {}): Lang {
 }
 
 export function toggleLang(): Lang {
-  return setLang(current === 'fr' ? 'en' : 'fr');
+  return setLang(current === "fr" ? "en" : "fr");
 }
 
 /* --------------------------------------------------------------- dictionaries */
@@ -8494,143 +10618,148 @@ type Dict = Record<string, string>;
 
 const EN: Dict = {
   /* axis + suffix chips */
-  'ax.date': 'Date',
-  'sfx.stock': ' · stock',
-  'sfx.weekly': ' · weekly',
-  'sfx.derived': ' · derived',
-  'sfx.floor': ' · lower bound',
-  'sfx.regional': ' · regional',
+  "ax.date": "Date",
+  "sfx.stock": " · stock",
+  "sfx.weekly": " · weekly",
+  "sfx.derived": " · derived",
+  "sfx.floor": " · lower bound",
+  "sfx.regional": " · regional",
 
   /* daily dataset labels */
-  'ds.prot': 'Protesters',
-  'ds.protReg': 'Protesters (regional)',
-  'ds.arre': 'Arrests',
-  'ds.arreReg': 'Arrests (regional)',
-  'ds.finj': 'Injured — security forces',
-  'ds.finjReg': 'Injured — forces (regional)',
-  'ds.pinj': 'Injured — protesters',
-  'ds.pinjReg': 'Injured — protesters (regional)',
-  'ds.dam': 'Material damage',
-  'ds.damReg': 'Material damage (regional)',
-  'ds.pol': 'Policing cost, per day',
-  'ds.polReg': 'Policing cost (modelled day)',
-  'ds.pcum': 'Policing cost, cumulative',
-  'ds.pcumReg': 'Policing cost, cumulative (modelled)',
+  "ds.prot": "Protesters",
+  "ds.protReg": "Protesters (regional)",
+  "ds.arre": "Arrests",
+  "ds.arreReg": "Arrests (regional)",
+  "ds.finj": "Injured — security forces",
+  "ds.finjReg": "Injured — forces (regional)",
+  "ds.pinj": "Injured — protesters",
+  "ds.pinjReg": "Injured — protesters (regional)",
+  "ds.dam": "Material damage",
+  "ds.damReg": "Material damage (regional)",
+  "ds.pol": "Policing cost, per day",
+  "ds.polReg": "Policing cost (modelled day)",
+  "ds.pcum": "Policing cost, cumulative",
+  "ds.pcumReg": "Policing cost, cumulative (modelled)",
 
   /* weekly dataset labels */
-  'ds.protW': 'Protesters (weekly peak)',
-  'ds.protWReg': 'Protesters (weekly peak, regional)',
-  'ds.arreW': 'Arrests (weekly total)',
-  'ds.arreWReg': 'Arrests (weekly total, regional)',
-  'ds.finjW': 'Forces injured (weekly total)',
-  'ds.finjWReg': 'Forces injured (weekly total, regional)',
-  'ds.pinjW': 'Protesters injured (weekly total)',
-  'ds.pinjWReg': 'Protesters injured (weekly total, regional)',
+  "ds.protW": "Protesters (weekly peak)",
+  "ds.protWReg": "Protesters (weekly peak, regional)",
+  "ds.arreW": "Arrests (weekly total)",
+  "ds.arreWReg": "Arrests (weekly total, regional)",
+  "ds.finjW": "Forces injured (weekly total)",
+  "ds.finjWReg": "Forces injured (weekly total, regional)",
+  "ds.pinjW": "Protesters injured (weekly total)",
+  "ds.pinjWReg": "Protesters injured (weekly total, regional)",
 
   /* subtitles + y axes */
-  'ch.prot.sub': 'Ministry and organiser counts, one marker per published day',
-  'ch.prot.y': 'Protesters',
-  'ch.enf.sub': 'Arrests are not custody placements; injuries are counted per side',
-  'ch.enf.y': 'People',
-  'ch.cost.sub': 'Damage and policing cost are not measured on the same basis',
-  'ch.cost.y': '€ millions (damage)',
-  'ch.cost.y1': '€ millions (policing, cumulative)',
-  'ch.pw.sub': 'Peak day of each week, not a weekly sum',
-  'ch.pw.y': 'Protesters (peak day)',
-  'ch.ew.sub': 'Weekly sums; a stock or floor is not additive',
-  'ch.ew.y': 'People (weekly total)',
+  "ch.prot.sub": "Ministry and organiser counts, one marker per published day",
+  "ch.prot.y": "Protesters",
+  "ch.enf.sub":
+    "Arrests are not custody placements; injuries are counted per side",
+  "ch.enf.y": "People",
+  "ch.cost.sub": "Damage and policing cost are not measured on the same basis",
+  "ch.cost.y": "€ millions (damage)",
+  "ch.cost.y1": "€ millions (policing, cumulative)",
+  "ch.pw.sub": "Peak day of each week, not a weekly sum",
+  "ch.pw.y": "Protesters (peak day)",
+  "ch.ew.sub": "Weekly sums; a stock or floor is not additive",
+  "ch.ew.y": "People (weekly total)",
 
   /* tooltip note fragments */
-  'note.policing': '{head} officers × €{low}–€{high} per officer-day · {note}',
-  'note.cum.add': 'deployment days counted: {days}',
-  'note.cum.carry': 'no deployment published this day; cumulative unchanged',
+  "note.policing": "{head} officers × €{low}–€{high} per officer-day · {note}",
+  "note.cum.add": "deployment days counted: {days}",
+  "note.cum.carry": "no deployment published this day; cumulative unchanged",
 
   /* weekly footnote fragments */
-  'wk.days': '{n} day{s} counted · {kind}',
-  'wk.reg': 'regional figures only',
-  'wk.nat': 'national figures',
-  'wk.noreg': 'no national figure this week',
-  'wk.floor': 'includes a floor or a stock — not a sum',
-  'wk.edge': 'week clipped by the window',
-  'wk.peak': 'peak {d}',
-  'wk.excl': '{n} regional point{s} excluded',
-  'wk.partial': 'Week of {d} (partial)',
-  'wk.of': 'Week of {d}',
+  "wk.days": "{n} day{s} counted · {kind}",
+  "wk.reg": "regional figures only",
+  "wk.nat": "national figures",
+  "wk.noreg": "no national figure this week",
+  "wk.floor": "includes a floor or a stock — not a sum",
+  "wk.edge": "week clipped by the window",
+  "wk.peak": "peak {d}",
+  "wk.excl": "{n} regional point{s} excluded",
+  "wk.partial": "Week of {d} (partial)",
+  "wk.of": "Week of {d}",
 
   /* episodes */
-  'wkn': 'Week {n} · {label}',
-  'wkn.partial': 'Week {n} · {label} (partial)',
-  'obs': 'observations {counts} over {weeks} weeks',
+  wkn: "Week {n} · {label}",
+  "wkn.partial": "Week {n} · {label} (partial)",
+  obs: "observations {counts} over {weeks} weeks",
 };
 
 const FR: Dict = {
-  'ax.date': 'Date',
-  'sfx.stock': ' · stock',
-  'sfx.weekly': ' · hebdomadaire',
-  'sfx.derived': ' · dérivé',
-  'sfx.floor': ' · borne inférieure',
-  'sfx.regional': ' · régional',
+  "ax.date": "Date",
+  "sfx.stock": " · stock",
+  "sfx.weekly": " · hebdomadaire",
+  "sfx.derived": " · dérivé",
+  "sfx.floor": " · borne inférieure",
+  "sfx.regional": " · régional",
 
-  'ds.prot': 'Manifestants',
-  'ds.protReg': 'Manifestants (régional)',
-  'ds.arre': 'Interpellations',
-  'ds.arreReg': 'Interpellations (régional)',
-  'ds.finj': "Blessés — forces de l'ordre",
-  'ds.finjReg': 'Blessés — forces (régional)',
-  'ds.pinj': 'Blessés — manifestants',
-  'ds.pinjReg': 'Blessés — manifestants (régional)',
-  'ds.dam': 'Dommages matériels',
-  'ds.damReg': 'Dommages matériels (régional)',
-  'ds.pol': 'Coût du maintien de l’ordre, par jour',
-  'ds.polReg': 'Coût du maintien de l’ordre (jour modélisé)',
-  'ds.pcum': 'Coût du maintien de l’ordre, cumulé',
-  'ds.pcumReg': 'Coût du maintien de l’ordre, cumulé (modélisé)',
+  "ds.prot": "Manifestants",
+  "ds.protReg": "Manifestants (régional)",
+  "ds.arre": "Interpellations",
+  "ds.arreReg": "Interpellations (régional)",
+  "ds.finj": "Blessés — forces de l'ordre",
+  "ds.finjReg": "Blessés — forces (régional)",
+  "ds.pinj": "Blessés — manifestants",
+  "ds.pinjReg": "Blessés — manifestants (régional)",
+  "ds.dam": "Dommages matériels",
+  "ds.damReg": "Dommages matériels (régional)",
+  "ds.pol": "Coût du maintien de l’ordre, par jour",
+  "ds.polReg": "Coût du maintien de l’ordre (jour modélisé)",
+  "ds.pcum": "Coût du maintien de l’ordre, cumulé",
+  "ds.pcumReg": "Coût du maintien de l’ordre, cumulé (modélisé)",
 
-  'ds.protW': 'Manifestants (pointe hebdomadaire)',
-  'ds.protWReg': 'Manifestants (pointe hebdomadaire, régional)',
-  'ds.arreW': 'Interpellations (total hebdomadaire)',
-  'ds.arreWReg': 'Interpellations (total hebdomadaire, régional)',
-  'ds.finjW': 'Forces blessées (total hebdomadaire)',
-  'ds.finjWReg': 'Forces blessées (total hebdomadaire, régional)',
-  'ds.pinjW': 'Manifestants blessés (total hebdomadaire)',
-  'ds.pinjWReg': 'Manifestants blessés (total hebdomadaire, régional)',
+  "ds.protW": "Manifestants (pointe hebdomadaire)",
+  "ds.protWReg": "Manifestants (pointe hebdomadaire, régional)",
+  "ds.arreW": "Interpellations (total hebdomadaire)",
+  "ds.arreWReg": "Interpellations (total hebdomadaire, régional)",
+  "ds.finjW": "Forces blessées (total hebdomadaire)",
+  "ds.finjWReg": "Forces blessées (total hebdomadaire, régional)",
+  "ds.pinjW": "Manifestants blessés (total hebdomadaire)",
+  "ds.pinjWReg": "Manifestants blessés (total hebdomadaire, régional)",
 
-  'ch.prot.sub': 'Comptages ministériels et syndicaux, un marqueur par jour publié',
-  'ch.prot.y': 'Manifestants',
-  'ch.enf.sub': 'Une interpellation n’est pas une garde à vue ; les blessés sont comptés par camp',
-  'ch.enf.y': 'Personnes',
-  'ch.cost.sub': 'Dommages et coût du maintien de l’ordre ne se mesurent pas sur la même base',
-  'ch.cost.y': 'Millions d’€ (dommages)',
-  'ch.cost.y1': 'Millions d’€ (maintien de l’ordre, cumulé)',
-  'ch.pw.sub': 'Jour de pointe de chaque semaine, pas une somme hebdomadaire',
-  'ch.pw.y': 'Manifestants (jour de pointe)',
-  'ch.ew.sub': 'Sommes hebdomadaires ; un stock ou un plancher ne s’additionne pas',
-  'ch.ew.y': 'Personnes (total hebdomadaire)',
+  "ch.prot.sub":
+    "Comptages ministériels et syndicaux, un marqueur par jour publié",
+  "ch.prot.y": "Manifestants",
+  "ch.enf.sub":
+    "Une interpellation n’est pas une garde à vue ; les blessés sont comptés par camp",
+  "ch.enf.y": "Personnes",
+  "ch.cost.sub":
+    "Dommages et coût du maintien de l’ordre ne se mesurent pas sur la même base",
+  "ch.cost.y": "Millions d’€ (dommages)",
+  "ch.cost.y1": "Millions d’€ (maintien de l’ordre, cumulé)",
+  "ch.pw.sub": "Jour de pointe de chaque semaine, pas une somme hebdomadaire",
+  "ch.pw.y": "Manifestants (jour de pointe)",
+  "ch.ew.sub":
+    "Sommes hebdomadaires ; un stock ou un plancher ne s’additionne pas",
+  "ch.ew.y": "Personnes (total hebdomadaire)",
 
-  'note.policing': '{head} agents × {low}–{high} € par agent-jour · {note}',
-  'note.cum.add': 'jours de dispositif comptés : {days}',
-  'note.cum.carry': 'aucun dispositif publié ce jour ; cumul inchangé',
+  "note.policing": "{head} agents × {low}–{high} € par agent-jour · {note}",
+  "note.cum.add": "jours de dispositif comptés : {days}",
+  "note.cum.carry": "aucun dispositif publié ce jour ; cumul inchangé",
 
-  'wk.days': '{n} jour{s} compté{s} · {kind}',
-  'wk.reg': 'chiffres régionaux seulement',
-  'wk.nat': 'chiffres nationaux',
-  'wk.noreg': 'aucun chiffre national cette semaine',
-  'wk.floor': 'comprend un plancher ou un stock — pas une somme',
-  'wk.edge': 'semaine tronquée par la fenêtre',
-  'wk.peak': 'pointe le {d}',
-  'wk.excl': '{n} point{s} régional(aux) exclu(s)',
-  'wk.partial': 'Semaine du {d} (partielle)',
-  'wk.of': 'Semaine du {d}',
+  "wk.days": "{n} jour{s} compté{s} · {kind}",
+  "wk.reg": "chiffres régionaux seulement",
+  "wk.nat": "chiffres nationaux",
+  "wk.noreg": "aucun chiffre national cette semaine",
+  "wk.floor": "comprend un plancher ou un stock — pas une somme",
+  "wk.edge": "semaine tronquée par la fenêtre",
+  "wk.peak": "pointe le {d}",
+  "wk.excl": "{n} point{s} régional(aux) exclu(s)",
+  "wk.partial": "Semaine du {d} (partielle)",
+  "wk.of": "Semaine du {d}",
 
-  'wkn': 'Semaine {n} · {label}',
-  'wkn.partial': 'Semaine {n} · {label} (partielle)',
-  'obs': 'observations {counts} sur {weeks} semaines',
+  wkn: "Semaine {n} · {label}",
+  "wkn.partial": "Semaine {n} · {label} (partielle)",
+  obs: "observations {counts} sur {weeks} semaines",
 };
 
 const DICTS: Record<Lang, Dict> = { en: EN, fr: FR };
 
 /** Per-module overlays. Only French is registered in practice; English is inline in callers. */
-export function reg(dict: Dict, forLang: Lang = 'fr'): void {
+export function reg(dict: Dict, forLang: Lang = "fr"): void {
   Object.assign(DICTS[forLang], dict);
 }
 
@@ -8638,11 +10767,14 @@ export function reg(dict: Dict, forLang: Lang = 'fr'): void {
 
 const TOKEN = /\{(\w+)\}/g;
 
-function fill(template: string, params?: Record<string, string | number>): string {
+function fill(
+  template: string,
+  params?: Record<string, string | number>,
+): string {
   if (!params) return template;
   const withPlural: Record<string, string | number> =
-    typeof params.n === 'number' && params.s === undefined
-      ? { ...params, s: params.n === 1 ? '' : 's' }
+    typeof params.n === "number" && params.s === undefined
+      ? { ...params, s: params.n === 1 ? "" : "s" }
       : params;
   return template.replace(TOKEN, (whole, name: string) =>
     name in withPlural ? String(withPlural[name]) : whole,
@@ -8652,10 +10784,10 @@ function fill(template: string, params?: Record<string, string | number>): strin
 /** Drops separators left dangling by an empty token, e.g. "… officer-day · " → "… officer-day". */
 function tidy(s: string): string {
   return s
-    .replace(/[ \t]{2,}/g, ' ')
-    .replace(/[ \t]*·[ \t]*(?=·|$)/g, '')
-    .replace(/[ \t]*·[ \t]*$/, '')
-    .replace(/[ \t]*—[ \t]*$/, '')
+    .replace(/[ \t]{2,}/g, " ")
+    .replace(/[ \t]*·[ \t]*(?=·|$)/g, "")
+    .replace(/[ \t]*·[ \t]*$/, "")
+    .replace(/[ \t]*—[ \t]*$/, "")
     .trim();
 }
 
@@ -8672,7 +10804,10 @@ export function t(key: string): string {
 }
 
 /** Base dictionary with `{token}` interpolation. */
-export function tp(key: string, params: Record<string, string | number>): string {
+export function tp(
+  key: string,
+  params: Record<string, string | number>,
+): string {
   return tidy(fill(t(key), params));
 }
 
@@ -8697,15 +10832,15 @@ let nf: Intl.NumberFormat | null = null;
 let cf: Intl.NumberFormat | null = null;
 let fmtLang: Lang | null = null;
 
-const locale = (): string => (current === 'fr' ? 'fr-FR' : 'en-GB');
+const locale = (): string => (current === "fr" ? "fr-FR" : "en-GB");
 
 function refreshFormatters(): void {
   if (fmtLang === current && nf && cf) return;
   fmtLang = current;
   nf = new Intl.NumberFormat(locale(), { maximumFractionDigits: 0 });
   cf = new Intl.NumberFormat(locale(), {
-    notation: 'compact',
-    compactDisplay: 'short',
+    notation: "compact",
+    compactDisplay: "short",
     maximumFractionDigits: 1,
   });
 }
@@ -8720,7 +10855,7 @@ export function num(value: number): string {
 export function compact(value: number): string {
   refreshFormatters();
   const abs = Math.abs(value);
-  if (!Number.isFinite(value)) return '—';
+  if (!Number.isFinite(value)) return "—";
   if (abs < 1000) return nf!.format(value);
   return cf!.format(value);
 }
@@ -8728,87 +10863,138 @@ export function compact(value: number): string {
 /** Input is millions of euros. FR: "1,2 M€"  EN: "€1.2M". */
 export function moneyM(millions: number): string {
   refreshFormatters();
-  if (!Number.isFinite(millions)) return '—';
-  const body = millions < 10
-    ? new Intl.NumberFormat(locale(), { maximumFractionDigits: 1 }).format(millions)
-    : cf!.format(millions);
-  return current === 'fr' ? `${body} M€` : `€${body}`;
+  if (!Number.isFinite(millions)) return "—";
+  const body =
+    millions < 10
+      ? new Intl.NumberFormat(locale(), { maximumFractionDigits: 1 }).format(
+          millions,
+        )
+      : cf!.format(millions);
+  return current === "fr" ? `${body} M€` : `€${body}`;
 }
 
 /* ---------------------------------------------------------- static markup */
 
-type AttrName = 'text' | 'aria-label' | 'title' | 'placeholder';
+type AttrName = "text" | "aria-label" | "title" | "placeholder";
 
 const STATIC: Record<string, Bi> = {
-  'doc.title': {
-    en: 'Protest activity in France — October–November 2026',
-    fr: 'L’activité contestataire en France — octobre–novembre 2026',
+  "doc.title": {
+    en: "Protest activity in France — October–November 2026",
+    fr: "L’activité contestataire en France — octobre–novembre 2026",
   },
 
-  'hdr.kicker': { en: 'Working draft · 1 Oct – 11 Nov 2026', fr: 'Document de travail · 1er oct. – 11 nov. 2026' },
-  'hdr.title': {
-    en: 'Protest activity in France, autumn 2026',
-    fr: 'L’activité contestataire en France, automne 2026',
+  "hdr.kicker": {
+    en: "Working draft · 1 Oct – 11 Nov 2026",
+    fr: "Document de travail · 1er oct. – 11 nov. 2026",
   },
-  'hdr.lede': {
-    en: 'Turnout, arrests, injuries and damage, set against six earlier French movements. Every point is a range where the publishers disagree.',
-    fr: 'Foules, interpellations, blessés et dommages, comparés à six mouvements français antérieurs. Chaque point est une fourchette là où les éditeurs divergent.',
+  "hdr.title": {
+    en: "Protest activity in France, autumn 2026",
+    fr: "L’activité contestataire en France, automne 2026",
   },
-
-  'ui.lang': { en: 'Language', fr: 'Langue' },
-  'ui.lang.fr': { en: 'Afficher la page en français', fr: 'Afficher la page en français' },
-  'ui.lang.en': { en: 'Show this page in English', fr: 'Afficher la page en anglais' },
-
-  'disc.lead': {
-    en: 'These charts are AI-generated and have not been independently verified. Do not use them for serious analysis, publication or decision-making without checking every figure against the sources below. ',
-    fr: 'Ces graphiques sont générés par IA et n’ont pas été vérifiés de façon indépendante. Ne les utilisez pas pour une analyse sérieuse, une publication ou une décision sans vérifier chaque chiffre auprès des sources ci-dessous. ',
-  },
-  'disc.link': {
-    en: 'The full conversation in which they were produced, including every figure that was rejected, is in the transcript.',
-    fr: 'La conversation complète dans laquelle ils ont été produits, y compris chaque chiffre écarté, figure dans la transcription.',
+  "hdr.lede": {
+    en: "Turnout, arrests, injuries and damage, set against six earlier French movements. Every point is a range where the publishers disagree.",
+    fr: "Foules, interpellations, blessés et dommages, comparés à six mouvements français antérieurs. Chaque point est une fourchette là où les éditeurs divergent.",
   },
 
-  'sec.a.title': { en: 'A · Daily counts, 1 October – 11 November 2026', fr: 'A · Décomptes quotidiens, 1er octobre – 11 novembre 2026' },
-  'sec.a.lede': {
-    en: 'One point per day on which something was published. Days with no figure stay empty rather than interpolated.',
-    fr: 'Un point par jour où un chiffre a été publié. Les jours sans chiffre restent vides plutôt qu’interpolés.',
+  "ui.lang": { en: "Language", fr: "Langue" },
+  "ui.lang.fr": {
+    en: "Afficher la page en français",
+    fr: "Afficher la page en français",
   },
-  'card.prot.title': { en: 'Protesters', fr: 'Manifestants' },
-  'card.prot.sub': { en: 'Ministry and organiser counts', fr: 'Comptages ministériels et syndicaux' },
-  'card.enf.title': { en: 'Arrests and injuries', fr: 'Interpellations et blessés' },
-  'card.enf.sub': { en: 'Custody is not the same as arrest', fr: 'La garde à vue n’est pas l’interpellation' },
-  'card.cost.title': { en: 'Damage and the cost of policing', fr: 'Dommages et coût du maintien de l’ordre' },
-  'card.cost.sub': { en: 'Two different bases of measurement', fr: 'Deux bases de mesure différentes' },
+  "ui.lang.en": {
+    en: "Show this page in English",
+    fr: "Afficher la page en anglais",
+  },
 
-  'sec.b.title': { en: 'B · Weekly aggregates', fr: 'B · Agrégats hebdomadaires' },
-  'sec.b.lede': {
-    en: 'Weeks run Monday to Sunday. A peak-day crowd and a summed weekly arrest count are not the same statistic — the tooltip says which is which.',
-    fr: 'Les semaines vont du lundi au dimanche. Une foule de jour de pointe et un total hebdomadaire d’interpellations ne sont pas la même statistique — l’infobulle précise laquelle.',
+  "disc.lead": {
+    en: "These charts are AI-generated and have not been independently verified. Do not use them for serious analysis, publication or decision-making without checking every figure against the sources below. ",
+    fr: "Ces graphiques sont générés par IA et n’ont pas été vérifiés de façon indépendante. Ne les utilisez pas pour une analyse sérieuse, une publication ou une décision sans vérifier chaque chiffre auprès des sources ci-dessous. ",
   },
-  'card.pw.title': { en: 'Protesters, weekly peak', fr: 'Manifestants, pointe hebdomadaire' },
-  'card.ew.title': { en: 'Enforcement, weekly totals', fr: 'Répression, totaux hebdomadaires' },
+  "disc.link": {
+    en: "The full conversation in which they were produced, including every figure that was rejected, is in the transcript.",
+    fr: "La conversation complète dans laquelle ils ont été produits, y compris chaque chiffre écarté, figure dans la transcription.",
+  },
 
-  'sec.c.title': { en: 'C · One panel per movement', fr: 'C · Un panneau par mouvement' },
-  'sec.c.lede': {
-    en: 'Each panel keeps its own time span, so the shapes are comparable but the durations are not.',
-    fr: 'Chaque panneau conserve sa propre durée : les formes sont comparables, les durées non.',
+  "sec.a.title": {
+    en: "A · Daily counts, 1 October – 11 November 2026",
+    fr: "A · Décomptes quotidiens, 1er octobre – 11 novembre 2026",
   },
-  'sec.cp.title': { en: 'C′ · Transposed: one panel per series', fr: 'C′ · Transposé : un panneau par série' },
-  'sec.cp.lede': {
-    en: 'The same data with movements overlaid, so a single measure can be read across 1968 to 2026. The x axis is elapsed weeks.',
-    fr: 'Les mêmes données avec les mouvements superposés, pour lire une même mesure de 1968 à 2026. L’axe des x est le nombre de semaines écoulées.',
+  "sec.a.lede": {
+    en: "One point per day on which something was published. Days with no figure stay empty rather than interpolated.",
+    fr: "Un point par jour où un chiffre a été publié. Les jours sans chiffre restent vides plutôt qu’interpolés.",
   },
-  'leg.items.title': { en: 'Highlight a measure', fr: 'Mettre en avant une mesure' },
-  'leg.movements.title': { en: 'Highlight a movement', fr: 'Mettre en avant un mouvement' },
+  "card.prot.title": { en: "Protesters", fr: "Manifestants" },
+  "card.prot.sub": {
+    en: "Ministry and organiser counts",
+    fr: "Comptages ministériels et syndicaux",
+  },
+  "card.enf.title": {
+    en: "Arrests and injuries",
+    fr: "Interpellations et blessés",
+  },
+  "card.enf.sub": {
+    en: "Custody is not the same as arrest",
+    fr: "La garde à vue n’est pas l’interpellation",
+  },
+  "card.cost.title": {
+    en: "Damage and the cost of policing",
+    fr: "Dommages et coût du maintien de l’ordre",
+  },
+  "card.cost.sub": {
+    en: "Two different bases of measurement",
+    fr: "Deux bases de mesure différentes",
+  },
 
-  'src.wrap.title': { en: 'Sources and method', fr: 'Sources et méthode' },
+  "sec.b.title": {
+    en: "B · Weekly aggregates",
+    fr: "B · Agrégats hebdomadaires",
+  },
+  "sec.b.lede": {
+    en: "Weeks run Monday to Sunday. A peak-day crowd and a summed weekly arrest count are not the same statistic — the tooltip says which is which.",
+    fr: "Les semaines vont du lundi au dimanche. Une foule de jour de pointe et un total hebdomadaire d’interpellations ne sont pas la même statistique — l’infobulle précise laquelle.",
+  },
+  "card.pw.title": {
+    en: "Protesters, weekly peak",
+    fr: "Manifestants, pointe hebdomadaire",
+  },
+  "card.ew.title": {
+    en: "Enforcement, weekly totals",
+    fr: "Répression, totaux hebdomadaires",
+  },
+
+  "sec.c.title": {
+    en: "C · One panel per movement",
+    fr: "C · Un panneau par mouvement",
+  },
+  "sec.c.lede": {
+    en: "Each panel keeps its own time span, so the shapes are comparable but the durations are not.",
+    fr: "Chaque panneau conserve sa propre durée : les formes sont comparables, les durées non.",
+  },
+  "sec.cp.title": {
+    en: "C′ · Transposed: one panel per series",
+    fr: "C′ · Transposé : un panneau par série",
+  },
+  "sec.cp.lede": {
+    en: "The same data with movements overlaid, so a single measure can be read across 1968 to 2026. The x axis is elapsed weeks.",
+    fr: "Les mêmes données avec les mouvements superposés, pour lire une même mesure de 1968 à 2026. L’axe des x est le nombre de semaines écoulées.",
+  },
+  "leg.items.title": {
+    en: "Highlight a measure",
+    fr: "Mettre en avant une mesure",
+  },
+  "leg.movements.title": {
+    en: "Highlight a movement",
+    fr: "Mettre en avant un mouvement",
+  },
+
+  "src.wrap.title": { en: "Sources and method", fr: "Sources et méthode" },
 };
 
 /** Resolves every `[data-i18n]` in the document. Safe to call on each render. */
 export function applyStaticCopy(root: ParentNode = document): void {
   const L = current;
 
-  for (const node of root.querySelectorAll<HTMLElement>('[data-i18n]')) {
+  for (const node of root.querySelectorAll<HTMLElement>("[data-i18n]")) {
     const key = node.dataset.i18n;
     if (!key) continue;
     const entry = STATIC[key];
@@ -8818,21 +11004,21 @@ export function applyStaticCopy(root: ParentNode = document): void {
     }
     const text = entry[L] ?? entry.en;
     const attr = node.dataset.i18nAttr as AttrName | undefined;
-    if (!attr || attr === 'text') node.textContent = text;
+    if (!attr || attr === "text") node.textContent = text;
     else node.setAttribute(attr, text);
   }
 
   document.documentElement.lang = L;
   document.documentElement.dataset.lang = L;
-  const docTitle = STATIC['doc.title'];
+  const docTitle = STATIC["doc.title"];
   if (docTitle) document.title = docTitle[L] ?? docTitle.en;
 }
 
 /** Reflects the current language onto the segmented control. */
 export function syncLangSwitch(root: ParentNode = document): void {
-  for (const b of root.querySelectorAll<HTMLButtonElement>('[data-set-lang]')) {
+  for (const b of root.querySelectorAll<HTMLButtonElement>("[data-set-lang]")) {
     const on = b.dataset.setLang === current;
-    b.setAttribute('aria-pressed', String(on));
+    b.setAttribute("aria-pressed", String(on));
     b.tabIndex = on ? 0 : -1;
   }
 }
@@ -8884,7 +11070,6 @@ Three consequences worth knowing:
       31 │   nf,
          ╵   ~~
 
-
 ---
 
 **Assistant**
@@ -8897,34 +11082,41 @@ All six are the old export names; the current file renamed most of them and kept
 const TOKEN = /\{(\w+)\}/g;
 
 /** `{token}` substitution. Auto-injects `s` ('' / 's') when `n` is numeric, like tp(). */
-export function fill(template: string, params?: Record<string, string | number>): string {
+export function fill(
+  template: string,
+  params?: Record<string, string | number>,
+): string {
   if (!params) return template;
   const p: Record<string, string | number> =
-    typeof params.n === 'number' && params.s === undefined
-      ? { ...params, s: params.n === 1 ? '' : 's' }
+    typeof params.n === "number" && params.s === undefined
+      ? { ...params, s: params.n === 1 ? "" : "s" }
       : params;
-  return template.replace(TOKEN, (whole, name: string) => (name in p ? String(p[name]) : whole));
+  return template.replace(TOKEN, (whole, name: string) =>
+    name in p ? String(p[name]) : whole,
+  );
 }
 
 /** Drops separators left dangling by an empty token. */
 function tidy(s: string): string {
   return s
-    .replace(/[ \t]{2,}/g, ' ')
-    .replace(/[ \t]*·[ \t]*(?=·|$)/g, '')
-    .replace(/[ \t]*·[ \t]*$/, '')
-    .replace(/[ \t]*—[ \t]*$/, '')
+    .replace(/[ \t]{2,}/g, " ")
+    .replace(/[ \t]*·[ \t]*(?=·|$)/g, "")
+    .replace(/[ \t]*·[ \t]*$/, "")
+    .replace(/[ \t]*—[ \t]*$/, "")
     .trim();
 }
 
 /* ------------------------------------------------------------------- numbers */
 
-const locale = (): string => (current === 'fr' ? 'fr-FR' : 'en-GB');
+const locale = (): string => (current === "fr" ? "fr-FR" : "en-GB");
 
 /* Live bindings: importers read these at call time, so a switch is seen by everyone. */
-export let nf: Intl.NumberFormat = new Intl.NumberFormat(locale(), { maximumFractionDigits: 0 });
+export let nf: Intl.NumberFormat = new Intl.NumberFormat(locale(), {
+  maximumFractionDigits: 0,
+});
 export let cf: Intl.NumberFormat = new Intl.NumberFormat(locale(), {
-  notation: 'compact',
-  compactDisplay: 'short',
+  notation: "compact",
+  compactDisplay: "short",
   maximumFractionDigits: 1,
 });
 
@@ -8935,8 +11127,8 @@ function refreshNumbers(): void {
   numLang = current;
   nf = new Intl.NumberFormat(locale(), { maximumFractionDigits: 0 });
   cf = new Intl.NumberFormat(locale(), {
-    notation: 'compact',
-    compactDisplay: 'short',
+    notation: "compact",
+    compactDisplay: "short",
     maximumFractionDigits: 1,
   });
 }
@@ -8944,25 +11136,27 @@ function refreshNumbers(): void {
 /** Locale-grouped integer. */
 export function num(value: number): string {
   refreshNumbers();
-  return Number.isFinite(value) ? nf.format(value) : '—';
+  return Number.isFinite(value) ? nf.format(value) : "—";
 }
 
 /** Axis tick: 1.2k / 1,2 k, 2.5M / 2,5 M. */
 export function compact(value: number): string {
   refreshNumbers();
-  if (!Number.isFinite(value)) return '—';
+  if (!Number.isFinite(value)) return "—";
   return Math.abs(value) < 1000 ? nf.format(value) : cf.format(value);
 }
 
 /** Input is millions of euros. FR: "1,2 M€"  EN: "€1.2M". */
 export function moneyM(millions: number): string {
   refreshNumbers();
-  if (!Number.isFinite(millions)) return '—';
+  if (!Number.isFinite(millions)) return "—";
   const body =
     Math.abs(millions) < 10
-      ? new Intl.NumberFormat(locale(), { maximumFractionDigits: 1 }).format(millions)
+      ? new Intl.NumberFormat(locale(), { maximumFractionDigits: 1 }).format(
+          millions,
+        )
       : cf.format(millions);
-  return current === 'fr' ? `${body} M€` : `€${body}`;
+  return current === "fr" ? `${body} M€` : `€${body}`;
 }
 
 /** Alias kept for chart.ts. Values are millions of euros, same as moneyM(). */
@@ -8973,19 +11167,22 @@ export const eurM: (millions: number) => string = moneyM;
 type DateInput = Date | string | number;
 
 const DATE_LONG: Intl.DateTimeFormatOptions = {
-  day: 'numeric',
-  month: 'short',
-  year: 'numeric',
-  timeZone: 'UTC',
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+  timeZone: "UTC",
 };
 const DATE_SHORT: Intl.DateTimeFormatOptions = {
-  day: 'numeric',
-  month: 'short',
-  timeZone: 'UTC',
+  day: "numeric",
+  month: "short",
+  timeZone: "UTC",
 };
 
 let dsLong: Intl.DateTimeFormat = new Intl.DateTimeFormat(locale(), DATE_LONG);
-let dsShort: Intl.DateTimeFormat = new Intl.DateTimeFormat(locale(), DATE_SHORT);
+let dsShort: Intl.DateTimeFormat = new Intl.DateTimeFormat(
+  locale(),
+  DATE_SHORT,
+);
 let dsLang: Lang = current;
 
 function refreshDates(): void {
@@ -9004,21 +11201,23 @@ function toDate(value: DateInput): Date | null {
 /** French writes the first of the month as "1er", which Intl never emits. */
 function ordinalFr(d: Date, fmt: Intl.DateTimeFormat): string {
   const s = fmt.format(d);
-  return current === 'fr' && d.getUTCDate() === 1 ? s.replace(/^1\b/, '1er') : s;
+  return current === "fr" && d.getUTCDate() === 1
+    ? s.replace(/^1\b/, "1er")
+    : s;
 }
 
 /** "1 Nov 2026" / "1er nov. 2026". Invalid input → em dash, never throws. */
 export function fmtDate(value: DateInput): string {
   refreshDates();
   const d = toDate(value);
-  return d ? ordinalFr(d, dsLong) : '—';
+  return d ? ordinalFr(d, dsLong) : "—";
 }
 
 /** "1 Nov" / "1er nov.". */
 export function fmtDayMonth(value: DateInput): string {
   refreshDates();
   const d = toDate(value);
-  return d ? ordinalFr(d, dsShort) : '—';
+  return d ? ordinalFr(d, dsShort) : "—";
 }
 
 /** Week-start label: identical to fmtDayMonth, ready for tp('wk.of', { d }). */
@@ -9073,7 +11272,6 @@ Three contract points, since these names were only ever visible from `chart.ts`:
       7 │   LOCALES,
         ╵   ~~~~~~~
 
-
 ---
 
 **Assistant**
@@ -9101,8 +11299,11 @@ Replace the entire contents of `src/client/i18n.ts`:
  * module evaluation, so it can never be async or DOM-derived.
  */
 
-export type Lang = 'fr' | 'en';
-export interface Bi { readonly en: string; readonly fr: string }
+export type Lang = "fr" | "en";
+export interface Bi {
+  readonly en: string;
+  readonly fr: string;
+}
 export interface LocaleMeta {
   /** BCP-47 tag for Intl. */
   readonly tag: string;
@@ -9115,11 +11316,11 @@ export interface LocaleMeta {
 /* ------------------------------------------------------------------ locales */
 
 export const LOCALES: Record<Lang, LocaleMeta> = {
-  en: { tag: 'en-GB', htmlLang: 'en', label: 'English' },
-  fr: { tag: 'fr-FR', htmlLang: 'fr', label: 'Français' },
+  en: { tag: "en-GB", htmlLang: "en", label: "English" },
+  fr: { tag: "fr-FR", htmlLang: "fr", label: "Français" },
 };
 
-export const DEFAULT_LANG: Lang = 'en';
+export const DEFAULT_LANG: Lang = "en";
 export const DEFAULT_LOCALE: string = LOCALES[DEFAULT_LANG].tag;
 
 /** Active BCP-47 tag. */
@@ -9129,15 +11330,16 @@ export function localeTag(): string {
 
 /* -------------------------------------------------------------------- state */
 
-const STORAGE_KEY = 'lang';
+const STORAGE_KEY = "lang";
 
-const isLang = (v: unknown): v is Lang => v === 'fr' || v === 'en';
-const hasDom = (): boolean => typeof window !== 'undefined' && typeof document !== 'undefined';
+const isLang = (v: unknown): v is Lang => v === "fr" || v === "en";
+const hasDom = (): boolean =>
+  typeof window !== "undefined" && typeof document !== "undefined";
 
 function fromUrl(): Lang | null {
   if (!hasDom()) return null;
   try {
-    const v = new URLSearchParams(window.location.search).get('lang');
+    const v = new URLSearchParams(window.location.search).get("lang");
     return isLang(v) ? v : null;
   } catch {
     return null;
@@ -9155,12 +11357,14 @@ function fromStorage(): Lang | null {
 }
 
 function fromBrowser(): Lang | null {
-  if (typeof navigator === 'undefined') return null;
-  const tags = navigator.languages?.length ? navigator.languages : [navigator.language];
+  if (typeof navigator === "undefined") return null;
+  const tags = navigator.languages?.length
+    ? navigator.languages
+    : [navigator.language];
   for (const tag of tags) {
     const low = String(tag).toLowerCase();
-    if (low.startsWith('fr')) return 'fr';
-    if (low.startsWith('en')) return 'en';
+    if (low.startsWith("fr")) return "fr";
+    if (low.startsWith("en")) return "en";
   }
   return null;
 }
@@ -9195,7 +11399,7 @@ export function setLang(next: Lang, opts: SetLangOptions = {}): Lang {
 }
 
 export function toggleLang(): Lang {
-  return setLang(current === 'fr' ? 'en' : 'fr');
+  return setLang(current === "fr" ? "en" : "fr");
 }
 
 /* ------------------------------------------------------------- dictionaries */
@@ -9204,145 +11408,150 @@ type Dict = Record<string, string>;
 
 const EN: Dict = {
   /* axis + suffix chips */
-  'ax.date': 'Date',
-  'sfx.stock': ' · stock',
-  'sfx.weekly': ' · weekly',
-  'sfx.derived': ' · derived',
-  'sfx.floor': ' · lower bound',
-  'sfx.regional': ' · regional',
+  "ax.date": "Date",
+  "sfx.stock": " · stock",
+  "sfx.weekly": " · weekly",
+  "sfx.derived": " · derived",
+  "sfx.floor": " · lower bound",
+  "sfx.regional": " · regional",
 
   /* daily dataset labels */
-  'ds.prot': 'Protesters',
-  'ds.protReg': 'Protesters (regional)',
-  'ds.arre': 'Arrests',
-  'ds.arreReg': 'Arrests (regional)',
-  'ds.finj': 'Injured — security forces',
-  'ds.finjReg': 'Injured — forces (regional)',
-  'ds.pinj': 'Injured — protesters',
-  'ds.pinjReg': 'Injured — protesters (regional)',
-  'ds.dam': 'Material damage',
-  'ds.damReg': 'Material damage (regional)',
-  'ds.pol': 'Policing cost, per day',
-  'ds.polReg': 'Policing cost (modelled day)',
-  'ds.pcum': 'Policing cost, cumulative',
-  'ds.pcumReg': 'Policing cost, cumulative (modelled)',
+  "ds.prot": "Protesters",
+  "ds.protReg": "Protesters (regional)",
+  "ds.arre": "Arrests",
+  "ds.arreReg": "Arrests (regional)",
+  "ds.finj": "Injured — security forces",
+  "ds.finjReg": "Injured — forces (regional)",
+  "ds.pinj": "Injured — protesters",
+  "ds.pinjReg": "Injured — protesters (regional)",
+  "ds.dam": "Material damage",
+  "ds.damReg": "Material damage (regional)",
+  "ds.pol": "Policing cost, per day",
+  "ds.polReg": "Policing cost (modelled day)",
+  "ds.pcum": "Policing cost, cumulative",
+  "ds.pcumReg": "Policing cost, cumulative (modelled)",
 
   /* weekly dataset labels */
-  'ds.protW': 'Protesters (weekly peak)',
-  'ds.protWReg': 'Protesters (weekly peak, regional)',
-  'ds.arreW': 'Arrests (weekly total)',
-  'ds.arreWReg': 'Arrests (weekly total, regional)',
-  'ds.finjW': 'Forces injured (weekly total)',
-  'ds.finjWReg': 'Forces injured (weekly total, regional)',
-  'ds.pinjW': 'Protesters injured (weekly total)',
-  'ds.pinjWReg': 'Protesters injured (weekly total, regional)',
+  "ds.protW": "Protesters (weekly peak)",
+  "ds.protWReg": "Protesters (weekly peak, regional)",
+  "ds.arreW": "Arrests (weekly total)",
+  "ds.arreWReg": "Arrests (weekly total, regional)",
+  "ds.finjW": "Forces injured (weekly total)",
+  "ds.finjWReg": "Forces injured (weekly total, regional)",
+  "ds.pinjW": "Protesters injured (weekly total)",
+  "ds.pinjWReg": "Protesters injured (weekly total, regional)",
 
   /* subtitles + y axes */
-  'ch.prot.sub': 'Ministry and organiser counts, one marker per published day',
-  'ch.prot.y': 'Protesters',
-  'ch.enf.sub': 'Arrests are not custody placements; injuries are counted per side',
-  'ch.enf.y': 'People',
-  'ch.cost.sub': 'Damage and policing cost are not measured on the same basis',
-  'ch.cost.y': '€ millions (damage)',
-  'ch.cost.y1': '€ millions (policing, cumulative)',
-  'ch.pw.sub': 'Peak day of each week, not a weekly sum',
-  'ch.pw.y': 'Protesters (peak day)',
-  'ch.ew.sub': 'Weekly sums; a stock or floor is not additive',
-  'ch.ew.y': 'People (weekly total)',
+  "ch.prot.sub": "Ministry and organiser counts, one marker per published day",
+  "ch.prot.y": "Protesters",
+  "ch.enf.sub":
+    "Arrests are not custody placements; injuries are counted per side",
+  "ch.enf.y": "People",
+  "ch.cost.sub": "Damage and policing cost are not measured on the same basis",
+  "ch.cost.y": "€ millions (damage)",
+  "ch.cost.y1": "€ millions (policing, cumulative)",
+  "ch.pw.sub": "Peak day of each week, not a weekly sum",
+  "ch.pw.y": "Protesters (peak day)",
+  "ch.ew.sub": "Weekly sums; a stock or floor is not additive",
+  "ch.ew.y": "People (weekly total)",
 
   /* tooltip note fragments */
-  'note.policing': '{head} officers × €{low}–€{high} per officer-day · {note}',
-  'note.cum.add': 'deployment days counted: {days}',
-  'note.cum.carry': 'no deployment published this day; cumulative unchanged',
+  "note.policing": "{head} officers × €{low}–€{high} per officer-day · {note}",
+  "note.cum.add": "deployment days counted: {days}",
+  "note.cum.carry": "no deployment published this day; cumulative unchanged",
 
   /* weekly footnote fragments */
-  'wk.days': '{n} day{s} counted · {kind}',
-  'wk.reg': 'regional figures only',
-  'wk.nat': 'national figures',
-  'wk.noreg': 'no national figure this week',
-  'wk.floor': 'includes a floor or a stock — not a sum',
-  'wk.edge': 'week clipped by the window',
-  'wk.peak': 'peak {d}',
-  'wk.excl': '{n} regional point{s} excluded',
-  'wk.partial': 'Week of {d} (partial)',
-  'wk.of': 'Week of {d}',
+  "wk.days": "{n} day{s} counted · {kind}",
+  "wk.reg": "regional figures only",
+  "wk.nat": "national figures",
+  "wk.noreg": "no national figure this week",
+  "wk.floor": "includes a floor or a stock — not a sum",
+  "wk.edge": "week clipped by the window",
+  "wk.peak": "peak {d}",
+  "wk.excl": "{n} regional point{s} excluded",
+  "wk.partial": "Week of {d} (partial)",
+  "wk.of": "Week of {d}",
 
   /* spans + episodes */
-  'span.sep': ' – ',
-  'wkn': 'Week {n} · {label}',
-  'wkn.partial': 'Week {n} · {label} (partial)',
-  'obs': 'observations {counts} over {weeks} weeks',
+  "span.sep": " – ",
+  wkn: "Week {n} · {label}",
+  "wkn.partial": "Week {n} · {label} (partial)",
+  obs: "observations {counts} over {weeks} weeks",
 };
 
 const FR: Dict = {
-  'ax.date': 'Date',
-  'sfx.stock': ' · stock',
-  'sfx.weekly': ' · hebdomadaire',
-  'sfx.derived': ' · dérivé',
-  'sfx.floor': ' · borne inférieure',
-  'sfx.regional': ' · régional',
+  "ax.date": "Date",
+  "sfx.stock": " · stock",
+  "sfx.weekly": " · hebdomadaire",
+  "sfx.derived": " · dérivé",
+  "sfx.floor": " · borne inférieure",
+  "sfx.regional": " · régional",
 
-  'ds.prot': 'Manifestants',
-  'ds.protReg': 'Manifestants (régional)',
-  'ds.arre': 'Interpellations',
-  'ds.arreReg': 'Interpellations (régional)',
-  'ds.finj': "Blessés — forces de l'ordre",
-  'ds.finjReg': 'Blessés — forces (régional)',
-  'ds.pinj': 'Blessés — manifestants',
-  'ds.pinjReg': 'Blessés — manifestants (régional)',
-  'ds.dam': 'Dommages matériels',
-  'ds.damReg': 'Dommages matériels (régional)',
-  'ds.pol': 'Coût du maintien de l’ordre, par jour',
-  'ds.polReg': 'Coût du maintien de l’ordre (jour modélisé)',
-  'ds.pcum': 'Coût du maintien de l’ordre, cumulé',
-  'ds.pcumReg': 'Coût du maintien de l’ordre, cumulé (modélisé)',
+  "ds.prot": "Manifestants",
+  "ds.protReg": "Manifestants (régional)",
+  "ds.arre": "Interpellations",
+  "ds.arreReg": "Interpellations (régional)",
+  "ds.finj": "Blessés — forces de l'ordre",
+  "ds.finjReg": "Blessés — forces (régional)",
+  "ds.pinj": "Blessés — manifestants",
+  "ds.pinjReg": "Blessés — manifestants (régional)",
+  "ds.dam": "Dommages matériels",
+  "ds.damReg": "Dommages matériels (régional)",
+  "ds.pol": "Coût du maintien de l’ordre, par jour",
+  "ds.polReg": "Coût du maintien de l’ordre (jour modélisé)",
+  "ds.pcum": "Coût du maintien de l’ordre, cumulé",
+  "ds.pcumReg": "Coût du maintien de l’ordre, cumulé (modélisé)",
 
-  'ds.protW': 'Manifestants (pointe hebdomadaire)',
-  'ds.protWReg': 'Manifestants (pointe hebdomadaire, régional)',
-  'ds.arreW': 'Interpellations (total hebdomadaire)',
-  'ds.arreWReg': 'Interpellations (total hebdomadaire, régional)',
-  'ds.finjW': 'Forces blessées (total hebdomadaire)',
-  'ds.finjWReg': 'Forces blessées (total hebdomadaire, régional)',
-  'ds.pinjW': 'Manifestants blessés (total hebdomadaire)',
-  'ds.pinjWReg': 'Manifestants blessés (total hebdomadaire, régional)',
+  "ds.protW": "Manifestants (pointe hebdomadaire)",
+  "ds.protWReg": "Manifestants (pointe hebdomadaire, régional)",
+  "ds.arreW": "Interpellations (total hebdomadaire)",
+  "ds.arreWReg": "Interpellations (total hebdomadaire, régional)",
+  "ds.finjW": "Forces blessées (total hebdomadaire)",
+  "ds.finjWReg": "Forces blessées (total hebdomadaire, régional)",
+  "ds.pinjW": "Manifestants blessés (total hebdomadaire)",
+  "ds.pinjWReg": "Manifestants blessés (total hebdomadaire, régional)",
 
-  'ch.prot.sub': 'Comptages ministériels et syndicaux, un marqueur par jour publié',
-  'ch.prot.y': 'Manifestants',
-  'ch.enf.sub': 'Une interpellation n’est pas une garde à vue ; les blessés sont comptés par camp',
-  'ch.enf.y': 'Personnes',
-  'ch.cost.sub': 'Dommages et coût du maintien de l’ordre ne se mesurent pas sur la même base',
-  'ch.cost.y': 'Millions d’€ (dommages)',
-  'ch.cost.y1': 'Millions d’€ (maintien de l’ordre, cumulé)',
-  'ch.pw.sub': 'Jour de pointe de chaque semaine, pas une somme hebdomadaire',
-  'ch.pw.y': 'Manifestants (jour de pointe)',
-  'ch.ew.sub': 'Sommes hebdomadaires ; un stock ou un plancher ne s’additionne pas',
-  'ch.ew.y': 'Personnes (total hebdomadaire)',
+  "ch.prot.sub":
+    "Comptages ministériels et syndicaux, un marqueur par jour publié",
+  "ch.prot.y": "Manifestants",
+  "ch.enf.sub":
+    "Une interpellation n’est pas une garde à vue ; les blessés sont comptés par camp",
+  "ch.enf.y": "Personnes",
+  "ch.cost.sub":
+    "Dommages et coût du maintien de l’ordre ne se mesurent pas sur la même base",
+  "ch.cost.y": "Millions d’€ (dommages)",
+  "ch.cost.y1": "Millions d’€ (maintien de l’ordre, cumulé)",
+  "ch.pw.sub": "Jour de pointe de chaque semaine, pas une somme hebdomadaire",
+  "ch.pw.y": "Manifestants (jour de pointe)",
+  "ch.ew.sub":
+    "Sommes hebdomadaires ; un stock ou un plancher ne s’additionne pas",
+  "ch.ew.y": "Personnes (total hebdomadaire)",
 
-  'note.policing': '{head} agents × {low}–{high} € par agent-jour · {note}',
-  'note.cum.add': 'jours de dispositif comptés : {days}',
-  'note.cum.carry': 'aucun dispositif publié ce jour ; cumul inchangé',
+  "note.policing": "{head} agents × {low}–{high} € par agent-jour · {note}",
+  "note.cum.add": "jours de dispositif comptés : {days}",
+  "note.cum.carry": "aucun dispositif publié ce jour ; cumul inchangé",
 
-  'wk.days': '{n} jour{s} compté{s} · {kind}',
-  'wk.reg': 'chiffres régionaux seulement',
-  'wk.nat': 'chiffres nationaux',
-  'wk.noreg': 'aucun chiffre national cette semaine',
-  'wk.floor': 'comprend un plancher ou un stock — pas une somme',
-  'wk.edge': 'semaine tronquée par la fenêtre',
-  'wk.peak': 'pointe le {d}',
-  'wk.excl': '{n} point{s} régional(aux) exclu(s)',
-  'wk.partial': 'Semaine du {d} (partielle)',
-  'wk.of': 'Semaine du {d}',
+  "wk.days": "{n} jour{s} compté{s} · {kind}",
+  "wk.reg": "chiffres régionaux seulement",
+  "wk.nat": "chiffres nationaux",
+  "wk.noreg": "aucun chiffre national cette semaine",
+  "wk.floor": "comprend un plancher ou un stock — pas une somme",
+  "wk.edge": "semaine tronquée par la fenêtre",
+  "wk.peak": "pointe le {d}",
+  "wk.excl": "{n} point{s} régional(aux) exclu(s)",
+  "wk.partial": "Semaine du {d} (partielle)",
+  "wk.of": "Semaine du {d}",
 
-  'span.sep': ' – ',
-  'wkn': 'Semaine {n} · {label}',
-  'wkn.partial': 'Semaine {n} · {label} (partielle)',
-  'obs': 'observations {counts} sur {weeks} semaines',
+  "span.sep": " – ",
+  wkn: "Semaine {n} · {label}",
+  "wkn.partial": "Semaine {n} · {label} (partielle)",
+  obs: "observations {counts} sur {weeks} semaines",
 };
 
 const DICTS: Record<Lang, Dict> = { en: EN, fr: FR };
 
 /** Per-module overlays. Only French is registered in practice; English is inline in callers. */
-export function reg(dict: Dict, forLang: Lang = 'fr'): void {
+export function reg(dict: Dict, forLang: Lang = "fr"): void {
   Object.assign(DICTS[forLang], dict);
 }
 
@@ -9355,22 +11564,27 @@ export function has(key: string): boolean {
 const TOKEN = /\{(\w+)\}/g;
 
 /** `{token}` substitution. Auto-injects `s` ('' / 's') when `n` is numeric. */
-export function fill(template: string, params?: Record<string, string | number>): string {
+export function fill(
+  template: string,
+  params?: Record<string, string | number>,
+): string {
   if (!params) return template;
   const p: Record<string, string | number> =
-    typeof params.n === 'number' && params.s === undefined
-      ? { ...params, s: params.n === 1 ? '' : 's' }
+    typeof params.n === "number" && params.s === undefined
+      ? { ...params, s: params.n === 1 ? "" : "s" }
       : params;
-  return template.replace(TOKEN, (whole, name: string) => (name in p ? String(p[name]) : whole));
+  return template.replace(TOKEN, (whole, name: string) =>
+    name in p ? String(p[name]) : whole,
+  );
 }
 
 /** Drops separators left dangling by an empty token: "… officer-day · " → "… officer-day". */
 function tidy(s: string): string {
   return s
-    .replace(/[ \t]{2,}/g, ' ')
-    .replace(/[ \t]*·[ \t]*(?=·|$)/g, '')
-    .replace(/[ \t]*·[ \t]*$/, '')
-    .replace(/[ \t]*—[ \t]*$/, '')
+    .replace(/[ \t]{2,}/g, " ")
+    .replace(/[ \t]*·[ \t]*(?=·|$)/g, "")
+    .replace(/[ \t]*·[ \t]*$/, "")
+    .replace(/[ \t]*—[ \t]*$/, "")
     .trim();
 }
 
@@ -9382,7 +11596,7 @@ function tidy(s: string): string {
  */
 export function plural(n: number, one?: string, many?: string): string {
   const isOne = Math.abs(n) === 1;
-  if (one === undefined) return isOne ? '' : 's';
+  if (one === undefined) return isOne ? "" : "s";
   return isOne ? one : (many ?? `${one}s`);
 }
 
@@ -9399,7 +11613,10 @@ export function t(key: string): string {
 }
 
 /** Base dictionary with `{token}` interpolation. */
-export function tp(key: string, params: Record<string, string | number>): string {
+export function tp(
+  key: string,
+  params: Record<string, string | number>,
+): string {
   return tidy(fill(t(key), params));
 }
 
@@ -9420,8 +11637,8 @@ export let nf: Intl.NumberFormat = new Intl.NumberFormat(LOCALES[current].tag, {
   maximumFractionDigits: 0,
 });
 export let cf: Intl.NumberFormat = new Intl.NumberFormat(LOCALES[current].tag, {
-  notation: 'compact',
-  compactDisplay: 'short',
+  notation: "compact",
+  compactDisplay: "short",
   maximumFractionDigits: 1,
 });
 
@@ -9432,31 +11649,37 @@ function refreshNumbers(): void {
   numLang = current;
   const tag = LOCALES[current].tag;
   nf = new Intl.NumberFormat(tag, { maximumFractionDigits: 0 });
-  cf = new Intl.NumberFormat(tag, { notation: 'compact', compactDisplay: 'short', maximumFractionDigits: 1 });
+  cf = new Intl.NumberFormat(tag, {
+    notation: "compact",
+    compactDisplay: "short",
+    maximumFractionDigits: 1,
+  });
 }
 
 /** Locale-grouped integer. */
 export function num(value: number): string {
   refreshNumbers();
-  return Number.isFinite(value) ? nf.format(value) : '—';
+  return Number.isFinite(value) ? nf.format(value) : "—";
 }
 
 /** Axis tick: 1.2k / 1,2 k, 2.5M / 2,5 M. */
 export function compact(value: number): string {
   refreshNumbers();
-  if (!Number.isFinite(value)) return '—';
+  if (!Number.isFinite(value)) return "—";
   return Math.abs(value) < 1000 ? nf.format(value) : cf.format(value);
 }
 
 /** Input is millions of euros. FR: "1,2 M€"  EN: "€1.2M". */
 export function moneyM(millions: number): string {
   refreshNumbers();
-  if (!Number.isFinite(millions)) return '—';
+  if (!Number.isFinite(millions)) return "—";
   const body =
     Math.abs(millions) < 10
-      ? new Intl.NumberFormat(LOCALES[current].tag, { maximumFractionDigits: 1 }).format(millions)
+      ? new Intl.NumberFormat(LOCALES[current].tag, {
+          maximumFractionDigits: 1,
+        }).format(millions)
       : cf.format(millions);
-  return current === 'fr' ? `${body} M€` : `€${body}`;
+  return current === "fr" ? `${body} M€` : `€${body}`;
 }
 
 /** Alias kept for chart.ts — same inputs, same output as moneyM(). */
@@ -9467,14 +11690,25 @@ export const eurM: (millions: number) => string = moneyM;
 type DateInput = Date | string | number;
 
 const DATE_LONG: Intl.DateTimeFormatOptions = {
-  day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC',
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+  timeZone: "UTC",
 };
 const DATE_SHORT: Intl.DateTimeFormatOptions = {
-  day: 'numeric', month: 'short', timeZone: 'UTC',
+  day: "numeric",
+  month: "short",
+  timeZone: "UTC",
 };
 
-let dsLong: Intl.DateTimeFormat = new Intl.DateTimeFormat(LOCALES[current].tag, DATE_LONG);
-let dsShort: Intl.DateTimeFormat = new Intl.DateTimeFormat(LOCALES[current].tag, DATE_SHORT);
+let dsLong: Intl.DateTimeFormat = new Intl.DateTimeFormat(
+  LOCALES[current].tag,
+  DATE_LONG,
+);
+let dsShort: Intl.DateTimeFormat = new Intl.DateTimeFormat(
+  LOCALES[current].tag,
+  DATE_SHORT,
+);
 let dsLang: Lang = current;
 
 function refreshDates(): void {
@@ -9494,21 +11728,23 @@ function toDate(value: DateInput): Date | null {
 /** French writes the first of the month as "1er"; Intl never emits it. */
 function ordinalFr(d: Date, fmt: Intl.DateTimeFormat): string {
   const s = fmt.format(d);
-  return current === 'fr' && d.getUTCDate() === 1 ? s.replace(/^1\b/, '1er') : s;
+  return current === "fr" && d.getUTCDate() === 1
+    ? s.replace(/^1\b/, "1er")
+    : s;
 }
 
 /** "1 Nov 2026" / "1er nov. 2026"; invalid input → em dash, never throws. */
 export function fmtDate(value: DateInput): string {
   refreshDates();
   const d = toDate(value);
-  return d ? ordinalFr(d, dsLong) : '—';
+  return d ? ordinalFr(d, dsLong) : "—";
 }
 
 /** "1 Nov" / "1er nov." */
 export function fmtDayMonth(value: DateInput): string {
   refreshDates();
   const d = toDate(value);
-  return d ? ordinalFr(d, dsShort) : '—';
+  return d ? ordinalFr(d, dsShort) : "—";
 }
 
 /** Week-start label. Wrap with tp('wk.of', { d: fmtWeek(ws) }) at the call site. */
@@ -9534,97 +11770,153 @@ const ISO_ALL = /\b(\d{4}-\d{2}-\d{2})\b/g;
  * Strings containing ISO dates are localised; everything else is passed through, so
  * hand-authored spans like 'Mai 68' survive integer-locale switches untouched.
  */
-export function fmtSpan(span: string | SpanLike | DateInput, end?: DateInput): string {
-  const sep = t('span.sep');
+export function fmtSpan(
+  span: string | SpanLike | DateInput,
+  end?: DateInput,
+): string {
+  const sep = t("span.sep");
 
-  if (typeof span === 'string') {
+  if (typeof span === "string") {
     if (end !== undefined) return `${fmtDayMonth(span)}${sep}${fmtDate(end)}`;
-    return ISO_ANY.test(span) ? span.replace(ISO_ALL, (m) => fmtDayMonth(m)) : span;
+    return ISO_ANY.test(span)
+      ? span.replace(ISO_ALL, (m) => fmtDayMonth(m))
+      : span;
   }
-  if (typeof span === 'number' || span instanceof Date) {
-    return end !== undefined ? `${fmtDayMonth(span)}${sep}${fmtDate(end)}` : fmtDate(span);
+  if (typeof span === "number" || span instanceof Date) {
+    return end !== undefined
+      ? `${fmtDayMonth(span)}${sep}${fmtDate(end)}`
+      : fmtDate(span);
   }
   if (span.label) return span.label;
-  if (span.start && span.end) return `${fmtDayMonth(span.start)}${sep}${fmtDate(span.end)}`;
+  if (span.start && span.end)
+    return `${fmtDayMonth(span.start)}${sep}${fmtDate(span.end)}`;
   if (span.start) return fmtDate(span.start);
   if (span.end) return fmtDate(span.end);
-  return '—';
+  return "—";
 }
 
 /* ------------------------------------------------------------ static copy */
 
-type AttrName = 'text' | 'aria-label' | 'title' | 'placeholder';
+type AttrName = "text" | "aria-label" | "title" | "placeholder";
 
 const STATIC: Record<string, Bi> = {
-  'doc.title': {
-    en: 'Protest activity in France — October–November 2026',
-    fr: 'L’activité contestataire en France — octobre–novembre 2026',
+  "doc.title": {
+    en: "Protest activity in France — October–November 2026",
+    fr: "L’activité contestataire en France — octobre–novembre 2026",
   },
 
-  'hdr.kicker': { en: 'Working draft · 1 Oct – 11 Nov 2026', fr: 'Document de travail · 1er oct. – 11 nov. 2026' },
-  'hdr.title': {
-    en: 'Protest activity in France, autumn 2026',
-    fr: 'L’activité contestataire en France, automne 2026',
+  "hdr.kicker": {
+    en: "Working draft · 1 Oct – 11 Nov 2026",
+    fr: "Document de travail · 1er oct. – 11 nov. 2026",
   },
-  'hdr.lede': {
-    en: 'Turnout, arrests, injuries and damage, set against six earlier French movements. Every point is a range where the publishers disagree.',
-    fr: 'Foules, interpellations, blessés et dommages, comparés à six mouvements français antérieurs. Chaque point est une fourchette là où les éditeurs divergent.',
+  "hdr.title": {
+    en: "Protest activity in France, autumn 2026",
+    fr: "L’activité contestataire en France, automne 2026",
   },
-
-  'ui.lang': { en: 'Language', fr: 'Langue' },
-  'ui.lang.fr': { en: 'Afficher la page en français', fr: 'Afficher la page en français' },
-  'ui.lang.en': { en: 'Show this page in English', fr: 'Afficher la page en anglais' },
-
-  'disc.lead': {
-    en: 'These charts are AI-generated and have not been independently verified. Do not use them for serious analysis, publication or decision-making without checking every figure against the sources below. ',
-    fr: 'Ces graphiques sont générés par IA et n’ont pas été vérifiés de façon indépendante. Ne les utilisez pas pour une analyse sérieuse, une publication ou une décision sans vérifier chaque chiffre auprès des sources ci-dessous. ',
-  },
-  'disc.link': {
-    en: 'The full conversation in which they were produced, including every figure that was rejected, is in the transcript.',
-    fr: 'La conversation complète dans laquelle ils ont été produits, y compris chaque chiffre écarté, figure dans la transcription.',
+  "hdr.lede": {
+    en: "Turnout, arrests, injuries and damage, set against six earlier French movements. Every point is a range where the publishers disagree.",
+    fr: "Foules, interpellations, blessés et dommages, comparés à six mouvements français antérieurs. Chaque point est une fourchette là où les éditeurs divergent.",
   },
 
-  'sec.a.title': { en: 'A · Daily counts, 1 October – 11 November 2026', fr: 'A · Décomptes quotidiens, 1er octobre – 11 novembre 2026' },
-  'sec.a.lede': {
-    en: 'One point per day on which something was published. Days with no figure stay empty rather than interpolated.',
-    fr: 'Un point par jour où un chiffre a été publié. Les jours sans chiffre restent vides plutôt qu’interpolés.',
+  "ui.lang": { en: "Language", fr: "Langue" },
+  "ui.lang.fr": {
+    en: "Afficher la page en français",
+    fr: "Afficher la page en français",
   },
-  'card.prot.title': { en: 'Protesters', fr: 'Manifestants' },
-  'card.prot.sub': { en: 'Ministry and organiser counts', fr: 'Comptages ministériels et syndicaux' },
-  'card.enf.title': { en: 'Arrests and injuries', fr: 'Interpellations et blessés' },
-  'card.enf.sub': { en: 'Custody is not the same as arrest', fr: 'La garde à vue n’est pas l’interpellation' },
-  'card.cost.title': { en: 'Damage and the cost of policing', fr: 'Dommages et coût du maintien de l’ordre' },
-  'card.cost.sub': { en: 'Two different bases of measurement', fr: 'Deux bases de mesure différentes' },
+  "ui.lang.en": {
+    en: "Show this page in English",
+    fr: "Afficher la page en anglais",
+  },
 
-  'sec.b.title': { en: 'B · Weekly aggregates', fr: 'B · Agrégats hebdomadaires' },
-  'sec.b.lede': {
-    en: 'Weeks run Monday to Sunday. A peak-day crowd and a summed weekly arrest count are not the same statistic — the tooltip says which is which.',
-    fr: 'Les semaines vont du lundi au dimanche. Une foule de jour de pointe et un total hebdomadaire d’interpellations ne sont pas la même statistique — l’infobulle précise laquelle.',
+  "disc.lead": {
+    en: "These charts are AI-generated and have not been independently verified. Do not use them for serious analysis, publication or decision-making without checking every figure against the sources below. ",
+    fr: "Ces graphiques sont générés par IA et n’ont pas été vérifiés de façon indépendante. Ne les utilisez pas pour une analyse sérieuse, une publication ou une décision sans vérifier chaque chiffre auprès des sources ci-dessous. ",
   },
-  'card.pw.title': { en: 'Protesters, weekly peak', fr: 'Manifestants, pointe hebdomadaire' },
-  'card.ew.title': { en: 'Enforcement, weekly totals', fr: 'Répression, totaux hebdomadaires' },
+  "disc.link": {
+    en: "The full conversation in which they were produced, including every figure that was rejected, is in the transcript.",
+    fr: "La conversation complète dans laquelle ils ont été produits, y compris chaque chiffre écarté, figure dans la transcription.",
+  },
 
-  'sec.c.title': { en: 'C · One panel per movement', fr: 'C · Un panneau par mouvement' },
-  'sec.c.lede': {
-    en: 'Each panel keeps its own time span, so the shapes are comparable but the durations are not.',
-    fr: 'Chaque panneau conserve sa propre durée : les formes sont comparables, les durées non.',
+  "sec.a.title": {
+    en: "A · Daily counts, 1 October – 11 November 2026",
+    fr: "A · Décomptes quotidiens, 1er octobre – 11 novembre 2026",
   },
-  'sec.cp.title': { en: 'C′ · Transposed: one panel per series', fr: 'C′ · Transposé : un panneau par série' },
-  'sec.cp.lede': {
-    en: 'The same data with movements overlaid, so a single measure can be read across 1968 to 2026. The x axis is elapsed weeks.',
-    fr: 'Les mêmes données avec les mouvements superposés, pour lire une même mesure de 1968 à 2026. L’axe des x est le nombre de semaines écoulées.',
+  "sec.a.lede": {
+    en: "One point per day on which something was published. Days with no figure stay empty rather than interpolated.",
+    fr: "Un point par jour où un chiffre a été publié. Les jours sans chiffre restent vides plutôt qu’interpolés.",
   },
-  'leg.items.title': { en: 'Highlight a measure', fr: 'Mettre en avant une mesure' },
-  'leg.movements.title': { en: 'Highlight a movement', fr: 'Mettre en avant un mouvement' },
+  "card.prot.title": { en: "Protesters", fr: "Manifestants" },
+  "card.prot.sub": {
+    en: "Ministry and organiser counts",
+    fr: "Comptages ministériels et syndicaux",
+  },
+  "card.enf.title": {
+    en: "Arrests and injuries",
+    fr: "Interpellations et blessés",
+  },
+  "card.enf.sub": {
+    en: "Custody is not the same as arrest",
+    fr: "La garde à vue n’est pas l’interpellation",
+  },
+  "card.cost.title": {
+    en: "Damage and the cost of policing",
+    fr: "Dommages et coût du maintien de l’ordre",
+  },
+  "card.cost.sub": {
+    en: "Two different bases of measurement",
+    fr: "Deux bases de mesure différentes",
+  },
 
-  'src.wrap.title': { en: 'Sources and method', fr: 'Sources et méthode' },
+  "sec.b.title": {
+    en: "B · Weekly aggregates",
+    fr: "B · Agrégats hebdomadaires",
+  },
+  "sec.b.lede": {
+    en: "Weeks run Monday to Sunday. A peak-day crowd and a summed weekly arrest count are not the same statistic — the tooltip says which is which.",
+    fr: "Les semaines vont du lundi au dimanche. Une foule de jour de pointe et un total hebdomadaire d’interpellations ne sont pas la même statistique — l’infobulle précise laquelle.",
+  },
+  "card.pw.title": {
+    en: "Protesters, weekly peak",
+    fr: "Manifestants, pointe hebdomadaire",
+  },
+  "card.ew.title": {
+    en: "Enforcement, weekly totals",
+    fr: "Répression, totaux hebdomadaires",
+  },
+
+  "sec.c.title": {
+    en: "C · One panel per movement",
+    fr: "C · Un panneau par mouvement",
+  },
+  "sec.c.lede": {
+    en: "Each panel keeps its own time span, so the shapes are comparable but the durations are not.",
+    fr: "Chaque panneau conserve sa propre durée : les formes sont comparables, les durées non.",
+  },
+  "sec.cp.title": {
+    en: "C′ · Transposed: one panel per series",
+    fr: "C′ · Transposé : un panneau par série",
+  },
+  "sec.cp.lede": {
+    en: "The same data with movements overlaid, so a single measure can be read across 1968 to 2026. The x axis is elapsed weeks.",
+    fr: "Les mêmes données avec les mouvements superposés, pour lire une même mesure de 1968 à 2026. L’axe des x est le nombre de semaines écoulées.",
+  },
+  "leg.items.title": {
+    en: "Highlight a measure",
+    fr: "Mettre en avant une mesure",
+  },
+  "leg.movements.title": {
+    en: "Highlight a movement",
+    fr: "Mettre en avant un mouvement",
+  },
+
+  "src.wrap.title": { en: "Sources and method", fr: "Sources et méthode" },
 };
 
 /** Resolves every `[data-i18n]` in the document. Safe to call on each render. */
 export function applyStaticCopy(root: ParentNode = document): void {
   const L = current;
 
-  for (const node of root.querySelectorAll<HTMLElement>('[data-i18n]')) {
+  for (const node of root.querySelectorAll<HTMLElement>("[data-i18n]")) {
     const key = node.dataset.i18n;
     if (!key) continue;
     const entry = STATIC[key];
@@ -9634,21 +11926,21 @@ export function applyStaticCopy(root: ParentNode = document): void {
     }
     const text = entry[L] ?? entry.en;
     const attr = node.dataset.i18nAttr as AttrName | undefined;
-    if (!attr || attr === 'text') node.textContent = text;
+    if (!attr || attr === "text") node.textContent = text;
     else node.setAttribute(attr, text);
   }
 
   document.documentElement.lang = LOCALES[L].htmlLang;
   document.documentElement.dataset.lang = L;
-  const docTitle = STATIC['doc.title'];
+  const docTitle = STATIC["doc.title"];
   if (docTitle) document.title = docTitle[L] ?? docTitle.en;
 }
 
 /** Reflects the current language onto the segmented control. */
 export function syncLangSwitch(root: ParentNode = document): void {
-  for (const b of root.querySelectorAll<HTMLButtonElement>('[data-set-lang]')) {
+  for (const b of root.querySelectorAll<HTMLButtonElement>("[data-set-lang]")) {
     const on = b.dataset.setLang === current;
-    b.setAttribute('aria-pressed', String(on));
+    b.setAttribute("aria-pressed", String(on));
     b.tabIndex = on ? 0 : -1;
   }
 }
@@ -9711,7 +12003,6 @@ Empty output means every imported name resolves. Any line it prints is a name in
       11 │ import { getLocale, LOCALES, onLocaleChange, setLocale } from "./i18n.ts";
          ╵                              ~~~~~~~~~~~~~~
 
-
 ---
 
 **Assistant**
@@ -9756,7 +12047,7 @@ function emit(next: Lang, previous: Lang): void {
       try {
         fn(next, previous);
       } catch (err) {
-        console.error('[i18n] locale listener threw', err);
+        console.error("[i18n] locale listener threw", err);
       }
     }
   } finally {
@@ -9769,8 +12060,14 @@ function emit(next: Lang, previous: Lang): void {
 /** Accepts 'fr', 'fr-FR', 'FR', 'français' — anything else is ignored. */
 function normalize(input: Lang | string): Lang | null {
   const low = String(input).toLowerCase();
-  if (low === 'fr' || low.startsWith('fr-') || low === 'français' || low === 'francais') return 'fr';
-  if (low === 'en' || low.startsWith('en-')) return 'en';
+  if (
+    low === "fr" ||
+    low.startsWith("fr-") ||
+    low === "français" ||
+    low === "francais"
+  )
+    return "fr";
+  if (low === "en" || low.startsWith("en-")) return "en";
   return null;
 }
 
@@ -9810,12 +12107,15 @@ export function setLang(next: Lang, opts: SetLangOptions = {}): Lang {
 }
 
 /** Locale-era alias of setLang(). Accepts a bare tag as well as a Lang. */
-export function setLocale(next: Lang | string, opts: SetLangOptions = {}): Lang {
+export function setLocale(
+  next: Lang | string,
+  opts: SetLangOptions = {},
+): Lang {
   return setLang((normalize(next) ?? current) as Lang, opts);
 }
 
 export function toggleLang(): Lang {
-  return setLang(current === 'fr' ? 'en' : 'fr');
+  return setLang(current === "fr" ? "en" : "fr");
 }
 
 /* ------------------------------------------------------------------ relative time */
@@ -9826,7 +12126,7 @@ const HAS_CLOCK = /[T ]\d{2}:\d{2}/;
 
 function isInstant(value: Date | string | number): boolean {
   if (value instanceof Date) return true;
-  if (typeof value === 'number') return true;
+  if (typeof value === "number") return true;
   return !DATE_ONLY.test(value) && HAS_CLOCK.test(value);
 }
 
@@ -9844,26 +12144,28 @@ export function fmtWhen(
 ): string {
   const d = toDate(value);
   const r = toDate(reference);
-  if (!d || !r) return '—';
+  if (!d || !r) return "—";
 
   const delta = d.getTime() - r.getTime();
   const abs = Math.abs(delta);
-  const rtf = new Intl.RelativeTimeFormat(LOCALES[current].tag, { numeric: 'auto' });
+  const rtf = new Intl.RelativeTimeFormat(LOCALES[current].tag, {
+    numeric: "auto",
+  });
 
-  if (abs < MINUTE) return rtf.format(0, 'minute');
-  if (abs < HOUR) return rtf.format(Math.round(delta / MINUTE), 'minute');
-  if (abs < DAY) return rtf.format(Math.round(delta / HOUR), 'hour');
-  if (abs < 7 * DAY) return rtf.format(Math.round(delta / DAY), 'day');
+  if (abs < MINUTE) return rtf.format(0, "minute");
+  if (abs < HOUR) return rtf.format(Math.round(delta / MINUTE), "minute");
+  if (abs < DAY) return rtf.format(Math.round(delta / HOUR), "hour");
+  if (abs < 7 * DAY) return rtf.format(Math.round(delta / DAY), "day");
 
   if (!isInstant(value)) return fmtDate(value);
 
   /* Real instants are shown in the reader's timezone, not UTC. */
   return new Intl.DateTimeFormat(LOCALES[current].tag, {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   }).format(d);
 }
 
@@ -9873,10 +12175,14 @@ export function fmtWhen(
 export type Catalogue = Record<string, string | Bi>;
 
 /** Reads a catalogue entry in the active language. */
-export function fromCatalogue(catalogue: Catalogue, key: string, fallback = ''): string {
+export function fromCatalogue(
+  catalogue: Catalogue,
+  key: string,
+  fallback = "",
+): string {
   const entry = catalogue[key];
   if (entry === undefined) return fallback;
-  return typeof entry === 'string' ? entry : bi(entry);
+  return typeof entry === "string" ? entry : bi(entry);
 }
 ```
 
@@ -9899,12 +12205,11 @@ Any hit outside `i18n.ts` is a second state machine and should be deleted in fav
 **You**
 
 Uncaught TypeError: LOCALES.includes is not a function
-    isLocale lang.ts:19
-    localeFromUrl lang.ts:25
-    initLang lang.ts:81
-    <anonymous> main.ts:89
+isLocale lang.ts:19
+localeFromUrl lang.ts:25
+initLang lang.ts:81
+<anonymous> main.ts:89
 lang.ts:19:41
-
 
 ---
 
@@ -9920,15 +12225,15 @@ Two edits, both mechanical.
 /* ------------------------------------------------------------------ locales */
 
 /** The selectable languages, in display order. Flat, so `.includes()` and `.map()` work. */
-export const LOCALES: readonly Lang[] = Object.freeze(['fr', 'en'] as const);
+export const LOCALES: readonly Lang[] = Object.freeze(["fr", "en"] as const);
 
 /** Per-language metadata, indexed by code. Kept separate from LOCALES so neither shape is overloaded. */
 export const LOCALE_META: Record<Lang, LocaleMeta> = {
-  en: { tag: 'en-GB', htmlLang: 'en', label: 'English' },
-  fr: { tag: 'fr-FR', htmlLang: 'fr', label: 'Français' },
+  en: { tag: "en-GB", htmlLang: "en", label: "English" },
+  fr: { tag: "fr-FR", htmlLang: "fr", label: "Français" },
 };
 
-export const DEFAULT_LANG: Lang = 'en';
+export const DEFAULT_LANG: Lang = "en";
 export const DEFAULT_LOCALE: string = LOCALE_META[DEFAULT_LANG].tag;
 
 /** Active BCP-47 tag, e.g. 'fr-FR'. */
@@ -9943,8 +12248,8 @@ export function localeLabel(l: Lang = current): string {
 
 /** Narrowing guard matching lang.ts's isLocale() shape. Accepts tags, not just bare codes. */
 export function isLang(value: unknown): value is Lang {
-  const low = String(value ?? '').toLowerCase();
-  return low.startsWith('fr') || low.startsWith('en');
+  const low = String(value ?? "").toLowerCase();
+  return low.startsWith("fr") || low.startsWith("en");
 }
 ```
 
@@ -9990,11 +12295,10 @@ Any hit where the result is used as an object (`LOCALES.en`, `LOCALES[x].tag`) i
 **You**
 
 Uncaught TypeError: can't access property "meta", m is undefined
-    renderChrome page.ts:85
-    render main.ts:62
-    <anonymous> main.ts:91
+renderChrome page.ts:85
+render main.ts:62
+<anonymous> main.ts:91
 page.ts:85:3
-
 
 ---
 
@@ -10002,11 +12306,11 @@ page.ts:85:3
 
 I checked the workspace — there are no `.ts` files in it, so `page.ts:85` isn't readable here. But the stack is enough: `LOCALES` now has **three** incompatible shapes demanded across the codebase, because each module was written against a different generation of `i18n.ts`.
 
-| Consumer | Code | Needs |
-|---|---|---|
-| `lang.ts:19` | `LOCALES.includes(x)` | flat array |
-| `page.ts:85` | `const m = LOCALES[…]` then `m.meta` | object keyed by code |
-| `i18n.ts` internals | `LOCALE_META[x].tag` | record |
+| Consumer            | Code                                 | Needs                |
+| ------------------- | ------------------------------------ | -------------------- |
+| `lang.ts:19`        | `LOCALES.includes(x)`                | flat array           |
+| `page.ts:85`        | `const m = LOCALES[…]` then `m.meta` | object keyed by code |
+| `i18n.ts` internals | `LOCALE_META[x].tag`                 | record               |
 
 `m` is `undefined` because indexing an **array** with a string key (`LOCALES['fr']`) yields `undefined`, and the very next property access throws. Picking a fourth shape just moves the crash.
 
@@ -10032,38 +12336,43 @@ export interface LocaleDescriptor {
 /** Selectable languages, in display order. Array, so .includes / .map / .find work. */
 export const LOCALES: readonly LocaleDescriptor[] = Object.freeze([
   {
-    code: 'en',
-    tag: 'en-GB',
-    htmlLang: 'en',
-    label: 'English',
+    code: "en",
+    tag: "en-GB",
+    htmlLang: "en",
+    label: "English",
     meta: {
-      title: 'Protest activity in France — October–November 2026',
+      title: "Protest activity in France — October–November 2026",
       description:
-        'Turnout, arrests, injuries and damage in the autumn 2026 protest movement, set against six earlier French movements. LLM-assisted working draft, not verified.',
+        "Turnout, arrests, injuries and damage in the autumn 2026 protest movement, set against six earlier French movements. LLM-assisted working draft, not verified.",
     },
   },
   {
-    code: 'fr',
-    tag: 'fr-FR',
-    htmlLang: 'fr',
-    label: 'Français',
+    code: "fr",
+    tag: "fr-FR",
+    htmlLang: "fr",
+    label: "Français",
     meta: {
-      title: 'L’activité contestataire en France — octobre–novembre 2026',
+      title: "L’activité contestataire en France — octobre–novembre 2026",
       description:
-        'Foules, interpellations, blessés et dommages du mouvement de l’automne 2026, comparés à six mouvements français antérieurs. Document de travail assisté par IA, non vérifié.',
+        "Foules, interpellations, blessés et dommages du mouvement de l’automne 2026, comparés à six mouvements français antérieurs. Document de travail assisté par IA, non vérifié.",
     },
   },
 ] as const);
 
 /** Derived lookup, so `LOCALE_META[lang]` is always the same object as the array entry. */
 export const LOCALE_META: Record<Lang, LocaleDescriptor> = Object.freeze(
-  Object.fromEntries(LOCALES.map((l) => [l.code, l])) as Record<Lang, LocaleDescriptor>,
+  Object.fromEntries(LOCALES.map((l) => [l.code, l])) as Record<
+    Lang,
+    LocaleDescriptor
+  >,
 );
 
 /** Just the codes, for `.includes()` on untrusted input. */
-export const LOCALE_CODES: readonly Lang[] = Object.freeze(LOCALES.map((l) => l.code));
+export const LOCALE_CODES: readonly Lang[] = Object.freeze(
+  LOCALES.map((l) => l.code),
+);
 
-export const DEFAULT_LANG: Lang = 'en';
+export const DEFAULT_LANG: Lang = "en";
 export const DEFAULT_LOCALE: string = LOCALE_META[DEFAULT_LANG].tag;
 
 export function localeTag(l: Lang = current): string {
@@ -10076,7 +12385,9 @@ export function localeLabel(l: Lang = current): string {
 
 /** Accepts 'fr', 'fr-FR', 'FR'. Uses the codes list, not object identity. */
 export function isLang(value: unknown): value is Lang {
-  const code = String(value ?? '').slice(0, 2).toLowerCase();
+  const code = String(value ?? "")
+    .slice(0, 2)
+    .toLowerCase();
   return (LOCALE_CODES as readonly string[]).includes(code);
 }
 ```
@@ -10101,7 +12412,7 @@ if (LOCALE_CODES.includes(code as Lang)) return code as Lang;
 const m = LOCALE_META[getLocale()];
 if (!m) {
   console.warn(`[page] no locale descriptor for "${getLocale()}"`);
-  return;            // or `continue` inside the loop
+  return; // or `continue` inside the loop
 }
 // m.meta.title, m.meta.description, m.tag, m.label …
 ```
@@ -10113,7 +12424,7 @@ If line 85 is inside `LOCALES.map((l) => …)`, then `l` is already a descriptor
 If you would rather not touch `page.ts` right now, make the array also answer to string keys. Same objects, one extra assignment:
 
 ```ts
-const list = [ /* … the two descriptors … */ ];
+const list = [/* … the two descriptors … */];
 
 /** Array that also indexes by code — bridge for older call sites. Remove once page.ts uses LOCALE_META. */
 export const LOCALES = Object.assign(
@@ -10155,7 +12466,7 @@ Fix the charts in sections A & B
 
 Read the attached `chart.ts`. The data is fine — the plots have nowhere to draw.
 
-**Diagnosis.** `maintainAspectRatio: false` means Chart.js sizes the canvas from its *parent*. `.card-canvas` has no height, so the canvas falls back to its HTML-intrinsic box: **300 × 150**. Chrome in that 150px: title ~21 + subtitle ~27 + legend ~30 + x ticks 14 + x-axis title 17 + `layout.padding.top` 16 ≈ 130. The plot area is left with **~17px**, so every value lands within a few pixels of the baseline (reading as a flat line at 0), 5 y-ticks get `autoSkip`ped down to the single first tick (`0`), the legend lands on top of the plot, and the axis titles of chart 3 are cropped because the bitmap and the CSS box disagree after the resize. Secondary: `suggestedMax` is hand-guessed (`1_600_000`, `2_800`, `900`/`520`) and the same `2_800` is reused for daily and weekly charts whose ranges differ, so a band can be clipped by its own frame.
+**Diagnosis.** `maintainAspectRatio: false` means Chart.js sizes the canvas from its _parent_. `.card-canvas` has no height, so the canvas falls back to its HTML-intrinsic box: **300 × 150**. Chrome in that 150px: title ~21 + subtitle ~27 + legend ~30 + x ticks 14 + x-axis title 17 + `layout.padding.top` 16 ≈ 130. The plot area is left with **~17px**, so every value lands within a few pixels of the baseline (reading as a flat line at 0), 5 y-ticks get `autoSkip`ped down to the single first tick (`0`), the legend lands on top of the plot, and the axis titles of chart 3 are cropped because the bitmap and the CSS box disagree after the resize. Secondary: `suggestedMax` is hand-guessed (`1_600_000`, `2_800`, `900`/`520`) and the same `2_800` is reused for daily and weekly charts whose ranges differ, so a band can be clipped by its own frame.
 
 ## 1. CSS — give the canvas a definite box
 
@@ -10173,10 +12484,15 @@ Read the attached `chart.ts`. The data is fine — the plots have nowhere to dra
 }
 
 /* section B is weekly: fewer, thicker points, no daily tick clutter */
-#sec-b .card-canvas { height: clamp(260px, 26vw, 300px); min-height: 260px; }
+#sec-b .card-canvas {
+  height: clamp(260px, 26vw, 300px);
+  min-height: 260px;
+}
 
 @media (max-width: 40rem) {
-  .card-canvas { height: 300px; }
+  .card-canvas {
+    height: 300px;
+  }
 }
 ```
 
@@ -10377,9 +12693,9 @@ Read the attachment; all 18 citations and the two prose blocks (intro + foot) ar
  * lives OUTSIDE #sources in index.html, so it survives the replacement.
  */
 
-import { bi, fmtDate, fmtDayMonth, type Bi } from './i18n.ts';
+import { bi, fmtDate, fmtDayMonth, type Bi } from "./i18n.ts";
 
-export type GroupId = 'g2026' | 'hist';
+export type GroupId = "g2026" | "hist";
 
 export interface Source {
   readonly id: string;
@@ -10403,33 +12719,36 @@ export interface SourceGroup {
 
 /* ------------------------------------------------------------------- copy */
 
-const BOX_TITLE: Bi = { en: 'Sources and method', fr: 'Sources et méthode' };
+const BOX_TITLE: Bi = { en: "Sources and method", fr: "Sources et méthode" };
 
 const INTRO: Bi = {
-  en: 'Compiled by an LLM from the reports below; no figure here is a primary measurement made for this page. Where a movement has an official count, the interior ministry is the source of the arrest and officer-injury numbers and the unions publish the competing turnout figure. Counts that only ever existed as scattered daily press reports were summed by hand, which is where most of the error will be.',
-  fr: 'Compilé par une IA à partir des sources ci-dessous ; aucun chiffre ici n’est une mesure primaire réalisée pour cette page. Lorsqu’un mouvement dispose d’un décompte officiel, le ministère de l’Intérieur est la source des interpellations et des blessés parmi les forces, les syndicats publiant la foule concurrente. Les décomptes qui n’ont existé que sous forme de brèves quotidiennes dispersées ont été additionnés à la main : c’est là que se concentre l’essentiel de l’erreur.',
+  en: "Compiled by an LLM from the reports below; no figure here is a primary measurement made for this page. Where a movement has an official count, the interior ministry is the source of the arrest and officer-injury numbers and the unions publish the competing turnout figure. Counts that only ever existed as scattered daily press reports were summed by hand, which is where most of the error will be.",
+  fr: "Compilé par une IA à partir des sources ci-dessous ; aucun chiffre ici n’est une mesure primaire réalisée pour cette page. Lorsqu’un mouvement dispose d’un décompte officiel, le ministère de l’Intérieur est la source des interpellations et des blessés parmi les forces, les syndicats publiant la foule concurrente. Les décomptes qui n’ont existé que sous forme de brèves quotidiennes dispersées ont été additionnés à la main : c’est là que se concentre l’essentiel de l’erreur.",
 };
 
 const FOOT: Bi = {
-  en: 'Not a source, but load-bearing: the index in the earlier drafts of Section C divided each series by its own first figure, and the C′ x-axis was set by the longest episode. Both were replaced — C plots raw counts on a shared log axis, and C′ is capped at week 7. Nothing here has been through external review.',
-  fr: 'Ce n’est pas une source, mais cela porte la lecture : dans les brouillons antérieurs, l’indice de la section C divisait chaque série par son premier chiffre, et l’axe des x de C′ était fixé par l’épisode le plus long. Les deux ont été remplacés — C trace des effectifs bruts sur un axe log partagé, et C′ est plafonné à la semaine 7. Rien ici n’a fait l’objet d’une relecture externe.',
+  en: "Not a source, but load-bearing: the index in the earlier drafts of Section C divided each series by its own first figure, and the C′ x-axis was set by the longest episode. Both were replaced — C plots raw counts on a shared log axis, and C′ is capped at week 7. Nothing here has been through external review.",
+  fr: "Ce n’est pas une source, mais cela porte la lecture : dans les brouillons antérieurs, l’indice de la section C divisait chaque série par son premier chiffre, et l’axe des x de C′ était fixé par l’épisode le plus long. Les deux ont été remplacés — C trace des effectifs bruts sur un axe log partagé, et C′ est plafonné à la semaine 7. Rien ici n’a fait l’objet d’une relecture externe.",
 };
 
 export const GROUPS: readonly SourceGroup[] = [
   {
-    id: 'g2026',
-    title: { en: 'The 2026 movement — 1 Oct to 11 Nov', fr: 'Le mouvement de 2026 — du 1er oct. au 11 nov.' },
+    id: "g2026",
+    title: {
+      en: "The 2026 movement — 1 Oct to 11 Nov",
+      fr: "Le mouvement de 2026 — du 1er oct. au 11 nov.",
+    },
     blurb: {
-      en: 'Eight reports. Ministry figures originate in press briefings, so every daily value was read out of the reporting below rather than from a dataset.',
-      fr: 'Huit sources. Les chiffres ministériels proviennent de points presse : chaque valeur quotidienne a été relevée dans les articles ci-dessous, et non dans un jeu de données.',
+      en: "Eight reports. Ministry figures originate in press briefings, so every daily value was read out of the reporting below rather than from a dataset.",
+      fr: "Huit sources. Les chiffres ministériels proviennent de points presse : chaque valeur quotidienne a été relevée dans les articles ci-dessous, et non dans un jeu de données.",
     },
   },
   {
-    id: 'hist',
-    title: { en: 'Historical episodes', fr: 'Épisodes historiques' },
+    id: "hist",
+    title: { en: "Historical episodes", fr: "Épisodes historiques" },
     blurb: {
-      en: 'Encyclopaedia summaries of the published counts, plus three live-blog reports on the September 2025 movement. No primary archives were consulted.',
-      fr: 'Synthèses encyclopédiques des décomptes publiés, plus trois directs de presse sur le mouvement de septembre 2025. Aucune archive primaire n’a été consultée.',
+      en: "Encyclopaedia summaries of the published counts, plus three live-blog reports on the September 2025 movement. No primary archives were consulted.",
+      fr: "Synthèses encyclopédiques des décomptes publiés, plus trois directs de presse sur le mouvement de septembre 2025. Aucune archive primaire n’a été consultée.",
     },
   },
 ];
@@ -10439,197 +12758,198 @@ export const GROUPS: readonly SourceGroup[] = [
 export const SOURCES: readonly Source[] = [
   /* ------------------------------------------------ 2026 — damage and cost */
   {
-    id: 'ifrap-2026',
-    group: 'g2026',
+    id: "ifrap-2026",
+    group: "g2026",
     label:
-      'Fondation IFRAP — « Violences des 17 et 18 octobre 2026 : une facture qui approche le milliard d’euros »',
-    url: 'https://www.ifrap.org/etat-et-collectivites/violences-des-17-et-18-octobre-2026-une-facture-qui-approche-le-milliard-deuros',
-    date: '2026-10-21',
+      "Fondation IFRAP — « Violences des 17 et 18 octobre 2026 : une facture qui approche le milliard d’euros »",
+    url: "https://www.ifrap.org/etat-et-collectivites/violences-des-17-et-18-octobre-2026-une-facture-qui-approche-le-milliard-deuros",
+    date: "2026-10-21",
     what: {
-      en: 'the €247M–872M damage range for 17–18 Oct: ~€910M material damage and ~€190M lost turnover in the high estimate, €666M of it retail.',
-      fr: 'la fourchette de 247 à 872 M€ de dommages pour les 17–18 oct. : ~910 M€ de dommages matériels et ~190 M€ de chiffre d’affaires perdu dans l’hypothèse haute, dont 666 M€ pour le commerce de détail.',
+      en: "the €247M–872M damage range for 17–18 Oct: ~€910M material damage and ~€190M lost turnover in the high estimate, €666M of it retail.",
+      fr: "la fourchette de 247 à 872 M€ de dommages pour les 17–18 oct. : ~910 M€ de dommages matériels et ~190 M€ de chiffre d’affaires perdu dans l’hypothèse haute, dont 666 M€ pour le commerce de détail.",
     },
   },
   {
-    id: 'monde-cci-2026',
-    group: 'g2026',
-    label: 'Le Monde — « Plus de 2 500 commerces dégradés », d’après CCI France',
-    url: 'https://www.lemonde.fr/economie/article/2026/10/27/plus-de-2-500-commerces-degrades-en-marge-des-recentes-mobilisations-selon-cci-france-qui-demande-une-interdiction-des-manifestations-jusqu-aux-fetes-de-fin-d-annee_6801314_3234.html',
-    date: '2026-10-27',
+    id: "monde-cci-2026",
+    group: "g2026",
+    label:
+      "Le Monde — « Plus de 2 500 commerces dégradés », d’après CCI France",
+    url: "https://www.lemonde.fr/economie/article/2026/10/27/plus-de-2-500-commerces-degrades-en-marge-des-recentes-mobilisations-selon-cci-france-qui-demande-une-interdiction-des-manifestations-jusqu-aux-fetes-de-fin-d-annee_6801314_3234.html",
+    date: "2026-10-27",
     what: {
-      en: 'CCI France’s shop counts: 2,488 hit on 17 Oct, of which 1,161 pillaged, sacked or burnt.',
-      fr: 'les décomptes de commerces de CCI France : 2 488 touchés le 17 oct., dont 1 161 pillés, saccagés ou incendiés.',
+      en: "CCI France’s shop counts: 2,488 hit on 17 Oct, of which 1,161 pillaged, sacked or burnt.",
+      fr: "les décomptes de commerces de CCI France : 2 488 touchés le 17 oct., dont 1 161 pillés, saccagés ou incendiés.",
     },
   },
   {
-    id: 'franceinfo-cci-2026',
-    group: 'g2026',
-    label: 'franceinfo — « Plus de 2 500 magasins touchés »',
-    url: 'https://www.franceinfo.fr/societe/mobilisation-du-17-octobre/plus-de-2-500-magasins-touches-par-les-violences-en-marge-des-manifestations-des-17-et-24-octobre-selon-les-chambres-de-commerce_8256049.html',
-    date: '2026-10-27',
+    id: "franceinfo-cci-2026",
+    group: "g2026",
+    label: "franceinfo — « Plus de 2 500 magasins touchés »",
+    url: "https://www.franceinfo.fr/societe/mobilisation-du-17-octobre/plus-de-2-500-magasins-touches-par-les-violences-en-marge-des-manifestations-des-17-et-24-octobre-selon-les-chambres-de-commerce_8256049.html",
+    date: "2026-10-27",
     what: {
-      en: 'the 24 Oct increment (50 shops, total 2,538) and the 80% centre-town turnover drop.',
-      fr: 'l’incrément du 24 oct. (50 commerces, 2 538 au total) et la chute de 80 % du chiffre d’affaires en centre-ville.',
+      en: "the 24 Oct increment (50 shops, total 2,538) and the 80% centre-town turnover drop.",
+      fr: "l’incrément du 24 oct. (50 commerces, 2 538 au total) et la chute de 80 % du chiffre d’affaires en centre-ville.",
     },
   },
   {
-    id: 'bfmtv-cci-2026',
-    group: 'g2026',
-    label: 'BFMTV — CCI France, 20 shops vandalised on 31 Oct',
-    url: 'https://www.bfmtv.com/economie/entreprises/20-commerces-vandalises-samedi-contre-2-488-le-17-octobre-cci-france-constate-une-nette-baisse-des-degradations-en-marge-des-manifestations-mais-s-inquiete-d-une-forte-chute-du-chiffre-d-affaires-des-magasins-pouvant-atteindre-80_AD-202611010225.html',
-    date: '2026-11-01',
+    id: "bfmtv-cci-2026",
+    group: "g2026",
+    label: "BFMTV — CCI France, 20 shops vandalised on 31 Oct",
+    url: "https://www.bfmtv.com/economie/entreprises/20-commerces-vandalises-samedi-contre-2-488-le-17-octobre-cci-france-constate-une-nette-baisse-des-degradations-en-marge-des-manifestations-mais-s-inquiete-d-une-forte-chute-du-chiffre-d-affaires-des-magasins-pouvant-atteindre-80_AD-202611010225.html",
+    date: "2026-11-01",
     what: {
-      en: 'why week 6 carries no damage figure: the count collapses after 24 Oct.',
-      fr: 'pourquoi la semaine 6 ne porte aucun chiffre de dommages : le décompte s’effondre après le 24 oct.',
+      en: "why week 6 carries no damage figure: the count collapses after 24 Oct.",
+      fr: "pourquoi la semaine 6 ne porte aucun chiffre de dommages : le décompte s’effondre après le 24 oct.",
     },
   },
   {
-    id: 'capital-policing-2026',
-    group: 'g2026',
-    label: 'Capital.fr — « Combien ont coûté les 70 000 policiers de samedi »',
-    url: 'https://www.capital.fr/economie-politique/combien-ont-coute-les-70-000-policiers-de-samedi-letat-ne-le-dit-pas-mais-certains-chiffres-existent-1531269',
-    date: '2026-10-28',
+    id: "capital-policing-2026",
+    group: "g2026",
+    label: "Capital.fr — « Combien ont coûté les 70 000 policiers de samedi »",
+    url: "https://www.capital.fr/economie-politique/combien-ont-coute-les-70-000-policiers-de-samedi-letat-ne-le-dit-pas-mais-certains-chiffres-existent-1531269",
+    date: "2026-10-28",
     what: {
-      en: 'the €15,000–30,000 per CRS company per day and €3.4M per 3,000 gendarmes benchmarks behind the policing-cost band; also the 1,435 arrests and 53 officers injured on 24 Oct.',
-      fr: 'les références de 15 000–30 000 € par compagnie de CRS et par jour, et de 3,4 M€ pour 3 000 gendarmes, derrière la fourchette de coût du maintien de l’ordre ; aussi les 1 435 interpellations et 53 policiers blessés du 24 oct.',
+      en: "the €15,000–30,000 per CRS company per day and €3.4M per 3,000 gendarmes benchmarks behind the policing-cost band; also the 1,435 arrests and 53 officers injured on 24 Oct.",
+      fr: "les références de 15 000–30 000 € par compagnie de CRS et par jour, et de 3,4 M€ pour 3 000 gendarmes, derrière la fourchette de coût du maintien de l’ordre ; aussi les 1 435 interpellations et 53 policiers blessés du 24 oct.",
     },
   },
   {
-    id: 'figaro-cost-2026',
-    group: 'g2026',
-    label: 'Le Figaro — « Le coût exorbitant d’un week-end d’émeutes »',
-    url: 'https://www.lefigaro.fr/societes/violences-urbaines-le-cout-exorbitant-d-un-week-end-d-emeutes-pour-les-commerces-et-les-collectivites-20261020',
-    date: '2026-10-20',
+    id: "figaro-cost-2026",
+    group: "g2026",
+    label: "Le Figaro — « Le coût exorbitant d’un week-end d’émeutes »",
+    url: "https://www.lefigaro.fr/societes/violences-urbaines-le-cout-exorbitant-d-un-week-end-d-emeutes-pour-les-commerces-et-les-collectivites-20261020",
+    date: "2026-10-20",
     what: {
-      en: 'cross-check on the damage order of magnitude.',
-      fr: 'contre-vérification de l’ordre de grandeur des dommages.',
+      en: "cross-check on the damage order of magnitude.",
+      fr: "contre-vérification de l’ordre de grandeur des dommages.",
     },
   },
   {
-    id: 'canard-eyes-2026',
-    group: 'g2026',
-    label: 'Le Canard enchaîné — « Les manifestants ont le mauvais œil »',
-    url: 'https://www.lecanardenchaine.fr/police-justice/55381-les-manifestants-ont-le-mauvais-oeil',
-    date: '2026-11-10',
+    id: "canard-eyes-2026",
+    group: "g2026",
+    label: "Le Canard enchaîné — « Les manifestants ont le mauvais œil »",
+    url: "https://www.lecanardenchaine.fr/police-justice/55381-les-manifestants-ont-le-mauvais-oeil",
+    date: "2026-11-10",
     what: {
-      en: 'Prof. Laurent Thines’ (CHU de Besançon) press-and-blog register: 79 serious injuries in three weeks — 10 blinded, 9 cranio-facial, 7 amputations, 1 death. The source of the protester-injury floor, and the reason no weekly protester-injury series exists.',
-      fr: 'le registre presse et blog du Pr Laurent Thines (CHU de Besançon) : 79 blessés graves en trois semaines — 10 éborgnés, 9 traumatismes crânio-faciaux, 7 amputations, 1 mort. Source du plancher de blessés parmi les manifestants, et raison pour laquelle aucune série hebdomadaire de blessés manifestants n’existe.',
+      en: "Prof. Laurent Thines’ (CHU de Besançon) press-and-blog register: 79 serious injuries in three weeks — 10 blinded, 9 cranio-facial, 7 amputations, 1 death. The source of the protester-injury floor, and the reason no weekly protester-injury series exists.",
+      fr: "le registre presse et blog du Pr Laurent Thines (CHU de Besançon) : 79 blessés graves en trois semaines — 10 éborgnés, 9 traumatismes crânio-faciaux, 7 amputations, 1 mort. Source du plancher de blessés parmi les manifestants, et raison pour laquelle aucune série hebdomadaire de blessés manifestants n’existe.",
     },
   },
   {
-    id: 'interieur',
-    group: 'g2026',
-    label: 'Ministère de l’Intérieur',
-    url: 'https://www.interieur.gouv.fr/',
+    id: "interieur",
+    group: "g2026",
+    label: "Ministère de l’Intérieur",
+    url: "https://www.interieur.gouv.fr/",
     what: {
-      en: 'origin of every arrest, custody and officer-injury count and of the ministry turnout figure. Published as press briefings and evening situation reports, not as a downloadable series, so the daily values were collected from the reporting above rather than from a dataset.',
-      fr: 'origine de chaque décompte d’interpellations, de gardes à vue et de blessés parmi les forces, ainsi que du chiffre ministériel de foule. Publiés en points presse et points de situation du soir, non en séries téléchargeables : les valeurs quotidiennes ont donc été relevées dans la presse ci-dessus, et non dans un jeu de données.',
+      en: "origin of every arrest, custody and officer-injury count and of the ministry turnout figure. Published as press briefings and evening situation reports, not as a downloadable series, so the daily values were collected from the reporting above rather than from a dataset.",
+      fr: "origine de chaque décompte d’interpellations, de gardes à vue et de blessés parmi les forces, ainsi que du chiffre ministériel de foule. Publiés en points presse et points de situation du soir, non en séries téléchargeables : les valeurs quotidiennes ont donc été relevées dans la presse ci-dessus, et non dans un jeu de données.",
     },
   },
 
   /* ------------------------------------------------------ historical episodes */
   {
-    id: 'wiki-mai68-fr',
-    group: 'hist',
-    label: 'Mai 68',
-    url: 'https://fr.wikipedia.org/wiki/Mai_68',
+    id: "wiki-mai68-fr",
+    group: "hist",
+    label: "Mai 68",
+    url: "https://fr.wikipedia.org/wiki/Mai_68",
     what: {
-      en: '1 May (25,000 prefecture / 100,000 CGT) and 13 May (230,000 prefecture / 171,000 ORTF / 1,000,000 unions) turnouts; the 469 arrests of 10–11 May and the 1,000+ of 25 May.',
-      fr: 'les foules du 1er mai (25 000 préfecture / 100 000 CGT) et du 13 mai (230 000 préfecture / 171 000 ORTF / 1 000 000 syndicats) ; les 469 interpellations des 10–11 mai et les 1 000 et plus du 25 mai.',
+      en: "1 May (25,000 prefecture / 100,000 CGT) and 13 May (230,000 prefecture / 171,000 ORTF / 1,000,000 unions) turnouts; the 469 arrests of 10–11 May and the 1,000+ of 25 May.",
+      fr: "les foules du 1er mai (25 000 préfecture / 100 000 CGT) et du 13 mai (230 000 préfecture / 171 000 ORTF / 1 000 000 syndicats) ; les 469 interpellations des 10–11 mai et les 1 000 et plus du 25 mai.",
     },
   },
   {
-    id: 'wiki-mai68-en',
-    group: 'hist',
-    label: 'May 68 (English Wikipedia)',
-    url: 'https://en.wikipedia.org/wiki/May_68',
+    id: "wiki-mai68-en",
+    group: "hist",
+    label: "May 68 (English Wikipedia)",
+    url: "https://en.wikipedia.org/wiki/May_68",
     what: {
-      en: 'the 887 injured figure, which appears only in this article’s infobox and is flagged accordingly — no French count was published.',
-      fr: 'le chiffre de 887 blessés, présent uniquement dans l’infobox de cet article et signalé comme tel — aucun décompte français n’a été publié.',
+      en: "the 887 injured figure, which appears only in this article’s infobox and is flagged accordingly — no French count was published.",
+      fr: "le chiffre de 887 blessés, présent uniquement dans l’infobox de cet article et signalé comme tel — aucun décompte français n’a été publié.",
     },
   },
   {
-    id: 'wiki-cpe',
-    group: 'hist',
-    label: 'Contrat première embauche',
-    url: 'https://fr.wikipedia.org/wiki/Contrat_premi%C3%A8re_embauche',
+    id: "wiki-cpe",
+    group: "hist",
+    label: "Contrat première embauche",
+    url: "https://fr.wikipedia.org/wiki/Contrat_premi%C3%A8re_embauche",
     what: {
-      en: 'the CPE turnout series (7 Feb, 7 Mar, 18 Mar, 23 Mar, 28 Mar, 4 Apr) and the Paris-only enforcement counts of 16–18 Mar.',
-      fr: 'la série de foules du CPE (7 févr., 7 mars, 18 mars, 23 mars, 28 mars, 4 avr.) et les décomptes répressifs strictement parisiens des 16–18 mars.',
+      en: "the CPE turnout series (7 Feb, 7 Mar, 18 Mar, 23 Mar, 28 Mar, 4 Apr) and the Paris-only enforcement counts of 16–18 Mar.",
+      fr: "la série de foules du CPE (7 févr., 7 mars, 18 mars, 23 mars, 28 mars, 4 avr.) et les décomptes répressifs strictement parisiens des 16–18 mars.",
     },
   },
   {
-    id: 'wiki-gj',
-    group: 'hist',
-    label: 'Mouvement des Gilets jaunes',
-    url: 'https://fr.wikipedia.org/wiki/Mouvement_des_Gilets_jaunes',
+    id: "wiki-gj",
+    group: "hist",
+    label: "Mouvement des Gilets jaunes",
+    url: "https://fr.wikipedia.org/wiki/Mouvement_des_Gilets_jaunes",
     what: {
-      en: 'the Act I–44 ministry turnout series and the Act I–IV custody/interpellation counts. Later acts were never published as a series, which is why the enforcement lines stop at week 3.',
-      fr: 'la série ministérielle de foules des actes I à XLIV et les décomptes de gardes à vue / interpellations des actes I à IV. Les actes suivants n’ont jamais été publiés en série, d’où l’arrêt des courbes répressives à la semaine 3.',
+      en: "the Act I–44 ministry turnout series and the Act I–IV custody/interpellation counts. Later acts were never published as a series, which is why the enforcement lines stop at week 3.",
+      fr: "la série ministérielle de foules des actes I à XLIV et les décomptes de gardes à vue / interpellations des actes I à IV. Les actes suivants n’ont jamais été publiés en série, d’où l’arrêt des courbes répressives à la semaine 3.",
     },
   },
   {
-    id: 'wiki-nahel',
-    group: 'hist',
-    label: 'Mort de Nahel Merzouk',
-    url: 'https://fr.wikipedia.org/wiki/Mort_de_Nahel_Merzouk',
+    id: "wiki-nahel",
+    group: "hist",
+    label: "Mort de Nahel Merzouk",
+    url: "https://fr.wikipedia.org/wiki/Mort_de_Nahel_Merzouk",
     what: {
-      en: 'the 3,354 arrests and 722 officers injured of 27 Jun – 2 Jul 2023, and the 108 of the following week.',
-      fr: 'les 3 354 interpellations et 722 policiers blessés du 27 juin au 2 juill. 2023, et les 108 de la semaine suivante.',
+      en: "the 3,354 arrests and 722 officers injured of 27 Jun – 2 Jul 2023, and the 108 of the following week.",
+      fr: "les 3 354 interpellations et 722 policiers blessés du 27 juin au 2 juill. 2023, et les 108 de la semaine suivante.",
     },
   },
   {
-    id: 'wiki-retraites',
-    group: 'hist',
-    label: 'Mouvement social contre la réforme des retraites de 2023',
-    url: 'https://fr.wikipedia.org/wiki/Mouvement_social_contre_la_r%C3%A9forme_des_retraites_en_France_en_2023',
+    id: "wiki-retraites",
+    group: "hist",
+    label: "Mouvement social contre la réforme des retraites de 2023",
+    url: "https://fr.wikipedia.org/wiki/Mouvement_social_contre_la_r%C3%A9forme_des_retraites_en_France_en_2023",
     what: {
-      en: 'the ministry and union turnout pairs for each national action day, 19 Jan – 6 Jun 2023.',
-      fr: 'les couples ministère / syndicats de chaque journée nationale d’action, du 19 janv. au 6 juin 2023.',
+      en: "the ministry and union turnout pairs for each national action day, 19 Jan – 6 Jun 2023.",
+      fr: "les couples ministère / syndicats de chaque journée nationale d’action, du 19 janv. au 6 juin 2023.",
     },
   },
   {
-    id: 'france24-bloquons',
-    group: 'hist',
-    label: 'France 24 — « Bloquons tout », direct du 10 septembre 2025',
-    url: 'https://www.france24.com/fr/france/20250910-en-direct-france-bloquons-tout-colere-sociale-emmanuel-macron',
-    date: '2025-09-10',
+    id: "france24-bloquons",
+    group: "hist",
+    label: "France 24 — « Bloquons tout », direct du 10 septembre 2025",
+    url: "https://www.france24.com/fr/france/20250910-en-direct-france-bloquons-tout-colere-sociale-emmanuel-macron",
+    date: "2025-09-10",
     what: {
-      en: '197,000 participants, 596 rallies, 253 blockades, 540 arrests (211 in Paris) — the final ministry point of the evening, superseding the 175,000 of 17:45.',
-      fr: '197 000 participants, 596 rassemblements, 253 blocages, 540 interpellations (dont 211 à Paris) — le point ministériel final de la soirée, qui supplante les 175 000 de 17 h 45.',
+      en: "197,000 participants, 596 rallies, 253 blockades, 540 arrests (211 in Paris) — the final ministry point of the evening, superseding the 175,000 of 17:45.",
+      fr: "197 000 participants, 596 rassemblements, 253 blocages, 540 interpellations (dont 211 à Paris) — le point ministériel final de la soirée, qui supplante les 175 000 de 17 h 45.",
     },
   },
   {
-    id: 'bfmtv-bloquons',
-    group: 'hist',
-    label: 'BFMTV — direct du 10 septembre',
-    url: 'https://www.bfmtv.com/societe/manifestations/direct-10-septembre-blocages-transports-manifestations-suivez-le-mouvement-bloquons-tout-a-paris-lyon-marseille_LN-202509100070.html',
-    date: '2025-09-10',
+    id: "bfmtv-bloquons",
+    group: "hist",
+    label: "BFMTV — direct du 10 septembre",
+    url: "https://www.bfmtv.com/societe/manifestations/direct-10-septembre-blocages-transports-manifestations-suivez-le-mouvement-bloquons-tout-a-paris-lyon-marseille_LN-202509100070.html",
+    date: "2025-09-10",
     what: {
-      en: 'the intra-day revision of the count (175,000 → 197,000), which is why the chart shows a band rather than a point.',
-      fr: 'la révision du décompte en cours de journée (175 000 → 197 000), d’où une fourchette plutôt qu’un point sur le graphique.',
+      en: "the intra-day revision of the count (175,000 → 197,000), which is why the chart shows a band rather than a point.",
+      fr: "la révision du décompte en cours de journée (175 000 → 197 000), d’où une fourchette plutôt qu’un point sur le graphique.",
     },
   },
   {
-    id: 'figaro-bloquons',
-    group: 'hist',
-    label: 'Le Figaro — direct du 10 septembre',
-    url: 'https://www.lefigaro.fr/social/direct-bloquons-tout-10-septembre-mouvement-greves-manifestations-perturbations-transports-ecole-20250910',
-    date: '2025-09-10',
-    dateEnd: '2025-09-11',
+    id: "figaro-bloquons",
+    group: "hist",
+    label: "Le Figaro — direct du 10 septembre",
+    url: "https://www.lefigaro.fr/social/direct-bloquons-tout-10-septembre-mouvement-greves-manifestations-perturbations-transports-ecole-20250910",
+    date: "2025-09-10",
+    dateEnd: "2025-09-11",
     what: {
-      en: 'the 18 Sep intersyndicale day and the 2 Oct third wave.',
-      fr: 'la journée intersyndicale du 18 sept. et la troisième vague du 2 oct.',
+      en: "the 18 Sep intersyndicale day and the 2 Oct third wave.",
+      fr: "la journée intersyndicale du 18 sept. et la troisième vague du 2 oct.",
     },
   },
   {
-    id: 'wiki-bloquons',
-    group: 'hist',
-    label: 'Bloquons tout (English Wikipedia)',
-    url: 'https://en.wikipedia.org/wiki/Bloquons_tout',
+    id: "wiki-bloquons",
+    group: "hist",
+    label: "Bloquons tout (English Wikipedia)",
+    url: "https://en.wikipedia.org/wiki/Bloquons_tout",
     what: {
-      en: 'the movement’s chronology and its 10 Sep / 18 Sep / 2 Oct structure.',
-      fr: 'la chronologie du mouvement et sa structure des 10 sept., 18 sept. et 2 oct.',
+      en: "the movement’s chronology and its 10 Sep / 18 Sep / 2 Oct structure.",
+      fr: "la chronologie du mouvement et sa structure des 10 sept., 18 sept. et 2 oct.",
     },
   },
 ];
@@ -10641,28 +12961,46 @@ export const SOURCE_GROUPS = GROUPS;
 
 const MARKER_KEY: { key: string; text: Bi }[] = [
   {
-    key: 'r',
-    text: { en: 'regional only — one département or one city, never extrapolated', fr: 'régional seulement — un département ou une ville, jamais extrapolé' },
+    key: "r",
+    text: {
+      en: "regional only — one département or one city, never extrapolated",
+      fr: "régional seulement — un département ou une ville, jamais extrapolé",
+    },
   },
   {
-    key: 'p',
-    text: { en: 'partial — a floor, or two publishers disagreeing; both bounds shown', fr: 'partiel — un plancher, ou deux éditeurs en désaccord ; les deux bornes affichées' },
+    key: "p",
+    text: {
+      en: "partial — a floor, or two publishers disagreeing; both bounds shown",
+      fr: "partiel — un plancher, ou deux éditeurs en désaccord ; les deux bornes affichées",
+    },
   },
   {
-    key: 'f',
-    text: { en: 'lower bound — the true figure is at least this', fr: 'borne inférieure — le chiffre réel est au moins celui-ci' },
+    key: "f",
+    text: {
+      en: "lower bound — the true figure is at least this",
+      fr: "borne inférieure — le chiffre réel est au moins celui-ci",
+    },
   },
   {
-    key: 'e',
-    text: { en: 'derived — modelled here, not published as such', fr: 'dérivé — modélisé ici, non publié tel quel' },
+    key: "e",
+    text: {
+      en: "derived — modelled here, not published as such",
+      fr: "dérivé — modélisé ici, non publié tel quel",
+    },
   },
   {
-    key: 'c',
-    text: { en: 'stock or actions-total — a different basis; never sum it with the rest', fr: 'stock ou total d’actions — autre base de mesure ; ne jamais l’additionner au reste' },
+    key: "c",
+    text: {
+      en: "stock or actions-total — a different basis; never sum it with the rest",
+      fr: "stock ou total d’actions — autre base de mesure ; ne jamais l’additionner au reste",
+    },
   },
   {
-    key: 'w',
-    text: { en: 'weekly aggregate — a week, not a day', fr: 'agrégat hebdomadaire — une semaine, pas un jour' },
+    key: "w",
+    text: {
+      en: "weekly aggregate — a week, not a day",
+      fr: "agrégat hebdomadaire — une semaine, pas un jour",
+    },
   },
 ];
 
@@ -10680,8 +13018,9 @@ function el<K extends keyof HTMLElementTagNameMap>(
 }
 
 function resolveHost(root?: HTMLElement | string | null): HTMLElement | null {
-  if (!root) return document.getElementById('sources');
-  if (typeof root === 'string') return document.querySelector<HTMLElement>(root);
+  if (!root) return document.getElementById("sources");
+  if (typeof root === "string")
+    return document.querySelector<HTMLElement>(root);
   return root;
 }
 
@@ -10692,26 +13031,26 @@ function dateLabel(item: Source): string | null {
 }
 
 function sourceItem(item: Source): HTMLLIElement {
-  const li = el('li', 'source-item');
+  const li = el("li", "source-item");
   li.dataset.sourceId = item.id;
 
-  const a = el('a', 'source-link', item.label);
+  const a = el("a", "source-link", item.label);
   a.href = item.url;
-  a.target = '_blank';
-  a.rel = 'noopener noreferrer';
-  a.referrerPolicy = 'no-referrer-when-downgrade';
+  a.target = "_blank";
+  a.rel = "noopener noreferrer";
+  a.referrerPolicy = "no-referrer-when-downgrade";
   li.append(a);
 
   const label = dateLabel(item);
   if (label) {
-    li.append(document.createTextNode(' '));
-    const t = el('time', 'source-date', label);
+    li.append(document.createTextNode(" "));
+    const t = el("time", "source-date", label);
     t.dateTime = item.date!;
     li.append(t);
   }
 
-  li.append(document.createTextNode(' — '));
-  li.append(el('span', 'source-what', bi(item.what)));
+  li.append(document.createTextNode(" — "));
+  li.append(el("span", "source-what", bi(item.what)));
   return li;
 }
 
@@ -10719,13 +13058,15 @@ function sourceItem(item: Source): HTMLLIElement {
 export function renderSources(root?: HTMLElement | string | null): void {
   const host = resolveHost(root);
   if (!host) {
-    console.error('[sources] no host: add <div id="sources"> to index.html, or pass a selector');
+    console.error(
+      '[sources] no host: add <div id="sources"> to index.html, or pass a selector',
+    );
     return;
   }
 
-  const box = el('section', 'sources');
-  box.setAttribute('aria-label', bi(BOX_TITLE));
-  box.append(el('p', 'sources-intro', bi(INTRO)));
+  const box = el("section", "sources");
+  box.setAttribute("aria-label", bi(BOX_TITLE));
+  box.append(el("p", "sources-intro", bi(INTRO)));
 
   for (const group of GROUPS) {
     const items = SOURCES.filter((s) => s.group === group.id);
@@ -10733,48 +13074,114 @@ export function renderSources(root?: HTMLElement | string | null): void {
       console.warn(`[sources] group "${group.id}" has no entries`);
       continue;
     }
-    const wrap = el('div', 'source-group');
+    const wrap = el("div", "source-group");
     wrap.id = `src-${group.id}`;
-    wrap.append(el('h3', 'source-group-title', bi(group.title)));
-    wrap.append(el('p', 'source-group-blurb', bi(group.blurb)));
+    wrap.append(el("h3", "source-group-title", bi(group.title)));
+    wrap.append(el("p", "source-group-blurb", bi(group.blurb)));
 
-    const list = el('ul', 'source-list');
+    const list = el("ul", "source-list");
     for (const item of items) list.append(sourceItem(item));
     wrap.append(list);
     box.append(wrap);
   }
 
-  const key = el('div', 'source-group source-key');
-  key.append(el('h3', 'source-group-title', bi({ en: 'How to read the markers', fr: 'Comment lire les marqueurs' })));
-  const dl = el('dl', 'marker-list');
+  const key = el("div", "source-group source-key");
+  key.append(
+    el(
+      "h3",
+      "source-group-title",
+      bi({ en: "How to read the markers", fr: "Comment lire les marqueurs" }),
+    ),
+  );
+  const dl = el("dl", "marker-list");
   for (const m of MARKER_KEY) {
-    dl.append(el('dt', 'marker-key', m.key));
-    dl.append(el('dd', 'marker-text', bi(m.text)));
+    dl.append(el("dt", "marker-key", m.key));
+    dl.append(el("dd", "marker-text", bi(m.text)));
   }
   key.append(dl);
   box.append(key);
 
-  box.append(el('p', 'sources-note', bi(FOOT)));
+  box.append(el("p", "sources-note", bi(FOOT)));
   host.replaceChildren(box);
 }
 ```
 
 ```css
-.sources { font-size: 0.8rem; line-height: 1.5; color: #374151; }
-.sources-intro { margin: 0 0 1.25rem; max-width: 100ch; color: #4b5563; }
-.source-group + .source-group { margin-top: 1.4rem; }
-.source-group-title { margin: 0 0 0.35rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: #111827; }
-.source-group-blurb { margin: 0 0 0.5rem; max-width: 90ch; font-size: 0.75rem; color: #6b7280; }
-.source-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.45rem; }
-.source-item { color: #374151; }
-.source-link { color: #1b5c92; text-decoration: none; border-bottom: 1px solid #b0cfe6; }
-.source-link:hover { border-bottom-color: #1b5c92; }
-.source-date { color: #9ca3af; white-space: nowrap; }
-.source-what { color: #6b7280; }
-.marker-list { display: grid; grid-template-columns: max-content 1fr; gap: 0.2rem 0.65rem; margin: 0; font-size: 0.75rem; }
-.marker-key { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: #111827; }
-.marker-text { margin: 0; color: #6b7280; }
-.sources-note { margin: 1.4rem 0 0; padding-top: 0.7rem; border-top: 1px solid #e5e7eb; max-width: 100ch; font-size: 0.72rem; color: #6b7280; }
+.sources {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: #374151;
+}
+.sources-intro {
+  margin: 0 0 1.25rem;
+  max-width: 100ch;
+  color: #4b5563;
+}
+.source-group + .source-group {
+  margin-top: 1.4rem;
+}
+.source-group-title {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #111827;
+}
+.source-group-blurb {
+  margin: 0 0 0.5rem;
+  max-width: 90ch;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+.source-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.45rem;
+}
+.source-item {
+  color: #374151;
+}
+.source-link {
+  color: #1b5c92;
+  text-decoration: none;
+  border-bottom: 1px solid #b0cfe6;
+}
+.source-link:hover {
+  border-bottom-color: #1b5c92;
+}
+.source-date {
+  color: #9ca3af;
+  white-space: nowrap;
+}
+.source-what {
+  color: #6b7280;
+}
+.marker-list {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.2rem 0.65rem;
+  margin: 0;
+  font-size: 0.75rem;
+}
+.marker-key {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: #111827;
+}
+.marker-text {
+  margin: 0;
+  color: #6b7280;
+}
+.sources-note {
+  margin: 1.4rem 0 0;
+  padding-top: 0.7rem;
+  border-top: 1px solid #e5e7eb;
+  max-width: 100ch;
+  font-size: 0.72rem;
+  color: #6b7280;
+}
 ```
 
 Restored content, by omission: the six 2026 press citations with their real article URLs and dates (Le Monde/CCI, franceinfo, BFMTV, Capital, Le Figaro, Le Canard), the specific IFRAP article rather than the bare `ifrap.org` root, the six historical news items (France 24, BFMTV, Le Figaro, plus the en-wiki May 68 and Bloquons tout pages), and the intro/foot prose. `renderSources(host?)`, `Source`, `SourceGroup` keep their signatures, so `main.ts` needs no change.
@@ -10811,7 +13218,8 @@ function ensureChartBox(canvas: HTMLCanvasElement): HTMLElement {
     canvas.parentNode?.insertBefore(host, canvas);
     host.append(canvas);
   }
-  if (getComputedStyle(host).position === "static") host.style.position = "relative";
+  if (getComputedStyle(host).position === "static")
+    host.style.position = "relative";
   if (host.clientHeight < 160) host.style.height = `${MIN_CHART_H}px`;
   canvas.style.display = "block";
   return host;
@@ -10829,7 +13237,12 @@ export function mount(canvas: HTMLCanvasElement, cfg: Cfg): Chart<"line"> {
   if (!ctx) throw new Error("2d context unavailable");
   const { data, ...options } = cfg;
 
-  const chart = new Chart<"line">(ctx, { type: "line", data, options, plugins: [errorBars] });
+  const chart = new Chart<"line">(ctx, {
+    type: "line",
+    data,
+    options,
+    plugins: [errorBars],
+  });
   mounted.set(canvas, chart);
   return chart;
 }
@@ -10837,11 +13250,26 @@ export function mount(canvas: HTMLCanvasElement, cfg: Cfg): Chart<"line"> {
 
 ```css
 /* the wrapper actually present in index.html — replace any .card-canvas rule */
-.wrap { position: relative; height: 460px; margin-bottom: 28px; }
-#section-weekly .wrap { height: 420px; }
-.wrap > canvas { display: block; width: 100%; height: 100%; }
+.wrap {
+  position: relative;
+  height: 460px;
+  margin-bottom: 28px;
+}
+#section-weekly .wrap {
+  height: 420px;
+}
+.wrap > canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
 
-@media (max-width: 40rem) { .wrap, #section-weekly .wrap { height: 340px; } }
+@media (max-width: 40rem) {
+  .wrap,
+  #section-weekly .wrap {
+    height: 340px;
+  }
+}
 ```
 
 The `ensureChartBox` guard is deliberate belt-and-braces: even if the `.wrap` height is lost again, the parent gets a definite pixel height before Chart.js measures it.
@@ -10891,7 +13319,10 @@ function el<K extends keyof HTMLElementTagNameMap>(
 
 /** #sources in index.html, or a body appended to <main>/<body> so the box can never vanish. */
 function resolveHost(root?: HTMLElement | string | null): HTMLElement {
-  if (root) return typeof root === "string" ? document.querySelector<HTMLElement>(root) ?? makeHost() : root;
+  if (root)
+    return typeof root === "string"
+      ? (document.querySelector<HTMLElement>(root) ?? makeHost())
+      : root;
   return (
     document.getElementById("sources") ??
     document.querySelector<HTMLElement>("[data-sources]") ??
@@ -10908,7 +13339,9 @@ function makeHost(): HTMLElement {
 
 function dateLabel(s: Source): string | null {
   if (!s.date) return null;
-  return s.dateEnd ? `${fmtDayMonth(s.date)}–${fmtDate(s.dateEnd)}` : fmtDate(s.date);
+  return s.dateEnd
+    ? `${fmtDayMonth(s.date)}–${fmtDate(s.dateEnd)}`
+    : fmtDate(s.date);
 }
 
 function sourceItem(s: Source): HTMLLIElement {
@@ -10940,7 +13373,8 @@ export function renderSources(root?: HTMLElement | string | null): void {
   const host = resolveHost(root);
 
   const heads = [...host.children].filter(
-    (n): n is HTMLElement => /^H[1-3]$/.test(n.tagName) && !n.closest(".source-group"),
+    (n): n is HTMLElement =>
+      /^H[1-3]$/.test(n.tagName) && !n.closest(".source-group"),
   );
 
   const body: Node[] = [el("p", "intro", bi(INTRO))];
@@ -10964,7 +13398,13 @@ export function renderSources(root?: HTMLElement | string | null): void {
 
   const key = el("div", "source-group");
   key.id = "src-key";
-  key.append(el("h2", undefined, bi({ en: "How to read the markers", fr: "Comment lire les marqueurs" })));
+  key.append(
+    el(
+      "h2",
+      undefined,
+      bi({ en: "How to read the markers", fr: "Comment lire les marqueurs" }),
+    ),
+  );
   const dl = el("dl", "marker-list");
   for (const m of MARKER_KEY) {
     dl.append(el("dt", undefined, m.key));
@@ -11023,7 +13463,7 @@ Apply this same thinking to the charts in section C'
 
 **Assistant**
 
-C′ has the mirror-image problem, and the file shows it: `index.html` still carries `<div class="legend" id="legend-events">` (line 156) *while* the prose promises "direct labels instead of a legend". If `episodes.ts` fills that host, seven movement names are stated twice per figure — the `directLabels` bug with the channels swapped. Hue can't rescue it either: seven steps of one ramp are not decodable without something naming them, so in C′ the **labels** are the load-bearing channel and the legend is the redundant one.
+C′ has the mirror-image problem, and the file shows it: `index.html` still carries `<div class="legend" id="legend-events">` (line 156) _while_ the prose promises "direct labels instead of a legend". If `episodes.ts` fills that host, seven movement names are stated twice per figure — the `directLabels` bug with the channels swapped. Hue can't rescue it either: seven steps of one ramp are not decodable without something naming them, so in C′ the **labels** are the load-bearing channel and the legend is the redundant one.
 
 Same rule, applied mechanically: exactly one identifier per series per figure, the plugin is opt-in per config (so it can't leak back into C), a label is skipped when another channel already names the series, and no label is ever drawn twice in a panel. The extra work C′ needs that C didn't is that seven labels in a 230px panel collide — so they get a reserved right gutter, de-overlap, and a leader line, instead of being stacked on the curves.
 
@@ -11067,7 +13507,11 @@ interface Candidate {
 }
 
 /** Truncates to `max` px with an ellipsis, binary-searching so long names stay readable. */
-function ellipsise(ctx: CanvasRenderingContext2D, s: string, max: number): string {
+function ellipsise(
+  ctx: CanvasRenderingContext2D,
+  s: string,
+  max: number,
+): string {
   if (ctx.measureText(s).width <= max) return s;
   let lo = 0;
   let hi = s.length;
@@ -11216,7 +13660,12 @@ At the C′ call site in `episodes.ts` — the panel shell must reserve the gutt
 ```ts
 import { CAP_WEEK, capSuffix, endLabels, mount } from "./chart.ts";
 
-const ITEMS_LABELS = endLabels({ gap: 12, gutter: 92, fontSize: 10, maxLabels: 8 });
+const ITEMS_LABELS = endLabels({
+  gap: 12,
+  gutter: 92,
+  fontSize: 10,
+  maxLabels: 8,
+});
 
 function itemsPanelShell(seriesTitle: string, range: string) {
   return {
@@ -11230,8 +13679,8 @@ function itemsPanelShell(seriesTitle: string, range: string) {
       tooltip: { mode: "index" as const, intersect: false },
     },
     scales: {
-      x: { /* … capped at week 7, unchanged … */ },
-      y: { /* … per-panel limits, range printed in the strip, unchanged … */ },
+      x: {/* … capped at week 7, unchanged … */},
+      y: {/* … per-panel limits, range printed in the strip, unchanged … */},
     },
   };
 }
@@ -11247,9 +13696,11 @@ const datasets = movements.map((mv) => ({
   spanGaps: true,
 }));
 
-mount(canvas, { data: { labels: weeks, datasets }, ...itemsPanelShell(seriesTitle, range) }, [
-  ITEMS_LABELS,
-]);
+mount(
+  canvas,
+  { data: { labels: weeks, datasets }, ...itemsPanelShell(seriesTitle, range) },
+  [ITEMS_LABELS],
+);
 
 /* #legend-events must not also be filled: one identifier per series per figure. */
 const legendHost = document.getElementById("legend-events");
@@ -11276,7 +13727,7 @@ Expected: `legend-events` only where it is cleared, `endLabels` only in the C′
 
 **You**
 
-These are my current files. 
+These are my current files.
 
 1. fix the missing sources (e.g. the Canard Enchaîné)
 2. remove the episode names from the right-hand side of the charts in section C'
@@ -11292,8 +13743,8 @@ Both bugs are cross-module duplication, and both are visible in the files you at
 `main.ts` calls, in this order:
 
 ```ts
-renderSources();   // sources.ts — 18 citations, bilingual, includes Le Canard
-renderChrome();    // page.ts → sources() → host.replaceChildren(...) from t().sources
+renderSources(); // sources.ts — 18 citations, bilingual, includes Le Canard
+renderChrome(); // page.ts → sources() → host.replaceChildren(...) from t().sources
 ```
 
 `page.ts:61` `sources()` unconditionally replaces the children of `#sources` with `t().sources` from `i18n.ts:1272` — a 13-item catalogue with root URLs (`https://www.ifrap.org`, `https://www.cci.fr`) and no Canard, no Le Monde/CCI, no franceinfo/BFMTV/Capital, no September 2025 live blogs. Last writer wins, so the good renderer is erased on every frame. The heading survives only because both write one.
@@ -11327,13 +13778,14 @@ export function renderChrome(): void {
 **`sources.ts`** — one small addition so the heading is the bilingual one instead of the hard-coded `Sources` in `index.html`. It rewrites text, never removes the node:
 
 ```ts
-  const heads = [...host.children].filter(
-    (n): n is HTMLElement => /^H[1-3]$/.test(n.tagName) && !n.closest(".source-group"),
-  );
+const heads = [...host.children].filter(
+  (n): n is HTMLElement =>
+    /^H[1-3]$/.test(n.tagName) && !n.closest(".source-group"),
+);
 
-  /* index.html owns the heading; give it the active language without replacing it. */
-  const heading = heads.find((n) => n.tagName === "H1");
-  if (heading) heading.textContent = bi(BOX_TITLE);
+/* index.html owns the heading; give it the active language without replacing it. */
+const heading = heads.find((n) => n.tagName === "H1");
+if (heading) heading.textContent = bi(BOX_TITLE);
 ```
 
 No CSS changes needed: `sources.ts` emits exactly the hooks `styles.css` already has — `#sources > p.intro`, `.source-group h2`, `.date`, `.what`, `#sources > p.foot` — and it keeps `index.html`'s `<h1>` (styled by `#sources > h1`).
@@ -11354,41 +13806,41 @@ interface PanelDataset extends ChartDataset<"line", Pt[]> {
 }
 
 /* ---------- 3. buildDataset: drop the __label assignment ---------- */
-  return {
-    label: m.items[key].label,
-    data: points,
-    /* … unchanged … */
-    __item: key,
-    __ep: epIndex,
-    __color: color,
-    __hollow: drawn,
-  };
+return {
+  label: m.items[key].label,
+  data: points,
+  /* … unchanged … */
+  __item: key,
+  __ep: epIndex,
+  __color: color,
+  __hollow: drawn,
+};
 
 /* ---------- 4. companion panel: no gutter, no plugin ---------- */
-    const options: ChartOptions<"line"> = {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: false,
-      interaction: { mode: "nearest", axis: "x", intersect: false },
-      layout: { padding: { top: 6, right: 10, bottom: 0, left: 0 } },
-      scales: {
-        x: xScale(ENFORCEMENT_LAST),
-        y: yScale(lo, hi, true),
-      },
-      plugins: {
-        legend: { display: false },
-        title: { display: false },
-        subtitle: { display: false },
-        tooltip: tooltipSpec(),
-      },
-    };
+const options: ChartOptions<"line"> = {
+  responsive: true,
+  maintainAspectRatio: false,
+  animation: false,
+  interaction: { mode: "nearest", axis: "x", intersect: false },
+  layout: { padding: { top: 6, right: 10, bottom: 0, left: 0 } },
+  scales: {
+    x: xScale(ENFORCEMENT_LAST),
+    y: yScale(lo, hi, true),
+  },
+  plugins: {
+    legend: { display: false },
+    title: { display: false },
+    subtitle: { display: false },
+    tooltip: tooltipSpec(),
+  },
+};
 
-    const chart = new Chart<"line">(canvas, {
-      type: "line",
-      data: { datasets } as unknown as ChartData<"line">,
-      options,
-      plugins: [],
-    });
+const chart = new Chart<"line">(canvas, {
+  type: "line",
+  data: { datasets } as unknown as ChartData<"line">,
+  options,
+  plugins: [],
+});
 ```
 
 Two consequences worth closing out:
@@ -11403,10 +13855,24 @@ Two consequences worth closing out:
 I ran out of tool budget before reading `chart.ts`'s `mount`. Note one thing visible in the two files I did read: `index.html` wraps every A/B canvas in `.canvas-box` / `.canvas-box.tall`, and **`styles.css` has no `.canvas-box` rule at all** — its only height rule is `.wrap` (line 41), which nothing in `index.html` uses. If the A/B charts collapse to ~150px again, that mismatch is the cause, not `i18n.ts`:
 
 ```css
-.canvas-box { position: relative; height: 460px; }
-.canvas-box.tall { height: 520px; }
-.canvas-box > canvas { display: block; width: 100%; height: 100%; }
-@media (max-width: 40rem) { .canvas-box, .canvas-box.tall { height: 340px; } }
+.canvas-box {
+  position: relative;
+  height: 460px;
+}
+.canvas-box.tall {
+  height: 520px;
+}
+.canvas-box > canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+@media (max-width: 40rem) {
+  .canvas-box,
+  .canvas-box.tall {
+    height: 340px;
+  }
+}
 ```
 
 ## Check
@@ -11471,12 +13937,12 @@ That `fromBrowser` deletion is the substantive half of the change. Setting `DEFA
 
 ## What this does and does not change
 
-| Entry | Result |
-|---|---|
-| `?lang=fr` / `?lang=en` | honoured, not persisted (`initLang` passes `persist:false`) |
-| no param, nothing stored | **French**, regardless of browser locale |
-| no param, `localStorage.lang = "en"` | English — a real past choice still wins |
-| `index.html` before JS | French, `lang="fr"`, matches what follows |
+| Entry                                | Result                                                      |
+| ------------------------------------ | ----------------------------------------------------------- |
+| `?lang=fr` / `?lang=en`              | honoured, not persisted (`initLang` passes `persist:false`) |
+| no param, nothing stored             | **French**, regardless of browser locale                    |
+| no param, `localStorage.lang = "en"` | English — a real past choice still wins                     |
+| `index.html` before JS               | French, `lang="fr"`, matches what follows                   |
 
 So a returning visitor who clicked EN stays in EN. If you want the new default to apply to them too, bump the storage key (`const STORAGE_KEY = "lang-v2"`) — that discards all stored preferences once.
 
@@ -11488,4 +13954,3 @@ Two things to confirm rather than assume:
 `lang.ts`, `main.ts`, `page.ts`, `chart.ts` and `episodes.ts` need no edits: `initLang()` no-ops without a param, `renderChrome()` reads `localeMeta()` at render time, and both chart modules key their memoisation on `localeVersion()`.
 
 ---
-

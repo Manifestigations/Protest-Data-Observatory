@@ -6,8 +6,8 @@ import { bi, eurM, fill, getLocale, nf, t } from "../copy";
 import {
   denominator,
   KEY_2026,
-  population,
   pctOfValue,
+  population,
 } from "../data/population.ts";
 import type { Unit } from "./series.ts";
 

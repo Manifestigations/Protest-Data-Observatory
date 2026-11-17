@@ -1,6 +1,6 @@
 # French Protest Charts (Part V - Improvements)
 
-*Created: 12/11/2026, 14:18:30*
+_Created: 12/11/2026, 14:18:30_
 
 ---
 
@@ -9,6 +9,7 @@
 Take the project in this GitHub repo: https://github.com/y1DWgTh1oTZIG/french-protest-charts
 
 Make the following changes:
+
 1. Add a link to the GitHub repo as an icon next to the language toggle
 2. Sort the sources within each source group by publication date, earliest-first
 3. Wrap each source group inside a collapsible `<details>` element
@@ -19,7 +20,7 @@ Make the following changes:
 
 I'll start by examining the repository structure.Read the repo (`src/client/{sources,page,lang,dom}.ts`, `docs/index.html`). Three edits: `docs/index.html` (icon markup), `src/client/page.ts` (localise the icon label), `src/client/sources.ts` (sorted groups + `<details>`), `docs/styles.css` (layout).
 
-````html
+```html
 <!-- docs/index.html — replace the <div class="lang-switch"> block with this -->
 <div class="head-tools">
   <div class="lang-switch" data-lang-switch role="group" aria-label="Langue">
@@ -35,11 +36,13 @@ I'll start by examining the repository structure.Read the repo (`src/client/{sou
     aria-label="Code source sur GitHub"
   >
     <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-      <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.4 7.4 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z" />
+      <path
+        d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.4 7.4 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"
+      />
     </svg>
   </a>
 </div>
-````
+```
 
 ```ts
 /* src/client/page.ts — add below the `$` helper; call repoLink() from renderChrome() */
@@ -234,7 +237,9 @@ export function renderSources(
   border-radius: 50%;
   color: inherit;
   text-decoration: none;
-  transition: background-color 0.15s ease, opacity 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    opacity 0.15s ease;
 }
 
 .repo-link svg {
@@ -304,7 +309,7 @@ After the disclaimer, add a section containing the attached content, with each s
 
 I'll review the current state of the repo before writing code.The repo is in an earlier state than expected (no `.head-tools`). Let me check the i18n/copy architecture and file layout.Reviewed `main`. Current state: `docs/index.html` has the `.head-tools` + `#repo-link` icon (previous round applied), the disclaimer is an empty `<p id="disclaimer">`, `page.ts#renderChrome()` owns all chrome and re-runs on locale change, catalogue prose is plain text (`textContent`-only, no HTML), and `styles.css` already carries the `.source-group` `<details>` pattern to mirror. There is no `#about` container yet, so the section needs both a mount point and a renderer.
 
-Content issues in the attachment worth knowing (handled below): one malformed link `[considering escape by helicopter)(https://…` (would render literally), the quote's attribution reads *The Spook Who Sat By the Soor*, and `docs/` has no `transcript-5.md` (transcripts 1–4 exist; 3 and 4 are byte-identical), so the "reviewing sources" link will 404.
+Content issues in the attachment worth knowing (handled below): one malformed link `[considering escape by helicopter)(https://…` (would render literally), the quote's attribution reads _The Spook Who Sat By the Soor_, and `docs/` has no `transcript-5.md` (transcripts 1–4 exist; 3 and 4 are byte-identical), so the "reviewing sources" link will 404.
 
 **New file — `src/client/about.ts`**
 
@@ -361,7 +366,8 @@ const HELICOPTER =
   "https://www.lavoixdunord.fr/506027/article/2018-12-13/un-helicoptere-etait-pret-samedi-au-cas-ou-pour-emmener-emmanuel-macron";
 const STRATEGY =
   "https://lepoing.net/manifestation-du-7-novembre-a-montpellier-la-contestation-cherche-encore-sa-strategie/";
-const BUNKER = "https://neru.tv/sources/macron-bunker-secret-pour-fuir-le-peuple/";
+const BUNKER =
+  "https://neru.tv/sources/macron-bunker-secret-pour-fuir-le-peuple/";
 const PAGES = "https://y1dwgth1otzig.github.io/french-protest-charts/?lang=en";
 const REPO = "https://github.com/y1DWgTh1oTZIG/french-protest-charts";
 const SPOOK = "https://www.youtube.com/watch?v=HG-56GKbPtk&t=3896";
@@ -388,10 +394,7 @@ const QUOTE: Block = {
       "[But if they support us] then it’s hit and run, harass and hound, and we can paralyze this country.",
     ],
   ],
-  by: [
-    "Dan Freeman, ",
-    { link: "The Spook Who Sat by the Door", href: SPOOK },
-  ],
+  by: ["Dan Freeman, ", { link: "The Spook Who Sat by the Door", href: SPOOK }],
 };
 
 const ABOUT: Record<Lang, readonly SubSection[]> = {
@@ -437,9 +440,15 @@ const ABOUT: Record<Lang, readonly SubSection[]> = {
           kind: "p",
           runs: [
             "However, I think the police may have decided to try intelligence in place of violence for a change. They seem to be using kettling much more often, surrounding and tear-gassing protestors and then allowing them to exit only by allowing their identity card to be photographed and a fine for attending an illegal protest to be issued. The fixed-penalty fines are 135EUR, but I suspect their main objective is the IDs for intelligence collection and issuing future charges. Similarly, police in Brest ",
-            { link: "seized the photo directories of several schools", href: BLOG },
+            {
+              link: "seized the photo directories of several schools",
+              href: BLOG,
+            },
             ", for as-yet-unclear reasons. It’s worth noting that in France, it is illegal for the state to record ethnicity data and for employers to record lists of striking employees, both because of the experience in WWII where the French collaborator and German occupier governments used these lists to round up their enemies for deportation and worse. The fear in the back of everyone’s mind is the possibility that France will again have a far-right government next April, which ",
-            { link: "almost two thirds of the police openly support", href: RN_VOTE },
+            {
+              link: "almost two thirds of the police openly support",
+              href: RN_VOTE,
+            },
             ", and so where might those lists end up?",
           ],
         },
@@ -873,7 +882,7 @@ export function renderAbout(
 ```html
 <!-- docs/index.html: directly after this line -->
 <!--     <p id="disclaimer" class="disclaimer"></p> -->
-    <section id="about" class="about"></section>
+<section id="about" class="about"></section>
 ```
 
 ```ts
@@ -881,8 +890,8 @@ export function renderAbout(
 import { renderAbout } from "./about";
 
 // inside renderChrome(), immediately after disclaimer():
-  disclaimer();
-  renderAbout(); // after the disclaimer, before the chart sections
+disclaimer();
+renderAbout(); // after the disclaimer, before the chart sections
 ```
 
 ```css
@@ -986,4 +995,3 @@ Build: `npx esbuild src/client/main.ts --bundle --format=esm --target=es2022 --o
 Two things to decide: the French copy above is my translation of your English text — worth a read before it ships, since the argument is yours. And the blockquote stays in English in both locales because it quotes Dan Freeman verbatim; the attribution is the only translated part.
 
 ---
-

@@ -72,7 +72,10 @@ export const ABOUT_FR: About = [
         kind: "p",
         runs: [
           "Mais en même temps, je ne veux pas leur accorder trop de crédit. ",
-          { link: "La baisse du niveau de formation des policiers", href: TRAINING },
+          {
+            link: "La baisse du niveau de formation des policiers",
+            href: TRAINING,
+          },
           " et ",
           {
             link: "l’inadéquation de leurs méthodes de maintien de l’ordre",
@@ -86,7 +89,12 @@ export const ABOUT_FR: About = [
       {
         kind: "ul",
         items: [
-          [{ link: "l’anecdotique, comme des écussons velcro à l’envers", href: PILEUP }],
+          [
+            {
+              link: "l’anecdotique, comme des écussons velcro à l’envers",
+              href: PILEUP,
+            },
+          ],
           [
             "au assez grave, comme ",
             {
@@ -185,7 +193,10 @@ export const ABOUT_FR: About = [
         kind: "p",
         runs: [
           "Ces débats, et bien d’autres, se jouent actuellement dans la vertigineuse constellation d’assemblées générales apparues au cours du dernier mois. Il y a ",
-          { link: "une volonté claire de construire un double pouvoir", href: DUAL_POWER },
+          {
+            link: "une volonté claire de construire un double pouvoir",
+            href: DUAL_POWER,
+          },
           ". Mais jusqu’où ira-t-elle ?",
         ],
       },

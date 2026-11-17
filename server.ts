@@ -3,8 +3,8 @@
    rebuild shows up on reload. Not used in production: GitHub Pages serves
    docs/ directly. GET/HEAD only; every path is resolved and checked to stay
    inside docs/ before anything is read. */
-import { createServer } from "node:http";
 import { readFile, stat } from "node:fs/promises";
+import { createServer } from "node:http";
 import { resolve, sep } from "node:path";
 
 const PORT = Number(process.env.PORT ?? 3000);

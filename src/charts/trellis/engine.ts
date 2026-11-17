@@ -6,8 +6,8 @@
    organiser count exists; otherwise a point value. */
 
 import type { Chart, ChartDataset } from "chart.js";
-import { gapSegment, THEME } from "../../core/canvas-registry.ts";
 import { fill, fmtWeek, t } from "../../copy/index.ts";
+import { gapSegment, THEME } from "../../core/canvas-registry.ts";
 import { noteText } from "../../data/notes.ts";
 import {
   bandOf,
@@ -19,7 +19,6 @@ import {
   type Metric,
   type Row,
 } from "../../model/index.ts";
-import { hollow } from "../../core/colors.ts";
 
 export interface Pt {
   x: number;

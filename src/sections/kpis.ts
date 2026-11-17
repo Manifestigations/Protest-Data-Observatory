@@ -13,7 +13,8 @@
  *   - a day or week with no published figure is left out, not counted as zero.
  */
 
-import { DATES, WEEKS } from "../data/data.ts";
+import { visiblePoints } from "../charts/series.ts";
+import { seriesData, type Pt } from "../charts/trellis/engine.ts";
 import {
   compact,
   eurM,
@@ -25,9 +26,8 @@ import {
   type ChartCopy,
 } from "../copy";
 import { byId, el } from "../core/dom.ts";
-import { seriesData, type Pt } from "../charts/trellis/engine.ts";
+import { DATES, WEEKS } from "../data/data.ts";
 import { ENFORCEMENT_LAST, EPISODES } from "../data/episodes/index.ts";
-import { visiblePoints } from "../charts/series.ts";
 
 type SeriesCopyKey = keyof ChartCopy["series"];
 

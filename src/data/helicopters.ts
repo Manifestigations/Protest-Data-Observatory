@@ -3,8 +3,8 @@
    Values in M€ (Unit = "count" | "eurM"; policing series is eurM).
    ════════════════════════════════════════════════════════════════════════════ */
 
-import { bandOf, midOf, type Band } from "../model/index.ts";
-import { DATES, DAILY, type Pt, type Series } from "./data.ts";
+import { bandOf, type Band } from "../model/index.ts";
+import { DAILY, DATES, type Pt, type Series } from "./data.ts";
 
 /** €/h — requisition tariff; reproduces the 2019 yellow-vest precedent. */
 export const RATE_REQUISITION = 1_412;
@@ -16,11 +16,7 @@ export const RATE_ALL_IN = 7_000;
 const M = 1e6;
 
 export type Basis =
-  | "clashes"
-  | "nightPatrol"
-  | "saturday"
-  | "intersyndical"
-  | "ongoing";
+  "clashes" | "nightPatrol" | "saturday" | "intersyndical" | "ongoing";
 
 export interface FlightDay {
   readonly date: string;

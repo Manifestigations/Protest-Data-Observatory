@@ -1,6 +1,6 @@
-import { byId, el } from "../../core/dom.ts";
 import { fill, t } from "../../copy";
 import { getLocale } from "../../copy/state.ts";
+import { byId, el } from "../../core/dom.ts";
 import {
   CASES,
   SEVERITY_LEVELS,

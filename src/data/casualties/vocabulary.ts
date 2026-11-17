@@ -14,12 +14,7 @@
  */
 
 export type LadderId =
-  | "light"
-  | "residual"
-  | "serious"
-  | "vision"
-  | "destruction"
-  | "fatal";
+  "light" | "residual" | "serious" | "vision" | "destruction" | "fatal";
 
 export interface NativeLabel {
   /** The label the source uses, transcribed. */

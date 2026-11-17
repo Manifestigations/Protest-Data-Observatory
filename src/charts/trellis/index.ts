@@ -99,16 +99,6 @@ function emphasiseEvent(index: number | null): void {
 
 /* ── Hosts: one grid per page ──────────────────────────────────────────────── */
 
-interface EpisodeHosts {
-  episodeHost: HTMLElement;
-  itemLegend: HTMLElement;
-}
-
-interface ItemHosts {
-  itemHost: HTMLElement;
-  eventLegend: HTMLElement;
-}
-
 /** The four ids section C/D own. The grids no longer share a page, so each grid
  *  resolves its own pair — one declaration, because the ids must not drift. */
 const EPISODE_HOSTS = {

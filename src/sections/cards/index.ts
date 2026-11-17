@@ -5,6 +5,7 @@
 
 import { bi } from "../../copy";
 import { byId, el } from "../../core/dom";
+import type { CardSpec } from "../../site/routes";
 import {
   CREDIT_LABEL,
   CREDIT_LINK_LABEL,
@@ -13,7 +14,6 @@ import {
   pageHref,
   relHref,
 } from "../../site/routes";
-import type { CardSpec } from "../../site/routes";
 
 /** docs/img/<file>, relative to the page's own depth:
  *  index.html → "img/x.jpg";  2026/turnout.html → "../img/x.jpg" */

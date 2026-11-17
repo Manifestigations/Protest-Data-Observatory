@@ -5,7 +5,6 @@ import { fill, nf, t } from "../../copy";
 import { byId, el } from "../../core/dom.ts";
 import {
   BYSTANDER_CELLS,
-  CASES,
   CIVILIAN_PROXY_SHARE,
   ESTIMATES,
   FORCES,
@@ -15,12 +14,10 @@ import {
   POPULATION_ORDER,
   RATIO,
   SENSITIVITY,
-  SEVERITY_LEVELS,
   SERIOUS_MOVEMENT,
   THINES,
   type CaseRow,
   type Cell,
-  type Estimate,
   type SevRow,
 } from "../../data/casualties/index.ts";
 import { cellView, estimateRange, pct, share, type CellView } from "./model.ts";

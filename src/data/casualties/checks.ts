@@ -3,7 +3,6 @@
  * runtime surprise. `scripts/check-casualties.ts` runs the same functions under
  * Node for CI. */
 
-import { CIVILIANS_24OCT, CRS_OCTOBER, FORCES, THINES } from "./inputs.ts";
 import {
   LIGHT_CENTRAL_SHARE,
   MIX,
@@ -11,6 +10,7 @@ import {
   NOT_LIGHT_MOVEMENT,
   SERIOUS_MOVEMENT,
 } from "./estimate.ts";
+import { CIVILIANS_24OCT, CRS_OCTOBER, FORCES, THINES } from "./inputs.ts";
 
 const close = (a: number, b: number, eps = 1e-9) => Math.abs(a - b) <= eps;
 

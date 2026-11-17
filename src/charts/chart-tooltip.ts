@@ -1,7 +1,7 @@
-import type { Band } from "../model/index.ts";
 import type { TooltipItem } from "chart.js";
 import { fill, t } from "../copy";
 import { noteText, suffixFor } from "../data/notes.ts";
+import type { Band } from "../model/index.ts";
 import type { ProtestDataset } from "./datasets.ts";
 import { fmt, rateLine } from "./format.ts";
 import { wrapTooltipLines } from "./tooltip.ts";

@@ -58,8 +58,7 @@ export function nearestByY(
   for (const el of elements) {
     const meta = chart.getDatasetMeta(el.datasetIndex);
     const pt = meta.data[el.index] as
-      | { y?: number; skip?: boolean }
-      | undefined;
+      { y?: number; skip?: boolean } | undefined;
     if (!pt || pt.skip || pt.y === undefined) continue;
     const dy = Math.abs(pt.y - p.y);
     if (dy < bestDy) {

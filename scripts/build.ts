@@ -6,8 +6,8 @@
    `dev` is true only under --watch, so a one-shot build is a production
    build: read configs() for exactly what that switches. `npm run build` runs
    this script; `npm run dev` runs it with --watch. */
-import { spawn } from "node:child_process";
 import * as esbuild from "esbuild";
+import { spawn } from "node:child_process";
 
 const watch = process.argv.includes("--watch");
 const dev = watch; // --watch is the only dev build; one-shot is production

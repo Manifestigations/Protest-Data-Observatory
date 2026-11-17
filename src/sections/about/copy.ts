@@ -1,7 +1,7 @@
 import type { Lang } from "../../copy";
-import type { About } from "./model.ts";
 import { ABOUT_EN, CALLOUT_EN, SECTION_LABEL_EN } from "./copy.en.ts";
 import { ABOUT_FR, CALLOUT_FR, SECTION_LABEL_FR } from "./copy.fr.ts";
+import type { About } from "./model.ts";
 
 export const ABOUT: Record<Lang, About> = { en: ABOUT_EN, fr: ABOUT_FR };
 export const SECTION_LABEL: Record<Lang, string> = {

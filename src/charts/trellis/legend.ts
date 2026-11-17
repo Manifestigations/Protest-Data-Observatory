@@ -67,7 +67,7 @@ export function legend(
       button.addEventListener("click", () => {
         pinned = !pinned;
         button.setAttribute("aria-pressed", String(pinned));
-        pinned ? entry.on() : entry.off();
+        (pinned ? entry.on : entry.off)();
       });
     }
 

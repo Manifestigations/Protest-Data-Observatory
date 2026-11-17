@@ -35,24 +35,8 @@ import {
   type Scale,
   type TooltipItem,
 } from "chart.js";
-import { dataTable, keyboardChart } from "../../core/a11y.ts";
-import { THEME, track } from "../../core/canvas-registry.ts";
-import {
-  contextBands,
-  daySpans,
-  weekSpans,
-  type ChartSpan,
-} from "../context/context.ts";
-import {
-  DAILY,
-  DATES,
-  END,
-  START,
-  WEEKLY,
-  WEEKS,
-  type Pt as DayPt,
-} from "../../data/data.ts";
-import { byId, el } from "../../core/dom.ts";
+import { wrapTooltipLines } from "../../charts/tooltip.ts";
+import { seriesData } from "../../charts/trellis/engine.ts";
 import {
   a11y,
   fill,
@@ -63,7 +47,20 @@ import {
   nf,
   t,
 } from "../../copy";
-import type { Episode } from "../../model/index.ts";
+import { dataTable, keyboardChart } from "../../core/a11y.ts";
+import { THEME, track } from "../../core/canvas-registry.ts";
+import { tones } from "../../core/colors.ts";
+import { byId, el } from "../../core/dom.ts";
+import {
+  DAILY,
+  DATES,
+  END,
+  START,
+  WEEKLY,
+  WEEKS,
+  type Pt as DayPt,
+} from "../../data/data.ts";
+import { EPISODES } from "../../data/episodes/index.ts";
 import {
   KEY_2026,
   basisOf,
@@ -72,10 +69,13 @@ import {
   popKeyFor,
   population,
 } from "../../data/population.ts";
-import { wrapTooltipLines } from "../../charts/tooltip.ts";
-import { seriesData } from "../../charts/trellis/engine.ts";
-import { EPISODES } from "../../data/episodes/index.ts";
-import { tones } from "../../core/colors.ts";
+import type { Episode } from "../../model/index.ts";
+import {
+  contextBands,
+  daySpans,
+  weekSpans,
+  type ChartSpan,
+} from "../context/context.ts";
 
 Chart.register(
   LineController,
@@ -388,8 +388,7 @@ const pcPeak: Plugin<"line"> = {
   id: "pcPeak",
   afterDatasetsDraw(chart) {
     const ds = chart.data.datasets[0] as
-      | ChartDataset<"line", (number | null)[]>
-      | undefined;
+      ChartDataset<"line", (number | null)[]> | undefined;
     if (!ds) return;
     const data = ds.data as (number | null)[];
 

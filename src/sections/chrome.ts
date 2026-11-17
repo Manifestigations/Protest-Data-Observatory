@@ -12,18 +12,12 @@ import {
   t,
   type SectionCopy,
 } from "../copy";
-import { renderAbout } from "./about";
-import { PAGES, SITE_NAME, pageById, type PageId } from "../site/routes.ts";
 import { PAGE_SECTIONS } from "../copy/meta-overrides.ts";
+import { PAGES, pageById, type PageId } from "../site/routes.ts";
+import { renderAbout } from "./about";
 
 const $ = (id: string): HTMLElement | null => document.getElementById(id);
 
-const REPO_LABEL = {
-  en: "Source code on GitHub",
-  fr: "Code source sur GitHub",
-} as const;
-
-type Lang = "en" | "fr";
 type SecKey = "a" | "b" | "c" | "d" | "e";
 
 const lang = (): "en" | "fr" => getLocale();
@@ -62,15 +56,6 @@ function disclaimer(): void {
   const host = $("disclaimer");
   if (!host) return;
   host.textContent = t().disclaimer.body;
-}
-
-/** The anchor is static in index.html; only its label follows the locale. */
-function repoLink(): void {
-  const a = $("repo-link");
-  if (!a) return;
-  const label = REPO_LABEL[lang()];
-  a.setAttribute("aria-label", label);
-  a.setAttribute("title", label);
 }
 
 /** Which page this document is.

@@ -13423,9 +13423,6 @@ function fmtSpan(span, end) {
   if (span.end != null) return fmtDate(span.end);
   return "\u2014";
 }
-var MINUTE = 6e4;
-var HOUR = 60 * MINUTE;
-var DAY = 24 * HOUR;
 function pctOf(v, base) {
   const r = 100 * v / base;
   return r >= 10 ? `${Math.round(r)}%` : `${Number(r.toFixed(1))}%`;
@@ -13501,7 +13498,7 @@ function fromStorage() {
   }
 }
 var current = localeFromUrl() ?? fromStorage() ?? DEFAULT_LANG;
-buildFormats(localeMeta2(current).tag);
+buildFormats(localeMeta(current).tag);
 var version2 = 0;
 function getLocale() {
   return current;
@@ -13531,7 +13528,7 @@ function emit(next, previous) {
 }
 function syncLangAttrs() {
   if (!hasDom()) return;
-  const locale2 = localeMeta2(current);
+  const locale2 = localeMeta(current);
   document.documentElement.lang = locale2.meta.htmlLang;
   document.documentElement.dataset.lang = current;
 }
@@ -13547,7 +13544,7 @@ function setLang(next, opts = {}) {
   if (changed) {
     current = target;
     version2 += 1;
-    buildFormats(localeMeta2(target).tag);
+    buildFormats(localeMeta(target).tag);
     if (persist && hasDom()) {
       try {
         window.localStorage.setItem(STORAGE_KEY, target);
@@ -13563,9 +13560,34 @@ var LOCALES = Object.freeze([
   "fr",
   "en"
 ]);
-function localeMeta2(locale2 = current) {
+function localeMeta(locale2 = current) {
   return LOCALE_META[normalizeLocale(locale2) ?? DEFAULT_LANG];
 }
+
+// src/copy/a11y.ts
+var A11Y = {
+  en: {
+    about: "Notes on this project",
+    chart: "Chart",
+    chartRole: "chart",
+    chartHint: "Interactive chart. Use the left and right arrow keys to step through data points, Home and End for the ends, Escape to clear. A table of the same data follows the chart.",
+    tableCaption: "Data for \u201C{title}\u201D",
+    dateHeader: "Date",
+    weekHeader: "Week",
+    switched: "Page language: {lang}. Charts redrawn."
+  },
+  fr: {
+    about: "Notes sur ce projet",
+    chart: "Graphique",
+    chartRole: "graphique",
+    chartHint: "Graphique interactif. Utilisez les fl\xE8ches gauche et droite pour parcourir les points, D\xE9but et Fin pour les extr\xE9mit\xE9s, \xC9chap pour quitter. Un tableau des m\xEAmes donn\xE9es suit le graphique.",
+    tableCaption: "Donn\xE9es de \xAB {title} \xBB",
+    dateHeader: "Date",
+    weekHeader: "Semaine",
+    switched: "Langue de la page : {lang}. Graphiques redessin\xE9s."
+  }
+};
+var a11y = () => A11Y[current];
 
 // src/copy/chrome.ts
 var STATIC = {
@@ -13672,31 +13694,6 @@ function syncLangSwitch(root2 = document) {
     b.tabIndex = on ? 0 : -1;
   }
 }
-
-// src/copy/a11y.ts
-var A11Y = {
-  en: {
-    about: "Notes on this project",
-    chart: "Chart",
-    chartRole: "chart",
-    chartHint: "Interactive chart. Use the left and right arrow keys to step through data points, Home and End for the ends, Escape to clear. A table of the same data follows the chart.",
-    tableCaption: "Data for \u201C{title}\u201D",
-    dateHeader: "Date",
-    weekHeader: "Week",
-    switched: "Page language: {lang}. Charts redrawn."
-  },
-  fr: {
-    about: "Notes sur ce projet",
-    chart: "Graphique",
-    chartRole: "graphique",
-    chartHint: "Graphique interactif. Utilisez les fl\xE8ches gauche et droite pour parcourir les points, D\xE9but et Fin pour les extr\xE9mit\xE9s, \xC9chap pour quitter. Un tableau des m\xEAmes donn\xE9es suit le graphique.",
-    tableCaption: "Donn\xE9es de \xAB {title} \xBB",
-    dateHeader: "Date",
-    weekHeader: "Semaine",
-    switched: "Langue de la page : {lang}. Graphiques redessin\xE9s."
-  }
-};
-var a11y = () => A11Y[current];
 
 // src/copy/en/helicopters.ts
 var HELI_COPY_EN = {
@@ -14652,6 +14649,159 @@ function assertCasualties() {
   }
 }
 
+// src/data/casualties/cases.ts
+var CASES = [
+  {
+    id: "forcesAccidental",
+    side: "forces",
+    kind: "accidental",
+    count: { s: "c", n: 4 },
+    cases: ["givors", "crsWrist", "crsAnkle"]
+  },
+  {
+    id: "forcesConflictual",
+    side: "forces",
+    kind: "conflictual",
+    count: { s: "x", why: "causeUnknown" },
+    cases: ["helmet", "groin2023"]
+  },
+  {
+    id: "protesterConflictual",
+    side: "protesters",
+    kind: "conflictual",
+    count: { s: "x", why: "causeUnknown" },
+    cases: ["mael", "alaric", "eyes"]
+  },
+  {
+    id: "protesterAccidental",
+    side: "protesters",
+    kind: "accidental",
+    count: { s: "x", why: "noneDocumented" },
+    cases: []
+  },
+  {
+    id: "sainteSoline",
+    side: "forces",
+    kind: "accidental",
+    count: { s: "c", n: 29 },
+    cases: ["sainteSoline"],
+    reference: true
+  }
+];
+
+// src/data/casualties/levels.ts
+var SEVERITY_LEVELS = [
+  {
+    /* 1,167 / 1,233 = 94.65% → the 94.6% the file itself states. Serious is
+       bounded 0–66 because serious ⊆ not-light and the file has no class of
+       its own: that is a structural bound, not a count. */
+    id: "crsOctober",
+    population: "forces",
+    total: { s: "n", v: 1233 },
+    serious: { s: "r", lo: 0, hi: NOT_LIGHT, d: true },
+    light: { s: "n", v: 1167 },
+    other: { s: "n", v: NOT_LIGHT, d: true },
+    sources: ["mediapart-crs-blesses-1311"]
+  },
+  {
+    /* Published level at the peak: 7 serious out of 1,144. */
+    id: "forcesPeak",
+    population: "forces",
+    total: { s: "n", v: FORCES.stock17Oct },
+    serious: { s: "n", v: FORCES.serious17Oct },
+    light: { s: "x", why: "notPublished" },
+    other: { s: "x", why: "notPublished" },
+    sources: ["bfmtv-bilan-17oct"]
+  },
+  {
+    /* The movement total, decomposed in estimate.ts (E3, E4, E6). */
+    id: "forcesMovement",
+    population: "forces",
+    total: { s: "n", v: FORCES.movement },
+    serious: {
+      s: "r",
+      lo: SERIOUS_MOVEMENT.lo,
+      hi: SERIOUS_MOVEMENT.hi,
+      d: true
+    },
+    light: {
+      s: "r",
+      lo: FORCES.movement - NOT_LIGHT_MOVEMENT.hi,
+      hi: FORCES.movement - NOT_LIGHT_MOVEMENT.lo,
+      d: true
+    },
+    other: {
+      s: "r",
+      lo: NOT_LIGHT_MOVEMENT.lo - SERIOUS_MOVEMENT.hi,
+      hi: NOT_LIGHT_MOVEMENT.hi - SERIOUS_MOVEMENT.lo,
+      d: true
+    },
+    sources: ["bfmtv-bilan-17oct", "mediapart-crs-blesses-1311"]
+  },
+  {
+    /* A register, not a rate: no total has ever been published, so no share can
+       exist on this row. The serious cell is a documented floor. */
+    id: "protesters",
+    population: "protesters",
+    participation: "participating",
+    total: { s: "x", why: "noDenominator" },
+    serious: { s: "f", v: THINES_FLOOR() },
+    light: { s: "x", why: "noDenominator" },
+    other: { s: "x", why: "registerOnly" },
+    sources: ["lemonde-blessures-0511"]
+  }
+];
+function THINES_FLOOR() {
+  return 79;
+}
+var SEVERITY_WEEKS = [
+  {
+    id: "week12oct",
+    population: "forces",
+    total: { s: "n", v: 207, d: true },
+    serious: { s: "n", v: 7 },
+    light: { s: "x", why: "notPublished" },
+    other: { s: "x", why: "notPublished" },
+    sources: ["bfmtv-bilan-17oct"]
+  },
+  {
+    id: "week19oct",
+    population: "forces",
+    total: { s: "n", v: 267, d: true },
+    serious: { s: "x", why: "notPublished" },
+    light: { s: "x", why: "notPublished" },
+    other: { s: "x", why: "notPublished" },
+    sources: ["bfmtv-bilan-17oct"]
+  },
+  {
+    id: "week26oct",
+    population: "forces",
+    total: { s: "n", v: 116, d: true },
+    serious: { s: "x", why: "notPublished" },
+    light: { s: "x", why: "notPublished" },
+    other: { s: "x", why: "notPublished" },
+    sources: ["bfmtv-bilan-17oct"]
+  },
+  {
+    id: "week2nov",
+    population: "forces",
+    total: { s: "n", v: 53 },
+    serious: { s: "x", why: "notPublished" },
+    light: { s: "x", why: "notPublished" },
+    other: { s: "x", why: "notPublished" },
+    sources: ["bfmtv-bilan-17oct"]
+  },
+  {
+    id: "crsOctober",
+    population: "forces",
+    total: { s: "n", v: 1233 },
+    serious: { s: "r", lo: 0, hi: NOT_LIGHT, d: true },
+    light: { s: "n", v: 1167 },
+    other: { s: "n", v: NOT_LIGHT, d: true },
+    sources: ["mediapart-crs-blesses-1311"]
+  }
+];
+
 // src/data/casualties/universe.ts
 var POPULATION_ORDER = [
   "forces",
@@ -14775,159 +14925,6 @@ var FORCE_CARRIER = {
   declared: FORCES.stock17Oct,
   serious: FORCES.serious17Oct
 };
-
-// src/data/casualties/levels.ts
-var SEVERITY_LEVELS = [
-  {
-    /* 1,167 / 1,233 = 94.65% → the 94.6% the file itself states. Serious is
-       bounded 0–66 because serious ⊆ not-light and the file has no class of
-       its own: that is a structural bound, not a count. */
-    id: "crsOctober",
-    population: "forces",
-    total: { s: "n", v: 1233 },
-    serious: { s: "r", lo: 0, hi: NOT_LIGHT, d: true },
-    light: { s: "n", v: 1167 },
-    other: { s: "n", v: NOT_LIGHT, d: true },
-    sources: ["mediapart-crs-blesses-1311"]
-  },
-  {
-    /* Published level at the peak: 7 serious out of 1,144. */
-    id: "forcesPeak",
-    population: "forces",
-    total: { s: "n", v: FORCES.stock17Oct },
-    serious: { s: "n", v: FORCES.serious17Oct },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" },
-    sources: ["bfmtv-bilan-17oct"]
-  },
-  {
-    /* The movement total, decomposed in estimate.ts (E3, E4, E6). */
-    id: "forcesMovement",
-    population: "forces",
-    total: { s: "n", v: FORCES.movement },
-    serious: {
-      s: "r",
-      lo: SERIOUS_MOVEMENT.lo,
-      hi: SERIOUS_MOVEMENT.hi,
-      d: true
-    },
-    light: {
-      s: "r",
-      lo: FORCES.movement - NOT_LIGHT_MOVEMENT.hi,
-      hi: FORCES.movement - NOT_LIGHT_MOVEMENT.lo,
-      d: true
-    },
-    other: {
-      s: "r",
-      lo: NOT_LIGHT_MOVEMENT.lo - SERIOUS_MOVEMENT.hi,
-      hi: NOT_LIGHT_MOVEMENT.hi - SERIOUS_MOVEMENT.lo,
-      d: true
-    },
-    sources: ["bfmtv-bilan-17oct", "mediapart-crs-blesses-1311"]
-  },
-  {
-    /* A register, not a rate: no total has ever been published, so no share can
-       exist on this row. The serious cell is a documented floor. */
-    id: "protesters",
-    population: "protesters",
-    participation: "participating",
-    total: { s: "x", why: "noDenominator" },
-    serious: { s: "f", v: THINES_FLOOR() },
-    light: { s: "x", why: "noDenominator" },
-    other: { s: "x", why: "registerOnly" },
-    sources: ["lemonde-blessures-0511"]
-  }
-];
-function THINES_FLOOR() {
-  return 79;
-}
-var SEVERITY_WEEKS = [
-  {
-    id: "week12oct",
-    population: "forces",
-    total: { s: "n", v: 207, d: true },
-    serious: { s: "n", v: 7 },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" },
-    sources: ["bfmtv-bilan-17oct"]
-  },
-  {
-    id: "week19oct",
-    population: "forces",
-    total: { s: "n", v: 267, d: true },
-    serious: { s: "x", why: "notPublished" },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" },
-    sources: ["bfmtv-bilan-17oct"]
-  },
-  {
-    id: "week26oct",
-    population: "forces",
-    total: { s: "n", v: 116, d: true },
-    serious: { s: "x", why: "notPublished" },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" },
-    sources: ["bfmtv-bilan-17oct"]
-  },
-  {
-    id: "week2nov",
-    population: "forces",
-    total: { s: "n", v: 53 },
-    serious: { s: "x", why: "notPublished" },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" },
-    sources: ["bfmtv-bilan-17oct"]
-  },
-  {
-    id: "crsOctober",
-    population: "forces",
-    total: { s: "n", v: 1233 },
-    serious: { s: "r", lo: 0, hi: NOT_LIGHT, d: true },
-    light: { s: "n", v: 1167 },
-    other: { s: "n", v: NOT_LIGHT, d: true },
-    sources: ["mediapart-crs-blesses-1311"]
-  }
-];
-
-// src/data/casualties/cases.ts
-var CASES = [
-  {
-    id: "forcesAccidental",
-    side: "forces",
-    kind: "accidental",
-    count: { s: "c", n: 4 },
-    cases: ["givors", "crsWrist", "crsAnkle"]
-  },
-  {
-    id: "forcesConflictual",
-    side: "forces",
-    kind: "conflictual",
-    count: { s: "x", why: "causeUnknown" },
-    cases: ["helmet", "groin2023"]
-  },
-  {
-    id: "protesterConflictual",
-    side: "protesters",
-    kind: "conflictual",
-    count: { s: "x", why: "causeUnknown" },
-    cases: ["mael", "alaric", "eyes"]
-  },
-  {
-    id: "protesterAccidental",
-    side: "protesters",
-    kind: "accidental",
-    count: { s: "x", why: "noneDocumented" },
-    cases: []
-  },
-  {
-    id: "sainteSoline",
-    side: "forces",
-    kind: "accidental",
-    count: { s: "c", n: 29 },
-    cases: ["sainteSoline"],
-    reference: true
-  }
-];
 
 // src/data/casualties/index.ts
 assertCasualties();
@@ -15381,9 +15378,10 @@ function projectDaily(key) {
     };
   });
 }
-var strikers = projectDaily("strikers").map(
-  (p) => ({ ...p, detach: false })
-);
+var strikers = projectDaily("strikers").map((p) => ({
+  ...p,
+  detach: false
+}));
 function projectPolicingDaily() {
   return DATES.map((date) => {
     const dep = DEPLOYMENT[date];
@@ -15670,7 +15668,7 @@ var SPANS = [
     source: "https://www.lemonde.fr/en/france/article/2026/10/22/french-city-of-lyon-bans-all-protests-on-saturday_6761449_7.html"
   }
 ];
-var DAY2 = 864e5;
+var DAY = 864e5;
 function daySpans() {
   const out = [];
   for (const s of SPANS) {
@@ -15783,9 +15781,9 @@ var contextBands = {
 };
 function spanBox(from2, to2) {
   const t0 = Date.parse(RANGE.from);
-  const total = Math.max(Date.parse(RANGE.to) - t0, DAY2);
+  const total = Math.max(Date.parse(RANGE.to) - t0, DAY);
   const a = Math.max(Date.parse(from2), t0);
-  const b = Math.min(Date.parse(to2) + DAY2, t0 + total);
+  const b = Math.min(Date.parse(to2) + DAY, t0 + total);
   return {
     left: (a - t0) / total * 100,
     width: Math.max(b - a, 0) / total * 100
@@ -15909,6 +15907,144 @@ function mountContext() {
   } catch (e) {
     console.error("[context A]", e);
   }
+}
+
+// src/data/helicopters.ts
+var RATE_REQUISITION = 1412;
+var RATE_AUDIT = 1800;
+var RATE_ALL_IN = 7e3;
+var M = 1e6;
+var FLIGHT_DAYS = [
+  { date: "2026-10-17", hours: [8, 20], cities: 6, basis: "clashes" },
+  { date: "2026-10-18", hours: [6, 14], cities: 4, basis: "clashes" },
+  { date: "2026-10-19", hours: [2, 4], cities: 1, basis: "nightPatrol" },
+  { date: "2026-10-24", hours: [10, 24], cities: 6, basis: "saturday" },
+  { date: "2026-10-31", hours: [10, 24], cities: 6, basis: "saturday" },
+  { date: "2026-11-05", hours: [8, 18], cities: 5, basis: "intersyndical" },
+  { date: "2026-11-07", hours: [10, 24], cities: 6, basis: "saturday" },
+  { date: "2026-11-14", hours: [8, 20], cities: 5, basis: "ongoing" },
+  { date: "2026-11-15", hours: [8, 20], cities: 5, basis: "ongoing" }
+];
+var HELI_DAYS = FLIGHT_DAYS.map((d) => {
+  const [hLo, hHi] = bandOf(d.hours);
+  return {
+    date: d.date,
+    hours: [hLo, hHi],
+    cities: d.cities,
+    basis: d.basis,
+    inService: [hLo * RATE_REQUISITION / M, hHi * RATE_AUDIT / M],
+    allIn: [hLo * RATE_ALL_IN / M, hHi * RATE_ALL_IN / M]
+  };
+});
+var HELI_BY_DATE = new Map(
+  HELI_DAYS.map((d) => [d.date, d])
+);
+var HELI_AT = new Map(
+  DATES.reduce((acc, date, i) => {
+    const d = HELI_BY_DATE.get(date);
+    if (d) acc.push([i, d]);
+    return acc;
+  }, [])
+);
+var DATES_SET = new Set(DATES);
+var sum = (pick) => HELI_DAYS.reduce(
+  (a, d) => {
+    const [lo2, hi2] = pick(d);
+    return [a[0] + lo2, a[1] + hi2];
+  },
+  [0, 0]
+);
+var HELI_TOTALS = {
+  days: HELI_DAYS.length,
+  hours: sum((d) => d.hours),
+  inService: sum((d) => d.inService),
+  allIn: sum((d) => d.allIn),
+  /** The part falling on a day the chart also carries a ground deployment
+   *  figure — the only part that moves the plotted line. */
+  onPublishedDays: sum((d) => DATES_SET.has(d.date) ? d.inService : [0, 0])
+};
+function withAerial(base, mode) {
+  let runLo = 0;
+  let runHi = 0;
+  return base.map((p, i) => {
+    const date = DATES[i];
+    if (date === void 0) return p;
+    const d = HELI_AT.get(i);
+    if (d === void 0) return p;
+    const [aLo, aHi] = d.inService;
+    if (mode === "cumulative") {
+      runLo += aLo;
+      runHi += aHi;
+      if (p.v === null) return p;
+      const [bLo2, bHi2] = p.band ?? [p.v, p.v];
+      const loT2 = bLo2 + runLo;
+      const hiT2 = bHi2 + runHi;
+      return { ...p, v: (loT2 + hiT2) / 2, band: [loT2, hiT2] };
+    }
+    if (p.v === null) return p;
+    const [bLo, bHi] = p.band ?? [p.v, p.v];
+    const loT = bLo + aLo;
+    const hiT = bHi + aHi;
+    return { ...p, v: (loT + hiT) / 2, band: [loT, hiT] };
+  });
+}
+var POLICING_WITH_AERIAL = {
+  daily: withAerial(DAILY.policing, "daily"),
+  cumulative: withAerial(DAILY.policingCumulative, "cumulative")
+};
+
+// src/sections/costs/methodology.ts
+var eur = (millions) => new Intl.NumberFormat("fr-FR", {
+  style: "currency",
+  currency: "EUR",
+  notation: "compact",
+  maximumFractionDigits: 2
+}).format(millions * 1e6);
+function insertCostMethodology(anchor, canvas) {
+  const lang2 = getLocale();
+  const c = lang2 === "fr" ? HELI_COPY_FR : HELI_COPY_EN;
+  const section = document.createElement("section");
+  section.className = "cost-method";
+  section.dataset.role = "cost-method";
+  const h = document.createElement("h3");
+  h.textContent = c.heading;
+  const intro = document.createElement("p");
+  intro.className = "cost-method__intro";
+  intro.textContent = c.intro;
+  const ol = document.createElement("ol");
+  ol.className = "cost-method__steps";
+  for (const step of c.steps) {
+    const li = document.createElement("li");
+    const title = document.createElement("strong");
+    title.textContent = step.title;
+    const body = document.createElement("p");
+    body.textContent = step.body;
+    li.append(title, body);
+    ol.append(li);
+  }
+  const [hLo, hHi] = HELI_TOTALS.hours;
+  const [cLo, cHi] = HELI_TOTALS.inService;
+  const [aLo, aHi] = HELI_TOTALS.allIn;
+  const summary = document.createElement("p");
+  summary.className = "cost-method__summary";
+  summary.textContent = c.summary({
+    days: HELI_TOTALS.days,
+    hLo,
+    hHi,
+    cLo: eur(cLo),
+    cHi: eur(cHi),
+    aLo: eur(aLo),
+    aHi: eur(aHi)
+  });
+  const caveat = document.createElement("p");
+  caveat.className = "cost-method__caveat";
+  caveat.textContent = c.caveat;
+  section.append(h, intro, ol, summary, caveat);
+  const wrap2 = canvas.parentElement;
+  const ref = wrap2 && wrap2 !== anchor && anchor.contains(wrap2) ? wrap2 : canvas;
+  if (anchor.contains(ref)) anchor.insertBefore(section, ref);
+  else anchor.before(section);
+  return section;
 }
 
 // src/charts/series.ts
@@ -16918,144 +17054,6 @@ var CHARTS = [
   }
 ];
 
-// src/data/helicopters.ts
-var RATE_REQUISITION = 1412;
-var RATE_AUDIT = 1800;
-var RATE_ALL_IN = 7e3;
-var M = 1e6;
-var FLIGHT_DAYS = [
-  { date: "2026-10-17", hours: [8, 20], cities: 6, basis: "clashes" },
-  { date: "2026-10-18", hours: [6, 14], cities: 4, basis: "clashes" },
-  { date: "2026-10-19", hours: [2, 4], cities: 1, basis: "nightPatrol" },
-  { date: "2026-10-24", hours: [10, 24], cities: 6, basis: "saturday" },
-  { date: "2026-10-31", hours: [10, 24], cities: 6, basis: "saturday" },
-  { date: "2026-11-05", hours: [8, 18], cities: 5, basis: "intersyndical" },
-  { date: "2026-11-07", hours: [10, 24], cities: 6, basis: "saturday" },
-  { date: "2026-11-14", hours: [8, 20], cities: 5, basis: "ongoing" },
-  { date: "2026-11-15", hours: [8, 20], cities: 5, basis: "ongoing" }
-];
-var HELI_DAYS = FLIGHT_DAYS.map((d) => {
-  const [hLo, hHi] = bandOf(d.hours);
-  return {
-    date: d.date,
-    hours: [hLo, hHi],
-    cities: d.cities,
-    basis: d.basis,
-    inService: [hLo * RATE_REQUISITION / M, hHi * RATE_AUDIT / M],
-    allIn: [hLo * RATE_ALL_IN / M, hHi * RATE_ALL_IN / M]
-  };
-});
-var HELI_BY_DATE = new Map(
-  HELI_DAYS.map((d) => [d.date, d])
-);
-var HELI_AT = new Map(
-  DATES.reduce((acc, date, i) => {
-    const d = HELI_BY_DATE.get(date);
-    if (d) acc.push([i, d]);
-    return acc;
-  }, [])
-);
-var DATES_SET = new Set(DATES);
-var sum = (pick) => HELI_DAYS.reduce(
-  (a, d) => {
-    const [lo2, hi2] = pick(d);
-    return [a[0] + lo2, a[1] + hi2];
-  },
-  [0, 0]
-);
-var HELI_TOTALS = {
-  days: HELI_DAYS.length,
-  hours: sum((d) => d.hours),
-  inService: sum((d) => d.inService),
-  allIn: sum((d) => d.allIn),
-  /** The part falling on a day the chart also carries a ground deployment
-   *  figure — the only part that moves the plotted line. */
-  onPublishedDays: sum((d) => DATES_SET.has(d.date) ? d.inService : [0, 0])
-};
-function withAerial(base, mode) {
-  let runLo = 0;
-  let runHi = 0;
-  return base.map((p, i) => {
-    const date = DATES[i];
-    if (date === void 0) return p;
-    const d = HELI_AT.get(i);
-    if (d === void 0) return p;
-    const [aLo, aHi] = d.inService;
-    if (mode === "cumulative") {
-      runLo += aLo;
-      runHi += aHi;
-      if (p.v === null) return p;
-      const [bLo2, bHi2] = p.band ?? [p.v, p.v];
-      const loT2 = bLo2 + runLo;
-      const hiT2 = bHi2 + runHi;
-      return { ...p, v: (loT2 + hiT2) / 2, band: [loT2, hiT2] };
-    }
-    if (p.v === null) return p;
-    const [bLo, bHi] = p.band ?? [p.v, p.v];
-    const loT = bLo + aLo;
-    const hiT = bHi + aHi;
-    return { ...p, v: (loT + hiT) / 2, band: [loT, hiT] };
-  });
-}
-var POLICING_WITH_AERIAL = {
-  daily: withAerial(DAILY.policing, "daily"),
-  cumulative: withAerial(DAILY.policingCumulative, "cumulative")
-};
-
-// src/sections/costs/methodology.ts
-var eur = (millions) => new Intl.NumberFormat("fr-FR", {
-  style: "currency",
-  currency: "EUR",
-  notation: "compact",
-  maximumFractionDigits: 2
-}).format(millions * 1e6);
-function insertCostMethodology(anchor, canvas) {
-  const lang2 = getLocale();
-  const c = lang2 === "fr" ? HELI_COPY_FR : HELI_COPY_EN;
-  const section = document.createElement("section");
-  section.className = "cost-method";
-  section.dataset.role = "cost-method";
-  const h = document.createElement("h3");
-  h.textContent = c.heading;
-  const intro = document.createElement("p");
-  intro.className = "cost-method__intro";
-  intro.textContent = c.intro;
-  const ol = document.createElement("ol");
-  ol.className = "cost-method__steps";
-  for (const step of c.steps) {
-    const li = document.createElement("li");
-    const title = document.createElement("strong");
-    title.textContent = step.title;
-    const body = document.createElement("p");
-    body.textContent = step.body;
-    li.append(title, body);
-    ol.append(li);
-  }
-  const [hLo, hHi] = HELI_TOTALS.hours;
-  const [cLo, cHi] = HELI_TOTALS.inService;
-  const [aLo, aHi] = HELI_TOTALS.allIn;
-  const summary = document.createElement("p");
-  summary.className = "cost-method__summary";
-  summary.textContent = c.summary({
-    days: HELI_TOTALS.days,
-    hLo,
-    hHi,
-    cLo: eur(cLo),
-    cHi: eur(cHi),
-    aLo: eur(aLo),
-    aHi: eur(aHi)
-  });
-  const caveat = document.createElement("p");
-  caveat.className = "cost-method__caveat";
-  caveat.textContent = c.caveat;
-  section.append(h, intro, ol, summary, caveat);
-  const wrap2 = canvas.parentElement;
-  const ref = wrap2 && wrap2 !== anchor && anchor.contains(wrap2) ? wrap2 : canvas;
-  if (anchor.contains(ref)) anchor.insertBefore(section, ref);
-  else anchor.before(section);
-  return section;
-}
-
 // src/charts/mount.ts
 Chart.register(
   LineController,
@@ -17134,54 +17132,30 @@ function mountCharts() {
   }
 }
 
-// src/data/episodes/mai68.ts
-var MAY68 = {
-  id: "may68",
-  start: "1968-04-29",
-  end: "1968-06-30",
+// src/data/episodes/bloquons.ts
+var BLOQUONS = {
+  id: "bt",
+  start: "2025-09-10",
+  end: "2025-10-05",
   weeks: [
-    /* 1 May, République → Bastille: 25,000 (police) vs 100,000 (CGT). */
-    { w: 0, from: "1968-04-29", to: "1968-05-05", p: [25e3, 1e5] },
     {
-      /* 6 May: >20,000 to the Sorbonne; 10 May: 20,000 (12,000 police).
-         Night of 10–11 May: 6,255 police, 125 cars damaged / 63 burnt,
-         469 arrests. The 891 high adds 422 early-May arrests.
-         Forces: 300+ on 6 May, 247 on 10–11 May.
-         Protesters injured: ≥100 — no national count was published. */
+      w: 0,
+      from: "2025-09-08",
+      to: "2025-09-14",
+      p: [175e3, 25e4],
+      a: 540,
+      flag: { p: "c" }
+    },
+    {
       w: 1,
-      from: "1968-05-06",
-      to: "1968-05-12",
-      p: 2e4,
-      a: [469, 891],
-      f: [247, 300],
-      i: 100,
-      flag: { i: "f" }
+      from: "2025-09-15",
+      to: "2025-09-21",
+      p: [5e5, 1e6],
+      a: 309,
+      f: 26,
+      i: 11
     },
-    /* 13 May, Paris — peak of the episode: prefecture 230,000 · ORTF 171,000
-       · surface-area estimate 500,000 · unions 1,000,000. */
-    { w: 2, from: "1968-05-13", to: "1968-05-19", p: [23e4, 1e6] },
-    {
-      /* 25 May: 1,000+ arrests (floor), ~9M strikers, ORTF walkout.
-         887 injured — from the English-Wikipedia infobox, attributed to 25 May
-         only. Weak provenance, flagged "e". */
-      w: 3,
-      from: "1968-05-20",
-      to: "1968-05-26",
-      a: 1e3,
-      i: 887,
-      flag: { a: "f", i: "e" }
-    },
-    /* 27 May Grenelle protocol · Charléty meeting. */
-    { w: 4, from: "1968-05-27", to: "1968-06-02" },
-    /* 4 Jun partial return to work · 7 Jun Renault Flins clashes. */
-    { w: 5, from: "1968-06-03", to: "1968-06-09" },
-    /* 10 Jun: Tautin killed · 11 Jun: 2 killed at Sochaux · 12 Jun:
-       demonstrations banned nationwide. */
-    { w: 6, from: "1968-06-10", to: "1968-06-16" },
-    /* 23 Jun legislative elections. */
-    { w: 7, from: "1968-06-17", to: "1968-06-23" },
-    /* Crisis closes 30 Jun. */
-    { w: 8, from: "1968-06-24", to: "1968-06-30" }
+    { w: 3, from: "2025-09-29", to: "2025-10-05", p: [195e3, 6e5] }
   ]
 };
 
@@ -17299,6 +17273,57 @@ var GILETS = {
   }))
 };
 
+// src/data/episodes/mai68.ts
+var MAY68 = {
+  id: "may68",
+  start: "1968-04-29",
+  end: "1968-06-30",
+  weeks: [
+    /* 1 May, République → Bastille: 25,000 (police) vs 100,000 (CGT). */
+    { w: 0, from: "1968-04-29", to: "1968-05-05", p: [25e3, 1e5] },
+    {
+      /* 6 May: >20,000 to the Sorbonne; 10 May: 20,000 (12,000 police).
+         Night of 10–11 May: 6,255 police, 125 cars damaged / 63 burnt,
+         469 arrests. The 891 high adds 422 early-May arrests.
+         Forces: 300+ on 6 May, 247 on 10–11 May.
+         Protesters injured: ≥100 — no national count was published. */
+      w: 1,
+      from: "1968-05-06",
+      to: "1968-05-12",
+      p: 2e4,
+      a: [469, 891],
+      f: [247, 300],
+      i: 100,
+      flag: { i: "f" }
+    },
+    /* 13 May, Paris — peak of the episode: prefecture 230,000 · ORTF 171,000
+       · surface-area estimate 500,000 · unions 1,000,000. */
+    { w: 2, from: "1968-05-13", to: "1968-05-19", p: [23e4, 1e6] },
+    {
+      /* 25 May: 1,000+ arrests (floor), ~9M strikers, ORTF walkout.
+         887 injured — from the English-Wikipedia infobox, attributed to 25 May
+         only. Weak provenance, flagged "e". */
+      w: 3,
+      from: "1968-05-20",
+      to: "1968-05-26",
+      a: 1e3,
+      i: 887,
+      flag: { a: "f", i: "e" }
+    },
+    /* 27 May Grenelle protocol · Charléty meeting. */
+    { w: 4, from: "1968-05-27", to: "1968-06-02" },
+    /* 4 Jun partial return to work · 7 Jun Renault Flins clashes. */
+    { w: 5, from: "1968-06-03", to: "1968-06-09" },
+    /* 10 Jun: Tautin killed · 11 Jun: 2 killed at Sochaux · 12 Jun:
+       demonstrations banned nationwide. */
+    { w: 6, from: "1968-06-10", to: "1968-06-16" },
+    /* 23 Jun legislative elections. */
+    { w: 7, from: "1968-06-17", to: "1968-06-23" },
+    /* Crisis closes 30 Jun. */
+    { w: 8, from: "1968-06-24", to: "1968-06-30" }
+  ]
+};
+
 // src/data/episodes/nahel.ts
 var NAHEL = {
   id: "nahel",
@@ -17358,33 +17383,6 @@ var PENSIONS = {
     { w: 12, from: "2023-04-10", to: "2023-04-16", p: [38e4, 15e5] },
     { w: 16, from: "2023-05-01", to: "2023-05-07", p: [782e3, 23e5] },
     { w: 20, from: "2023-06-05", to: "2023-06-08", p: [281e3, 9e5] }
-  ]
-};
-
-// src/data/episodes/bloquons.ts
-var BLOQUONS = {
-  id: "bt",
-  start: "2025-09-10",
-  end: "2025-10-05",
-  weeks: [
-    {
-      w: 0,
-      from: "2025-09-08",
-      to: "2025-09-14",
-      p: [175e3, 25e4],
-      a: 540,
-      flag: { p: "c" }
-    },
-    {
-      w: 1,
-      from: "2025-09-15",
-      to: "2025-09-21",
-      p: [5e5, 1e6],
-      a: 309,
-      f: 26,
-      i: 11
-    },
-    { w: 3, from: "2025-09-29", to: "2025-10-05", p: [195e3, 6e5] }
   ]
 };
 
@@ -17630,7 +17628,7 @@ function legend(host, key, entries) {
       button.addEventListener("click", () => {
         pinned = !pinned;
         button.setAttribute("aria-pressed", String(pinned));
-        pinned ? entry.on() : entry.off();
+        (pinned ? entry.on : entry.off)();
       });
     }
     for (const ev of ["mouseenter", "focus", "pointerdown"])
@@ -19197,6 +19195,31 @@ function mountCasualties() {
   if (b) b.replaceChildren(...bHead ? bRest : [...bTop, ...bRest]);
 }
 
+// src/copy/meta-overrides.ts
+var PAGE_SECTIONS = {
+  en: {
+    "2026/violence:a": {
+      title: "A \xB7 Daily counts, 15 September \u2013 11 November 2026",
+      blurb: "One marker per day on which an arrest, an injury or a deployment figure was published. Days with no figure stay empty rather than interpolated; gaps in a line are dashed. These are situation reports, not a series: where a figure is a floor or a running total, the tooltip says so."
+    },
+    "2026/violence:b": {
+      title: "B \xB7 Weekly aggregates",
+      blurb: "Weeks run Monday to Sunday. Arrests are summed across the week; injuries are the highest published level of the week, never a sum, and the officer-injury running total is a stock carried forward, not a weekly toll. The tooltip says which is which."
+    }
+    /* add "2026/costs:a" / "2026/costs:b" here if that page needs its own wording */
+  },
+  fr: {
+    "2026/violence:a": {
+      title: "A \xB7 D\xE9comptes quotidiens, 15 septembre \u2013 11 novembre 2026",
+      blurb: "Un marqueur par jour o\xF9 un chiffre d\u2019interpellation, de blessure ou de d\xE9ploiement a \xE9t\xE9 publi\xE9. Les jours sans chiffre restent vides plut\xF4t qu\u2019interpol\xE9s ; les lacunes d\u2019une courbe sont en pointill\xE9s. Ce sont des points de situation, non une s\xE9rie : lorsqu\u2019un chiffre est un plancher ou un cumul, l\u2019infobulle le pr\xE9cise."
+    },
+    "2026/violence:b": {
+      title: "B \xB7 Agr\xE9gats hebdomadaires",
+      blurb: "Les semaines vont du lundi au dimanche. Les interpellations sont somm\xE9es sur la semaine ; les blessures retiennent le niveau publi\xE9 le plus haut de la semaine, jamais une somme, et le cumul des bless\xE9s parmi les forces est un stock report\xE9, non un bilan hebdomadaire. L\u2019infobulle pr\xE9cise lequel est lequel."
+    }
+  }
+};
+
 // src/sections/about/links.ts
 var BLOG = "https://www.lemonde.fr/societe/article/2026/11/09/a-brest-la-police-saisit-les-trombinoscopes-de-plusieurs-lycees-eleves-et-parents-denoncent-un-fichage_6808694_3224.html";
 var RN_VOTE = "https://www.humanite.fr/politique/rassemblement-national/entre-les-67-de-vote-rn-dans-ses-rangs-et-lambiance-securitaire-en-vigueur-la-police-deja-prete-a-servir-lextreme-droite";
@@ -19614,7 +19637,10 @@ var ABOUT_FR = [
         kind: "p",
         runs: [
           "Mais en m\xEAme temps, je ne veux pas leur accorder trop de cr\xE9dit. ",
-          { link: "La baisse du niveau de formation des policiers", href: TRAINING },
+          {
+            link: "La baisse du niveau de formation des policiers",
+            href: TRAINING
+          },
           " et ",
           {
             link: "l\u2019inad\xE9quation de leurs m\xE9thodes de maintien de l\u2019ordre",
@@ -19628,7 +19654,12 @@ var ABOUT_FR = [
       {
         kind: "ul",
         items: [
-          [{ link: "l\u2019anecdotique, comme des \xE9cussons velcro \xE0 l\u2019envers", href: PILEUP }],
+          [
+            {
+              link: "l\u2019anecdotique, comme des \xE9cussons velcro \xE0 l\u2019envers",
+              href: PILEUP
+            }
+          ],
           [
             "au assez grave, comme ",
             {
@@ -19727,7 +19758,10 @@ var ABOUT_FR = [
         kind: "p",
         runs: [
           "Ces d\xE9bats, et bien d\u2019autres, se jouent actuellement dans la vertigineuse constellation d\u2019assembl\xE9es g\xE9n\xE9rales apparues au cours du dernier mois. Il y a ",
-          { link: "une volont\xE9 claire de construire un double pouvoir", href: DUAL_POWER },
+          {
+            link: "une volont\xE9 claire de construire un double pouvoir",
+            href: DUAL_POWER
+          },
           ". Mais jusqu\u2019o\xF9 ira-t-elle ?"
         ]
       },
@@ -19971,7 +20005,7 @@ function callout(lang2) {
 // src/sections/about/index.ts
 function renderAbout(host = document.getElementById("about")) {
   if (!host) return;
-  const lang2 = localeMeta2().meta.htmlLang;
+  const lang2 = localeMeta().meta.htmlLang;
   const open = /* @__PURE__ */ new Map();
   for (const el2 of host.querySelectorAll(
     "details[data-about]"
@@ -19986,31 +20020,6 @@ function renderAbout(host = document.getElementById("about")) {
   for (const sub of subs) frag.append(group(sub, open));
   host.replaceChildren(frag);
 }
-
-// src/copy/meta-overrides.ts
-var PAGE_SECTIONS = {
-  en: {
-    "2026/violence:a": {
-      title: "A \xB7 Daily counts, 15 September \u2013 11 November 2026",
-      blurb: "One marker per day on which an arrest, an injury or a deployment figure was published. Days with no figure stay empty rather than interpolated; gaps in a line are dashed. These are situation reports, not a series: where a figure is a floor or a running total, the tooltip says so."
-    },
-    "2026/violence:b": {
-      title: "B \xB7 Weekly aggregates",
-      blurb: "Weeks run Monday to Sunday. Arrests are summed across the week; injuries are the highest published level of the week, never a sum, and the officer-injury running total is a stock carried forward, not a weekly toll. The tooltip says which is which."
-    }
-    /* add "2026/costs:a" / "2026/costs:b" here if that page needs its own wording */
-  },
-  fr: {
-    "2026/violence:a": {
-      title: "A \xB7 D\xE9comptes quotidiens, 15 septembre \u2013 11 novembre 2026",
-      blurb: "Un marqueur par jour o\xF9 un chiffre d\u2019interpellation, de blessure ou de d\xE9ploiement a \xE9t\xE9 publi\xE9. Les jours sans chiffre restent vides plut\xF4t qu\u2019interpol\xE9s ; les lacunes d\u2019une courbe sont en pointill\xE9s. Ce sont des points de situation, non une s\xE9rie : lorsqu\u2019un chiffre est un plancher ou un cumul, l\u2019infobulle le pr\xE9cise."
-    },
-    "2026/violence:b": {
-      title: "B \xB7 Agr\xE9gats hebdomadaires",
-      blurb: "Les semaines vont du lundi au dimanche. Les interpellations sont somm\xE9es sur la semaine ; les blessures retiennent le niveau publi\xE9 le plus haut de la semaine, jamais une somme, et le cumul des bless\xE9s parmi les forces est un stock report\xE9, non un bilan hebdomadaire. L\u2019infobulle pr\xE9cise lequel est lequel."
-    }
-  }
-};
 
 // src/sections/chrome.ts
 var $ = (id) => document.getElementById(id);
@@ -20050,7 +20059,7 @@ function currentPage() {
   return pageById(raw) ? raw : "home";
 }
 var asPage = (p) => p && pageById(p) ? p : currentPage();
-var sec = (page, k) => PAGE_SECTIONS[lang()][`${page}:${k}`] ?? localeMeta2().sections[k];
+var sec = (page, k) => PAGE_SECTIONS[lang()][`${page}:${k}`] ?? localeMeta().sections[k];
 function renderChrome(pageIn) {
   const page = asPage(pageIn);
   disclaimer();
@@ -20108,8 +20117,14 @@ var BLOCKS = [
     ],
     note: DATA_NOTE,
     actions: [
-      { label: { en: "Open an issue", fr: "Ouvrir un ticket" }, href: NEW_ISSUE },
-      { label: { en: "See existing issues", fr: "Voir les tickets existants" }, href: ISSUES }
+      {
+        label: { en: "Open an issue", fr: "Ouvrir un ticket" },
+        href: NEW_ISSUE
+      },
+      {
+        label: { en: "See existing issues", fr: "Voir les tickets existants" },
+        href: ISSUES
+      }
     ]
   },
   {
@@ -20141,7 +20156,12 @@ var BLOCKS = [
       en: "Open an issue before a large pull request: settling the data question first usually halves the code.",
       fr: "Ouvrez un ticket avant une grosse pull request : r\xE9gler la question des donn\xE9es d\u2019abord divise g\xE9n\xE9ralement le code par deux."
     },
-    actions: [{ label: { en: "Repository on GitHub", fr: "D\xE9p\xF4t sur GitHub" }, href: REPO2 }]
+    actions: [
+      {
+        label: { en: "Repository on GitHub", fr: "D\xE9p\xF4t sur GitHub" },
+        href: REPO2
+      }
+    ]
   },
   {
     id: "medics",
@@ -20180,7 +20200,12 @@ var BLOCKS = [
       en: "What should the guide cover? Suggest it as an issue now \u2014 the outline is still open.",
       fr: "Que devrait couvrir ce guide ? Proposez-le d\xE8s maintenant en ticket : le plan est encore ouvert."
     },
-    actions: [{ label: { en: "Suggest a topic", fr: "Proposer un sujet" }, href: NEW_ISSUE }]
+    actions: [
+      {
+        label: { en: "Suggest a topic", fr: "Proposer un sujet" },
+        href: NEW_ISSUE
+      }
+    ]
   },
   {
     id: "share",
@@ -23466,87 +23491,6 @@ var GROUPS = [
   }
 ];
 
-// src/data/sources/mentions.ts
-var MENTIONS = [
-  {
-    name: "data.gouv.fr \u2014 base des mobilisations",
-    note: both(
-      "intended source for the metropolitan/overseas split; never actually retrieved.",
-      "source pr\xE9vue pour la ventilation m\xE9tropole / outre-mer ; jamais effectivement consult\xE9e."
-    )
-  },
-  {
-    name: "CCI France",
-    note: both(
-      "author of the 2,488 / 2,538 shop counts, reached through Le Monde, franceinfo, BFMTV, LSA and La D\xE9p\xEAche.",
-      "auteur des d\xE9comptes de 2 488 / 2 538 commerces, atteint via Le Monde, franceinfo, BFMTV, LSA et La D\xE9p\xEAche."
-    )
-  },
-  {
-    name: "Pr Laurent Thines (CHU de Besan\xE7on)",
-    note: both(
-      "author of the 79-serious-injury register attributed by Le Canard encha\xEEn\xE9; also cited directly as the injury floor.",
-      "auteur du registre de 79 bless\xE9s graves attribu\xE9 par Le Canard encha\xEEn\xE9 ; \xE9galement cit\xE9 directement comme plancher."
-    )
-  },
-  {
-    name: "S\xE9nat \u2014 commission d\u2019enqu\xEAte de juin 2023",
-    note: both(
-      "the ~50,000 rioters and consolidated damage estimate, reached through the Senate press release above.",
-      "les ~50 000 \xE9meutiers et l\u2019estimation consolid\xE9e des dommages, atteints via le communiqu\xE9 du S\xE9nat ci-dessus."
-    )
-  },
-  {
-    name: "France Police",
-    note: both(
-      "police union; publisher of the 750,000 counter-count for the Act II of the Gilets jaunes.",
-      "syndicat policier ; auteur du contre-d\xE9compte de 750 000 pour l\u2019acte II des Gilets jaunes."
-    )
-  },
-  {
-    name: "Collectif \xAB Nombre jaune \xBB",
-    note: both(
-      "the independent crowd-counting group behind the alternative Gilets jaunes figures.",
-      "le collectif ind\xE9pendant de comptage derri\xE8re les chiffres alternatifs des Gilets jaunes."
-    )
-  },
-  {
-    name: "Occurrence",
-    note: both(
-      "Paris crowd counts quoted in Part II but never linked to a page.",
-      "comptages parisiens cit\xE9s dans la partie II, jamais li\xE9s \xE0 une page."
-    )
-  },
-  {
-    name: "CGT",
-    note: both(
-      "every union turnout figure here is the CGT\u2019s, relayed by the press.",
-      "chaque chiffre syndical de foule est celui de la CGT, relay\xE9 par la presse."
-    )
-  },
-  {
-    name: "Union \xE9tudiante",
-    note: both(
-      "organiser of the student days; no count of its own was retrieved.",
-      "organisatrice des journ\xE9es \xE9tudiantes ; aucun d\xE9compte propre n\u2019a \xE9t\xE9 retrouv\xE9."
-    )
-  },
-  {
-    name: "USL (intersyndicale.lyc\xE9enne)",
-    note: both(
-      "the litig\xE9 intersyndicate whose call calendar drives the school-movement rows.",
-      "l\u2019intersyndicale Phar\xE8 whose call calendar drives the school-movement rows."
-    )
-  },
-  {
-    name: "Pr\xE9fecture de police de Paris",
-    note: both(
-      "Paris-only counts (17 Oct, 7 Nov) are prefecture figures relayed by the press, never a national series.",
-      "les chiffres strictement parisiens (17 oct., 7 nov.) sont des donn\xE9es pr\xE9fectorales relay\xE9es par la presse, jamais une s\xE9rie nationale."
-    )
-  }
-];
-
 // src/data/sources/page-map.ts
 var HISTORIC = ["historic/movements", "historic/series"];
 var PAGES_BY_GROUP = {
@@ -24104,7 +24048,7 @@ function boot() {
   onLocaleChange(() => {
     scheduleRender();
     const { switched } = t().a11y;
-    announce(fill(switched, { lang: localeMeta2().label }));
+    announce(fill(switched, { lang: localeMeta().label }));
   });
   render2();
   window.addEventListener("pagehide", destroyAll, { once: true });

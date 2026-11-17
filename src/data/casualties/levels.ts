@@ -5,9 +5,9 @@
  * the only row that is a distribution rather than a single population.
  */
 
-import type { SevRow } from "./types.ts";
-import { FORCES } from "./inputs.ts";
 import { NOT_LIGHT, NOT_LIGHT_MOVEMENT, SERIOUS_MOVEMENT } from "./estimate.ts";
+import { FORCES } from "./inputs.ts";
+import type { SevRow } from "./types.ts";
 
 export const SEVERITY_LEVELS: readonly SevRow[] = [
   {

@@ -3,10 +3,9 @@
  * track. Exact published strings stay in the caption line and in the
  * <details> table fallback, so no precision is lost. */
 
-import { el } from "../../core/dom.ts";
 import { t } from "../../copy";
+import { el } from "../../core/dom.ts";
 import {
-  CASES,
   type CaseRow,
   type Cell,
   type SevRow,

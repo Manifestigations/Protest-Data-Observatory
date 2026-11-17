@@ -3,9 +3,9 @@
 import type { Plugin } from "chart.js";
 import { fmtDayMonth } from "../../copy";
 import { DATES } from "../../data/data.ts";
-import { AXIS_LEFT, DEF, type SeriesId } from "../series.ts";
-import { clipToArea } from "./clip.ts";
 import { styleOf } from "../datasets.ts";
+import { AXIS_LEFT, type SeriesId } from "../series.ts";
+import { clipToArea } from "./clip.ts";
 
 export type SpanMark = {
   readonly from: string; // ISO date, inclusive
@@ -32,18 +32,12 @@ const ELLIPSE_RY = 7;
 const BRACE_CURL = 6;
 const BRACE_LIFT = 12;
 
-function withAlpha(hex: string, a: number): string {
-  const n = Number.parseInt(hex.slice(1), 16);
-  return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`;
-}
-
 export const spanMark: Plugin<"line"> = {
   id: "spanMark",
   afterDatasetsDraw(chart) {
     const spans = (
       chart.options.plugins as
-        | { spanMark?: { spans?: readonly SpanMark[] } }
-        | undefined
+        { spanMark?: { spans?: readonly SpanMark[] } } | undefined
     )?.spanMark?.spans;
     if (!spans?.length) return;
 

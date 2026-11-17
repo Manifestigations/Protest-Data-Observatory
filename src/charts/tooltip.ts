@@ -6,8 +6,7 @@
 import { Chart, type ChartType, type TooltipItem } from "chart.js";
 
 type Padding =
-  | number
-  | { top?: number; right?: number; bottom?: number; left?: number };
+  number | { top?: number; right?: number; bottom?: number; left?: number };
 
 type Fontish = {
   size?: number;

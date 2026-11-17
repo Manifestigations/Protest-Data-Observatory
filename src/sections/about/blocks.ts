@@ -25,20 +25,20 @@ function inline(run: Run): Node {
 function block(b: Block): HTMLElement {
   switch (b.kind) {
     case "p": {
-    const p = document.createElement("p");
-    p.append(...b.runs.map(inline));
-    return p;
-  }
+      const p = document.createElement("p");
+      p.append(...b.runs.map(inline));
+      return p;
+    }
 
     case "ul": {
-    const ul = document.createElement("ul");
-    for (const item of b.items) {
-      const li = document.createElement("li");
-      li.append(...item.map(inline));
-      ul.append(li);
+      const ul = document.createElement("ul");
+      for (const item of b.items) {
+        const li = document.createElement("li");
+        li.append(...item.map(inline));
+        ul.append(li);
+      }
+      return ul;
     }
-    return ul;
-  }
 
     /* h4, not h3: the group title is already the h3. */
     case "h": {
@@ -49,17 +49,17 @@ function block(b: Block): HTMLElement {
     }
 
     default: {
-  const quote = document.createElement("blockquote");
-  quote.className = "about-quote";
-  for (const para of b.paras) {
-    const p = document.createElement("p");
-    p.append(...para.map(inline));
-    quote.append(p);
-  }
-  const by = document.createElement("footer");
-  by.append(...b.by.map(inline));
-  quote.append(by);
-  return quote;
+      const quote = document.createElement("blockquote");
+      quote.className = "about-quote";
+      for (const para of b.paras) {
+        const p = document.createElement("p");
+        p.append(...para.map(inline));
+        quote.append(p);
+      }
+      const by = document.createElement("footer");
+      by.append(...b.by.map(inline));
+      quote.append(by);
+      return quote;
     }
   }
 }

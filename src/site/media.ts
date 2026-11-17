@@ -26,9 +26,6 @@ export interface Hero {
   readonly sourceId: string;
 }
 
-const commons = (file: string, width = 1200): string =>
-  `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(file)}?width=${width}`;
-
 const commonsPage = (file: string): string =>
   `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(file).replace(/%20/g, "_")}`;
 

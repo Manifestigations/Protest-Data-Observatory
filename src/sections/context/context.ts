@@ -25,7 +25,9 @@
  */
 
 import type { Plugin } from "chart.js";
+import { fill, fmtDate, getLocale } from "../../copy";
 import { dataTable } from "../../core/a11y.ts";
+import { byId, el } from "../../core/dom.ts";
 import {
   DATES,
   END,
@@ -33,8 +35,6 @@ import {
   HOLIDAY_START,
   START,
 } from "../../data/data.ts";
-import { byId, el } from "../../core/dom.ts";
-import { fill, fmtDate, getLocale } from "../../copy";
 
 /* ----- copy */
 
@@ -208,8 +208,7 @@ export const contextBands: Plugin<"line"> = {
   beforeDatasetsDraw(chart) {
     const cfg = (
       chart.options.plugins as unknown as
-        | { contextBands?: { spans?: readonly ChartSpan[] } }
-        | undefined
+        { contextBands?: { spans?: readonly ChartSpan[] } } | undefined
     )?.contextBands;
     const spans = cfg?.spans;
     if (!spans?.length) return;

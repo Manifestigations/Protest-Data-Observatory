@@ -38,7 +38,7 @@ import {
   pageHref,
   pageKey,
   type PageId,
-  type PageSpec
+  type PageSpec,
 } from "../site/routes.ts";
 
 /* Static anchors carry a plausible href for no-JS readers; this makes it

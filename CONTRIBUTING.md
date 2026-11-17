@@ -204,14 +204,14 @@ Prettier is the formatter and ESLint is the linter; Prettier owns style
 questions, ESLint only flags likely bugs. Never hand-fix what a command can
 fix, and never add a new `eslint-disable` without a comment saying why.
 
-| Rule | Value |
-| ----- | ----- |
-| Indent / tabs | 2 spaces |
-| Quotes | double for strings |
-| Semicolons | yes |
-| Line width | 80 |
+| Rule            | Value                        |
+| --------------- | ---------------------------- |
+| Indent / tabs   | 2 spaces                     |
+| Quotes          | double for strings           |
+| Semicolons      | yes                          |
+| Line width      | 80                           |
 | Trailing commas | everywhere the parser allows |
-| Line endings | LF |
+| Line endings    | LF                           |
 
 Imports are sorted automatically by Prettier: third-party first, then this
 repo's layers in dependency order (`model` → `data` → `charts` → `copy` →

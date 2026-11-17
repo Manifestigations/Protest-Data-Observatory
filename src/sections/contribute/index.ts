@@ -8,7 +8,10 @@ const REPO = "https://github.com/Manifestigations/Protest-Data-Observatory";
 const NEW_ISSUE = `${REPO}/issues/new`;
 const ISSUES = `${REPO}/issues`;
 
-interface Action { readonly label: Bi; readonly href: string }
+interface Action {
+  readonly label: Bi;
+  readonly href: string;
+}
 
 interface Block {
   readonly id: string;
@@ -60,8 +63,14 @@ const BLOCKS: readonly Block[] = [
     ],
     note: DATA_NOTE,
     actions: [
-      { label: { en: "Open an issue", fr: "Ouvrir un ticket" }, href: NEW_ISSUE },
-      { label: { en: "See existing issues", fr: "Voir les tickets existants" }, href: ISSUES },
+      {
+        label: { en: "Open an issue", fr: "Ouvrir un ticket" },
+        href: NEW_ISSUE,
+      },
+      {
+        label: { en: "See existing issues", fr: "Voir les tickets existants" },
+        href: ISSUES,
+      },
     ],
   },
   {
@@ -93,7 +102,12 @@ const BLOCKS: readonly Block[] = [
       en: "Open an issue before a large pull request: settling the data question first usually halves the code.",
       fr: "Ouvrez un ticket avant une grosse pull request : régler la question des données d’abord divise généralement le code par deux.",
     },
-    actions: [{ label: { en: "Repository on GitHub", fr: "Dépôt sur GitHub" }, href: REPO }],
+    actions: [
+      {
+        label: { en: "Repository on GitHub", fr: "Dépôt sur GitHub" },
+        href: REPO,
+      },
+    ],
   },
   {
     id: "medics",
@@ -132,7 +146,12 @@ const BLOCKS: readonly Block[] = [
       en: "What should the guide cover? Suggest it as an issue now — the outline is still open.",
       fr: "Que devrait couvrir ce guide ? Proposez-le dès maintenant en ticket : le plan est encore ouvert.",
     },
-    actions: [{ label: { en: "Suggest a topic", fr: "Proposer un sujet" }, href: NEW_ISSUE }],
+    actions: [
+      {
+        label: { en: "Suggest a topic", fr: "Proposer un sujet" },
+        href: NEW_ISSUE,
+      },
+    ],
   },
   {
     id: "share",

@@ -72,13 +72,7 @@ export type NoteRef =
   | { k: "week"; p: WeekNoteParts };
 
 export type EpisodeId =
-  | "may68"
-  | "cpe"
-  | "gj"
-  | "nahel"
-  | "pensions"
-  | "bt"
-  | "students26";
+  "may68" | "cpe" | "gj" | "nahel" | "pensions" | "bt" | "students26";
 
 /**
  * One week of one episode. `w` is the row index and must run sequentially from

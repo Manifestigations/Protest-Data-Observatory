@@ -2,8 +2,8 @@
    src/client/a11y.ts — NEW. Accessible names, data tables, key nav,
    live announcements. No Chart.js internals beyond the public API.
    ═══════════════════════════════════════════════════════════════════ */
-import type { AnyChart } from "./canvas-registry.ts";
 import { nf } from "../copy";
+import type { AnyChart } from "./canvas-registry.ts";
 
 /* ---- live region (4.1.3) ---- */
 let live: HTMLElement | null = null;
@@ -191,8 +191,7 @@ export function keyboardChart(
       index: at,
     }));
     const pt = chart.getDatasetMeta(0).data[at] as
-      | { x?: number; y?: number }
-      | undefined;
+      { x?: number; y?: number } | undefined;
     chart.setActiveElements(els);
     chart.tooltip?.setActiveElements(els, { x: pt?.x ?? 0, y: pt?.y ?? 0 });
     chart.update("none");
