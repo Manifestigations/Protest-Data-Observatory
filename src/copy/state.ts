@@ -1,5 +1,5 @@
 import { EN_META } from "./en/meta";
-import { buildFormats } from "./format";
+import { buildFormats, current, setCurrentLang } from "./format";
 import { FR_META } from "./fr/meta";
 import { warnOnce } from "./lookup";
 import type { Lang, LocaleMeta } from "./types";
@@ -56,7 +56,10 @@ function fromStorage(): Lang | null {
   }
 }
 
-export let current: Lang = localeFromUrl() ?? fromStorage() ?? DEFAULT_LANG;
+// `current` now lives in the Dataset's i18n core (format.ts is a shim) so the
+// data layer shares the same locale state; this module stays the only writer.
+export { current } from "./format";
+setCurrentLang(localeFromUrl() ?? fromStorage() ?? DEFAULT_LANG);
 
 buildFormats(localeMeta(current).tag);
 
@@ -127,7 +130,7 @@ export function setLang(next: Lang | string, opts: SetLangOptions = {}): Lang {
   const changed = previous !== target;
 
   if (changed) {
-    current = target;
+    setCurrentLang(target);
     version += 1;
     buildFormats(localeMeta(target).tag);
     if (persist && hasDom()) {

@@ -7,3 +7,9 @@ export * from "./interpolate.ts";
 export * from "./lookup.ts";
 export * from "./state.ts";
 export * from "./types.ts";
+
+/* Dataset split — explicit re-exports win over the `export *` above,
+   resolving the name clashes against the vendored i18n core. */
+export { fill, plural } from "./interpolate.ts";
+export { bi, t, warnOnce } from "./lookup.ts";
+export { current } from "./state.ts";
