@@ -13,7 +13,7 @@ import {
 } from "chart.js";
 import { a11y, compact, fill, nf, pctOf, t } from "../../copy/index.ts";
 import { fromChart, keyboardChart } from "../../core/a11y.ts";
-import { THEME, type AnyChart } from "../../core/canvas-registry.ts";
+import { THEME } from "../../core/canvas-registry.ts";
 import { el } from "../../core/dom.ts";
 import { EPISODES } from "../../data/episodes/index.ts";
 import { METRICS, type Episode } from "../../model/index.ts";
@@ -273,7 +273,7 @@ const panelPoints = (ds: unknown): (Pt | null)[] =>
  * partial-week wording). It is not a week number, so do not parse it as one.
  */
 export function decoratePanel(
-  chart: AnyChart,
+  chart: Chart,
   figure: HTMLElement,
   title: string,
 ): void {

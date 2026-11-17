@@ -322,28 +322,29 @@ export const gapSegment = (slots = 1, dash: number[] = [6, 4]) => ({
   },
 });
 
-/** Permissive chart handle for host code that does not care about TType/TData.
- *  The all-defaults `Chart` looks like it should be this, but it isn't: dataset
- *  TData arrays are invariant and `Plugin<TType>` is contravariant, so a
- *  concrete `Chart<"line", Pt[]>` is not assignable to it (either direction).
- *  `any` parameters make the handle accept every instantiation. */
-export type AnyChart = Chart<any, any, any>;
+/** Minimal shape the registry needs from a chart. Any concrete
+ *  `Chart<TType, TData, …>` instantiation satisfies it, without re-declaring
+ *  chart.js's generics (which are invariant/contravariant and would reject
+ *  concrete instantiations — the bug the old `Chart` alias hit). */
+export interface Destructible {
+  destroy(): void;
+}
 
-const live = new Set<() => void>();
+const live = new Set<Destructible>();
 
 /** Returns the same concrete type it was given (T literal), so
  *  `const chart = track(new Chart<"line">(…))` stays `Chart<"line">`.
- *  Bound by the surface the registry actually needs — not `AnyChart`: binding
- *  T to AnyChart fails inference for concrete instantiations (see above). */
-export const track = <T extends { destroy(): void }>(chart: T): T => (
-  live.add(() => chart.destroy()),
+ *  Bound only by `Destructible` — a full `Chart` bound would fail inference
+ *  for concrete instantiations. */
+export const track = <T extends Destructible>(chart: T): T => (
+  live.add(chart),
   chart
 );
 
 export function destroyAll(): void {
-  for (const destroy of live) {
+  for (const chart of live) {
     try {
-      destroy();
+      chart.destroy();
     } catch (err) {
       console.error("[chart] destroy failed", err);
     }

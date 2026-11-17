@@ -16,7 +16,7 @@ export default defineConfig(
     },
   },
   {
-    ignores: ["node_modules/", "docs/bundle.js", "docs/*.map", "**/vendor/**"],
+    ignores: ["node_modules/", "docs/bundle.js", "docs/*.map", "vendor/"],
   },
   {
     name: "project/javascript-basics",
@@ -62,6 +62,17 @@ export default defineConfig(
       "eslint.config.js",
     ],
     languageOptions: { globals: { ...globals.node } },
+  },
+  {
+    // Playwright: the `tab.evaluate()` callbacks run in the *browser*, so
+    // `document` / `window` are real globals there even though the script
+    // itself is Node. tseslint already disables no-undef for .ts; do the same
+    // here so .mjs test scripts don't get flagged for browser-context code.
+    name: "project/browser-context-scripts",
+    files: ["scripts/**/*.mjs"],
+    languageOptions: {
+      globals: { document: "readonly", window: "readonly" },
+    },
   },
   // Must stay last: turns off every rule that conflicts with Prettier.
   prettier,

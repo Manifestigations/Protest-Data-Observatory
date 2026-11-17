@@ -2,8 +2,8 @@
    src/client/a11y.ts — NEW. Accessible names, data tables, key nav,
    live announcements. No Chart.js internals beyond the public API.
    ═══════════════════════════════════════════════════════════════════ */
+import type { Chart } from "chart.js";
 import { nf } from "../copy";
-import type { AnyChart } from "./canvas-registry.ts";
 
 /* ---- live region (4.1.3) ---- */
 let live: HTMLElement | null = null;
@@ -91,7 +91,7 @@ export function dataTable(spec: TableSpec): HTMLDetailsElement {
 
 /** Build a table straight from a mounted chart (sections A/B). */
 export function fromChart(
-  chart: AnyChart,
+  chart: Chart,
   opts: {
     caption: string;
     indexHeader: string;
@@ -129,7 +129,7 @@ export function fromChart(
 }
 
 /** Spoken summary of one data index, reused by keyboard nav. */
-export function readout(chart: AnyChart, i: number): string {
+export function readout(chart: Chart, i: number): string {
   const label = chart.data.labels?.[i] ?? "";
   const parts = (chart.data.datasets as unknown[])
     .filter((d) => !(d as { detachedOnly?: boolean }).detachedOnly)
@@ -144,7 +144,7 @@ export function readout(chart: AnyChart, i: number): string {
 let seq = 0;
 
 export function keyboardChart(
-  chart: AnyChart,
+  chart: Chart,
   opts: {
     hint: string;
     roledescription: string;
