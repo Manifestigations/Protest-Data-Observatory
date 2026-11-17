@@ -59,10 +59,12 @@ Requires **Node ≥ 22.18** (ESM, native TypeScript type stripping).
 ```bash
 npm install
 
-node scripts/build.ts            # one-shot build → docs/bundle.js + docs/styles.css
-node scripts/build.ts --watch    # rebuild on save + serve http://127.0.0.1:3000
-npm run typecheck                # tsc --noEmit
-npm run check:casualties         # internal consistency check on the casualty data
+node scripts/build.ts # one-shot build → docs/bundle.js + docs/styles.css
+node scripts/build.ts --watch # rebuild on save + serve http://127.0.0.1:3000
+npm run typecheck # tsc --noEmit
+npm run lint # ESLint (flat config: eslint.config.mjs); `npm run lint:fix` for auto-fixes
+npm run format # Prettier — also sorts imports; `npm run format:check` is the CI gate
+npm run check:casualties # internal consistency check on the casualty data
 ```
 
 `node scripts/build.ts --watch` also spawns `server.ts`, which serves `docs/` on
@@ -70,8 +72,10 @@ npm run check:casualties         # internal consistency check on the casualty da
 prefer two terminals: `npm run dev:server` plus a build in watch mode.
 
 No framework, no test runner, no bundler config beyond the two esbuild
-configs in `scripts/build.ts`. Runtime dependency for charts: `chart.js`
-(canvas). UI is plain DOM helpers in `src/core/dom.ts`.
+configs in `scripts/build.ts`, and no style config beyond
+`eslint.config.mjs` and `.prettierrc.json` — the Style CI workflow
+(Prettier + ESLint, including automatic import sorting) blocks pull
+requests until both pass; see [CONTRIBUTING.md](Contributing.md#formatting-and-linting).
 
 ---
 
@@ -168,6 +172,11 @@ serving the old bundle. Never hand-edit `docs/bundle.js` or
 - **Accessibility is part of the data's honesty**: canvas descriptions, tab
   order, contrast, and black-and-white maps under `prefers-contrast`.
 - **Consent, anonymity and safety come before the figure**, always.
+- **The formatter settles style.** Two spaces, double quotes, semicolons,
+  80 columns, trailing commas, LF, and Prettier's import ordering. If it
+  looks wrong, run `npm run format` and `npm run lint` rather than
+  reformatting by hand, and never inline-disable a lint rule without a
+  comment saying why.
 
 ---
 

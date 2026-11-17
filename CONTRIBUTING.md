@@ -54,7 +54,7 @@ so the number can be checked without trusting us.
 ## 2. Editing data
 
 Skills: editing literal values in a TypeScript file. You do not need to know the
-framework, React or Chart.js.
+framework or Chart.js.
 
 ### 2.1 Set up
 
@@ -182,7 +182,9 @@ Conventions:
 - Data and copy are separate layers: a chart module imports figures from
   `src/data`, never a literal number.
 - No new dependencies without an issue first. There is no test framework;
-  `npm run typecheck`, the build, and `npm run check:casualties` are the checks.
+  `npm run typecheck`, `npm run lint`, `npm run format:check`, the build,
+  and `npm run check:casualties` are the checks (all four style commands
+  also run in CI).
 - Keep the bundle working without JavaScript for content that is in the HTML
   shells, and keep canvas descriptions in sync when a chart changes.
 
@@ -195,6 +197,41 @@ Comments:
 - A comment states a fact about the code next to it, including limits: a number in prose must match the literal below it, and every arithmetic comment (1,233 − 1,167 = 66) is checkable by hand.
 - Prose is a claim, not a wish. If the code does not do it, the comment is a bug report — file it, don't word it away.
 - Wrap at 80 columns, no trailing whitespace, `colors.ts` not `colours.ts`.
+
+### Formatting and linting (enforced by CI)
+
+Prettier is the formatter and ESLint is the linter; Prettier owns style
+questions, ESLint only flags likely bugs. Never hand-fix what a command can
+fix, and never add a new `eslint-disable` without a comment saying why.
+
+| Rule | Value |
+| ----- | ----- |
+| Indent / tabs | 2 spaces |
+| Quotes | double for strings |
+| Semicolons | yes |
+| Line width | 80 |
+| Trailing commas | everywhere the parser allows |
+| Line endings | LF |
+
+Imports are sorted automatically by Prettier: third-party first, then this
+repo's layers in dependency order (`model` → `data` → `charts` → `copy` →
+`core` → `site` → `sections` → `entry` → relative), named and type
+specifiers alphabetical within their group. Do not re-sort or regroup
+imports by hand — change one import at a time and run:
+
+```bash
+npm run format      # rewrites changed files (also sorts imports)
+npm run format:check # fails if any file would change
+npm run lint        # ESLint; `npm run lint:fix` for auto-fixable ones
+```
+
+The **Style** workflow (`.github/workflows/style.yml`) runs both checks on
+every push to `main` and every pull request, and pull requests are blocked
+while either check is red.
+
+`docs/bundle.js`, its sourcemap and `docs/styles.css` are committed build
+output (see §2.5) and are excluded from both tools; never edit them by
+hand, and never add them to a format-only commit.
 
 ---
 

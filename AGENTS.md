@@ -23,6 +23,8 @@ node scripts/build.ts --watch     # build + watch + spawn server.ts on :3000
 npm run typecheck                 # tsc --noEmit — always run
 npm run check:casualties          # casualty data self-consistency
 npm run dev:server                # serve docs/ only
+npm run lint                      # ESLint (flat config: eslint.config.mjs)
+npm run format                    # Prettier — also sorts imports
 ```
 
 ## Invariants — do not violate
@@ -40,8 +42,7 @@ npm run dev:server                # serve docs/ only
    `Source.what` is bilingual.
 6. **All user-visible strings are `Bi`.** No hardcoded text in DOM/TS code; no
    one-language additions. French is authored, not translated from English.
-7. **No new dependencies** (runtime deps: `chart.js`, plus `react`/`react-dom`
-   present but unused by the entry). Ask via issue first.
+7. **No new dependencies** (runtime deps: `chart.js`). Ask via issue first.
 8. **`NoteRef` is a reference, not copy.** Wording lives in
    `src/data/notes.ts`, rendered per locale.
 
@@ -105,9 +106,10 @@ engine. Detached styling comes from `src/core/colors.ts` (`hollow`).
 - `src/entry/main.ts` mounts are individually guarded — a section that never
   renders usually means the page's `data-page` value or the `PAGES` entry is
   wrong, not that the mount failed.
-- Don't reformat `src/data/data.ts` or `notes.ts`: they carry hand-written
-  verification comments (`FIX n`, arithmetic cross-checks) that are part of the
-  record.
+- src/data/data.ts and notes.ts are machine-formatted now, and their
+  hand-written verification comments (FIX n, arithmetic cross-checks)
+  are part of the record: Prettier preserves them in place — keep them
+  when editing, never let a formatter commit drop or reword them.
 
 ## Definition of done
 
