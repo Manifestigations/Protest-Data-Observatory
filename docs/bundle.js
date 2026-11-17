@@ -14284,11 +14284,11 @@ var gapSegment = (slots = 1, dash = [6, 4]) => ({
   }
 });
 var live2 = /* @__PURE__ */ new Set();
-var track = (chart) => (live2.add(chart), chart);
+var track = (chart) => (live2.add(() => chart.destroy()), chart);
 function destroyAll() {
-  for (const chart of live2) {
+  for (const destroy of live2) {
     try {
-      chart.destroy();
+      destroy();
     } catch (err) {
       console.error("[chart] destroy failed", err);
     }

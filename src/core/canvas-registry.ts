@@ -322,23 +322,28 @@ export const gapSegment = (slots = 1, dash: number[] = [6, 4]) => ({
   },
 });
 
-/** Permissive chart handle for host code that does not care about TType/TData:
- *  the Chart class with all its type parameters defaulted. */
-export type AnyChart = Chart;
+/** Permissive chart handle for host code that does not care about TType/TData.
+ *  The all-defaults `Chart` looks like it should be this, but it isn't: dataset
+ *  TData arrays are invariant and `Plugin<TType>` is contravariant, so a
+ *  concrete `Chart<"line", Pt[]>` is not assignable to it (either direction).
+ *  `any` parameters make the handle accept every instantiation. */
+export type AnyChart = Chart<any, any, any>;
 
-const live = new Set<AnyChart>();
+const live = new Set<() => void>();
 
 /** Returns the same concrete type it was given (T literal), so
- *  `const chart = track(new Chart<"line">(…))` stays `Chart<"line">`. */
-export const track = <T extends AnyChart>(chart: T): T => (
-  live.add(chart),
+ *  `const chart = track(new Chart<"line">(…))` stays `Chart<"line">`.
+ *  Bound by the surface the registry actually needs — not `AnyChart`: binding
+ *  T to AnyChart fails inference for concrete instantiations (see above). */
+export const track = <T extends { destroy(): void }>(chart: T): T => (
+  live.add(() => chart.destroy()),
   chart
 );
 
 export function destroyAll(): void {
-  for (const chart of live) {
+  for (const destroy of live) {
     try {
-      chart.destroy();
+      destroy();
     } catch (err) {
       console.error("[chart] destroy failed", err);
     }

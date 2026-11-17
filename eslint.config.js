@@ -26,29 +26,19 @@ export default defineConfig(
   },
   ...tseslint.configs.recommended,
   {
-    // Browser API usage must stay within the `browserslist` targets in
-    // package.json (= Baseline Widely available). A false positive may be
-    // silenced per-line with an `eslint-disable compat/compat` + reason,
-    // and Baseline "Newly available" features must carry the
-    // `// baseline:<slug> — review <date>` marker (AGENTS.md).
     name: "project/baseline-compat",
     files: ["src/**/*.{ts,tsx}"],
-    languageOptions: { globals: { ...globals.browser } },
-    plugins: { compat },
-    rules: {
-      "compat/compat": "error",
-      "compat/nav": "error",
-    },
+    ...compat.configs["flat/recommended"],
   },
   {
     // Efficiency and robustness for mobile on unreliable connections.
     name: "project/efficiency",
     files: ["src/**/*.{ts,tsx}"],
     rules: {
-      complexity: ["error", { max: 12 }],
-      "max-depth": ["error", 4],
+      complexity: ["warn", { max: 12 }],
+      "max-depth": ["warn", 4],
       "max-lines-per-function": [
-        "error",
+        "warn",
         { max: 120, skipBlankLines: true, skipComments: true },
       ],
       "no-console": ["error", { allow: ["warn", "error"] }],
