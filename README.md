@@ -62,8 +62,8 @@ npm install
 node scripts/build.ts # one-shot build → docs/bundle.js + docs/styles.css
 node scripts/build.ts --watch # rebuild on save + serve http://127.0.0.1:3000
 npm run typecheck # tsc --noEmit
-npm run lint # ESLint (flat config: eslint.config.mjs); `npm run lint:fix` for auto-fixes
-npm run format # Prettier — also sorts imports; `npm run format:check` is the CI gate
+npm run lint # ESLint (flat config: eslint.config.js); `npm run lint:fix` for auto-fixes
+npm run format # Prettier — also organizes imports (.ts); `npm run format:check` is the CI gate
 npm run check:casualties # internal consistency check on the casualty data
 ```
 
@@ -73,9 +73,10 @@ prefer two terminals: `npm run dev:server` plus a build in watch mode.
 
 No framework, no test runner, no bundler config beyond the two esbuild
 configs in `scripts/build.ts`, and no style config beyond
-`eslint.config.mjs` and `.prettierrc.json` — the Style CI workflow
-(Prettier + ESLint, including automatic import sorting) blocks pull
-requests until both pass; see [CONTRIBUTING.md](Contributing.md#formatting-and-linting).
+`eslint.config.js` and `.prettierrc.json` — the Style CI workflow
+(Prettier + ESLint, including automatic import organization for
+TypeScript files) blocks pull requests until both pass; see
+[CONTRIBUTING.md — Formatting and linting](CONTRIBUTING.md#formatting-and-linting-enforced-by-ci).
 
 ---
 

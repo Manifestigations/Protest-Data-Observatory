@@ -22,7 +22,7 @@ import { applyUrlLang, mountLangSwitch } from "../core/lang.ts";
 import { initTheme } from "../core/theme.ts";
 import { mountCards } from "../sections/cards/index.ts";
 import { mountCasualties } from "../sections/casualties/index.ts";
-import { renderChrome } from "../sections/chrome.ts";
+import { currentPage, renderChrome } from "../sections/chrome.ts";
 import { mountContext } from "../sections/context/context.ts";
 import { mountContribute } from "../sections/contribute/index.ts";
 import { initDisclosure } from "../sections/disclosure.ts";
@@ -115,7 +115,7 @@ export function render(): void {
     pageById(document.documentElement.dataset.page ?? "") ?? PAGES.home;
   const id = pageKey(page);
 
-  renderChrome(page); // the same page the rest of this render uses
+  renderChrome(page2); // the same page the rest of this render uses
   renderSources(id);
   mountPage(page);
   fixPageLinks(page);

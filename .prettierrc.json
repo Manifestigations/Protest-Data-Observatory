@@ -5,21 +5,5 @@
   "singleQuote": false,
   "trailingComma": "all",
   "endOfLine": "lf",
-  "plugins": ["prettier-plugin-organize-imports"],
-  "importOrder": [
-    "^@?\\w",
-    "^src/model/",
-    "^src/data/",
-    "^src/charts",
-    "^src/copy/",
-    "^src/core/",
-    "^src/site/",
-    "^src/sections/",
-    "^src/entry/",
-    "^\\.{1,2}/"
-  ],
-  "importOrderSeparation": false,
-  "importOrderSortSpecifiers": true,
-  "importOrderCaseInsensitive": true,
-  "importOrderParserPlugins": ["typescript", "jsx"]
+  "plugins": ["prettier-plugin-organize-imports"]
 }

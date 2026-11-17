@@ -20047,7 +20047,7 @@ function disclaimer() {
   if (!host) return;
   host.textContent = t().disclaimer.body;
 }
-function currentPage2() {
+function currentPage() {
   const last = location.pathname.split("/").filter(Boolean).pop() ?? "index";
   const name = /\.[a-z]+$/i.test(last) ? last : `${last}.html`;
   const hits = Object.keys(PAGES).filter((k) => {
@@ -20058,7 +20058,7 @@ function currentPage2() {
   const raw = document.documentElement.dataset.page ?? document.body?.dataset.page ?? "";
   return pageById(raw) ? raw : "home";
 }
-var asPage = (p) => p && pageById(p) ? p : currentPage2();
+var asPage = (p) => p && pageById(p) ? p : currentPage();
 var sec = (page, k) => PAGE_SECTIONS[lang()][`${page}:${k}`] ?? localeMeta().sections[k];
 function renderChrome(pageIn) {
   const page = asPage(pageIn);
@@ -23995,7 +23995,7 @@ function render2() {
   destroyAll();
   const page = pageById(document.documentElement.dataset.page ?? "") ?? PAGES.home;
   const id = pageKey(page);
-  renderChrome(page);
+  renderChrome(page2);
   renderSources(id);
   mountPage(page);
   fixPageLinks(page);

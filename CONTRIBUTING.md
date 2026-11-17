@@ -219,11 +219,15 @@ fix, and never add a new `eslint-disable` without a comment saying why.
 | Trailing commas | everywhere the parser allows |
 | Line endings    | LF                           |
 
-Imports are sorted automatically by Prettier: third-party first, then this
-repo's layers in dependency order (`model` → `data` → `charts` → `copy` →
-`core` → `site` → `sections` → `entry` → relative), named and type
-specifiers alphabetical within their group. Do not re-sort or regroup
-imports by hand — change one import at a time and run:
+Imports are organized automatically by Prettier:
+`prettier-plugin-organize-imports` runs TypeScript's organize-imports on
+every `.ts`/`.tsx` file, collapsing the import list into a single block in
+canonical order (side-effect imports first, then third-party, then relative
+paths), sorted by module specifier, with named and type specifiers
+alphabetical within each statement. It does not touch `eslint.config.js`,
+`scripts/*.js`, or other JS files — keep those import lists hand-ordered.
+Do not reorder or regroup imports by hand — change one import at a time and
+run:
 
 ```bash
 npm run format      # rewrites changed files (also sorts imports)
