@@ -2,7 +2,7 @@
    src/client/a11y.ts — NEW. Accessible names, data tables, key nav,
    live announcements. No Chart.js internals beyond the public API.
    ═══════════════════════════════════════════════════════════════════ */
-import type { Chart } from "chart.js";
+import type { AnyChart } from "./canvas-registry.ts";
 import { nf } from "../copy";
 
 /* ---- live region (4.1.3) ---- */
@@ -91,7 +91,7 @@ export function dataTable(spec: TableSpec): HTMLDetailsElement {
 
 /** Build a table straight from a mounted chart (sections A/B). */
 export function fromChart(
-  chart: Chart,
+  chart: AnyChart,
   opts: {
     caption: string;
     indexHeader: string;
@@ -129,7 +129,7 @@ export function fromChart(
 }
 
 /** Spoken summary of one data index, reused by keyboard nav. */
-export function readout(chart: Chart, i: number): string {
+export function readout(chart: AnyChart, i: number): string {
   const label = chart.data.labels?.[i] ?? "";
   const parts = (chart.data.datasets as unknown[])
     .filter((d) => !(d as { detachedOnly?: boolean }).detachedOnly)
@@ -144,7 +144,7 @@ export function readout(chart: Chart, i: number): string {
 let seq = 0;
 
 export function keyboardChart(
-  chart: Chart,
+  chart: AnyChart,
   opts: {
     hint: string;
     roledescription: string;
@@ -181,7 +181,7 @@ export function keyboardChart(
     if (next === null || next < 0 || next >= n) {
       at = -1;
       chart.setActiveElements([]);
-      chart.tooltip.setActiveElements([], { x: 0, y: 0 });
+      chart.tooltip?.setActiveElements([], { x: 0, y: 0 });
       chart.update("none");
       return;
     }
@@ -194,7 +194,7 @@ export function keyboardChart(
       | { x?: number; y?: number }
       | undefined;
     chart.setActiveElements(els);
-    chart.tooltip.setActiveElements(els, { x: pt?.x ?? 0, y: pt?.y ?? 0 });
+    chart.tooltip?.setActiveElements(els, { x: pt?.x ?? 0, y: pt?.y ?? 0 });
     chart.update("none");
     announce(speak(at));
   };

@@ -4,10 +4,9 @@ import * as esbuild from "esbuild";
 const watch = process.argv.includes("--watch");
 const dev = watch; // watch implies dev build
 
-/** @returns {import("esbuild").BuildOptions[]} */
-const configs = () => [
+const configs = (): esbuild.BuildOptions[] => [
   {
-    entryPoints: ["src/entry/main.ts"], // keep your real path (main.ts vs main.tsx)
+    entryPoints: ["src/entry/main.ts"],
     outfile: "docs/bundle.js",
     bundle: true,
     format: "esm",
@@ -17,13 +16,11 @@ const configs = () => [
     minify: !dev,
     define: { "process.env.NODE_ENV": dev ? '"development"' : '"production"' },
     logLevel: "info",
-    // add only if you import assets from src/:
-    // loader: { ".png": "file", ".jpg": "file", ".svg": "text" },
   },
   {
     entryPoints: ["src/styles/index.css"],
     outfile: "docs/styles.css",
-    bundle: true, // follows @import
+    bundle: true,
     sourcemap: dev,
     minify: !dev,
     logLevel: "info",

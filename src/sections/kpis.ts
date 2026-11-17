@@ -124,7 +124,7 @@ function bestValue(obs: readonly Observation[]): Observation | null {
 
 function dailyRowsFor(specs: readonly KpiSpec[], weekly: boolean): Row[] {
   return specs.map((spec) => {
-    const pts = visiblePoints(spec.copy);
+    const pts = visiblePoints(spec.copy as Parameters<typeof visiblePoints>[0]);
     const obs: Observation[] = pts.map((p) => ({
       v: p.v,
       where: weekly

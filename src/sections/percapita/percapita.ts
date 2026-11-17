@@ -420,7 +420,7 @@ const pcPeak: Plugin<"line"> = {
     ctx.lineWidth = 3;
     ctx.strokeStyle = "#fff";
     ctx.strokeText(text, x, y);
-    ctx.fillStyle = STREET();
+    ctx.fillStyle = STREET().fill;
     ctx.fillText(text, x, y);
     ctx.restore();
   },

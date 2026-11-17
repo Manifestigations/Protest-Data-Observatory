@@ -144,6 +144,11 @@ export interface KpiCopy {
 export interface CasualtyCopy {
   readonly headlineTitle: string;
   readonly weeklyTitle: string;
+  readonly popTitle: string;
+  readonly bystanderTitle: string;
+  readonly estTitle: string;
+  readonly mixTitle: string;
+  readonly bystanderCaption: string;
 
   readonly colScope: string;
   readonly colTotal: string;

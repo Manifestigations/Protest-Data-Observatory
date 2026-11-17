@@ -28,7 +28,7 @@ const VARS = {
 
 /* 3. regression: 0.18 was previously corrected to 0.45 for exactly this
       reason. 0.45 keeps the series legible while de-emphasised. */
-export const DIM = 0.45;
+export { DIM } from "./colors.ts";
 
 /* 2. titles/subtitles were still #666 (Chart.js default) → ≈3.1:1 on dark. */
 export const TEXT = {
@@ -307,9 +307,17 @@ export const gapSegment = (slots = 1, dash: number[] = [6, 4]) => ({
   },
 });
 
-const live = new Set<Chart>();
+/** Permissive chart handle for host code that does not care about TType/TData. */
+export type AnyChart = Chart<any, any, any>;
 
-export const track = <T extends Chart>(chart: T): T => (live.add(chart), chart);
+const live = new Set<AnyChart>();
+
+/** Returns the same concrete type it was given (T literal), so
+ *  `const chart = track(new Chart<"line">(…))` stays `Chart<"line">`. */
+export const track = <T extends AnyChart>(chart: T): T => (
+  live.add(chart),
+  chart
+);
 
 export function destroyAll(): void {
   for (const chart of live) {

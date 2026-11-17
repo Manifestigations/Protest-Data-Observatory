@@ -12,8 +12,8 @@
    page, hovering one still dims the other. */
 
 import { Chart, type ChartData, type ChartEvent } from "chart.js";
-import { alpha, THEME, track } from "../../core/canvas-registry.ts";
 import { compact, fill, fmtSpan, t } from "../../copy/index.ts";
+import { THEME, track } from "../../core/canvas-registry.ts";
 import { ENFORCEMENT_LAST, EPISODES } from "../../data/episodes/index.ts";
 import { isDetached, METRICS, type Metric } from "../../model/index.ts";
 import {
@@ -24,15 +24,9 @@ import {
   resetSeriesCache,
   type PanelDataset,
 } from "./engine.ts";
-import { WEEK_MODE, nearestByY } from "./interaction.ts";
-import {
-  DIM,
-  fade,
-  movementRamp,
-  RAMP,
-  SERIES,
-  seriesStyles,
-} from "./palette.ts";
+import { nearestByY, WEEK_MODE } from "./interaction.ts";
+import { legend, toggleDatasets, wireLegendSync } from "./legend.ts";
+import { DIM, fade, movementRamp, seriesStyles } from "./palette.ts";
 import {
   columns,
   decoratePanel,
@@ -42,7 +36,6 @@ import {
   xScale,
   yScale,
 } from "./panel.ts";
-import { legend, toggleDatasets, wireLegendSync } from "./legend.ts";
 
 /* ----- emphasis (shared by whichever grids this page hosts) */
 

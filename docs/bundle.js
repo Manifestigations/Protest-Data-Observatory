@@ -12234,6 +12234,11 @@ var EPISODES_EN = {
 var CASUALTY_EN = {
   headlineTitle: "How the injuries divide",
   weeklyTitle: "What a week can establish",
+  popTitle: "Documented population",
+  bystanderTitle: "Bystanders among those injured",
+  estTitle: "Estimates",
+  mixTitle: "Composition by severity",
+  bystanderCaption: "Bystanders are counted only where the source distinguishes them from participants.",
   colScope: "Population",
   colTotal: "Declared total",
   colSerious: "Serious",
@@ -12943,6 +12948,11 @@ var EPISODES_FR = {
 var CASUALTY_FR = {
   headlineTitle: "Comment se r\xE9partissent les blessures",
   weeklyTitle: "Ce qu\u2019une semaine peut \xE9tablir",
+  popTitle: "Population document\xE9e",
+  bystanderTitle: "Passants parmi les bless\xE9s",
+  estTitle: "Estimations",
+  mixTitle: "Composition par gravit\xE9",
+  bystanderCaption: "Les passants ne sont compt\xE9s que lorsque la source les distingue des participants.",
   colScope: "Population",
   colTotal: "Total d\xE9clar\xE9",
   colSerious: "Graves",
@@ -13895,7 +13905,7 @@ function keyboardChart(chart, opts) {
     if (next === null || next < 0 || next >= n2) {
       at = -1;
       chart.setActiveElements([]);
-      chart.tooltip.setActiveElements([], { x: 0, y: 0 });
+      chart.tooltip?.setActiveElements([], { x: 0, y: 0 });
       chart.update("none");
       return;
     }
@@ -13906,7 +13916,7 @@ function keyboardChart(chart, opts) {
     }));
     const pt = chart.getDatasetMeta(0).data[at];
     chart.setActiveElements(els);
-    chart.tooltip.setActiveElements(els, { x: pt?.x ?? 0, y: pt?.y ?? 0 });
+    chart.tooltip?.setActiveElements(els, { x: pt?.x ?? 0, y: pt?.y ?? 0 });
     chart.update("none");
     announce(speak(at));
   };
@@ -13937,6 +13947,167 @@ function keyboardChart(chart, opts) {
   canvas.addEventListener("blur", () => paint(null));
 }
 
+// src/core/colors.ts
+var DIM = 0.45;
+var FALLBACK = {
+  "c-police": "#1d4ed8",
+  "c-police-wash": "rgb(29 78 216 / 14%)",
+  "c-police-on": "#ffffff",
+  "c-protest": "#000000",
+  "c-protest-wash": "rgb(0 0 0 / 12%)",
+  "c-protest-on": "#ffffff",
+  "c-bystander": "#ffffff",
+  "c-bystander-wash": "rgb(255 255 255 / 20%)",
+  "c-bystander-ink": "#111827",
+  "c-bystander-edge": "#9aa3af",
+  "c-arrest": "#b91c1c",
+  "c-arrest-wash": "rgb(185 28 28 / 14%)",
+  "c-arrest-on": "#ffffff",
+  "c-turnout": "#0f7a3d",
+  "c-turnout-wash": "rgb(15 122 61 / 14%)",
+  "c-turnout-on": "#ffffff",
+  "c-cost": "#d99e00",
+  "c-cost-wash": "rgb(217 158 0 / 18%)",
+  "c-cost-on": "#1b1300",
+  "c-protest-soft": "#3f3f46",
+  "c-protest-soft-wash": "rgb(63 63 70 / 14%)",
+  "c-protest-soft-on": "#ffffff",
+  "c-blockade": "#4a2c17",
+  "c-blockade-wash": "rgb(74 44 23 / 14%)",
+  "c-blockade-on": "#ffffff",
+  "c-remainder": "#c7ccd3",
+  "c-remainder-wash": "rgb(199 204 211 / 55%)",
+  "c-remainder-ink": "#111827",
+  "c-remainder-edge": "#9aa3af",
+  "chart-hollow": "#ffffff",
+  "chart-series-1": "#5c97c5",
+  "chart-series-2": "#357ab0",
+  "chart-series-3": "#2a6b9c",
+  "chart-series-4": "#1b5c92",
+  "chart-series-5": "#124a78",
+  "chart-series-6": "#0a3a63",
+  "chart-series-7": "#062844"
+};
+var cache = /* @__PURE__ */ new Map();
+var probe = null;
+function css(token) {
+  const hit = cache.get(token);
+  if (hit !== void 0) return hit;
+  if (!probe) {
+    probe = document.createElement("span");
+    probe.setAttribute("aria-hidden", "true");
+    probe.style.cssText = "position:absolute;inline-size:0;block-size:0;overflow:hidden;pointer-events:none";
+    document.body.append(probe);
+  }
+  probe.style.color = `var(--${token}, ${FALLBACK[token] ?? "currentColor"})`;
+  const value2 = getComputedStyle(probe).color || FALLBACK[token] || "currentColor";
+  cache.set(token, value2);
+  return value2;
+}
+function resetColours() {
+  cache.clear();
+}
+var tones = {
+  get police() {
+    return {
+      fill: css("c-police"),
+      wash: css("c-police-wash"),
+      ink: css("c-police-on"),
+      edge: css("c-police")
+    };
+  },
+  get protest() {
+    return {
+      fill: css("c-protest"),
+      wash: css("c-protest-wash"),
+      ink: css("c-protest-on"),
+      edge: css("c-protest")
+    };
+  },
+  get bystander() {
+    return {
+      fill: css("c-bystander"),
+      wash: css("c-bystander-wash"),
+      ink: css("c-bystander-ink"),
+      edge: css("c-bystander-edge")
+    };
+  },
+  get arrest() {
+    return {
+      fill: css("c-arrest"),
+      wash: css("c-arrest-wash"),
+      ink: css("c-arrest-on"),
+      edge: css("c-arrest")
+    };
+  },
+  get turnout() {
+    return {
+      fill: css("c-turnout"),
+      wash: css("c-turnout-wash"),
+      ink: css("c-turnout-on"),
+      edge: css("c-turnout")
+    };
+  },
+  get cost() {
+    return {
+      fill: css("c-cost"),
+      wash: css("c-cost-wash"),
+      ink: css("c-cost-on"),
+      edge: css("c-cost")
+    };
+  },
+  /** Blue & yellow: the cost of policing, everywhere it appears. */
+  get policeCost() {
+    return {
+      fill: css("c-police"),
+      wash: css("c-police-wash"),
+      ink: css("c-police-on"),
+      edge: css("c-police"),
+      hatch: css("c-cost")
+    };
+  },
+  get protestSoft() {
+    return {
+      fill: css("c-protest-soft"),
+      wash: css("c-protest-soft-wash"),
+      ink: css("c-protest-soft-on"),
+      edge: css("c-protest-soft")
+    };
+  },
+  get blockade() {
+    return {
+      fill: css("c-blockade"),
+      wash: css("c-blockade-wash"),
+      ink: css("c-blockade-on"),
+      edge: css("c-blockade")
+    };
+  },
+  get remainder() {
+    return {
+      fill: css("c-remainder"),
+      wash: css("c-remainder-wash"),
+      ink: css("c-remainder-ink"),
+      edge: css("c-remainder-edge")
+    };
+  }
+};
+if (typeof document !== "undefined") {
+  matchMedia("(prefers-color-scheme: dark)").addEventListener(
+    "change",
+    resetColours
+  );
+  new MutationObserver(resetColours).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"]
+  });
+}
+var RAMP_STEPS = 7;
+function ramp(steps2 = RAMP_STEPS) {
+  const n2 = Math.min(steps2, RAMP_STEPS);
+  return Array.from({ length: n2 }, (_, i) => css(`chart-series-${i + 1}`));
+}
+var hollow = () => css("chart-hollow");
+
 // src/core/canvas-registry.ts
 var VARS = {
   ink: "--chart-ink",
@@ -13955,7 +14126,7 @@ var VARS = {
   series6: "--chart-series-6",
   series7: "--chart-series-7"
 };
-var FALLBACK = {
+var FALLBACK2 = {
   ink: "#111827",
   label: "#4b5563",
   muted: "#6b7280",
@@ -13979,7 +14150,7 @@ function normalise(css2, fallback) {
   ctx2d.fillStyle = css2;
   return typeof ctx2d.fillStyle === "string" ? ctx2d.fillStyle : fallback;
 }
-var cache = null;
+var cache2 = null;
 function read() {
   const out = {};
   const probe3 = document.createElement("span");
@@ -13988,12 +14159,12 @@ function read() {
   (document.body ?? document.documentElement).append(probe3);
   for (const key of Object.keys(VARS)) {
     probe3.style.color = `var(${VARS[key]})`;
-    out[key] = normalise(getComputedStyle(probe3).color, FALLBACK[key]);
+    out[key] = normalise(getComputedStyle(probe3).color, FALLBACK2[key]);
   }
   probe3.remove();
   return out;
 }
-var value = (key) => (cache ??= read(), cache[key]);
+var value = (key) => (cache2 ??= read(), cache2[key]);
 var SERIES = [
   "series1",
   "series2",
@@ -14004,7 +14175,7 @@ var SERIES = [
   "series7"
 ].map((k) => value(k));
 function refreshTheme() {
-  cache = null;
+  cache2 = null;
 }
 var THEME = {
   get ink() {
@@ -15740,166 +15911,6 @@ function mountContext() {
   }
 }
 
-// src/core/colors.ts
-var FALLBACK2 = {
-  "c-police": "#1d4ed8",
-  "c-police-wash": "rgb(29 78 216 / 14%)",
-  "c-police-on": "#ffffff",
-  "c-protest": "#000000",
-  "c-protest-wash": "rgb(0 0 0 / 12%)",
-  "c-protest-on": "#ffffff",
-  "c-bystander": "#ffffff",
-  "c-bystander-wash": "rgb(255 255 255 / 20%)",
-  "c-bystander-ink": "#111827",
-  "c-bystander-edge": "#9aa3af",
-  "c-arrest": "#b91c1c",
-  "c-arrest-wash": "rgb(185 28 28 / 14%)",
-  "c-arrest-on": "#ffffff",
-  "c-turnout": "#0f7a3d",
-  "c-turnout-wash": "rgb(15 122 61 / 14%)",
-  "c-turnout-on": "#ffffff",
-  "c-cost": "#d99e00",
-  "c-cost-wash": "rgb(217 158 0 / 18%)",
-  "c-cost-on": "#1b1300",
-  "c-protest-soft": "#3f3f46",
-  "c-protest-soft-wash": "rgb(63 63 70 / 14%)",
-  "c-protest-soft-on": "#ffffff",
-  "c-blockade": "#4a2c17",
-  "c-blockade-wash": "rgb(74 44 23 / 14%)",
-  "c-blockade-on": "#ffffff",
-  "c-remainder": "#c7ccd3",
-  "c-remainder-wash": "rgb(199 204 211 / 55%)",
-  "c-remainder-ink": "#111827",
-  "c-remainder-edge": "#9aa3af",
-  "chart-hollow": "#ffffff",
-  "chart-series-1": "#5c97c5",
-  "chart-series-2": "#357ab0",
-  "chart-series-3": "#2a6b9c",
-  "chart-series-4": "#1b5c92",
-  "chart-series-5": "#124a78",
-  "chart-series-6": "#0a3a63",
-  "chart-series-7": "#062844"
-};
-var cache2 = /* @__PURE__ */ new Map();
-var probe = null;
-function css(token) {
-  const hit = cache2.get(token);
-  if (hit !== void 0) return hit;
-  if (!probe) {
-    probe = document.createElement("span");
-    probe.setAttribute("aria-hidden", "true");
-    probe.style.cssText = "position:absolute;inline-size:0;block-size:0;overflow:hidden;pointer-events:none";
-    document.body.append(probe);
-  }
-  probe.style.color = `var(--${token}, ${FALLBACK2[token] ?? "currentColor"})`;
-  const value2 = getComputedStyle(probe).color || FALLBACK2[token] || "currentColor";
-  cache2.set(token, value2);
-  return value2;
-}
-function resetColours() {
-  cache2.clear();
-}
-var tones = {
-  get police() {
-    return {
-      fill: css("c-police"),
-      wash: css("c-police-wash"),
-      ink: css("c-police-on"),
-      edge: css("c-police")
-    };
-  },
-  get protest() {
-    return {
-      fill: css("c-protest"),
-      wash: css("c-protest-wash"),
-      ink: css("c-protest-on"),
-      edge: css("c-protest")
-    };
-  },
-  get bystander() {
-    return {
-      fill: css("c-bystander"),
-      wash: css("c-bystander-wash"),
-      ink: css("c-bystander-ink"),
-      edge: css("c-bystander-edge")
-    };
-  },
-  get arrest() {
-    return {
-      fill: css("c-arrest"),
-      wash: css("c-arrest-wash"),
-      ink: css("c-arrest-on"),
-      edge: css("c-arrest")
-    };
-  },
-  get turnout() {
-    return {
-      fill: css("c-turnout"),
-      wash: css("c-turnout-wash"),
-      ink: css("c-turnout-on"),
-      edge: css("c-turnout")
-    };
-  },
-  get cost() {
-    return {
-      fill: css("c-cost"),
-      wash: css("c-cost-wash"),
-      ink: css("c-cost-on"),
-      edge: css("c-cost")
-    };
-  },
-  /** Blue & yellow: the cost of policing, everywhere it appears. */
-  get policeCost() {
-    return {
-      fill: css("c-police"),
-      wash: css("c-police-wash"),
-      ink: css("c-police-on"),
-      edge: css("c-police"),
-      hatch: css("c-cost")
-    };
-  },
-  get protestSoft() {
-    return {
-      fill: css("c-protest-soft"),
-      wash: css("c-protest-soft-wash"),
-      ink: css("c-protest-soft-on"),
-      edge: css("c-protest-soft")
-    };
-  },
-  get blockade() {
-    return {
-      fill: css("c-blockade"),
-      wash: css("c-blockade-wash"),
-      ink: css("c-blockade-on"),
-      edge: css("c-blockade")
-    };
-  },
-  get remainder() {
-    return {
-      fill: css("c-remainder"),
-      wash: css("c-remainder-wash"),
-      ink: css("c-remainder-ink"),
-      edge: css("c-remainder-edge")
-    };
-  }
-};
-if (typeof document !== "undefined") {
-  matchMedia("(prefers-color-scheme: dark)").addEventListener(
-    "change",
-    resetColours
-  );
-  new MutationObserver(resetColours).observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ["data-theme"]
-  });
-}
-var RAMP_STEPS = 7;
-function ramp(steps2 = RAMP_STEPS) {
-  const n2 = Math.min(steps2, RAMP_STEPS);
-  return Array.from({ length: n2 }, (_, i) => css(`chart-series-${i + 1}`));
-}
-var hollow = () => css("chart-hollow");
-
 // src/charts/series.ts
 var AXIS_LEFT = "y";
 var AXIS_RIGHT = "y1";
@@ -16141,9 +16152,10 @@ var errorBars = {
       for (let j = 0; j < pts.length; j++) {
         const band = ds.errorBars[j];
         const p = pts[j];
-        if (!band || p.skip) continue;
-        lowPts.push([p.x, scale.getPixelForValue(band[0])]);
-        highPts.push([p.x, scale.getPixelForValue(band[1])]);
+        if (band == null || p.skip) continue;
+        const [lo2, hi2] = typeof band === "number" ? [band, band] : band;
+        lowPts.push([p.x, scale.getPixelForValue(lo2)]);
+        highPts.push([p.x, scale.getPixelForValue(hi2)]);
       }
       if (lowPts.length < 2) continue;
       ctx.save();
@@ -16178,9 +16190,10 @@ var errorBars = {
       for (let j = 0; j < pts.length; j++) {
         const band = ds.errorBars[j];
         const p = pts[j];
-        if (!band || p.skip) continue;
-        const yHigh = scale.getPixelForValue(band[1]);
-        const yLow = scale.getPixelForValue(band[0]);
+        if (band == null || p.skip) continue;
+        const [lo2, hi2] = typeof band === "number" ? [band, band] : band;
+        const yHigh = scale.getPixelForValue(hi2);
+        const yLow = scale.getPixelForValue(lo2);
         ctx.moveTo(p.x, yHigh);
         ctx.lineTo(p.x, yLow);
         ctx.moveTo(p.x - CAP_PX, yHigh);
@@ -16730,8 +16743,18 @@ function wrapTooltipLines(text, item, part = "body") {
 }
 
 // src/charts/chart-tooltip.ts
+var pair = (b) => typeof b === "number" ? [b, b] : b;
 function tooltipCallbacks(v) {
   const m = t().chart;
+  const rangeFill = (band, label, unit) => {
+    const [lo2, hi2] = pair(band);
+    return fill(m.tooltipRange, {
+      label,
+      mid: fmt((lo2 + hi2) / 2, unit),
+      low: fmt(lo2, unit),
+      high: fmt(hi2, unit)
+    });
+  };
   return {
     title: (items) => wrapTooltipLines(v.titles[items[0].dataIndex] ?? "", items[0], "title"),
     label: (item) => {
@@ -16739,18 +16762,14 @@ function tooltipCallbacks(v) {
       const unit = ds.unit ?? "count";
       const note2 = noteText(ds.notes?.[item.dataIndex]);
       const detached = ds.showLine === false;
+      const label = ds.label ?? "";
       const band = ds.errorBars?.[item.dataIndex];
-      const base = band ? fill(m.tooltipRange, {
-        label: ds.label,
-        mid: fmt((band[0] + band[1]) / 2, unit),
-        low: fmt(band[0], unit),
-        high: fmt(band[1], unit)
-      }) : fill(m.tooltipPoint, {
-        label: ds.label,
+      const base = band != null ? rangeFill(band, label, unit) : fill(m.tooltipPoint, {
+        label,
         value: fmt(item.parsed.y ?? 0, unit)
       });
       const body = base + suffixFor(ds.quality?.[item.dataIndex], detached);
-      const rate = ds.perCapita ? rateLine(ds.errorBars?.[item.dataIndex], item.parsed.y ?? 0) : null;
+      const rate = ds.perCapita ? rateLine(band == null ? void 0 : pair(band), item.parsed.y ?? 0) : null;
       const full = rate ? `${body}
 ${rate}` : body;
       return wrapTooltipLines(
@@ -17571,6 +17590,104 @@ function nearestByY(chart, elements, e) {
 }
 var WEEK_MODE = "trellisWeek";
 
+// src/charts/trellis/legend.ts
+var legendHidden = /* @__PURE__ */ new Map();
+var legendButtons = /* @__PURE__ */ new Map();
+function legendState(key, n2) {
+  const s = legendHidden.get(key) ?? [];
+  while (s.length < n2) s.push(false);
+  s.length = n2;
+  legendHidden.set(key, s);
+  return s;
+}
+function legendMark(key, idx) {
+  legendButtons.get(key)?.forEach((b, i) => {
+    b.classList.toggle("is-active", i === idx);
+  });
+}
+function legend(host, key, entries) {
+  const hidden = legendState(key, entries.length);
+  const buttons = entries.map((entry, idx) => {
+    const button = el("button");
+    button.type = "button";
+    button.setAttribute("aria-pressed", String(hidden[idx]));
+    button.classList.toggle("is-off", hidden[idx]);
+    const swatch = el("span", "swatch");
+    swatch.style.background = entry.dash?.length ? `repeating-linear-gradient(90deg, ${entry.color} 0 3px, transparent 3px 6px)` : entry.color;
+    button.append(swatch, document.createTextNode(entry.text));
+    if (entry.hide) {
+      button.addEventListener("click", () => {
+        hidden[idx] = !hidden[idx];
+        button.setAttribute("aria-pressed", String(hidden[idx]));
+        button.classList.toggle("is-off", hidden[idx]);
+        entry.hide?.(hidden[idx]);
+      });
+    } else {
+      let pinned = false;
+      button.addEventListener("click", () => {
+        pinned = !pinned;
+        button.setAttribute("aria-pressed", String(pinned));
+        pinned ? entry.on() : entry.off();
+      });
+    }
+    for (const ev of ["mouseenter", "focus", "pointerdown"])
+      button.addEventListener(ev, () => {
+        entry.on();
+        legendMark(key, idx);
+      });
+    for (const ev of ["mouseleave", "blur"])
+      button.addEventListener(ev, () => {
+        if (!entry.hide && button.getAttribute("aria-pressed") === "true")
+          return;
+        entry.off();
+        legendMark(key, null);
+      });
+    return button;
+  });
+  legendButtons.set(key, buttons);
+  host.replaceChildren(...buttons);
+  entries.forEach((entry, idx) => {
+    if (hidden[idx]) entry.hide?.(true);
+  });
+}
+function chartsIn(host) {
+  const out = [];
+  for (const c of host?.querySelectorAll("canvas") ?? []) {
+    const chart = Chart.getChart(c);
+    if (chart) out.push(chart);
+  }
+  return out;
+}
+function toggleDatasets(host, field, key, hidden) {
+  for (const chart of chartsIn(host)) {
+    let touched = false;
+    datasetsOf(chart).forEach((d, i) => {
+      if (d[field] !== key) return;
+      chart.setDatasetVisibility(i, !hidden);
+      touched = true;
+    });
+    if (touched) chart.update("none");
+  }
+}
+function wireLegendSync(host, key, indexOf) {
+  for (const canvas of host?.querySelectorAll("canvas") ?? []) {
+    const chart = Chart.getChart(canvas);
+    if (!chart) continue;
+    canvas.addEventListener("pointermove", (ev) => {
+      const mode = chart.options.interaction?.mode ?? "nearest";
+      const els = chart.getElementsAtEventForMode(
+        ev,
+        mode,
+        { intersect: !!chart.options.interaction?.intersect },
+        true
+      );
+      const d = els.length ? datasetsOf(chart)[els[0].datasetIndex] : void 0;
+      legendMark(key, d ? indexOf(d) : null);
+    });
+    canvas.addEventListener("pointerleave", () => legendMark(key, null));
+  }
+}
+
 // src/charts/palette.ts
 var TONE_OF = {
   turnout: "turnout",
@@ -17580,7 +17697,9 @@ var TONE_OF = {
   forcesInjuredStock: "police",
   protesterInjured: "protest",
   damagesCost: "cost",
-  blockades: "protest"
+  blockades: "protest",
+  policingCost: "policeCost",
+  heliCost: "policeCost"
 };
 
 // src/charts/trellis/palette.ts
@@ -17767,8 +17886,12 @@ var panelOptions = (kind, x, y, onHover) => {
       legend: { display: false },
       title: { display: false },
       subtitle: { display: false },
-      tooltip: { ...tooltipSpec(kind), interaction }
+      tooltip: tooltipSpec(kind)
     },
+    /* chart.js types onHover's third parameter as bare `Chart`, so a
+       `(…, chart: Chart<"line">) => void` is not directly assignable to it
+       (Chart is invariant in TType). Every chart that reaches this callback
+       is a line chart; the cast only bridges the declaration gap. */
     onHover
   };
 };
@@ -17797,111 +17920,13 @@ function decoratePanel(chart, figure, title) {
   });
 }
 
-// src/charts/trellis/legend.ts
-var legendHidden = /* @__PURE__ */ new Map();
-var legendButtons = /* @__PURE__ */ new Map();
-function legendState(key, n2) {
-  const s = legendHidden.get(key) ?? [];
-  while (s.length < n2) s.push(false);
-  s.length = n2;
-  legendHidden.set(key, s);
-  return s;
-}
-function legendMark(key, idx) {
-  legendButtons.get(key)?.forEach((b, i) => {
-    b.classList.toggle("is-active", i === idx);
-  });
-}
-function legend(host, key, entries) {
-  const hidden = legendState(key, entries.length);
-  const buttons = entries.map((entry, idx) => {
-    const button = el("button");
-    button.type = "button";
-    button.setAttribute("aria-pressed", String(hidden[idx]));
-    button.classList.toggle("is-off", hidden[idx]);
-    const swatch = el("span", "swatch");
-    swatch.style.background = entry.dash?.length ? `repeating-linear-gradient(90deg, ${entry.color} 0 3px, transparent 3px 6px)` : entry.color;
-    button.append(swatch, document.createTextNode(entry.text));
-    if (entry.hide) {
-      button.addEventListener("click", () => {
-        hidden[idx] = !hidden[idx];
-        button.setAttribute("aria-pressed", String(hidden[idx]));
-        button.classList.toggle("is-off", hidden[idx]);
-        entry.hide?.(hidden[idx]);
-      });
-    } else {
-      let pinned = false;
-      button.addEventListener("click", () => {
-        pinned = !pinned;
-        button.setAttribute("aria-pressed", String(pinned));
-        pinned ? entry.on() : entry.off();
-      });
-    }
-    for (const ev of ["mouseenter", "focus", "pointerdown"])
-      button.addEventListener(ev, () => {
-        entry.on();
-        legendMark(key, idx);
-      });
-    for (const ev of ["mouseleave", "blur"])
-      button.addEventListener(ev, () => {
-        if (!entry.hide && button.getAttribute("aria-pressed") === "true")
-          return;
-        entry.off();
-        legendMark(key, null);
-      });
-    return button;
-  });
-  legendButtons.set(key, buttons);
-  host.replaceChildren(...buttons);
-  entries.forEach((entry, idx) => {
-    if (hidden[idx]) entry.hide?.(true);
-  });
-}
-function chartsIn(host) {
-  const out = [];
-  for (const c of host?.querySelectorAll("canvas") ?? []) {
-    const chart = Chart.getChart(c);
-    if (chart) out.push(chart);
-  }
-  return out;
-}
-function toggleDatasets(host, field, key, hidden) {
-  for (const chart of chartsIn(host)) {
-    let touched = false;
-    datasetsOf(chart).forEach((d, i) => {
-      if (d[field] !== key) return;
-      chart.setDatasetVisibility(i, !hidden);
-      touched = true;
-    });
-    if (touched) chart.update("none");
-  }
-}
-function wireLegendSync(host, key, indexOf) {
-  for (const canvas of host?.querySelectorAll("canvas") ?? []) {
-    const chart = Chart.getChart(canvas);
-    if (!chart) continue;
-    canvas.addEventListener("pointermove", (ev) => {
-      const mode = chart.options.interaction?.mode ?? "nearest";
-      const els = chart.getElementsAtEventForMode(
-        ev,
-        mode,
-        { intersect: !!chart.options.interaction?.intersect },
-        true
-      );
-      const d = els.length ? datasetsOf(chart)[els[0].datasetIndex] : void 0;
-      legendMark(key, d ? indexOf(d) : null);
-    });
-    canvas.addEventListener("pointerleave", () => legendMark(key, null));
-  }
-}
-
 // src/charts/trellis/index.ts
 var episodePanels = [];
 var itemPanels = [];
 var activeItem = null;
 var activeEvent = null;
 function restyle(d, on, bold = false) {
-  const c = on ? d.__color : fade(d.__color, DIM2);
+  const c = on ? d.__color : fade(d.__color, DIM);
   d.borderColor = c;
   d.backgroundColor = c;
   d.pointBorderColor = c;
@@ -17924,7 +17949,7 @@ function emphasiseItem(key) {
   for (const { chart, item } of itemPanels) {
     const host = chart.canvas.parentElement;
     if (host)
-      host.style.opacity = key === null || item === key ? "1" : String(DIM2);
+      host.style.opacity = key === null || item === key ? "1" : String(DIM);
   }
 }
 function emphasiseEvent(index) {
@@ -18622,6 +18647,551 @@ function mountCards(fromPath, cards, host = byId("card-grid")) {
   const grid = el("div", "card-grid");
   for (const c of cards) grid.append(card(c, fromPath));
   host.replaceChildren(grid);
+}
+
+// src/sections/casualties/model.ts
+function cellView(c) {
+  switch (c.s) {
+    case "n": {
+      const cls = ["cas-num"];
+      if (c.d) cls.push("cas-derived");
+      if (c.regional) cls.push("cas-regional");
+      return {
+        text: `${c.d ? "\u2248 " : ""}${nf().format(c.v)}`,
+        cls: cls.join(" ")
+      };
+    }
+    case "r":
+      return {
+        text: `\u2248 ${nf().format(c.lo)}\u2013${nf().format(c.hi)}`,
+        cls: `cas-num cas-derived${c.regional ? " cas-regional" : ""}`
+      };
+    case "f":
+      return { text: `\u2265 ${nf().format(c.v)}`, cls: "cas-num cas-floor" };
+    case "c":
+      return {
+        text: fill(t().casualties.casesCount, { n: c.n }),
+        cls: "cas-num cas-cases"
+      };
+    default:
+      return { text: t().casualties.why[c.why], cls: "cas-absent" };
+  }
+}
+function share(light, total) {
+  if (light.s !== "n" || total.s !== "n" || total.v <= 0) return null;
+  return light.v / total.v;
+}
+function pct(p) {
+  return `${nf().format(Number((p * 100).toFixed(1)))}%`;
+}
+function estimateRange(e) {
+  if (!e.value) return cellView({ s: "x", why: e.why ?? "notEstimable" });
+  const f = e.unit === "share" ? pct : (x) => nf().format(x);
+  return {
+    text: e.value.lo === e.value.hi ? f(e.value.lo) : `${f(e.value.lo)}\u2013${f(e.value.hi)}`,
+    cls: e.unit === "share" ? "cas-num cas-derived" : "cas-num"
+  };
+}
+
+// src/sections/casualties/tables.ts
+function cell(c, extra = "") {
+  const v = cellView(c);
+  return el("td", extra ? `${v.cls} ${extra}` : v.cls, v.text);
+}
+function rowHead(text) {
+  const th = el("th", "cas-scope", text);
+  th.scope = "row";
+  return th;
+}
+function head(labels, lead = 1) {
+  const tr = el("tr");
+  labels.forEach((label, i) => {
+    const th = el(
+      "th",
+      i < lead ? "cas-scope-head" : "cas-num-head",
+      label
+    );
+    th.scope = "col";
+    tr.append(th);
+  });
+  const thead = el("thead");
+  thead.append(tr);
+  return thead;
+}
+function bar(p) {
+  const wrap2 = el("span", "cas-bar");
+  const run = el("span", "cas-bar-fill");
+  run.style.width = `${Math.max(0, Math.min(1, p)) * 100}%`;
+  wrap2.append(run);
+  return wrap2;
+}
+function stat(num, label, cls = "cas-head-stat") {
+  const wrap2 = el("div", cls);
+  wrap2.append(
+    el("span", "cas-head-num", num),
+    el("span", "cas-head-label", label)
+  );
+  return wrap2;
+}
+function headline() {
+  const c = t().casualties;
+  const wrap2 = el("div", "cas-headline");
+  const total = nf().format(FORCES.movement);
+  wrap2.append(
+    stat(
+      `${pct(SERIOUS_MOVEMENT.lo / FORCES.movement)}\u2013${pct(SERIOUS_MOVEMENT.hi / FORCES.movement)}`,
+      fill(c.headSeriousShare, {
+        lo: pct(SERIOUS_MOVEMENT.lo / FORCES.movement),
+        hi: pct(SERIOUS_MOVEMENT.hi / FORCES.movement),
+        total
+      })
+    ),
+    stat(
+      `${nf().format(SERIOUS_MOVEMENT.lo)}\u2013${nf().format(SERIOUS_MOVEMENT.hi)}`,
+      fill(c.headSeriousCount, {
+        forces: `${nf().format(SERIOUS_MOVEMENT.lo)}\u2013${nf().format(SERIOUS_MOVEMENT.hi)}`,
+        protesters: `\u2265 ${nf().format(THINES.seriousTo5Nov + THINES.deathsTo5Nov)}`
+      })
+    ),
+    stat(
+      pct(MIX[0].central / FORCES.movement),
+      fill(c.headMix, { light: nf().format(MIX[0].central), total })
+    )
+  );
+  return wrap2;
+}
+function mixBlock() {
+  const c = t().casualties;
+  const wrap2 = el("div", "cas-mix");
+  wrap2.append(el("h4", "cas-title", c.mixTitle));
+  const total = MIX.reduce((a, b) => a + b.central, 0);
+  for (const band of MIX) {
+    const row = el("div", "cas-mix-row");
+    row.append(el("span", "cas-mix-label", c.mix[band.id]));
+    const track2 = el("span", "cas-mix-track");
+    const run = el("span", `cas-mix-fill cas-mix-${band.id}`);
+    run.style.width = `${band.central / total * 100}%`;
+    track2.append(run);
+    row.append(
+      track2,
+      el(
+        "span",
+        "cas-mix-value",
+        `${nf().format(band.lo)}\u2013${nf().format(band.hi)}`
+      ),
+      el(
+        "span",
+        "cas-mix-share",
+        `${pct(band.lo / total)}\u2013${pct(band.hi / total)}`
+      )
+    );
+    wrap2.append(row);
+  }
+  wrap2.append(el("p", "cas-note", c.noteMix));
+  return wrap2;
+}
+function severityTable(rows, caption) {
+  const c = t().casualties;
+  const table = el("table", "cas-table");
+  table.append(el("caption", "cas-caption", caption));
+  table.append(
+    head([
+      c.colScope,
+      c.colTotal,
+      c.colSerious,
+      c.colLight,
+      c.colLightShare,
+      c.colOther
+    ])
+  );
+  const tbody = el("tbody");
+  for (const row of rows) {
+    const tr = el("tr");
+    tr.append(rowHead(c.scope[row.id] ?? row.id));
+    tr.append(cell(row.total), cell(row.serious), cell(row.light));
+    const p = share(row.light, row.total);
+    const td = el("td", "cas-share");
+    if (p === null) td.append(el("span", "cas-absent", "\u2014"));
+    else td.append(el("span", "cas-pct", pct(p)), bar(p));
+    tr.append(td);
+    tr.append(cell(row.other));
+    tbody.append(tr);
+  }
+  table.append(tbody);
+  return table;
+}
+function populationTable() {
+  const c = t().casualties;
+  const table = el("table", "cas-table cas-population");
+  table.append(el("caption", "cas-caption", c.capPopulation));
+  table.append(
+    head([
+      c.colScope,
+      c.colPopulation,
+      c.colParticipation,
+      c.colSelection,
+      c.colCount
+    ])
+  );
+  const tbody = el("tbody");
+  const ordered = [...OBSERVATIONS].sort(
+    (a, b) => POPULATION_ORDER.indexOf(a.population) - POPULATION_ORDER.indexOf(b.population) || a.date.localeCompare(b.date)
+  );
+  for (const obs of ordered) {
+    const tr = el("tr");
+    tr.append(rowHead(c.observations[obs.id] ?? obs.id));
+    tr.append(el("td", "cas-kind", c.population[obs.population]));
+    tr.append(el("td", "cas-kind", c.participation[obs.participation]));
+    tr.append(el("td", "cas-kind", c.selection[obs.selection]));
+    tr.append(cell(obs.count));
+    tbody.append(tr);
+  }
+  table.append(tbody);
+  return table;
+}
+function bystanderTable() {
+  const c = t().casualties;
+  const table = el("table", "cas-table cas-bystanders");
+  table.append(el("caption", "cas-caption", c.bystanderCaption));
+  table.append(head([c.colQuestion, c.colCount]));
+  const tbody = el("tbody");
+  const rows = [
+    [c.bystanders.documented, BYSTANDER_CELLS.documented],
+    [c.bystanders.serious, BYSTANDER_CELLS.serious],
+    [c.bystanders.national, BYSTANDER_CELLS.national]
+  ];
+  for (const [label, c2] of rows) {
+    const tr = el("tr");
+    tr.append(rowHead(label), cell(c2));
+    tbody.append(tr);
+  }
+  table.append(tbody);
+  return table;
+}
+function estimateTable() {
+  const c = t().casualties;
+  const table = el("table", "cas-table cas-estimates");
+  table.append(el("caption", "cas-caption", c.capEstimate));
+  table.append(
+    head([c.colEstimate, c.colRange, c.colMethod, c.colEdges, c.colStatus])
+  );
+  const tbody = el("tbody");
+  for (const e of ESTIMATES) {
+    const copy = c.estimates[e.key];
+    const tr = el("tr", e.status === "gap" ? "cas-reference" : "");
+    tr.append(rowHead(copy?.label ?? e.key));
+    const v = estimateRange(e);
+    tr.append(el("td", v.cls, v.text));
+    tr.append(el("td", "cas-kind", copy?.method ?? ""));
+    tr.append(
+      el(
+        "td",
+        "cas-kind",
+        fill(c.edgePair, { lo: c.edge[e.loEdge], hi: c.edge[e.hiEdge] })
+      )
+    );
+    tr.append(el("td", "cas-kind", c.status[e.status]));
+    tbody.append(tr);
+  }
+  table.append(tbody);
+  return table;
+}
+function sensitivityTable() {
+  const c = t().casualties;
+  const table = el("table", "cas-table cas-sensitivity");
+  table.append(el("caption", "cas-caption", c.capSensitivity));
+  table.append(head([c.colRatio, c.colAt17, c.colMovement]));
+  const tbody = el("tbody");
+  for (const row of SENSITIVITY) {
+    const tr = el("tr", row.ratio === RATIO.mid ? "cas-reference" : "");
+    tr.append(rowHead(`r = ${row.ratio}`));
+    tr.append(el("td", "cas-num cas-derived", nf().format(row.at17Oct)));
+    tr.append(el("td", "cas-num cas-derived", nf().format(row.movement)));
+    tbody.append(tr);
+  }
+  table.append(tbody);
+  return table;
+}
+function causeTable(rows, caption) {
+  const c = t().casualties;
+  const table = el("table", "cas-table cas-cause");
+  table.append(el("caption", "cas-caption", caption));
+  table.append(head([c.colSide, c.colCircumstance, c.colCount, c.colCases], 2));
+  const tbody = el("tbody");
+  for (const row of rows) {
+    const tr = el("tr", row.reference ? "cas-reference" : "");
+    tr.append(rowHead(c.side[row.side]));
+    tr.append(el("td", "cas-kind", c.kind[row.kind]));
+    tr.append(cell(row.count));
+    const td = el("td", "cas-cases-cell");
+    if (!row.cases.length) td.append(el("span", "cas-absent", c.noCases));
+    else {
+      const list = el("ul", "cas-case-list");
+      for (const key of row.cases) list.append(el("li", "", c.cases[key]));
+      td.append(list);
+    }
+    tr.append(td);
+    tbody.append(tr);
+  }
+  table.append(tbody);
+  return table;
+}
+function resolutionTable() {
+  const c = t().casualties;
+  const table = el("table", "cas-table cas-resolution");
+  table.append(el("caption", "cas-caption", c.capResolution));
+  table.append(head([c.colQuestion, c.colWindow, c.colWeekly], 2));
+  const tbody = el("tbody");
+  for (const row of c.resolution) {
+    const tr = el("tr");
+    tr.append(rowHead(row.label), el("td", "", row.window));
+    tr.append(el("td", "cas-num", row.weekly));
+    tbody.append(tr);
+  }
+  table.append(tbody);
+  return table;
+}
+var CIVILIAN_PROXY = pct(CIVILIAN_PROXY_SHARE);
+
+// src/sections/casualties/visuals.ts
+var NUM = /\d[\d\s\u00a0\u202f]*(?:[.,]\d+)?/g;
+var clean = (s) => Number(s.replace(/[\s\u00a0\u202f]/g, "").replace(",", "."));
+var nums = (c) => {
+  NUM.lastIndex = 0;
+  return (cellView(c).text.match(NUM) ?? []).map(clean);
+};
+var lo = (c) => nums(c)[0] ?? null;
+var hi = (c) => nums(c).at(-1) ?? null;
+function casCopy() {
+  const c = t().casualties;
+  return {
+    scope: (id) => c.scope[id] ?? id,
+    side: (id) => c.side[id] ?? id,
+    kind: (id) => c.kind[id] ?? id,
+    caseText: (id) => c.cases[id] ?? id,
+    legend: {
+      serious: c.colSerious,
+      light: c.colLight,
+      unpub: c.why.notPublished
+    },
+    casesLabel: (n2) => c.casesCount.replace(/\{n\}/g, String(n2)),
+    noCases: c.noCases
+  };
+}
+function stackOf(row) {
+  const total = lo(row.total);
+  if (total === null) return { parts: [], serious: null };
+  const light = lo(row.light);
+  const other = lo(row.other);
+  const sLo = lo(row.serious);
+  const sHi = hi(row.serious);
+  const parts = [];
+  if (light !== null) parts.push({ cls: "cas-seg-light", n: light });
+  if (other !== null) parts.push({ cls: "cas-seg-other", n: other });
+  if (parts.length === 0 && sHi !== null) {
+    parts.push({ cls: "cas-seg-serious", n: Math.min(sHi, total) });
+  }
+  const used = parts.reduce((a, p) => a + p.n, 0);
+  if (used < total) parts.push({ cls: "cas-seg-unpub", n: total - used });
+  else if (used > total) {
+    console.warn(
+      `[casualties] ${row.id}: published parts sum to ${used} > total ${total}; proportions are scaled, the remainder is unknown`
+    );
+  }
+  const serious = sLo !== null && sHi !== null && sHi > sLo ? [sLo, sHi] : null;
+  return { parts, serious };
+}
+function strip(row, cp) {
+  const c = t().casualties;
+  const total = lo(row.total);
+  const { parts, serious } = stackOf(row);
+  const wrap2 = el("div", "cas-strip");
+  const head2 = el("div", "cas-strip-head");
+  head2.append(
+    el("span", "cas-strip-name", cp.scope(row.id)),
+    el("span", "cas-strip-total", cellView(row.total).text)
+  );
+  const p = share(row.light, row.total);
+  if (p !== null) head2.append(el("span", "cas-strip-share", pct(p)));
+  wrap2.append(head2);
+  const box = el("div", "cas-track-wrap");
+  const track2 = el("div", "cas-track");
+  if (total === null || parts.length === 0) {
+    track2.classList.add("cas-track-empty");
+    track2.append(el("span", "cas-track-note", cellView(row.total).text));
+  } else {
+    track2.style.gridTemplateColumns = parts.map((x) => `${Math.max(x.n, 0)}fr`).join(" ");
+    for (const x of parts) track2.append(el("span", `cas-seg ${x.cls}`));
+    if (serious) {
+      const left = Math.min(100, Math.max(0, serious[0] / total * 100));
+      const width = Math.min(
+        100 - left,
+        Math.max(0.6, (serious[1] - serious[0]) / total * 100)
+      );
+      const whisk = el("span", "cas-whisker");
+      whisk.style.left = `${left}%`;
+      whisk.style.width = `${width}%`;
+      whisk.title = `${c.colSerious} ${cellView(row.serious).text}`;
+      box.append(whisk);
+    }
+  }
+  const meta = [
+    `${c.colSerious} ${cellView(row.serious).text}`,
+    `${c.colLight} ${cellView(row.light).text}`,
+    `${c.colOther} ${cellView(row.other).text}`
+  ].join(" \xB7 ");
+  track2.setAttribute("role", "img");
+  track2.setAttribute("aria-label", `${head2.textContent} \u2014 ${meta}`);
+  box.append(track2);
+  wrap2.append(box, el("p", "cas-strip-meta", meta));
+  return wrap2;
+}
+function severityStrips(rows, caption) {
+  const cp = casCopy();
+  const wrap2 = el("div", "cas-visual");
+  wrap2.append(el("p", "cas-caption", caption));
+  const legend2 = el("div", "cas-legend");
+  const keys = [
+    ["cas-seg-serious", cp.legend.serious],
+    ["cas-seg-light", cp.legend.light],
+    ["cas-seg-unpub", cp.legend.unpub]
+  ];
+  for (const [cls, label] of keys) {
+    const item = el("span", "cas-legend-item");
+    item.append(el("i", `cas-swatch ${cls}`), el("span", "", label));
+    legend2.append(item);
+  }
+  wrap2.append(legend2);
+  for (const row of rows) wrap2.append(strip(row, cp));
+  return wrap2;
+}
+function tally(cell2, cp) {
+  const txt2 = cellView(cell2).text.trim();
+  if (txt2 === cp.noCases) return { kind: "zero", n: 0 };
+  const n2 = lo(cell2);
+  return n2 === null ? { kind: "unknown", n: 0 } : { kind: "n", n: n2 };
+}
+var DOT_CAP = 24;
+function dotsFor(row, t2) {
+  const dots = el("div", "cas-dots");
+  dots.setAttribute("aria-hidden", "true");
+  if (t2.kind === "unknown") {
+    dots.append(el("span", "cas-dot-unknown", "?"));
+    return dots;
+  }
+  if (t2.kind === "zero") {
+    dots.classList.add("cas-dots-empty");
+    return dots;
+  }
+  const ref = row.reference;
+  const shown = Math.min(t2.n, DOT_CAP);
+  for (let i = 0; i < shown; i++) {
+    dots.append(el("i", ref ? "cas-dot cas-dot-ref" : "cas-dot"));
+  }
+  if (t2.n > DOT_CAP) {
+    dots.append(el("span", "cas-dot-more", `+${t2.n - DOT_CAP}`));
+  }
+  return dots;
+}
+function detailsFor(row, cp) {
+  const det = el("details", "cas-cases");
+  const sum2 = el("summary", "cas-cases-sum");
+  sum2.setAttribute("aria-label", cp.casesLabel(row.cases.length));
+  sum2.title = cp.casesLabel(row.cases.length);
+  const ul = el("ul", "cas-case-list");
+  for (const key of row.cases) ul.append(el("li", "", cp.caseText(key)));
+  det.append(sum2, ul);
+  return det;
+}
+function caseTally(rows, caption) {
+  const cp = casCopy();
+  const wrap2 = el("div", "cas-visual");
+  wrap2.append(el("p", "cas-caption", caption));
+  let side = null;
+  for (const row of rows) {
+    const t2 = tally(row.count, cp);
+    const line = el("div", "cas-tally-row");
+    if (row.reference) line.classList.add("cas-reference");
+    const sideLabel = cp.side(row.side);
+    if (sideLabel !== side) {
+      side = sideLabel;
+      line.append(el("p", "cas-tally-side", sideLabel));
+    }
+    const facts = el("div", "cas-tally-facts");
+    facts.append(
+      el("span", "cas-tally-kind", cp.kind(row.kind)),
+      el("span", "cas-tally-count", cellView(row.count).text)
+    );
+    if (row.cases.length > 0) facts.append(detailsFor(row, cp));
+    const body = el("div", "cas-tally-body");
+    body.append(dotsFor(row, t2), facts);
+    line.append(body);
+    line.setAttribute(
+      "aria-label",
+      `${sideLabel} \u2014 ${cp.kind(row.kind)}: ${cellView(row.count).text}`
+    );
+    wrap2.append(line);
+  }
+  return wrap2;
+}
+function withTable(visual, table, label) {
+  const det = el("details", "cas-table-toggle");
+  det.append(el("summary", "", label), table);
+  const box = el("div", "cas-visual-box");
+  box.append(visual, det);
+  return box;
+}
+
+// src/sections/casualties/index.ts
+var LABEL = {
+  fr: "Voir les chiffres",
+  en: "See the numbers"
+};
+function mountCasualties() {
+  const c = t().casualties;
+  const label = c.showTable ?? LABEL[getLocale()] ?? LABEL.en;
+  const a = byId("cas-a");
+  const aHead = byId("cas-a-head");
+  const aTop = [el("h4", "cas-title", c.headlineTitle), headline(), mixBlock()];
+  const aRest = [
+    withTable(
+      severityStrips(SEVERITY_LEVELS, c.capLevels),
+      severityTable(SEVERITY_LEVELS, c.capLevels),
+      label
+    ),
+    el("h4", "cas-title", c.popTitle),
+    populationTable(),
+    el("p", "cas-note", c.notePopulation),
+    el("h4", "cas-title", c.bystanderTitle),
+    bystanderTable(),
+    el("p", "cas-note", fill(c.noteBystanders, { proxy: CIVILIAN_PROXY })),
+    withTable(
+      caseTally(CASES, c.capCases),
+      causeTable(CASES, c.capCases),
+      label
+    ),
+    el("p", "cas-note", c.noteLevels)
+  ];
+  if (aHead) aHead.replaceChildren(...aTop);
+  if (a) a.replaceChildren(...aHead ? aRest : [...aTop, ...aRest]);
+  const b = byId("cas-b");
+  const bHead = byId("cas-b-head");
+  const bTop = [
+    el("h4", "cas-title", c.weeklyTitle),
+    severityStrips(SEVERITY_WEEKS, c.capWeeks)
+  ];
+  const bRest = [
+    severityTable(SEVERITY_WEEKS, c.capWeeks),
+    el("h4", "cas-title", c.estTitle),
+    estimateTable(),
+    el("p", "cas-note", c.noteEstimate),
+    sensitivityTable(),
+    el("p", "cas-note", c.noteSensitivity),
+    resolutionTable(),
+    el("p", "cas-note", c.noteWeeks)
+  ];
+  if (bHead) bHead.replaceChildren(...bTop);
+  if (b) b.replaceChildren(...bHead ? bRest : [...bTop, ...bRest]);
 }
 
 // src/sections/about/links.ts
@@ -19492,6 +20062,314 @@ function renderChrome(pageIn) {
   note("note-e", sec(page, "e").note ?? "");
 }
 
+// src/sections/contribute/index.ts
+var REPO2 = "https://github.com/Manifestigations/Protest-Data-Observatory";
+var NEW_ISSUE = `${REPO2}/issues/new`;
+var ISSUES = `${REPO2}/issues`;
+var DATA_NOTE = {
+  en: "French or English, whichever you write in. A free GitHub account is the only requirement: no local setup, no code, no knowledge of this repository.",
+  fr: "En fran\xE7ais ou en anglais, selon ce qui vous est le plus facile. Un compte GitHub gratuit est la seule condition : aucune installation, aucun code, aucune connaissance de ce d\xE9p\xF4t."
+};
+var BLOCKS = [
+  {
+    id: "data",
+    title: {
+      en: "Send a data point, or a correction",
+      fr: "Envoyer un chiffre, ou une correction"
+    },
+    lead: {
+      en: "You do not need to be a programmer and you do not need to read the code. If you know a figure this site is missing \u2014 or has wrong \u2014 open an issue and paste the number with the source that publishes it. That is the whole process: a figure, a date, a link.",
+      fr: "Il n\u2019est pas n\xE9cessaire d\u2019\xEAtre programmeur ni de lire le code. Si vous connaissez un chiffre qui manque \xE0 ce site \u2014 ou qui y est faux \u2014 ouvrez un ticket et collez le chiffre avec la source qui le publie. C\u2019est tout le processus : un chiffre, une date, un lien."
+    },
+    bullets: [
+      {
+        en: "What the figure is: turnout, arrests, injuries, blocked schools, damage, cost of policing.",
+        fr: "Ce que mesure le chiffre : foule, interpellations, bless\xE9s, lyc\xE9es bloqu\xE9s, dommages, co\xFBt du maintien de l\u2019ordre."
+      },
+      {
+        en: "Where and when: the date, and the territory \u2014 national, a region, one city, one establishment.",
+        fr: "O\xF9 et quand : la date, et le territoire \u2014 national, une r\xE9gion, une ville, un \xE9tablissement."
+      },
+      {
+        en: "The figure as published, including the range if the publisher gives one. Do not average two publishers for us.",
+        fr: "Le chiffre tel que publi\xE9, fourchette comprise si l\u2019\xE9diteur en donne une. Ne moyennez pas deux \xE9diteurs \xE0 notre place."
+      },
+      {
+        en: "The source: a URL, a report title and page, or the outlet and date of an article. Paywalled or a PDF is fine \u2014 say so and we will find it.",
+        fr: "La source : une URL, un titre de rapport et sa page, ou le m\xE9dia et la date d\u2019un article. Payant ou en PDF, ce n\u2019est pas un obstacle : dites-le et nous irons le chercher."
+      },
+      {
+        en: "Who published it, and whether they are counting or estimating. The charts mark the difference.",
+        fr: "Qui l\u2019a publi\xE9, et s\u2019il s\u2019agit d\u2019un d\xE9compte ou d\u2019une estimation. Les graphiques distinguent les deux."
+      }
+    ],
+    note: DATA_NOTE,
+    actions: [
+      { label: { en: "Open an issue", fr: "Ouvrir un ticket" }, href: NEW_ISSUE },
+      { label: { en: "See existing issues", fr: "Voir les tickets existants" }, href: ISSUES }
+    ]
+  },
+  {
+    id: "code",
+    title: { en: "Contribute code", fr: "Contribuer au code" },
+    lead: {
+      en: "The site is TypeScript with no framework: one esbuild bundle serves every page, the charts are drawn on canvas, and all copy is written as { en, fr } pairs beside the module that uses it. npm run build writes docs/bundle.js and docs/styles.css, which is what GitHub Pages serves.",
+      fr: "Le site est en TypeScript sans framework : un seul bundle esbuild sert toutes les pages, les graphiques sont dessin\xE9s sur canvas, et chaque texte existe en { en, fr } \xE0 c\xF4t\xE9 du module qui l\u2019utilise. npm run build \xE9crit docs/bundle.js et docs/styles.css, que GitHub Pages sert tels quels."
+    },
+    bullets: [
+      {
+        en: "A movement missing from the comparison, or a source group that needs adding to src/data/sources.",
+        fr: "Un mouvement absent de la comparaison, ou un groupe de sources \xE0 ajouter dans src/data/sources."
+      },
+      {
+        en: "Chart correctness: a band drawn from one publisher, a gap interpolated that should have stayed empty.",
+        fr: "L\u2019exactitude des graphiques : une fourchette trac\xE9e depuis un seul \xE9diteur, un vide interpol\xE9 qui aurait d\xFB rester vide."
+      },
+      {
+        en: "Accessibility: focus order, canvas descriptions, contrast, the grayscale-to-colour cards under prefers-contrast.",
+        fr: "L\u2019accessibilit\xE9 : ordre de tabulation, descriptions des canvas, contrastes, cartes en noir et blanc selon prefers-contrast."
+      },
+      {
+        en: "The French copy, which reads as a translation in places because it is one.",
+        fr: "Les textes fran\xE7ais, qui se lisent parfois comme une traduction parce qu\u2019ils en sont une."
+      }
+    ],
+    note: {
+      en: "Open an issue before a large pull request: settling the data question first usually halves the code.",
+      fr: "Ouvrez un ticket avant une grosse pull request : r\xE9gler la question des donn\xE9es d\u2019abord divise g\xE9n\xE9ralement le code par deux."
+    },
+    actions: [{ label: { en: "Repository on GitHub", fr: "D\xE9p\xF4t sur GitHub" }, href: REPO2 }]
+  },
+  {
+    id: "medics",
+    status: { en: "In preparation", fr: "En pr\xE9paration" },
+    title: {
+      en: "Coming: how to record better data",
+      fr: "\xC0 venir : mieux consigner les donn\xE9es"
+    },
+    lead: {
+      en: "A guide for street medics, legal observers and anyone counting in the street, on turning what you see into a figure that survives being checked six months later.",
+      fr: "Un guide pour les street medics, les observateurs juridiques et toute personne qui compte dans la rue, pour transformer ce que vous voyez en un chiffre qui r\xE9siste \xE0 une v\xE9rification six mois plus tard."
+    },
+    bullets: [
+      {
+        en: "What to write down at the time: hour, place, who was counting, and the boundary of what was counted.",
+        fr: "Ce qu\u2019il faut noter sur le moment : heure, lieu, qui comptait, et la limite de ce qui \xE9tait compt\xE9."
+      },
+      {
+        en: "A count and an estimate are different data. Record which one you have, and never round a count into an estimate.",
+        fr: "Un d\xE9compte et une estimation sont deux donn\xE9es diff\xE9rentes. Notez laquelle vous avez, et n\u2019arrondissez jamais un d\xE9compte en estimation."
+      },
+      {
+        en: "Always the denominator: injuries without a number of people present cannot be compared with anything.",
+        fr: "Toujours le d\xE9nominateur : des bless\xE9s sans nombre de personnes pr\xE9sentes ne se comparent \xE0 rien."
+      },
+      {
+        en: "The chain from observation to publication, so a figure can be traced back to the person who saw it.",
+        fr: "La cha\xEEne de l\u2019observation \xE0 la publication, pour qu\u2019un chiffre remonte jusqu\u2019\xE0 la personne qui l\u2019a vu."
+      },
+      {
+        en: "Consent, anonymity and safety, which outrank the data every time.",
+        fr: "Le consentement, l\u2019anonymat et la s\xE9curit\xE9, qui priment sur la donn\xE9e \xE0 chaque fois."
+      }
+    ],
+    note: {
+      en: "What should the guide cover? Suggest it as an issue now \u2014 the outline is still open.",
+      fr: "Que devrait couvrir ce guide ? Proposez-le d\xE8s maintenant en ticket : le plan est encore ouvert."
+    },
+    actions: [{ label: { en: "Suggest a topic", fr: "Proposer un sujet" }, href: NEW_ISSUE }]
+  },
+  {
+    id: "share",
+    title: { en: "Or just share it", fr: "Ou simplement le partager" },
+    lead: {
+      en: "Challenging a false narrative is easier with a chart than with an argument. Link the page rather than a screenshot: the numbers stay current, and the source travels with them.",
+      fr: "Contester un r\xE9cit faux est plus facile avec un graphique qu\u2019avec un argument. Partagez le lien de la page plut\xF4t qu\u2019une capture d\u2019\xE9cran : les chiffres restent \xE0 jour, et la source voyage avec eux."
+    },
+    bullets: [
+      {
+        en: "Quote the band, not one end of it. \u201CBetween 175,000 and 197,000\u201D is the finding; either number alone is a half-truth.",
+        fr: "Citez la fourchette, pas une de ses bornes. \xAB Entre 175 000 et 197 000 \xBB est le r\xE9sultat ; un seul des deux chiffres est une demi-v\xE9rit\xE9."
+      },
+      {
+        en: "Say what the chart does not show \u2014 every page states its own gaps under the title.",
+        fr: "Dites ce que le graphique ne montre pas : chaque page \xE9nonce ses lacunes sous son titre."
+      },
+      {
+        en: "Point people at the Sources box on that page, so the figure can be checked without trusting us.",
+        fr: "Renvoiez vers la rubrique Sources de la page, pour que le chiffre soit v\xE9rifiable sans nous faire confiance."
+      }
+    ]
+  }
+];
+function block2(b) {
+  const section = el("section", "contribute-section");
+  section.id = `contribute-${b.id}`;
+  section.setAttribute("aria-labelledby", `${section.id}-title`);
+  const head2 = el("header", "contribute-head");
+  const h = el("h2", "contribute-title", bi(b.title));
+  h.id = `${section.id}-title`;
+  head2.append(h);
+  if (b.status) head2.append(el("span", "contribute-status", bi(b.status)));
+  section.append(head2, el("p", "contribute-lead", bi(b.lead)));
+  if (b.bullets.length) {
+    const ul = el("ul", "contribute-list");
+    for (const t2 of b.bullets) ul.append(el("li", void 0, bi(t2)));
+    section.append(ul);
+  }
+  if (b.note) section.append(el("p", "callout", bi(b.note)));
+  if (b.actions?.length) {
+    const row = el("p", "contribute-actions");
+    for (const a of b.actions) {
+      const link = el("a", "contribute-button", bi(a.label));
+      link.href = a.href;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      row.append(link);
+    }
+    section.append(row);
+  }
+  return section;
+}
+function mountContribute(host = byId("contribute")) {
+  if (!host) return;
+  host.replaceChildren(...BLOCKS.map(block2));
+}
+
+// src/sections/disclosure.ts
+var OPEN_KEY = "pdo-open";
+var LABEL2 = {
+  en: {
+    tools: "Section controls",
+    expand: "Expand all",
+    collapse: "Collapse all"
+  },
+  fr: {
+    tools: "Contr\xF4les des sections",
+    expand: "Tout d\xE9plier",
+    collapse: "Tout replier"
+  }
+};
+var reveal;
+var defaultOpen = true;
+function pageKey2() {
+  const last = location.pathname.split("/").filter(Boolean).pop() ?? "index";
+  const name = /\.[a-z]+$/i.test(last) ? last : `${last}.html`;
+  const hits = Object.keys(PAGES).filter((k) => {
+    const p = PAGES[k].path;
+    return p === name || p.endsWith(`/${name}`);
+  });
+  if (hits.length === 1) return hits[0];
+  return document.documentElement.dataset.page ?? "home";
+}
+function readAll() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(OPEN_KEY) ?? "{}");
+    return raw && typeof raw === "object" ? raw : {};
+  } catch {
+    return {};
+  }
+}
+function storedOpen(id) {
+  return readAll()[pageKey2()]?.[id];
+}
+function saveOpen(id, open) {
+  try {
+    const all = readAll();
+    const page = pageKey2();
+    all[page] = { ...all[page] ?? {}, [id]: open };
+    localStorage.setItem(OPEN_KEY, JSON.stringify(all));
+  } catch {
+  }
+}
+function wrap(host, level) {
+  const head2 = host.querySelector(
+    ':scope > header[id^="hdr-"], :scope > h2'
+  );
+  if (!head2) return null;
+  const card3 = document.createElement("details");
+  card3.className = level === 2 ? "sec-card sec-card--sub" : "sec-card";
+  const id = head2.id || `sec-${Math.random().toString(36).slice(2, 8)}`;
+  card3.dataset.sec = id;
+  const summary = document.createElement("summary");
+  summary.className = "sec-summary";
+  summary.append(head2);
+  host.before(card3);
+  card3.append(summary, host);
+  card3.open = level === 2 ? true : storedOpen(id) ?? defaultOpen;
+  card3.addEventListener("toggle", () => {
+    saveOpen(id, card3.open);
+    if (card3.open) reveal?.(card3);
+  });
+  return card3;
+}
+var isPageShell = (s) => !!s.querySelector(":scope > header#hdr-page");
+function enhanceSections() {
+  if (typeof document === "undefined") return;
+  const sections = [
+    ...document.querySelectorAll(
+      "main section[aria-labelledby], main section#sources"
+    )
+  ].filter((s) => !s.closest("details.sec-card") && !isPageShell(s));
+  for (const section of sections) {
+    if (!wrap(section, 1)) continue;
+    for (const group2 of section.querySelectorAll(".run-group")) {
+      if (group2.closest("section") !== section) continue;
+      if (group2.closest("details.sec-card")) continue;
+      wrap(group2, 2);
+    }
+  }
+}
+function setAllCards(open) {
+  for (const card3 of document.querySelectorAll(
+    "main details.sec-card"
+  )) {
+    card3.open = open;
+    saveOpen(card3.dataset.sec ?? "", open);
+  }
+}
+function toolbar() {
+  document.querySelector("main > .sec-tools")?.remove();
+  const host = document.querySelector("main > #crumbs") ?? document.querySelector("main");
+  if (!host) return null;
+  const label = LABEL2[getLocale() === "fr" ? "fr" : "en"];
+  const bar2 = document.createElement("div");
+  bar2.className = "sec-tools";
+  bar2.setAttribute("role", "group");
+  bar2.setAttribute("aria-label", label.tools);
+  for (const [text, open] of [
+    [label.expand, true],
+    [label.collapse, false]
+  ]) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "sec-tools__btn";
+    b.textContent = text;
+    b.addEventListener("click", () => setAllCards(open));
+    bar2.append(b);
+  }
+  host.after(bar2);
+  return bar2;
+}
+var printHookBound = false;
+function initDisclosure(opts = {}) {
+  reveal = opts.onReveal;
+  if (opts.defaultOpen !== void 0) defaultOpen = opts.defaultOpen;
+  enhanceSections();
+  const bar2 = toolbar();
+  const openForPrint = () => setAllCards(true);
+  addEventListener("beforeprint", openForPrint);
+  if (!printHookBound) {
+    addEventListener("beforeprint", () => setAllCards(true));
+    printHookBound = true;
+  }
+  return () => {
+    reveal = void 0;
+    bar2?.remove();
+    removeEventListener("beforeprint", openForPrint);
+  };
+}
+
 // src/sections/kpis.ts
 var DAILY_SPECS = [
   { copy: "protestersDaily", data: "turnout", unit: "count" },
@@ -19635,7 +20513,7 @@ function card2(row, largestLabel) {
   box.append(list);
   return box;
 }
-function block2(rows, largestLabel, note2) {
+function block3(rows, largestLabel, note2) {
   const frag = document.createDocumentFragment();
   frag.append(el("h4", "kpi-heading", t().kpi.heading));
   const grid = el("div", "kpi-grid");
@@ -19669,7 +20547,7 @@ function mountKpiPresets(root2 = document) {
     );
     const k = t().kpi;
     host.replaceChildren(
-      block2(
+      block3(
         dailyRowsFor(specs, !(preset.kind === "daily")),
         preset.kind === "daily" ? k.largestDay : k.largestWeek,
         preset.kind === "daily" ? k.noteDaily : k.noteWeekly
@@ -19680,15 +20558,15 @@ function mountKpiPresets(root2 = document) {
 function mountKpis() {
   const k = t().kpi;
   const a = byId("kpi-a");
-  if (a) a.replaceChildren(block2(dailyRows(false), k.largestDay, k.noteDaily));
+  if (a) a.replaceChildren(block3(dailyRows(false), k.largestDay, k.noteDaily));
   const b = byId("kpi-b");
   if (b) {
-    b.replaceChildren(block2(dailyRows(true), k.largestWeek, k.noteWeekly));
+    b.replaceChildren(block3(dailyRows(true), k.largestWeek, k.noteWeekly));
   }
   const c = byId("kpi-c");
   if (c) {
     c.replaceChildren(
-      block2(
+      block3(
         episodeRows(Number.POSITIVE_INFINITY),
         k.largestFigure,
         k.noteEpisodes
@@ -19698,7 +20576,7 @@ function mountKpis() {
   const d = byId("kpi-d");
   if (d) {
     d.replaceChildren(
-      block2(
+      block3(
         episodeRows(ENFORCEMENT_LAST),
         k.largestFigure,
         k.noteEpisodesCapped
@@ -19976,7 +20854,7 @@ var pcPeak = {
     ctx.lineWidth = 3;
     ctx.strokeStyle = "#fff";
     ctx.strokeText(text, x, y);
-    ctx.fillStyle = STREET();
+    ctx.fillStyle = STREET().fill;
     ctx.fillText(text, x, y);
     ctx.restore();
   }
@@ -22917,7 +23795,7 @@ function emphasiseStat(stat2, force = false) {
       if (s === "range") {
         d.backgroundColor = alpha2(d.__color, on ? 0.2 : 0.05);
       } else {
-        const c = on ? d.__color : alpha2(d.__color, DIM3);
+        const c = on ? d.__color : alpha2(d.__color, DIM);
         d.borderColor = c;
         d.pointBorderColor = c;
         d.backgroundColor = c;
@@ -23074,13 +23952,16 @@ function mountSummary() {
                   lines.push(
                     p.n > 1 ? fill(m.panels.figureCount, { n: p.n }) : m.panels.singleFigure
                   );
-                  return lines.map((l) => wrapTooltipLines(l, first, "body"));
+                  return lines.flatMap(
+                    (l) => wrapTooltipLines(l, first, "body")
+                  );
                 }
               }
             }
           },
-          onHover: (_e, els) => {
-            const d = els[0]?.dataset;
+          onHover: (_e, els, chart2) => {
+            const i = els[0]?.datasetIndex;
+            const d = i === void 0 ? void 0 : chart2.data.datasets[i];
             emphasiseStat(d?.__stat ?? null);
           }
         },
@@ -23112,859 +23993,6 @@ function mountSummary() {
       hide: (hidden) => setStatHidden("peak", hidden)
     }
   ]);
-}
-
-// src/sections/contribute/index.ts
-var REPO2 = "https://github.com/Manifestigations/Protest-Data-Observatory";
-var NEW_ISSUE = `${REPO2}/issues/new`;
-var ISSUES = `${REPO2}/issues`;
-var DATA_NOTE = {
-  en: "French or English, whichever you write in. A free GitHub account is the only requirement: no local setup, no code, no knowledge of this repository.",
-  fr: "En fran\xE7ais ou en anglais, selon ce qui vous est le plus facile. Un compte GitHub gratuit est la seule condition : aucune installation, aucun code, aucune connaissance de ce d\xE9p\xF4t."
-};
-var BLOCKS = [
-  {
-    id: "data",
-    title: {
-      en: "Send a data point, or a correction",
-      fr: "Envoyer un chiffre, ou une correction"
-    },
-    lead: {
-      en: "You do not need to be a programmer and you do not need to read the code. If you know a figure this site is missing \u2014 or has wrong \u2014 open an issue and paste the number with the source that publishes it. That is the whole process: a figure, a date, a link.",
-      fr: "Il n\u2019est pas n\xE9cessaire d\u2019\xEAtre programmeur ni de lire le code. Si vous connaissez un chiffre qui manque \xE0 ce site \u2014 ou qui y est faux \u2014 ouvrez un ticket et collez le chiffre avec la source qui le publie. C\u2019est tout le processus : un chiffre, une date, un lien."
-    },
-    bullets: [
-      {
-        en: "What the figure is: turnout, arrests, injuries, blocked schools, damage, cost of policing.",
-        fr: "Ce que mesure le chiffre : foule, interpellations, bless\xE9s, lyc\xE9es bloqu\xE9s, dommages, co\xFBt du maintien de l\u2019ordre."
-      },
-      {
-        en: "Where and when: the date, and the territory \u2014 national, a region, one city, one establishment.",
-        fr: "O\xF9 et quand : la date, et le territoire \u2014 national, une r\xE9gion, une ville, un \xE9tablissement."
-      },
-      {
-        en: "The figure as published, including the range if the publisher gives one. Do not average two publishers for us.",
-        fr: "Le chiffre tel que publi\xE9, fourchette comprise si l\u2019\xE9diteur en donne une. Ne moyennez pas deux \xE9diteurs \xE0 notre place."
-      },
-      {
-        en: "The source: a URL, a report title and page, or the outlet and date of an article. Paywalled or a PDF is fine \u2014 say so and we will find it.",
-        fr: "La source : une URL, un titre de rapport et sa page, ou le m\xE9dia et la date d\u2019un article. Payant ou en PDF, ce n\u2019est pas un obstacle : dites-le et nous irons le chercher."
-      },
-      {
-        en: "Who published it, and whether they are counting or estimating. The charts mark the difference.",
-        fr: "Qui l\u2019a publi\xE9, et s\u2019il s\u2019agit d\u2019un d\xE9compte ou d\u2019une estimation. Les graphiques distinguent les deux."
-      }
-    ],
-    note: DATA_NOTE,
-    actions: [
-      { label: { en: "Open an issue", fr: "Ouvrir un ticket" }, href: NEW_ISSUE },
-      { label: { en: "See existing issues", fr: "Voir les tickets existants" }, href: ISSUES }
-    ]
-  },
-  {
-    id: "code",
-    title: { en: "Contribute code", fr: "Contribuer au code" },
-    lead: {
-      en: "The site is TypeScript with no framework: one esbuild bundle serves every page, the charts are drawn on canvas, and all copy is written as { en, fr } pairs beside the module that uses it. npm run build writes docs/bundle.js and docs/styles.css, which is what GitHub Pages serves.",
-      fr: "Le site est en TypeScript sans framework : un seul bundle esbuild sert toutes les pages, les graphiques sont dessin\xE9s sur canvas, et chaque texte existe en { en, fr } \xE0 c\xF4t\xE9 du module qui l\u2019utilise. npm run build \xE9crit docs/bundle.js et docs/styles.css, que GitHub Pages sert tels quels."
-    },
-    bullets: [
-      {
-        en: "A movement missing from the comparison, or a source group that needs adding to src/data/sources.",
-        fr: "Un mouvement absent de la comparaison, ou un groupe de sources \xE0 ajouter dans src/data/sources."
-      },
-      {
-        en: "Chart correctness: a band drawn from one publisher, a gap interpolated that should have stayed empty.",
-        fr: "L\u2019exactitude des graphiques : une fourchette trac\xE9e depuis un seul \xE9diteur, un vide interpol\xE9 qui aurait d\xFB rester vide."
-      },
-      {
-        en: "Accessibility: focus order, canvas descriptions, contrast, the grayscale-to-colour cards under prefers-contrast.",
-        fr: "L\u2019accessibilit\xE9 : ordre de tabulation, descriptions des canvas, contrastes, cartes en noir et blanc selon prefers-contrast."
-      },
-      {
-        en: "The French copy, which reads as a translation in places because it is one.",
-        fr: "Les textes fran\xE7ais, qui se lisent parfois comme une traduction parce qu\u2019ils en sont une."
-      }
-    ],
-    note: {
-      en: "Open an issue before a large pull request: settling the data question first usually halves the code.",
-      fr: "Ouvrez un ticket avant une grosse pull request : r\xE9gler la question des donn\xE9es d\u2019abord divise g\xE9n\xE9ralement le code par deux."
-    },
-    actions: [{ label: { en: "Repository on GitHub", fr: "D\xE9p\xF4t sur GitHub" }, href: REPO2 }]
-  },
-  {
-    id: "medics",
-    status: { en: "In preparation", fr: "En pr\xE9paration" },
-    title: {
-      en: "Coming: how to record better data",
-      fr: "\xC0 venir : mieux consigner les donn\xE9es"
-    },
-    lead: {
-      en: "A guide for street medics, legal observers and anyone counting in the street, on turning what you see into a figure that survives being checked six months later.",
-      fr: "Un guide pour les street medics, les observateurs juridiques et toute personne qui compte dans la rue, pour transformer ce que vous voyez en un chiffre qui r\xE9siste \xE0 une v\xE9rification six mois plus tard."
-    },
-    bullets: [
-      {
-        en: "What to write down at the time: hour, place, who was counting, and the boundary of what was counted.",
-        fr: "Ce qu\u2019il faut noter sur le moment : heure, lieu, qui comptait, et la limite de ce qui \xE9tait compt\xE9."
-      },
-      {
-        en: "A count and an estimate are different data. Record which one you have, and never round a count into an estimate.",
-        fr: "Un d\xE9compte et une estimation sont deux donn\xE9es diff\xE9rentes. Notez laquelle vous avez, et n\u2019arrondissez jamais un d\xE9compte en estimation."
-      },
-      {
-        en: "Always the denominator: injuries without a number of people present cannot be compared with anything.",
-        fr: "Toujours le d\xE9nominateur : des bless\xE9s sans nombre de personnes pr\xE9sentes ne se comparent \xE0 rien."
-      },
-      {
-        en: "The chain from observation to publication, so a figure can be traced back to the person who saw it.",
-        fr: "La cha\xEEne de l\u2019observation \xE0 la publication, pour qu\u2019un chiffre remonte jusqu\u2019\xE0 la personne qui l\u2019a vu."
-      },
-      {
-        en: "Consent, anonymity and safety, which outrank the data every time.",
-        fr: "Le consentement, l\u2019anonymat et la s\xE9curit\xE9, qui priment sur la donn\xE9e \xE0 chaque fois."
-      }
-    ],
-    note: {
-      en: "What should the guide cover? Suggest it as an issue now \u2014 the outline is still open.",
-      fr: "Que devrait couvrir ce guide ? Proposez-le d\xE8s maintenant en ticket : le plan est encore ouvert."
-    },
-    actions: [{ label: { en: "Suggest a topic", fr: "Proposer un sujet" }, href: NEW_ISSUE }]
-  },
-  {
-    id: "share",
-    title: { en: "Or just share it", fr: "Ou simplement le partager" },
-    lead: {
-      en: "Challenging a false narrative is easier with a chart than with an argument. Link the page rather than a screenshot: the numbers stay current, and the source travels with them.",
-      fr: "Contester un r\xE9cit faux est plus facile avec un graphique qu\u2019avec un argument. Partagez le lien de la page plut\xF4t qu\u2019une capture d\u2019\xE9cran : les chiffres restent \xE0 jour, et la source voyage avec eux."
-    },
-    bullets: [
-      {
-        en: "Quote the band, not one end of it. \u201CBetween 175,000 and 197,000\u201D is the finding; either number alone is a half-truth.",
-        fr: "Citez la fourchette, pas une de ses bornes. \xAB Entre 175 000 et 197 000 \xBB est le r\xE9sultat ; un seul des deux chiffres est une demi-v\xE9rit\xE9."
-      },
-      {
-        en: "Say what the chart does not show \u2014 every page states its own gaps under the title.",
-        fr: "Dites ce que le graphique ne montre pas : chaque page \xE9nonce ses lacunes sous son titre."
-      },
-      {
-        en: "Point people at the Sources box on that page, so the figure can be checked without trusting us.",
-        fr: "Renvoiez vers la rubrique Sources de la page, pour que le chiffre soit v\xE9rifiable sans nous faire confiance."
-      }
-    ]
-  }
-];
-function block3(b) {
-  const section = el("section", "contribute-section");
-  section.id = `contribute-${b.id}`;
-  section.setAttribute("aria-labelledby", `${section.id}-title`);
-  const head2 = el("header", "contribute-head");
-  const h = el("h2", "contribute-title", bi(b.title));
-  h.id = `${section.id}-title`;
-  head2.append(h);
-  if (b.status) head2.append(el("span", "contribute-status", bi(b.status)));
-  section.append(head2, el("p", "contribute-lead", bi(b.lead)));
-  if (b.bullets.length) {
-    const ul = el("ul", "contribute-list");
-    for (const t2 of b.bullets) ul.append(el("li", void 0, bi(t2)));
-    section.append(ul);
-  }
-  if (b.note) section.append(el("p", "callout", bi(b.note)));
-  if (b.actions?.length) {
-    const row = el("p", "contribute-actions");
-    for (const a of b.actions) {
-      const link = el("a", "contribute-button", bi(a.label));
-      link.href = a.href;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-      row.append(link);
-    }
-    section.append(row);
-  }
-  return section;
-}
-function mountContribute(host = byId("contribute")) {
-  if (!host) return;
-  host.replaceChildren(...BLOCKS.map(block3));
-}
-
-// src/sections/casualties/model.ts
-function cellView(c) {
-  switch (c.s) {
-    case "n": {
-      const cls = ["cas-num"];
-      if (c.d) cls.push("cas-derived");
-      if (c.regional) cls.push("cas-regional");
-      return {
-        text: `${c.d ? "\u2248 " : ""}${nf().format(c.v)}`,
-        cls: cls.join(" ")
-      };
-    }
-    case "r":
-      return {
-        text: `\u2248 ${nf().format(c.lo)}\u2013${nf().format(c.hi)}`,
-        cls: `cas-num cas-derived${c.regional ? " cas-regional" : ""}`
-      };
-    case "f":
-      return { text: `\u2265 ${nf().format(c.v)}`, cls: "cas-num cas-floor" };
-    case "c":
-      return {
-        text: fill(t().casualties.casesCount, { n: c.n }),
-        cls: "cas-num cas-cases"
-      };
-    default:
-      return { text: t().casualties.why[c.why], cls: "cas-absent" };
-  }
-}
-function share(light, total) {
-  if (light.s !== "n" || total.s !== "n" || total.v <= 0) return null;
-  return light.v / total.v;
-}
-function pct(p) {
-  return `${nf().format(Number((p * 100).toFixed(1)))}%`;
-}
-function estimateRange(e) {
-  if (!e.value) return cellView({ s: "x", why: e.why ?? "notEstimable" });
-  const f = e.unit === "share" ? pct : (x) => nf().format(x);
-  return {
-    text: e.value.lo === e.value.hi ? f(e.value.lo) : `${f(e.value.lo)}\u2013${f(e.value.hi)}`,
-    cls: e.unit === "share" ? "cas-num cas-derived" : "cas-num"
-  };
-}
-
-// src/sections/casualties/tables.ts
-function cell(c, extra = "") {
-  const v = cellView(c);
-  return el("td", extra ? `${v.cls} ${extra}` : v.cls, v.text);
-}
-function rowHead(text) {
-  const th = el("th", "cas-scope", text);
-  th.scope = "row";
-  return th;
-}
-function head(labels, lead = 1) {
-  const tr = el("tr");
-  labels.forEach((label, i) => {
-    const th = el(
-      "th",
-      i < lead ? "cas-scope-head" : "cas-num-head",
-      label
-    );
-    th.scope = "col";
-    tr.append(th);
-  });
-  const thead = el("thead");
-  thead.append(tr);
-  return thead;
-}
-function bar(p) {
-  const wrap2 = el("span", "cas-bar");
-  const run = el("span", "cas-bar-fill");
-  run.style.width = `${Math.max(0, Math.min(1, p)) * 100}%`;
-  wrap2.append(run);
-  return wrap2;
-}
-function stat(num, label, cls = "cas-head-stat") {
-  const wrap2 = el("div", cls);
-  wrap2.append(
-    el("span", "cas-head-num", num),
-    el("span", "cas-head-label", label)
-  );
-  return wrap2;
-}
-function headline() {
-  const c = t().casualties;
-  const wrap2 = el("div", "cas-headline");
-  const total = nf().format(FORCES.movement);
-  wrap2.append(
-    stat(
-      `${pct(SERIOUS_MOVEMENT.lo / FORCES.movement)}\u2013${pct(SERIOUS_MOVEMENT.hi / FORCES.movement)}`,
-      fill(c.headSeriousShare, {
-        lo: pct(SERIOUS_MOVEMENT.lo / FORCES.movement),
-        hi: pct(SERIOUS_MOVEMENT.hi / FORCES.movement),
-        total
-      })
-    ),
-    stat(
-      `${nf().format(SERIOUS_MOVEMENT.lo)}\u2013${nf().format(SERIOUS_MOVEMENT.hi)}`,
-      fill(c.headSeriousCount, {
-        forces: `${nf().format(SERIOUS_MOVEMENT.lo)}\u2013${nf().format(SERIOUS_MOVEMENT.hi)}`,
-        protesters: `\u2265 ${nf().format(THINES.seriousTo5Nov + THINES.deathsTo5Nov)}`
-      })
-    ),
-    stat(
-      pct(MIX[0].central / FORCES.movement),
-      fill(c.headMix, { light: nf().format(MIX[0].central), total })
-    )
-  );
-  return wrap2;
-}
-function mixBlock() {
-  const c = t().casualties;
-  const wrap2 = el("div", "cas-mix");
-  wrap2.append(el("h4", "cas-title", c.mixTitle));
-  const total = MIX.reduce((a, b) => a + b.central, 0);
-  for (const band of MIX) {
-    const row = el("div", "cas-mix-row");
-    row.append(el("span", "cas-mix-label", c.mix[band.id]));
-    const track2 = el("span", "cas-mix-track");
-    const run = el("span", `cas-mix-fill cas-mix-${band.id}`);
-    run.style.width = `${band.central / total * 100}%`;
-    track2.append(run);
-    row.append(
-      track2,
-      el(
-        "span",
-        "cas-mix-value",
-        `${nf().format(band.lo)}\u2013${nf().format(band.hi)}`
-      ),
-      el(
-        "span",
-        "cas-mix-share",
-        `${pct(band.lo / total)}\u2013${pct(band.hi / total)}`
-      )
-    );
-    wrap2.append(row);
-  }
-  wrap2.append(el("p", "cas-note", c.noteMix));
-  return wrap2;
-}
-function severityTable(rows, caption) {
-  const c = t().casualties;
-  const table = el("table", "cas-table");
-  table.append(el("caption", "cas-caption", caption));
-  table.append(
-    head([
-      c.colScope,
-      c.colTotal,
-      c.colSerious,
-      c.colLight,
-      c.colLightShare,
-      c.colOther
-    ])
-  );
-  const tbody = el("tbody");
-  for (const row of rows) {
-    const tr = el("tr");
-    tr.append(rowHead(c.scope[row.id] ?? row.id));
-    tr.append(cell(row.total), cell(row.serious), cell(row.light));
-    const p = share(row.light, row.total);
-    const td = el("td", "cas-share");
-    if (p === null) td.append(el("span", "cas-absent", "\u2014"));
-    else td.append(el("span", "cas-pct", pct(p)), bar(p));
-    tr.append(td);
-    tr.append(cell(row.other));
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
-}
-function populationTable() {
-  const c = t().casualties;
-  const table = el("table", "cas-table cas-population");
-  table.append(el("caption", "cas-caption", c.capPopulation));
-  table.append(
-    head([
-      c.colScope,
-      c.colPopulation,
-      c.colParticipation,
-      c.colSelection,
-      c.colCount
-    ])
-  );
-  const tbody = el("tbody");
-  const ordered = [...OBSERVATIONS].sort(
-    (a, b) => POPULATION_ORDER.indexOf(a.population) - POPULATION_ORDER.indexOf(b.population) || a.date.localeCompare(b.date)
-  );
-  for (const obs of ordered) {
-    const tr = el("tr");
-    tr.append(rowHead(c.observations[obs.id] ?? obs.id));
-    tr.append(el("td", "cas-kind", c.population[obs.population]));
-    tr.append(el("td", "cas-kind", c.participation[obs.participation]));
-    tr.append(el("td", "cas-kind", c.selection[obs.selection]));
-    tr.append(cell(obs.count));
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
-}
-function bystanderTable() {
-  const c = t().casualties;
-  const table = el("table", "cas-table cas-bystanders");
-  table.append(el("caption", "cas-caption", c.bystanderCaption));
-  table.append(head([c.colQuestion, c.colCount]));
-  const tbody = el("tbody");
-  const rows = [
-    [c.bystanders.documented, BYSTANDER_CELLS.documented],
-    [c.bystanders.serious, BYSTANDER_CELLS.serious],
-    [c.bystanders.national, BYSTANDER_CELLS.national]
-  ];
-  for (const [label, c2] of rows) {
-    const tr = el("tr");
-    tr.append(rowHead(label), cell(c2));
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
-}
-function estimateTable() {
-  const c = t().casualties;
-  const table = el("table", "cas-table cas-estimates");
-  table.append(el("caption", "cas-caption", c.capEstimate));
-  table.append(
-    head([c.colEstimate, c.colRange, c.colMethod, c.colEdges, c.colStatus])
-  );
-  const tbody = el("tbody");
-  for (const e of ESTIMATES) {
-    const copy = c.estimates[e.key];
-    const tr = el("tr", e.status === "gap" ? "cas-reference" : "");
-    tr.append(rowHead(copy?.label ?? e.key));
-    const v = estimateRange(e);
-    tr.append(el("td", v.cls, v.text));
-    tr.append(el("td", "cas-kind", copy?.method ?? ""));
-    tr.append(
-      el(
-        "td",
-        "cas-kind",
-        fill(c.edgePair, { lo: c.edge[e.loEdge], hi: c.edge[e.hiEdge] })
-      )
-    );
-    tr.append(el("td", "cas-kind", c.status[e.status]));
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
-}
-function sensitivityTable() {
-  const c = t().casualties;
-  const table = el("table", "cas-table cas-sensitivity");
-  table.append(el("caption", "cas-caption", c.capSensitivity));
-  table.append(head([c.colRatio, c.colAt17, c.colMovement]));
-  const tbody = el("tbody");
-  for (const row of SENSITIVITY) {
-    const tr = el("tr", row.ratio === RATIO.mid ? "cas-reference" : "");
-    tr.append(rowHead(`r = ${row.ratio}`));
-    tr.append(el("td", "cas-num cas-derived", nf().format(row.at17Oct)));
-    tr.append(el("td", "cas-num cas-derived", nf().format(row.movement)));
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
-}
-function causeTable(rows, caption) {
-  const c = t().casualties;
-  const table = el("table", "cas-table cas-cause");
-  table.append(el("caption", "cas-caption", caption));
-  table.append(head([c.colSide, c.colCircumstance, c.colCount, c.colCases], 2));
-  const tbody = el("tbody");
-  for (const row of rows) {
-    const tr = el("tr", row.reference ? "cas-reference" : "");
-    tr.append(rowHead(c.side[row.side]));
-    tr.append(el("td", "cas-kind", c.kind[row.kind]));
-    tr.append(cell(row.count));
-    const td = el("td", "cas-cases-cell");
-    if (!row.cases.length) td.append(el("span", "cas-absent", c.noCases));
-    else {
-      const list = el("ul", "cas-case-list");
-      for (const key of row.cases) list.append(el("li", "", c.cases[key]));
-      td.append(list);
-    }
-    tr.append(td);
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
-}
-function resolutionTable() {
-  const c = t().casualties;
-  const table = el("table", "cas-table cas-resolution");
-  table.append(el("caption", "cas-caption", c.capResolution));
-  table.append(head([c.colQuestion, c.colWindow, c.colWeekly], 2));
-  const tbody = el("tbody");
-  for (const row of c.resolution) {
-    const tr = el("tr");
-    tr.append(rowHead(row.label), el("td", "", row.window));
-    tr.append(el("td", "cas-num", row.weekly));
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
-}
-var CIVILIAN_PROXY = pct(CIVILIAN_PROXY_SHARE);
-
-// src/sections/casualties/visuals.ts
-var NUM = /\d[\d\s\u00a0\u202f]*(?:[.,]\d+)?/g;
-var clean = (s) => Number(s.replace(/[\s\u00a0\u202f]/g, "").replace(",", "."));
-var nums = (c) => {
-  NUM.lastIndex = 0;
-  return (cellView(c).text.match(NUM) ?? []).map(clean);
-};
-var lo = (c) => nums(c)[0] ?? null;
-var hi = (c) => nums(c).at(-1) ?? null;
-function casCopy() {
-  const c = t().casualties;
-  return {
-    scope: (id) => c.scope[id] ?? id,
-    side: (id) => c.side[id] ?? id,
-    kind: (id) => c.kind[id] ?? id,
-    caseText: (id) => c.cases[id] ?? id,
-    legend: {
-      serious: c.colSerious,
-      light: c.colLight,
-      unpub: c.why.notPublished
-    },
-    casesLabel: (n2) => c.casesCount.replace(/\{n\}/g, String(n2)),
-    noCases: c.noCases
-  };
-}
-function stackOf(row) {
-  const total = lo(row.total);
-  if (total === null) return { parts: [], serious: null };
-  const light = lo(row.light);
-  const other = lo(row.other);
-  const sLo = lo(row.serious);
-  const sHi = hi(row.serious);
-  const parts = [];
-  if (light !== null) parts.push({ cls: "cas-seg-light", n: light });
-  if (other !== null) parts.push({ cls: "cas-seg-other", n: other });
-  if (parts.length === 0 && sHi !== null) {
-    parts.push({ cls: "cas-seg-serious", n: Math.min(sHi, total) });
-  }
-  const used = parts.reduce((a, p) => a + p.n, 0);
-  if (used < total) parts.push({ cls: "cas-seg-unpub", n: total - used });
-  else if (used > total) {
-    console.warn(
-      `[casualties] ${row.id}: published parts sum to ${used} > total ${total}; proportions are scaled, the remainder is unknown`
-    );
-  }
-  const serious = sLo !== null && sHi !== null && sHi > sLo ? [sLo, sHi] : null;
-  return { parts, serious };
-}
-function strip(row, cp) {
-  const c = t().casualties;
-  const total = lo(row.total);
-  const { parts, serious } = stackOf(row);
-  const wrap2 = el("div", "cas-strip");
-  const head2 = el("div", "cas-strip-head");
-  head2.append(
-    el("span", "cas-strip-name", cp.scope(row.id)),
-    el("span", "cas-strip-total", cellView(row.total).text)
-  );
-  const p = share(row.light, row.total);
-  if (p !== null) head2.append(el("span", "cas-strip-share", pct(p)));
-  wrap2.append(head2);
-  const box = el("div", "cas-track-wrap");
-  const track2 = el("div", "cas-track");
-  if (total === null || parts.length === 0) {
-    track2.classList.add("cas-track-empty");
-    track2.append(el("span", "cas-track-note", cellView(row.total).text));
-  } else {
-    track2.style.gridTemplateColumns = parts.map((x) => `${Math.max(x.n, 0)}fr`).join(" ");
-    for (const x of parts) track2.append(el("span", `cas-seg ${x.cls}`));
-    if (serious) {
-      const left = Math.min(100, Math.max(0, serious[0] / total * 100));
-      const width = Math.min(
-        100 - left,
-        Math.max(0.6, (serious[1] - serious[0]) / total * 100)
-      );
-      const whisk = el("span", "cas-whisker");
-      whisk.style.left = `${left}%`;
-      whisk.style.width = `${width}%`;
-      whisk.title = `${c.colSerious} ${cellView(row.serious).text}`;
-      box.append(whisk);
-    }
-  }
-  const meta = [
-    `${c.colSerious} ${cellView(row.serious).text}`,
-    `${c.colLight} ${cellView(row.light).text}`,
-    `${c.colOther} ${cellView(row.other).text}`
-  ].join(" \xB7 ");
-  track2.setAttribute("role", "img");
-  track2.setAttribute("aria-label", `${head2.textContent} \u2014 ${meta}`);
-  box.append(track2);
-  wrap2.append(box, el("p", "cas-strip-meta", meta));
-  return wrap2;
-}
-function severityStrips(rows, caption) {
-  const cp = casCopy();
-  const wrap2 = el("div", "cas-visual");
-  wrap2.append(el("p", "cas-caption", caption));
-  const legend2 = el("div", "cas-legend");
-  const keys = [
-    ["cas-seg-serious", cp.legend.serious],
-    ["cas-seg-light", cp.legend.light],
-    ["cas-seg-unpub", cp.legend.unpub]
-  ];
-  for (const [cls, label] of keys) {
-    const item = el("span", "cas-legend-item");
-    item.append(el("i", `cas-swatch ${cls}`), el("span", "", label));
-    legend2.append(item);
-  }
-  wrap2.append(legend2);
-  for (const row of rows) wrap2.append(strip(row, cp));
-  return wrap2;
-}
-function tally(cell2, cp) {
-  const txt2 = cellView(cell2).text.trim();
-  if (txt2 === cp.noCases) return { kind: "zero", n: 0 };
-  const n2 = lo(cell2);
-  return n2 === null ? { kind: "unknown", n: 0 } : { kind: "n", n: n2 };
-}
-var DOT_CAP = 24;
-function dotsFor(row, t2) {
-  const dots = el("div", "cas-dots");
-  dots.setAttribute("aria-hidden", "true");
-  if (t2.kind === "unknown") {
-    dots.append(el("span", "cas-dot-unknown", "?"));
-    return dots;
-  }
-  if (t2.kind === "zero") {
-    dots.classList.add("cas-dots-empty");
-    return dots;
-  }
-  const ref = row.reference;
-  const shown = Math.min(t2.n, DOT_CAP);
-  for (let i = 0; i < shown; i++) {
-    dots.append(el("i", ref ? "cas-dot cas-dot-ref" : "cas-dot"));
-  }
-  if (t2.n > DOT_CAP) {
-    dots.append(el("span", "cas-dot-more", `+${t2.n - DOT_CAP}`));
-  }
-  return dots;
-}
-function detailsFor(row, cp) {
-  const det = el("details", "cas-cases");
-  const sum2 = el("summary", "cas-cases-sum");
-  sum2.setAttribute("aria-label", cp.casesLabel(row.cases.length));
-  sum2.title = cp.casesLabel(row.cases.length);
-  const ul = el("ul", "cas-case-list");
-  for (const key of row.cases) ul.append(el("li", "", cp.caseText(key)));
-  det.append(sum2, ul);
-  return det;
-}
-function caseTally(rows, caption) {
-  const cp = casCopy();
-  const wrap2 = el("div", "cas-visual");
-  wrap2.append(el("p", "cas-caption", caption));
-  let side = null;
-  for (const row of rows) {
-    const t2 = tally(row.count, cp);
-    const line = el("div", "cas-tally-row");
-    if (row.reference) line.classList.add("cas-reference");
-    const sideLabel = cp.side(row.side);
-    if (sideLabel !== side) {
-      side = sideLabel;
-      line.append(el("p", "cas-tally-side", sideLabel));
-    }
-    const facts = el("div", "cas-tally-facts");
-    facts.append(
-      el("span", "cas-tally-kind", cp.kind(row.kind)),
-      el("span", "cas-tally-count", cellView(row.count).text)
-    );
-    if (row.cases.length > 0) facts.append(detailsFor(row, cp));
-    const body = el("div", "cas-tally-body");
-    body.append(dotsFor(row, t2), facts);
-    line.append(body);
-    line.setAttribute(
-      "aria-label",
-      `${sideLabel} \u2014 ${cp.kind(row.kind)}: ${cellView(row.count).text}`
-    );
-    wrap2.append(line);
-  }
-  return wrap2;
-}
-function withTable(visual, table, label) {
-  const det = el("details", "cas-table-toggle");
-  det.append(el("summary", "", label), table);
-  const box = el("div", "cas-visual-box");
-  box.append(visual, det);
-  return box;
-}
-
-// src/sections/casualties/index.ts
-var LABEL = {
-  fr: "Voir les chiffres",
-  en: "See the numbers"
-};
-function mountCasualties() {
-  const c = t().casualties;
-  const label = c.showTable ?? LABEL[getLocale()] ?? LABEL.en;
-  const a = byId("cas-a");
-  const aHead = byId("cas-a-head");
-  const aTop = [el("h4", "cas-title", c.headlineTitle), headline(), mixBlock()];
-  const aRest = [
-    withTable(
-      severityStrips(SEVERITY_LEVELS, c.capLevels),
-      severityTable(SEVERITY_LEVELS, c.capLevels),
-      label
-    ),
-    el("h4", "cas-title", c.popTitle),
-    populationTable(),
-    el("p", "cas-note", c.notePopulation),
-    el("h4", "cas-title", c.bystanderTitle),
-    bystanderTable(),
-    el("p", "cas-note", fill(c.noteBystanders, { proxy: CIVILIAN_PROXY })),
-    withTable(
-      caseTally(CASES, c.capCases),
-      causeTable(CASES, c.capCases),
-      label
-    ),
-    el("p", "cas-note", c.noteLevels)
-  ];
-  if (aHead) aHead.replaceChildren(...aTop);
-  if (a) a.replaceChildren(...aHead ? aRest : [...aTop, ...aRest]);
-  const b = byId("cas-b");
-  const bHead = byId("cas-b-head");
-  const bTop = [
-    el("h4", "cas-title", c.weeklyTitle),
-    severityStrips(SEVERITY_WEEKS, c.capWeeks)
-  ];
-  const bRest = [
-    severityTable(SEVERITY_WEEKS, c.capWeeks),
-    el("h4", "cas-title", c.estTitle),
-    estimateTable(),
-    el("p", "cas-note", c.noteEstimate),
-    sensitivityTable(),
-    el("p", "cas-note", c.noteSensitivity),
-    resolutionTable(),
-    el("p", "cas-note", c.noteWeeks)
-  ];
-  if (bHead) bHead.replaceChildren(...bTop);
-  if (b) b.replaceChildren(...bHead ? bRest : [...bTop, ...bRest]);
-}
-
-// src/sections/disclosure.ts
-var OPEN_KEY = "pdo-open";
-var LABEL2 = {
-  en: {
-    tools: "Section controls",
-    expand: "Expand all",
-    collapse: "Collapse all"
-  },
-  fr: {
-    tools: "Contr\xF4les des sections",
-    expand: "Tout d\xE9plier",
-    collapse: "Tout replier"
-  }
-};
-var reveal;
-var defaultOpen = true;
-function pageKey2() {
-  const last = location.pathname.split("/").filter(Boolean).pop() ?? "index";
-  const name = /\.[a-z]+$/i.test(last) ? last : `${last}.html`;
-  const hits = Object.keys(PAGES).filter((k) => {
-    const p = PAGES[k].path;
-    return p === name || p.endsWith(`/${name}`);
-  });
-  if (hits.length === 1) return hits[0];
-  return document.documentElement.dataset.page ?? "home";
-}
-function readAll() {
-  try {
-    const raw = JSON.parse(localStorage.getItem(OPEN_KEY) ?? "{}");
-    return raw && typeof raw === "object" ? raw : {};
-  } catch {
-    return {};
-  }
-}
-function storedOpen(id) {
-  return readAll()[pageKey2()]?.[id];
-}
-function saveOpen(id, open) {
-  try {
-    const all = readAll();
-    const page = pageKey2();
-    all[page] = { ...all[page] ?? {}, [id]: open };
-    localStorage.setItem(OPEN_KEY, JSON.stringify(all));
-  } catch {
-  }
-}
-function wrap(host, level) {
-  const head2 = host.querySelector(
-    ':scope > header[id^="hdr-"], :scope > h2'
-  );
-  if (!head2) return null;
-  const card3 = document.createElement("details");
-  card3.className = level === 2 ? "sec-card sec-card--sub" : "sec-card";
-  const id = head2.id || `sec-${Math.random().toString(36).slice(2, 8)}`;
-  card3.dataset.sec = id;
-  const summary = document.createElement("summary");
-  summary.className = "sec-summary";
-  summary.append(head2);
-  host.before(card3);
-  card3.append(summary, host);
-  card3.open = level === 2 ? true : storedOpen(id) ?? defaultOpen;
-  card3.addEventListener("toggle", () => {
-    saveOpen(id, card3.open);
-    if (card3.open) reveal?.(card3);
-  });
-  return card3;
-}
-var isPageShell = (s) => !!s.querySelector(":scope > header#hdr-page");
-function enhanceSections() {
-  if (typeof document === "undefined") return;
-  const sections = [
-    ...document.querySelectorAll(
-      "main section[aria-labelledby], main section#sources"
-    )
-  ].filter((s) => !s.closest("details.sec-card") && !isPageShell(s));
-  for (const section of sections) {
-    if (!wrap(section, 1)) continue;
-    for (const group2 of section.querySelectorAll(".run-group")) {
-      if (group2.closest("section") !== section) continue;
-      if (group2.closest("details.sec-card")) continue;
-      wrap(group2, 2);
-    }
-  }
-}
-function setAllCards(open) {
-  for (const card3 of document.querySelectorAll(
-    "main details.sec-card"
-  )) {
-    card3.open = open;
-    saveOpen(card3.dataset.sec ?? "", open);
-  }
-}
-function toolbar() {
-  document.querySelector("main > .sec-tools")?.remove();
-  const host = document.querySelector("main > #crumbs") ?? document.querySelector("main");
-  if (!host) return null;
-  const label = LABEL2[getLocale() === "fr" ? "fr" : "en"];
-  const bar2 = document.createElement("div");
-  bar2.className = "sec-tools";
-  bar2.setAttribute("role", "group");
-  bar2.setAttribute("aria-label", label.tools);
-  for (const [text, open] of [
-    [label.expand, true],
-    [label.collapse, false]
-  ]) {
-    const b = document.createElement("button");
-    b.type = "button";
-    b.className = "sec-tools__btn";
-    b.textContent = text;
-    b.addEventListener("click", () => setAllCards(open));
-    bar2.append(b);
-  }
-  host.after(bar2);
-  return bar2;
-}
-var printHookBound = false;
-function initDisclosure(opts = {}) {
-  reveal = opts.onReveal;
-  if (opts.defaultOpen !== void 0) defaultOpen = opts.defaultOpen;
-  enhanceSections();
-  const bar2 = toolbar();
-  const openForPrint = () => setAllCards(true);
-  addEventListener("beforeprint", openForPrint);
-  if (!printHookBound) {
-    addEventListener("beforeprint", () => setAllCards(true));
-    printHookBound = true;
-  }
-  return () => {
-    reveal = void 0;
-    bar2?.remove();
-    removeEventListener("beforeprint", openForPrint);
-  };
 }
 
 // src/entry/main.ts
@@ -24072,7 +24100,8 @@ function boot() {
   initTheme();
   onLocaleChange(() => {
     scheduleRender();
-    announce(fill(t().a11y.switched, { lang: localeMeta2().label }));
+    const { switched } = t().a11y;
+    announce(fill(switched, { lang: localeMeta2().label }));
   });
   render2();
   window.addEventListener("pagehide", destroyAll, { once: true });

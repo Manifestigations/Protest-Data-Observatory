@@ -6,6 +6,8 @@
    colours at create time and cannot read CSS variables.
    ========================================================================== */
 
+export const DIM = 0.45;
+
 export const TONES = [
   "police",
   "protest",

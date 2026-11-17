@@ -3,6 +3,12 @@ import type { CasualtyCopy } from "../../copy/types.ts";
 export const CASUALTY_FR: CasualtyCopy = {
   headlineTitle: "Comment se répartissent les blessures",
   weeklyTitle: "Ce qu’une semaine peut établir",
+  popTitle: "Population documentée",
+  bystanderTitle: "Passants parmi les blessés",
+  estTitle: "Estimations",
+  mixTitle: "Composition par gravité",
+  bystanderCaption:
+    "Les passants ne sont comptés que lorsque la source les distingue des participants.",
 
   colScope: "Population",
   colTotal: "Total déclaré",

@@ -6,6 +6,7 @@ import { mountCharts } from "../charts/mount.ts";
 import { mountCrossEpisode } from "../charts/trellis/index.ts";
 import {
   applyStaticCopy,
+  bi,
   fill,
   getLocale,
   localeMeta,
@@ -13,33 +14,31 @@ import {
   syncLangSwitch,
   t,
 } from "../copy";
+import { announce } from "../core/a11y.ts";
 import { destroyAll } from "../core/canvas-registry.ts";
 import { byId, el } from "../core/dom.ts";
 import { applyUrlLang, mountLangSwitch } from "../core/lang.ts";
 import { initTheme } from "../core/theme.ts";
 import { mountCards } from "../sections/cards/index.ts";
+import { mountCasualties } from "../sections/casualties/index.ts";
 import { currentPage, renderChrome } from "../sections/chrome.ts";
 import { mountContext } from "../sections/context/context.ts";
-import { mountKpis, mountKpiPresets } from "../sections/kpis.ts";
+import { mountContribute } from "../sections/contribute/index.ts";
+import { initDisclosure } from "../sections/disclosure.ts";
+import { mountKpiPresets, mountKpis } from "../sections/kpis.ts";
 import { mountPerCapita } from "../sections/percapita/percapita.ts";
 import { renderSources } from "../sections/sources/index.ts";
 import { mountSummary } from "../sections/summary.ts";
 import {
   CRUMB_LABEL,
-  HOME_LABEL,
   PAGES,
   SITE_NAME,
   pageById,
   pageHref,
   pageKey,
   type PageId,
-  type PageSpec,
+  type PageSpec
 } from "../site/routes.ts";
-import { bi } from "../copy";
-import { announce } from "../core/a11y.ts";
-import { mountContribute } from "../sections/contribute/index.ts";
-import { mountCasualties } from "../sections/casualties/index.ts";
-import { initDisclosure } from "../sections/disclosure.ts";
 
 /* Static anchors carry a plausible href for no-JS readers; this makes it
    correct for the page's depth (2026/turnout.html → ../contribute.html). */
@@ -175,7 +174,8 @@ function boot(): void {
   initTheme();
   onLocaleChange(() => {
     scheduleRender();
-    announce(fill(t().a11y.switched, { lang: localeMeta().label }));
+    const { switched } = t().a11y as { switched: string };
+    announce(fill(switched, { lang: localeMeta().label }));
   });
   render();
   window.addEventListener("pagehide", destroyAll, { once: true });

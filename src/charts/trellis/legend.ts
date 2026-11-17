@@ -143,7 +143,9 @@ export function wireLegendSync(
         true,
       );
       const d = els.length
-        ? (datasetsOf(chart)[els[0].datasetIndex] as PanelDataset)
+        ? (datasetsOf(chart as Chart<"line">)[
+            els[0].datasetIndex
+          ] as PanelDataset)
         : undefined;
       legendMark(key, d ? indexOf(d) : null);
     });

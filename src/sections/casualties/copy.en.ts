@@ -6,6 +6,12 @@ import type { CasualtyCopy } from "../../copy/types.ts";
 export const CASUALTY_EN: CasualtyCopy = {
   headlineTitle: "How the injuries divide",
   weeklyTitle: "What a week can establish",
+  popTitle: "Documented population",
+  bystanderTitle: "Bystanders among those injured",
+  estTitle: "Estimates",
+  mixTitle: "Composition by severity",
+  bystanderCaption:
+    "Bystanders are counted only where the source distinguishes them from participants.",
 
   colScope: "Population",
   colTotal: "Declared total",

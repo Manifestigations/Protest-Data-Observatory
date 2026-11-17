@@ -16,6 +16,8 @@ export const TONE_OF: Readonly<Record<MetricKey, Tone>> = {
   protesterInjured: "protest",
   damagesCost: "cost",
   blockades: "protest",
+  policingCost: "policeCost",
+  heliCost: "policeCost",
 };
 
 export interface SeriesStyle {

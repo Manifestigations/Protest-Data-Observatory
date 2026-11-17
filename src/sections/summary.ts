@@ -2,7 +2,15 @@
    One panel per measure, log y. The dumbbell carries the whole story: a long bar
    means a few huge weeks dragged the mean away from the median. */
 
-import { Chart, type ChartData, type Plugin, type TooltipItem } from "chart.js";
+import {
+  Chart,
+  type ChartData,
+  type Plugin,
+  type Point,
+  type TooltipItem,
+} from "chart.js";
+import { clipToArea } from "../charts/plugins/clip.ts";
+import { wrapTooltipLines } from "../charts/tooltip.ts";
 import {
   datasetsOf,
   decades,
@@ -12,14 +20,12 @@ import {
   type Pt,
 } from "../charts/trellis/engine.ts";
 import { legend } from "../charts/trellis/legend.ts";
-import { DIM, SERIES, seriesStyles } from "../charts/trellis/palette.ts";
+import { DIM, seriesStyles } from "../charts/trellis/palette.ts";
+import { columns, panelFigure } from "../charts/trellis/panel.ts";
 import { compact, fill, nf, t } from "../copy";
 import { alpha, THEME, track } from "../core/canvas-registry.ts";
 import { EPISODES } from "../data/episodes/index.ts";
 import type { Episode, Metric } from "../model/index.ts";
-import { wrapTooltipLines } from "../charts/tooltip.ts";
-import { columns, panelFigure } from "../charts/trellis/panel.ts";
-import { clipToArea } from "../charts/plugins/clip.ts";
 
 /* ----- types */
 
@@ -419,20 +425,26 @@ export function mountSummary(): void {
                       ? fill(m.panels.figureCount, { n: p.n })
                       : m.panels.singleFigure,
                   );
-                  return lines.map((l) => wrapTooltipLines(l, first, "body"));
+                  return lines.flatMap((l) =>
+                    wrapTooltipLines(l, first, "body"),
+                  );
                 },
               },
             },
           },
-          onHover: (_e, els) => {
-            const d = els[0]?.dataset as StatDataset | undefined;
+          onHover: (_e, els, chart) => {
+            const i = els[0]?.datasetIndex;
+            const d =
+              i === undefined
+                ? undefined
+                : (chart.data.datasets[i] as StatDataset | undefined);
             emphasiseStat(d?.__stat ?? null);
           },
         },
         plugins: [rangeBand],
       }),
     );
-    summaryPanels.push(chart);
+    summaryPanels.push(chart as Chart<"line", (number | Point | null)[]>);
   }
 
   legend(legendHost, "stats", [

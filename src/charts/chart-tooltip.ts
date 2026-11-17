@@ -1,5 +1,4 @@
-/* ── Section A/B — tooltip callbacks ──────────────────────────────────────── */
-
+import type { Band } from "../model/index.ts";
 import type { TooltipItem } from "chart.js";
 import { fill, t } from "../copy";
 import { noteText, suffixFor } from "../data/notes.ts";
@@ -8,8 +7,24 @@ import { fmt, rateLine } from "./format.ts";
 import { wrapTooltipLines } from "./tooltip.ts";
 import type { View } from "./view.ts";
 
+type Unit = NonNullable<ProtestDataset["unit"]>;
+
+const pair = (b: Band): [number, number] =>
+  typeof b === "number" ? [b, b] : b;
+
 export function tooltipCallbacks(v: View) {
   const m = t().chart;
+
+  const rangeFill = (band: Band, label: string, unit: Unit) => {
+    const [lo, hi] = pair(band);
+    return fill(m.tooltipRange, {
+      label,
+      mid: fmt((lo + hi) / 2, unit),
+      low: fmt(lo, unit),
+      high: fmt(hi, unit),
+    });
+  };
+
   return {
     title: (items: TooltipItem<"line">[]) =>
       wrapTooltipLines(v.titles[items[0].dataIndex] ?? "", items[0], "title"),
@@ -18,24 +33,20 @@ export function tooltipCallbacks(v: View) {
       const unit = ds.unit ?? "count";
       const note = noteText(ds.notes?.[item.dataIndex]);
       const detached = ds.showLine === false;
+      const label = ds.label ?? "";
 
       const band = ds.errorBars?.[item.dataIndex];
-      const base = band
-        ? fill(m.tooltipRange, {
-            label: ds.label,
-            mid: fmt((band[0] + band[1]) / 2, unit),
-            low: fmt(band[0], unit),
-            high: fmt(band[1], unit),
-          })
-        : fill(m.tooltipPoint, {
-            label: ds.label,
-            value: fmt(item.parsed.y ?? 0, unit),
-          });
+      const base =
+        band != null
+          ? rangeFill(band, label, unit)
+          : fill(m.tooltipPoint, {
+              label,
+              value: fmt(item.parsed.y ?? 0, unit),
+            });
 
       const body = base + suffixFor(ds.quality?.[item.dataIndex], detached);
-      // The rate is a second paragraph, so it survives the wrap intact.
       const rate = ds.perCapita
-        ? rateLine(ds.errorBars?.[item.dataIndex], item.parsed.y ?? 0)
+        ? rateLine(band == null ? undefined : pair(band), item.parsed.y ?? 0)
         : null;
       const full = rate ? `${body}\n${rate}` : body;
       return wrapTooltipLines(

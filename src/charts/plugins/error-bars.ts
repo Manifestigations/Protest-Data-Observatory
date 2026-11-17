@@ -1,5 +1,6 @@
 /* ── Error bars and shaded bands ───────────────────────────────────────────── */
 
+import type { Band } from "../../model/index.ts";
 import type { Plugin } from "chart.js";
 import { THEME } from "../../core/canvas-registry.ts";
 import type { ProtestDataset } from "../datasets.ts";
@@ -28,9 +29,10 @@ export const errorBars: Plugin<"line"> = {
       for (let j = 0; j < pts.length; j++) {
         const band = ds.errorBars[j];
         const p = pts[j];
-        if (!band || p.skip) continue;
-        lowPts.push([p.x, scale.getPixelForValue(band[0])]);
-        highPts.push([p.x, scale.getPixelForValue(band[1])]);
+        if (band == null || p.skip) continue;
+        const [lo, hi] = typeof band === "number" ? [band, band] : band;
+        lowPts.push([p.x, scale.getPixelForValue(lo)]);
+        highPts.push([p.x, scale.getPixelForValue(hi)]);
       }
       if (lowPts.length < 2) continue;
 
@@ -73,10 +75,10 @@ export const errorBars: Plugin<"line"> = {
       for (let j = 0; j < pts.length; j++) {
         const band = ds.errorBars[j];
         const p = pts[j];
-        if (!band || p.skip) continue;
-
-        const yHigh = scale.getPixelForValue(band[1]);
-        const yLow = scale.getPixelForValue(band[0]);
+        if (band == null || p.skip) continue;
+        const [lo, hi] = typeof band === "number" ? [band, band] : band;
+        const yHigh = scale.getPixelForValue(hi);
+        const yLow = scale.getPixelForValue(lo);
 
         ctx.moveTo(p.x, yHigh);
         ctx.lineTo(p.x, yLow);

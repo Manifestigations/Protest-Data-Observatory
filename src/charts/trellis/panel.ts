@@ -4,20 +4,28 @@
 
 import {
   Chart,
+  type ActiveElement,
+  type ChartEvent,
   type ChartOptions,
-  type ChartDataset,
-  type TooltipItem,
   type InteractionMode,
+  type TooltipItem,
 } from "chart.js";
+import { a11y, compact, fill, nf, pctOf, t } from "../../copy/index.ts";
 import { fromChart, keyboardChart } from "../../core/a11y.ts";
-import { THEME } from "../../core/canvas-registry.ts";
+import { THEME, type AnyChart } from "../../core/canvas-registry.ts";
 import { el } from "../../core/dom.ts";
-import { a11y, compact, fill, nf, pctOf, plural, t } from "../../copy/index.ts";
 import { EPISODES } from "../../data/episodes/index.ts";
 import { METRICS, type Episode } from "../../model/index.ts";
 import { wrapTooltipLines } from "../tooltip.ts";
-import { datasetsOf, statsOf, type PanelDataset, type Pt } from "./engine.ts";
+import { statsOf, type PanelDataset, type Pt } from "./engine.ts";
 import { WEEK_MODE } from "./interaction.ts";
+
+/** Hover callback shared by panelOptions and every panel call site. */
+export type PanelHover = (
+  event: ChartEvent,
+  elements: ActiveElement[],
+  chart: Chart<"line">,
+) => void;
 
 export type TrellisKind = "episode" | "item";
 
@@ -219,11 +227,8 @@ export const panelOptions = (
   kind: TrellisKind,
   x: object,
   y: object,
-  onHover?: ChartOptions<"line">["onHover"],
+  onHover?: PanelHover,
 ): ChartOptions<"line"> => {
-  /* Set on all three levels: `options.interaction` seeds both `hover` and
-     `plugins.tooltip.interaction`, but naming them removes any doubt about
-     which one a given Chart.js patch reads. */
   const interaction = { mode: WEEK_MODE as InteractionMode, intersect: false };
   return {
     responsive: true,
@@ -237,20 +242,24 @@ export const panelOptions = (
       legend: { display: false },
       title: { display: false },
       subtitle: { display: false },
-      tooltip: { ...tooltipSpec(kind), interaction },
+      tooltip: tooltipSpec(kind),
     },
-    onHover,
+    /* chart.js types onHover's third parameter as bare `Chart`, so a
+       `(…, chart: Chart<"line">) => void` is not directly assignable to it
+       (Chart is invariant in TType). Every chart that reaches this callback
+       is a line chart; the cast only bridges the declaration gap. */
+    onHover: onHover as unknown as ChartOptions<"line">["onHover"],
   };
 };
 
-const panelPoints = (ds: ChartDataset): (Pt | null)[] =>
+const panelPoints = (ds: unknown): (Pt | null)[] =>
   (ds as { data?: (Pt | null)[] }).data ?? [];
 
 /** Data table + keyboard navigation for one trellis panel. Shared by both
  * grids: the row index is the week number (`Pt.t`), which every panel's
  * series carries, so the same decorate works for episodes and for items. */
 export function decoratePanel(
-  chart: Chart,
+  chart: AnyChart,
   figure: HTMLElement,
   title: string,
 ): void {
