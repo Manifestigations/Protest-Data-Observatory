@@ -104,6 +104,23 @@ while either check is red.
 output (see §2.5) and are excluded from both tools; never edit them by
 hand, and never add them to a format-only commit.
 
+### Quality checks (enforced by CI)
+
+Beyond formatting and linting, the **Style** workflow runs:
+
+- `check:baseline` — uses of a Baseline "Newly available" or "Limited
+  availability" browser feature must carry a marker comment:
+  `// baseline:<web.dev slug> — review <YYYY-MM-DD>`, where the date is
+  when the feature is expected to become Widely available (web.dev/baseline:
+  30 months past newly interoperable). A review date in the past is an
+  error — either the feature is now safe to use unmarked, or you re-verify.
+- `check:size` — the gzipped `bundle.js` + `styles.css` must stay under the
+  budget in `scripts/check-size.ts`. Visitors are often on phones and
+  flaky connections; treat every added kilobyte as a regression.
+- `check:a11y` — axe-core, WCAG 2.2 AA tags, on every built page at mobile
+  and desktop, plus a no-horizontal-overflow assertion at 360 / 768 / 1280 /
+  1920 px. Test on a narrow phone before pushing.
+
 ---
 
 ## 3. Pull request checklist
@@ -117,6 +134,10 @@ hand, and never add them to a format-only commit.
 - [ ] `docs/bundle.js`, `docs/bundle.js.map`, `docs/styles.css`,
       `docs/styles.css.map` committed.
 - [ ] `content/data-problems.md` updated if you settled a known data problem.
+- [ ] No Baseline "Newly available"/"Limited" feature without a
+      `baseline:… review …` marker; `npm run check:baseline` passes.
+- [ ] `npm run check:size` and `npm run check:a11y` pass; no horizontal
+      overflow at 360px.
 
 We will not merge: a figure with no source, a silently interpolated gap, a
 translated source label, a flag removed to smooth a line, or a source-count

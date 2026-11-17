@@ -18,7 +18,7 @@ const configs = (): esbuild.BuildOptions[] => [
     outfile: "docs/bundle.js",
     bundle: true,
     format: "esm",
-    target: "es2022",
+    target: "es2025",
     jsx: "automatic",
     sourcemap: dev,
     minify: !dev,

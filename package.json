@@ -1,30 +1,45 @@
 {
   "name": "Protest Data Observatory",
   "type": "module",
-  "engines": {
-    "node": ">=22.18"
-  },
   "scripts": {
     "dev": "node scripts/build.ts --watch",
     "build": "node scripts/build.ts",
     "check:comments": "node scripts/check-comments.ts",
     "check:casualties": "node scripts/check-casualties.ts",
+    "check:baseline": "node scripts/check-baseline.ts",
+    "check:size": "node scripts/check-size.ts",
+    "check:a11y": "node scripts/check-a11y.mjs",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit"
   },
+  "engines": {
+    "node": ">=22.18"
+  },
+  "browserslist": [
+    "chrome >= 143",
+    "edge >= 143",
+    "firefox >= 141",
+    "safari >= 17.4",
+    "ios_saf >= 17.4",
+    "opera >= 129",
+    "android >= 143"
+  ],
   "dependencies": {
     "chart.js": "^4.6.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/node": "^26.6.6",
+    "axe-core": "^4.14.1",
     "esbuild": "^0.28.2",
     "eslint": "^10.15.0",
     "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-compat": "^7.0.2",
     "globals": "^17.14.0",
+    "playwright": "^1.65.1",
     "prettier": "^3.10.1",
     "prettier-plugin-organize-imports": "^4.3.0",
     "typescript": "^6.0.3",

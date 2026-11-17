@@ -15,6 +15,36 @@ verification record.
 - Not verified data: never present figures as fact in copy or docs.
 - Bilingual throughout. `Bi = { en: string; fr: string }`.
 
+## Browser and quality bar
+
+- **Baseline Widely available only.** The app must run on the current
+  Baseline Widely available core browsers (Chrome, Edge, Firefox, Safari —
+  desktop + Android/iOS; per web.dev/baseline, "Widely available" means 30
+  months past the newly-interoperable date). The `browserslist` field in
+  `package.json` is the pinned snapshot of that set; the esbuild `target`
+  and TS `target`/`lib` are set from it. Re-sync all three when Baseline
+  statuses move, and record the sync date in `package.json`'s
+  `"# baseline-synced"` comment.
+- **Newly available / Limited availability features** may be used only
+  with a marker comment on the line(s) that use the feature:
+  `// baseline:<web.dev slug> — review <YYYY-MM-DD>` where the date is
+  when the feature is expected to become Widely available. `npm run
+check:baseline` fails on malformed or overdue markers; at review time,
+  delete the marker (feature now widely available) or fix the code.
+- **WCAG 2.2 AA, at all times.** Every page and every interactive element
+  must meet WCAG 2.2 AA (contrast, keyboard order, focus visibility,
+  `prefers-reduced-motion`, text alternatives for canvas). `npm run
+check:a11y` runs axe-core over every built page and blocks red PRs.
+- **All screen sizes.** Layouts must work from 320px to 1920px with no
+  horizontal overflow and no clipped controls. `npm run check:a11y` also
+  asserts no overflow at 360 / 768 / 1280 / 1920 px.
+- **Efficient, lightweight, robust — mobile on flaky connections first.**
+  No runtime network calls (data is bundled); gzipped bundle + CSS must
+  stay under the budget in `scripts/check-size.ts` (never raise the budget
+  without saying why in the PR); lazy-mount below-the-fold sections;
+  functions stay small (ESLint `complexity` ≤ 12, `max-depth` 4, no
+  `console.log`, no `innerHTML` assignment for dynamic content).
+
 ## Commands
 
 ```bash
@@ -24,8 +54,11 @@ node scripts/build.ts --watch     # build + watch + spawn server.ts on :3000
 npm run typecheck                 # tsc --noEmit — always run
 npm run check:casualties          # casualty data self-consistency
 npm run dev:server                # serve docs/ only
-npm run lint                      # ESLint (flat config: eslint.config.mjs)
+npm run lint                      # ESLint (flat config: eslint.config.js)
 npm run format                    # Prettier — also sorts imports
+npm run check:baseline            # Baseline review-date markers are well-formed and not overdue
+npm run check:size                # gzipped bundle + CSS under budget
+npm run check:a11y                # axe-core WCAG 2.2 AA + no horizontal overflow, all viewports
 ```
 
 ## Invariants — do not violate
@@ -43,9 +76,15 @@ npm run format                    # Prettier — also sorts imports
    `Source.what` is bilingual.
 6. **All user-visible strings are `Bi`.** No hardcoded text in DOM/TS code; no
    one-language additions. French is authored, not translated from English.
-7. **No new dependencies** (runtime deps: `chart.js`). Ask via issue first.
+7. ~~**No new dependencies** (runtime deps: `chart.js`). Ask via issue first.~~
 8. **`NoteRef` is a reference, not copy.** Wording lives in
    `src/data/notes.ts`, rendered per locale.
+9. **Only Baseline Widely available browser features** — or a
+   `// baseline:<slug> — review <date>` marker on the line using the
+   feature (see Browser and quality bar). `npm run check:baseline` must
+   pass.
+10. **WCAG 2.2 AA is non-negotiable.** axe (`npm run check:a11y`) must
+    stay green; a11y fixes go in the same PR as the change that broke it.
 
 ## Where things are
 
@@ -107,6 +146,7 @@ engine. Detached styling comes from `src/core/colors.ts` (`hollow`).
 ## Definition of done
 
 `npm run typecheck` passes · `node scripts/build.ts` ran · `docs/` artifacts
-staged · both locales updated · every new figure has a verbatim-labelled source
+staged · `npm run check:baseline`, `npm run check:size`, `npm run check:a11y`
+pass · both locales updated · every new figure has a verbatim-labelled source
 · no range collapsed, no gap interpolated, no flag relaxed · PR body states
 which figures changed and why.
