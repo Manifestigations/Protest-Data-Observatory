@@ -23972,12 +23972,7 @@ function crumbs(page) {
       li.append(span);
     } else {
       const a = el("a", void 0, bi(p.title));
-      a.href = pageHref(
-        page.path,
-        p === PAGES.home ? "home" : Object.keys(PAGES).find(
-          (k) => PAGES[k] === p
-        ) ?? "home"
-      );
+      a.href = pageHref(page.path, pageKey(p));
       li.append(a);
     }
     list.append(li);
@@ -23990,12 +23985,11 @@ function mountPage(page) {
   crumbs(page);
   mountCards(page.path, page.cards);
 }
-var page2 = currentPage();
 function render2() {
   destroyAll();
-  const page = pageById(document.documentElement.dataset.page ?? "") ?? PAGES.home;
-  const id = pageKey(page);
-  renderChrome(page2);
+  const id = currentPage();
+  const page = PAGES[id];
+  renderChrome(id);
   renderSources(id);
   mountPage(page);
   fixPageLinks(page);
