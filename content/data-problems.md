@@ -26,6 +26,12 @@ The policing costs also don't address [opportunity costs](https://en.wikipedia.o
 
 ---
 
+## Demographics
+
+There are no ethnic statistics for either side. In France, collection of ethnic data is illegal; the DPJJ study proxies with nationality and birthplace.
+
+--
+
 ## Historic Data
 
 Obviously, all of these issues are intensified when looking further back at historical events (although with the caveat that historic data is much more settled). There are probably academic books written about 1968 with detailed breakdowns of figures, but I have not been very successful finding them with the LLM. Also, going that far back in time causes its own issues: for example, 'France-entière' did not exist at the time, and so the total population figures are only for what we now call Metropolitan France.
