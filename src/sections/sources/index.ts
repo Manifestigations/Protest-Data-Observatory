@@ -7,6 +7,7 @@ import {
 } from "@manifestigations/dataset";
 import { bi } from "../../copy";
 import { el } from "../../core/dom";
+import { groupsForPage, mediaForPage } from "../../data/sources/page-map";
 import type { PageId } from "../../site/routes";
 import { BOX_TITLE, INTRO } from "./copy";
 

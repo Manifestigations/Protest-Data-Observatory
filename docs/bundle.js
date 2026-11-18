@@ -11784,9 +11784,9 @@ function setCurrentLang(next) {
   current = next;
 }
 buildFormats("fr");
-var nf2 = () => numFmt;
-var compact2 = () => cptFmt;
-var eurM2 = () => eurFmt;
+var nf = () => numFmt;
+var compact = () => cptFmt;
+var eurM = () => eurFmt;
 function toDate(value2) {
   if (value2 instanceof Date)
     return Number.isNaN(value2.getTime()) ? null : value2;
@@ -11802,7 +11802,7 @@ function toDate(value2) {
 function firstOfMonth(s, d) {
   return current === "fr" && d.getUTCDate() === 1 ? s.replace(/^1\b/, "1er") : s;
 }
-function fmtDate2(value2) {
+function fmtDate(value2) {
   const d = toDate(value2);
   return d ? firstOfMonth(dates.long.format(d), d) : "\u2014";
 }
@@ -11810,7 +11810,7 @@ function fmtDayMonth(value2) {
   const d = toDate(value2);
   return d ? firstOfMonth(dates.short.format(d), d) : "\u2014";
 }
-function fmtWeek2(start, end) {
+function fmtWeek(start, end) {
   const a = toDate(start);
   if (!a)
     return "\u2014";
@@ -11833,21 +11833,21 @@ function fmtSpan(span, end) {
   const sep = t("span.sep");
   if (typeof span === "string") {
     if (end !== void 0)
-      return `${fmtDayMonth(span)}${sep}${fmtDate2(end)}`;
+      return `${fmtDayMonth(span)}${sep}${fmtDate(end)}`;
     return ISO_ANY.test(span) ? span.replace(ISO_ALL, (m) => fmtDayMonth(m)) : span;
   }
   if (typeof span === "number" || span instanceof Date) {
-    return end !== void 0 ? `${fmtDayMonth(span)}${sep}${fmtDate2(end)}` : fmtDate2(span);
+    return end !== void 0 ? `${fmtDayMonth(span)}${sep}${fmtDate(end)}` : fmtDate(span);
   }
   if (span.label)
     return span.label;
   if (span.start != null && span.end != null) {
-    return `${fmtDayMonth(span.start)}${sep}${fmtDate2(span.end)}`;
+    return `${fmtDayMonth(span.start)}${sep}${fmtDate(span.end)}`;
   }
   if (span.start != null)
-    return fmtDate2(span.start);
+    return fmtDate(span.start);
   if (span.end != null)
-    return fmtDate2(span.end);
+    return fmtDate(span.end);
   return "\u2014";
 }
 function pctOf(v, base) {
@@ -11962,260 +11962,6 @@ var MARKERS = FLAGS.filter((f) => f.long !== null).map((f) => ({
   text: f.long
 }));
 
-// ../Dataset/dist/data/episodes/bloquons.js
-var BLOQUONS = {
-  id: "bt",
-  start: "2025-09-10",
-  end: "2025-10-05",
-  weeks: [
-    {
-      w: 0,
-      from: "2025-09-08",
-      to: "2025-09-14",
-      p: [175e3, 25e4],
-      a: 540,
-      flag: { p: "c" }
-    },
-    {
-      w: 1,
-      from: "2025-09-15",
-      to: "2025-09-21",
-      p: [5e5, 1e6],
-      a: 309,
-      f: 26,
-      i: 11
-    },
-    { w: 3, from: "2025-09-29", to: "2025-10-05", p: [195e3, 6e5] }
-  ]
-};
-
-// ../Dataset/dist/data/episodes/cpe.js
-var CPE = {
-  id: "cpe",
-  start: "2006-02-06",
-  end: "2006-04-16",
-  weeks: [
-    /* 7 Feb: first national action day, 187 demonstrations. */
-    { w: 0, from: "2006-02-06", to: "2006-02-12", p: [2e5, 4e5] },
-    /* 7 Mar: ">1 million" claimed; ~38 universities on strike by 9 Mar. */
-    { w: 4, from: "2006-03-06", to: "2006-03-12", p: [4e5, 1e6] },
-    {
-      /* 16 Mar: 250,000 (Le Monde) / 447,500 (police) — the ministry's
-         247,500 is the same police count rounded differently.
-         18 Mar: 500,000 ministry / 1.5M organisers; Paris 80,000–350,000.
-         Enforcement, Paris only: 156 (ministry) / 167 (organisers) arrests;
-         34 forces injured.
-         Protesters injured 70 = 18 (16 Mar) + 52 (18 Mar), Paris only —
-         flagged "e" because it is a two-day Paris sum inside a weekly row.
-         14 Mar (same week, second action day): 41,000 (police source). */
-      w: 5,
-      from: "2006-03-13",
-      to: "2006-03-19",
-      p: [5e5, 15e5],
-      a: [156, 167],
-      f: 34,
-      i: 70,
-      flag: { i: "e" }
-    },
-    {
-      /* 23 Mar: 21 universities fully blocked, 67 striking or blocked.
-         630 arrests, 90 forces injured. */
-      w: 6,
-      from: "2006-03-20",
-      to: "2006-03-26",
-      p: [22e4, 45e4],
-      a: 630,
-      f: 90
-    },
-    /* 28 Mar: 4th national action day, 600 arrests. */
-    {
-      w: 7,
-      from: "2006-03-27",
-      to: "2006-04-02",
-      p: [1055e3, 271e4],
-      a: 600
-    },
-    /* 4 Apr: peak day of the episode. */
-    { w: 8, from: "2006-04-03", to: "2006-04-09", p: [1e6, 31e5] },
-    /* CPE scrapped 10 Apr; the movement splits, Easter follows. */
-    { w: 9, from: "2006-04-10", to: "2006-04-16" }
-  ]
-};
-
-// ../Dataset/dist/data/episodes/gilets-jaunes.js
-var GJ_ACTS = [
-  [0, "2018-11-17", 287700],
-  [1, "2018-11-24", 166e3],
-  [2, "2018-12-01", 136e3],
-  [3, "2018-12-08", 136e3],
-  [4, "2018-12-15", 66e3],
-  [5, "2018-12-22", 38600],
-  [6, "2018-12-29", 32e3],
-  [7, "2019-01-05", 5e4],
-  [8, "2019-01-12", 84e3],
-  [9, "2019-01-19", 84e3],
-  [10, "2019-01-26", 69e3],
-  [11, "2019-02-02", 58600],
-  [12, "2019-02-09", 51400],
-  [13, "2019-02-16", 41500],
-  [14, "2019-02-23", 46600],
-  [15, "2019-03-02", 39300],
-  [16, "2019-03-09", 28600],
-  [17, "2019-03-16", 32300],
-  [18, "2019-03-23", 40500],
-  [19, "2019-03-30", 33700],
-  [20, "2019-04-06", 22300],
-  [21, "2019-04-13", 31e3],
-  [22, "2019-04-20", 27900],
-  [23, "2019-04-27", 23600],
-  [24, "2019-05-04", 18900],
-  [25, "2019-05-11", 18600],
-  [26, "2019-05-18", 15500],
-  [27, "2019-05-25", 12500],
-  [28, "2019-06-01", 9500],
-  [29, "2019-06-08", 10300],
-  [30, "2019-06-15", 7e3],
-  [31, "2019-06-22", 11800],
-  [32, "2019-06-29", 5800],
-  [43, "2019-09-07", 7e3]
-];
-var GJ_EXTRA = {
-  0: { a: [117, 73], flag: { a: "f" } },
-  1: { a: [101, 103], f: 5, i: 19, flag: { i: "e" } },
-  2: {},
-  3: { a: 1385 }
-};
-var GILETS = {
-  id: "gj",
-  start: "2018-11-12",
-  end: "2019-09-09",
-  weeks: GJ_ACTS.map(([w, date, n2]) => ({
-    w,
-    from: date,
-    to: date,
-    act: w + 1,
-    p: n2,
-    ...GJ_EXTRA[w] ?? {},
-    flag: {
-      ...w === 0 ? { p: "c" } : {},
-      ...GJ_EXTRA[w]?.flag ?? {}
-    }
-  }))
-};
-
-// ../Dataset/dist/data/episodes/mai68.js
-var MAY68 = {
-  id: "may68",
-  start: "1968-04-29",
-  end: "1968-06-30",
-  weeks: [
-    /* 1 May, République → Bastille: 25,000 (police) vs 100,000 (CGT). */
-    { w: 0, from: "1968-04-29", to: "1968-05-05", p: [25e3, 1e5] },
-    {
-      /* 6 May: >20,000 to the Sorbonne; 10 May: 20,000 (12,000 police).
-         Night of 10–11 May: 6,255 police, 125 cars damaged / 63 burnt,
-         469 arrests. The 891 high adds 422 early-May arrests.
-         Forces: 300+ on 6 May, 247 on 10–11 May.
-         Protesters injured: ≥100 — no national count was published. */
-      w: 1,
-      from: "1968-05-06",
-      to: "1968-05-12",
-      p: 2e4,
-      a: [469, 891],
-      f: [247, 300],
-      i: 100,
-      flag: { i: "f" }
-    },
-    /* 13 May, Paris — peak of the episode: prefecture 230,000 · ORTF 171,000
-       · surface-area estimate 500,000 · unions 1,000,000. */
-    { w: 2, from: "1968-05-13", to: "1968-05-19", p: [23e4, 1e6] },
-    {
-      /* 25 May: 1,000+ arrests (floor), ~9M strikers, ORTF walkout.
-         887 injured — from the English-Wikipedia infobox, attributed to 25 May
-         only. Weak provenance, flagged "e". */
-      w: 3,
-      from: "1968-05-20",
-      to: "1968-05-26",
-      a: 1e3,
-      i: 887,
-      flag: { a: "f", i: "e" }
-    },
-    /* 27 May Grenelle protocol · Charléty meeting. */
-    { w: 4, from: "1968-05-27", to: "1968-06-02" },
-    /* 4 Jun partial return to work · 7 Jun Renault Flins clashes. */
-    { w: 5, from: "1968-06-03", to: "1968-06-09" },
-    /* 10 Jun: Tautin killed · 11 Jun: 2 killed at Sochaux · 12 Jun:
-       demonstrations banned nationwide. */
-    { w: 6, from: "1968-06-10", to: "1968-06-16" },
-    /* 23 Jun legislative elections. */
-    { w: 7, from: "1968-06-17", to: "1968-06-23" },
-    /* Crisis closes 30 Jun. */
-    { w: 8, from: "1968-06-24", to: "1968-06-30" }
-  ]
-};
-
-// ../Dataset/dist/data/episodes/nahel.js
-var NAHEL = {
-  id: "nahel",
-  start: "2023-06-27",
-  end: "2023-07-09",
-  weeks: [
-    {
-      w: 0,
-      from: "2023-06-26",
-      to: "2023-07-02",
-      p: [8e3, 5e4],
-      a: 3354,
-      f: 722,
-      flag: { p: "e" }
-    },
-    { w: 1, from: "2023-07-03", to: "2023-07-09", a: 108, f: 1 }
-  ]
-};
-
-// ../Dataset/dist/data/episodes/retraites.js
-var PENSIONS = {
-  id: "pensions",
-  start: "2023-01-19",
-  end: "2023-06-08",
-  weeks: [
-    { w: 0, from: "2023-01-16", to: "2023-01-22", p: [112e4, 2e6] },
-    { w: 2, from: "2023-01-30", to: "2023-02-05", p: [127e4, 28e5] },
-    { w: 3, from: "2023-02-06", to: "2023-02-12", p: [963e3, 25e5] },
-    { w: 4, from: "2023-02-13", to: "2023-02-19", p: [44e4, 13e5] },
-    { w: 7, from: "2023-03-06", to: "2023-03-12", p: [128e4, 35e5] },
-    { w: 8, from: "2023-03-13", to: "2023-03-19", p: [48e4, 17e5] },
-    {
-      /* 23 Mar: the flashpoint — 49.3 passed, two failed no-confidence votes.
-         Ministry: up to 1.08M nationwide / 119,000 Paris; CGT 3.5M / 800,000.
-         Darmanin's consolidated day: 457 arrests, 441 security forces injured.
-         An earlier evening statement had given 80+ arrests / 123 police hurt,
-         so 457/441 is the final figure and the only one plotted. */
-      w: 9,
-      from: "2023-03-20",
-      to: "2023-03-26",
-      p: [1089e3, 35e5],
-      a: 457,
-      f: 441
-    },
-    {
-      /* 27 Mar: the eleventh day of mobilisation, after the 5 April talks
-         failed. Expected 600,000–800,000 nationwide (60,000–90,000 Paris).
-         Interior Ministry: 111 arrests, 154 police officers injured. */
-      w: 11,
-      from: "2023-04-03",
-      to: "2023-04-09",
-      p: [57e4, 2e6],
-      a: 111,
-      f: 154
-    },
-    { w: 10, from: "2023-03-27", to: "2023-04-02", p: [74e4, 2e6] },
-    { w: 12, from: "2023-04-10", to: "2023-04-16", p: [38e4, 15e5] },
-    { w: 16, from: "2023-05-01", to: "2023-05-07", p: [782e3, 23e5] },
-    { w: 20, from: "2023-06-05", to: "2023-06-08", p: [281e3, 9e5] }
-  ]
-};
-
 // ../Dataset/dist/model/index.js
 var METRICS = ["p", "a", "f", "i"];
 var METRIC_OF = {
@@ -12231,41 +11977,6 @@ var midOf = (b) => {
   const [lo2, hi2] = bandOf(b);
   return (lo2 + hi2) / 2;
 };
-
-// ../Dataset/dist/data/episodes/students.js
-var STUDENTS = {
-  id: "students26",
-  start: STUDENT_WEEKS[0].key,
-  end: END,
-  // the window's last day, not the Sunday of the final week
-  weeks: STUDENT_WEEKS.map((wk, w) => {
-    const row = { w, from: wk.key, to: wk.end, partial: wk.touchesEdge };
-    for (const m of METRICS) {
-      const band = wk[m];
-      if (band)
-        row[m] = band;
-      const flag = wk.flags[m];
-      if (flag && flag !== "n")
-        (row.flag ??= {})[m] = flag;
-      const ref = wk.notes[m];
-      if (ref)
-        (row.noteRef ??= {})[m] = ref;
-    }
-    return row;
-  })
-};
-
-// ../Dataset/dist/data/episodes/index.js
-var EPISODES = [
-  MAY68,
-  CPE,
-  GILETS,
-  NAHEL,
-  PENSIONS,
-  BLOQUONS,
-  STUDENTS
-];
-var ENFORCEMENT_LAST = EPISODES.reduce((last, ep) => ep.weeks.reduce((l, r) => r.a !== void 0 || r.f !== void 0 || r.i !== void 0 ? Math.max(l, r.w) : l, last), 0);
 
 // ../Dataset/dist/data/calendar.js
 var START = "2026-09-15";
@@ -12653,6 +12364,22 @@ var FACTS = {
   }
 };
 
+// ../Dataset/dist/data/policing.js
+var DEPLOYMENT = {
+  /* September deployment is an ASSUMPTION … (verbatim) */
+};
+var FORCES_STOCK = {
+  /* … */
+};
+var FORCES_STOCK_DERIVED = {
+  /* … */
+};
+var RATE = { low: 136, high: 1133 };
+var costBand = (dep) => [
+  dep.low * RATE.low / 1e6,
+  dep.high * RATE.high / 1e6
+];
+
 // ../Dataset/dist/data/types.js
 var NIL = {
   v: null,
@@ -12662,6 +12389,106 @@ var NIL = {
   detach: false
 };
 var round2 = (v) => Number.isInteger(v) ? v : Math.round(v * 100) / 100;
+
+// ../Dataset/dist/data/projections.js
+function projectDaily(key) {
+  return DATES.map((date) => {
+    const obs = FACTS[date]?.[key];
+    if (!obs)
+      return NIL;
+    const q = obs.q ?? "n";
+    return {
+      v: round2((obs.low + obs.high) / 2),
+      band: [obs.low, obs.high],
+      q,
+      note: { k: "obs", date, metric: key },
+      detach: isDetached(q)
+    };
+  });
+}
+var strikers = projectDaily("strikers").map((p) => ({
+  ...p,
+  detach: false
+}));
+function projectPolicingDaily() {
+  return DATES.map((date) => {
+    const dep = DEPLOYMENT[date];
+    if (!dep)
+      return NIL;
+    const [lo2, hi2] = costBand(dep);
+    const q = dep.q ?? "n";
+    return {
+      v: round2((lo2 + hi2) / 2),
+      band: [round2(lo2), round2(hi2)],
+      q,
+      note: { k: "policing", low: dep.low, high: dep.high, date },
+      detach: isDetached(q)
+    };
+  });
+}
+function projectPolicingCumulative() {
+  let lo2 = 0;
+  let hi2 = 0;
+  let days = 0;
+  let started = false;
+  return DATES.map((date) => {
+    const dep = DEPLOYMENT[date];
+    if (dep) {
+      const [a, b] = costBand(dep);
+      lo2 += a;
+      hi2 += b;
+      days++;
+      started = true;
+    }
+    if (!started)
+      return NIL;
+    return {
+      v: round2((lo2 + hi2) / 2),
+      band: [round2(lo2), round2(hi2)],
+      q: "e",
+      note: { k: "cumulative", days, added: Boolean(dep) },
+      detach: false
+      // always a line; its band is shaded, not barred
+    };
+  });
+}
+function projectForcesStock() {
+  return DATES.map((date) => {
+    const pub = FORCES_STOCK[date];
+    if (pub) {
+      return {
+        v: round2((pub.low + pub.high) / 2),
+        band: [pub.low, pub.high],
+        q: "c",
+        note: { k: "obs", date, metric: "forcesInjuredStock" },
+        detach: false
+      };
+    }
+    const der = FORCES_STOCK_DERIVED[date];
+    if (der) {
+      return {
+        v: round2((der.low + der.high) / 2),
+        band: [der.low, der.high],
+        q: "e",
+        note: { k: "obs", date, metric: "forcesInjuredStock" },
+        detach: false
+      };
+    }
+    return NIL;
+  });
+}
+var DAILY = {
+  turnout: projectDaily("turnout"),
+  strikers,
+  arrests: projectDaily("arrests"),
+  forcesInjured: projectDaily("forcesInjured"),
+  forcesInjuredStock: projectForcesStock(),
+  protesterInjured: projectDaily("protesterInjured"),
+  damagesCost: projectDaily("damagesCost"),
+  blockades: projectDaily("blockades"),
+  policing: projectPolicingDaily(),
+  policingCumulative: projectPolicingCumulative()
+};
 
 // ../Dataset/dist/data/aggregate.js
 function aggregate(key, op) {
@@ -12868,22 +12695,6 @@ var POLICING_WITH_AERIAL = {
   cumulative: withAerial(DAILY.policingCumulative, "cumulative")
 };
 
-// ../Dataset/dist/data/policing.js
-var DEPLOYMENT = {
-  /* September deployment is an ASSUMPTION … (verbatim) */
-};
-var FORCES_STOCK = {
-  /* … */
-};
-var FORCES_STOCK_DERIVED = {
-  /* … */
-};
-var RATE = { low: 136, high: 1133 };
-var costBand = (dep) => [
-  dep.low * RATE.low / 1e6,
-  dep.high * RATE.high / 1e6
-];
-
 // ../Dataset/dist/data/population.js
 var POPULATION = {
   /* 1968 has one base only. INSEE, RP1968 in the 1 January 2026 geography:
@@ -12940,106 +12751,6 @@ function pctOfValue(v, pop) {
   return v / d * 100;
 }
 
-// ../Dataset/dist/data/projections.js
-function projectDaily(key) {
-  return DATES.map((date) => {
-    const obs = FACTS[date]?.[key];
-    if (!obs)
-      return NIL;
-    const q = obs.q ?? "n";
-    return {
-      v: round2((obs.low + obs.high) / 2),
-      band: [obs.low, obs.high],
-      q,
-      note: { k: "obs", date, metric: key },
-      detach: isDetached(q)
-    };
-  });
-}
-var strikers = projectDaily("strikers").map((p) => ({
-  ...p,
-  detach: false
-}));
-function projectPolicingDaily() {
-  return DATES.map((date) => {
-    const dep = DEPLOYMENT[date];
-    if (!dep)
-      return NIL;
-    const [lo2, hi2] = costBand(dep);
-    const q = dep.q ?? "n";
-    return {
-      v: round2((lo2 + hi2) / 2),
-      band: [round2(lo2), round2(hi2)],
-      q,
-      note: { k: "policing", low: dep.low, high: dep.high, date },
-      detach: isDetached(q)
-    };
-  });
-}
-function projectPolicingCumulative() {
-  let lo2 = 0;
-  let hi2 = 0;
-  let days = 0;
-  let started = false;
-  return DATES.map((date) => {
-    const dep = DEPLOYMENT[date];
-    if (dep) {
-      const [a, b] = costBand(dep);
-      lo2 += a;
-      hi2 += b;
-      days++;
-      started = true;
-    }
-    if (!started)
-      return NIL;
-    return {
-      v: round2((lo2 + hi2) / 2),
-      band: [round2(lo2), round2(hi2)],
-      q: "e",
-      note: { k: "cumulative", days, added: Boolean(dep) },
-      detach: false
-      // always a line; its band is shaded, not barred
-    };
-  });
-}
-function projectForcesStock() {
-  return DATES.map((date) => {
-    const pub = FORCES_STOCK[date];
-    if (pub) {
-      return {
-        v: round2((pub.low + pub.high) / 2),
-        band: [pub.low, pub.high],
-        q: "c",
-        note: { k: "obs", date, metric: "forcesInjuredStock" },
-        detach: false
-      };
-    }
-    const der = FORCES_STOCK_DERIVED[date];
-    if (der) {
-      return {
-        v: round2((der.low + der.high) / 2),
-        band: [der.low, der.high],
-        q: "e",
-        note: { k: "obs", date, metric: "forcesInjuredStock" },
-        detach: false
-      };
-    }
-    return NIL;
-  });
-}
-var DAILY = {
-  turnout: projectDaily("turnout"),
-  strikers,
-  arrests: projectDaily("arrests"),
-  forcesInjured: projectDaily("forcesInjured"),
-  forcesInjuredStock: projectForcesStock(),
-  protesterInjured: projectDaily("protesterInjured"),
-  damagesCost: projectDaily("damagesCost"),
-  blockades: projectDaily("blockades"),
-  policing: projectPolicingDaily(),
-  policingCumulative: projectPolicingCumulative()
-};
-
 // ../Dataset/dist/data/student-weeks.js
 var STUDENT_WEEKS = WEEKS.map((week, idx) => {
   const out = {
@@ -13064,6 +12775,831 @@ var STUDENT_WEEKS = WEEKS.map((week, idx) => {
   }
   return out;
 });
+
+// ../Dataset/dist/data/casualties/inputs.js
+var CRS_OCTOBER = {
+  /** Médiapart 13 Nov 2026, internal CRS file, October 2026, CRS only. */
+  declared: 1233,
+  light: 1167,
+  /** The file has two categories and no "serious" one. */
+  serious: null,
+  sources: ["mediapart-crs-blesses-1311"]
+};
+var FORCES = {
+  /** Ministry running totals (FORCES_STOCK in data.ts). */
+  stock30Sep: 83,
+  stock14Oct: 937,
+  stock17Oct: 1144,
+  serious17Oct: 7,
+  stock31Oct: { lo: 1527, hi: 1570 },
+  movement: 1580,
+  increments: {
+    to14Oct: 854,
+    week12oct: 207,
+    week19oct: 267,
+    week26oct: 116,
+    week2nov: 53
+  },
+  sources: ["bfmtv-bilan-17oct"]
+};
+var THINES = {
+  seriousTo5Nov: 78,
+  deathsTo5Nov: 1,
+  seriousAt17Oct: 54,
+  // 5 eye + 5 cranio-facial + 2 amputations + 42 other
+  sources: ["lemonde-blessures-0511"]
+};
+var CIVILIANS_24OCT = {
+  injured: 150,
+  serious: 3,
+  sources: []
+};
+var TOULOUSE = {
+  treated: 130,
+  date: "2026-10-17",
+  sources: ["mediacites-toulouse-17oct"]
+};
+var EDUCATION = { d29: 31, d30: 119, d01: 235, d05: 300 };
+
+// ../Dataset/dist/data/casualties/estimate.js
+var round3 = Math.round;
+var n = (x) => x.toLocaleString("en-GB");
+var NOT_LIGHT = CRS_OCTOBER.declared - CRS_OCTOBER.light;
+var POST_PEAK = FORCES.movement - FORCES.stock17Oct;
+var NOT_LIGHT_SHARE = NOT_LIGHT / CRS_OCTOBER.declared;
+var SERIOUS_SHARE_17 = FORCES.serious17Oct / FORCES.stock17Oct;
+var OCTOBER_ALL_FORCES = {
+  lo: FORCES.stock31Oct.lo - FORCES.stock30Sep,
+  hi: FORCES.stock31Oct.hi - FORCES.stock30Sep
+};
+var SERIOUS_MOVEMENT = {
+  /* Published: 7 serious at the 17 Oct consolidation. A count, not a rate. */
+  lo: FORCES.serious17Oct,
+  /* Rate transfer: 1,580 × (7 / 1,144) = 9.67 → 10. Assumes the 0.61 %
+     severity measured at the peak held all movement. Whether it did cannot be
+     checked: the ministry published a severity split once, at the peak. */
+  central: round3(FORCES.movement * SERIOUS_SHARE_17),
+  /* Ceiling: 7 + 436 × (66 / 1,233) = 7 + 23 = 30. Applies the not-light rate
+     to the injuries after the peak as though every one could have been
+     serious. It is the largest number the data does not exclude, not a
+     plausible one: a ceiling, not an estimate. */
+  hi: FORCES.serious17Oct + round3(POST_PEAK * NOT_LIGHT_SHARE)
+};
+var NOT_LIGHT_MOVEMENT = {
+  /** 66 is the CRS October actual, a subset of the movement total. */
+  lo: NOT_LIGHT,
+  /** Rate transfer: 1,580 × 5.35 % = 84.6 → 85. */
+  central: round3(FORCES.movement * NOT_LIGHT_SHARE),
+  hi: round3(FORCES.movement * NOT_LIGHT_SHARE)
+};
+var MIX = [
+  {
+    id: "light",
+    lo: FORCES.movement - NOT_LIGHT_MOVEMENT.hi,
+    // 1,495
+    hi: FORCES.movement - NOT_LIGHT_MOVEMENT.lo,
+    // 1,514
+    central: FORCES.movement - NOT_LIGHT_MOVEMENT.hi
+    // 1,495
+  },
+  {
+    id: "residual",
+    lo: NOT_LIGHT_MOVEMENT.lo - SERIOUS_MOVEMENT.hi,
+    // 36
+    hi: NOT_LIGHT_MOVEMENT.hi - SERIOUS_MOVEMENT.lo,
+    // 78
+    central: NOT_LIGHT_MOVEMENT.hi - SERIOUS_MOVEMENT.central
+    // 75
+  },
+  {
+    id: "serious",
+    lo: SERIOUS_MOVEMENT.lo,
+    // 7
+    hi: SERIOUS_MOVEMENT.hi,
+    // 30
+    central: SERIOUS_MOVEMENT.central
+    // 10
+  }
+];
+var LIGHT_CENTRAL_SHARE = MIX[0].central / FORCES.movement;
+var RATIO = {
+  lo: 5,
+  mid: round3(TOULOUSE.treated / THINES.seriousAt17Oct),
+  hi: 30
+};
+var SENSITIVITY = [5, 10, 13, 20, 30].map((ratio) => ({
+  ratio,
+  at17Oct: THINES.seriousAt17Oct * ratio,
+  movement: THINES.seriousTo5Nov * ratio
+}));
+var ESTIMATES = [
+  {
+    id: "E1",
+    key: "crsSeriousShare",
+    population: "forces",
+    unit: "share",
+    value: { lo: 0, hi: NOT_LIGHT_SHARE },
+    loEdge: "bound",
+    hiEdge: "ceiling",
+    arithmetic: `0 \xF7 ${n(CRS_OCTOBER.declared)} = 0%; ${n(NOT_LIGHT)} \xF7 ${n(CRS_OCTOBER.declared)} = 5.35%`,
+    assumptions: ["seriousSubsetOfNotLight"],
+    sources: ["mediapart-crs-blesses-1311"],
+    status: "publishable",
+    flag: "e"
+  },
+  {
+    id: "E2",
+    key: "forcesSeriousShare17",
+    population: "forces",
+    unit: "share",
+    value: { lo: SERIOUS_SHARE_17, hi: SERIOUS_SHARE_17 },
+    loEdge: "published",
+    hiEdge: "published",
+    arithmetic: `${n(FORCES.serious17Oct)} \xF7 ${n(FORCES.stock17Oct)} = 0.61%`,
+    assumptions: [],
+    sources: ["bfmtv-bilan-17oct"],
+    status: "publishable",
+    flag: "n"
+  },
+  {
+    id: "E3",
+    key: "forcesSeriousCount",
+    population: "forces",
+    unit: "count",
+    value: SERIOUS_MOVEMENT,
+    loEdge: "published",
+    hiEdge: "ceiling",
+    arithmetic: `${n(FORCES.serious17Oct)}; ${n(FORCES.movement)} \xD7 (7 \xF7 ${n(FORCES.stock17Oct)}) = ${SERIOUS_MOVEMENT.central}; 7 + ${n(POST_PEAK)} \xD7 (${n(NOT_LIGHT)} \xF7 ${n(CRS_OCTOBER.declared)}) = ${SERIOUS_MOVEMENT.hi}`,
+    assumptions: ["rateTransfer", "seriousSubsetOfNotLight"],
+    sources: ["bfmtv-bilan-17oct", "mediapart-crs-blesses-1311"],
+    status: "publishable",
+    flag: "e"
+  },
+  {
+    id: "E4",
+    key: "forcesNotLightCount",
+    population: "forces",
+    unit: "count",
+    value: NOT_LIGHT_MOVEMENT,
+    loEdge: "bound",
+    hiEdge: "transfer",
+    arithmetic: `${n(NOT_LIGHT)}; ${n(FORCES.movement)} \xD7 (${n(NOT_LIGHT)} \xF7 ${n(CRS_OCTOBER.declared)}) = ${NOT_LIGHT_MOVEMENT.hi}`,
+    assumptions: ["rateTransfer", "crsDominatesOctober"],
+    sources: ["mediapart-crs-blesses-1311"],
+    status: "publishable",
+    flag: "e"
+  },
+  {
+    id: "E5",
+    key: "crsShareOfForces",
+    population: "forces",
+    unit: "share",
+    value: {
+      lo: CRS_OCTOBER.declared / OCTOBER_ALL_FORCES.hi,
+      hi: CRS_OCTOBER.declared / OCTOBER_ALL_FORCES.lo
+    },
+    loEdge: "bound",
+    hiEdge: "bound",
+    arithmetic: `${n(CRS_OCTOBER.declared)} \xF7 ${n(OCTOBER_ALL_FORCES.hi)} \u2026 ${n(CRS_OCTOBER.declared)} \xF7 ${n(OCTOBER_ALL_FORCES.lo)}`,
+    assumptions: ["crsDominatesOctober", "declarationsNotPersons"],
+    sources: ["mediapart-crs-blesses-1311"],
+    status: "note",
+    flag: "e"
+  },
+  {
+    id: "E6",
+    key: "seriousShareMovement",
+    population: "all",
+    unit: "share",
+    value: {
+      lo: SERIOUS_MOVEMENT.lo / FORCES.movement,
+      hi: SERIOUS_MOVEMENT.hi / FORCES.movement,
+      central: SERIOUS_MOVEMENT.central / FORCES.movement
+    },
+    loEdge: "published",
+    hiEdge: "ceiling",
+    arithmetic: `7 \xF7 ${n(FORCES.movement)} = 0.44%; 30 \xF7 ${n(FORCES.movement)} = 1.90%`,
+    assumptions: ["rateTransfer", "seriousSubsetOfNotLight"],
+    sources: ["bfmtv-bilan-17oct", "mediapart-crs-blesses-1311"],
+    status: "publishable",
+    flag: "e"
+  },
+  {
+    /* A register count with no denominator: 79 documented cases is a floor.
+       The band is [79, 79] only because the renderer has no infinity, and
+       hiEdge "unbounded" is what says the top is unknown. These two numbers
+       are not a range and must never be printed as "79 to 79". */
+    id: "E7",
+    key: "protestersSeriousFloor",
+    population: "protesters",
+    unit: "count",
+    value: {
+      lo: THINES.seriousTo5Nov + THINES.deathsTo5Nov,
+      hi: THINES.seriousTo5Nov + THINES.deathsTo5Nov
+    },
+    loEdge: "floor",
+    hiEdge: "unbounded",
+    arithmetic: `${n(THINES.seriousTo5Nov)} + ${n(THINES.deathsTo5Nov)} = ${n(THINES.seriousTo5Nov + THINES.deathsTo5Nov)}`,
+    assumptions: ["registerSelection"],
+    sources: ["lemonde-blessures-0511"],
+    status: "publishable",
+    flag: "f"
+  },
+  {
+    id: "E8",
+    key: "protestersSeriousShare",
+    population: "protesters",
+    unit: "share",
+    value: { lo: 1 / RATIO.hi, hi: 1 / RATIO.lo },
+    loEdge: "bound",
+    hiEdge: "bound",
+    arithmetic: `1 \xF7 ${RATIO.hi} = 3.3%; 1 \xF7 ${RATIO.lo} = 20% (r \u2208 [${RATIO.lo}, ${RATIO.hi}])`,
+    assumptions: ["treatedPerSerious", "registerSelection"],
+    sources: ["lemonde-blessures-0511", "mediacites-toulouse-17oct"],
+    status: "note",
+    flag: "e"
+  },
+  {
+    id: "E9",
+    key: "bystandersSerious",
+    population: "bystanders",
+    unit: "count",
+    why: "notEstimable",
+    loEdge: "unbounded",
+    hiEdge: "unbounded",
+    arithmetic: "no count exists: the register tracks protesters only, and the ministry counts carry no severity tag",
+    assumptions: ["registerSelection"],
+    sources: [],
+    status: "gap"
+  }
+];
+var CIVILIAN_PROXY_SHARE = CIVILIANS_24OCT.serious / CIVILIANS_24OCT.injured;
+
+// ../Dataset/dist/data/casualties/cases.js
+var CASES = [
+  {
+    id: "forcesAccidental",
+    side: "forces",
+    kind: "accidental",
+    count: { s: "c", n: 4 },
+    cases: ["givors", "crsWrist", "crsAnkle"]
+  },
+  {
+    id: "forcesConflictual",
+    side: "forces",
+    kind: "conflictual",
+    count: { s: "x", why: "causeUnknown" },
+    cases: ["helmet", "groin2023"]
+  },
+  {
+    id: "protesterConflictual",
+    side: "protesters",
+    kind: "conflictual",
+    count: { s: "x", why: "causeUnknown" },
+    cases: ["mael", "alaric", "eyes"]
+  },
+  {
+    id: "protesterAccidental",
+    side: "protesters",
+    kind: "accidental",
+    count: { s: "x", why: "noneDocumented" },
+    cases: []
+  },
+  {
+    id: "sainteSoline",
+    side: "forces",
+    kind: "accidental",
+    count: { s: "c", n: 29 },
+    cases: ["sainteSoline"],
+    reference: true
+  }
+];
+
+// ../Dataset/dist/data/casualties/levels.js
+var SEVERITY_LEVELS = [
+  {
+    /* 1,167 / 1,233 = 94.65% → the 94.6% the file itself states. Serious is
+       bounded 0–66 because serious ⊆ not-light and the file has no class of
+       its own: that is a structural bound, not a count. */
+    id: "crsOctober",
+    population: "forces",
+    total: { s: "n", v: 1233 },
+    serious: { s: "r", lo: 0, hi: NOT_LIGHT, d: true },
+    light: { s: "n", v: 1167 },
+    other: { s: "n", v: NOT_LIGHT, d: true },
+    sources: ["mediapart-crs-blesses-1311"]
+  },
+  {
+    /* Published level at the peak: 7 serious out of 1,144. */
+    id: "forcesPeak",
+    population: "forces",
+    total: { s: "n", v: FORCES.stock17Oct },
+    serious: { s: "n", v: FORCES.serious17Oct },
+    light: { s: "x", why: "notPublished" },
+    other: { s: "x", why: "notPublished" },
+    sources: ["bfmtv-bilan-17oct"]
+  },
+  {
+    /* The movement total, decomposed in estimate.ts (E3, E4, E6). */
+    id: "forcesMovement",
+    population: "forces",
+    total: { s: "n", v: FORCES.movement },
+    serious: {
+      s: "r",
+      lo: SERIOUS_MOVEMENT.lo,
+      hi: SERIOUS_MOVEMENT.hi,
+      d: true
+    },
+    light: {
+      s: "r",
+      lo: FORCES.movement - NOT_LIGHT_MOVEMENT.hi,
+      hi: FORCES.movement - NOT_LIGHT_MOVEMENT.lo,
+      d: true
+    },
+    other: {
+      s: "r",
+      lo: NOT_LIGHT_MOVEMENT.lo - SERIOUS_MOVEMENT.hi,
+      hi: NOT_LIGHT_MOVEMENT.hi - SERIOUS_MOVEMENT.lo,
+      d: true
+    },
+    sources: ["bfmtv-bilan-17oct", "mediapart-crs-blesses-1311"]
+  },
+  {
+    /* A register, not a rate: no total has ever been published, so no share can
+       exist on this row. The serious cell is a documented floor. */
+    id: "protesters",
+    population: "protesters",
+    participation: "participating",
+    total: { s: "x", why: "noDenominator" },
+    serious: { s: "f", v: THINES_FLOOR() },
+    light: { s: "x", why: "noDenominator" },
+    other: { s: "x", why: "registerOnly" },
+    sources: ["lemonde-blessures-0511"]
+  }
+];
+function THINES_FLOOR() {
+  return 79;
+}
+var SEVERITY_WEEKS = [
+  {
+    id: "week12oct",
+    population: "forces",
+    total: { s: "n", v: 207, d: true },
+    serious: { s: "n", v: 7 },
+    light: { s: "x", why: "notPublished" },
+    other: { s: "x", why: "notPublished" },
+    sources: ["bfmtv-bilan-17oct"]
+  },
+  {
+    id: "week19oct",
+    population: "forces",
+    total: { s: "n", v: 267, d: true },
+    serious: { s: "x", why: "notPublished" },
+    light: { s: "x", why: "notPublished" },
+    other: { s: "x", why: "notPublished" },
+    sources: ["bfmtv-bilan-17oct"]
+  },
+  {
+    id: "week26oct",
+    population: "forces",
+    total: { s: "n", v: 116, d: true },
+    serious: { s: "x", why: "notPublished" },
+    light: { s: "x", why: "notPublished" },
+    other: { s: "x", why: "notPublished" },
+    sources: ["bfmtv-bilan-17oct"]
+  },
+  {
+    id: "week2nov",
+    population: "forces",
+    total: { s: "n", v: 53 },
+    serious: { s: "x", why: "notPublished" },
+    light: { s: "x", why: "notPublished" },
+    other: { s: "x", why: "notPublished" },
+    sources: ["bfmtv-bilan-17oct"]
+  },
+  {
+    id: "crsOctober",
+    population: "forces",
+    total: { s: "n", v: 1233 },
+    serious: { s: "r", lo: 0, hi: NOT_LIGHT, d: true },
+    light: { s: "n", v: 1167 },
+    other: { s: "n", v: NOT_LIGHT, d: true },
+    sources: ["mediapart-crs-blesses-1311"]
+  }
+];
+
+// ../Dataset/dist/data/casualties/universe.js
+var POPULATION_ORDER = [
+  "forces",
+  "protesters",
+  "bystanders",
+  "educationDeclared",
+  "mixed"
+];
+var OBSERVATIONS = [
+  {
+    id: "edu29",
+    date: "2026-09-29",
+    population: "educationDeclared",
+    participation: "unknown",
+    selection: "official",
+    window: "day",
+    count: { s: "n", v: EDUCATION.d29 },
+    sources: []
+  },
+  {
+    id: "edu30",
+    date: "2026-09-30",
+    population: "educationDeclared",
+    participation: "unknown",
+    selection: "official",
+    window: "movement",
+    count: { s: "n", v: EDUCATION.d30, d: true },
+    sources: []
+  },
+  {
+    id: "edu01",
+    date: "2026-10-01",
+    population: "educationDeclared",
+    participation: "unknown",
+    selection: "official",
+    window: "movement",
+    count: { s: "n", v: EDUCATION.d01, d: true },
+    sources: []
+  },
+  {
+    id: "edu05",
+    date: "2026-10-05",
+    population: "educationDeclared",
+    participation: "unknown",
+    selection: "official",
+    window: "movement",
+    count: { s: "n", v: EDUCATION.d05 },
+    sources: []
+  },
+  {
+    /* 1 proviseur, 1 parent d'élève, 1 agent de la Région — the repo's own
+       comment says these are "not protesters". Moved out of protesterInjured. */
+    id: "reg12",
+    date: "2026-10-12",
+    population: "bystanders",
+    participation: "non-participating",
+    selection: "regional",
+    window: "day",
+    count: { s: "n", v: 3, regional: true },
+    sources: []
+  },
+  {
+    /* 54 serious + 1 death; register only, so no denominator exists. */
+    id: "thines17",
+    date: "2026-10-17",
+    population: "protesters",
+    participation: "participating",
+    selection: "register",
+    window: "movement",
+    count: { s: "f", v: THINES.seriousAt17Oct + THINES.deathsTo5Nov },
+    sources: THINES.sources
+  },
+  {
+    id: "toulouse17",
+    date: TOULOUSE.date,
+    population: "protesters",
+    participation: "participating",
+    selection: "treated",
+    window: "day",
+    count: { s: "n", v: TOULOUSE.treated },
+    sources: TOULOUSE.sources
+  },
+  {
+    id: "civ24",
+    date: "2026-10-24",
+    population: "mixed",
+    participation: "unknown",
+    selection: "official",
+    window: "day",
+    count: { s: "n", v: CIVILIANS_24OCT.injured },
+    sources: CIVILIANS_24OCT.sources
+  },
+  {
+    id: "thines05",
+    date: "2026-11-05",
+    population: "protesters",
+    participation: "participating",
+    selection: "register",
+    window: "movement",
+    count: { s: "f", v: THINES.seriousTo5Nov + THINES.deathsTo5Nov },
+    sources: THINES.sources
+  },
+  {
+    id: "legal05",
+    date: "2026-11-05",
+    population: "protesters",
+    participation: "participating",
+    selection: "legal",
+    window: "movement",
+    count: { s: "f", v: 18 },
+    sources: []
+  }
+];
+var BYSTANDER_CELLS = {
+  documented: { s: "n", v: 3, regional: true },
+  serious: { s: "x", why: "notEstimable" },
+  national: { s: "x", why: "notPublished" }
+};
+var FORCE_CARRIER = {
+  total: FORCES.movement,
+  declared: FORCES.stock17Oct,
+  serious: FORCES.serious17Oct
+};
+
+// ../Dataset/dist/data/episodes/bloquons.js
+var BLOQUONS = {
+  id: "bt",
+  start: "2025-09-10",
+  end: "2025-10-05",
+  weeks: [
+    {
+      w: 0,
+      from: "2025-09-08",
+      to: "2025-09-14",
+      p: [175e3, 25e4],
+      a: 540,
+      flag: { p: "c" }
+    },
+    {
+      w: 1,
+      from: "2025-09-15",
+      to: "2025-09-21",
+      p: [5e5, 1e6],
+      a: 309,
+      f: 26,
+      i: 11
+    },
+    { w: 3, from: "2025-09-29", to: "2025-10-05", p: [195e3, 6e5] }
+  ]
+};
+
+// ../Dataset/dist/data/episodes/cpe.js
+var CPE = {
+  id: "cpe",
+  start: "2006-02-06",
+  end: "2006-04-16",
+  weeks: [
+    /* 7 Feb: first national action day, 187 demonstrations. */
+    { w: 0, from: "2006-02-06", to: "2006-02-12", p: [2e5, 4e5] },
+    /* 7 Mar: ">1 million" claimed; ~38 universities on strike by 9 Mar. */
+    { w: 4, from: "2006-03-06", to: "2006-03-12", p: [4e5, 1e6] },
+    {
+      /* 16 Mar: 250,000 (Le Monde) / 447,500 (police) — the ministry's
+         247,500 is the same police count rounded differently.
+         18 Mar: 500,000 ministry / 1.5M organisers; Paris 80,000–350,000.
+         Enforcement, Paris only: 156 (ministry) / 167 (organisers) arrests;
+         34 forces injured.
+         Protesters injured 70 = 18 (16 Mar) + 52 (18 Mar), Paris only —
+         flagged "e" because it is a two-day Paris sum inside a weekly row.
+         14 Mar (same week, second action day): 41,000 (police source). */
+      w: 5,
+      from: "2006-03-13",
+      to: "2006-03-19",
+      p: [5e5, 15e5],
+      a: [156, 167],
+      f: 34,
+      i: 70,
+      flag: { i: "e" }
+    },
+    {
+      /* 23 Mar: 21 universities fully blocked, 67 striking or blocked.
+         630 arrests, 90 forces injured. */
+      w: 6,
+      from: "2006-03-20",
+      to: "2006-03-26",
+      p: [22e4, 45e4],
+      a: 630,
+      f: 90
+    },
+    /* 28 Mar: 4th national action day, 600 arrests. */
+    {
+      w: 7,
+      from: "2006-03-27",
+      to: "2006-04-02",
+      p: [1055e3, 271e4],
+      a: 600
+    },
+    /* 4 Apr: peak day of the episode. */
+    { w: 8, from: "2006-04-03", to: "2006-04-09", p: [1e6, 31e5] },
+    /* CPE scrapped 10 Apr; the movement splits, Easter follows. */
+    { w: 9, from: "2006-04-10", to: "2006-04-16" }
+  ]
+};
+
+// ../Dataset/dist/data/episodes/gilets-jaunes.js
+var GJ_ACTS = [
+  [0, "2018-11-17", 287700],
+  [1, "2018-11-24", 166e3],
+  [2, "2018-12-01", 136e3],
+  [3, "2018-12-08", 136e3],
+  [4, "2018-12-15", 66e3],
+  [5, "2018-12-22", 38600],
+  [6, "2018-12-29", 32e3],
+  [7, "2019-01-05", 5e4],
+  [8, "2019-01-12", 84e3],
+  [9, "2019-01-19", 84e3],
+  [10, "2019-01-26", 69e3],
+  [11, "2019-02-02", 58600],
+  [12, "2019-02-09", 51400],
+  [13, "2019-02-16", 41500],
+  [14, "2019-02-23", 46600],
+  [15, "2019-03-02", 39300],
+  [16, "2019-03-09", 28600],
+  [17, "2019-03-16", 32300],
+  [18, "2019-03-23", 40500],
+  [19, "2019-03-30", 33700],
+  [20, "2019-04-06", 22300],
+  [21, "2019-04-13", 31e3],
+  [22, "2019-04-20", 27900],
+  [23, "2019-04-27", 23600],
+  [24, "2019-05-04", 18900],
+  [25, "2019-05-11", 18600],
+  [26, "2019-05-18", 15500],
+  [27, "2019-05-25", 12500],
+  [28, "2019-06-01", 9500],
+  [29, "2019-06-08", 10300],
+  [30, "2019-06-15", 7e3],
+  [31, "2019-06-22", 11800],
+  [32, "2019-06-29", 5800],
+  [43, "2019-09-07", 7e3]
+];
+var GJ_EXTRA = {
+  0: { a: [117, 73], flag: { a: "f" } },
+  1: { a: [101, 103], f: 5, i: 19, flag: { i: "e" } },
+  2: {},
+  3: { a: 1385 }
+};
+var GILETS = {
+  id: "gj",
+  start: "2018-11-12",
+  end: "2019-09-09",
+  weeks: GJ_ACTS.map(([w, date, n2]) => ({
+    w,
+    from: date,
+    to: date,
+    act: w + 1,
+    p: n2,
+    ...GJ_EXTRA[w] ?? {},
+    flag: {
+      ...w === 0 ? { p: "c" } : {},
+      ...GJ_EXTRA[w]?.flag ?? {}
+    }
+  }))
+};
+
+// ../Dataset/dist/data/episodes/mai68.js
+var MAY68 = {
+  id: "may68",
+  start: "1968-04-29",
+  end: "1968-06-30",
+  weeks: [
+    /* 1 May, République → Bastille: 25,000 (police) vs 100,000 (CGT). */
+    { w: 0, from: "1968-04-29", to: "1968-05-05", p: [25e3, 1e5] },
+    {
+      /* 6 May: >20,000 to the Sorbonne; 10 May: 20,000 (12,000 police).
+         Night of 10–11 May: 6,255 police, 125 cars damaged / 63 burnt,
+         469 arrests. The 891 high adds 422 early-May arrests.
+         Forces: 300+ on 6 May, 247 on 10–11 May.
+         Protesters injured: ≥100 — no national count was published. */
+      w: 1,
+      from: "1968-05-06",
+      to: "1968-05-12",
+      p: 2e4,
+      a: [469, 891],
+      f: [247, 300],
+      i: 100,
+      flag: { i: "f" }
+    },
+    /* 13 May, Paris — peak of the episode: prefecture 230,000 · ORTF 171,000
+       · surface-area estimate 500,000 · unions 1,000,000. */
+    { w: 2, from: "1968-05-13", to: "1968-05-19", p: [23e4, 1e6] },
+    {
+      /* 25 May: 1,000+ arrests (floor), ~9M strikers, ORTF walkout.
+         887 injured — from the English-Wikipedia infobox, attributed to 25 May
+         only. Weak provenance, flagged "e". */
+      w: 3,
+      from: "1968-05-20",
+      to: "1968-05-26",
+      a: 1e3,
+      i: 887,
+      flag: { a: "f", i: "e" }
+    },
+    /* 27 May Grenelle protocol · Charléty meeting. */
+    { w: 4, from: "1968-05-27", to: "1968-06-02" },
+    /* 4 Jun partial return to work · 7 Jun Renault Flins clashes. */
+    { w: 5, from: "1968-06-03", to: "1968-06-09" },
+    /* 10 Jun: Tautin killed · 11 Jun: 2 killed at Sochaux · 12 Jun:
+       demonstrations banned nationwide. */
+    { w: 6, from: "1968-06-10", to: "1968-06-16" },
+    /* 23 Jun legislative elections. */
+    { w: 7, from: "1968-06-17", to: "1968-06-23" },
+    /* Crisis closes 30 Jun. */
+    { w: 8, from: "1968-06-24", to: "1968-06-30" }
+  ]
+};
+
+// ../Dataset/dist/data/episodes/nahel.js
+var NAHEL = {
+  id: "nahel",
+  start: "2023-06-27",
+  end: "2023-07-09",
+  weeks: [
+    {
+      w: 0,
+      from: "2023-06-26",
+      to: "2023-07-02",
+      p: [8e3, 5e4],
+      a: 3354,
+      f: 722,
+      flag: { p: "e" }
+    },
+    { w: 1, from: "2023-07-03", to: "2023-07-09", a: 108, f: 1 }
+  ]
+};
+
+// ../Dataset/dist/data/episodes/retraites.js
+var PENSIONS = {
+  id: "pensions",
+  start: "2023-01-19",
+  end: "2023-06-08",
+  weeks: [
+    { w: 0, from: "2023-01-16", to: "2023-01-22", p: [112e4, 2e6] },
+    { w: 2, from: "2023-01-30", to: "2023-02-05", p: [127e4, 28e5] },
+    { w: 3, from: "2023-02-06", to: "2023-02-12", p: [963e3, 25e5] },
+    { w: 4, from: "2023-02-13", to: "2023-02-19", p: [44e4, 13e5] },
+    { w: 7, from: "2023-03-06", to: "2023-03-12", p: [128e4, 35e5] },
+    { w: 8, from: "2023-03-13", to: "2023-03-19", p: [48e4, 17e5] },
+    {
+      /* 23 Mar: the flashpoint — 49.3 passed, two failed no-confidence votes.
+         Ministry: up to 1.08M nationwide / 119,000 Paris; CGT 3.5M / 800,000.
+         Darmanin's consolidated day: 457 arrests, 441 security forces injured.
+         An earlier evening statement had given 80+ arrests / 123 police hurt,
+         so 457/441 is the final figure and the only one plotted. */
+      w: 9,
+      from: "2023-03-20",
+      to: "2023-03-26",
+      p: [1089e3, 35e5],
+      a: 457,
+      f: 441
+    },
+    {
+      /* 27 Mar: the eleventh day of mobilisation, after the 5 April talks
+         failed. Expected 600,000–800,000 nationwide (60,000–90,000 Paris).
+         Interior Ministry: 111 arrests, 154 police officers injured. */
+      w: 11,
+      from: "2023-04-03",
+      to: "2023-04-09",
+      p: [57e4, 2e6],
+      a: 111,
+      f: 154
+    },
+    { w: 10, from: "2023-03-27", to: "2023-04-02", p: [74e4, 2e6] },
+    { w: 12, from: "2023-04-10", to: "2023-04-16", p: [38e4, 15e5] },
+    { w: 16, from: "2023-05-01", to: "2023-05-07", p: [782e3, 23e5] },
+    { w: 20, from: "2023-06-05", to: "2023-06-08", p: [281e3, 9e5] }
+  ]
+};
+
+// ../Dataset/dist/data/episodes/students.js
+var STUDENTS = {
+  id: "students26",
+  start: STUDENT_WEEKS[0].key,
+  end: END,
+  // the window's last day, not the Sunday of the final week
+  weeks: STUDENT_WEEKS.map((wk, w) => {
+    const row = { w, from: wk.key, to: wk.end, partial: wk.touchesEdge };
+    for (const m of METRICS) {
+      const band = wk[m];
+      if (band)
+        row[m] = band;
+      const flag = wk.flags[m];
+      if (flag && flag !== "n")
+        (row.flag ??= {})[m] = flag;
+      const ref = wk.notes[m];
+      if (ref)
+        (row.noteRef ??= {})[m] = ref;
+    }
+    return row;
+  })
+};
+
+// ../Dataset/dist/data/episodes/index.js
+var EPISODES = [
+  MAY68,
+  CPE,
+  GILETS,
+  NAHEL,
+  PENSIONS,
+  BLOQUONS,
+  STUDENTS
+];
+var ENFORCEMENT_LAST = EPISODES.reduce((last, ep) => ep.weeks.reduce((l, r) => r.a !== void 0 || r.f !== void 0 || r.i !== void 0 ? Math.max(l, r.w) : l, last), 0);
 
 // ../Dataset/dist/data/sources/record.js
 var both = (en, fr) => ({ en, fr });
@@ -13606,417 +14142,6 @@ var SOURCES_BY_GROUP = (() => {
     bucket.sort(byPublicationDate);
   return buckets;
 })();
-
-// ../Dataset/dist/data/casualties/inputs.js
-var CRS_OCTOBER = {
-  /** Médiapart 13 Nov 2026, internal CRS file, October 2026, CRS only. */
-  declared: 1233,
-  light: 1167,
-  /** The file has two categories and no "serious" one. */
-  serious: null,
-  sources: ["mediapart-crs-blesses-1311"]
-};
-var FORCES2 = {
-  /** Ministry running totals (FORCES_STOCK in data.ts). */
-  stock30Sep: 83,
-  stock14Oct: 937,
-  stock17Oct: 1144,
-  serious17Oct: 7,
-  stock31Oct: { lo: 1527, hi: 1570 },
-  movement: 1580,
-  increments: {
-    to14Oct: 854,
-    week12oct: 207,
-    week19oct: 267,
-    week26oct: 116,
-    week2nov: 53
-  },
-  sources: ["bfmtv-bilan-17oct"]
-};
-var THINES2 = {
-  seriousTo5Nov: 78,
-  deathsTo5Nov: 1,
-  seriousAt17Oct: 54,
-  // 5 eye + 5 cranio-facial + 2 amputations + 42 other
-  sources: ["lemonde-blessures-0511"]
-};
-var CIVILIANS_24OCT = {
-  injured: 150,
-  serious: 3,
-  sources: []
-};
-var TOULOUSE = {
-  treated: 130,
-  date: "2026-10-17",
-  sources: ["mediacites-toulouse-17oct"]
-};
-
-// ../Dataset/dist/data/casualties/estimate.js
-var round3 = Math.round;
-var n = (x) => x.toLocaleString("en-GB");
-var NOT_LIGHT = CRS_OCTOBER.declared - CRS_OCTOBER.light;
-var POST_PEAK = FORCES2.movement - FORCES2.stock17Oct;
-var NOT_LIGHT_SHARE = NOT_LIGHT / CRS_OCTOBER.declared;
-var SERIOUS_SHARE_17 = FORCES2.serious17Oct / FORCES2.stock17Oct;
-var OCTOBER_ALL_FORCES = {
-  lo: FORCES2.stock31Oct.lo - FORCES2.stock30Sep,
-  hi: FORCES2.stock31Oct.hi - FORCES2.stock30Sep
-};
-var SERIOUS_MOVEMENT2 = {
-  /* Published: 7 serious at the 17 Oct consolidation. A count, not a rate. */
-  lo: FORCES2.serious17Oct,
-  /* Rate transfer: 1,580 × (7 / 1,144) = 9.67 → 10. Assumes the 0.61 %
-     severity measured at the peak held all movement. Whether it did cannot be
-     checked: the ministry published a severity split once, at the peak. */
-  central: round3(FORCES2.movement * SERIOUS_SHARE_17),
-  /* Ceiling: 7 + 436 × (66 / 1,233) = 7 + 23 = 30. Applies the not-light rate
-     to the injuries after the peak as though every one could have been
-     serious. It is the largest number the data does not exclude, not a
-     plausible one: a ceiling, not an estimate. */
-  hi: FORCES2.serious17Oct + round3(POST_PEAK * NOT_LIGHT_SHARE)
-};
-var NOT_LIGHT_MOVEMENT = {
-  /** 66 is the CRS October actual, a subset of the movement total. */
-  lo: NOT_LIGHT,
-  /** Rate transfer: 1,580 × 5.35 % = 84.6 → 85. */
-  central: round3(FORCES2.movement * NOT_LIGHT_SHARE),
-  hi: round3(FORCES2.movement * NOT_LIGHT_SHARE)
-};
-var MIX2 = [
-  {
-    id: "light",
-    lo: FORCES2.movement - NOT_LIGHT_MOVEMENT.hi,
-    // 1,495
-    hi: FORCES2.movement - NOT_LIGHT_MOVEMENT.lo,
-    // 1,514
-    central: FORCES2.movement - NOT_LIGHT_MOVEMENT.hi
-    // 1,495
-  },
-  {
-    id: "residual",
-    lo: NOT_LIGHT_MOVEMENT.lo - SERIOUS_MOVEMENT2.hi,
-    // 36
-    hi: NOT_LIGHT_MOVEMENT.hi - SERIOUS_MOVEMENT2.lo,
-    // 78
-    central: NOT_LIGHT_MOVEMENT.hi - SERIOUS_MOVEMENT2.central
-    // 75
-  },
-  {
-    id: "serious",
-    lo: SERIOUS_MOVEMENT2.lo,
-    // 7
-    hi: SERIOUS_MOVEMENT2.hi,
-    // 30
-    central: SERIOUS_MOVEMENT2.central
-    // 10
-  }
-];
-var LIGHT_CENTRAL_SHARE = MIX2[0].central / FORCES2.movement;
-var RATIO2 = {
-  lo: 5,
-  mid: round3(TOULOUSE.treated / THINES2.seriousAt17Oct),
-  hi: 30
-};
-var SENSITIVITY2 = [5, 10, 13, 20, 30].map((ratio) => ({
-  ratio,
-  at17Oct: THINES2.seriousAt17Oct * ratio,
-  movement: THINES2.seriousTo5Nov * ratio
-}));
-var ESTIMATES2 = [
-  {
-    id: "E1",
-    key: "crsSeriousShare",
-    population: "forces",
-    unit: "share",
-    value: { lo: 0, hi: NOT_LIGHT_SHARE },
-    loEdge: "bound",
-    hiEdge: "ceiling",
-    arithmetic: `0 \xF7 ${n(CRS_OCTOBER.declared)} = 0%; ${n(NOT_LIGHT)} \xF7 ${n(CRS_OCTOBER.declared)} = 5.35%`,
-    assumptions: ["seriousSubsetOfNotLight"],
-    sources: ["mediapart-crs-blesses-1311"],
-    status: "publishable",
-    flag: "e"
-  },
-  {
-    id: "E2",
-    key: "forcesSeriousShare17",
-    population: "forces",
-    unit: "share",
-    value: { lo: SERIOUS_SHARE_17, hi: SERIOUS_SHARE_17 },
-    loEdge: "published",
-    hiEdge: "published",
-    arithmetic: `${n(FORCES2.serious17Oct)} \xF7 ${n(FORCES2.stock17Oct)} = 0.61%`,
-    assumptions: [],
-    sources: ["bfmtv-bilan-17oct"],
-    status: "publishable",
-    flag: "n"
-  },
-  {
-    id: "E3",
-    key: "forcesSeriousCount",
-    population: "forces",
-    unit: "count",
-    value: SERIOUS_MOVEMENT2,
-    loEdge: "published",
-    hiEdge: "ceiling",
-    arithmetic: `${n(FORCES2.serious17Oct)}; ${n(FORCES2.movement)} \xD7 (7 \xF7 ${n(FORCES2.stock17Oct)}) = ${SERIOUS_MOVEMENT2.central}; 7 + ${n(POST_PEAK)} \xD7 (${n(NOT_LIGHT)} \xF7 ${n(CRS_OCTOBER.declared)}) = ${SERIOUS_MOVEMENT2.hi}`,
-    assumptions: ["rateTransfer", "seriousSubsetOfNotLight"],
-    sources: ["bfmtv-bilan-17oct", "mediapart-crs-blesses-1311"],
-    status: "publishable",
-    flag: "e"
-  },
-  {
-    id: "E4",
-    key: "forcesNotLightCount",
-    population: "forces",
-    unit: "count",
-    value: NOT_LIGHT_MOVEMENT,
-    loEdge: "bound",
-    hiEdge: "transfer",
-    arithmetic: `${n(NOT_LIGHT)}; ${n(FORCES2.movement)} \xD7 (${n(NOT_LIGHT)} \xF7 ${n(CRS_OCTOBER.declared)}) = ${NOT_LIGHT_MOVEMENT.hi}`,
-    assumptions: ["rateTransfer", "crsDominatesOctober"],
-    sources: ["mediapart-crs-blesses-1311"],
-    status: "publishable",
-    flag: "e"
-  },
-  {
-    id: "E5",
-    key: "crsShareOfForces",
-    population: "forces",
-    unit: "share",
-    value: {
-      lo: CRS_OCTOBER.declared / OCTOBER_ALL_FORCES.hi,
-      hi: CRS_OCTOBER.declared / OCTOBER_ALL_FORCES.lo
-    },
-    loEdge: "bound",
-    hiEdge: "bound",
-    arithmetic: `${n(CRS_OCTOBER.declared)} \xF7 ${n(OCTOBER_ALL_FORCES.hi)} \u2026 ${n(CRS_OCTOBER.declared)} \xF7 ${n(OCTOBER_ALL_FORCES.lo)}`,
-    assumptions: ["crsDominatesOctober", "declarationsNotPersons"],
-    sources: ["mediapart-crs-blesses-1311"],
-    status: "note",
-    flag: "e"
-  },
-  {
-    id: "E6",
-    key: "seriousShareMovement",
-    population: "all",
-    unit: "share",
-    value: {
-      lo: SERIOUS_MOVEMENT2.lo / FORCES2.movement,
-      hi: SERIOUS_MOVEMENT2.hi / FORCES2.movement,
-      central: SERIOUS_MOVEMENT2.central / FORCES2.movement
-    },
-    loEdge: "published",
-    hiEdge: "ceiling",
-    arithmetic: `7 \xF7 ${n(FORCES2.movement)} = 0.44%; 30 \xF7 ${n(FORCES2.movement)} = 1.90%`,
-    assumptions: ["rateTransfer", "seriousSubsetOfNotLight"],
-    sources: ["bfmtv-bilan-17oct", "mediapart-crs-blesses-1311"],
-    status: "publishable",
-    flag: "e"
-  },
-  {
-    /* A register count with no denominator: 79 documented cases is a floor.
-       The band is [79, 79] only because the renderer has no infinity, and
-       hiEdge "unbounded" is what says the top is unknown. These two numbers
-       are not a range and must never be printed as "79 to 79". */
-    id: "E7",
-    key: "protestersSeriousFloor",
-    population: "protesters",
-    unit: "count",
-    value: {
-      lo: THINES2.seriousTo5Nov + THINES2.deathsTo5Nov,
-      hi: THINES2.seriousTo5Nov + THINES2.deathsTo5Nov
-    },
-    loEdge: "floor",
-    hiEdge: "unbounded",
-    arithmetic: `${n(THINES2.seriousTo5Nov)} + ${n(THINES2.deathsTo5Nov)} = ${n(THINES2.seriousTo5Nov + THINES2.deathsTo5Nov)}`,
-    assumptions: ["registerSelection"],
-    sources: ["lemonde-blessures-0511"],
-    status: "publishable",
-    flag: "f"
-  },
-  {
-    id: "E8",
-    key: "protestersSeriousShare",
-    population: "protesters",
-    unit: "share",
-    value: { lo: 1 / RATIO2.hi, hi: 1 / RATIO2.lo },
-    loEdge: "bound",
-    hiEdge: "bound",
-    arithmetic: `1 \xF7 ${RATIO2.hi} = 3.3%; 1 \xF7 ${RATIO2.lo} = 20% (r \u2208 [${RATIO2.lo}, ${RATIO2.hi}])`,
-    assumptions: ["treatedPerSerious", "registerSelection"],
-    sources: ["lemonde-blessures-0511", "mediacites-toulouse-17oct"],
-    status: "note",
-    flag: "e"
-  },
-  {
-    id: "E9",
-    key: "bystandersSerious",
-    population: "bystanders",
-    unit: "count",
-    why: "notEstimable",
-    loEdge: "unbounded",
-    hiEdge: "unbounded",
-    arithmetic: "no count exists: the register tracks protesters only, and the ministry counts carry no severity tag",
-    assumptions: ["registerSelection"],
-    sources: [],
-    status: "gap"
-  }
-];
-var CIVILIAN_PROXY_SHARE2 = CIVILIANS_24OCT.serious / CIVILIANS_24OCT.injured;
-
-// ../Dataset/dist/data/casualties/cases.js
-var CASES = [
-  {
-    id: "forcesAccidental",
-    side: "forces",
-    kind: "accidental",
-    count: { s: "c", n: 4 },
-    cases: ["givors", "crsWrist", "crsAnkle"]
-  },
-  {
-    id: "forcesConflictual",
-    side: "forces",
-    kind: "conflictual",
-    count: { s: "x", why: "causeUnknown" },
-    cases: ["helmet", "groin2023"]
-  },
-  {
-    id: "protesterConflictual",
-    side: "protesters",
-    kind: "conflictual",
-    count: { s: "x", why: "causeUnknown" },
-    cases: ["mael", "alaric", "eyes"]
-  },
-  {
-    id: "protesterAccidental",
-    side: "protesters",
-    kind: "accidental",
-    count: { s: "x", why: "noneDocumented" },
-    cases: []
-  },
-  {
-    id: "sainteSoline",
-    side: "forces",
-    kind: "accidental",
-    count: { s: "c", n: 29 },
-    cases: ["sainteSoline"],
-    reference: true
-  }
-];
-
-// ../Dataset/dist/data/casualties/levels.js
-var SEVERITY_LEVELS = [
-  {
-    /* 1,167 / 1,233 = 94.65% → the 94.6% the file itself states. Serious is
-       bounded 0–66 because serious ⊆ not-light and the file has no class of
-       its own: that is a structural bound, not a count. */
-    id: "crsOctober",
-    population: "forces",
-    total: { s: "n", v: 1233 },
-    serious: { s: "r", lo: 0, hi: NOT_LIGHT, d: true },
-    light: { s: "n", v: 1167 },
-    other: { s: "n", v: NOT_LIGHT, d: true },
-    sources: ["mediapart-crs-blesses-1311"]
-  },
-  {
-    /* Published level at the peak: 7 serious out of 1,144. */
-    id: "forcesPeak",
-    population: "forces",
-    total: { s: "n", v: FORCES2.stock17Oct },
-    serious: { s: "n", v: FORCES2.serious17Oct },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" },
-    sources: ["bfmtv-bilan-17oct"]
-  },
-  {
-    /* The movement total, decomposed in estimate.ts (E3, E4, E6). */
-    id: "forcesMovement",
-    population: "forces",
-    total: { s: "n", v: FORCES2.movement },
-    serious: {
-      s: "r",
-      lo: SERIOUS_MOVEMENT2.lo,
-      hi: SERIOUS_MOVEMENT2.hi,
-      d: true
-    },
-    light: {
-      s: "r",
-      lo: FORCES2.movement - NOT_LIGHT_MOVEMENT.hi,
-      hi: FORCES2.movement - NOT_LIGHT_MOVEMENT.lo,
-      d: true
-    },
-    other: {
-      s: "r",
-      lo: NOT_LIGHT_MOVEMENT.lo - SERIOUS_MOVEMENT2.hi,
-      hi: NOT_LIGHT_MOVEMENT.hi - SERIOUS_MOVEMENT2.lo,
-      d: true
-    },
-    sources: ["bfmtv-bilan-17oct", "mediapart-crs-blesses-1311"]
-  },
-  {
-    /* A register, not a rate: no total has ever been published, so no share can
-       exist on this row. The serious cell is a documented floor. */
-    id: "protesters",
-    population: "protesters",
-    participation: "participating",
-    total: { s: "x", why: "noDenominator" },
-    serious: { s: "f", v: THINES_FLOOR() },
-    light: { s: "x", why: "noDenominator" },
-    other: { s: "x", why: "registerOnly" },
-    sources: ["lemonde-blessures-0511"]
-  }
-];
-function THINES_FLOOR() {
-  return 79;
-}
-var SEVERITY_WEEKS = [
-  {
-    id: "week12oct",
-    population: "forces",
-    total: { s: "n", v: 207, d: true },
-    serious: { s: "n", v: 7 },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" },
-    sources: ["bfmtv-bilan-17oct"]
-  },
-  {
-    id: "week19oct",
-    population: "forces",
-    total: { s: "n", v: 267, d: true },
-    serious: { s: "x", why: "notPublished" },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" },
-    sources: ["bfmtv-bilan-17oct"]
-  },
-  {
-    id: "week26oct",
-    population: "forces",
-    total: { s: "n", v: 116, d: true },
-    serious: { s: "x", why: "notPublished" },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" },
-    sources: ["bfmtv-bilan-17oct"]
-  },
-  {
-    id: "week2nov",
-    population: "forces",
-    total: { s: "n", v: 53 },
-    serious: { s: "x", why: "notPublished" },
-    light: { s: "x", why: "notPublished" },
-    other: { s: "x", why: "notPublished" },
-    sources: ["bfmtv-bilan-17oct"]
-  },
-  {
-    id: "crsOctober",
-    population: "forces",
-    total: { s: "n", v: 1233 },
-    serious: { s: "r", lo: 0, hi: NOT_LIGHT, d: true },
-    light: { s: "n", v: 1167 },
-    other: { s: "n", v: NOT_LIGHT, d: true },
-    sources: ["mediapart-crs-blesses-1311"]
-  }
-];
 
 // src/copy/fr/meta.ts
 var FR_META = {
@@ -15672,7 +15797,7 @@ var A11Y = {
     switched: "Langue de la page : {lang}. Graphiques redessin\xE9s."
   }
 };
-var a11y2 = () => A11Y[current];
+var a11y = () => A11Y[current];
 
 // src/copy/chrome.ts
 var STATIC = {
@@ -15891,13 +16016,13 @@ function announce(text) {
 }
 var txt = (v) => {
   if (v == null) return "\u2014";
-  if (typeof v === "number") return nf2().format(Math.round(v));
+  if (typeof v === "number") return nf().format(Math.round(v));
   if (typeof v === "object") {
     const p = v;
     if (typeof p.low === "number" && typeof p.high === "number")
-      return p.low === p.high ? nf2().format(Math.round(p.low)) : `${nf2().format(Math.round(p.low))} \u2013 ${nf2().format(Math.round(p.high))}`;
+      return p.low === p.high ? nf().format(Math.round(p.low)) : `${nf().format(Math.round(p.low))} \u2013 ${nf().format(Math.round(p.high))}`;
     for (const n2 of [p.v, p.y])
-      if (typeof n2 === "number") return nf2().format(Math.round(n2));
+      if (typeof n2 === "number") return nf().format(Math.round(n2));
   }
   return String(v);
 };
@@ -17557,7 +17682,7 @@ var spanMark = {
 
 // src/charts/format.ts
 function fmt(v, unit) {
-  return unit === "eurM" ? fill(t2().chart.eurM, { v: eurM2().format(v) }) : nf2().format(Math.round(v));
+  return unit === "eurM" ? fill(t2().chart.eurM, { v: eurM().format(v) }) : nf().format(Math.round(v));
 }
 var pctFormat = new Intl.NumberFormat(getLocale(), {
   minimumFractionDigits: 2,
@@ -17576,12 +17701,12 @@ function rateLine(band, v) {
   const pct2 = hi2 - lo2 < 1e-9 ? fmtPct(lo2) : `${fmtPct(lo2)} \u2013 ${fmtPct(hi2)}`;
   return fill(bi(RATE2), {
     pct: pct2,
-    pop: nf2().format(denominator(pop) ?? 0)
+    pop: nf().format(denominator(pop) ?? 0)
   });
 }
-var tickFormat = (unit) => (v) => unit === "eurM" ? fill(t2().chart.eurM, { v: nf2().format(v) }) : compactFixed(v);
+var tickFormat = (unit) => (v) => unit === "eurM" ? fill(t2().chart.eurM, { v: nf().format(v) }) : compactFixed(v);
 function compactFixed(v) {
-  return nf2().format(v);
+  return nf().format(v);
 }
 
 // src/charts/axes.ts
@@ -17716,6 +17841,52 @@ function scalesFor(v, card3, ids) {
   return scales;
 }
 
+// src/charts/notes.ts
+function noteText(ref) {
+  if (!ref) return "";
+  const m = t2().chart;
+  switch (ref.k) {
+    case "obs":
+      return m.obsNotes[ref.date]?.[ref.metric] ?? "";
+    case "policing": {
+      const head2 = ref.low === ref.high ? nf().format(ref.low) : `${nf().format(ref.low)}\u2013${nf().format(ref.high)}`;
+      const note2 = m.deployNotes[ref.date];
+      return fill(note2 ? m.policingDay : m.policingDayPlain, {
+        head: head2,
+        low: nf().format(RATE.low),
+        high: nf().format(RATE.high),
+        note: note2 ?? ""
+      });
+    }
+    case "cumulative":
+      return fill(ref.added ? m.cumulativeAdded : m.cumulativeCarried, {
+        days: ref.days
+      });
+    case "week": {
+      const p = ref.p;
+      const parts = [
+        fill(p.kind === "national" ? m.weekNational : m.weekRegionalOnly, {
+          n: p.days
+        })
+      ];
+      if (p.peak) parts.push(fill(m.weekPeak, { date: fmtDayMonth(p.peak) }));
+      if (p.noNational) parts.push(m.weekNoNational);
+      if (p.excluded) parts.push(fill(m.weekExcluded, { n: p.excluded }));
+      if (p.floored) parts.push(m.weekFloored);
+      if (p.clipped) parts.push(m.weekClipped);
+      if (p.vacation) parts.push(m.weekVacation);
+      return parts.join(m.weekJoin);
+    }
+    default:
+      return "";
+  }
+}
+function suffixFor(q, detached) {
+  const s = t2().chart.suffix;
+  const text = q === "c" ? s.c : q === "w" ? s.w : q === "e" ? s.e : q === "f" ? s.f : q === "x" ? s.x : detached ? s.regional : "";
+  return text ? fill(t2().chart.suffixWrap, { text }) : "";
+}
+
 // src/charts/tooltip.ts
 var DEFAULT_SIZE = 12;
 var MAX_WIDTH = 360;
@@ -17843,7 +18014,7 @@ function view(weekly) {
   const c = t2().chart;
   return weekly ? {
     labels: WEEKS.map(
-      (w) => fmtWeek2(w.key, w.end) + (w.touchesEdge ? c.edgeMark : "")
+      (w) => fmtWeek(w.key, w.end) + (w.touchesEdge ? c.edgeMark : "")
     ),
     titles: WEEKS.map(
       (w) => fill(w.touchesEdge ? c.weekOfPartial : c.weekOf, {
@@ -17856,7 +18027,7 @@ function view(weekly) {
     maxTicksLimit: 12
   } : {
     labels: DATES.map(fmtDayMonth),
-    titles: DATES.map(fmtDate2),
+    titles: DATES.map(fmtDate),
     footers: DATES.map((d) => c.dayNotes[d] ?? null),
     xTitle: c.axisDate,
     maxRotation: 90,
@@ -18045,13 +18216,13 @@ function mountChart(spec, canvas) {
     host?.querySelector('[data-role="cost-method"]')?.remove();
     if (spec.id === "chart-costs" && host) insertCostMethodology(host, canvas);
     const table = fromChart(chart, {
-      caption: fill(a11y2().tableCaption, { title: copy.title }),
-      indexHeader: a11y2().dateHeader
+      caption: fill(a11y().tableCaption, { title: copy.title }),
+      indexHeader: a11y().dateHeader
     });
     host?.append(table);
     keyboardChart(chart, {
-      hint: a11y2().chartHint,
-      roledescription: a11y2().chartRole
+      hint: a11y().chartHint,
+      roledescription: a11y().chartRole
     });
   } catch (err) {
     console.error(`[${spec.id}]`, err);
@@ -18063,10 +18234,10 @@ var datasetsOf = (chart) => chart.data.datasets;
 function rowTitle(ep, r) {
   const m = t2();
   if (ep.id === "students26") {
-    const base = fmtWeek2(r.from, r.to);
+    const base = fmtWeek(r.from, r.to);
     return r.partial ? fill(m.panels.partialWeek, { label: base }) : base;
   }
-  const when = r.act !== void 0 ? fill(m.panels.act, { n: r.act }) : fmtWeek2(r.from, r.to);
+  const when = r.act !== void 0 ? fill(m.panels.act, { n: r.act }) : fmtWeek(r.from, r.to);
   const action = m.episodes[ep.id].weeks[r.w]?.action;
   return action ? fill(m.panels.withAction, { when, action }) : when;
 }
@@ -18409,7 +18580,7 @@ function yScale(min, max, showLabels) {
       font: { size: 9 },
       color: THEME.muted,
       padding: 6,
-      callback: (v) => compact2().format(Number(v))
+      callback: (v) => compact().format(Number(v))
     },
     afterBuildTicks: (axis) => {
       axis.ticks = ticks.map((value2) => ({ value: value2 }));
@@ -18448,12 +18619,12 @@ function tooltipSpec(kind) {
     callbacks: {
       title: (items) => {
         const p = items[0].raw;
-        const text = kind === "episode" ? p.t : `${a11y2().weekHeader}${p.x}`;
+        const text = kind === "episode" ? p.t : `${a11y().weekHeader}${p.x}`;
         return wrapTooltipLines(text, items[0], "title");
       },
       label: (item) => {
         const p = item.raw;
-        const value2 = p.low === p.high ? nf2().format(Math.round(p.low)) : `${nf2().format(Math.round(p.low))} \u2013 ${nf2().format(Math.round(p.high))}`;
+        const value2 = p.low === p.high ? nf().format(Math.round(p.low)) : `${nf().format(Math.round(p.low))} \u2013 ${nf().format(Math.round(p.high))}`;
         const flag = m.flags[p.flag];
         const line = flag ? fill(m.tooltip.lineWithFlag, { value: value2, flag }) : fill(m.tooltip.linePlain, { value: value2 });
         const name = kind === "item" ? m.episodes[EPISODES[item.dataset.__ep].id].short : "";
@@ -18463,7 +18634,7 @@ function tooltipSpec(kind) {
         const p = item.raw;
         const lines = [];
         if (kind === "item") {
-          const n2 = nf2().format(Math.round(p.base));
+          const n2 = nf().format(Math.round(p.base));
           const text = Math.abs(p.y - p.base) / p.base < 1e-9 ? fill(m.tooltip.firstFigure, { n: n2 }) : shareLine(p, item.dataset);
           if (text) lines.push(...wrapTooltipLines(text, item, "body"));
         }
@@ -18473,7 +18644,7 @@ function tooltipSpec(kind) {
       footer: (items) => {
         if (kind !== "episode") return [];
         const p = items[0].raw;
-        const n2 = nf2().format(Math.round(p.base));
+        const n2 = nf().format(Math.round(p.base));
         const text = Math.abs(p.y - p.base) / p.base < 1e-9 ? fill(m.tooltip.firstFigure, { n: n2 }) : shareLine(p, items[0].dataset);
         return text ? wrapTooltipLines(text, items[0], "footer") : [];
       }
@@ -18532,14 +18703,14 @@ function decoratePanel(chart, figure, title) {
   figure.querySelector(".data-table")?.remove();
   figure.append(
     fromChart(chart, {
-      caption: fill(a11y2().tableCaption, { title }),
-      indexHeader: a11y2().weekHeader,
+      caption: fill(a11y().tableCaption, { title }),
+      indexHeader: a11y().weekHeader,
       indexOf: (ds, i) => String(panelPoints(ds)[i]?.t ?? "\u2014")
     })
   );
   keyboardChart(chart, {
-    hint: a11y2().chartHint,
-    roledescription: a11y2().chartRole,
+    hint: a11y().chartHint,
+    roledescription: a11y().chartRole,
     readout: (i) => {
       const week = panelPoints(datasets[0])[i]?.t ?? String(i + 1);
       const rows = datasets.map((d) => {
@@ -18723,8 +18894,8 @@ function mountItemTrellis() {
     const [rawLo, rawHi] = rawExtent(EPISODES, [s.key], ENFORCEMENT_LAST);
     const [lo2, hi2] = logBounds(rawLo, rawHi);
     const range = fill(m.panels.valueRange, {
-      lo: compact2().format(rawLo),
-      hi: compact2().format(rawHi)
+      lo: compact().format(rawLo),
+      hi: compact().format(rawHi)
     });
     const { figure, canvas } = panelFigure(
       m.items[s.key].short,
@@ -18994,17 +19165,17 @@ function cellView(c) {
       if (c.d) cls.push("cas-derived");
       if (c.regional) cls.push("cas-regional");
       return {
-        text: `${c.d ? "\u2248 " : ""}${nf2().format(c.v)}`,
+        text: `${c.d ? "\u2248 " : ""}${nf().format(c.v)}`,
         cls: cls.join(" ")
       };
     }
     case "r":
       return {
-        text: `\u2248 ${nf2().format(c.lo)}\u2013${nf2().format(c.hi)}`,
+        text: `\u2248 ${nf().format(c.lo)}\u2013${nf().format(c.hi)}`,
         cls: `cas-num cas-derived${c.regional ? " cas-regional" : ""}`
       };
     case "f":
-      return { text: `\u2265 ${nf2().format(c.v)}`, cls: "cas-num cas-floor" };
+      return { text: `\u2265 ${nf().format(c.v)}`, cls: "cas-num cas-floor" };
     case "c":
       return {
         text: fill(t2().casualties.casesCount, { n: c.n }),
@@ -19019,11 +19190,11 @@ function share(light, total) {
   return light.v / total.v;
 }
 function pct(p) {
-  return `${nf2().format(Number((p * 100).toFixed(1)))}%`;
+  return `${nf().format(Number((p * 100).toFixed(1)))}%`;
 }
 function estimateRange(e) {
   if (!e.value) return cellView({ s: "x", why: e.why ?? "notEstimable" });
-  const f = e.unit === "share" ? pct : (x) => nf2().format(x);
+  const f = e.unit === "share" ? pct : (x) => nf().format(x);
   return {
     text: e.value.lo === e.value.hi ? f(e.value.lo) : `${f(e.value.lo)}\u2013${f(e.value.hi)}`,
     cls: e.unit === "share" ? "cas-num cas-derived" : "cas-num"
@@ -19073,7 +19244,7 @@ function stat(num, label, cls = "cas-head-stat") {
 function headline() {
   const c = t2().casualties;
   const wrap2 = el("div", "cas-headline");
-  const total = nf2().format(FORCES.movement);
+  const total = nf().format(FORCES.movement);
   wrap2.append(
     stat(
       `${pct(SERIOUS_MOVEMENT.lo / FORCES.movement)}\u2013${pct(SERIOUS_MOVEMENT.hi / FORCES.movement)}`,
@@ -19084,15 +19255,15 @@ function headline() {
       })
     ),
     stat(
-      `${nf2().format(SERIOUS_MOVEMENT.lo)}\u2013${nf2().format(SERIOUS_MOVEMENT.hi)}`,
+      `${nf().format(SERIOUS_MOVEMENT.lo)}\u2013${nf().format(SERIOUS_MOVEMENT.hi)}`,
       fill(c.headSeriousCount, {
-        forces: `${nf2().format(SERIOUS_MOVEMENT.lo)}\u2013${nf2().format(SERIOUS_MOVEMENT.hi)}`,
-        protesters: `\u2265 ${nf2().format(THINES.seriousTo5Nov + THINES.deathsTo5Nov)}`
+        forces: `${nf().format(SERIOUS_MOVEMENT.lo)}\u2013${nf().format(SERIOUS_MOVEMENT.hi)}`,
+        protesters: `\u2265 ${nf().format(THINES.seriousTo5Nov + THINES.deathsTo5Nov)}`
       })
     ),
     stat(
       pct(MIX[0].central / FORCES.movement),
-      fill(c.headMix, { light: nf2().format(MIX[0].central), total })
+      fill(c.headMix, { light: nf().format(MIX[0].central), total })
     )
   );
   return wrap2;
@@ -19114,7 +19285,7 @@ function mixBlock() {
       el(
         "span",
         "cas-mix-value",
-        `${nf2().format(band.lo)}\u2013${nf2().format(band.hi)}`
+        `${nf().format(band.lo)}\u2013${nf().format(band.hi)}`
       ),
       el(
         "span",
@@ -19242,8 +19413,8 @@ function sensitivityTable() {
   for (const row of SENSITIVITY) {
     const tr = el("tr", row.ratio === RATIO.mid ? "cas-reference" : "");
     tr.append(rowHead(`r = ${row.ratio}`));
-    tr.append(el("td", "cas-num cas-derived", nf2().format(row.at17Oct)));
-    tr.append(el("td", "cas-num cas-derived", nf2().format(row.movement)));
+    tr.append(el("td", "cas-num cas-derived", nf().format(row.at17Oct)));
+    tr.append(el("td", "cas-num cas-derived", nf().format(row.movement)));
     tbody.append(tr);
   }
   table.append(tbody);
@@ -20913,7 +21084,7 @@ var pctBand = (lo2, hi2) => {
   const a = pctText(lo2);
   return Math.abs(hi2 - lo2) < 1e-9 ? a : `${a} \u2013 ${pctText(hi2)}`;
 };
-var countText = (v) => v === null ? "\u2014" : nf2().format(Math.round(v));
+var countText = (v) => v === null ? "\u2014" : nf().format(Math.round(v));
 var countBand = (r) => {
   if (r.lo === null) return "\u2014";
   const hi2 = r.hi ?? r.lo;
@@ -20930,7 +21101,7 @@ function tickText(v) {
 }
 function dailyRows2() {
   const pop = population(KEY_2026);
-  const notes = t().chart.dayNotes;
+  const notes = t2().chart.dayNotes;
   return DATES.map((d, i) => {
     const p = DAILY.turnout[i];
     const v = p?.v ?? null;
@@ -20939,7 +21110,7 @@ function dailyRows2() {
     const phi = hi2 === null ? null : pctOfValue(hi2, pop);
     return {
       key: fmtDayMonth(d),
-      title: fmtDate2(d),
+      title: fmtDate(d),
       p: plo === null ? null : plo / 100,
       plo: plo === null ? null : plo / 100,
       phi: phi === null ? null : phi / 100,
@@ -20959,7 +21130,7 @@ function weeklyRows() {
     const phi = hi2 === null ? null : pctOfValue(hi2, pop);
     return {
       key: String(w.key),
-      title: fmtWeek2(w.key, w.end),
+      title: fmtWeek(w.key, w.end),
       p: plo === null ? null : plo / 100,
       plo: plo === null ? null : plo / 100,
       phi: phi === null ? null : phi / 100,
@@ -21300,7 +21471,7 @@ function sectionA(host) {
     },
     L2(COPY.titleA),
     fill(L2(COPY.noteA), {
-      pop: nf2().format(denominator(pop) ?? 0),
+      pop: nf().format(denominator(pop) ?? 0),
       min: floorLabel(rows)
     }),
     L2(COPY.colDate)
@@ -21321,7 +21492,7 @@ function sectionB(host) {
     },
     L2(COPY.titleB),
     fill(L2(COPY.noteB), {
-      pop: nf2().format(denominator(pop) ?? 0),
+      pop: nf().format(denominator(pop) ?? 0),
       min: floorLabel(rows)
     }),
     L2(COPY.colWeek)
@@ -21329,7 +21500,7 @@ function sectionB(host) {
 }
 var spansFor = (ep) => ep.weeks.some((w) => w.to >= START && w.from <= END) ? [] : weekSpans(ep.weeks);
 function sectionC(host) {
-  const m = t();
+  const m = t2();
   host.replaceChildren();
   host.style.gridTemplateColumns = "repeat(auto-fit, minmax(min(100%, 17.5rem), 1fr))";
   const panels = EPISODES.map((ep) => ({ ep, rows: episodeRows2(ep) }));
@@ -21341,7 +21512,7 @@ function sectionC(host) {
     const pop = population(popKeyFor(ep.id));
     const base = denominator(pop);
     const caption = base === null ? L2(COPY.noBase) : fill(L2(COPY.base), {
-      n: `${nf2().format(base)}${basisOf(pop) === "metro" ? ` \xB7 ${L2(COPY.metro)}` : ""}`
+      n: `${nf().format(base)}${basisOf(pop) === "metro" ? ` \xB7 ${L2(COPY.metro)}` : ""}`
     });
     const panel = el("div", "pc-panel");
     render(
@@ -21404,6 +21575,49 @@ function mountPerCapita() {
   }
 }
 
+// src/data/sources/page-map.ts
+var HISTORIC = ["historic/movements", "historic/series"];
+var PAGES_BY_GROUP = {
+  /* 2026: state reports and press underpin every 2026 figure. */
+  official: ["2026/turnout", "2026/violence", "2026/costs"],
+  press: ["2026/turnout", "2026/violence", "2026/costs"],
+  strikes: ["2026/turnout"],
+  blockades: ["2026/turnout"],
+  overseas: ["2026/turnout", "2026/violence"],
+  ref2026: ["2026/turnout", "2026/violence"],
+  /* costs: the only page that plots money. */
+  cost: ["2026/costs"],
+  /* historic: both trellises carry all seven movements. */
+  mai68: HISTORIC,
+  cpe: HISTORIC,
+  gj: HISTORIC,
+  nahel: HISTORIC,
+  retraites: HISTORIC,
+  rn2024: HISTORIC,
+  bloquons: HISTORIC,
+  /* media: only where a hero image is actually rendered. */
+  media: ["home", "2026", "historic"]
+};
+var MEDIA_BY_PAGE = {
+  home: ["media-2026-demo", "media-historic"],
+  "2026": ["media-turnout", "media-violence", "media-costs"],
+  historic: ["media-movements", "media-series"]
+};
+var PAGE_GROUPS = /* @__PURE__ */ new Map();
+for (const [id, pages] of Object.entries(PAGES_BY_GROUP)) {
+  for (const page of pages) {
+    const list = PAGE_GROUPS.get(page) ?? [];
+    list.push(id);
+    PAGE_GROUPS.set(page, list);
+  }
+}
+function groupsForPage(page) {
+  return PAGE_GROUPS.get(page) ?? [];
+}
+function mediaForPage(page) {
+  return MEDIA_BY_PAGE[page] ?? [];
+}
+
 // src/sections/sources/copy.ts
 var BOX_TITLE = {
   en: "Sources and method",
@@ -21417,7 +21631,7 @@ var INTRO = {
 // src/sections/sources/index.ts
 function dateLabel(s) {
   if (!s.date) return null;
-  return s.dateEnd ? `${fmtDayMonth(s.date)}\u2013${fmtDate2(s.dateEnd)}` : fmtDate2(s.date);
+  return s.dateEnd ? `${fmtDayMonth(s.date)}\u2013${fmtDate(s.dateEnd)}` : fmtDate(s.date);
 }
 function sourceItem(s) {
   const li = el("li");

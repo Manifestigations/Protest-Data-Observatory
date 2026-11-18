@@ -3,6 +3,7 @@ import type { TooltipItem } from "chart.js";
 import { fill, t } from "../copy";
 import type { ProtestDataset } from "./datasets.ts";
 import { fmt, rateLine } from "./format.ts";
+import { noteText, suffixFor } from "./notes.ts";
 import { wrapTooltipLines } from "./tooltip.ts";
 import type { View } from "./view.ts";
 

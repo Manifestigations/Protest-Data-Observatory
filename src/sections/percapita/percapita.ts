@@ -38,7 +38,6 @@ import {
   pctOfValue,
   popKeyFor,
   population,
-  t,
   type Pt as DayPt,
   type Episode,
 } from "@manifestigations/dataset";
@@ -61,7 +60,7 @@ import { wrapTooltipLines } from "../../charts/tooltip.ts";
 import { seriesData } from "../../charts/trellis/engine.ts";
 import { resolvedColumns } from "../../charts/trellis/index.ts";
 import { watchColumnCount } from "../../charts/trellis/panel.ts";
-import { a11y, fill, getLocale } from "../../copy/index.ts";
+import { a11y, fill, getLocale, t } from "../../copy/index.ts";
 import { dataTable, keyboardChart } from "../../core/a11y.ts";
 import { THEME, track } from "../../core/canvas-registry.ts";
 import { tones } from "../../core/colors.ts";

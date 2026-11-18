@@ -18,6 +18,7 @@ import {
 import type { Chart, ChartDataset } from "chart.js";
 import { fill, fmtWeek, t } from "../../copy/index.ts";
 import { gapSegment, THEME } from "../../core/canvas-registry.ts";
+import { noteText } from "../notes.ts";
 
 /**
  * One plotted point.
