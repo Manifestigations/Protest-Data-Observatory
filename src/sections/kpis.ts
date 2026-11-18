@@ -14,10 +14,16 @@
  */
 
 import {
+  compact,
   DATES,
   ENFORCEMENT_LAST,
   EPISODES,
+  eurM,
+  fmtDate,
+  fmtWeek,
+  nf,
   WEEKS,
+  type ChartCopy,
 } from "@manifestigations/dataset";
 import { visiblePoints } from "../charts/series.ts";
 import { seriesData, type Pt } from "../charts/trellis/engine.ts";

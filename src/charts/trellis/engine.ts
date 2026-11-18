@@ -9,7 +9,6 @@ import {
   bandOf,
   isDetached,
   midOf,
-  noteText,
   type Episode,
   type EpisodeId,
   type Flag,

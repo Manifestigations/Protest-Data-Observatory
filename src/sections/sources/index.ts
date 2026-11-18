@@ -1,8 +1,8 @@
 import type { Source } from "@manifestigations/dataset";
 import {
+  fmtDate,
+  fmtDayMonth,
   GROUPS,
-  groupsForPage,
-  mediaForPage,
   SOURCES_BY_GROUP,
 } from "@manifestigations/dataset";
 import { bi } from "../../copy";

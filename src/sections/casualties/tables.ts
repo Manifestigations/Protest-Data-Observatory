@@ -2,6 +2,18 @@
  * set of different populations, windows or categories. */
 
 import {
+  BYSTANDER_CELLS,
+  CIVILIAN_PROXY_SHARE,
+  ESTIMATES,
+  FORCES,
+  LADDER,
+  MIX,
+  OBSERVATIONS,
+  POPULATION_ORDER,
+  RATIO,
+  SENSITIVITY,
+  SERIOUS_MOVEMENT,
+  THINES,
   type CaseRow,
   type Cell,
   type SevRow,

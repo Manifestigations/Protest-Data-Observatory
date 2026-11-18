@@ -9,7 +9,7 @@
    an error bar, and the two differ by skew, not by uncertainty. */
 
 import type { Episode, Metric } from "@manifestigations/dataset";
-import { EPISODES } from "@manifestigations/dataset";
+import { compact, EPISODES, nf } from "@manifestigations/dataset";
 import {
   Chart,
   type ChartData,
