@@ -8,6 +8,8 @@
     "lede   tools";
   align-items: start;
   column-gap: clamp(12px, 2vw, 24px);
+  padding-block-end: 0.8rem;
+  border-block-end: 2px solid var(--line-1);
 
   & > .kicker {
     grid-area: kicker;

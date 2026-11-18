@@ -21466,8 +21466,7 @@ function sectionA(host) {
       xTitle: L2(COPY.axisDate),
       rotate: true,
       maxTicks: 25,
-      showY: true,
-      spans: daySpans()
+      showY: true
     },
     L2(COPY.titleA),
     fill(L2(COPY.noteA), {

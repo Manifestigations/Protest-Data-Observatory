@@ -65,12 +65,7 @@ import { dataTable, keyboardChart } from "../../core/a11y.ts";
 import { THEME, track } from "../../core/canvas-registry.ts";
 import { tones } from "../../core/colors.ts";
 import { byId, el } from "../../core/dom.ts";
-import {
-  contextBands,
-  daySpans,
-  weekSpans,
-  type ChartSpan,
-} from "../context/context.ts";
+import { contextBands, weekSpans, type ChartSpan } from "../context/context.ts";
 
 Chart.register(
   LineController,
@@ -683,7 +678,6 @@ function sectionA(host: HTMLElement): void {
       rotate: true,
       maxTicks: 25,
       showY: true,
-      spans: daySpans(),
     },
     L(COPY.titleA),
     fill(L(COPY.noteA), {

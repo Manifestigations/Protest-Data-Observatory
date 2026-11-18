@@ -250,6 +250,8 @@ a {
   grid-template-areas: "kicker tools" "title  tools" "lede   tools";
   align-items: start;
   column-gap: clamp(12px, 2vw, 24px);
+  padding-block-end: 0.8rem;
+  border-block-end: 2px solid var(--line-1);
   & > .kicker {
     grid-area: kicker;
     margin-bottom: 0.35rem;
@@ -877,7 +879,7 @@ canvas:focus-visible {
   background: var(--surface-2);
 }
 .kpi-title {
-  margin-bottom: 0.55rem;
+  margin-block: 0.75rem 0.55rem;
   font-size: var(--fs-sm);
   font-weight: 700;
   color: var(--ink-1);
@@ -1728,6 +1730,10 @@ details.data-table th[scope=row] {
 /* src/styles/cards.css */
 .crumbs {
   margin-bottom: clamp(14px, 2vw, 20px);
+  border: 1px solid var(--line-1);
+  border-radius: 10px;
+  padding: 0.2rem 0.4rem;
+  inline-size: fit-content;
   & ol {
     display: flex;
     flex-wrap: wrap;
@@ -1935,7 +1941,7 @@ details.data-table th[scope=row] {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-block: 1rem 0;
+  margin-block: 1rem 1rem;
 }
 .sec-tools__btn {
   font: inherit;
