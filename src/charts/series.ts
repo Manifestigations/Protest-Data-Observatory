@@ -3,9 +3,9 @@
    what it plots, its tone, its axis, how it is drawn. No value is computed
    here; the data is already in data.ts. */
 
+import { DAILY, DATES, WEEKLY, type Series } from "@manifestigations/dataset";
 import type { PointStyle } from "chart.js";
 import { tones, type Tone } from "../core/colors.ts";
-import { DAILY, DATES, WEEKLY, type Series } from "../../vendor/dataset/src/data/data.ts";
 
 export type Unit = "count" | "eurM";
 

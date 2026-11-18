@@ -20,6 +20,23 @@
  * an interpolated stretch is visibly different from a measured day.
  */
 
+import type { Episode } from "@manifestigations/dataset";
+import {
+  DAILY,
+  DATES,
+  END,
+  EPISODES,
+  KEY_2026,
+  START,
+  WEEKLY,
+  WEEKS,
+  basisOf,
+  denominator,
+  pctOfValue,
+  popKeyFor,
+  population,
+  type Pt as DayPt,
+} from "@manifestigations/dataset";
 import {
   CategoryScale,
   Chart,
@@ -53,25 +70,6 @@ import { dataTable, keyboardChart } from "../../core/a11y.ts";
 import { THEME, track } from "../../core/canvas-registry.ts";
 import { tones } from "../../core/colors.ts";
 import { byId, el } from "../../core/dom.ts";
-import {
-  DAILY,
-  DATES,
-  END,
-  START,
-  WEEKLY,
-  WEEKS,
-  type Pt as DayPt,
-} from "../../vendor/dataset/src/data/data.ts";
-import { EPISODES } from "../../vendor/dataset/src/data/episodes/index.ts";
-import {
-  KEY_2026,
-  basisOf,
-  denominator,
-  pctOfValue,
-  popKeyFor,
-  population,
-} from "../../vendor/dataset/src/data/population.ts";
-import type { Episode } from "../../vendor/dataset/src/model/index.ts";
 import {
   contextBands,
   daySpans,

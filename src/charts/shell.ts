@@ -1,9 +1,9 @@
 /* ── Section A/B — chart shell and the one builder ───────────────────────── */
 
+import { WEEKS } from "@manifestigations/dataset";
 import type { ChartData, ChartOptions, LegendItem } from "chart.js";
 import { t } from "../copy";
 import { THEME } from "../core/canvas-registry.ts";
-import { WEEKS } from "../../vendor/dataset/src/data/data.ts";
 import { daySpans, weekSpans } from "../sections/context/context.ts";
 import { scalesFor } from "./axes.ts";
 import { tooltipCallbacks } from "./chart-tooltip.ts";

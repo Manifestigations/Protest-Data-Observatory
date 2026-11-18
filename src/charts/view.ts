@@ -2,8 +2,8 @@
    One object carries everything that differs between the daily and weekly
    charts, so the shell and the tooltip never re-test `weekly`. */
 
+import { DATES, WEEKS } from "@manifestigations/dataset";
 import { fill, fmtDate, fmtDayMonth, fmtWeek, t } from "../copy";
-import { DATES, WEEKS } from "../../vendor/dataset/src/data/data.ts";
 
 export interface View {
   labels: string[];

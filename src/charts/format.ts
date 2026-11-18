@@ -2,13 +2,13 @@
    `fmt` and the rate sentence are here rather than in chart-tooltip.ts because
    the axis tick formatter needs them too. */
 
-import { bi, eurM, fill, getLocale, nf, t } from "../copy";
 import {
   denominator,
   KEY_2026,
   pctOfValue,
   population,
-} from "../../vendor/dataset/src/data/population.ts";
+} from "@manifestigations/dataset";
+import { bi, eurM, fill, getLocale, nf, t } from "../copy";
 import type { Unit } from "./series.ts";
 
 export function fmt(v: number, unit: Unit): string {

@@ -1,9 +1,8 @@
 /* ── Section A/B — scales ──────────────────────────────────────────────────── */
 
+import type { ChartCardCopy, Series } from "@manifestigations/dataset";
 import type { ChartOptions } from "chart.js";
-import type { ChartCardCopy } from "../copy";
 import { THEME } from "../core/canvas-registry.ts";
-import type { Series } from "../../vendor/dataset/src/data/data.ts";
 import { tickFormat } from "./format.ts";
 import {
   AXIS_LEFT,

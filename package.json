@@ -45,6 +45,7 @@
     "esbuild@0.28.2": true
   },
   "dependencies": {
+    "@manifestigations/dataset": "^0.1.0",
     "chart.js": "4.6.1"
   }
 }

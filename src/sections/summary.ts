@@ -8,6 +8,8 @@
    No mean is drawn. statsOf() computes one, but beside the median it reads as
    an error bar, and the two differ by skew, not by uncertainty. */
 
+import type { Episode, Metric } from "@manifestigations/dataset";
+import { EPISODES } from "@manifestigations/dataset";
 import {
   Chart,
   type ChartData,
@@ -15,8 +17,6 @@ import {
   type Point,
   type TooltipItem,
 } from "chart.js";
-import { EPISODES } from "../../vendor/dataset/src/data/episodes/index.ts";
-import type { Episode, Metric } from "../../vendor/dataset/src/model/index.ts";
 import { clipToArea } from "../charts/plugins/clip.ts";
 import { wrapTooltipLines } from "../charts/tooltip.ts";
 import {
@@ -31,7 +31,7 @@ import { resolvedColumns } from "../charts/trellis/index.ts";
 import { legend } from "../charts/trellis/legend.ts";
 import { DIM, seriesStyles } from "../charts/trellis/palette.ts";
 import { panelFigure, watchColumnCount } from "../charts/trellis/panel.ts";
-import { compact, fill, nf, t } from "../copy";
+import { fill, t } from "../copy/index.ts";
 import { alpha, THEME, track } from "../core/canvas-registry.ts";
 import { closedCardOf, deferUntilReveal } from "./disclosure.ts";
 

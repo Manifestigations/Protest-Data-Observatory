@@ -1,25 +1,13 @@
 /* Every table in the casualty section. Rows are never summed: each table is a
  * set of different populations, windows or categories. */
 
-import { fill, nf, t } from "../../copy";
-import { byId, el } from "../../core/dom.ts";
 import {
-  BYSTANDER_CELLS,
-  CIVILIAN_PROXY_SHARE,
-  ESTIMATES,
-  FORCES,
-  LADDER,
-  MIX,
-  OBSERVATIONS,
-  POPULATION_ORDER,
-  RATIO,
-  SENSITIVITY,
-  SERIOUS_MOVEMENT,
-  THINES,
   type CaseRow,
   type Cell,
   type SevRow,
-} from "../../vendor/dataset/src/data/casualties/index.ts";
+} from "@manifestigations/dataset";
+import { fill, nf, t } from "../../copy";
+import { byId, el } from "../../core/dom.ts";
 import { cellView, estimateRange, pct, share, type CellView } from "./model.ts";
 
 function cell(c: Cell, extra = ""): HTMLElement {

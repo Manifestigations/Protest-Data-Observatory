@@ -13,21 +13,17 @@
  *   - a day or week with no published figure is left out, not counted as zero.
  */
 
+import {
+  DATES,
+  ENFORCEMENT_LAST,
+  EPISODES,
+  WEEKS,
+} from "@manifestigations/dataset";
 import { visiblePoints } from "../charts/series.ts";
 import { seriesData, type Pt } from "../charts/trellis/engine.ts";
-import {
-  compact,
-  eurM,
-  fill,
-  fmtDate,
-  fmtWeek,
-  nf,
-  t,
-  type ChartCopy,
-} from "../copy";
+import { fill } from "../copy/index.ts";
+import { t } from "../copy/lookup.ts";
 import { byId, el } from "../core/dom.ts";
-import { DATES, WEEKS } from "../../vendor/dataset/src/data/data.ts";
-import { ENFORCEMENT_LAST, EPISODES } from "../../vendor/dataset/src/data/episodes/index.ts";
 
 type SeriesCopyKey = keyof ChartCopy["series"];
 

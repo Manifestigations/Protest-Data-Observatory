@@ -1,6 +1,6 @@
+import type { Band } from "@manifestigations/dataset";
+import { noteText, suffixFor } from "@manifestigations/dataset";
 import type { TooltipItem } from "chart.js";
-import { noteText, suffixFor } from "../../vendor/dataset/src/data/notes.ts";
-import type { Band } from "../../vendor/dataset/src/model/index.ts";
 import { fill, t } from "../copy";
 import type { ProtestDataset } from "./datasets.ts";
 import { fmt, rateLine } from "./format.ts";

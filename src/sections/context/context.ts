@@ -24,17 +24,17 @@
  * per-section filtering is needed at the call sites.
  */
 
-import type { Plugin } from "chart.js";
-import { fill, fmtDate, getLocale } from "../../copy";
-import { dataTable } from "../../core/a11y.ts";
-import { byId, el } from "../../core/dom.ts";
 import {
   DATES,
   END,
   HOLIDAY_END,
   HOLIDAY_START,
   START,
-} from "../../vendor/dataset/src/data/data.ts";
+} from "@manifestigations/dataset";
+import type { Plugin } from "chart.js";
+import { fill, fmtDate, getLocale } from "../../copy";
+import { dataTable } from "../../core/a11y.ts";
+import { byId, el } from "../../core/dom.ts";
 
 /* ----- copy */
 

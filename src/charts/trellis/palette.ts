@@ -4,8 +4,8 @@
    resolved per mount, because Chart.js bakes colours into a dataset at
    create time. */
 
+import { METRICS, METRIC_OF, type Metric } from "@manifestigations/dataset";
 import { DIM, hollow, ramp, tones, type Tone } from "../../core/colors.ts";
-import { METRICS, METRIC_OF, type Metric } from "../../vendor/dataset/src/model/index.ts";
 import { TONE_OF } from "../palette.ts";
 
 export { DIM };

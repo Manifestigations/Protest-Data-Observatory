@@ -5,20 +5,20 @@
    a/f/i = weekly totals. Bands are authority (low) → organiser (high) where an
    organiser count exists; otherwise a point value. */
 
-import type { Chart, ChartDataset } from "chart.js";
-import { fill, fmtWeek, t } from "../../copy/index.ts";
-import { gapSegment, THEME } from "../../core/canvas-registry.ts";
-import { noteText } from "../../vendor/dataset/src/data/notes.ts";
 import {
   bandOf,
   isDetached,
   midOf,
+  noteText,
   type Episode,
   type EpisodeId,
   type Flag,
   type Metric,
   type Row,
-} from "../../vendor/dataset/src/model/index.ts";
+} from "@manifestigations/dataset";
+import type { Chart, ChartDataset } from "chart.js";
+import { fill, fmtWeek, t } from "../../copy/index.ts";
+import { gapSegment, THEME } from "../../core/canvas-registry.ts";
 
 /**
  * One plotted point.

@@ -11,16 +11,14 @@
    The emphasis maps stay module-scoped, so if both grids ever land on the same
    page, hovering one still dims the other. */
 
-import { Chart, type ChartData, type ChartEvent } from "chart.js";
 import {
   ENFORCEMENT_LAST,
   EPISODES,
-} from "../../../vendor/dataset/src/data/episodes/index.ts";
-import {
   isDetached,
   METRICS,
   type Metric,
-} from "../../../vendor/dataset/src/model/index.ts";
+} from "@manifestigations/dataset";
+import { Chart, type ChartData, type ChartEvent } from "chart.js";
 import { compact, fill, fmtSpan, t } from "../../copy/index.ts";
 import { THEME, track } from "../../core/canvas-registry.ts";
 import { closedCardOf, deferUntilReveal } from "../../sections/disclosure.ts";

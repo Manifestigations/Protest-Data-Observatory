@@ -4,13 +4,13 @@
    Exact published strings stay in the caption line and in the <details> table
    fallback, so no precision is lost by drawing. */
 
-import { t } from "../../copy";
-import { el } from "../../core/dom.ts";
 import {
   type CaseRow,
   type Cell,
   type SevRow,
-} from "../../vendor/dataset/src/data/casualties/index.ts";
+} from "@manifestigations/dataset";
+import { t } from "../../copy";
+import { el } from "../../core/dom.ts";
 import { cellView, pct, share } from "./model.ts";
 
 /* ── Cell parsing ───────────────────────────────────────────────────────── */

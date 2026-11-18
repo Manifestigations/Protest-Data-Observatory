@@ -1,11 +1,11 @@
-import { fill, t } from "../../copy";
-import { getLocale } from "../../copy/state.ts";
-import { byId, el } from "../../core/dom.ts";
 import {
   CASES,
   SEVERITY_LEVELS,
   SEVERITY_WEEKS,
-} from "../../vendor/dataset/src/data/casualties/index.ts";
+} from "@manifestigations/dataset";
+import { fill, t } from "../../copy";
+import { getLocale } from "../../copy/state.ts";
+import { byId, el } from "../../core/dom.ts";
 import {
   CIVILIAN_PROXY,
   bystanderTable,

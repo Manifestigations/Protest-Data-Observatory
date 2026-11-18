@@ -3,6 +3,7 @@
    a11y table. Shared by section C (one panel per episode) and section C′
    (one panel per metric); none of it holds state. */
 
+import { EPISODES, METRICS, type Episode } from "@manifestigations/dataset";
 import {
   Chart,
   type ActiveElement,
@@ -15,8 +16,6 @@ import { a11y, compact, fill, nf, pctOf, t } from "../../copy/index.ts";
 import { fromChart, keyboardChart } from "../../core/a11y.ts";
 import { THEME } from "../../core/canvas-registry.ts";
 import { el } from "../../core/dom.ts";
-import { EPISODES } from "../../vendor/dataset/src/data/episodes/index.ts";
-import { METRICS, type Episode } from "../../vendor/dataset/src/model/index.ts";
 import { wrapTooltipLines } from "../tooltip.ts";
 import { statsOf, type PanelDataset, type Pt } from "./engine.ts";
 import { resolvedColumns } from "./index.ts";

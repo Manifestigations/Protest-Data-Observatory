@@ -2,11 +2,16 @@
 
 import type { ChartDataset } from "chart.js";
 
+import type {
+  Band,
+  Flag,
+  NoteRef,
+  Pt,
+  Series,
+} from "@manifestigations/dataset";
 import { t } from "../copy";
 import { THEME } from "../core/canvas-registry.ts";
 import { tones, type Tone, type ToneColours } from "../core/colors.ts";
-import type { Pt, Series } from "../../vendor/dataset/src/data/data.ts";
-import type { Band, Flag, NoteRef } from "../../vendor/dataset/src/model/index.ts";
 import { AXIS_LEFT, DEF, type SeriesId, type Unit } from "./series.ts";
 
 export interface ProtestDataset extends ChartDataset<
