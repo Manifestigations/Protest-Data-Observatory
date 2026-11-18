@@ -1,4 +1,0 @@
-[submodule "vendor/dataset"]
-	path = vendor/dataset
-	url = git@github-private:Manifestigations/Dataset.git
-	branch = main
