@@ -24,6 +24,41 @@ The estimates for policing costs should be taken as very rough, mainly determine
 
 The policing costs also don't address [opportunity costs](https://en.wikipedia.org/wiki/Parable_of_the_broken_window)---every additional euro spent on police deployments is a euro not spent on the education or health service. However, for the protestors, it's arguable that the damage they cause may come with a _negative_ opportunity cost: they smashed up a load of stuff on the 17th, and a little later the government started offering to _increase_ spending on education. That seems basically impossible to model confidently, so I've left it out.
 
+LLM STILL
+
+## Who pays, and what has actually been paid
+
+The "costs" panel answers _how much_. This section answers _borne by whom_, because a
+€1.1bn damage bill is not a €1.1bn transfer to anyone.
+
+Three payers, three stages. **Committed**: announced or owed. **Disbursed**: actually
+paid. **Contingent**: exposure that has been neither imposed nor paid — a statutory
+maximum a court has not applied to anyone. The third stage exists because the
+protestor column is otherwise unrepresentable: recording a €15,000 maximum as
+"committed" would claim money is owed that nobody owes.
+
+Four decisions, each with a consequence:
+
+1. **Insurance is a conduit, and the two counts do not agree.** On 19 November
+   France Assureurs put insured damage at **€207M for 5,280 claims** — 198M for
+   professional property, 3.5M for households, 6M for motor — against IFRAP's
+   €911M of material damage. The insured share is **22.7%**, not the 73% that
+   IFRAP's own coverage assumptions implied. The two are estimates of different
+   things, made independently, from different reporting dates (claims reported
+   to 12 November, window extended to 30 days). We print both and reconcile
+   neither: the gap is the finding. No local-authority line was published, so
+   public property is absent from the insurers' count, not zero in it.
+2. **The €5bn is a loan, not spending.** It is never added to a budget figure. The
+   interest subsidy is unpublished, so a cash cost is not computable.
+3. **Nothing is disbursed in 2026.** No source publishes a claims-paid figure; the
+   insurers' claim window had not closed. The column is empty _and says so_. UPDATE an estimated ultimate cost now exists (€207M), a paid figure still does not, for any party.
+4. **The iFRAP range is corrected.** The site previously quoted "€247M–872M", which is
+   not what iFRAP publishes. It publishes three scenarios: €309M / €613M / €1,101M.
+
+Consequence for the chart: the only defensible damage-to-concession statement is a
+_commitment_ ratio — €5,000M against €1,101M is 4.5×, against €309M is 16.2×. It is
+captioned "commitment per euro of damage", never "spending".
+
 ---
 
 ## Demographics

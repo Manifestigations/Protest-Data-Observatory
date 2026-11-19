@@ -16,17 +16,42 @@
       and a weekly tooltip.
 
    Nothing here needs to know which context it is in: both resolve through
-   the same { k: "obs" } branch. */
+   the same { k: "obs" } branch.
+
+   ── Fourth pass, 19 Nov 2026 ──────────────────────────────────────────────
+   costNoteText(id) resolves the "who pays" notes. Those are NOT NoteRefs: a
+   cost row has no date-metric cell to hang off, so the id is a plain string
+   (CostNoteRef in Dataset's src/data/costs.ts) and the copy lives in
+   src/copy/{en,fr}/costs.ts keyed by that same string. A miss warns once and
+   returns '' — the same tolerance t() applies to a missing catalogue branch,
+   because a missing note must not break a render. */
 
 import {
+  COST_COPY_EN,
+  COST_COPY_FR,
+  current,
   fill,
   fmtDayMonth,
   nf,
   RATE,
   t,
+  type CostCopy,
   type Flag,
   type NoteRef,
 } from "../copy";
+
+/** The active locale's cost copy. `current` is the same live binding t() reads. */
+const costCopy = (): CostCopy =>
+  current === "fr" ? COST_COPY_FR : COST_COPY_EN;
+
+/** Copy for a cost row's note. Unknown ids yield '' and warn once. */
+export function costNoteText(id: string | null | undefined): string {
+  if (!id) return "";
+  const text = costCopy().notes[id];
+  if (text) return text;
+  warnOnce(`cost-note:${id}`, `no copy for cost note "${id}"`);
+  return "";
+}
 
 /** Resolve a stored note reference into copy, in the active locale. */
 export function noteText(ref: NoteRef | null | undefined): string {

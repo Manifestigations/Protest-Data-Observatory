@@ -85,13 +85,19 @@ run `node server.ts`.
 8. **`NoteRef` is a reference, not copy.** Wording lives in
    `src/data/notes.ts`, rendered per locale.
 9. **A figure is edited in `Dataset`, never here.** See the section above.
+10. **A cost record carries three stages, never two.** `contingent` exists so
+    that a statutory maximum is not recorded as money owed. Never add
+    `committed` to `disbursed`, never add a `loan` row to a `spending` total,
+    never sum a `perPerson` maximum. Render an empty cell as "not published",
+    never as 0.
 
 ## Where things are
 
 | Need                                                                      | File                                                                                                                                                                                          |
 | ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Types: `Metric`, `Flag`, `Band`, `Row`, `Episode`, `MetricKey`, `NoteRef` | `src/model/index.ts` (real, this repo)                                                                                                                                                        |
-| 2026 figures, projections, weekly aggregation                             | `vendor/dataset/src/data/{facts,projections,aggregate,calendar,student-weeks,policing,helicopters,population}.ts` — reached through the shims in `src/data/`                                  |
+| 2026 figures, projections, weekly aggregation, **who pays**               | `vendor/dataset/src/data/{facts,projections,aggregate,calendar,student-weeks,policing,helicopters,population,costs}.ts` — reached through the shims in `src/data/`                            |
+| Cost copy: stages, payers, the eight cost notes, the ratio caption        | `src/copy/{en,fr}/costs.ts` (`CostCopy`), resolved by `costNoteText()` in `src/charts/notes.ts`                                                                                               |
 | Historical episodes (one per movement)                                    | `vendor/dataset/src/data/episodes/{mai68,cpe,gilets-jaunes,nahel,retraites,bloquons,students}.ts`; registry `episodes/index.ts`                                                               |
 | Source catalogue                                                          | `vendor/dataset/src/data/sources/*.ts` — types `types.ts`, helpers `src()`/`both()` in `record.ts`, groups in `groups.ts`, page→source mapping in `page-map.ts`, attribution in `mentions.ts` |
 | Casualty cases/levels/estimates                                           | `vendor/dataset/src/data/casualties/*`                                                                                                                                                        |
@@ -123,6 +129,12 @@ one `Row` per week (`w` sequential, `from`/`to` ISO). Never edit the shim.
 
 **Add a note** — `src/data/notes.ts` here; referenced by `noteRef` from the
 Dataset cell; must exist in both languages.
+
+**Add a cost note** — the id is `CostNoteRef` in Dataset's `src/data/costs.ts`;
+the wording goes in **both** `src/copy/{en,fr}/costs.ts` under `notes`, keyed by
+that exact string. `costNoteText()` warns once and renders '' for a miss, so a
+typo is silent on the page — check both locales by hand. Do not add a `NoteRef`
+kind: a cost row has no date-metric cell to hang off.
 
 **Add a page** — add a `PageId` + `PageSpec` in `src/site/routes.ts`; create the
 HTML shell in `docs/` with the right `data-page` and relative links
@@ -160,4 +172,6 @@ engine. Detached styling comes from `src/core/colors.ts` (`hollow`).
 `docs/bundle.js` and `docs/styles.css` staged · no `.map` staged · both locales
 updated · every new figure has a verbatim-labelled source **in `Dataset`** · no
 range collapsed, no gap interpolated, no flag relaxed · no shim edited by hand ·
-PR body states which figures changed and where in `Dataset` they changed.
+PR body states which figures changed and where in `Dataset` they changed. ·
+every cost note id exists in both `src/copy/en/costs.ts` and `src/copy/fr/costs.ts`
+r· no `committed` figure added to a `disbursed` one

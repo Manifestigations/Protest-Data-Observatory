@@ -106,7 +106,9 @@ no virtual DOM, nothing re-renders. `src/core/dom.ts` holds the DOM helpers
 | Path                                                    | What it is                                                                                                                                              | Touch it when                             |
 | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
 | `src/data/facts.ts`                                     | The 2026 observations, keyed by ISO date — **a copy of the Dataset file; edit it in `Dataset`**                                                         | a 2026 number changes                     |
-| `src/data/data.ts`                                      | Entry point for the 2026 layer: a verification record plus `export *` re-exports. No logic                                                              | never — import from it, don't edit it     |
+| `src/data/index.ts`                                     | Entry point for the 2026 layer (a shim): verification record plus re-exports. No logic                                                                  | never — import from it, don't edit it     |
+| `src/data/costs.ts`                                     | Who pays: `PAYER_COSTS`, `COST_UNPRICED` — a **shim** of the Dataset file                                                                               | a cost changes, in `Dataset`              |
+| `src/charts/notes.ts`                                   | `noteText()` for `NoteRef`s, `costNoteText()` for cost notes, `suffixFor()` for markers                                                                 | a note resolves wrongly                   |
 | `src/data/{projections,aggregate,student-weeks}.ts`     | Daily and weekly series **computed** from `facts.ts`                                                                                                    | only the arithmetic behind a series       |
 | `src/data/episodes/*.ts`                                | One file per historical movement (`mai68`, `cpe`, `gilets-jaunes`, `nahel`, `retraites`, `bloquons`, `students`) — copies of Dataset files              | a historical series changes               |
 | `src/data/sources/*.ts`                                 | Source catalogue: publisher, verbatim headline, URL, date, what it is used for                                                                          | you cite anything new                     |
@@ -213,6 +215,9 @@ files** — otherwise the live site keeps serving the old bundle. Never hand-edi
 - **Accessibility is part of the data's honesty**: canvas descriptions, tab
   order, contrast, and black-and-white maps under `prefers-contrast`.
 - **Consent, anonymity and safety come before the figure**, always.
+- **An empty column is a finding.** In 2026 nothing is disbursed, because no
+  one publishes a claims-paid figure. Draw it as "not published", never as
+  zero, and never fill it with the committed total.
 
 ---
 

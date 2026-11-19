@@ -12,6 +12,7 @@ const PAGES_BY_GROUP: Readonly<Record<GroupId, readonly PageId[]>> = {
   /* 2026: state reports and press underpin every 2026 figure. */
   official: ["2026/turnout", "2026/violence", "2026/costs"],
   press: ["2026/turnout", "2026/violence", "2026/costs"],
+  polls: ["2026/turnout"],
   strikes: ["2026/turnout"],
   blockades: ["2026/turnout"],
   overseas: ["2026/turnout", "2026/violence"],
