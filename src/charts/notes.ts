@@ -86,7 +86,7 @@ export function noteText(ref: NoteRef | null | undefined): string {
       });
 
     case "act":
-      return m.actNotes[ref.id] ?? "";
+      return m.actNotes[ref.id] ?? m.actNoteMissing;
 
     case "week": {
       const p = ref.p;

@@ -13563,6 +13563,22 @@ var GJ_SOURCES = [
   src("rfi-gj", "gj", "RFI \u2014 Gilets jaunes : retour sur neuf actes de contestation", "https://www.rfi.fr/fr/france/20190118-gilets-jaunes-retour-neuf-actes-contestation-rue-interpellations", both("the first nine acts condensed, with arrest figures \u2014 the only compact source for acts I\u2013IX enforcement.", "les neuf premiers actes en r\xE9sum\xE9, avec interpellations \u2014 seule source compacte pour la r\xE9pression des actes I \xE0 IX."), "2019-01-18")
 ];
 
+// ../Dataset/dist/data/sources/legal.js
+var LEGAL_SOURCES = [
+  src("reuters-2026-11-14", "legal", "Reuters \u2014 Riots in France: How anti-government protests spiralled out of control", "https://www.reuters.com/world/europe/riots-france-how-anti-government-protests-spiralled-out-control-2026-11-14/", both("Court reporting and Interior Ministry figures, 14 Nov 2026", "Chronique judiciaire et chiffres du minist\xE8re de l'Int\xE9rieur, 14 nov. 2026"), "2026-11-14"),
+  src("rtl-2026-10-29", "legal", "RTL \u2014 20 enqu\xEAtes pour mutilation ouvertes par l'IGPN", "https://www.rtl.fr/actu/justice-faits-divers/info-rtl-mains-arrachees-eborgnements-20-enquetes-pour-mutilation-ouvertes-par-l-igpn-depuis-le-debut-du-mouvement-lyceen-7900690520", both("IGPN enquiry count and case list", "Nombre d'enqu\xEAtes IGPN et liste de cas"), "2026-10-29"),
+  src("fr24-2026-10-10", "legal", "France 24 \u2014 Severe injuries at French student protests draw scrutiny to police tactics", "https://www.france24.com/en/france/20261010-injuries-french-student-protests-draw-scrutiny-to-police-tactics", both("24 IGPN investigations as of 10 Oct", "24 enqu\xEAtes IGPN au 10 oct."), "2026-10-10"),
+  src("aljazeera-2026-10-21", "legal", "Al Jazeera \u2014 French police accused of brutalising minors", "https://www.aljazeera.com/news/2026/10/21/i-am-still-traumatised-french-police-accused-of-brutalising-minors", both("36 IGPN inquiries as of 21 Oct", "36 enqu\xEAtes IGPN au 21 oct."), "2026-10-21"),
+  src("midilibre-2026-11-18", "legal", "Midi Libre \u2014 104 bless\xE9s graves, 11 \xE9borgn\xE9s, 7 amput\xE9s", "https://www.midilibre.fr/2026/11/18/104-blesses-graves-lors-des-manifestations-11-eborgnes-7-amputes-un-medecin-alerte-et-fait-etat-dune-hecatombe-le-17-octobre-13658589.php", both("Pr. Thines' tally, via Le Quotidien du m\xE9decin", "Bilan du Pr Thines, via Le Quotidien du m\xE9decin"), "2026-11-18"),
+  src("lemonde-2026-11-05", "legal", "Le Monde \u2014 French government uses anti-terror measures to prevent activists from protesting", "https://www.lemonde.fr/en/france/article/2026/11/05/french-government-uses-anti-terror-measures-to-prevent-activists-from-protesting_6772574_7.html", both("MICAS served on protesters", "MICAS notifi\xE9es \xE0 des militants"), "2026-11-05"),
+  src("fr24-2026-11-08", "legal", "France 24 \u2014 Menstrual disorders fuel calls to ban tear gas", "https://www.france24.com/en/france/20261108-abnormal-menstraution-periods-fuel-calls-ban-tear-gas-french-protests-police", both("Tear-gas use during the protests", "Usage de gaz lacrymog\xE8ne"), "2026-11-08"),
+  src("bernama-2026-11-17", "legal", "Bernama \u2014 France reports 7,184 police custody cases, 466 prison sentences", "https://www.bernama.com/en//world/news.php?id=2636395", both("Justice Ministry figures", "Chiffres du minist\xE8re de la Justice"), "2026-11-17"),
+  src("lemonde-2026-10-26", "legal", "Le Monde \u2014 Violences de militants d'ultradroite en marge du 24 octobre : plusieurs enqu\xEAtes ouvertes", "https://www.lemonde.fr/societe/article/2026/10/26/violences-de-militants-d-ultradroite-en-marge-du-24-octobre-plusieurs-enquete-ouvertes-a-aucun-moment-la-police-ne-les-a-proteges-defend-laurent-nunez_6800799_3224.html", both("Prosecutors' communiqu\xE9s, Rouen, Montpellier and Nice; the ministry's account", "Communiqu\xE9s des parquets de Rouen, Montpellier et Nice ; la version du minist\xE8re"), "2026-10-26"),
+  src("franceinfo-2026-10-29", "legal", "franceinfo \u2014 Rouen, Clermont-Ferrand, Nice\u2026 Des groupuscules d'extr\xEAme droite signal\xE9s en marge des manifestations", "https://www.franceinfo.fr/societe/manifestations/rouen-clermont-ferrand-nice-des-groupuscules-d-extreme-droite-signales-en-marge-des-manifestations_8253973.html", both("Eyewitness and video account of 24 October", "T\xE9moignages et vid\xE9os du 24 octobre"), "2026-10-29"),
+  src("lemonde-2026-10-21-en", "legal", "Le Monde (English) \u2014 Excuses and hasty procedures at trials of dozens arrested during looting in France", "https://www.lemonde.fr/en/france/article/2026/10/21/excuses-and-hasty-procedures-at-trials-of-dozens-arrested-during-looting-in-france_6760925_7.html", both("Courtroom capacity and dockets, 20 October", "Capacit\xE9 et r\xF4le des audiences du 20 octobre"), "2026-10-21"),
+  src("actujuridique-2026-10-20", "legal", "Actu-Juridique \u2014 \xC0 Paris, les mandats de d\xE9p\xF4t pleuvent en comparutions imm\xE9diates", "https://www.actu-juridique.fr/penal/emeutes-du-17-octobre-a-paris-les-mandats-de-depots-pleuvent-en-comparutions-immediates/", both("Hearings of 19 October, 23rd chamber", "Audiences du 19 octobre, 23e chambre"), "2026-10-20")
+];
+
 // ../Dataset/dist/data/sources/mai68.js
 var MAI68_SOURCES = [
   /* -------------------------------------------------------------- May 1968 */
@@ -13902,6 +13918,11 @@ var GROUPS = [
     }
   },
   {
+    id: "legal",
+    title: both("Legal records", "Sources judiciaires"),
+    blurb: both("Court decisions, prosecutors' communiqu\xE9s, police oversight reports and press investigations used for the procedural state of a claim.", "D\xE9cisions de justice, communiqu\xE9s du parquet, rapports de l'IGPN et enqu\xEAtes de presse utilis\xE9s pour \xE9tablir l'\xE9tat d'une proc\xE9dure.")
+  },
+  {
     id: "comparative",
     title: { en: "Comparative movements", fr: "Mouvements de comparaison" },
     blurb: {
@@ -13992,6 +14013,7 @@ var SOURCES = [
   ...BLOCKADES_SOURCES,
   ...BLOQUONS_SOURCES,
   ...COST_SOURCES,
+  ...LEGAL_SOURCES,
   ...CPE_SOURCES,
   ...GJ_SOURCES,
   ...MAI68_SOURCES,
@@ -14514,6 +14536,38 @@ var CHART_EN = {
       strikers: "Derived, not counted. 1.55% weighted education participation (ministry), used as a proxy for the civil service on the 2,500,000-agent base: 38,750. Education's own rates: 1.60% of teachers, 7.01% of life-schools staff. The ministry's figure covers the metropolitan academies only."
     }
   },
+  actNotes: {
+    /* ── far-right ──────────────────────────────────────────────────── */
+    "act-2026-10-24-rouen-01": "Identitarian militants beat a man in central Rouen after the march dispersed, then left chanting 'Rouen nationaliste'. Nobody was arrested at the time; police passing through the group went to check the victim instead. The Rouen prosecutor opened an aggravated-violence enquiry on 26 October, after Blast published the video. 'Identitarian' is the prosecutor's word, not ours.",
+    "act-2026-10-24-nancy-01": "Masked men threw projectiles at demonstrators, then sang La Marseillaise and placed themselves behind mobile gendarmes moving towards the march. No enquiry is reported, so the status stays at alleged. The account rests on a video published by Lib\xE9ration, which is why the attribution is journalistic rather than judicial.",
+    "act-2026-10-24-montpellier-01": "The mayor described a 'far-right militia' using violence against demonstrators. The prosecutor opened an enquiry on 26 October 'to identify these individuals' and announced no charge, so the record carries none: an enquiry to identify people is not yet an accusation of a named offence.",
+    "act-2026-10-24-nice-01": "Eleven suspected ultra-right militants were arrested before the march, and the Nice prosecutor announced they would be tried for criminal conspiracy to commit aggravated violence. The charge concerns an agreement to act, not the injuries: the prefecture reported three light injuries near the Old Nice without saying who caused them.",
+    "act-2026-10-24-clermont-ferrand-01": "Black-clad individuals occupied a caf\xE9 terrace, gave Nazi salutes, unfurled flags and photographed themselves in front of the manager. No offence has been publicly characterised and no enquiry is reported, so there is no charge and the status is alleged. The record is here because the incident is documented; remove it if no offence is ever identified.",
+    /* ── protesters ─────────────────────────────────────────────────── */
+    "act-2026-10-17-limoges-01": "The Limoges prosecutor opened an attempted-homicide investigation after a protester was left with a serious head injury. The injury is counted once, in the casualty register; this record is its legal reading, not a second victim.",
+    "act-2026-10-17-marseille-01": "Damage reported in Marseille during the 17 October demonstrations. No charge, no proceeding and no figure were published. The record marks that the act was reported; it does not count it.",
+    "act-2026-10-17-lyon-01": "Arson reported in Lyon on 17 October. No published charge or proceeding. The record exists so the act is not lost, not so that it can be added to anything.",
+    "act-2026-10-17-paris-01": "A trumpeter from the Vosges was prosecuted for taking part in an armed demonstration, after police found work gloves, a mask, a box of matches and a spanner on him near the Place de la R\xE9publique. The prosecution asked for six months; the court acquitted him. He also faced a charge of racially aggravated insult, recorded in this note rather than in a second record, because one act holds one charge.",
+    /* ── sittings ───────────────────────────────────────────────────── */
+    "sit-2026-10-19-paris": "Six adults were tried in immediate appearance, four of them before the 23rd chamber, division 1. Five of the six ended the day in detention, and one hearing was adjourned to 22 December with the defendant held in the meantime. Room and docket counts were not published: the six are defendants, not the court's capacity.",
+    "sit-2026-10-20-paris": "Four courtrooms, twice the usual number, plus a fifth for guilty-plea procedures. Defence lawyers denounced a 'historic repression' and accused the justice minister of trying to force open the doors of the courts and guide the judges' pens. The reported constraint was arithmetic: cases arrived faster than they could be heard, and procedure risked annulment for breach of the delay within which a detained person must be brought to court. Most outcomes were suspended sentences, below what prosecutors sought.",
+    "sit-2026-10-20-marseille": "Two courtrooms sat at full capacity. Neither docket nor outcomes were published, so the record holds a room count and nothing else.",
+    "sit-2026-10-20-lyon": "Lyon sat the same day; no figure \u2014 rooms, docket or outcomes \u2014 was published. The empty fields are the finding: the national picture of 20 October is Paris-shaped because Paris is where the press was.",
+    /* ── police ─────────────────────────────────────────────────────── */
+    "act-2026-09-28-saint-ouen-laumone-01": "A stun grenade fired at close range during a lyc\xE9e protest. The Interior Ministry suspended stun grenades for the student mobilisations on 7 October, nine days later \u2014 a suspension is an administrative decision, not a finding against the officer.",
+    "act-2026-09-30-tours-01": "The date is derived, not reported: the source places the injury 'two days after' 28 September. The only record in this set to have left the enquiry stage \u2014 the officer was charged (mis en examen) on 29 October.",
+    "act-2026-10-05-lens-01": "A stun grenade injury at a lyc\xE9e in Lens. The suspension of stun grenades for student mobilisations followed two days later, and no outright ban has been ordered since. The record concerns the use, not the weapon.",
+    "act-2026-10-17-limoges-02": "A grenade injury in Limoges on 17 October, entered separately from the attempted-homicide case of the same day. The reporting cited does not say whether one projectile caused both injuries: the two records are not a matched pair.",
+    "act-2026-10-24-toulouse-01": "A grenade injury in Toulouse on 24 October, the day far-right groups clashed with protesters in several cities. The record concerns the police projectile, not those clashes \u2014 for which this dataset has no side.",
+    "act-2026-10-17-paris-02": "A baton beating filmed at the edge of the Place de la R\xE9publique at about 16:00 on 17 October. The IGPN enquiry is the only proceeding known, and no unit is named in the reporting cited.",
+    /* ── counterfactual register ────────────────────────────────────── */
+    "nrm-2026-10-17-paris-orchestra": "Tear gas fired during the orchestra's set at the Place de la R\xE9publique gathering. Tested against the prohibition on indiscriminate attack: the crowd was not a military objective, and no method of direction could have made it one.",
+    "nrm-2026-10-17-paris-gassing": "Mass gassing on 17 October, the day a 59-year-old man died after exposure, per the medical tally. The proportionality test asks whether the expected civilian harm was excessive to the military advantage anticipated \u2014 a question no French court will put, hence hypothetical.",
+    "nrm-2026-10-05-lens-grenade": "No instrument in force prohibits stun grenades. The entry asks whether a close-range use causing irreversible injury would breach the rule against weapons of a nature to cause superfluous injury.",
+    "nrm-2026-09-30-tours-lbd": "The LBD 40 is not a prohibited weapon. The question is the use: a defence-ball launcher fired at head height is one documented mechanism of blinding injury in this movement.",
+    "nrm-2026-11-08-tear-gas-as-method": "CS is lawful for domestic riot control and unlawful as a method of warfare. Nothing here alleges the second; the entry marks where the line would fall."
+  },
+  actNoteMissing: "No note has been written for this record yet \u2014 the record stands, its provenance is unstated.",
   deployNotes: {
     "2026-09-28": "deployment estimated",
     "2026-09-29": "deployment estimated",
@@ -15223,6 +15277,38 @@ var CHART_FR = {
       strikers: "Chiffre d\xE9riv\xE9, non compt\xE9. 1,55 % de participation pond\xE9r\xE9e dans l\u2019\xE9ducation (minist\xE8re), utilis\xE9s comme approximation de la fonction publique sur la base de 2 500 000 agents : 38 750. Taux propres \xE0 l\u2019\xE9ducation : 1,60 % des enseignants, 7,01 % des personnels de vie scolaire. Le chiffre minist\xE9riel ne couvre que les acad\xE9mies m\xE9tropolitaines."
     }
   },
+  actNotes: {
+    /* ── extrême droite ─────────────────────────────────────────────── */
+    "act-2026-10-24-rouen-01": "Des militants identitaires frappent un homme dans le centre de Rouen apr\xE8s la dispersion du cort\xE8ge, puis repartent en scandant \xAB Rouen nationaliste \xBB. Aucune interpellation sur le moment : les policiers qui traversent le groupe vont contr\xF4ler la victime. Le parquet de Rouen a ouvert une enqu\xEAte pour violences aggrav\xE9es le 26 octobre, apr\xE8s la diffusion de la vid\xE9o par Blast. \xAB Identitaires \xBB est le mot du procureur, pas le n\xF4tre.",
+    "act-2026-10-24-nancy-01": "Des individus cagoul\xE9s lancent des projectiles sur des manifestants, entonnent La Marseillaise, puis se placent derri\xE8re des gendarmes mobiles qui interviennent en direction du cort\xE8ge. Aucune enqu\xEAte n'est signal\xE9e : le statut reste \xAB all\xE9gu\xE9 \xBB. Le r\xE9cit repose sur une vid\xE9o publi\xE9e par Lib\xE9ration, d'o\xF9 une attribution journalistique et non judiciaire.",
+    "act-2026-10-24-montpellier-01": "Le maire d\xE9nonce une \xAB milice d'extr\xEAme droite \xBB ayant fait usage de la violence contre des manifestants. Le parquet a ouvert le 26 octobre une enqu\xEAte pour \xAB identifier ces individus \xBB sans annoncer de qualification : la fiche n'en porte donc aucune, une enqu\xEAte d'identification n'\xE9tant pas encore une accusation d'infraction pr\xE9cise.",
+    "act-2026-10-24-nice-01": "Onze militants pr\xE9sum\xE9s d'ultradroite ont \xE9t\xE9 interpell\xE9s avant la manifestation, et le parquet de Nice a annonc\xE9 qu'ils seraient jug\xE9s pour association de malfaiteurs en vue de commettre des violences volontaires aggrav\xE9es. La qualification porte sur une entente, non sur les blessures : la pr\xE9fecture a signal\xE9 trois bless\xE9s l\xE9gers aux abords du Vieux-Nice sans pr\xE9ciser qui les avait caus\xE9s.",
+    "act-2026-10-24-clermont-ferrand-01": "Des individus v\xEAtus de noir investissent la terrasse d'un caf\xE9, font des saluts nazis, d\xE9ploient des drapeaux et se photographient devant la g\xE9rante. Aucune infraction n'a \xE9t\xE9 publiquement qualifi\xE9e et aucune enqu\xEAte n'est signal\xE9e : pas de qualification, statut \xAB all\xE9gu\xE9 \xBB. La fiche existe parce que le fait est document\xE9 ; \xE0 retirer si aucune infraction n'est jamais caract\xE9ris\xE9e.",
+    /* ── manifestants ───────────────────────────────────────────────── */
+    "act-2026-10-17-limoges-01": "Le parquet de Limoges a ouvert une enqu\xEAte pour tentative d'homicide apr\xE8s qu'un manifestant a \xE9t\xE9 gri\xE8vement bless\xE9 \xE0 la t\xEAte. La blessure n'est compt\xE9e qu'une fois, au registre des victimes ; cette fiche en est la lecture juridique, non une seconde victime.",
+    "act-2026-10-17-marseille-01": "D\xE9gradations signal\xE9es \xE0 Marseille pendant les manifestations du 17 octobre. Aucune qualification, aucune proc\xE9dure et aucun chiffre n'ont \xE9t\xE9 publi\xE9s. La fiche atteste que le fait a \xE9t\xE9 rapport\xE9 ; elle ne le compte pas.",
+    "act-2026-10-17-lyon-01": "Incendie signal\xE9 \xE0 Lyon le 17 octobre. Aucune qualification ni proc\xE9dure publi\xE9e. La fiche existe pour que l'acte ne disparaisse pas, non pour \xEAtre additionn\xE9 \xE0 quoi que ce soit.",
+    "act-2026-10-17-paris-01": "Un trompettiste venu des Vosges est poursuivi pour participation avec arme \xE0 une manifestation, apr\xE8s que les policiers ont trouv\xE9 sur lui des gants coqu\xE9s, un masque, une bo\xEEte d'allumettes et une cl\xE9 \xE0 molette pr\xE8s de la place de la R\xE9publique. Le parquet a requis six mois ; le tribunal l'a relax\xE9. Il \xE9tait aussi poursuivi pour outrage \xE0 caract\xE8re raciste, consign\xE9 dans cette note et non dans une seconde fiche, un acte ne portant qu'une qualification.",
+    /* ── audiences ──────────────────────────────────────────────────── */
+    "sit-2026-10-19-paris": "Six majeurs jug\xE9s en comparution imm\xE9diate, dont quatre devant la 23e chambre, 1re section. Cinq des six ont termin\xE9 la journ\xE9e en d\xE9tention, et une affaire a \xE9t\xE9 renvoy\xE9e au 22 d\xE9cembre avec maintien en d\xE9tention. Le nombre de salles et le r\xF4le n'ont pas \xE9t\xE9 publi\xE9s : les six sont des pr\xE9venus, non une capacit\xE9.",
+    "sit-2026-10-20-paris": "Quatre salles d'audience, le double de l'ordinaire, plus une cinqui\xE8me consacr\xE9e aux proc\xE9dures de reconnaissance pr\xE9alable de culpabilit\xE9. Les avocats de la d\xE9fense ont d\xE9nonc\xE9 une \xAB r\xE9pression historique \xBB et accus\xE9 la ministre de la justice de vouloir forcer les portes des tribunaux et guider la plume des juges. La contrainte rapport\xE9e est arithm\xE9tique : les dossiers arrivaient plus vite qu'ils ne pouvaient \xEAtre jug\xE9s, et les proc\xE9dures risquaient la nullit\xE9 pour d\xE9passement du d\xE9lai de comparution d'une personne d\xE9tenue. La plupart des peines prononc\xE9es sont avec sursis, en de\xE7\xE0 des r\xE9quisitions.",
+    "sit-2026-10-20-marseille": "Deux salles ont si\xE9g\xE9 \xE0 pleine capacit\xE9. Ni le r\xF4le ni les issues n'ont \xE9t\xE9 publi\xE9s : la fiche ne retient qu'un nombre de salles.",
+    "sit-2026-10-20-lyon": "Lyon a si\xE9g\xE9 le m\xEAme jour ; aucun chiffre \u2014 salles, r\xF4le, issues \u2014 n'a \xE9t\xE9 publi\xE9. Les champs vides sont le r\xE9sultat : l'image nationale du 20 octobre est parisienne parce que la presse \xE9tait \xE0 Paris.",
+    /* ── forces de l'ordre ──────────────────────────────────────────── */
+    "act-2026-09-28-saint-ouen-laumone-01": "Grenade de d\xE9sencerclement tir\xE9e \xE0 courte distance lors d'une manifestation lyc\xE9enne. Le minist\xE8re de l'Int\xE9rieur a suspendu les grenades de d\xE9sencerclement pour les mobilisations lyc\xE9ennes le 7 octobre, neuf jours plus tard \u2014 une suspension est une d\xE9cision administrative, non une d\xE9cision sur la responsabilit\xE9 de l'agent.",
+    "act-2026-09-30-tours-01": "La date est d\xE9riv\xE9e, non rapport\xE9e : la source situe la blessure \xAB deux jours apr\xE8s \xBB le 28 septembre. Seule fiche de cet ensemble \xE0 avoir d\xE9pass\xE9 le stade de l'enqu\xEAte : l'agent a \xE9t\xE9 mis en examen le 29 octobre.",
+    "act-2026-10-05-lens-01": "Blessure par grenade dans un lyc\xE9e \xE0 Lens. La suspension des grenades de d\xE9sencerclement pour les mobilisations lyc\xE9ennes est intervenue deux jours plus tard, sans qu'une interdiction g\xE9n\xE9rale ait \xE9t\xE9 prononc\xE9e depuis. La fiche porte sur l'usage, non sur l'arme.",
+    "act-2026-10-17-limoges-02": "Blessure par grenade \xE0 Limoges le 17 octobre, enregistr\xE9e s\xE9par\xE9ment de l'affaire pour tentative d'homicide du m\xEAme jour. Les sources cit\xE9es ne disent pas si un m\xEAme projectile a caus\xE9 les deux blessures : les deux fiches ne forment pas une paire.",
+    "act-2026-10-24-toulouse-01": "Blessure par grenade \xE0 Toulouse le 24 octobre, jour o\xF9 des groupes d'extr\xEAme droite ont affront\xE9 des manifestants dans plusieurs villes. La fiche porte sur le projectile policier, non sur ces affrontements, pour lesquels ce jeu de donn\xE9es n'a pas de camp.",
+    "act-2026-10-17-paris-02": "Passage \xE0 tabac film\xE9 en marge de la place de la R\xE9publique, vers 16 h, le 17 octobre. L'enqu\xEAte de l'IGPN est la seule proc\xE9dure connue, et aucune unit\xE9 n'est nomm\xE9e dans les sources cit\xE9es.",
+    /* ── registre hypothétique ──────────────────────────────────────── */
+    "nrm-2026-10-17-paris-orchestra": "Gaz lacrymog\xE8ne tir\xE9 pendant le set de l'orchestre, place de la R\xE9publique. Confront\xE9 \xE0 l'interdiction des attaques indiscrimin\xE9es : la foule n'\xE9tait pas un objectif militaire, et aucune m\xE9thode de direction n'aurait pu en faire un.",
+    "nrm-2026-10-17-paris-gassing": "Gazage massif le 17 octobre, jour o\xF9 un homme de 59 ans est mort apr\xE8s exposition selon le bilan m\xE9dical. Le test de proportionnalit\xE9 demande si les dommages civils attendus \xE9taient excessifs au regard de l'avantage militaire escompt\xE9 \u2014 une question qu'aucune juridiction fran\xE7aise ne posera, d'o\xF9 le caract\xE8re hypoth\xE9tique.",
+    "nrm-2026-10-05-lens-grenade": "Aucun instrument en vigueur n'interdit les grenades de d\xE9sencerclement. La fiche demande si un usage \xE0 courte distance causant des l\xE9sions irr\xE9versibles violerait la r\xE8gle interdisant les armes de nature \xE0 causer des maux superflus.",
+    "nrm-2026-09-30-tours-lbd": "Le LBD 40 n'est pas une arme interdite. La question est celle de l'usage : un tir \xE0 hauteur de t\xEAte est l'un des m\xE9canismes d'\xE9borgnement document\xE9s dans ce mouvement.",
+    "nrm-2026-11-08-tear-gas-as-method": "Le CS est autoris\xE9 pour le maintien de l'ordre int\xE9rieur et interdit comme m\xE9thode de guerre. Rien ici n'all\xE8gue le second : la fiche marque o\xF9 passerait la fronti\xE8re."
+  },
+  actNoteMissing: "Aucune note n'a encore \xE9t\xE9 r\xE9dig\xE9e pour cette fiche \u2014 la fiche existe, sa provenance n'est pas renseign\xE9e.",
   deployNotes: {
     "2026-09-28": "dispositif estim\xE9",
     "2026-09-29": "dispositif estim\xE9",
@@ -15800,7 +15886,7 @@ var DICT2 = {
   fr: { "span.sep": SPAN_SEP2.fr }
 };
 var warned2 = /* @__PURE__ */ new Set();
-function warnOnce2(key, message) {
+function warnOnce(key, message) {
   if (warned2.has(key)) return;
   warned2.add(key);
   console.warn(`[i18n] ${message}`);
@@ -15929,7 +16015,7 @@ function setLang(next, opts = {}) {
   const { persist = true, notify = true } = opts;
   const target = normalizeLocale(next);
   if (!target) {
-    warnOnce2(`locale:${String(next)}`, `unrecognised locale "${String(next)}"`);
+    warnOnce(`locale:${String(next)}`, `unrecognised locale "${String(next)}"`);
     return current;
   }
   const previous = current;
@@ -18132,6 +18218,8 @@ function noteText(ref) {
       return fill(ref.added ? m.cumulativeAdded : m.cumulativeCarried, {
         days: ref.days
       });
+    case "act":
+      return m.actNotes[ref.id] ?? m.actNoteMissing;
     case "week": {
       const p = ref.p;
       const parts = [

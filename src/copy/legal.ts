@@ -112,6 +112,24 @@ export const CHARGE_LABELS: Record<ChargeId, Bi> = {
     fr: "Discrimination par une personne dépositaire de l'autorité publique",
   },
   "vie-privee": { en: "Breach of privacy", fr: "Atteinte à la vie privée" },
+
+  /* ── added with the far-right register ────────────────────────────────
+     `CHARGE_LABELS` is keyed by id and not by side, so this grouping is
+     cosmetic. What decides which side a record may use is `sides` in
+     Dataset/src/data/illegal/charges.ts, and `check:illegal` holds records
+     to it. */
+  "violences-aggravees": {
+    en: "Aggravated wilful violence",
+    fr: "Violences volontaires aggravées",
+  },
+  "association-malfaiteurs-violences": {
+    en: "Criminal conspiracy to commit violence",
+    fr: "Association de malfaiteurs en vue de commettre des violences",
+  },
+  "tentative-homicide": {
+    en: "Attempted homicide",
+    fr: "Tentative d'homicide",
+  },
 };
 
 export const TACTIC_LABELS: Record<TacticId, Bi> = {

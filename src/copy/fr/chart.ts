@@ -224,6 +224,18 @@ export const CHART_FR: ChartCopy = {
     },
   },
   actNotes: {
+    /* ── extrême droite ─────────────────────────────────────────────── */
+    "act-2026-10-24-rouen-01":
+      "Des militants identitaires frappent un homme dans le centre de Rouen après la dispersion du cortège, puis repartent en scandant « Rouen nationaliste ». Aucune interpellation sur le moment : les policiers qui traversent le groupe vont contrôler la victime. Le parquet de Rouen a ouvert une enquête pour violences aggravées le 26 octobre, après la diffusion de la vidéo par Blast. « Identitaires » est le mot du procureur, pas le nôtre.",
+    "act-2026-10-24-nancy-01":
+      "Des individus cagoulés lancent des projectiles sur des manifestants, entonnent La Marseillaise, puis se placent derrière des gendarmes mobiles qui interviennent en direction du cortège. Aucune enquête n'est signalée : le statut reste « allégué ». Le récit repose sur une vidéo publiée par Libération, d'où une attribution journalistique et non judiciaire.",
+    "act-2026-10-24-montpellier-01":
+      "Le maire dénonce une « milice d'extrême droite » ayant fait usage de la violence contre des manifestants. Le parquet a ouvert le 26 octobre une enquête pour « identifier ces individus » sans annoncer de qualification : la fiche n'en porte donc aucune, une enquête d'identification n'étant pas encore une accusation d'infraction précise.",
+    "act-2026-10-24-nice-01":
+      "Onze militants présumés d'ultradroite ont été interpellés avant la manifestation, et le parquet de Nice a annoncé qu'ils seraient jugés pour association de malfaiteurs en vue de commettre des violences volontaires aggravées. La qualification porte sur une entente, non sur les blessures : la préfecture a signalé trois blessés légers aux abords du Vieux-Nice sans préciser qui les avait causés.",
+    "act-2026-10-24-clermont-ferrand-01":
+      "Des individus vêtus de noir investissent la terrasse d'un café, font des saluts nazis, déploient des drapeaux et se photographient devant la gérante. Aucune infraction n'a été publiquement qualifiée et aucune enquête n'est signalée : pas de qualification, statut « allégué ». La fiche existe parce que le fait est documenté ; à retirer si aucune infraction n'est jamais caractérisée.",
+
     /* ── manifestants ───────────────────────────────────────────────── */
     "act-2026-10-17-limoges-01":
       "Le parquet de Limoges a ouvert une enquête pour tentative d'homicide après qu'un manifestant a été grièvement blessé à la tête. La blessure n'est comptée qu'une fois, au registre des victimes ; cette fiche en est la lecture juridique, non une seconde victime.",
@@ -231,6 +243,18 @@ export const CHART_FR: ChartCopy = {
       "Dégradations signalées à Marseille pendant les manifestations du 17 octobre. Aucune qualification, aucune procédure et aucun chiffre n'ont été publiés. La fiche atteste que le fait a été rapporté ; elle ne le compte pas.",
     "act-2026-10-17-lyon-01":
       "Incendie signalé à Lyon le 17 octobre. Aucune qualification ni procédure publiée. La fiche existe pour que l'acte ne disparaisse pas, non pour être additionné à quoi que ce soit.",
+    "act-2026-10-17-paris-01":
+      "Un trompettiste venu des Vosges est poursuivi pour participation avec arme à une manifestation, après que les policiers ont trouvé sur lui des gants coqués, un masque, une boîte d'allumettes et une clé à molette près de la place de la République. Le parquet a requis six mois ; le tribunal l'a relaxé. Il était aussi poursuivi pour outrage à caractère raciste, consigné dans cette note et non dans une seconde fiche, un acte ne portant qu'une qualification.",
+
+    /* ── audiences ──────────────────────────────────────────────────── */
+    "sit-2026-10-19-paris":
+      "Six majeurs jugés en comparution immédiate, dont quatre devant la 23e chambre, 1re section. Cinq des six ont terminé la journée en détention, et une affaire a été renvoyée au 22 décembre avec maintien en détention. Le nombre de salles et le rôle n'ont pas été publiés : les six sont des prévenus, non une capacité.",
+    "sit-2026-10-20-paris":
+      "Quatre salles d'audience, le double de l'ordinaire, plus une cinquième consacrée aux procédures de reconnaissance préalable de culpabilité. Les avocats de la défense ont dénoncé une « répression historique » et accusé la ministre de la justice de vouloir forcer les portes des tribunaux et guider la plume des juges. La contrainte rapportée est arithmétique : les dossiers arrivaient plus vite qu'ils ne pouvaient être jugés, et les procédures risquaient la nullité pour dépassement du délai de comparution d'une personne détenue. La plupart des peines prononcées sont avec sursis, en deçà des réquisitions.",
+    "sit-2026-10-20-marseille":
+      "Deux salles ont siégé à pleine capacité. Ni le rôle ni les issues n'ont été publiés : la fiche ne retient qu'un nombre de salles.",
+    "sit-2026-10-20-lyon":
+      "Lyon a siégé le même jour ; aucun chiffre — salles, rôle, issues — n'a été publié. Les champs vides sont le résultat : l'image nationale du 20 octobre est parisienne parce que la presse était à Paris.",
 
     /* ── forces de l'ordre ──────────────────────────────────────────── */
     "act-2026-09-28-saint-ouen-laumone-01":
@@ -243,7 +267,7 @@ export const CHART_FR: ChartCopy = {
       "Blessure par grenade à Limoges le 17 octobre, enregistrée séparément de l'affaire pour tentative d'homicide du même jour. Les sources citées ne disent pas si un même projectile a causé les deux blessures : les deux fiches ne forment pas une paire.",
     "act-2026-10-24-toulouse-01":
       "Blessure par grenade à Toulouse le 24 octobre, jour où des groupes d'extrême droite ont affronté des manifestants dans plusieurs villes. La fiche porte sur le projectile policier, non sur ces affrontements, pour lesquels ce jeu de données n'a pas de camp.",
-    "act-2026-10-17-paris-01":
+    "act-2026-10-17-paris-02":
       "Passage à tabac filmé en marge de la place de la République, vers 16 h, le 17 octobre. L'enquête de l'IGPN est la seule procédure connue, et aucune unité n'est nommée dans les sources citées.",
 
     /* ── registre hypothétique ──────────────────────────────────────── */

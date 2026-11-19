@@ -224,6 +224,18 @@ export const CHART_EN: ChartCopy = {
     },
   },
   actNotes: {
+    /* ── far-right ──────────────────────────────────────────────────── */
+    "act-2026-10-24-rouen-01":
+      "Identitarian militants beat a man in central Rouen after the march dispersed, then left chanting 'Rouen nationaliste'. Nobody was arrested at the time; police passing through the group went to check the victim instead. The Rouen prosecutor opened an aggravated-violence enquiry on 26 October, after Blast published the video. 'Identitarian' is the prosecutor's word, not ours.",
+    "act-2026-10-24-nancy-01":
+      "Masked men threw projectiles at demonstrators, then sang La Marseillaise and placed themselves behind mobile gendarmes moving towards the march. No enquiry is reported, so the status stays at alleged. The account rests on a video published by Libération, which is why the attribution is journalistic rather than judicial.",
+    "act-2026-10-24-montpellier-01":
+      "The mayor described a 'far-right militia' using violence against demonstrators. The prosecutor opened an enquiry on 26 October 'to identify these individuals' and announced no charge, so the record carries none: an enquiry to identify people is not yet an accusation of a named offence.",
+    "act-2026-10-24-nice-01":
+      "Eleven suspected ultra-right militants were arrested before the march, and the Nice prosecutor announced they would be tried for criminal conspiracy to commit aggravated violence. The charge concerns an agreement to act, not the injuries: the prefecture reported three light injuries near the Old Nice without saying who caused them.",
+    "act-2026-10-24-clermont-ferrand-01":
+      "Black-clad individuals occupied a café terrace, gave Nazi salutes, unfurled flags and photographed themselves in front of the manager. No offence has been publicly characterised and no enquiry is reported, so there is no charge and the status is alleged. The record is here because the incident is documented; remove it if no offence is ever identified.",
+
     /* ── protesters ─────────────────────────────────────────────────── */
     "act-2026-10-17-limoges-01":
       "The Limoges prosecutor opened an attempted-homicide investigation after a protester was left with a serious head injury. The injury is counted once, in the casualty register; this record is its legal reading, not a second victim.",
@@ -231,6 +243,18 @@ export const CHART_EN: ChartCopy = {
       "Damage reported in Marseille during the 17 October demonstrations. No charge, no proceeding and no figure were published. The record marks that the act was reported; it does not count it.",
     "act-2026-10-17-lyon-01":
       "Arson reported in Lyon on 17 October. No published charge or proceeding. The record exists so the act is not lost, not so that it can be added to anything.",
+    "act-2026-10-17-paris-01":
+      "A trumpeter from the Vosges was prosecuted for taking part in an armed demonstration, after police found work gloves, a mask, a box of matches and a spanner on him near the Place de la République. The prosecution asked for six months; the court acquitted him. He also faced a charge of racially aggravated insult, recorded in this note rather than in a second record, because one act holds one charge.",
+
+    /* ── sittings ───────────────────────────────────────────────────── */
+    "sit-2026-10-19-paris":
+      "Six adults were tried in immediate appearance, four of them before the 23rd chamber, division 1. Five of the six ended the day in detention, and one hearing was adjourned to 22 December with the defendant held in the meantime. Room and docket counts were not published: the six are defendants, not the court's capacity.",
+    "sit-2026-10-20-paris":
+      "Four courtrooms, twice the usual number, plus a fifth for guilty-plea procedures. Defence lawyers denounced a 'historic repression' and accused the justice minister of trying to force open the doors of the courts and guide the judges' pens. The reported constraint was arithmetic: cases arrived faster than they could be heard, and procedure risked annulment for breach of the delay within which a detained person must be brought to court. Most outcomes were suspended sentences, below what prosecutors sought.",
+    "sit-2026-10-20-marseille":
+      "Two courtrooms sat at full capacity. Neither docket nor outcomes were published, so the record holds a room count and nothing else.",
+    "sit-2026-10-20-lyon":
+      "Lyon sat the same day; no figure — rooms, docket or outcomes — was published. The empty fields are the finding: the national picture of 20 October is Paris-shaped because Paris is where the press was.",
 
     /* ── police ─────────────────────────────────────────────────────── */
     "act-2026-09-28-saint-ouen-laumone-01":
@@ -243,7 +267,7 @@ export const CHART_EN: ChartCopy = {
       "A grenade injury in Limoges on 17 October, entered separately from the attempted-homicide case of the same day. The reporting cited does not say whether one projectile caused both injuries: the two records are not a matched pair.",
     "act-2026-10-24-toulouse-01":
       "A grenade injury in Toulouse on 24 October, the day far-right groups clashed with protesters in several cities. The record concerns the police projectile, not those clashes — for which this dataset has no side.",
-    "act-2026-10-17-paris-01":
+    "act-2026-10-17-paris-02":
       "A baton beating filmed at the edge of the Place de la République at about 16:00 on 17 October. The IGPN enquiry is the only proceeding known, and no unit is named in the reporting cited.",
 
     /* ── counterfactual register ────────────────────────────────────── */

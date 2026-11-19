@@ -61,6 +61,19 @@ captioned "commitment per euro of damage", never "spending".
 
 ---
 
+## Crimes
+
+> [!TIP]
+> To write
+
+Arrest is not a charge. FACTS.arrests counts a police measure. Any funnel drawn from it and from this register mixes two populations.
+Only cases that reach court are visible. A "conviction rate" computed over these records measures what got prosecuted, not what happened.
+The war-crime register is a counterfactual, and the obvious counterfactual is wrong. Tear gas is lawful for domestic riot control under the Chemical Weapons Convention; what is arguable is use-as-method-of-warfare and indiscriminate use. Hence caveat is a required field, not a footnote.
+
+custody figures of "over 4,900" (3 Nov) and 7,184 (later) are not the same measure; IGPN enquiry counts move 24 → 36 → 80 → 161 partly because scope widens from IGPN to "internal watchdogs" ; and the Tours mis en examen is the only case in the set that has left the enquiry stage .
+
+---
+
 ## Demographics
 
 There are no ethnic statistics for either side. In France, collection of ethnic data is illegal; the DPJJ study proxies with nationality and birthplace.
