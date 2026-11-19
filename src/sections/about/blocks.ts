@@ -1,65 +1,47 @@
 import type { Lang } from "../../copy";
+import { html } from "../../core/html";
 import { CALLOUT } from "./copy";
 import type { Block, Run, SubSection } from "./model";
 
 /** Gets the accent treatment. Same id, because the featured section is the open one. */
 const FEATURED_ID = "analysis";
 
+/** A run is already a node: text, <em>, or a link. */
 function inline(run: Run): Node {
   if (typeof run === "string") return document.createTextNode(run);
 
-  if ("em" in run) {
-    const em = document.createElement("em");
-    em.textContent = run.em;
-    return em;
-  }
+  if ("em" in run) return html`<em>${run.em}</em>`;
 
-  const a = document.createElement("a");
-  a.href = run.href;
-  a.textContent = run.link;
-  a.rel = "noopener noreferrer";
-  if (/^https?:/i.test(run.href)) a.target = "_blank";
-  return a;
+  return html`<a
+    href="${run.href}"
+    rel="noopener noreferrer"
+    target="${/^https?:/i.test(run.href) ? "_blank" : null}"
+    >${run.link}</a
+  >`;
 }
 
-function block(b: Block): HTMLElement {
+function block(b: Block): Node {
   switch (b.kind) {
     case "p": {
-      const p = document.createElement("p");
-      p.append(...b.runs.map(inline));
-      return p;
+      return html`<p>${b.runs.map(inline)}</p>`;
     }
 
     case "ul": {
-      const ul = document.createElement("ul");
-      for (const item of b.items) {
-        const li = document.createElement("li");
-        li.append(...item.map(inline));
-        ul.append(li);
-      }
-      return ul;
+      return html`<ul>
+        ${b.items.map((item) => html`<li>${item.map(inline)}</li>`)}
+      </ul>`;
     }
 
     /* h4, not h3: the group title is already the h3. */
     case "h": {
-      const h = document.createElement("h4");
-      h.className = "about-subhead";
-      h.textContent = b.text;
-      return h;
+      return html`<h4 class="about-subhead">${b.text}</h4>`;
     }
 
     default: {
-      const quote = document.createElement("blockquote");
-      quote.className = "about-quote";
-      for (const para of b.paras) {
-        const p = document.createElement("p");
-        p.append(...para.map(inline));
-        quote.append(p);
-      }
-      const by = document.createElement("footer");
-      by.append(...b.by.map(inline));
-      quote.append(by);
-      return quote;
+      return html`<blockquote class="about-quote">
+        ${b.paras.map((para) => html`<p>${para.map(inline)}</p>`)}
+        <footer>${b.by.map(inline)}</footer>
+      </blockquote>`;
     }
   }
 }
@@ -71,34 +53,25 @@ export function group(
   sub: SubSection,
   open: ReadonlyMap<string, boolean>,
 ): HTMLDetailsElement {
-  const details = document.createElement("details");
-  details.className =
+  const cls =
     sub.id === FEATURED_ID
       ? "about-group about-group--featured"
       : "about-group";
-  details.dataset.about = sub.id;
-  details.open = open.get(sub.id) ?? false;
 
-  const summary = document.createElement("summary");
-  summary.className = "about-summary";
-
-  const title = document.createElement("h3");
-  title.className = "about-title";
-  title.textContent = sub.title;
-  summary.append(title);
-
-  const body = document.createElement("div");
-  body.className = "about-body";
-  for (const b of sub.blocks) body.append(block(b));
-
-  details.append(summary, body);
-  return details;
+  return html`<details
+    class="${cls}"
+    data-about="${sub.id}"
+    open="${open.get(sub.id) ?? false}"
+  >
+    <summary class="about-summary">
+      <h3 class="about-title">${sub.title}</h3>
+    </summary>
+    <div class="about-body">${sub.blocks.map(block)}</div>
+  </details>` as HTMLDetailsElement;
 }
 
-export function callout(lang: Lang): HTMLElement {
-  const p = document.createElement("p");
-  p.className = "callout callout--positive";
-  p.setAttribute("role", "note");
-  p.textContent = CALLOUT[lang];
-  return p;
+export function callout(lang: Lang): Node {
+  return html`<p class="callout callout--positive" role="note">
+    ${CALLOUT[lang]}
+  </p>`;
 }

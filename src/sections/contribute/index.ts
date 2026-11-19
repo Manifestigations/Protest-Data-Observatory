@@ -2,7 +2,8 @@
    on a locale change like every chart caption does. */
 
 import { bi, type Bi } from "../../copy";
-import { byId, el } from "../../core/dom";
+import { byId } from "../../core/dom";
+import { html } from "../../core/html";
 
 const REPO = "https://github.com/Manifestigations/Protest-Data-Observatory";
 const NEW_ISSUE = `${REPO}/issues/new`;
@@ -177,40 +178,47 @@ const BLOCKS: readonly Block[] = [
   },
 ];
 
-function block(b: Block): HTMLElement {
-  const section = el("section", "contribute-section");
-  section.id = `contribute-${b.id}`;
-  section.setAttribute("aria-labelledby", `${section.id}-title`);
+function block(b: Block): Node {
+  const id = `contribute-${b.id}`;
 
-  const head = el("header", "contribute-head");
-  const h = el("h2", "contribute-title", bi(b.title));
-  h.id = `${section.id}-title`;
-  head.append(h);
-  if (b.status) head.append(el("span", "contribute-status", bi(b.status)));
+  const bullets = b.bullets.length
+    ? html`<ul class="contribute-list">
+        ${b.bullets.map((item) => html`<li>${bi(item)}</li>`)}
+      </ul>`
+    : null;
 
-  section.append(head, el("p", "contribute-lead", bi(b.lead)));
+  const actions = b.actions?.length
+    ? html`<p class="contribute-actions">
+        ${b.actions.map(
+          (a) =>
+            html`<a
+              class="contribute-button"
+              href="${a.href}"
+              target="_blank"
+              rel="noopener noreferrer"
+              >${bi(a.label)}</a
+            >`,
+        )}
+      </p>`
+    : null;
 
-  if (b.bullets.length) {
-    const ul = el("ul", "contribute-list");
-    for (const t of b.bullets) ul.append(el("li", undefined, bi(t)));
-    section.append(ul);
-  }
-
-  if (b.note) section.append(el("p", "callout", bi(b.note)));
-
-  if (b.actions?.length) {
-    const row = el("p", "contribute-actions");
-    for (const a of b.actions) {
-      const link = el("a", "contribute-button", bi(a.label));
-      link.href = a.href;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-      row.append(link);
-    }
-    section.append(row);
-  }
-
-  return section;
+  return html`<section
+    class="contribute-section"
+    id="${id}"
+    aria-labelledby="${id}-title"
+  >
+    <header class="contribute-head">
+      <h2 class="contribute-title" id="${id}-title">${bi(b.title)}</h2>
+      ${
+        b.status
+          ? html`<span class="contribute-status">${bi(b.status)}</span>`
+          : null
+      }
+    </header>
+    <p class="contribute-lead">${bi(b.lead)}</p>
+    ${bullets} ${b.note ? html`<p class="callout">${bi(b.note)}</p>` : null}
+    ${actions}
+  </section>`;
 }
 
 /** Idempotent: replaces the host's children on every locale change. */

@@ -5,8 +5,9 @@ Operational map for coding agents. Read this file, then
 
 ## Ground truth
 
-- TypeScript, ESM, no framework. Charts: Chart.js on `<canvas>`. UI: plain DOM
-  helpers (`src/core/dom.ts`). One esbuild bundle serves all pages.
+- TypeScript, ESM, no framework. Charts: Chart.js on `<canvas>`. Markup: htm
+  tagged templates bound to real DOM nodes (`src/core/html.ts`) — no virtual
+  DOM, nothing re-renders. One esbuild bundle serves all pages.
 - Node ≥ 22.18 (native type stripping). No test runner.
 - `docs/` is **committed build output** served by GitHub Pages as-is. No CI
   build, no CI deploy.
@@ -52,20 +53,14 @@ npm run typecheck       # tsc --noEmit — always run
 npm run lint            # eslint .
 npm run format:check    # prettier --check .
 npm run check:comments  # comment/header conventions
-npm run check:casualties
+npm run check-baseline
+npm run check-size
+npm run check-a11y
 ```
 
 There is **no `npm run dev:server`**. `npm run dev` starts the watcher _and_
 the server as a child process (`scripts/build.ts`); to serve `docs/` on its own,
 run `node server.ts`.
-
-These scripts exist on disk but have **no npm alias** — invoke them with `node`:
-
-```bash
-node scripts/check-baseline.ts
-node scripts/check-size.ts
-node scripts/check-a11y.mjs
-```
 
 ## Invariants — do not violate
 
@@ -85,8 +80,8 @@ node scripts/check-a11y.mjs
    `Source.what` is bilingual. (Both live in Dataset.)
 6. **All user-visible strings are `Bi`.** No hardcoded text in DOM/TS code; no
    one-language additions. French is authored, not translated from English.
-7. **No new dependencies.** `chart.js` is the only runtime dependency. Ask via
-   issue first.
+7. **No new dependencies.** `chart.js` and `htm` (~600 B gzip) are the only
+   runtime dependencies. Anything else: ask via issue first.
 8. **`NoteRef` is a reference, not copy.** Wording lives in
    `src/data/notes.ts`, rendered per locale.
 9. **A figure is edited in `Dataset`, never here.** See the section above.
@@ -106,8 +101,7 @@ node scripts/check-a11y.mjs
 | Multi-panel (trellis) engine                                              | `src/charts/trellis/*`                                                                                                                                                                        |
 | Page sections                                                             | `src/sections/**` — `kpis.ts`, `summary.ts`, `casualties/`, `costs/`, `percapita/`, `context/`, `sources/`, `about/`, `contribute/`, `cards/`, `chrome.ts`, `disclosure.ts`                   |
 | Copy / i18n                                                               | `src/copy/{en,fr}/*.ts`, helpers `index.ts`, `lookup.ts`, `state.ts`, `meta-overrides.ts`; `format.ts`/`interpolate.ts`/`markers.ts`/`types.ts` re-export the shared core                     |
-| DOM / lang / theme / colors / a11y                                        | `src/core/*`                                                                                                                                                                                  |
-| Page table (`PAGES`, `PageId`, `relHref`, `pageHref`)                     | `src/site/routes.ts`; hero images `src/site/media.ts`                                                                                                                                         |
+| DOM / lang / theme / colors / a11y                                        | `src/core/*`; markup `src/core/html.ts`                                                                                                                                                       |     | Page table (`PAGES`, `PageId`, `relHref`, `pageHref`) | `src/site/routes.ts`; hero images `src/site/media.ts` |
 | Boot / mount dispatch (`data-page`)                                       | `src/entry/main.ts`                                                                                                                                                                           |
 | CSS                                                                       | `src/styles/index.css`                                                                                                                                                                        |
 | Build / checks                                                            | `scripts/{build,check-casualties,check-comments,check-baseline,check-size}.ts`, `scripts/check-a11y.mjs`                                                                                      |
@@ -137,7 +131,9 @@ HTML shell in `docs/` with the right `data-page` and relative links
 assets.
 
 **Change wording** — edit `src/copy/{en,fr}/…` (both) or the section's
-`copy.en.ts`/`copy.fr.ts`; never a literal in a chart or DOM call.
+`copy.en.ts`/`copy.fr.ts`; never a literal in a chart or DOM call. Markup
+strings in a section are structure, not copy: a French sentence inside an
+htm template is a bug, not a translation.
 
 **Fix a chart** — check `src/charts/specs.ts` and `datasets.ts` first: most
 "missing chart" or "wrong range" bugs are spec/dataset wiring, not the drawing

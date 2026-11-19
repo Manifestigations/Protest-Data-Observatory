@@ -94,8 +94,10 @@ which serves `docs/` on `127.0.0.1:3000` (`PORT` / `HOST` env vars,
 plus a build in watch mode.
 
 No framework, no test runner, no bundler config beyond the two esbuild
-configs in `scripts/build.ts`. Runtime dependency for charts: `chart.js`
-(canvas). UI is plain DOM helpers in `src/core/dom.ts`.
+configs in `scripts/build.ts`. Runtime dependencies: `chart.js` (canvas) and
+`htm` (~600 B gzip), which turns `html` tagged templates into real DOM nodes —
+no virtual DOM, nothing re-renders. `src/core/dom.ts` holds the DOM helpers
+(`byId`, `el`); markup goes through `src/core/html.ts`.
 
 ---
 
@@ -117,7 +119,7 @@ configs in `scripts/build.ts`. Runtime dependency for charts: `chart.js`
 | `src/charts/`                                           | Chart.js setup: specs, datasets, axes, tooltip, plugins (`error-bars`, `hatch`, `connectors`, `clip`, `span-mark`), `trellis/` engine for multi-panel   | drawing changes                           |
 | `src/sections/`                                         | One folder per page area: `kpis`, `summary`, `casualties`, `costs`, `percapita`, `context`, `sources`, `about`, `contribute`, `cards`, plus `chrome.ts` | page structure                            |
 | `src/copy/{en,fr}/` + `src/copy/*.ts`                   | All UI copy, `Bi = { en, fr }`, lookup/format/interpolation helpers                                                                                     | any wording                               |
-| `src/core/`                                             | DOM, lang switch, theme, colors, a11y, canvas registry                                                                                                  | infrastructure only                       |
+| `src/core/`                                             | DOM helpers, the htm binding (`html.ts`), lang switch, theme, colors, a11y, canvas registry                                                             | infrastructure only                       |
 | `src/site/`                                             | `routes.ts` (page table), `media.ts` (hero images)                                                                                                      | adding a page                             |
 | `src/entry/main.ts`                                     | Boot: locale, chrome, then guarded mounts                                                                                                               | wiring a new section                      |
 | `src/styles/index.css`                                  | All CSS, bundled to `docs/styles.css`                                                                                                                   | styling                                   |

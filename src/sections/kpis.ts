@@ -29,7 +29,8 @@ import { visiblePoints } from "../charts/series.ts";
 import { seriesData, type Pt } from "../charts/trellis/engine.ts";
 import { fill } from "../copy/index.ts";
 import { t } from "../copy/lookup.ts";
-import { byId, el } from "../core/dom.ts";
+import { byId } from "../core/dom.ts";
+import { html, mount } from "../core/html.ts";
 
 type SeriesCopyKey = keyof ChartCopy["series"];
 
@@ -217,21 +218,22 @@ function fmtPct(ratio: number): string {
   return `${Number(x.toFixed(1))}%`;
 }
 
-function kpiRow(label: string, num: string, sub: string): HTMLElement {
-  const row = el("div", "kpi-row");
-  row.append(el("dt", "kpi-label", label));
-  const dd = el("dd");
-  dd.append(el("span", "kpi-num", num), el("span", "kpi-sub", sub));
-  row.append(dd);
-  return row;
-}
+/* The number and its qualifier sit flush: .kpi-sub is positioned against
+   .kpi-num, so the two spans stay on one source line. */
+const kpiRow = (label: string, num: string, sub: string): Node =>
+  html`<div class="kpi-row">
+    <dt class="kpi-label">${label}</dt>
+    <dd>
+      <span class="kpi-num">${num}</span><span class="kpi-sub">${sub}</span>
+    </dd>
+  </div>`;
 
 function ratioCell(
   r: Ratio | null,
   label: string,
   template: string,
   unit: "count" | "eurM",
-): HTMLElement {
+): Node {
   if (!r) return kpiRow(label, "—", t().kpi.none);
   const against = fill(template, {
     value: fmtValue(r.obs.v, unit),
@@ -240,42 +242,41 @@ function ratioCell(
   return kpiRow(label, fmtPct(r.pct), `${r.obs.where} · ${against}`);
 }
 
-function card(row: Row, largestLabel: string): HTMLElement {
+function card(row: Row, largestLabel: string): Node {
   const k = t().kpi;
-  const box = el("div", "kpi-card");
-  box.append(el("h5", "kpi-title", row.label));
-
-  const list = el("dl", "kpi-list");
-  list.append(
-    row.largest
-      ? kpiRow(
-          largestLabel,
-          fmtValue(row.largest.v, row.unit),
-          row.largest.where,
-        )
-      : kpiRow(largestLabel, "—", k.none),
-    ratioCell(row.vsMean, k.vsMean, k.againstMean, row.unit),
-    ratioCell(row.vsMedian, k.vsMedian, k.againstMedian, row.unit),
-    ratioCell(row.vsFirst, k.vsFirst, k.againstFirst, row.unit),
-  );
-
-  box.append(list);
-  return box;
+  return html`<div class="kpi-card">
+    <h5 class="kpi-title">${row.label}</h5>
+    <dl class="kpi-list">
+      ${
+        row.largest
+          ? kpiRow(
+              largestLabel,
+              fmtValue(row.largest.v, row.unit),
+              row.largest.where,
+            )
+          : kpiRow(largestLabel, "—", k.none)
+      }
+      ${ratioCell(row.vsMean, k.vsMean, k.againstMean, row.unit)}
+      ${ratioCell(row.vsMedian, k.vsMedian, k.againstMedian, row.unit)}
+      ${ratioCell(row.vsFirst, k.vsFirst, k.againstFirst, row.unit)}
+    </dl>
+  </div>`;
 }
 
+/* Siblings, not a wrapper: .kpi-block's children are styled positionally, so
+   an extra <div> here would take a grid slot. */
 function block(
   rows: readonly Row[],
   largestLabel: string,
   note: string,
-): DocumentFragment {
-  const frag = document.createDocumentFragment();
-  frag.append(el("h4", "kpi-heading", t().kpi.heading));
-
-  const grid = el("div", "kpi-grid");
-  for (const row of rows) grid.append(card(row, largestLabel));
-  frag.append(grid);
-  frag.append(el("p", "kpi-note", note));
-  return frag;
+): Node[] {
+  return [
+    html`<h4 class="kpi-heading">${t().kpi.heading}</h4>`,
+    html`<div class="kpi-grid">
+      ${rows.map((row) => card(row, largestLabel))}
+    </div>`,
+    html`<p class="kpi-note">${note}</p>`,
+  ];
 }
 
 /* ----- mount ----- */
@@ -304,19 +305,19 @@ const PRESETS: Readonly<Record<string, Preset>> = {
 };
 
 export function mountKpiPresets(root: ParentNode = document): void {
-  for (const host of root.querySelectorAll<HTMLElement>("[data-kpi-preset]")) {
+  for (const host of root.querySelectorAll("[data-kpi-preset]")) {
     const preset = PRESETS[host.dataset.kpiPreset ?? ""];
     if (!preset) {
       console.warn(`[kpi] unknown preset ${host.dataset.kpiPreset}`);
       continue;
     }
-
     const specs = (preset.kind === "daily" ? DAILY_SPECS : WEEKLY_SPECS).filter(
       (s) => preset.data.includes(s.data),
     );
     const k = t().kpi;
-    host.replaceChildren(
-      block(
+    mount(
+      host,
+      ...block(
         dailyRowsFor(specs, !(preset.kind === "daily")),
         preset.kind === "daily" ? k.largestDay : k.largestWeek,
         preset.kind === "daily" ? k.noteDaily : k.noteWeekly,
@@ -327,30 +328,26 @@ export function mountKpiPresets(root: ParentNode = document): void {
 
 export function mountKpis(): void {
   const k = t().kpi;
-
   const a = byId("kpi-a");
-  if (a) a.replaceChildren(block(dailyRows(false), k.largestDay, k.noteDaily));
-
+  if (a) mount(a, ...block(dailyRows(false), k.largestDay, k.noteDaily));
   const b = byId("kpi-b");
-  if (b) {
-    b.replaceChildren(block(dailyRows(true), k.largestWeek, k.noteWeekly));
-  }
-
+  if (b) mount(b, ...block(dailyRows(true), k.largestWeek, k.noteWeekly));
   const c = byId("kpi-c");
   if (c) {
-    c.replaceChildren(
-      block(
+    mount(
+      c,
+      ...block(
         episodeRows(Number.POSITIVE_INFINITY),
         k.largestFigure,
         k.noteEpisodes,
       ),
     );
   }
-
   const d = byId("kpi-d");
   if (d) {
-    d.replaceChildren(
-      block(
+    mount(
+      d,
+      ...block(
         episodeRows(ENFORCEMENT_LAST),
         k.largestFigure,
         k.noteEpisodesCapped,

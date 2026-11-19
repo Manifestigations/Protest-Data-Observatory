@@ -10,7 +10,7 @@ import {
   type SevRow,
 } from "@manifestigations/dataset";
 import { t } from "../../copy";
-import { el } from "../../core/dom.ts";
+import { html } from "../../core/html.ts";
 import { cellView, pct, share } from "./model.ts";
 
 /* ── Cell parsing ───────────────────────────────────────────────────────── */
@@ -113,48 +113,16 @@ function stackOf(row: SevRow): {
   return { parts, serious };
 }
 
-function strip(row: SevRow, cp: Labels): HTMLElement {
+function strip(row: SevRow, cp: Labels): Node {
   const c = t().casualties;
   const total = lo(row.total);
   const { parts, serious } = stackOf(row);
 
-  const wrap = el("div", "cas-strip");
-
-  const head = el("div", "cas-strip-head");
-  head.append(
-    el("span", "cas-strip-name", cp.scope(row.id)),
-    el("span", "cas-strip-total", cellView(row.total).text),
-  );
+  const name = cp.scope(row.id);
+  const totalText = cellView(row.total).text;
   const p = share(row.light, row.total);
-  if (p !== null) head.append(el("span", "cas-strip-share", pct(p)));
-  wrap.append(head);
-
-  const box = el("div", "cas-track-wrap");
-  const track = el("div", "cas-track");
-
-  if (total === null || parts.length === 0) {
-    track.classList.add("cas-track-empty");
-    track.append(el("span", "cas-track-note", cellView(row.total).text));
-  } else {
-    // fr columns normalise to the total: no width maths, no flex shrink, no overflow
-    track.style.gridTemplateColumns = parts
-      .map((x) => `${Math.max(x.n, 0)}fr`)
-      .join(" ");
-    for (const x of parts) track.append(el("span", `cas-seg ${x.cls}`));
-
-    if (serious) {
-      const left = Math.min(100, Math.max(0, (serious[0] / total) * 100));
-      const width = Math.min(
-        100 - left,
-        Math.max(0.6, ((serious[1] - serious[0]) / total) * 100),
-      );
-      const whisk = el("span", "cas-whisker");
-      whisk.style.left = `${left}%`;
-      whisk.style.width = `${width}%`;
-      whisk.title = `${c.colSerious} ${cellView(row.serious).text}`;
-      box.append(whisk);
-    }
-  }
+  /* The share is shown in the head only when it exists. */
+  const shareText = p === null ? "" : pct(p);
 
   const meta = [
     `${c.colSerious} ${cellView(row.serious).text}`,
@@ -162,36 +130,82 @@ function strip(row: SevRow, cp: Labels): HTMLElement {
     `${c.colOther} ${cellView(row.other).text}`,
   ].join(" · ");
 
-  track.setAttribute("role", "img");
-  track.setAttribute("aria-label", `${head.textContent} — ${meta}`);
-  box.append(track);
-  wrap.append(box, el("p", "cas-strip-meta", meta));
-  return wrap;
+  /* Was head.textContent + " — " + meta. Reading textContent made the
+     accessible name depend on how the head was built; it is now the same
+     string assembled from the same three values, with no whitespace in it —
+     identical to before, and stable across a reformat. */
+  const label = `${name}${totalText}${shareText} — ${meta}`;
+
+  const empty = total === null || parts.length === 0;
+
+  /* fr columns normalise to the total: no width maths, no flex shrink, no
+     overflow. */
+  const columns = empty
+    ? null
+    : parts.map((x) => `${Math.max(x.n, 0)}fr`).join(" ");
+
+  const whisker = serious
+    ? (() => {
+        const t0 = total as number;
+        const left = Math.min(100, Math.max(0, (serious[0] / t0) * 100));
+        const width = Math.min(
+          100 - left,
+          Math.max(0.6, ((serious[1] - serious[0]) / t0) * 100),
+        );
+        return html`<span
+          class="cas-whisker"
+          style="left: ${left}%; width: ${width}%"
+          title="${c.colSerious} ${cellView(row.serious).text}"
+        ></span>`;
+      })()
+    : null;
+
+  return html`<div class="cas-strip">
+    <div class="cas-strip-head">
+      <span class="cas-strip-name">${name}</span
+      ><span class="cas-strip-total">${totalText}</span>${
+        p === null ? null : html`<span class="cas-strip-share">${pct(p)}</span>`
+      }
+    </div>
+    <div class="cas-track-wrap">
+      ${whisker}
+      <div
+        class="cas-track${empty ? " cas-track-empty" : ""}"
+        role="img"
+        aria-label="${label}"
+        style="${columns === null ? null : `grid-template-columns: ${columns}`}"
+      >
+        ${
+          empty
+            ? html`<span class="cas-track-note">${totalText}</span>`
+            : parts.map((x) => html`<span class="cas-seg ${x.cls}"></span>`)
+        }
+      </div>
+    </div>
+    <p class="cas-strip-meta">${meta}</p>
+  </div>`;
 }
 
-export function severityStrips(
-  rows: readonly SevRow[],
-  caption: string,
-): HTMLElement {
+export function severityStrips(rows: readonly SevRow[], caption: string): Node {
   const cp = casCopy(); // once per section, not per row
-  const wrap = el("div", "cas-visual");
-  wrap.append(el("p", "cas-caption", caption));
-
-  const legend = el("div", "cas-legend");
   const keys: readonly (readonly [string, string])[] = [
     ["cas-seg-serious", cp.legend.serious],
     ["cas-seg-light", cp.legend.light],
     ["cas-seg-unpub", cp.legend.unpub],
   ];
-  for (const [cls, label] of keys) {
-    const item = el("span", "cas-legend-item");
-    item.append(el("i", `cas-swatch ${cls}`), el("span", "", label));
-    legend.append(item);
-  }
-  wrap.append(legend);
 
-  for (const row of rows) wrap.append(strip(row, cp));
-  return wrap;
+  return html`<div class="cas-visual">
+    <p class="cas-caption">${caption}</p>
+    <div class="cas-legend">
+      ${keys.map(
+        ([cls, label]) =>
+          html`<span class="cas-legend-item"
+            ><i class="cas-swatch ${cls}"></i><span>${label}</span></span
+          >`,
+      )}
+    </div>
+    ${rows.map((row) => strip(row, cp))}
+  </div>`;
 }
 
 /* ── Case tally: one dot per documented case ────────────────────────────── */
@@ -210,95 +224,83 @@ function tally(cell: Cell, cp: Labels): Tally {
 
 const DOT_CAP = 24;
 
-function dotsFor(row: CaseRow, t2: Tally): HTMLElement {
-  const dots = el("div", "cas-dots");
-  dots.setAttribute("aria-hidden", "true");
+function dotsFor(row: CaseRow, t2: Tally): Node {
+  const dots = (children: readonly Node[]): Node =>
+    html`<div class="cas-dots" aria-hidden="true">${children}</div>`;
 
   if (t2.kind === "unknown") {
-    dots.append(el("span", "cas-dot-unknown", "?"));
-    return dots;
+    return dots([html`<span class="cas-dot-unknown">?</span>`]);
   }
   if (t2.kind === "zero") {
-    dots.classList.add("cas-dots-empty");
-    return dots;
+    return html`<div class="cas-dots cas-dots-empty" aria-hidden="true"></div>`;
   }
 
   const ref = row.reference;
   const shown = Math.min(t2.n, DOT_CAP);
-  for (let i = 0; i < shown; i++) {
-    dots.append(el("i", ref ? "cas-dot cas-dot-ref" : "cas-dot"));
-  }
-  if (t2.n > DOT_CAP) {
-    dots.append(el("span", "cas-dot-more", `+${t2.n - DOT_CAP}`));
-  }
-  return dots;
+  const marks = Array.from({ length: shown }, () =>
+    ref
+      ? html`<i class="cas-dot cas-dot-ref"></i>`
+      : html`<i class="cas-dot"></i>`,
+  );
+  if (t2.n > DOT_CAP)
+    marks.push(html`<span class="cas-dot-more">+${t2.n - DOT_CAP}</span>`);
+  return dots(marks);
 }
 
 /* The row already prints the count (e.g. "4 documented cases"); the expander
- * therefore carries no visible text, only the count as its accessible name. */
-function detailsFor(row: CaseRow, cp: Labels): HTMLElement {
-  const det = el("details", "cas-cases");
-  const sum = el("summary", "cas-cases-sum");
-  sum.setAttribute("aria-label", cp.casesLabel(row.cases.length));
-  sum.title = cp.casesLabel(row.cases.length);
-
-  const ul = el("ul", "cas-case-list");
-  for (const key of row.cases) ul.append(el("li", "", cp.caseText(key)));
-  det.append(sum, ul);
-  return det;
+   therefore carries no visible text, only the count as its accessible name. */
+function detailsFor(row: CaseRow, cp: Labels): Node {
+  const name = cp.casesLabel(row.cases.length);
+  return html`<details class="cas-cases">
+    <summary
+      class="cas-cases-sum"
+      aria-label="${name}"
+      title="${name}"
+    ></summary>
+    <ul class="cas-case-list">
+      ${row.cases.map((key) => html`<li>${cp.caseText(key)}</li>`)}
+    </ul>
+  </details>`;
 }
 
-export function caseTally(
-  rows: readonly CaseRow[],
-  caption: string,
-): HTMLElement {
+export function caseTally(rows: readonly CaseRow[], caption: string): Node {
   const cp = casCopy(); // once per section, not per row
-  const wrap = el("div", "cas-visual");
-  wrap.append(el("p", "cas-caption", caption));
-
   let side: string | null = null;
 
-  for (const row of rows) {
-    const t2 = tally(row.count, cp);
-    const line = el("div", "cas-tally-row");
-    if (row.reference) line.classList.add("cas-reference");
-
-    const sideLabel = cp.side(row.side);
-    if (sideLabel !== side) {
+  return html`<div class="cas-visual">
+    <p class="cas-caption">${caption}</p>
+    ${rows.map((row) => {
+      const t2 = tally(row.count, cp);
+      const sideLabel = cp.side(row.side);
+      const heading = sideLabel !== side ? sideLabel : null;
       side = sideLabel;
-      line.append(el("p", "cas-tally-side", sideLabel));
-    }
 
-    const facts = el("div", "cas-tally-facts");
-    facts.append(
-      el("span", "cas-tally-kind", cp.kind(row.kind)),
-      el("span", "cas-tally-count", cellView(row.count).text),
-    );
-    if (row.cases.length > 0) facts.append(detailsFor(row, cp));
-
-    const body = el("div", "cas-tally-body");
-    body.append(dotsFor(row, t2), facts);
-
-    line.append(body);
-    line.setAttribute(
-      "aria-label",
-      `${sideLabel} — ${cp.kind(row.kind)}: ${cellView(row.count).text}`,
-    );
-    wrap.append(line);
-  }
-  return wrap;
+      return html`<div
+        class="cas-tally-row${row.reference ? " cas-reference" : ""}"
+        aria-label="${sideLabel} — ${cp.kind(row.kind)}: ${cellView(row.count).text}"
+      >
+        ${heading ? html`<p class="cas-tally-side">${heading}</p>` : null}
+        <div class="cas-tally-body">
+          ${dotsFor(row, t2)}
+          <div class="cas-tally-facts">
+            <span class="cas-tally-kind">${cp.kind(row.kind)}</span
+            ><span class="cas-tally-count">${cellView(row.count).text}</span
+            >${row.cases.length > 0 ? detailsFor(row, cp) : null}
+          </div>
+        </div>
+      </div>`;
+    })}
+  </div>`;
 }
 
 /* ── Table fallback wrapper ─────────────────────────────────────────────── */
 
-export function withTable(
-  visual: HTMLElement,
-  table: HTMLElement,
-  label: string,
-): HTMLElement {
-  const det = el("details", "cas-table-toggle");
-  det.append(el("summary", "", label), table);
-  const box = el("div", "cas-visual-box");
-  box.append(visual, det);
-  return box;
+export function withTable(visual: Node, table: Node, label: string): Node {
+  return html`<div class="cas-visual-box">
+    ${visual}
+    <details class="cas-table-toggle">
+      <summary>${label}</summary>
+      ${table}
+    </details>
+  </div>`;
 }

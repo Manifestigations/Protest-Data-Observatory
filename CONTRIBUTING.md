@@ -85,9 +85,9 @@ languages, and it is the only file under `src/data/` you may edit.
 ## 3. Editing code
 
 The stack, in full: TypeScript, no framework, one esbuild bundle, Chart.js on
-canvas, plain DOM helpers, CSS in one file. All pages share one bundle; each
-page's HTML shell carries `data-page`, and `src/entry/main.ts` mounts only that
-page's sections (every mount is guarded).
+canvas, htm tagged templates bound to real DOM nodes, CSS in one file. All
+pages share one bundle; each page's HTML shell carries `data-page`, and
+`src/entry/main.ts` mounts only that page's sections (every mount is guarded).
 
 ### 3.1 Set up
 
@@ -122,9 +122,14 @@ no `dev:server` script; run `node server.ts` if you want the server alone.
 - French is authored, not machine-translated.
 - A chart module imports figures through `src/data/…` (the shims), never a
   literal number.
-- No new dependencies without an issue first. There is no test framework;
-  `npm run typecheck`, `npm run lint`, the build and `npm run check:casualties`
-  are the checks.
+- No new dependencies without an issue first. `htm` was accepted on that basis
+  (~600 B gzip, one file, no build-step change); anything bigger needs the
+  issue to state its cost. There is no test framework; `npm run typecheck`,
+  `npm run lint`, the build and `npm run check:size` are the checks.
+- Markup goes through `html` from `src/core/html.ts`. Interpolate, never build
+  a string of tags: `innerHTML` is an ESLint error and htm makes it
+  unnecessary. Text stays in the `{ en, fr }` tables — a French word inside a
+  template is copy that has escaped.
 - Keep the bundle working without JavaScript for content that is in the HTML
   shells, and keep canvas descriptions in sync when a chart changes.
 
@@ -155,6 +160,7 @@ Comments:
 - A comment states a fact about the code next to it, including limits: a number in prose must match the literal below it, and every arithmetic comment (1,233 − 1,167 = 66) is checkable by hand.
 - Prose is a claim, not a wish. If the code does not do it, the comment is a bug report — file it, don't word it away.
 - Wrap at 80 columns, no trailing whitespace, `colors.ts` not `colours.ts`.
+- htm templates are not reformatted by Prettier: `format:check` will not fix their indentation, so keep one element per line, closing tags aligned, and two inline siblings that must touch on the same line.
 
 ---
 

@@ -6,7 +6,7 @@ import {
   SOURCES_BY_GROUP,
 } from "@manifestigations/dataset";
 import { bi } from "../../copy";
-import { el } from "../../core/dom";
+import { html } from "../../core/html";
 import { groupsForPage, mediaForPage } from "../../data/sources/page-map";
 import type { PageId } from "../../site/routes";
 import { BOX_TITLE, INTRO } from "./copy";
@@ -18,42 +18,28 @@ function dateLabel(s: Source): string | null {
     : fmtDate(s.date);
 }
 
-function sourceItem(s: Source): HTMLLIElement {
-  const li = el("li");
-  li.dataset.sourceId = s.id;
-
-  const a = el("a", undefined, s.label);
-  a.href = s.url;
-  a.target = "_blank";
-  a.rel = "noopener noreferrer";
-  li.append(a);
-
+function sourceItem(s: Source): Node {
   const when = dateLabel(s);
-  if (when) {
-    li.append(document.createTextNode(" "));
-    const time = el("time", "date", when);
-    time.dateTime = s.date!;
-    li.append(time);
-  }
-
-  li.append(document.createTextNode(" — "));
-  li.append(el("span", "what", bi(s.what)));
-  return li;
+  return html`<li data-source-id="${s.id}">
+    <a href="${s.url}" target="_blank" rel="noopener noreferrer">${s.label}</a
+    >${when ? html`${" "}<time class="date" datetime="${s.date}">${when}</time>` : null}${" — "}<span
+      class="what"
+      >${bi(s.what)}</span
+    >
+  </li>`;
 }
 
-/** Collapsible group; `open` comes from the pre-render DOM so locale changes don't reset it. */
+/** Collapsible group; `open` comes from the pre-render DOM so locale changes
+ *  don't reset it. */
 function sourceGroup(
   id: string,
   summary: Node[],
   body: Node[],
 ): HTMLDetailsElement {
-  const details = el("details", "source-group");
-  details.dataset.group = id;
-
-  const head = el("summary", "group-summary");
-  head.append(...summary);
-  details.append(head, ...body);
-  return details;
+  return html`<details class="source-group" data-group="${id}">
+    <summary class="group-summary">${summary}</summary>
+    ${body}
+  </details>` as HTMLDetailsElement;
 }
 
 /** Idempotent. Keeps the static heading that the page owns, replaces the rest. */
@@ -62,39 +48,47 @@ export function renderSources(
   host: HTMLElement | null = document.getElementById("sources"),
 ): void {
   if (!host) return;
-
   const kept = [...host.children].filter((n): n is HTMLElement =>
     /^H[1-6]$/.test(n.tagName),
   );
   if (kept[0]) kept[0].textContent = bi(BOX_TITLE);
 
-  const box = el("div", "sources-box");
-  box.append(el("p", "intro", bi(INTRO)));
-
   const allowed = new Set(groupsForPage(page));
+  const groups: Node[] = [];
 
   for (const group of GROUPS) {
     if (!allowed.has(group.id)) continue;
-
     let items = SOURCES_BY_GROUP.get(group.id);
     if (!items || items.length === 0) continue;
-
     if (group.id === "media") {
       const keep = new Set(mediaForPage(page));
       items = items.filter((s) => keep.has(s.id));
       if (items.length === 0) continue;
     }
 
-    const title = el("h3", undefined, bi(group.title));
-    title.append(" ", el("span", "count", String(items.length)));
+    const title = html`<h3>
+      ${bi(group.title)}${" "}<span class="count">${items.length}</span>
+    </h3>`;
 
-    const list = el("ul");
-    for (const s of items) list.append(sourceItem(s));
-
-    box.append(
-      sourceGroup(group.id, [title], [el("p", "blurb", bi(group.blurb)), list]),
+    groups.push(
+      sourceGroup(
+        group.id,
+        [title],
+        [
+          html`<p class="blurb">${bi(group.blurb)}</p>`,
+          html`<ul>
+            ${items.map(sourceItem)}
+          </ul>`,
+        ],
+      ),
     );
   }
 
-  host.replaceChildren(...kept, box);
+  host.replaceChildren(
+    ...kept,
+    html`<div class="sources-box">
+      <p class="intro">${bi(INTRO)}</p>
+      ${groups}
+    </div>`,
+  );
 }

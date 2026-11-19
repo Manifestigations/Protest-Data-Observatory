@@ -15,7 +15,7 @@ import {
 import { a11y, compact, fill, nf, pctOf, t } from "../../copy/index.ts";
 import { fromChart, keyboardChart } from "../../core/a11y.ts";
 import { THEME } from "../../core/canvas-registry.ts";
-import { el } from "../../core/dom.ts";
+import { html } from "../../core/html.ts";
 import { wrapTooltipLines } from "../tooltip.ts";
 import { statsOf, type PanelDataset, type Pt } from "./engine.ts";
 import { resolvedColumns } from "./index.ts";
@@ -207,19 +207,28 @@ export function observations(ep: Episode): string {
 }
 
 export function panelFigure(strip: string, meta: string, note?: string) {
-  const figure = el("figure", "trellis-panel");
-  const caption = el("figcaption");
-  const title = el("span", "strip", strip);
-  title.id = `strip-${crypto.randomUUID().slice(0, 8)}`;
-  caption.append(title, el("span", "strip-meta", meta));
-  if (note) caption.append(el("p", "strip-note", note));
+  const id = `strip-${crypto.randomUUID().slice(0, 8)}`;
 
-  const box = el("div", "panel-canvas");
-  const canvas = el("canvas");
-  canvas.setAttribute("role", "img");
-  canvas.setAttribute("aria-labelledby", title.id); // panel name = series name
-  box.append(canvas);
-  figure.append(caption, box);
+  /* The canvas is built first and spliced in: Chart.js needs it as an
+     HTMLCanvasElement, and a template's root is a Node. */
+  const canvas = html`<canvas
+    role="img"
+    aria-labelledby="${id}"
+  ></canvas>` as HTMLCanvasElement;
+
+  /* .strip and .strip-meta stay on one source line: they are inline siblings,
+     and a whitespace text node between them would render as a space that the
+     append() this replaces did not have. */
+  const figure = html`<figure class="trellis-panel">
+    <figcaption>
+      <span class="strip" id="${id}">${strip}</span
+      ><span class="strip-meta">${meta}</span>${
+        note ? html`<p class="strip-note">${note}</p>` : null
+      }
+    </figcaption>
+    <div class="panel-canvas">${canvas}</div>
+  </figure>` as HTMLElement;
+
   return { figure, canvas };
 }
 

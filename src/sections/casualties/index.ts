@@ -5,7 +5,8 @@ import {
 } from "@manifestigations/dataset";
 import { fill, t } from "../../copy";
 import { getLocale } from "../../copy/state.ts";
-import { byId, el } from "../../core/dom.ts";
+import { byId } from "../../core/dom.ts";
+import { html, mount } from "../../core/html.ts";
 import {
   CIVILIAN_PROXY,
   bystanderTable,
@@ -25,6 +26,9 @@ const LABEL: Record<string, string> = {
   en: "See the numbers",
 };
 
+const subTitle = (text: string): Node =>
+  html`<h4 class="cas-title">${text}</h4>`;
+
 export function mountCasualties(): void {
   const c = t().casualties;
   const label =
@@ -34,47 +38,51 @@ export function mountCasualties(): void {
   const a = byId("cas-a");
   const aHead = byId("cas-a-head");
 
-  const aTop = [el("h4", "cas-title", c.headlineTitle), headline(), mixBlock()];
+  const aTop = [subTitle(c.headlineTitle), headline(), mixBlock()];
   const aRest = [
     withTable(
       severityStrips(SEVERITY_LEVELS, c.capLevels),
       severityTable(SEVERITY_LEVELS, c.capLevels),
       label,
     ),
-    el("h4", "cas-title", c.popTitle),
+    subTitle(c.popTitle),
     populationTable(),
-    el("p", "cas-note", c.notePopulation),
-    el("h4", "cas-title", c.bystanderTitle),
+    html`<p class="cas-note">${c.notePopulation}</p>`,
+    subTitle(c.bystanderTitle),
     bystanderTable(),
-    el("p", "cas-note", fill(c.noteBystanders, { proxy: CIVILIAN_PROXY })),
+    html`<p class="cas-note">
+      ${fill(c.noteBystanders, {
+        proxy: CIVILIAN_PROXY,
+      })}
+    </p>`,
     withTable(
       caseTally(CASES, c.capCases),
       causeTable(CASES, c.capCases),
       label,
     ),
-    el("p", "cas-note", c.noteLevels),
+    html`<p class="cas-note">${c.noteLevels}</p>`,
   ];
 
-  if (aHead) aHead.replaceChildren(...aTop);
-  if (a) a.replaceChildren(...(aHead ? aRest : [...aTop, ...aRest]));
+  if (aHead) mount(aHead, ...aTop);
+  if (a) mount(a, ...(aHead ? aRest : [...aTop, ...aRest]));
 
   /* Section B — weekly strip above the chart, estimands below it. */
   const b = byId("cas-b");
   const bHead = byId("cas-b-head");
   const bTop = [
-    el("h4", "cas-title", c.weeklyTitle),
+    subTitle(c.weeklyTitle),
     severityStrips(SEVERITY_WEEKS, c.capWeeks),
   ];
   const bRest = [
     severityTable(SEVERITY_WEEKS, c.capWeeks),
-    el("h4", "cas-title", c.estTitle),
+    subTitle(c.estTitle),
     estimateTable(),
-    el("p", "cas-note", c.noteEstimate),
+    html`<p class="cas-note">${c.noteEstimate}</p>`,
     sensitivityTable(),
-    el("p", "cas-note", c.noteSensitivity),
+    html`<p class="cas-note">${c.noteSensitivity}</p>`,
     resolutionTable(),
-    el("p", "cas-note", c.noteWeeks),
+    html`<p class="cas-note">${c.noteWeeks}</p>`,
   ];
-  if (bHead) bHead.replaceChildren(...bTop);
-  if (b) b.replaceChildren(...(bHead ? bRest : [...bTop, ...bRest]));
+  if (bHead) mount(bHead, ...bTop);
+  if (b) mount(b, ...(bHead ? bRest : [...bTop, ...bRest]));
 }

@@ -20,8 +20,5 @@ export function renderAbout(
   host.setAttribute("aria-label", SECTION_LABEL[lang]);
 
   const subs = ABOUT[lang];
-  const frag = document.createDocumentFragment();
-  frag.append(callout(lang)); // above every <details>
-  for (const sub of subs) frag.append(group(sub, open));
-  host.replaceChildren(frag);
+  host.replaceChildren(callout(lang), ...subs.map((sub) => group(sub, open)));
 }

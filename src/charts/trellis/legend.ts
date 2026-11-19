@@ -4,7 +4,7 @@
    state lives in a module map so a locale re-mount replays it. */
 
 import { Chart, type InteractionMode } from "chart.js";
-import { el } from "../../core/dom.ts";
+import { html } from "../../core/html.ts";
 import { datasetsOf, type PanelDataset } from "./engine.ts";
 
 export type LegendKey = "items" | "events" | "stats";
@@ -44,16 +44,22 @@ export function legend(
 ): void {
   const hidden = legendState(key, entries.length);
   const buttons = entries.map((entry, idx) => {
-    const button = el("button");
-    button.type = "button";
-    button.setAttribute("aria-pressed", String(hidden[idx]));
-    button.classList.toggle("is-off", hidden[idx]);
+    /* The swatch colour is an inline style, so it travels as one `style`
+       string: a dashed entry is a repeating gradient, a plain one a flat fill. */
+    const swatch = entry.dash?.length
+      ? `background: repeating-linear-gradient(90deg, ${entry.color} 0 3px, transparent 3px 6px)`
+      : `background: ${entry.color}`;
 
-    const swatch = el("span", "swatch");
-    swatch.style.background = entry.dash?.length
-      ? `repeating-linear-gradient(90deg, ${entry.color} 0 3px, transparent 3px 6px)`
-      : entry.color;
-    button.append(swatch, document.createTextNode(entry.text));
+    const button = html`<button
+      type="button"
+      aria-pressed="${String(hidden[idx])}"
+    >
+      <span class="swatch" style="${swatch}"></span>${entry.text}
+    </button>` as HTMLButtonElement;
+
+    /* is-off is a state the click handler also toggles, so it is set here by
+       classList rather than baked into the template. */
+    button.classList.toggle("is-off", hidden[idx]);
 
     if (entry.hide) {
       button.addEventListener("click", () => {

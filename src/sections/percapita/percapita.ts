@@ -64,7 +64,8 @@ import { a11y, fill, getLocale, t } from "../../copy/index.ts";
 import { dataTable, keyboardChart } from "../../core/a11y.ts";
 import { THEME, track } from "../../core/canvas-registry.ts";
 import { tones } from "../../core/colors.ts";
-import { byId, el } from "../../core/dom.ts";
+import { byId } from "../../core/dom.ts";
+import { html } from "../../core/html.ts";
 import { contextBands, weekSpans, type ChartSpan } from "../context/context.ts";
 
 Chart.register(
@@ -575,25 +576,23 @@ function build(rows: readonly Row[], o: Opts): Cfg | null {
 /* ----- DOM */
 
 function legendRow(): HTMLElement {
-  const row = el("div", "pc-legend");
-  const chip = (bg: string, text: string, ring: boolean): HTMLElement => {
-    const span = el("span", "pc-chip");
-    const sw = el("span", "pc-swatch");
-    sw.style.background = bg;
-    if (ring) {
-      sw.style.border = `1.5px solid ${STREET}`;
-      sw.style.background = "#fff";
-      sw.style.borderRadius = "50%";
-    }
-    span.append(sw, document.createTextNode(text));
-    return span;
+  const chip = (bg: string, text: string, ring = false): Node => {
+    /* The ringed chip is the measured-day marker: hollow, in the turnout
+       colour. STREET() called, not the function — the old template
+       interpolated the function itself into the border. */
+    const style = ring
+      ? `background: #fff; border: 1.5px solid ${STREET().fill}; border-radius: 50%`
+      : `background: ${bg}`;
+    return html`<span class="pc-chip"
+      ><span class="pc-swatch" style="${style}"></span>${text}</span
+    >`;
   };
-  row.append(
-    chip(STREET().fill, L(COPY.turnout), false),
-    chip(REST().fill, `${L(COPY.rest)} ${L(COPY.logNote)}`, false),
-    chip(THEME.hollow, L(COPY.measured), true),
-  );
-  return row;
+
+  return html`<div class="pc-legend">
+    ${chip(STREET().fill, L(COPY.turnout))}
+    ${chip(REST().fill, `${L(COPY.rest)} ${L(COPY.logNote)}`)}
+    ${chip(THEME.hollow, L(COPY.measured), true)}
+  </div>` as HTMLElement;
 }
 
 /* render(): the share column and the tooltip both name the base of the rows
@@ -613,19 +612,21 @@ function render(
 
   const shareHeader = metro ? L(SHARE.metropole) : L(SHARE.france);
 
-  const figure = el("figure", "pc-figure");
-  const cap = el("figcaption", "pc-caption");
-  cap.append(el("span", "pc-fig-title", title), legendRow());
+  /* One canvas, typed: Chart.js takes an HTMLCanvasElement and a template's
+     root is a Node. */
+  const canvas = html`<canvas
+    role="img"
+    aria-label="${title}"
+  ></canvas>` as HTMLCanvasElement;
 
-  const box = el("div", "pc-canvas");
-  const canvas = el("canvas");
-  canvas.setAttribute("role", "img");
-  canvas.setAttribute("aria-label", title);
-  box.append(canvas);
-  figure.append(cap, box);
-
-  figure.append(
-    dataTable({
+  /* .pc-fig-title is inline and .pc-legend is its own box: keeping the two on
+     one line removes the question of whether the space between them renders. */
+  const figure = html`<figure class="pc-figure">
+    <figcaption class="pc-caption">
+      <span class="pc-fig-title">${title}</span>${legendRow()}
+    </figcaption>
+    <div class="pc-canvas">${canvas}</div>
+    ${dataTable({
       caption: fill(L(COPY.tableCaption), { title }),
       indexHeader: firstCol,
       index: rows.map((r) => r.title),
@@ -633,9 +634,10 @@ function render(
         { header: L(COPY.colCount), values: rows.map(countBand) },
         { header: shareHeader, values: rows.map((r) => pctBand(r.plo, r.phi)) },
       ],
-    }),
-  );
-  if (note) figure.append(el("p", "pc-note", note));
+    })}
+    ${note ? html`<p class="pc-note">${note}</p>` : null}
+  </figure>`;
+
   host.append(figure);
 
   const ctx = canvas.getContext("2d");
@@ -757,7 +759,7 @@ function sectionC(host: HTMLElement): void {
             n: `${nf().format(base)}${basisOf(pop) === "metro" ? ` · ${L(COPY.metro)}` : ""}`,
           });
 
-    const panel = el("div", "pc-panel");
+    const panel = html`<div class="pc-panel"></div>` as HTMLElement;
     render(
       panel,
       rows,
@@ -784,9 +786,11 @@ function sectionC(host: HTMLElement): void {
   /* Last in the DOM, spanning every column: an auto-fit row that starts on
      its own line, rather than a child that pushes the panels out of their
      columns when it lands mid-row. */
-  const head = el("div", "pc-trellis-head");
-  head.append(el("p", "pc-note", L(COPY.noteC)));
-  host.append(head);
+  host.append(
+    html`<div class="pc-trellis-head">
+      <p class="pc-note">${L(COPY.noteC)}</p>
+    </div>`,
+  );
 }
 
 /* ----- mount */

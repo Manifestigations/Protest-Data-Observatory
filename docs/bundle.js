@@ -2,7 +2,7 @@
 function round(v) {
   return v + 0.5 | 0;
 }
-var lim = (v, l, h) => Math.max(Math.min(v, h), l);
+var lim = (v, l, h3) => Math.max(Math.min(v, h3), l);
 function p2b(v) {
   return lim(round(v * 2.55), 0, 255);
 }
@@ -49,17 +49,17 @@ function hexString(v) {
   return v ? "#" + f(v.r) + f(v.g) + f(v.b) + alpha(v.a, f) : void 0;
 }
 var HUE_RE = /^(hsla?|hwb|hsv)\(\s*([-+.e\d]+)(?:deg)?[\s,]+([-+.e\d]+)%[\s,]+([-+.e\d]+)%(?:[\s,]+([-+.e\d]+)(%)?)?\s*\)$/;
-function hsl2rgbn(h, s, l) {
+function hsl2rgbn(h3, s, l) {
   const a = s * Math.min(l, 1 - l);
-  const f = (n2, k = (n2 + h / 30) % 12) => l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+  const f = (n3, k = (n3 + h3 / 30) % 12) => l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
   return [f(0), f(8), f(4)];
 }
-function hsv2rgbn(h, s, v) {
-  const f = (n2, k = (n2 + h / 60) % 6) => v - v * s * Math.max(Math.min(k, 4 - k, 1), 0);
+function hsv2rgbn(h3, s, v) {
+  const f = (n3, k = (n3 + h3 / 60) % 6) => v - v * s * Math.max(Math.min(k, 4 - k, 1), 0);
   return [f(5), f(3), f(1)];
 }
-function hwb2rgbn(h, w, b) {
-  const rgb = hsl2rgbn(h, 1, 0.5);
+function hwb2rgbn(h3, w, b) {
+  const rgb = hsl2rgbn(h3, 1, 0.5);
   let i;
   if (w + b > 1) {
     i = 1 / (w + b);
@@ -89,29 +89,29 @@ function rgb2hsl(v) {
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
   const l = (max + min) / 2;
-  let h, s, d;
+  let h3, s, d;
   if (max !== min) {
     d = max - min;
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    h = hueValue(r, g, b, d, max);
-    h = h * 60 + 0.5;
+    h3 = hueValue(r, g, b, d, max);
+    h3 = h3 * 60 + 0.5;
   }
-  return [h | 0, s || 0, l];
+  return [h3 | 0, s || 0, l];
 }
 function calln(f, a, b, c) {
   return (Array.isArray(a) ? f(a[0], a[1], a[2]) : f(a, b, c)).map(n2b);
 }
-function hsl2rgb(h, s, l) {
-  return calln(hsl2rgbn, h, s, l);
+function hsl2rgb(h3, s, l) {
+  return calln(hsl2rgbn, h3, s, l);
 }
-function hwb2rgb(h, w, b) {
-  return calln(hwb2rgbn, h, w, b);
+function hwb2rgb(h3, w, b) {
+  return calln(hwb2rgbn, h3, w, b);
 }
-function hsv2rgb(h, s, v) {
-  return calln(hsv2rgbn, h, s, v);
+function hsv2rgb(h3, s, v) {
+  return calln(hsv2rgbn, h3, s, v);
 }
-function hue(h) {
-  return (h % 360 + 360) % 360;
+function hue(h3) {
+  return (h3 % 360 + 360) % 360;
 }
 function hueParse(str) {
   const m = HUE_RE.exec(str);
@@ -123,15 +123,15 @@ function hueParse(str) {
   if (m[5] !== v) {
     a = m[6] ? p2b(+m[5]) : n2b(+m[5]);
   }
-  const h = hue(+m[2]);
+  const h3 = hue(+m[2]);
   const p1 = +m[3] / 100;
   const p2 = +m[4] / 100;
   if (m[1] === "hwb") {
-    v = hwb2rgb(h, p1, p2);
+    v = hwb2rgb(h3, p1, p2);
   } else if (m[1] === "hsv") {
-    v = hsv2rgb(h, p1, p2);
+    v = hsv2rgb(h3, p1, p2);
   } else {
-    v = hsl2rgb(h, p1, p2);
+    v = hsl2rgb(h3, p1, p2);
   }
   return {
     r: v[0],
@@ -141,22 +141,22 @@ function hueParse(str) {
   };
 }
 function rotate(v, deg) {
-  var h = rgb2hsl(v);
-  h[0] = hue(h[0] + deg);
-  h = hsl2rgb(h);
-  v.r = h[0];
-  v.g = h[1];
-  v.b = h[2];
+  var h3 = rgb2hsl(v);
+  h3[0] = hue(h3[0] + deg);
+  h3 = hsl2rgb(h3);
+  v.r = h3[0];
+  v.g = h3[1];
+  v.b = h3[2];
 }
 function hslString(v) {
   if (!v) {
     return;
   }
   const a = rgb2hsl(v);
-  const h = a[0];
+  const h3 = a[0];
   const s = n2p(a[1]);
   const l = n2p(a[2]);
-  return v.a < 255 ? `hsla(${h}, ${s}%, ${l}%, ${b2n(v.a)})` : `hsl(${h}, ${s}%, ${l}%)`;
+  return v.a < 255 ? `hsla(${h3}, ${s}%, ${l}%, ${b2n(v.a)})` : `hsl(${h3}, ${s}%, ${l}%)`;
 }
 var map = {
   x: "dark",
@@ -397,15 +397,15 @@ function rgbString(v) {
 }
 var to = (v) => v <= 31308e-7 ? v * 12.92 : Math.pow(v, 1 / 2.4) * 1.055 - 0.055;
 var from = (v) => v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
-function interpolate(rgb1, rgb2, t3) {
+function interpolate(rgb1, rgb2, t4) {
   const r = from(b2n(rgb1.r));
   const g = from(b2n(rgb1.g));
   const b = from(b2n(rgb1.b));
   return {
-    r: n2b(to(r + t3 * (from(b2n(rgb2.r)) - r))),
-    g: n2b(to(g + t3 * (from(b2n(rgb2.g)) - g))),
-    b: n2b(to(b + t3 * (from(b2n(rgb2.b)) - b))),
-    a: rgb1.a + t3 * (rgb2.a - rgb1.a)
+    r: n2b(to(r + t4 * (from(b2n(rgb2.r)) - r))),
+    g: n2b(to(g + t4 * (from(b2n(rgb2.g)) - g))),
+    b: n2b(to(b + t4 * (from(b2n(rgb2.b)) - b))),
+    a: rgb1.a + t4 * (rgb2.a - rgb1.a)
   };
 }
 function modHSL(v, i, ratio) {
@@ -497,9 +497,9 @@ var Color = class _Color {
     }
     return this;
   }
-  interpolate(color2, t3) {
+  interpolate(color2, t4) {
     if (color2) {
-      this._rgb = interpolate(this._rgb, color2._rgb, t3);
+      this._rgb = interpolate(this._rgb, color2._rgb, t4);
     }
     return this;
   }
@@ -797,11 +797,11 @@ function _factorize(value2) {
   result.sort((a, b) => a - b).pop();
   return result;
 }
-function isNonPrimitive(n2) {
-  return typeof n2 === "symbol" || typeof n2 === "object" && n2 !== null && !(Symbol.toPrimitive in n2 || "toString" in n2 || "valueOf" in n2);
+function isNonPrimitive(n3) {
+  return typeof n3 === "symbol" || typeof n3 === "object" && n3 !== null && !(Symbol.toPrimitive in n3 || "toString" in n3 || "valueOf" in n3);
 }
-function isNumber(n2) {
-  return !isNonPrimitive(n2) && !isNaN(parseFloat(n2)) && isFinite(n2);
+function isNumber(n3) {
+  return !isNonPrimitive(n3) && !isNaN(parseFloat(n3)) && isFinite(n3);
 }
 function almostWhole(x, epsilon) {
   const rounded = Math.round(x);
@@ -1073,70 +1073,70 @@ function _scaleRangesChanged(meta) {
   Object.assign(_scaleRanges, newRanges);
   return changed;
 }
-var atEdge = (t3) => t3 === 0 || t3 === 1;
-var elasticIn = (t3, s, p) => -(Math.pow(2, 10 * (t3 -= 1)) * Math.sin((t3 - s) * TAU / p));
-var elasticOut = (t3, s, p) => Math.pow(2, -10 * t3) * Math.sin((t3 - s) * TAU / p) + 1;
+var atEdge = (t4) => t4 === 0 || t4 === 1;
+var elasticIn = (t4, s, p) => -(Math.pow(2, 10 * (t4 -= 1)) * Math.sin((t4 - s) * TAU / p));
+var elasticOut = (t4, s, p) => Math.pow(2, -10 * t4) * Math.sin((t4 - s) * TAU / p) + 1;
 var effects = {
-  linear: (t3) => t3,
-  easeInQuad: (t3) => t3 * t3,
-  easeOutQuad: (t3) => -t3 * (t3 - 2),
-  easeInOutQuad: (t3) => (t3 /= 0.5) < 1 ? 0.5 * t3 * t3 : -0.5 * (--t3 * (t3 - 2) - 1),
-  easeInCubic: (t3) => t3 * t3 * t3,
-  easeOutCubic: (t3) => (t3 -= 1) * t3 * t3 + 1,
-  easeInOutCubic: (t3) => (t3 /= 0.5) < 1 ? 0.5 * t3 * t3 * t3 : 0.5 * ((t3 -= 2) * t3 * t3 + 2),
-  easeInQuart: (t3) => t3 * t3 * t3 * t3,
-  easeOutQuart: (t3) => -((t3 -= 1) * t3 * t3 * t3 - 1),
-  easeInOutQuart: (t3) => (t3 /= 0.5) < 1 ? 0.5 * t3 * t3 * t3 * t3 : -0.5 * ((t3 -= 2) * t3 * t3 * t3 - 2),
-  easeInQuint: (t3) => t3 * t3 * t3 * t3 * t3,
-  easeOutQuint: (t3) => (t3 -= 1) * t3 * t3 * t3 * t3 + 1,
-  easeInOutQuint: (t3) => (t3 /= 0.5) < 1 ? 0.5 * t3 * t3 * t3 * t3 * t3 : 0.5 * ((t3 -= 2) * t3 * t3 * t3 * t3 + 2),
-  easeInSine: (t3) => -Math.cos(t3 * HALF_PI) + 1,
-  easeOutSine: (t3) => Math.sin(t3 * HALF_PI),
-  easeInOutSine: (t3) => -0.5 * (Math.cos(PI * t3) - 1),
-  easeInExpo: (t3) => t3 === 0 ? 0 : Math.pow(2, 10 * (t3 - 1)),
-  easeOutExpo: (t3) => t3 === 1 ? 1 : -Math.pow(2, -10 * t3) + 1,
-  easeInOutExpo: (t3) => atEdge(t3) ? t3 : t3 < 0.5 ? 0.5 * Math.pow(2, 10 * (t3 * 2 - 1)) : 0.5 * (-Math.pow(2, -10 * (t3 * 2 - 1)) + 2),
-  easeInCirc: (t3) => t3 >= 1 ? t3 : -(Math.sqrt(1 - t3 * t3) - 1),
-  easeOutCirc: (t3) => Math.sqrt(1 - (t3 -= 1) * t3),
-  easeInOutCirc: (t3) => (t3 /= 0.5) < 1 ? -0.5 * (Math.sqrt(1 - t3 * t3) - 1) : 0.5 * (Math.sqrt(1 - (t3 -= 2) * t3) + 1),
-  easeInElastic: (t3) => atEdge(t3) ? t3 : elasticIn(t3, 0.075, 0.3),
-  easeOutElastic: (t3) => atEdge(t3) ? t3 : elasticOut(t3, 0.075, 0.3),
-  easeInOutElastic(t3) {
+  linear: (t4) => t4,
+  easeInQuad: (t4) => t4 * t4,
+  easeOutQuad: (t4) => -t4 * (t4 - 2),
+  easeInOutQuad: (t4) => (t4 /= 0.5) < 1 ? 0.5 * t4 * t4 : -0.5 * (--t4 * (t4 - 2) - 1),
+  easeInCubic: (t4) => t4 * t4 * t4,
+  easeOutCubic: (t4) => (t4 -= 1) * t4 * t4 + 1,
+  easeInOutCubic: (t4) => (t4 /= 0.5) < 1 ? 0.5 * t4 * t4 * t4 : 0.5 * ((t4 -= 2) * t4 * t4 + 2),
+  easeInQuart: (t4) => t4 * t4 * t4 * t4,
+  easeOutQuart: (t4) => -((t4 -= 1) * t4 * t4 * t4 - 1),
+  easeInOutQuart: (t4) => (t4 /= 0.5) < 1 ? 0.5 * t4 * t4 * t4 * t4 : -0.5 * ((t4 -= 2) * t4 * t4 * t4 - 2),
+  easeInQuint: (t4) => t4 * t4 * t4 * t4 * t4,
+  easeOutQuint: (t4) => (t4 -= 1) * t4 * t4 * t4 * t4 + 1,
+  easeInOutQuint: (t4) => (t4 /= 0.5) < 1 ? 0.5 * t4 * t4 * t4 * t4 * t4 : 0.5 * ((t4 -= 2) * t4 * t4 * t4 * t4 + 2),
+  easeInSine: (t4) => -Math.cos(t4 * HALF_PI) + 1,
+  easeOutSine: (t4) => Math.sin(t4 * HALF_PI),
+  easeInOutSine: (t4) => -0.5 * (Math.cos(PI * t4) - 1),
+  easeInExpo: (t4) => t4 === 0 ? 0 : Math.pow(2, 10 * (t4 - 1)),
+  easeOutExpo: (t4) => t4 === 1 ? 1 : -Math.pow(2, -10 * t4) + 1,
+  easeInOutExpo: (t4) => atEdge(t4) ? t4 : t4 < 0.5 ? 0.5 * Math.pow(2, 10 * (t4 * 2 - 1)) : 0.5 * (-Math.pow(2, -10 * (t4 * 2 - 1)) + 2),
+  easeInCirc: (t4) => t4 >= 1 ? t4 : -(Math.sqrt(1 - t4 * t4) - 1),
+  easeOutCirc: (t4) => Math.sqrt(1 - (t4 -= 1) * t4),
+  easeInOutCirc: (t4) => (t4 /= 0.5) < 1 ? -0.5 * (Math.sqrt(1 - t4 * t4) - 1) : 0.5 * (Math.sqrt(1 - (t4 -= 2) * t4) + 1),
+  easeInElastic: (t4) => atEdge(t4) ? t4 : elasticIn(t4, 0.075, 0.3),
+  easeOutElastic: (t4) => atEdge(t4) ? t4 : elasticOut(t4, 0.075, 0.3),
+  easeInOutElastic(t4) {
     const s = 0.1125;
     const p = 0.45;
-    return atEdge(t3) ? t3 : t3 < 0.5 ? 0.5 * elasticIn(t3 * 2, s, p) : 0.5 + 0.5 * elasticOut(t3 * 2 - 1, s, p);
+    return atEdge(t4) ? t4 : t4 < 0.5 ? 0.5 * elasticIn(t4 * 2, s, p) : 0.5 + 0.5 * elasticOut(t4 * 2 - 1, s, p);
   },
-  easeInBack(t3) {
+  easeInBack(t4) {
     const s = 1.70158;
-    return t3 * t3 * ((s + 1) * t3 - s);
+    return t4 * t4 * ((s + 1) * t4 - s);
   },
-  easeOutBack(t3) {
+  easeOutBack(t4) {
     const s = 1.70158;
-    return (t3 -= 1) * t3 * ((s + 1) * t3 + s) + 1;
+    return (t4 -= 1) * t4 * ((s + 1) * t4 + s) + 1;
   },
-  easeInOutBack(t3) {
+  easeInOutBack(t4) {
     let s = 1.70158;
-    if ((t3 /= 0.5) < 1) {
-      return 0.5 * (t3 * t3 * (((s *= 1.525) + 1) * t3 - s));
+    if ((t4 /= 0.5) < 1) {
+      return 0.5 * (t4 * t4 * (((s *= 1.525) + 1) * t4 - s));
     }
-    return 0.5 * ((t3 -= 2) * t3 * (((s *= 1.525) + 1) * t3 + s) + 2);
+    return 0.5 * ((t4 -= 2) * t4 * (((s *= 1.525) + 1) * t4 + s) + 2);
   },
-  easeInBounce: (t3) => 1 - effects.easeOutBounce(1 - t3),
-  easeOutBounce(t3) {
+  easeInBounce: (t4) => 1 - effects.easeOutBounce(1 - t4),
+  easeOutBounce(t4) {
     const m = 7.5625;
     const d = 2.75;
-    if (t3 < 1 / d) {
-      return m * t3 * t3;
+    if (t4 < 1 / d) {
+      return m * t4 * t4;
     }
-    if (t3 < 2 / d) {
-      return m * (t3 -= 1.5 / d) * t3 + 0.75;
+    if (t4 < 2 / d) {
+      return m * (t4 -= 1.5 / d) * t4 + 0.75;
     }
-    if (t3 < 2.5 / d) {
-      return m * (t3 -= 2.25 / d) * t3 + 0.9375;
+    if (t4 < 2.5 / d) {
+      return m * (t4 -= 2.25 / d) * t4 + 0.9375;
     }
-    return m * (t3 -= 2.625 / d) * t3 + 0.984375;
+    return m * (t4 -= 2.625 / d) * t4 + 0.984375;
   },
-  easeInOutBounce: (t3) => t3 < 0.5 ? effects.easeInBounce(t3 * 2) * 0.5 : effects.easeOutBounce(t3 * 2 - 1) * 0.5 + 0.5
+  easeInOutBounce: (t4) => t4 < 0.5 ? effects.easeInBounce(t4 * 2) * 0.5 : effects.easeOutBounce(t4 * 2 - 1) * 0.5 + 0.5
 };
 function isPatternOrGradient(value2) {
   if (value2 && typeof value2 === "object") {
@@ -1387,7 +1387,7 @@ function getScope$1(node, key) {
     return node;
   }
   const keys = key.split(".");
-  for (let i = 0, n2 = keys.length; i < n2; ++i) {
+  for (let i = 0, n3 = keys.length; i < n3; ++i) {
     const k = keys[i];
     node = node[k] || (node[k] = /* @__PURE__ */ Object.create(null));
   }
@@ -1800,12 +1800,12 @@ function renderText(ctx, text, x, y, font, opts = {}) {
   ctx.restore();
 }
 function addRoundedRectPath(ctx, rect) {
-  const { x, y, w, h, radius } = rect;
+  const { x, y, w, h: h3, radius } = rect;
   ctx.arc(x + radius.topLeft, y + radius.topLeft, radius.topLeft, 1.5 * PI, PI, true);
-  ctx.lineTo(x, y + h - radius.bottomLeft);
-  ctx.arc(x + radius.bottomLeft, y + h - radius.bottomLeft, radius.bottomLeft, PI, HALF_PI, true);
-  ctx.lineTo(x + w - radius.bottomRight, y + h);
-  ctx.arc(x + w - radius.bottomRight, y + h - radius.bottomRight, radius.bottomRight, HALF_PI, 0, true);
+  ctx.lineTo(x, y + h3 - radius.bottomLeft);
+  ctx.arc(x + radius.bottomLeft, y + h3 - radius.bottomLeft, radius.bottomLeft, PI, HALF_PI, true);
+  ctx.lineTo(x + w - radius.bottomRight, y + h3);
+  ctx.arc(x + w - radius.bottomRight, y + h3 - radius.bottomRight, radius.bottomRight, HALF_PI, 0, true);
   ctx.lineTo(x + w, y + radius.topRight);
   ctx.arc(x + w - radius.topRight, y + radius.topRight, radius.topRight, 0, -HALF_PI, true);
   ctx.lineTo(x + radius.topLeft, y);
@@ -2217,7 +2217,7 @@ function resolveKeysFromAllScopes(scopes) {
 var EPSILON = Number.EPSILON || 1e-14;
 var getPoint = (points, i) => i < points.length && !points[i].skip && points[i];
 var getValueAxis = (indexAxis) => indexAxis === "x" ? "y" : "x";
-function splineCurve(firstPoint, middlePoint, afterPoint, t3) {
+function splineCurve(firstPoint, middlePoint, afterPoint, t4) {
   const previous = firstPoint.skip ? middlePoint : firstPoint;
   const current2 = middlePoint;
   const next = afterPoint.skip ? middlePoint : afterPoint;
@@ -2227,8 +2227,8 @@ function splineCurve(firstPoint, middlePoint, afterPoint, t3) {
   let s12 = d12 / (d01 + d12);
   s01 = isNaN(s01) ? 0 : s01;
   s12 = isNaN(s12) ? 0 : s12;
-  const fa = t3 * s01;
-  const fb = t3 * s12;
+  const fa = t4 * s01;
+  const fb = t4 * s12;
   return {
     previous: {
       x: current2.x - fa * (next.x - previous.x),
@@ -2548,19 +2548,19 @@ function readUsedSize(element, property) {
   const matches = value2 && value2.match(/^(\d+)(\.\d+)?px$/);
   return matches ? +matches[1] : void 0;
 }
-function _pointInLine(p1, p2, t3, mode) {
+function _pointInLine(p1, p2, t4, mode) {
   return {
-    x: p1.x + t3 * (p2.x - p1.x),
-    y: p1.y + t3 * (p2.y - p1.y)
+    x: p1.x + t4 * (p2.x - p1.x),
+    y: p1.y + t4 * (p2.y - p1.y)
   };
 }
-function _steppedInterpolation(p1, p2, t3, mode) {
+function _steppedInterpolation(p1, p2, t4, mode) {
   return {
-    x: p1.x + t3 * (p2.x - p1.x),
-    y: mode === "middle" ? t3 < 0.5 ? p1.y : p2.y : mode === "after" ? t3 < 1 ? p1.y : p2.y : t3 > 0 ? p2.y : p1.y
+    x: p1.x + t4 * (p2.x - p1.x),
+    y: mode === "middle" ? t4 < 0.5 ? p1.y : p2.y : mode === "after" ? t4 < 1 ? p1.y : p2.y : t4 > 0 ? p2.y : p1.y
   };
 }
-function _bezierInterpolation(p1, p2, t3, mode) {
+function _bezierInterpolation(p1, p2, t4, mode) {
   const cp1 = {
     x: p1.cp2x,
     y: p1.cp2y
@@ -2569,12 +2569,12 @@ function _bezierInterpolation(p1, p2, t3, mode) {
     x: p2.cp1x,
     y: p2.cp1y
   };
-  const a = _pointInLine(p1, cp1, t3);
-  const b = _pointInLine(cp1, cp2, t3);
-  const c = _pointInLine(cp2, p2, t3);
-  const d = _pointInLine(a, b, t3);
-  const e = _pointInLine(b, c, t3);
-  return _pointInLine(d, e, t3);
+  const a = _pointInLine(p1, cp1, t4);
+  const b = _pointInLine(cp1, cp2, t4);
+  const c = _pointInLine(cp2, p2, t4);
+  const d = _pointInLine(a, b, t4);
+  const e = _pointInLine(b, c, t4);
+  return _pointInLine(d, e, t4);
 }
 var getRightToLeftAdapter = function(rectX, width) {
   return {
@@ -3350,17 +3350,17 @@ function defaultClip(xScale2, yScale2, allowedOverflow) {
   };
 }
 function toClip(value2) {
-  let t3, r, b, l;
+  let t4, r, b, l;
   if (isObject(value2)) {
-    t3 = value2.top;
+    t4 = value2.top;
     r = value2.right;
     b = value2.bottom;
     l = value2.left;
   } else {
-    t3 = r = b = l = value2;
+    t4 = r = b = l = value2;
   }
   return {
-    top: t3,
+    top: t4,
     right: r,
     bottom: b,
     left: l,
@@ -5923,8 +5923,8 @@ var Scale = class _Scale extends Element {
     const labelSizes = this._getLabelSizes();
     const padding = optionTicks.autoSkipPadding || 0;
     const w = labelSizes ? labelSizes.widest.width + padding : 0;
-    const h = labelSizes ? labelSizes.highest.height + padding : 0;
-    return this.isHorizontal() ? h * cos > w * sin ? w / cos : h / sin : h * sin < w * cos ? h / cos : w / sin;
+    const h3 = labelSizes ? labelSizes.highest.height + padding : 0;
+    return this.isHorizontal() ? h3 * cos > w * sin ? w / cos : h3 / sin : h3 * sin < w * cos ? h3 / cos : w / sin;
   }
   _isVisible() {
     const display = this.options.display;
@@ -6330,7 +6330,7 @@ var Scale = class _Scale extends Element {
       return 0;
     }
     const ticks = this.ticks;
-    const index = ticks.findIndex((t3) => t3.value === value2);
+    const index = ticks.findIndex((t4) => t4.value === value2);
     if (index >= 0) {
       const opts = grid.setContext(this.getContext(index));
       return opts.lineWidth;
@@ -8307,8 +8307,8 @@ var LineElement = class extends Element {
         result.push(p1);
         continue;
       }
-      const t3 = Math.abs((value2 - p1[property]) / (p2[property] - p1[property]));
-      const interpolated = _interpolate(p1, p2, t3, options.stepped);
+      const t4 = Math.abs((value2 - p1[property]) / (p2[property] - p1[property]));
+      const interpolated = _interpolate(p1, p2, t4, options.stepped);
       interpolated[property] = point[property];
       result.push(interpolated);
     }
@@ -10844,11 +10844,11 @@ function leftForTextAlign(x, w, align) {
   }
   return x;
 }
-function yForAngle(y, h, angle) {
+function yForAngle(y, h3, angle) {
   if (angle === 90 || angle === 270) {
-    y -= h / 2;
+    y -= h3 / 2;
   } else if (angle > 270 || angle < 90) {
-    y -= h;
+    y -= h3;
   }
   return y;
 }
@@ -10989,10 +10989,10 @@ var RadialLinearScale = class extends LinearScaleBase {
   setDimensions() {
     const padding = this._padding = toPadding(getTickBackdropHeight(this.options) / 2);
     const w = this.width = this.maxWidth - padding.width;
-    const h = this.height = this.maxHeight - padding.height;
+    const h3 = this.height = this.maxHeight - padding.height;
     this.xCenter = Math.floor(this.left + w / 2 + padding.left);
-    this.yCenter = Math.floor(this.top + h / 2 + padding.top);
-    this.drawingArea = Math.floor(Math.min(w, h) / 2);
+    this.yCenter = Math.floor(this.top + h3 / 2 + padding.top);
+    this.drawingArea = Math.floor(Math.min(w, h3) / 2);
   }
   determineDataLimits() {
     const { min, max } = this.getMinMax(false);
@@ -11756,27 +11756,27 @@ var dates;
 var numFmt;
 var cptFmt;
 var eurFmt;
-function buildFormats(tag3) {
-  numFmt = new Intl.NumberFormat(tag3, { maximumFractionDigits: 0 });
-  cptFmt = new Intl.NumberFormat(tag3, {
+function buildFormats(tag2) {
+  numFmt = new Intl.NumberFormat(tag2, { maximumFractionDigits: 0 });
+  cptFmt = new Intl.NumberFormat(tag2, {
     notation: "compact",
     compactDisplay: "short",
     maximumFractionDigits: 1
   });
-  eurFmt = new Intl.NumberFormat(tag3, { maximumFractionDigits: 1 });
+  eurFmt = new Intl.NumberFormat(tag2, { maximumFractionDigits: 1 });
   dates = {
-    long: new Intl.DateTimeFormat(tag3, {
+    long: new Intl.DateTimeFormat(tag2, {
       day: "numeric",
       month: "short",
       year: "numeric",
       ...UTC
     }),
-    short: new Intl.DateTimeFormat(tag3, {
+    short: new Intl.DateTimeFormat(tag2, {
       day: "numeric",
       month: "short",
       ...UTC
     }),
-    day: new Intl.DateTimeFormat(tag3, { day: "numeric", ...UTC })
+    day: new Intl.DateTimeFormat(tag2, { day: "numeric", ...UTC })
   };
 }
 var current = "fr";
@@ -11983,9 +11983,9 @@ var START = "2026-09-15";
 var END = "2026-11-11";
 var utc = (s) => /* @__PURE__ */ new Date(`${s}T00:00:00Z`);
 var iso = (d) => d.toISOString().slice(0, 10);
-var addDays = (isoDate, n2) => {
+var addDays = (isoDate, n3) => {
   const d = /* @__PURE__ */ new Date(`${isoDate}T00:00:00Z`);
-  d.setUTCDate(d.getUTCDate() + n2);
+  d.setUTCDate(d.getUTCDate() + n3);
   return d.toISOString().slice(0, 10);
 };
 var mondayOf = (isoDate) => {
@@ -14107,12 +14107,12 @@ var GILETS = {
   id: "gj",
   start: "2018-11-12",
   end: "2019-09-09",
-  weeks: GJ_ACTS.map(([w, date, n2]) => ({
+  weeks: GJ_ACTS.map(([w, date, n3]) => ({
     w,
     from: date,
     to: date,
     act: w + 1,
-    p: n2,
+    p: n3,
     ...GJ_EXTRA[w] ?? {},
     flag: {
       ...w === 0 ? { p: "c" } : {},
@@ -15771,9 +15771,9 @@ function catalogueFor(forLang) {
       if (typeof prop !== "string" || prop in target || PASSTHROUGH.has(prop)) {
         return Reflect.get(target, prop, receiver);
       }
-      const tag3 = `${forLang}:${prop}`;
-      if (!warned2.has(tag3)) {
-        warned2.add(tag3);
+      const tag2 = `${forLang}:${prop}`;
+      if (!warned2.has(tag2)) {
+        warned2.add(tag2);
         console.warn(
           `[i18n] catalogue branch "${prop}" is missing (${forLang})`
         );
@@ -16147,8 +16147,8 @@ var txt = (v) => {
     const p = v;
     if (typeof p.low === "number" && typeof p.high === "number")
       return p.low === p.high ? nf().format(Math.round(p.low)) : `${nf().format(Math.round(p.low))} \u2013 ${nf().format(Math.round(p.high))}`;
-    for (const n2 of [p.v, p.y])
-      if (typeof n2 === "number") return nf().format(Math.round(n2));
+    for (const n3 of [p.v, p.y])
+      if (typeof n3 === "number") return nf().format(Math.round(n3));
   }
   return String(v);
 };
@@ -16162,10 +16162,10 @@ function dataTable(spec) {
   cap.className = "sr-only";
   cap.textContent = spec.caption;
   const head2 = table.createTHead().insertRow();
-  for (const h of [spec.indexHeader, ...spec.columns.map((c) => c.header)]) {
+  for (const h3 of [spec.indexHeader, ...spec.columns.map((c) => c.header)]) {
     const th = document.createElement("th");
     th.scope = "col";
-    th.textContent = h;
+    th.textContent = h3;
     head2.append(th);
   }
   const body = table.createTBody();
@@ -16190,7 +16190,7 @@ function fromChart(chart, opts) {
     (d) => opts.include?.(d) ?? true
   );
   const labels = (data.labels ?? []).map(String);
-  const n2 = labels.length || Math.max(
+  const n3 = labels.length || Math.max(
     0,
     ...sets.map((d) => (d.data ?? []).length)
   );
@@ -16198,14 +16198,14 @@ function fromChart(chart, opts) {
     caption: opts.caption,
     indexHeader: opts.indexHeader,
     index: Array.from(
-      { length: n2 },
+      { length: n3 },
       (_, i) => opts.indexOf?.(sets[0], i) ?? labels[i] ?? String(i + 1)
     ),
     columns: sets.map((d) => {
       const ds = d;
       return {
         header: String(ds.label ?? ""),
-        values: Array.from({ length: n2 }, (_, i) => txt(ds.data?.[i]))
+        values: Array.from({ length: n3 }, (_, i) => txt(ds.data?.[i]))
       };
     })
   });
@@ -16220,8 +16220,8 @@ function readout(chart, i) {
 }
 function keyboardChart(chart, opts) {
   const canvas = chart.canvas;
-  const n2 = chart.data.labels?.length ?? 0;
-  if (!n2) return;
+  const n3 = chart.data.labels?.length ?? 0;
+  if (!n3) return;
   const hintId = canvas.id ? `kbd-${canvas.id}` : `kbd-chart-${crypto.randomUUID()}`;
   if (!document.getElementById(hintId)) {
     const hint = document.createElement("p");
@@ -16240,7 +16240,7 @@ function keyboardChart(chart, opts) {
   const speak = opts.readout ?? ((i) => readout(chart, i));
   let at = -1;
   const paint = (next) => {
-    if (next === null || next < 0 || next >= n2) {
+    if (next === null || next < 0 || next >= n3) {
       at = -1;
       chart.setActiveElements([]);
       chart.tooltip?.setActiveElements([], { x: 0, y: 0 });
@@ -16262,17 +16262,17 @@ function keyboardChart(chart, opts) {
     switch (ev.key) {
       case "ArrowRight":
       case "ArrowUp":
-        paint(at < 0 ? 0 : Math.min(n2 - 1, at + 1));
+        paint(at < 0 ? 0 : Math.min(n3 - 1, at + 1));
         break;
       case "ArrowLeft":
       case "ArrowDown":
-        paint(at < 0 ? n2 - 1 : Math.max(0, at - 1));
+        paint(at < 0 ? n3 - 1 : Math.max(0, at - 1));
         break;
       case "Home":
         paint(0);
         break;
       case "End":
-        paint(n2 - 1);
+        paint(n3 - 1);
         break;
       case "Escape":
         paint(null);
@@ -16441,8 +16441,8 @@ if (typeof document !== "undefined") {
 }
 var RAMP_STEPS = 7;
 function ramp(steps2 = RAMP_STEPS) {
-  const n2 = Math.min(steps2, RAMP_STEPS);
-  return Array.from({ length: n2 }, (_, i) => css(`chart-series-${i + 1}`));
+  const n3 = Math.min(steps2, RAMP_STEPS);
+  return Array.from({ length: n3 }, (_, i) => css(`chart-series-${i + 1}`));
 }
 var hollow = () => css("chart-hollow");
 
@@ -16574,8 +16574,8 @@ var RAMP = DASHES.map((dash, i) => ({
 function alpha2(hex2, a) {
   const m = /^#([0-9a-f]{6})$/i.exec(hex2);
   if (!m) throw new Error(`alpha() expects #rrggbb, got "${hex2}"`);
-  const n2 = Number.parseInt(m[1], 16);
-  return `rgba(${n2 >> 16 & 255}, ${n2 >> 8 & 255}, ${n2 & 255}, ${a})`;
+  const n3 = Number.parseInt(m[1], 16);
+  return `rgba(${n3 >> 16 & 255}, ${n3 >> 8 & 255}, ${n3 & 255}, ${a})`;
 }
 function segIndex(ctx, which) {
   const given = which === 0 ? ctx.p0DataIndex : ctx.p1DataIndex;
@@ -16623,6 +16623,103 @@ function el(name, cls, text) {
   if (text !== void 0) node.textContent = text;
   return node;
 }
+
+// node_modules/htm/dist/htm.module.js
+var n2 = function(t4, s, r, e) {
+  var u;
+  s[0] = 0;
+  for (var h3 = 1; h3 < s.length; h3++) {
+    var p = s[h3++], a = s[h3] ? (s[0] |= p ? 1 : 2, r[s[h3++]]) : s[++h3];
+    3 === p ? e[0] = a : 4 === p ? e[1] = Object.assign(e[1] || {}, a) : 5 === p ? (e[1] = e[1] || {})[s[++h3]] = a : 6 === p ? e[1][s[++h3]] += a + "" : p ? (u = t4.apply(a, n2(t4, a, r, ["", null])), e.push(u), a[0] ? s[0] |= 2 : (s[h3 - 2] = 0, s[h3] = u)) : e.push(a);
+  }
+  return e;
+};
+var t3 = /* @__PURE__ */ new Map();
+function htm_module_default(s) {
+  var r = t3.get(this);
+  return r || (r = /* @__PURE__ */ new Map(), t3.set(this, r)), (r = n2(this, r.get(s) || (r.set(s, r = (function(n3) {
+    for (var t4, s2, r2 = 1, e = "", u = "", h3 = [0], p = function(n4) {
+      1 === r2 && (n4 || (e = e.replace(/^\s*\n\s*|\s*\n\s*$/g, ""))) ? h3.push(0, n4, e) : 3 === r2 && (n4 || e) ? (h3.push(3, n4, e), r2 = 2) : 2 === r2 && "..." === e && n4 ? h3.push(4, n4, 0) : 2 === r2 && e && !n4 ? h3.push(5, 0, true, e) : r2 >= 5 && ((e || !n4 && 5 === r2) && (h3.push(r2, 0, e, s2), r2 = 6), n4 && (h3.push(r2, n4, 0, s2), r2 = 6)), e = "";
+    }, a = 0; a < n3.length; a++) {
+      a && (1 === r2 && p(), p(a));
+      for (var l = 0; l < n3[a].length; l++) t4 = n3[a][l], 1 === r2 ? "<" === t4 ? (p(), h3 = [h3], r2 = 3) : e += t4 : 4 === r2 ? "--" === e && ">" === t4 ? (r2 = 1, e = "") : e = t4 + e[0] : u ? t4 === u ? u = "" : e += t4 : '"' === t4 || "'" === t4 ? u = t4 : ">" === t4 ? (p(), r2 = 1) : r2 && ("=" === t4 ? (r2 = 5, s2 = e, e = "") : "/" === t4 && (r2 < 5 || ">" === n3[a][l + 1]) ? (p(), 3 === r2 && (h3 = h3[0]), r2 = h3, (h3 = h3[0]).push(2, 0, r2), r2 = 0) : " " === t4 || "	" === t4 || "\n" === t4 || "\r" === t4 ? (p(), r2 = 2) : e += t4), 3 === r2 && "!--" === e && (r2 = 4, h3 = h3[0]);
+    }
+    return p(), h3;
+  })(s)), r), arguments, [])).length > 1 ? r : r[0];
+}
+
+// src/core/html.ts
+var SVG_NS = "http://www.w3.org/2000/svg";
+var SVG_TAGS = /* @__PURE__ */ new Set([
+  "svg",
+  "g",
+  "defs",
+  "path",
+  "circle",
+  "rect",
+  "line",
+  "polyline",
+  "polygon",
+  "text",
+  "tspan",
+  "use",
+  "title"
+]);
+var AS_PROPERTY = /* @__PURE__ */ new Set(["value", "checked", "indeterminate"]);
+var cssName = (key) => key.startsWith("--") ? key : key.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
+function setStyle2(node, value2) {
+  if (value2 == null) {
+    node.removeAttribute("style");
+    return;
+  }
+  if (typeof value2 === "string") {
+    node.setAttribute("style", value2);
+    return;
+  }
+  const style = node.style;
+  for (const [k, v] of Object.entries(value2)) {
+    if (v == null || v === "") style.removeProperty(cssName(k));
+    else style.setProperty(cssName(k), String(v));
+  }
+}
+function setProp(node, key, value2) {
+  if (key === "style") {
+    setStyle2(node, value2);
+    return;
+  }
+  if (key.startsWith("on") && typeof value2 === "function") {
+    node.addEventListener(key.slice(2).toLowerCase(), value2);
+    return;
+  }
+  if (AS_PROPERTY.has(key)) {
+    node[key] = value2;
+    return;
+  }
+  if (value2 == null || value2 === false) node.removeAttribute(key);
+  else if (value2 === true) node.setAttribute(key, "");
+  else node.setAttribute(key, String(value2));
+}
+function appendChildren(parent, children) {
+  for (const child of children) {
+    if (typeof child === "boolean" || child == null) continue;
+    if (Array.isArray(child)) appendChildren(parent, child);
+    else if (child instanceof Node) parent.appendChild(child);
+    else parent.appendChild(document.createTextNode(String(child)));
+  }
+}
+function h(tag2, props, ...children) {
+  if (typeof tag2 === "function") return tag2(props ?? {});
+  const node = SVG_TAGS.has(tag2) ? document.createElementNS(SVG_NS, tag2) : document.createElement(tag2);
+  if (props) {
+    for (const [key, value2] of Object.entries(props)) setProp(node, key, value2);
+  }
+  appendChildren(node, children);
+  return node;
+}
+var html = htm_module_default.bind(h);
+var mount = (host, ...nodes) => {
+  host.replaceChildren(...nodes);
+};
 
 // src/sections/context/context.ts
 var L = (o) => String(getLocale()).slice(0, 2) === "fr" ? o.fr : o.en;
@@ -16692,8 +16789,8 @@ function weekSpans(weeks) {
   return out;
 }
 var withAlpha = (hex2, a) => {
-  const n2 = Number.parseInt(hex2.slice(1), 16);
-  return `rgba(${n2 >> 16 & 255},${n2 >> 8 & 255},${n2 & 255},${a})`;
+  const n3 = Number.parseInt(hex2.slice(1), 16);
+  return `rgba(${n3 >> 16 & 255},${n3 >> 8 & 255},${n3 & 255},${a})`;
 };
 var contextBands = {
   id: "contextBands",
@@ -16781,31 +16878,22 @@ var eur = (millions) => new Intl.NumberFormat("fr-FR", {
 function insertCostMethodology(anchor, canvas) {
   const lang2 = getLocale();
   const c = lang2 === "fr" ? HELI_COPY_FR : HELI_COPY_EN;
-  const section = document.createElement("section");
-  section.className = "cost-method";
-  section.dataset.role = "cost-method";
-  const h = document.createElement("h3");
-  h.textContent = c.heading;
-  const intro = document.createElement("p");
-  intro.className = "cost-method__intro";
-  intro.textContent = c.intro;
-  const ol = document.createElement("ol");
-  ol.className = "cost-method__steps";
-  for (const step of c.steps) {
-    const li = document.createElement("li");
-    const title = document.createElement("strong");
-    title.textContent = step.title;
-    const body = document.createElement("p");
-    body.textContent = step.body;
-    li.append(title, body);
-    ol.append(li);
-  }
   const [hLo, hHi] = HELI_TOTALS.hours;
   const [cLo, cHi] = HELI_TOTALS.inService;
   const [aLo, aHi] = HELI_TOTALS.allIn;
-  const summary = document.createElement("p");
-  summary.className = "cost-method__summary";
-  summary.textContent = c.summary({
+  const section = html`<section class="cost-method" data-role="cost-method">
+    <h3>${c.heading}</h3>
+    <p class="cost-method__intro">${c.intro}</p>
+    <ol class="cost-method__steps">
+      ${c.steps.map(
+    (step) => html`<li>
+            <strong>${step.title}</strong>
+            <p>${step.body}</p>
+          </li>`
+  )}
+    </ol>
+    <p class="cost-method__summary">
+      ${c.summary({
     days: HELI_TOTALS.days,
     hLo,
     hHi,
@@ -16813,11 +16901,10 @@ function insertCostMethodology(anchor, canvas) {
     cHi: eur(cHi),
     aLo: eur(aLo),
     aHi: eur(aHi)
-  });
-  const caveat = document.createElement("p");
-  caveat.className = "cost-method__caveat";
-  caveat.textContent = c.caveat;
-  section.append(h, intro, ol, summary, caveat);
+  })}
+    </p>
+    <p class="cost-method__caveat">${c.caveat}</p>
+  </section>`;
   const wrap2 = canvas.parentElement;
   const ref = wrap2 && wrap2 !== anchor && anchor.contains(wrap2) ? wrap2 : canvas;
   if (anchor.contains(ref)) anchor.insertBefore(section, ref);
@@ -17644,19 +17731,19 @@ function datasetsFor(id, weekly) {
   const axis = def2.axis ?? AXIS_LEFT;
   const perCapita = id === "protestersDaily" || id === "protestersWeekly";
   const shaded = Boolean(def2.bandFill);
-  const n2 = def2.data.length;
-  const solid = Array.from({ length: n2 }, () => null);
-  const detached = Array.from({ length: n2 }, () => null);
-  const solidBand = Array.from({ length: n2 }, () => null);
-  const detachedBand = Array.from({ length: n2 }, () => null);
-  const quality = new Array(n2);
-  const notes = new Array(n2);
-  const radius = new Array(n2);
-  const hoverRadius = new Array(n2);
-  const twinRadius = new Array(n2);
-  const twinHoverRadius = new Array(n2);
+  const n3 = def2.data.length;
+  const solid = Array.from({ length: n3 }, () => null);
+  const detached = Array.from({ length: n3 }, () => null);
+  const solidBand = Array.from({ length: n3 }, () => null);
+  const detachedBand = Array.from({ length: n3 }, () => null);
+  const quality = new Array(n3);
+  const notes = new Array(n3);
+  const radius = new Array(n3);
+  const hoverRadius = new Array(n3);
+  const twinRadius = new Array(n3);
+  const twinHoverRadius = new Array(n3);
   let anyDetached = false;
-  for (let i = 0; i < n2; i++) {
+  for (let i = 0; i < n3; i++) {
     const p = def2.data[i];
     const r = def2.pointRadius?.[i] ?? def2.radius;
     const base = r === 0 ? 0 : r;
@@ -17839,8 +17926,8 @@ function compactFixed(v) {
 function niceCeil(v) {
   if (!Number.isFinite(v) || v <= 0) return 10;
   const base = 10 ** Math.floor(Math.log10(v));
-  const n2 = v / base;
-  const step = [1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].find((s) => n2 <= s + 1e-9) ?? 10;
+  const n3 = v / base;
+  const step = [1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].find((s) => n3 <= s + 1e-9) ?? 10;
   return step * base;
 }
 function axisMax(list, headroom = 1.08) {
@@ -17883,11 +17970,11 @@ function axisMin(list) {
 function yAxis(title, list, unit, position, log = false) {
   const max = axisMax(list);
   const floor = axisMin(list) * 0.9;
-  const tick = (n2) => {
-    if (!log) return tickFormat(unit)(n2);
-    const l = Math.log10(n2);
+  const tick = (n3) => {
+    if (!log) return tickFormat(unit)(n3);
+    const l = Math.log10(n3);
     const decade = Math.abs(l - Math.round(l)) < 1e-9;
-    return decade || Math.abs(n2 - max) < 1e-9 ? tickFormat(unit)(n2) : "";
+    return decade || Math.abs(n3 - max) < 1e-9 ? tickFormat(unit)(n3) : "";
   };
   const base = {
     position,
@@ -18296,7 +18383,7 @@ function ensureChartBox(canvas) {
   canvas.style.display = "block";
   return host;
 }
-function mount(canvas, cfg) {
+function mount2(canvas, cfg) {
   ensureChartBox(canvas);
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("2d context unavailable");
@@ -18336,7 +18423,7 @@ function mountChart(spec, canvas) {
     const name = copy.subtitle ? `${copy.title}. ${copy.subtitle}` : copy.title;
     canvas.setAttribute("aria-label", name);
     canvas.setAttribute("role", "img");
-    const chart = mount(canvas, buildChart(spec));
+    const chart = mount2(canvas, buildChart(spec));
     const host = canvas.closest("figure") ?? canvas.parentElement;
     host?.querySelector(".data-table")?.remove();
     host?.querySelector('[data-role="cost-method"]')?.remove();
@@ -18454,9 +18541,9 @@ function rawExtent(eps, keys, maxX) {
 }
 function logBounds(lo2, hi2) {
   const l = Math.log10(Math.max(lo2, 1e-6));
-  const h = Math.log10(Math.max(hi2, l + 0.1));
-  const pad = Math.max(0.06, (h - l) * 0.05);
-  return [10 ** (l - pad), 10 ** (h + pad)];
+  const h3 = Math.log10(Math.max(hi2, l + 0.1));
+  const pad = Math.max(0.06, (h3 - l) * 0.05);
+  return [10 ** (l - pad), 10 ** (h3 + pad)];
 }
 function decades(lo2, hi2) {
   const out = [];
@@ -18476,17 +18563,17 @@ function statsOf(points) {
   for (const p of points) if (Number.isFinite(p.y)) vs.push(p.y);
   if (vs.length === 0) return null;
   const sorted = [...vs].sort((a, b) => a - b);
-  const n2 = sorted.length;
-  const mid = n2 >> 1;
-  const median = n2 % 2 === 1 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+  const n3 = sorted.length;
+  const mid = n3 >> 1;
+  const median = n3 % 2 === 1 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
   let sum2 = 0;
   for (const v of vs) sum2 += v;
   const stats = {
     low: sorted[0],
-    high: sorted[n2 - 1],
-    mean: sum2 / n2,
+    high: sorted[n3 - 1],
+    mean: sum2 / n3,
     median,
-    count: n2
+    count: n3
   };
   statsCache.set(points, stats);
   return stats;
@@ -18525,10 +18612,10 @@ var WEEK_MODE = "trellisWeek";
 // src/charts/trellis/legend.ts
 var legendHidden = /* @__PURE__ */ new Map();
 var legendButtons = /* @__PURE__ */ new Map();
-function legendState(key, n2) {
+function legendState(key, n3) {
   const s = legendHidden.get(key) ?? [];
-  while (s.length < n2) s.push(false);
-  s.length = n2;
+  while (s.length < n3) s.push(false);
+  s.length = n3;
   legendHidden.set(key, s);
   return s;
 }
@@ -18540,13 +18627,14 @@ function legendMark(key, idx) {
 function legend(host, key, entries) {
   const hidden = legendState(key, entries.length);
   const buttons = entries.map((entry, idx) => {
-    const button = el("button");
-    button.type = "button";
-    button.setAttribute("aria-pressed", String(hidden[idx]));
+    const swatch = entry.dash?.length ? `background: repeating-linear-gradient(90deg, ${entry.color} 0 3px, transparent 3px 6px)` : `background: ${entry.color}`;
+    const button = html`<button
+      type="button"
+      aria-pressed="${String(hidden[idx])}"
+    >
+      <span class="swatch" style="${swatch}"></span>${entry.text}
+    </button>`;
     button.classList.toggle("is-off", hidden[idx]);
-    const swatch = el("span", "swatch");
-    swatch.style.background = entry.dash?.length ? `repeating-linear-gradient(90deg, ${entry.color} 0 3px, transparent 3px 6px)` : entry.color;
-    button.append(swatch, document.createTextNode(entry.text));
     if (entry.hide) {
       button.addEventListener("click", () => {
         hidden[idx] = !hidden[idx];
@@ -18647,9 +18735,9 @@ var RGB = /^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)/;
 function fade(color2, a) {
   const m = RGB.exec(color2);
   if (m) return `rgb(${m[1]} ${m[2]} ${m[3]} / ${a})`;
-  const h = color2.replace("#", "");
-  if (/^[0-9a-f]{6}$/i.test(h))
-    return `rgb(${parseInt(h.slice(0, 2), 16)} ${parseInt(h.slice(2, 4), 16)} ${parseInt(h.slice(4, 6), 16)} / ${a})`;
+  const h3 = color2.replace("#", "");
+  if (/^[0-9a-f]{6}$/i.test(h3))
+    return `rgb(${parseInt(h3.slice(0, 2), 16)} ${parseInt(h3.slice(2, 4), 16)} ${parseInt(h3.slice(4, 6), 16)} / ${a})`;
   return color2;
 }
 
@@ -18721,7 +18809,7 @@ function shareLine(p, dataset) {
   const stats = statsOf(dataset.data);
   if (!stats) return null;
   const m = t2().tooltip;
-  const part = (label, n2) => `${pctOf(p.y, n2)} (${label})`;
+  const part = (label, n3) => `${pctOf(p.y, n3)} (${label})`;
   const parts = [
     part(m.cmpHighest, stats.high),
     part(m.cmpMean, stats.mean),
@@ -18760,8 +18848,8 @@ function tooltipSpec(kind) {
         const p = item.raw;
         const lines = [];
         if (kind === "item") {
-          const n2 = nf().format(Math.round(p.base));
-          const text = Math.abs(p.y - p.base) / p.base < 1e-9 ? fill(m.tooltip.firstFigure, { n: n2 }) : shareLine(p, item.dataset);
+          const n3 = nf().format(Math.round(p.base));
+          const text = Math.abs(p.y - p.base) / p.base < 1e-9 ? fill(m.tooltip.firstFigure, { n: n3 }) : shareLine(p, item.dataset);
           if (text) lines.push(...wrapTooltipLines(text, item, "body"));
         }
         if (p.note) lines.push(...wrapTooltipLines(p.note, item, "body"));
@@ -18770,8 +18858,8 @@ function tooltipSpec(kind) {
       footer: (items) => {
         if (kind !== "episode") return [];
         const p = items[0].raw;
-        const n2 = nf().format(Math.round(p.base));
-        const text = Math.abs(p.y - p.base) / p.base < 1e-9 ? fill(m.tooltip.firstFigure, { n: n2 }) : shareLine(p, items[0].dataset);
+        const n3 = nf().format(Math.round(p.base));
+        const text = Math.abs(p.y - p.base) / p.base < 1e-9 ? fill(m.tooltip.firstFigure, { n: n3 }) : shareLine(p, items[0].dataset);
         return text ? wrapTooltipLines(text, items[0], "footer") : [];
       }
     }
@@ -18780,24 +18868,24 @@ function tooltipSpec(kind) {
 function observations(ep) {
   const m = t2();
   const counts = METRICS.map((k) => {
-    const n2 = ep.weeks.filter((r) => r[k] !== void 0).length;
-    return `${m.items[k].short} ${n2}`;
+    const n3 = ep.weeks.filter((r) => r[k] !== void 0).length;
+    return `${m.items[k].short} ${n3}`;
   }).join(m.panels.obsSep);
   return fill(m.panels.obs, { counts });
 }
 function panelFigure(strip2, meta, note2) {
-  const figure = el("figure", "trellis-panel");
-  const caption = el("figcaption");
-  const title = el("span", "strip", strip2);
-  title.id = `strip-${crypto.randomUUID().slice(0, 8)}`;
-  caption.append(title, el("span", "strip-meta", meta));
-  if (note2) caption.append(el("p", "strip-note", note2));
-  const box = el("div", "panel-canvas");
-  const canvas = el("canvas");
-  canvas.setAttribute("role", "img");
-  canvas.setAttribute("aria-labelledby", title.id);
-  box.append(canvas);
-  figure.append(caption, box);
+  const id = `strip-${crypto.randomUUID().slice(0, 8)}`;
+  const canvas = html`<canvas
+    role="img"
+    aria-labelledby="${id}"
+  ></canvas>`;
+  const figure = html`<figure class="trellis-panel">
+    <figcaption>
+      <span class="strip" id="${id}">${strip2}</span
+      ><span class="strip-meta">${meta}</span>${note2 ? html`<p class="strip-note">${note2}</p>` : null}
+    </figcaption>
+    <div class="panel-canvas">${canvas}</div>
+  </figure>`;
   return { figure, canvas };
 }
 var panelOptions = (kind, x, y, onHover) => {
@@ -18851,11 +18939,11 @@ var _colWatch = /* @__PURE__ */ new WeakSet();
 function watchColumnCount(host, remount) {
   if (typeof ResizeObserver === "undefined" || _colWatch.has(host)) return;
   _colWatch.add(host);
-  let n2 = resolvedColumns(host);
+  let n3 = resolvedColumns(host);
   new ResizeObserver(() => {
     const c = resolvedColumns(host);
-    if (c === n2) return;
-    n2 = c;
+    if (c === n3) return;
+    n3 = c;
     remount();
   }).observe(host);
 }
@@ -19077,15 +19165,15 @@ function mountCrossEpisode() {
   maybeMount("trellis-episodes", mountEpisodeTrellis);
   maybeMount("trellis-items", mountItemTrellis);
 }
-function maybeMount(id, mount2) {
+function maybeMount(id, mount3) {
   const host = document.getElementById(id);
   if (!host) return;
   const card3 = closedCardOf(host);
   if (card3)
     deferUntilReveal(card3, () => {
-      if (host.isConnected) mount2();
+      if (host.isConnected) mount3();
     });
-  else mount2();
+  else mount3();
 }
 for (const [id, remount] of [
   ["trellis-episodes", mountEpisodeTrellis],
@@ -19221,66 +19309,63 @@ function creditId(card3) {
   return `credit-${card3.href.replace(/\//g, "-")}`;
 }
 function hero(card3, fromPath) {
-  const figure = el("figure", "card-hero");
-  const img = el("img");
-  img.src = heroSrc(fromPath, card3.hero.file);
-  img.srcset = `${heroSrc(fromPath, heroFile720(card3.hero.file))} 720w`;
-  img.sizes = "(min-width: 40rem) 336px, 92vw";
-  img.alt = bi(card3.hero.alt);
-  img.width = 1200;
-  img.height = 800;
-  img.loading = "lazy";
-  img.decoding = "async";
-  img.setAttribute("aria-describedby", creditId(card3));
-  figure.append(img);
-  return figure;
+  return html`<figure class="card-hero">
+    <img
+      src="${heroSrc(fromPath, card3.hero.file)}"
+      srcset="${heroSrc(fromPath, heroFile720(card3.hero.file))} 720w"
+      sizes="(min-width: 40rem) 336px, 92vw"
+      alt="${bi(card3.hero.alt)}"
+      width="1200"
+      height="800"
+      loading="lazy"
+      decoding="async"
+      aria-describedby="${creditId(card3)}"
+    />
+  </figure>`;
 }
 function credit(card3) {
-  const p = el("p", "card-credit");
-  p.id = creditId(card3);
-  p.append(el("span", "card-credit-label", `${bi(CREDIT_LABEL)}:`), " ");
-  const link = el("a", "card-credit-link");
-  link.href = card3.hero.filePage;
-  link.target = "_blank";
-  link.rel = "noopener noreferrer";
-  link.textContent = card3.hero.credit.en === "" ? "" : bi(card3.hero.credit);
-  link.setAttribute(
-    "aria-label",
-    `${bi(card3.hero.credit)} \u2014 ${bi(CREDIT_LINK_LABEL)}`
-  );
-  p.append(link);
-  if (card3.hero.licenceUrl) {
-    p.append(" ");
-    const lic = el("a", "card-licence-link", bi(LICENCE_LABEL));
-    lic.href = card3.hero.licenceUrl;
-    lic.target = "_blank";
-    lic.rel = "noopener noreferrer";
-    p.append(lic);
-  }
-  p.append(" \xB7 ", el("span", "card-licence", bi(card3.hero.licence)));
-  return p;
+  const licence = card3.hero.licenceUrl ? html`${" "}<a
+          class="card-licence-link"
+          href="${card3.hero.licenceUrl}"
+          target="_blank"
+          rel="noopener noreferrer"
+          >${bi(LICENCE_LABEL)}</a
+        >` : null;
+  return html`<p class="card-credit" id="${creditId(card3)}">
+    <span class="card-credit-label">${bi(CREDIT_LABEL)}:</span>${" "}<a
+      class="card-credit-link"
+      href="${card3.hero.filePage}"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="${bi(card3.hero.credit)} — ${bi(CREDIT_LINK_LABEL)}"
+      >${card3.hero.credit.en === "" ? "" : bi(card3.hero.credit)}</a
+    >${licence}${" \xB7 "}<span class="card-licence"
+      >${bi(card3.hero.licence)}</span
+    >
+  </p>`;
 }
 function card(spec, fromPath) {
-  const article = el("article", "group-card");
-  const main = el("a", "card-main");
-  main.href = pageHref(fromPath, spec.href);
-  main.setAttribute("aria-describedby", creditId(spec));
-  const body = el("div", "card-body");
-  body.append(
-    el("h3", "card-title", bi(spec.title)),
-    el("p", "card-blurb", bi(spec.blurb))
-  );
-  body.append(el("p", "card-more", `${bi(MORE_LABEL)} \u2192`));
-  body.lastElementChild?.setAttribute("aria-hidden", "true");
-  main.append(hero(spec, fromPath), body);
-  article.append(main, credit(spec));
-  return article;
+  return html`<article class="group-card">
+    <a
+      class="card-main"
+      href="${pageHref(fromPath, spec.href)}"
+      aria-describedby="${creditId(spec)}"
+    >
+      ${hero(spec, fromPath)}
+      <div class="card-body">
+        <h3 class="card-title">${bi(spec.title)}</h3>
+        <p class="card-blurb">${bi(spec.blurb)}</p>
+        <p class="card-more" aria-hidden="true">${bi(MORE_LABEL)} →</p>
+      </div>
+    </a>
+    ${credit(spec)}
+  </article>`;
 }
 function mountCards(fromPath, cards, host = byId("card-grid")) {
   if (!host) return;
-  const grid = el("div", "card-grid");
-  for (const c of cards) grid.append(card(c, fromPath));
-  host.replaceChildren(grid);
+  host.replaceChildren(
+    html`<div class="card-grid">${cards.map((c) => card(c, fromPath))}</div>`
+  );
 }
 
 // src/sections/casualties/model.ts
@@ -19330,260 +19415,250 @@ function estimateRange(e) {
 // src/sections/casualties/tables.ts
 function cell(c, extra = "") {
   const v = cellView(c);
-  return el("td", extra ? `${v.cls} ${extra}` : v.cls, v.text);
+  return html`<td class="${extra ? `${v.cls} ${extra}` : v.cls}">
+    ${v.text}
+  </td>`;
 }
 function rowHead(text) {
-  const th = el("th", "cas-scope", text);
-  th.scope = "row";
-  return th;
+  return html`<th scope="row" class="cas-scope">${text}</th>`;
 }
 function head(labels, lead = 1) {
-  const tr = el("tr");
-  labels.forEach((label, i) => {
-    const th = el(
-      "th",
-      i < lead ? "cas-scope-head" : "cas-num-head",
-      label
-    );
-    th.scope = "col";
-    tr.append(th);
-  });
-  const thead = el("thead");
-  thead.append(tr);
-  return thead;
+  return html`<thead>
+    <tr>
+      ${labels.map(
+    (label, i) => html`<th
+            scope="col"
+            class="${i < lead ? "cas-scope-head" : "cas-num-head"}"
+          >
+            ${label}
+          </th>`
+  )}
+    </tr>
+  </thead>`;
 }
 function bar(p) {
-  const wrap2 = el("span", "cas-bar");
-  const run = el("span", "cas-bar-fill");
-  run.style.width = `${Math.max(0, Math.min(1, p)) * 100}%`;
-  wrap2.append(run);
-  return wrap2;
+  const w = `${Math.max(0, Math.min(1, p)) * 100}%`;
+  return html`<span class="cas-bar"
+    ><span class="cas-bar-fill" style="width: ${w}"></span
+  ></span>`;
 }
 function stat(num, label, cls = "cas-head-stat") {
-  const wrap2 = el("div", cls);
-  wrap2.append(
-    el("span", "cas-head-num", num),
-    el("span", "cas-head-label", label)
-  );
-  return wrap2;
+  return html`<div class="${cls}">
+    <span class="cas-head-num">${num}</span
+    ><span class="cas-head-label">${label}</span>
+  </div>`;
 }
 function headline() {
   const c = t2().casualties;
-  const wrap2 = el("div", "cas-headline");
   const total = nf().format(FORCES.movement);
-  wrap2.append(
-    stat(
-      `${pct(SERIOUS_MOVEMENT.lo / FORCES.movement)}\u2013${pct(SERIOUS_MOVEMENT.hi / FORCES.movement)}`,
-      fill(c.headSeriousShare, {
-        lo: pct(SERIOUS_MOVEMENT.lo / FORCES.movement),
-        hi: pct(SERIOUS_MOVEMENT.hi / FORCES.movement),
-        total
-      })
-    ),
-    stat(
-      `${nf().format(SERIOUS_MOVEMENT.lo)}\u2013${nf().format(SERIOUS_MOVEMENT.hi)}`,
-      fill(c.headSeriousCount, {
-        forces: `${nf().format(SERIOUS_MOVEMENT.lo)}\u2013${nf().format(SERIOUS_MOVEMENT.hi)}`,
-        protesters: `\u2265 ${nf().format(THINES.seriousTo5Nov + THINES.deathsTo5Nov)}`
-      })
-    ),
-    stat(
-      pct(MIX[0].central / FORCES.movement),
-      fill(c.headMix, { light: nf().format(MIX[0].central), total })
-    )
-  );
-  return wrap2;
+  return html`<div class="cas-headline">
+    ${stat(
+    `${pct(SERIOUS_MOVEMENT.lo / FORCES.movement)}\u2013${pct(SERIOUS_MOVEMENT.hi / FORCES.movement)}`,
+    fill(c.headSeriousShare, {
+      lo: pct(SERIOUS_MOVEMENT.lo / FORCES.movement),
+      hi: pct(SERIOUS_MOVEMENT.hi / FORCES.movement),
+      total
+    })
+  )}
+    ${stat(
+    `${nf().format(SERIOUS_MOVEMENT.lo)}\u2013${nf().format(SERIOUS_MOVEMENT.hi)}`,
+    fill(c.headSeriousCount, {
+      forces: `${nf().format(SERIOUS_MOVEMENT.lo)}\u2013${nf().format(SERIOUS_MOVEMENT.hi)}`,
+      protesters: `\u2265 ${nf().format(THINES.seriousTo5Nov + THINES.deathsTo5Nov)}`
+    })
+  )}
+    ${stat(
+    pct(MIX[0].central / FORCES.movement),
+    fill(c.headMix, { light: nf().format(MIX[0].central), total })
+  )}
+  </div>`;
 }
 function mixBlock() {
   const c = t2().casualties;
-  const wrap2 = el("div", "cas-mix");
-  wrap2.append(el("h4", "cas-title", c.mixTitle));
   const total = MIX.reduce((a, b) => a + b.central, 0);
-  for (const band of MIX) {
-    const row = el("div", "cas-mix-row");
-    row.append(el("span", "cas-mix-label", c.mix[band.id]));
-    const track2 = el("span", "cas-mix-track");
-    const run = el("span", `cas-mix-fill cas-mix-${band.id}`);
-    run.style.width = `${band.central / total * 100}%`;
-    track2.append(run);
-    row.append(
-      track2,
-      el(
-        "span",
-        "cas-mix-value",
-        `${nf().format(band.lo)}\u2013${nf().format(band.hi)}`
-      ),
-      el(
-        "span",
-        "cas-mix-share",
-        `${pct(band.lo / total)}\u2013${pct(band.hi / total)}`
-      )
-    );
-    wrap2.append(row);
-  }
-  wrap2.append(el("p", "cas-note", c.noteMix));
-  return wrap2;
+  return html`<div class="cas-mix">
+    <h4 class="cas-title">${c.mixTitle}</h4>
+    ${MIX.map((band) => {
+    const w = `${band.central / total * 100}%`;
+    return html`<div class="cas-mix-row">
+        <span class="cas-mix-label">${c.mix[band.id]}</span>
+        <span class="cas-mix-track"
+          ><span
+            class="cas-mix-fill cas-mix-${band.id}"
+            style="width: ${w}"
+          ></span
+        ></span>
+        <span class="cas-mix-value"
+          >${nf().format(band.lo)}–${nf().format(band.hi)}</span
+        >
+        <span class="cas-mix-share"
+          >${pct(band.lo / total)}–${pct(band.hi / total)}</span
+        >
+      </div>`;
+  })}
+    <p class="cas-note">${c.noteMix}</p>
+  </div>`;
 }
 function severityTable(rows, caption) {
   const c = t2().casualties;
-  const table = el("table", "cas-table");
-  table.append(el("caption", "cas-caption", caption));
-  table.append(
-    head([
-      c.colScope,
-      c.colTotal,
-      c.colSerious,
-      c.colLight,
-      c.colLightShare,
-      c.colOther
-    ])
-  );
-  const tbody = el("tbody");
-  for (const row of rows) {
-    const tr = el("tr");
-    tr.append(rowHead(c.scope[row.id] ?? row.id));
-    tr.append(cell(row.total), cell(row.serious), cell(row.light));
+  return html`<table class="cas-table">
+    <caption class="cas-caption">
+      ${caption}
+    </caption>
+    ${head([
+    c.colScope,
+    c.colTotal,
+    c.colSerious,
+    c.colLight,
+    c.colLightShare,
+    c.colOther
+  ])}
+    <tbody>
+      ${rows.map((row) => {
     const p = share(row.light, row.total);
-    const td = el("td", "cas-share");
-    if (p === null) td.append(el("span", "cas-absent", "\u2014"));
-    else td.append(el("span", "cas-pct", pct(p)), bar(p));
-    tr.append(td);
-    tr.append(cell(row.other));
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
+    return html`<tr>
+          ${rowHead(c.scope[row.id] ?? row.id)}${cell(row.total)}${cell(row.serious)}${cell(row.light)}${p === null ? html`<td class="cas-share">
+                  <span class="cas-absent">—</span>
+                </td>` : html`<td class="cas-share">
+                  <span class="cas-pct">${pct(p)}</span>${bar(p)}
+                </td>`}${cell(row.other)}
+        </tr>`;
+  })}
+    </tbody>
+  </table>`;
 }
 function populationTable() {
   const c = t2().casualties;
-  const table = el("table", "cas-table cas-population");
-  table.append(el("caption", "cas-caption", c.capPopulation));
-  table.append(
-    head([
-      c.colScope,
-      c.colPopulation,
-      c.colParticipation,
-      c.colSelection,
-      c.colCount
-    ])
-  );
-  const tbody = el("tbody");
   const ordered = [...OBSERVATIONS].sort(
     (a, b) => POPULATION_ORDER.indexOf(a.population) - POPULATION_ORDER.indexOf(b.population) || a.date.localeCompare(b.date)
   );
-  for (const obs of ordered) {
-    const tr = el("tr");
-    tr.append(rowHead(c.observations[obs.id] ?? obs.id));
-    tr.append(el("td", "cas-kind", c.population[obs.population]));
-    tr.append(el("td", "cas-kind", c.participation[obs.participation]));
-    tr.append(el("td", "cas-kind", c.selection[obs.selection]));
-    tr.append(cell(obs.count));
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
+  return html`<table class="cas-table cas-population">
+    <caption class="cas-caption">
+      ${c.capPopulation}
+    </caption>
+    ${head([
+    c.colScope,
+    c.colPopulation,
+    c.colParticipation,
+    c.colSelection,
+    c.colCount
+  ])}
+    <tbody>
+      ${ordered.map(
+    (obs) => html`<tr>
+            ${rowHead(c.observations[obs.id] ?? obs.id)}
+            <td class="cas-kind">${c.population[obs.population]}</td>
+            <td class="cas-kind">${c.participation[obs.participation]}</td>
+            <td class="cas-kind">${c.selection[obs.selection]}</td>
+            ${cell(obs.count)}
+          </tr>`
+  )}
+    </tbody>
+  </table>`;
 }
 function bystanderTable() {
   const c = t2().casualties;
-  const table = el("table", "cas-table cas-bystanders");
-  table.append(el("caption", "cas-caption", c.bystanderCaption));
-  table.append(head([c.colQuestion, c.colCount]));
-  const tbody = el("tbody");
   const rows = [
     [c.bystanders.documented, BYSTANDER_CELLS.documented],
     [c.bystanders.serious, BYSTANDER_CELLS.serious],
     [c.bystanders.national, BYSTANDER_CELLS.national]
   ];
-  for (const [label, c2] of rows) {
-    const tr = el("tr");
-    tr.append(rowHead(label), cell(c2));
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
+  return html`<table class="cas-table cas-bystanders">
+    <caption class="cas-caption">
+      ${c.bystanderCaption}
+    </caption>
+    ${head([c.colQuestion, c.colCount])}
+    <tbody>
+      ${rows.map(
+    ([label, c2]) => html`<tr>
+            ${rowHead(label)}${cell(c2)}
+          </tr>`
+  )}
+    </tbody>
+  </table>`;
 }
 function estimateTable() {
   const c = t2().casualties;
-  const table = el("table", "cas-table cas-estimates");
-  table.append(el("caption", "cas-caption", c.capEstimate));
-  table.append(
-    head([c.colEstimate, c.colRange, c.colMethod, c.colEdges, c.colStatus])
-  );
-  const tbody = el("tbody");
-  for (const e of ESTIMATES) {
+  return html`<table class="cas-table cas-estimates">
+    <caption class="cas-caption">
+      ${c.capEstimate}
+    </caption>
+    ${head([c.colEstimate, c.colRange, c.colMethod, c.colEdges, c.colStatus])}
+    <tbody>
+      ${ESTIMATES.map((e) => {
     const copy = c.estimates[e.key];
-    const tr = el("tr", e.status === "gap" ? "cas-reference" : "");
-    tr.append(rowHead(copy?.label ?? e.key));
     const v = estimateRange(e);
-    tr.append(el("td", v.cls, v.text));
-    tr.append(el("td", "cas-kind", copy?.method ?? ""));
-    tr.append(
-      el(
-        "td",
-        "cas-kind",
-        fill(c.edgePair, { lo: c.edge[e.loEdge], hi: c.edge[e.hiEdge] })
-      )
-    );
-    tr.append(el("td", "cas-kind", c.status[e.status]));
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
+    return html`<tr class="${e.status === "gap" ? "cas-reference" : ""}">
+          ${rowHead(copy?.label ?? e.key)}
+          <td class="${v.cls}">${v.text}</td>
+          <td class="cas-kind">${copy?.method ?? ""}</td>
+          <td class="cas-kind">
+            ${fill(c.edgePair, { lo: c.edge[e.loEdge], hi: c.edge[e.hiEdge] })}
+          </td>
+          <td class="cas-kind">${c.status[e.status]}</td>
+        </tr>`;
+  })}
+    </tbody>
+  </table>`;
 }
 function sensitivityTable() {
   const c = t2().casualties;
-  const table = el("table", "cas-table cas-sensitivity");
-  table.append(el("caption", "cas-caption", c.capSensitivity));
-  table.append(head([c.colRatio, c.colAt17, c.colMovement]));
-  const tbody = el("tbody");
-  for (const row of SENSITIVITY) {
-    const tr = el("tr", row.ratio === RATIO.mid ? "cas-reference" : "");
-    tr.append(rowHead(`r = ${row.ratio}`));
-    tr.append(el("td", "cas-num cas-derived", nf().format(row.at17Oct)));
-    tr.append(el("td", "cas-num cas-derived", nf().format(row.movement)));
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
+  return html`<table class="cas-table cas-sensitivity">
+    <caption class="cas-caption">
+      ${c.capSensitivity}
+    </caption>
+    ${head([c.colRatio, c.colAt17, c.colMovement])}
+    <tbody>
+      ${SENSITIVITY.map(
+    (row) => html`<tr class="${row.ratio === RATIO.mid ? "cas-reference" : ""}">
+            ${rowHead(`r = ${row.ratio}`)}
+            <td class="cas-num cas-derived">${nf().format(row.at17Oct)}</td>
+            <td class="cas-num cas-derived">${nf().format(row.movement)}</td>
+          </tr>`
+  )}
+    </tbody>
+  </table>`;
 }
 function causeTable(rows, caption) {
   const c = t2().casualties;
-  const table = el("table", "cas-table cas-cause");
-  table.append(el("caption", "cas-caption", caption));
-  table.append(head([c.colSide, c.colCircumstance, c.colCount, c.colCases], 2));
-  const tbody = el("tbody");
-  for (const row of rows) {
-    const tr = el("tr", row.reference ? "cas-reference" : "");
-    tr.append(rowHead(c.side[row.side]));
-    tr.append(el("td", "cas-kind", c.kind[row.kind]));
-    tr.append(cell(row.count));
-    const td = el("td", "cas-cases-cell");
-    if (!row.cases.length) td.append(el("span", "cas-absent", c.noCases));
-    else {
-      const list = el("ul", "cas-case-list");
-      for (const key of row.cases) list.append(el("li", "", c.cases[key]));
-      td.append(list);
-    }
-    tr.append(td);
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
+  return html`<table class="cas-table cas-cause">
+    <caption class="cas-caption">
+      ${caption}
+    </caption>
+    ${head([c.colSide, c.colCircumstance, c.colCount, c.colCases], 2)}
+    <tbody>
+      ${rows.map(
+    (row) => html`<tr class="${row.reference ? "cas-reference" : ""}">
+            ${rowHead(c.side[row.side])}
+            <td class="cas-kind">${c.kind[row.kind]}</td>
+            ${cell(row.count)}
+            <td class="cas-cases-cell">
+              ${row.cases.length === 0 ? html`<span class="cas-absent">${c.noCases}</span>` : html`<ul class="cas-case-list">
+                      ${row.cases.map((key) => html`<li>${c.cases[key]}</li>`)}
+                    </ul>`}
+            </td>
+          </tr>`
+  )}
+    </tbody>
+  </table>`;
 }
 function resolutionTable() {
   const c = t2().casualties;
-  const table = el("table", "cas-table cas-resolution");
-  table.append(el("caption", "cas-caption", c.capResolution));
-  table.append(head([c.colQuestion, c.colWindow, c.colWeekly], 2));
-  const tbody = el("tbody");
-  for (const row of c.resolution) {
-    const tr = el("tr");
-    tr.append(rowHead(row.label), el("td", "", row.window));
-    tr.append(el("td", "cas-num", row.weekly));
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
+  return html`<table class="cas-table cas-resolution">
+    <caption class="cas-caption">
+      ${c.capResolution}
+    </caption>
+    ${head([c.colQuestion, c.colWindow, c.colWeekly], 2)}
+    <tbody>
+      ${c.resolution.map(
+    (row) => html`<tr>
+            ${rowHead(row.label)}
+            <td>${row.window}</td>
+            <td class="cas-num">${row.weekly}</td>
+          </tr>`
+  )}
+    </tbody>
+  </table>`;
 }
 var CIVILIAN_PROXY = pct(CIVILIAN_PROXY_SHARE);
 
@@ -19608,7 +19683,7 @@ function casCopy() {
       light: c.colLight,
       unpub: c.why.notPublished
     },
-    casesLabel: (n2) => c.casesCount.replace(/\{n\}/g, String(n2)),
+    casesLabel: (n3) => c.casesCount.replace(/\{n\}/g, String(n3)),
     noCases: c.noCases
   };
 }
@@ -19639,141 +19714,142 @@ function strip(row, cp) {
   const c = t2().casualties;
   const total = lo(row.total);
   const { parts, serious } = stackOf(row);
-  const wrap2 = el("div", "cas-strip");
-  const head2 = el("div", "cas-strip-head");
-  head2.append(
-    el("span", "cas-strip-name", cp.scope(row.id)),
-    el("span", "cas-strip-total", cellView(row.total).text)
-  );
+  const name = cp.scope(row.id);
+  const totalText = cellView(row.total).text;
   const p = share(row.light, row.total);
-  if (p !== null) head2.append(el("span", "cas-strip-share", pct(p)));
-  wrap2.append(head2);
-  const box = el("div", "cas-track-wrap");
-  const track2 = el("div", "cas-track");
-  if (total === null || parts.length === 0) {
-    track2.classList.add("cas-track-empty");
-    track2.append(el("span", "cas-track-note", cellView(row.total).text));
-  } else {
-    track2.style.gridTemplateColumns = parts.map((x) => `${Math.max(x.n, 0)}fr`).join(" ");
-    for (const x of parts) track2.append(el("span", `cas-seg ${x.cls}`));
-    if (serious) {
-      const left = Math.min(100, Math.max(0, serious[0] / total * 100));
-      const width = Math.min(
-        100 - left,
-        Math.max(0.6, (serious[1] - serious[0]) / total * 100)
-      );
-      const whisk = el("span", "cas-whisker");
-      whisk.style.left = `${left}%`;
-      whisk.style.width = `${width}%`;
-      whisk.title = `${c.colSerious} ${cellView(row.serious).text}`;
-      box.append(whisk);
-    }
-  }
+  const shareText = p === null ? "" : pct(p);
   const meta = [
     `${c.colSerious} ${cellView(row.serious).text}`,
     `${c.colLight} ${cellView(row.light).text}`,
     `${c.colOther} ${cellView(row.other).text}`
   ].join(" \xB7 ");
-  track2.setAttribute("role", "img");
-  track2.setAttribute("aria-label", `${head2.textContent} \u2014 ${meta}`);
-  box.append(track2);
-  wrap2.append(box, el("p", "cas-strip-meta", meta));
-  return wrap2;
+  const label = `${name}${totalText}${shareText} \u2014 ${meta}`;
+  const empty = total === null || parts.length === 0;
+  const columns = empty ? null : parts.map((x) => `${Math.max(x.n, 0)}fr`).join(" ");
+  const whisker = serious ? (() => {
+    const t0 = total;
+    const left = Math.min(100, Math.max(0, serious[0] / t0 * 100));
+    const width = Math.min(
+      100 - left,
+      Math.max(0.6, (serious[1] - serious[0]) / t0 * 100)
+    );
+    return html`<span
+          class="cas-whisker"
+          style="left: ${left}%; width: ${width}%"
+          title="${c.colSerious} ${cellView(row.serious).text}"
+        ></span>`;
+  })() : null;
+  return html`<div class="cas-strip">
+    <div class="cas-strip-head">
+      <span class="cas-strip-name">${name}</span
+      ><span class="cas-strip-total">${totalText}</span>${p === null ? null : html`<span class="cas-strip-share">${pct(p)}</span>`}
+    </div>
+    <div class="cas-track-wrap">
+      ${whisker}
+      <div
+        class="cas-track${empty ? " cas-track-empty" : ""}"
+        role="img"
+        aria-label="${label}"
+        style="${columns === null ? null : `grid-template-columns: ${columns}`}"
+      >
+        ${empty ? html`<span class="cas-track-note">${totalText}</span>` : parts.map((x) => html`<span class="cas-seg ${x.cls}"></span>`)}
+      </div>
+    </div>
+    <p class="cas-strip-meta">${meta}</p>
+  </div>`;
 }
 function severityStrips(rows, caption) {
   const cp = casCopy();
-  const wrap2 = el("div", "cas-visual");
-  wrap2.append(el("p", "cas-caption", caption));
-  const legend2 = el("div", "cas-legend");
   const keys = [
     ["cas-seg-serious", cp.legend.serious],
     ["cas-seg-light", cp.legend.light],
     ["cas-seg-unpub", cp.legend.unpub]
   ];
-  for (const [cls, label] of keys) {
-    const item = el("span", "cas-legend-item");
-    item.append(el("i", `cas-swatch ${cls}`), el("span", "", label));
-    legend2.append(item);
-  }
-  wrap2.append(legend2);
-  for (const row of rows) wrap2.append(strip(row, cp));
-  return wrap2;
+  return html`<div class="cas-visual">
+    <p class="cas-caption">${caption}</p>
+    <div class="cas-legend">
+      ${keys.map(
+    ([cls, label]) => html`<span class="cas-legend-item"
+            ><i class="cas-swatch ${cls}"></i><span>${label}</span></span
+          >`
+  )}
+    </div>
+    ${rows.map((row) => strip(row, cp))}
+  </div>`;
 }
 function tally(cell2, cp) {
   const txt2 = cellView(cell2).text.trim();
   if (txt2 === cp.noCases) return { kind: "zero", n: 0 };
-  const n2 = lo(cell2);
-  return n2 === null ? { kind: "unknown", n: 0 } : { kind: "n", n: n2 };
+  const n3 = lo(cell2);
+  return n3 === null ? { kind: "unknown", n: 0 } : { kind: "n", n: n3 };
 }
 var DOT_CAP = 24;
 function dotsFor(row, t22) {
-  const dots = el("div", "cas-dots");
-  dots.setAttribute("aria-hidden", "true");
+  const dots = (children) => html`<div class="cas-dots" aria-hidden="true">${children}</div>`;
   if (t22.kind === "unknown") {
-    dots.append(el("span", "cas-dot-unknown", "?"));
-    return dots;
+    return dots([html`<span class="cas-dot-unknown">?</span>`]);
   }
   if (t22.kind === "zero") {
-    dots.classList.add("cas-dots-empty");
-    return dots;
+    return html`<div class="cas-dots cas-dots-empty" aria-hidden="true"></div>`;
   }
   const ref = row.reference;
   const shown = Math.min(t22.n, DOT_CAP);
-  for (let i = 0; i < shown; i++) {
-    dots.append(el("i", ref ? "cas-dot cas-dot-ref" : "cas-dot"));
-  }
-  if (t22.n > DOT_CAP) {
-    dots.append(el("span", "cas-dot-more", `+${t22.n - DOT_CAP}`));
-  }
-  return dots;
+  const marks = Array.from(
+    { length: shown },
+    () => ref ? html`<i class="cas-dot cas-dot-ref"></i>` : html`<i class="cas-dot"></i>`
+  );
+  if (t22.n > DOT_CAP)
+    marks.push(html`<span class="cas-dot-more">+${t22.n - DOT_CAP}</span>`);
+  return dots(marks);
 }
 function detailsFor(row, cp) {
-  const det = el("details", "cas-cases");
-  const sum2 = el("summary", "cas-cases-sum");
-  sum2.setAttribute("aria-label", cp.casesLabel(row.cases.length));
-  sum2.title = cp.casesLabel(row.cases.length);
-  const ul = el("ul", "cas-case-list");
-  for (const key of row.cases) ul.append(el("li", "", cp.caseText(key)));
-  det.append(sum2, ul);
-  return det;
+  const name = cp.casesLabel(row.cases.length);
+  return html`<details class="cas-cases">
+    <summary
+      class="cas-cases-sum"
+      aria-label="${name}"
+      title="${name}"
+    ></summary>
+    <ul class="cas-case-list">
+      ${row.cases.map((key) => html`<li>${cp.caseText(key)}</li>`)}
+    </ul>
+  </details>`;
 }
 function caseTally(rows, caption) {
   const cp = casCopy();
-  const wrap2 = el("div", "cas-visual");
-  wrap2.append(el("p", "cas-caption", caption));
   let side = null;
-  for (const row of rows) {
+  return html`<div class="cas-visual">
+    <p class="cas-caption">${caption}</p>
+    ${rows.map((row) => {
     const t22 = tally(row.count, cp);
-    const line = el("div", "cas-tally-row");
-    if (row.reference) line.classList.add("cas-reference");
     const sideLabel = cp.side(row.side);
-    if (sideLabel !== side) {
-      side = sideLabel;
-      line.append(el("p", "cas-tally-side", sideLabel));
-    }
-    const facts = el("div", "cas-tally-facts");
-    facts.append(
-      el("span", "cas-tally-kind", cp.kind(row.kind)),
-      el("span", "cas-tally-count", cellView(row.count).text)
-    );
-    if (row.cases.length > 0) facts.append(detailsFor(row, cp));
-    const body = el("div", "cas-tally-body");
-    body.append(dotsFor(row, t22), facts);
-    line.append(body);
-    line.setAttribute(
-      "aria-label",
-      `${sideLabel} \u2014 ${cp.kind(row.kind)}: ${cellView(row.count).text}`
-    );
-    wrap2.append(line);
-  }
-  return wrap2;
+    const heading = sideLabel !== side ? sideLabel : null;
+    side = sideLabel;
+    return html`<div
+        class="cas-tally-row${row.reference ? " cas-reference" : ""}"
+        aria-label="${sideLabel} — ${cp.kind(row.kind)}: ${cellView(row.count).text}"
+      >
+        ${heading ? html`<p class="cas-tally-side">${heading}</p>` : null}
+        <div class="cas-tally-body">
+          ${dotsFor(row, t22)}
+          <div class="cas-tally-facts">
+            <span class="cas-tally-kind">${cp.kind(row.kind)}</span
+            ><span class="cas-tally-count">${cellView(row.count).text}</span
+            >${row.cases.length > 0 ? detailsFor(row, cp) : null}
+          </div>
+        </div>
+      </div>`;
+  })}
+  </div>`;
 }
 function withTable(visual, table, label) {
-  const det = el("details", "cas-table-toggle");
-  det.append(el("summary", "", label), table);
-  const box = el("div", "cas-visual-box");
-  box.append(visual, det);
-  return box;
+  return html`<div class="cas-visual-box">
+    ${visual}
+    <details class="cas-table-toggle">
+      <summary>${label}</summary>
+      ${table}
+    </details>
+  </div>`;
 }
 
 // src/sections/casualties/index.ts
@@ -19781,51 +19857,56 @@ var LABEL2 = {
   fr: "Voir les chiffres",
   en: "See the numbers"
 };
+var subTitle = (text) => html`<h4 class="cas-title">${text}</h4>`;
 function mountCasualties() {
   const c = t2().casualties;
   const label = c.showTable ?? LABEL2[getLocale()] ?? LABEL2.en;
   const a = byId("cas-a");
   const aHead = byId("cas-a-head");
-  const aTop = [el("h4", "cas-title", c.headlineTitle), headline(), mixBlock()];
+  const aTop = [subTitle(c.headlineTitle), headline(), mixBlock()];
   const aRest = [
     withTable(
       severityStrips(SEVERITY_LEVELS, c.capLevels),
       severityTable(SEVERITY_LEVELS, c.capLevels),
       label
     ),
-    el("h4", "cas-title", c.popTitle),
+    subTitle(c.popTitle),
     populationTable(),
-    el("p", "cas-note", c.notePopulation),
-    el("h4", "cas-title", c.bystanderTitle),
+    html`<p class="cas-note">${c.notePopulation}</p>`,
+    subTitle(c.bystanderTitle),
     bystanderTable(),
-    el("p", "cas-note", fill(c.noteBystanders, { proxy: CIVILIAN_PROXY })),
+    html`<p class="cas-note">
+      ${fill(c.noteBystanders, {
+      proxy: CIVILIAN_PROXY
+    })}
+    </p>`,
     withTable(
       caseTally(CASES, c.capCases),
       causeTable(CASES, c.capCases),
       label
     ),
-    el("p", "cas-note", c.noteLevels)
+    html`<p class="cas-note">${c.noteLevels}</p>`
   ];
-  if (aHead) aHead.replaceChildren(...aTop);
-  if (a) a.replaceChildren(...aHead ? aRest : [...aTop, ...aRest]);
+  if (aHead) mount(aHead, ...aTop);
+  if (a) mount(a, ...aHead ? aRest : [...aTop, ...aRest]);
   const b = byId("cas-b");
   const bHead = byId("cas-b-head");
   const bTop = [
-    el("h4", "cas-title", c.weeklyTitle),
+    subTitle(c.weeklyTitle),
     severityStrips(SEVERITY_WEEKS, c.capWeeks)
   ];
   const bRest = [
     severityTable(SEVERITY_WEEKS, c.capWeeks),
-    el("h4", "cas-title", c.estTitle),
+    subTitle(c.estTitle),
     estimateTable(),
-    el("p", "cas-note", c.noteEstimate),
+    html`<p class="cas-note">${c.noteEstimate}</p>`,
     sensitivityTable(),
-    el("p", "cas-note", c.noteSensitivity),
+    html`<p class="cas-note">${c.noteSensitivity}</p>`,
     resolutionTable(),
-    el("p", "cas-note", c.noteWeeks)
+    html`<p class="cas-note">${c.noteWeeks}</p>`
   ];
-  if (bHead) bHead.replaceChildren(...bTop);
-  if (b) b.replaceChildren(...bHead ? bRest : [...bTop, ...bRest]);
+  if (bHead) mount(bHead, ...bTop);
+  if (b) mount(b, ...bHead ? bRest : [...bTop, ...bRest]);
 }
 
 // src/copy/meta-overrides.ts
@@ -20560,79 +20641,53 @@ var CALLOUT = { en: CALLOUT_EN, fr: CALLOUT_FR };
 var FEATURED_ID = "analysis";
 function inline(run) {
   if (typeof run === "string") return document.createTextNode(run);
-  if ("em" in run) {
-    const em = document.createElement("em");
-    em.textContent = run.em;
-    return em;
-  }
-  const a = document.createElement("a");
-  a.href = run.href;
-  a.textContent = run.link;
-  a.rel = "noopener noreferrer";
-  if (/^https?:/i.test(run.href)) a.target = "_blank";
-  return a;
+  if ("em" in run) return html`<em>${run.em}</em>`;
+  return html`<a
+    href="${run.href}"
+    rel="noopener noreferrer"
+    target="${/^https?:/i.test(run.href) ? "_blank" : null}"
+    >${run.link}</a
+  >`;
 }
 function block(b) {
   switch (b.kind) {
     case "p": {
-      const p = document.createElement("p");
-      p.append(...b.runs.map(inline));
-      return p;
+      return html`<p>${b.runs.map(inline)}</p>`;
     }
     case "ul": {
-      const ul = document.createElement("ul");
-      for (const item of b.items) {
-        const li = document.createElement("li");
-        li.append(...item.map(inline));
-        ul.append(li);
-      }
-      return ul;
+      return html`<ul>
+        ${b.items.map((item) => html`<li>${item.map(inline)}</li>`)}
+      </ul>`;
     }
     /* h4, not h3: the group title is already the h3. */
     case "h": {
-      const h = document.createElement("h4");
-      h.className = "about-subhead";
-      h.textContent = b.text;
-      return h;
+      return html`<h4 class="about-subhead">${b.text}</h4>`;
     }
     default: {
-      const quote = document.createElement("blockquote");
-      quote.className = "about-quote";
-      for (const para of b.paras) {
-        const p = document.createElement("p");
-        p.append(...para.map(inline));
-        quote.append(p);
-      }
-      const by = document.createElement("footer");
-      by.append(...b.by.map(inline));
-      quote.append(by);
-      return quote;
+      return html`<blockquote class="about-quote">
+        ${b.paras.map((para) => html`<p>${para.map(inline)}</p>`)}
+        <footer>${b.by.map(inline)}</footer>
+      </blockquote>`;
     }
   }
 }
 function group(sub, open) {
-  const details = document.createElement("details");
-  details.className = sub.id === FEATURED_ID ? "about-group about-group--featured" : "about-group";
-  details.dataset.about = sub.id;
-  details.open = open.get(sub.id) ?? false;
-  const summary = document.createElement("summary");
-  summary.className = "about-summary";
-  const title = document.createElement("h3");
-  title.className = "about-title";
-  title.textContent = sub.title;
-  summary.append(title);
-  const body = document.createElement("div");
-  body.className = "about-body";
-  for (const b of sub.blocks) body.append(block(b));
-  details.append(summary, body);
-  return details;
+  const cls = sub.id === FEATURED_ID ? "about-group about-group--featured" : "about-group";
+  return html`<details
+    class="${cls}"
+    data-about="${sub.id}"
+    open="${open.get(sub.id) ?? false}"
+  >
+    <summary class="about-summary">
+      <h3 class="about-title">${sub.title}</h3>
+    </summary>
+    <div class="about-body">${sub.blocks.map(block)}</div>
+  </details>`;
 }
 function callout(lang2) {
-  const p = document.createElement("p");
-  p.className = "callout callout--positive";
-  p.setAttribute("role", "note");
-  p.textContent = CALLOUT[lang2];
-  return p;
+  return html`<p class="callout callout--positive" role="note">
+    ${CALLOUT[lang2]}
+  </p>`;
 }
 
 // src/sections/about/index.ts
@@ -20648,27 +20703,17 @@ function renderAbout(host = document.getElementById("about")) {
   }
   host.setAttribute("aria-label", SECTION_LABEL[lang2]);
   const subs = ABOUT[lang2];
-  const frag = document.createDocumentFragment();
-  frag.append(callout(lang2));
-  for (const sub of subs) frag.append(group(sub, open));
-  host.replaceChildren(frag);
+  host.replaceChildren(callout(lang2), ...subs.map((sub) => group(sub, open)));
 }
 
 // src/sections/chrome.ts
 var $ = (id) => document.getElementById(id);
 var lang = () => getLocale();
-function tag(name, className, text) {
-  const el2 = document.createElement(name);
-  if (className) el2.className = className;
-  if (text !== void 0) el2.textContent = text;
-  return el2;
-}
 function header(id, s, level = 2) {
   const host = $(id);
   if (!host) return;
-  const h = tag(level === 3 ? "h3" : "h2", "sec-title", s.title);
-  h.id = `${id}-title`;
-  host.replaceChildren(h, tag("p", "sec-blurb", s.blurb));
+  const title = level === 3 ? html`<h3 class="sec-title" id="${id}-title">${s.title}</h3>` : html`<h2 class="sec-title" id="${id}-title">${s.title}</h2>`;
+  host.replaceChildren(title, html`<p class="sec-blurb">${s.blurb}</p>`);
 }
 function note(id, text) {
   const host = $(id);
@@ -20864,33 +20909,34 @@ var BLOCKS = [
   }
 ];
 function block2(b) {
-  const section = el("section", "contribute-section");
-  section.id = `contribute-${b.id}`;
-  section.setAttribute("aria-labelledby", `${section.id}-title`);
-  const head2 = el("header", "contribute-head");
-  const h = el("h2", "contribute-title", bi(b.title));
-  h.id = `${section.id}-title`;
-  head2.append(h);
-  if (b.status) head2.append(el("span", "contribute-status", bi(b.status)));
-  section.append(head2, el("p", "contribute-lead", bi(b.lead)));
-  if (b.bullets.length) {
-    const ul = el("ul", "contribute-list");
-    for (const t3 of b.bullets) ul.append(el("li", void 0, bi(t3)));
-    section.append(ul);
-  }
-  if (b.note) section.append(el("p", "callout", bi(b.note)));
-  if (b.actions?.length) {
-    const row = el("p", "contribute-actions");
-    for (const a of b.actions) {
-      const link = el("a", "contribute-button", bi(a.label));
-      link.href = a.href;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-      row.append(link);
-    }
-    section.append(row);
-  }
-  return section;
+  const id = `contribute-${b.id}`;
+  const bullets = b.bullets.length ? html`<ul class="contribute-list">
+        ${b.bullets.map((item) => html`<li>${bi(item)}</li>`)}
+      </ul>` : null;
+  const actions = b.actions?.length ? html`<p class="contribute-actions">
+        ${b.actions.map(
+    (a) => html`<a
+              class="contribute-button"
+              href="${a.href}"
+              target="_blank"
+              rel="noopener noreferrer"
+              >${bi(a.label)}</a
+            >`
+  )}
+      </p>` : null;
+  return html`<section
+    class="contribute-section"
+    id="${id}"
+    aria-labelledby="${id}-title"
+  >
+    <header class="contribute-head">
+      <h2 class="contribute-title" id="${id}-title">${bi(b.title)}</h2>
+      ${b.status ? html`<span class="contribute-status">${bi(b.status)}</span>` : null}
+    </header>
+    <p class="contribute-lead">${bi(b.lead)}</p>
+    ${bullets} ${b.note ? html`<p class="callout">${bi(b.note)}</p>` : null}
+    ${actions}
+  </section>`;
 }
 function mountContribute(host = byId("contribute")) {
   if (!host) return;
@@ -20917,13 +20963,13 @@ var METRIC_KEYS = ["p", "a", "f", "i"];
 function meanMedian(values) {
   if (!values.length) return null;
   const sorted = [...values].sort((a, b) => a - b);
-  const n2 = sorted.length;
-  const mid = n2 >> 1;
+  const n3 = sorted.length;
+  const mid = n3 >> 1;
   let sum2 = 0;
   for (const v of values) sum2 += v;
   return {
-    mean: sum2 / n2,
-    median: n2 % 2 === 1 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2
+    mean: sum2 / n3,
+    median: n3 % 2 === 1 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2
   };
 }
 function bestRatio(obs, base) {
@@ -21006,14 +21052,12 @@ function fmtPct2(ratio) {
   if (x >= 10) return `${Math.round(x)}%`;
   return `${Number(x.toFixed(1))}%`;
 }
-function kpiRow(label, num, sub) {
-  const row = el("div", "kpi-row");
-  row.append(el("dt", "kpi-label", label));
-  const dd = el("dd");
-  dd.append(el("span", "kpi-num", num), el("span", "kpi-sub", sub));
-  row.append(dd);
-  return row;
-}
+var kpiRow = (label, num, sub) => html`<div class="kpi-row">
+    <dt class="kpi-label">${label}</dt>
+    <dd>
+      <span class="kpi-num">${num}</span><span class="kpi-sub">${sub}</span>
+    </dd>
+  </div>`;
 function ratioCell(r, label, template, unit) {
   if (!r) return kpiRow(label, "\u2014", t2().kpi.none);
   const against = fill(template, {
@@ -21024,30 +21068,28 @@ function ratioCell(r, label, template, unit) {
 }
 function card2(row, largestLabel) {
   const k = t2().kpi;
-  const box = el("div", "kpi-card");
-  box.append(el("h5", "kpi-title", row.label));
-  const list = el("dl", "kpi-list");
-  list.append(
-    row.largest ? kpiRow(
-      largestLabel,
-      fmtValue(row.largest.v, row.unit),
-      row.largest.where
-    ) : kpiRow(largestLabel, "\u2014", k.none),
-    ratioCell(row.vsMean, k.vsMean, k.againstMean, row.unit),
-    ratioCell(row.vsMedian, k.vsMedian, k.againstMedian, row.unit),
-    ratioCell(row.vsFirst, k.vsFirst, k.againstFirst, row.unit)
-  );
-  box.append(list);
-  return box;
+  return html`<div class="kpi-card">
+    <h5 class="kpi-title">${row.label}</h5>
+    <dl class="kpi-list">
+      ${row.largest ? kpiRow(
+    largestLabel,
+    fmtValue(row.largest.v, row.unit),
+    row.largest.where
+  ) : kpiRow(largestLabel, "\u2014", k.none)}
+      ${ratioCell(row.vsMean, k.vsMean, k.againstMean, row.unit)}
+      ${ratioCell(row.vsMedian, k.vsMedian, k.againstMedian, row.unit)}
+      ${ratioCell(row.vsFirst, k.vsFirst, k.againstFirst, row.unit)}
+    </dl>
+  </div>`;
 }
 function block3(rows, largestLabel, note2) {
-  const frag = document.createDocumentFragment();
-  frag.append(el("h4", "kpi-heading", t2().kpi.heading));
-  const grid = el("div", "kpi-grid");
-  for (const row of rows) grid.append(card2(row, largestLabel));
-  frag.append(grid);
-  frag.append(el("p", "kpi-note", note2));
-  return frag;
+  return [
+    html`<h4 class="kpi-heading">${t2().kpi.heading}</h4>`,
+    html`<div class="kpi-grid">
+      ${rows.map((row) => card2(row, largestLabel))}
+    </div>`,
+    html`<p class="kpi-note">${note2}</p>`
+  ];
 }
 var PRESETS = {
   "turnout-daily": { kind: "daily", data: ["turnout", "blockades"] },
@@ -21073,8 +21115,9 @@ function mountKpiPresets(root2 = document) {
       (s) => preset.data.includes(s.data)
     );
     const k = t2().kpi;
-    host.replaceChildren(
-      block3(
+    mount(
+      host,
+      ...block3(
         dailyRowsFor(specs, !(preset.kind === "daily")),
         preset.kind === "daily" ? k.largestDay : k.largestWeek,
         preset.kind === "daily" ? k.noteDaily : k.noteWeekly
@@ -21085,15 +21128,14 @@ function mountKpiPresets(root2 = document) {
 function mountKpis() {
   const k = t2().kpi;
   const a = byId("kpi-a");
-  if (a) a.replaceChildren(block3(dailyRows(false), k.largestDay, k.noteDaily));
+  if (a) mount(a, ...block3(dailyRows(false), k.largestDay, k.noteDaily));
   const b = byId("kpi-b");
-  if (b) {
-    b.replaceChildren(block3(dailyRows(true), k.largestWeek, k.noteWeekly));
-  }
+  if (b) mount(b, ...block3(dailyRows(true), k.largestWeek, k.noteWeekly));
   const c = byId("kpi-c");
   if (c) {
-    c.replaceChildren(
-      block3(
+    mount(
+      c,
+      ...block3(
         episodeRows(Number.POSITIVE_INFINITY),
         k.largestFigure,
         k.noteEpisodes
@@ -21102,8 +21144,9 @@ function mountKpis() {
   }
   const d = byId("kpi-d");
   if (d) {
-    d.replaceChildren(
-      block3(
+    mount(
+      d,
+      ...block3(
         episodeRows(ENFORCEMENT_LAST),
         k.largestFigure,
         k.noteEpisodesCapped
@@ -21187,12 +21230,12 @@ var SHARE = {
     fr: "{v} de la population m\xE9tropolitaine"
   }
 };
-var tag2 = "";
+var tag = "";
 var pctFmt = null;
 function locale() {
   const next = String(getLocale()).slice(0, 2) === "fr" ? "fr-FR" : "en-GB";
-  if (next !== tag2) {
-    tag2 = next;
+  if (next !== tag) {
+    tag = next;
     pctFmt = new Intl.NumberFormat(next, {
       style: "percent",
       minimumFractionDigits: 2,
@@ -21219,11 +21262,11 @@ var countBand = (r) => {
 function tickText(v) {
   const exp = Math.round(Math.log10(v));
   const d = Math.max(0, -exp);
-  const n2 = new Intl.NumberFormat(locale(), {
+  const n3 = new Intl.NumberFormat(locale(), {
     minimumFractionDigits: d,
     maximumFractionDigits: d
   }).format(v);
-  return locale() === "fr-FR" ? `${n2} %` : `${n2}%`;
+  return locale() === "fr-FR" ? `${n3} %` : `${n3}%`;
 }
 function dailyRows2() {
   const pop = population(KEY_2026);
@@ -21512,52 +21555,43 @@ function build(rows, o) {
   };
 }
 function legendRow() {
-  const row = el("div", "pc-legend");
-  const chip = (bg, text, ring) => {
-    const span = el("span", "pc-chip");
-    const sw = el("span", "pc-swatch");
-    sw.style.background = bg;
-    if (ring) {
-      sw.style.border = `1.5px solid ${STREET}`;
-      sw.style.background = "#fff";
-      sw.style.borderRadius = "50%";
-    }
-    span.append(sw, document.createTextNode(text));
-    return span;
+  const chip = (bg, text, ring = false) => {
+    const style = ring ? `background: #fff; border: 1.5px solid ${STREET().fill}; border-radius: 50%` : `background: ${bg}`;
+    return html`<span class="pc-chip"
+      ><span class="pc-swatch" style="${style}"></span>${text}</span
+    >`;
   };
-  row.append(
-    chip(STREET().fill, L2(COPY.turnout), false),
-    chip(REST().fill, `${L2(COPY.rest)} ${L2(COPY.logNote)}`, false),
-    chip(THEME.hollow, L2(COPY.measured), true)
-  );
-  return row;
+  return html`<div class="pc-legend">
+    ${chip(STREET().fill, L2(COPY.turnout))}
+    ${chip(REST().fill, `${L2(COPY.rest)} ${L2(COPY.logNote)}`)}
+    ${chip(THEME.hollow, L2(COPY.measured), true)}
+  </div>`;
 }
 function render(host, rows, o, title, note2, firstCol) {
   const cfg = build(rows, o);
   if (!cfg) return;
   const metro = rows.some((r) => r.basis === "metro");
   const shareHeader = metro ? L2(SHARE.metropole) : L2(SHARE.france);
-  const figure = el("figure", "pc-figure");
-  const cap = el("figcaption", "pc-caption");
-  cap.append(el("span", "pc-fig-title", title), legendRow());
-  const box = el("div", "pc-canvas");
-  const canvas = el("canvas");
-  canvas.setAttribute("role", "img");
-  canvas.setAttribute("aria-label", title);
-  box.append(canvas);
-  figure.append(cap, box);
-  figure.append(
-    dataTable({
-      caption: fill(L2(COPY.tableCaption), { title }),
-      indexHeader: firstCol,
-      index: rows.map((r) => r.title),
-      columns: [
-        { header: L2(COPY.colCount), values: rows.map(countBand) },
-        { header: shareHeader, values: rows.map((r) => pctBand(r.plo, r.phi)) }
-      ]
-    })
-  );
-  if (note2) figure.append(el("p", "pc-note", note2));
+  const canvas = html`<canvas
+    role="img"
+    aria-label="${title}"
+  ></canvas>`;
+  const figure = html`<figure class="pc-figure">
+    <figcaption class="pc-caption">
+      <span class="pc-fig-title">${title}</span>${legendRow()}
+    </figcaption>
+    <div class="pc-canvas">${canvas}</div>
+    ${dataTable({
+    caption: fill(L2(COPY.tableCaption), { title }),
+    indexHeader: firstCol,
+    index: rows.map((r) => r.title),
+    columns: [
+      { header: L2(COPY.colCount), values: rows.map(countBand) },
+      { header: shareHeader, values: rows.map((r) => pctBand(r.plo, r.phi)) }
+    ]
+  })}
+    ${note2 ? html`<p class="pc-note">${note2}</p>` : null}
+  </figure>`;
   host.append(figure);
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
@@ -21639,7 +21673,7 @@ function sectionC(host) {
     const caption = base === null ? L2(COPY.noBase) : fill(L2(COPY.base), {
       n: `${nf().format(base)}${basisOf(pop) === "metro" ? ` \xB7 ${L2(COPY.metro)}` : ""}`
     });
-    const panel = el("div", "pc-panel");
+    const panel = html`<div class="pc-panel"></div>`;
     render(
       panel,
       rows,
@@ -21660,9 +21694,11 @@ function sectionC(host) {
   renderPanel(panels[0].ep, panels[0].rows, 0);
   cols = resolvedColumns(host);
   panels.slice(1).forEach(({ ep, rows }, i) => renderPanel(ep, rows, i + 1));
-  const head2 = el("div", "pc-trellis-head");
-  head2.append(el("p", "pc-note", L2(COPY.noteC)));
-  host.append(head2);
+  host.append(
+    html`<div class="pc-trellis-head">
+      <p class="pc-note">${L2(COPY.noteC)}</p>
+    </div>`
+  );
 }
 function mountPerCapita() {
   const a = byId("pc-a");
@@ -21759,41 +21795,29 @@ function dateLabel(s) {
   return s.dateEnd ? `${fmtDayMonth(s.date)}\u2013${fmtDate(s.dateEnd)}` : fmtDate(s.date);
 }
 function sourceItem(s) {
-  const li = el("li");
-  li.dataset.sourceId = s.id;
-  const a = el("a", void 0, s.label);
-  a.href = s.url;
-  a.target = "_blank";
-  a.rel = "noopener noreferrer";
-  li.append(a);
   const when = dateLabel(s);
-  if (when) {
-    li.append(document.createTextNode(" "));
-    const time = el("time", "date", when);
-    time.dateTime = s.date;
-    li.append(time);
-  }
-  li.append(document.createTextNode(" \u2014 "));
-  li.append(el("span", "what", bi(s.what)));
-  return li;
+  return html`<li data-source-id="${s.id}">
+    <a href="${s.url}" target="_blank" rel="noopener noreferrer">${s.label}</a
+    >${when ? html`${" "}<time class="date" datetime="${s.date}">${when}</time>` : null}${" \u2014 "}<span
+      class="what"
+      >${bi(s.what)}</span
+    >
+  </li>`;
 }
 function sourceGroup(id, summary, body) {
-  const details = el("details", "source-group");
-  details.dataset.group = id;
-  const head2 = el("summary", "group-summary");
-  head2.append(...summary);
-  details.append(head2, ...body);
-  return details;
+  return html`<details class="source-group" data-group="${id}">
+    <summary class="group-summary">${summary}</summary>
+    ${body}
+  </details>`;
 }
 function renderSources(page = "home", host = document.getElementById("sources")) {
   if (!host) return;
   const kept = [...host.children].filter(
-    (n2) => /^H[1-6]$/.test(n2.tagName)
+    (n3) => /^H[1-6]$/.test(n3.tagName)
   );
   if (kept[0]) kept[0].textContent = bi(BOX_TITLE);
-  const box = el("div", "sources-box");
-  box.append(el("p", "intro", bi(INTRO)));
   const allowed = new Set(groupsForPage(page));
+  const groups = [];
   for (const group2 of GROUPS) {
     if (!allowed.has(group2.id)) continue;
     let items = SOURCES_BY_GROUP.get(group2.id);
@@ -21803,15 +21827,29 @@ function renderSources(page = "home", host = document.getElementById("sources"))
       items = items.filter((s) => keep.has(s.id));
       if (items.length === 0) continue;
     }
-    const title = el("h3", void 0, bi(group2.title));
-    title.append(" ", el("span", "count", String(items.length)));
-    const list = el("ul");
-    for (const s of items) list.append(sourceItem(s));
-    box.append(
-      sourceGroup(group2.id, [title], [el("p", "blurb", bi(group2.blurb)), list])
+    const title = html`<h3>
+      ${bi(group2.title)}${" "}<span class="count">${items.length}</span>
+    </h3>`;
+    groups.push(
+      sourceGroup(
+        group2.id,
+        [title],
+        [
+          html`<p class="blurb">${bi(group2.blurb)}</p>`,
+          html`<ul>
+            ${items.map(sourceItem)}
+          </ul>`
+        ]
+      )
     );
   }
-  host.replaceChildren(...kept, box);
+  host.replaceChildren(
+    ...kept,
+    html`<div class="sources-box">
+      <p class="intro">${bi(INTRO)}</p>
+      ${groups}
+    </div>`
+  );
 }
 
 // src/sections/summary.ts
@@ -22034,9 +22072,9 @@ function mountSummary() {
                 minRotation: 60,
                 font: { size: 10 },
                 callback: (v) => {
-                  const n2 = Number(v);
-                  const i = Math.round(n2);
-                  return Math.abs(n2 - i) < 1e-6 && EPISODES[i] ? m.episodes[EPISODES[i].id].short : "";
+                  const n3 = Number(v);
+                  const i = Math.round(n3);
+                  return Math.abs(n3 - i) < 1e-6 && EPISODES[i] ? m.episodes[EPISODES[i].id].short : "";
                 }
               },
               afterBuildTicks: (axis) => {
@@ -22060,9 +22098,9 @@ function mountSummary() {
                 padding: 6,
                 font: { size: 10 },
                 callback: (v) => {
-                  const n2 = Number(v);
-                  const dec = Math.abs(Math.log10(n2) - Math.round(Math.log10(n2))) < 1e-9;
-                  return dec ? compact().format(n2) : "";
+                  const n3 = Number(v);
+                  const dec = Math.abs(Math.log10(n3) - Math.round(Math.log10(n3))) < 1e-9;
+                  return dec ? compact().format(n3) : "";
                 }
               },
               afterBuildTicks: (axis) => {
@@ -22169,9 +22207,9 @@ function fixPageLinks(page) {
   }
 }
 function header2(host, level, title, blurb) {
-  const h = el(level === 2 ? "h2" : "h3", "sec-title", title);
-  h.id = `${host.id}-title`;
-  host.replaceChildren(h, el("p", "sec-blurb", blurb));
+  const h3 = el(level === 2 ? "h2" : "h3", "sec-title", title);
+  h3.id = `${host.id}-title`;
+  host.replaceChildren(h3, el("p", "sec-blurb", blurb));
 }
 function crumbs(page) {
   const host = byId("crumbs");
@@ -22213,16 +22251,16 @@ function render2() {
   document.title = `${bi(page.title)} \u2014 ${bi(SITE_NAME)}`;
   applyStaticCopy();
   syncLangSwitch();
-  for (const mount2 of [
+  for (const mount3 of [
     mountKpis,
     mountKpiPresets,
     mountCasualties,
     mountContribute
   ]) {
     try {
-      mount2();
+      mount3();
     } catch (err) {
-      console.error(`[${mount2.name}]`, err);
+      console.error(`[${mount3.name}]`, err);
     }
   }
   initDisclosure({
@@ -22233,16 +22271,16 @@ function render2() {
       }
     }
   });
-  for (const mount2 of [
+  for (const mount3 of [
     mountCharts,
     mountPerCapita,
     mountCrossEpisode,
     mountSummary
   ]) {
     try {
-      mount2();
+      mount3();
     } catch (err) {
-      console.error(`[${mount2.name}]`, err);
+      console.error(`[${mount3.name}]`, err);
     }
   }
   initDisclosure({

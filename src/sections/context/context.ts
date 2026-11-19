@@ -34,7 +34,8 @@ import {
 import type { Plugin } from "chart.js";
 import { fill, fmtDate, getLocale } from "../../copy";
 import { dataTable } from "../../core/a11y.ts";
-import { byId, el } from "../../core/dom.ts";
+import { byId } from "../../core/dom.ts";
+import { html } from "../../core/html.ts";
 
 /* ----- copy */
 
@@ -352,38 +353,39 @@ function stripRow(
   label: string,
   spans: readonly Span[],
 ): HTMLElement {
-  const row = el("div", "ctx-row");
-  row.append(el("span", "ctx-name", label));
-
-  const track = el("div", "ctx-track");
-  for (const s of spans) {
+  const bars = spans.map((s) => {
     const { left, width } = spanBox(s.from, s.to);
-    const bar = el("div", "ctx-bar");
-    bar.style.left = `${left}%`;
-    bar.style.width = `${Math.max(width, 0.25)}%`;
-    bar.style.background = KIND_COLOR[kind]; // .ctx-bar sets no colour of its own
-    bar.title =
+    const title =
       s.from === s.to
         ? `${L(s.label)} — ${fmtDate(s.from)}`
         : `${L(s.label)} — ${fmtDate(s.from)} – ${fmtDate(s.to)}`;
-    track.append(bar);
-  }
-  if (!spans.length)
-    track.append(
-      el("span", "ctx-empty", L({ en: "none recorded", fr: "aucune mesure" })),
-    );
+    /* .ctx-bar sets no colour of its own, so the layer colour is inline. */
+    return html`<div
+      class="ctx-bar"
+      style="left: ${left}%; width: ${Math.max(width, 0.25)}%; background: ${KIND_COLOR[kind]}"
+      title="${title}"
+    ></div>`;
+  });
 
-  row.append(track);
-  return row;
+  /* An empty row keeps its track and says so — the municipal case, where the
+     emptiness is the finding. */
+  const track = bars.length
+    ? bars
+    : html`<span class="ctx-empty"
+        >${L({ en: "none recorded", fr: "aucune mesure" })}</span
+      >`;
+
+  /* .ctx-row is a two-column grid, so the whitespace between its children is
+     not rendered. */
+  return html`<div class="ctx-row">
+    <span class="ctx-name">${label}</span>
+    <div class="ctx-track">${track}</div>
+  </div>` as HTMLElement;
 }
 
 /** Month boundaries inside the window, plus the end. Ticks are anchored at their
  *  date, not at a label centroid: the CSS left-aligns the first one. */
 function axisRow(): HTMLElement {
-  const row = el("div", "ctx-row ctx-axis");
-  row.append(el("span", "ctx-name", "")); // keeps the label column aligned
-
-  const track = el("div", "ctx-track");
   const t0 = Date.parse(RANGE.from);
   const t1 = Date.parse(RANGE.to);
 
@@ -394,91 +396,91 @@ function axisRow(): HTMLElement {
   for (; d.getTime() <= t1; d.setUTCMonth(d.getUTCMonth() + 1))
     ticks.push(d.toISOString().slice(0, 10));
 
-  /* One tick per boundary: a month start that lands on END must not draw twice. */
-  for (const iso of new Set([...ticks, RANGE.to])) {
-    const tick = el("span", "ctx-tick", fmtDate(iso));
-    tick.style.left = `${spanBox(iso, iso).left}%`; // no second copy of the maths
-    track.append(tick);
-  }
+  /* One tick per boundary: a month start that lands on END must not draw twice.
+     The position comes from spanBox(), so there is no second copy of the maths. */
+  const marks = [...new Set([...ticks, RANGE.to])].map(
+    (iso) =>
+      html`<span class="ctx-tick" style="left: ${spanBox(iso, iso).left}%"
+        >${fmtDate(iso)}</span
+      >`,
+  );
 
-  row.append(track);
-  return row;
+  return html`<div class="ctx-row ctx-axis">
+    <span class="ctx-name"></span>
+    <div class="ctx-track">${marks}</div>
+  </div>` as HTMLElement;
 }
 
 function renderStrip(host: HTMLElement): void {
-  const figure = el("figure", "ctx-figure");
-  const cap = el("figcaption", "ctx-caption");
-  cap.textContent = fillL(
+  const caption = fillL(
     {
       en: "Context, not causation: {title}. Each layer keeps its own legal author.",
       fr: "Contexte, non causalité : {title}. Chaque couche garde son auteur juridique.",
     },
     { title: L(RANGE.title) },
   );
-  figure.append(cap);
 
-  const strip = el("div", "ctx-strip");
   /* `to: END` on the ban means this filter keeps it for any span that
      intersects the window at all, including one that overruns the end. */
   const spans = SPANS.filter((s) => s.to >= RANGE.from && s.from <= RANGE.to);
 
+  const rows: Node[] = [];
   for (const layer of LAYERS) {
     const mine = spans.filter((s) => s.kind === layer.kind);
-    // An empty restriction layer is omitted, except the municipal one: its
-    // absence is the finding, not a gap in the drawing.
+    /* An empty restriction layer is omitted, except the municipal one: its
+       absence is the finding, not a gap in the drawing. */
     if (!mine.length && layer.kind !== "municipal") continue;
-    strip.append(stripRow(layer.kind, L(layer.label), mine));
+    rows.push(stripRow(layer.kind, L(layer.label), mine));
   }
-  strip.append(axisRow());
-  figure.append(strip);
+  rows.push(axisRow());
 
-  figure.append(
-    dataTable({
-      caption: fillL(
-        { en: "Context spans: {title}", fr: "Repères de contexte : {title}" },
-        { title: L(RANGE.title) },
-      ),
-      indexHeader: L({ en: "Dates", fr: "Dates" }),
-      index: spans.map((s) =>
-        s.from === s.to
-          ? fmtDate(s.from)
-          : `${fmtDate(s.from)} – ${fmtDate(s.to)}`,
-      ),
-      columns: [
-        {
-          header: L({ en: "Layer", fr: "Couche" }),
-          values: spans.map((s) =>
-            L(LAYERS.find((l) => l.kind === s.kind)?.label ?? s.label),
-          ),
-        },
-        {
-          header: L({ en: "Measure", fr: "Mesure" }),
-          values: spans.map((s) => L(s.label)),
-        },
-        {
-          header: L({ en: "Source", fr: "Source" }),
-          values: spans.map((s) => s.source),
-        },
-      ],
-    }),
-  );
-
-  const details = el("div", "ctx-details");
-  for (const s of spans)
-    details.append(el("p", "ctx-note", `${L(s.label)} — ${L(s.detail)}`));
-  details.append(
-    el(
-      "p",
-      "ctx-note",
-      L({
+  const notes: Node[] = [
+    ...spans.map(
+      (s) => html`<p class="ctx-note">${L(s.label)} — ${L(s.detail)}</p>`,
+    ),
+    html`<p class="ctx-note">
+      ${L({
         en: "No prefectoral or municipal measure is recorded in this window: the only spans are the school calendar and the national ban. The municipal row is kept empty rather than omitted — a missing row reads as a clean sheet, an empty row reads as a check that came back empty.",
         fr: "Aucune mesure préfectorale ou municipale n’est enregistrée dans cette fenêtre : les seuls repères sont le calendrier scolaire et l’interdiction nationale. La ligne municipale est conservée vide plutôt que supprimée — une ligne absente se lit comme un casier vierge, une ligne vide comme une vérification revenue sans réponse.",
-      }),
-    ),
-  );
-  figure.append(details);
+      })}
+    </p>`,
+  ];
 
-  host.append(figure);
+  host.append(
+    html`<figure class="ctx-figure">
+      <figcaption class="ctx-caption">${caption}</figcaption>
+      <div class="ctx-strip">${rows}</div>
+      ${dataTable({
+        caption: fillL(
+          { en: "Context spans: {title}", fr: "Repères de contexte : {title}" },
+          { title: L(RANGE.title) },
+        ),
+        indexHeader: L({ en: "Dates", fr: "Dates" }),
+        index: spans.map((s) =>
+          s.from === s.to
+            ? fmtDate(s.from)
+            : `${fmtDate(s.from)} – ${fmtDate(s.to)}`,
+        ),
+        columns: [
+          {
+            header: L({ en: "Layer", fr: "Couche" }),
+            values: spans.map((s) =>
+              L(LAYERS.find((l) => l.kind === s.kind)?.label ?? s.label),
+            ),
+          },
+          {
+            header: L({ en: "Measure", fr: "Mesure" }),
+            values: spans.map((s) => L(s.label)),
+          },
+          {
+            header: L({ en: "Source", fr: "Source" }),
+            values: spans.map((s) => s.source),
+          },
+        ],
+      })}
+      <div class="ctx-details">${notes}</div>
+    </figure>`,
+  );
 }
 
 /* `stripRow` and `axisRow` lose their `r: Range` parameter — one range now.

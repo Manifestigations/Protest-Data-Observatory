@@ -19,7 +19,6 @@ const configs = (): esbuild.BuildOptions[] => [
     bundle: true,
     format: "esm",
     target: "es2025",
-    jsx: "automatic",
     sourcemap: dev,
     minify: !dev,
     define: { "process.env.NODE_ENV": dev ? '"development"' : '"production"' },

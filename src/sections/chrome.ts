@@ -13,6 +13,7 @@ import {
   type SectionCopy,
 } from "../copy";
 import { PAGE_SECTIONS } from "../copy/meta-overrides.ts";
+import { html } from "../core/html.ts";
 import { PAGES, pageById, type PageId } from "../site/routes.ts";
 import { renderAbout } from "./about";
 
@@ -22,27 +23,18 @@ type SecKey = "a" | "b" | "c" | "d" | "e";
 
 const lang = (): "en" | "fr" => getLocale();
 
-function tag<K extends keyof HTMLElementTagNameMap>(
-  name: K,
-  className?: string,
-  text?: string,
-): HTMLElementTagNameMap[K] {
-  const el = document.createElement(name);
-  if (className) el.className = className;
-  if (text !== undefined) el.textContent = text;
-  return el;
-}
-
 /** h2 at section level, h3 inside a .run-group. Also supplies the id that the
  *  section's aria-labelledby points at (it was dangling before). */
 function header(id: string, s: SectionCopy, level: 2 | 3 = 2): void {
   const host = $(id);
   if (!host) return;
 
-  const h = tag(level === 3 ? "h3" : "h2", "sec-title", s.title);
-  h.id = `${id}-title`;
+  const title =
+    level === 3
+      ? html`<h3 class="sec-title" id="${id}-title">${s.title}</h3>`
+      : html`<h2 class="sec-title" id="${id}-title">${s.title}</h2>`;
 
-  host.replaceChildren(h, tag("p", "sec-blurb", s.blurb));
+  host.replaceChildren(title, html`<p class="sec-blurb">${s.blurb}</p>`);
 }
 
 /** Authored copy only — textContent, so a catalogue entry cannot inject markup. */

@@ -1,5 +1,8 @@
 /* Every table in the casualty section. Rows are never summed: each table is a
- * set of different populations, windows or categories. */
+ * set of different populations, windows or categories.
+ *
+ * Table rows are written on one source line each: a <tr> is a row of cells and
+ * not a container, so it carries no text nodes of its own. */
 
 import {
   BYSTANDER_CELLS,
@@ -19,333 +22,319 @@ import {
   type SevRow,
 } from "@manifestigations/dataset";
 import { fill, nf, t } from "../../copy";
-import { byId, el } from "../../core/dom.ts";
+import { byId } from "../../core/dom.ts";
+import { html } from "../../core/html.ts";
 import { cellView, estimateRange, pct, share, type CellView } from "./model.ts";
 
-function cell(c: Cell, extra = ""): HTMLElement {
+function cell(c: Cell, extra = ""): Node {
   const v: CellView = cellView(c);
-  return el("td", extra ? `${v.cls} ${extra}` : v.cls, v.text);
+  return html`<td class="${extra ? `${v.cls} ${extra}` : v.cls}">
+    ${v.text}
+  </td>`;
 }
 
-function rowHead(text: string): HTMLTableCellElement {
-  const th = el("th", "cas-scope", text) as HTMLTableCellElement;
-  th.scope = "row";
-  return th;
+function rowHead(text: string): Node {
+  return html`<th scope="row" class="cas-scope">${text}</th>`;
 }
 
-function head(labels: readonly string[], lead = 1): HTMLElement {
-  const tr = el("tr");
-  labels.forEach((label, i) => {
-    const th = el(
-      "th",
-      i < lead ? "cas-scope-head" : "cas-num-head",
-      label,
-    ) as HTMLTableCellElement;
-    th.scope = "col";
-    tr.append(th);
-  });
-  const thead = el("thead");
-  thead.append(tr);
-  return thead;
+function head(labels: readonly string[], lead = 1): Node {
+  return html`<thead>
+    <tr>
+      ${labels.map(
+        (label, i) =>
+          html`<th
+            scope="col"
+            class="${i < lead ? "cas-scope-head" : "cas-num-head"}"
+          >
+            ${label}
+          </th>`,
+      )}
+    </tr>
+  </thead>`;
 }
 
-function bar(p: number): HTMLElement {
-  const wrap = el("span", "cas-bar");
-  const run = el("span", "cas-bar-fill");
-  run.style.width = `${Math.max(0, Math.min(1, p)) * 100}%`;
-  wrap.append(run);
-  return wrap;
+function bar(p: number): Node {
+  const w = `${Math.max(0, Math.min(1, p)) * 100}%`;
+  return html`<span class="cas-bar"
+    ><span class="cas-bar-fill" style="width: ${w}"></span
+  ></span>`;
 }
 
 /* ----- headline: the three estimands ----- */
 
-function stat(num: string, label: string, cls = "cas-head-stat"): HTMLElement {
-  const wrap = el("div", cls);
-  wrap.append(
-    el("span", "cas-head-num", num),
-    el("span", "cas-head-label", label),
-  );
-  return wrap;
+function stat(num: string, label: string, cls = "cas-head-stat"): Node {
+  return html`<div class="${cls}">
+    <span class="cas-head-num">${num}</span
+    ><span class="cas-head-label">${label}</span>
+  </div>`;
 }
 
-export function headline(): HTMLElement {
+export function headline(): Node {
   const c = t().casualties;
-  const wrap = el("div", "cas-headline");
   const total = nf().format(FORCES.movement);
 
-  wrap.append(
-    stat(
+  return html`<div class="cas-headline">
+    ${stat(
       `${pct(SERIOUS_MOVEMENT.lo / FORCES.movement)}–${pct(SERIOUS_MOVEMENT.hi / FORCES.movement)}`,
       fill(c.headSeriousShare, {
         lo: pct(SERIOUS_MOVEMENT.lo / FORCES.movement),
         hi: pct(SERIOUS_MOVEMENT.hi / FORCES.movement),
         total,
       }),
-    ),
-    stat(
+    )}
+    ${stat(
       `${nf().format(SERIOUS_MOVEMENT.lo)}–${nf().format(SERIOUS_MOVEMENT.hi)}`,
       fill(c.headSeriousCount, {
         forces: `${nf().format(SERIOUS_MOVEMENT.lo)}–${nf().format(SERIOUS_MOVEMENT.hi)}`,
         protesters: `≥ ${nf().format(THINES.seriousTo5Nov + THINES.deathsTo5Nov)}`,
       }),
-    ),
-    stat(
+    )}
+    ${stat(
       pct(MIX[0].central / FORCES.movement),
       fill(c.headMix, { light: nf().format(MIX[0].central), total }),
-    ),
-  );
-  return wrap;
+    )}
+  </div>`;
 }
 
 /* ----- the mix, three exclusive bands ----- */
 
-export function mixBlock(): HTMLElement {
+export function mixBlock(): Node {
   const c = t().casualties;
-  const wrap = el("div", "cas-mix");
-  wrap.append(el("h4", "cas-title", c.mixTitle));
-
   const total = MIX.reduce((a, b) => a + b.central, 0);
-  for (const band of MIX) {
-    const row = el("div", "cas-mix-row");
-    row.append(el("span", "cas-mix-label", c.mix[band.id]));
-    const track = el("span", "cas-mix-track");
-    const run = el("span", `cas-mix-fill cas-mix-${band.id}`);
-    run.style.width = `${(band.central / total) * 100}%`;
-    track.append(run);
-    row.append(
-      track,
-      el(
-        "span",
-        "cas-mix-value",
-        `${nf().format(band.lo)}–${nf().format(band.hi)}`,
-      ),
-      el(
-        "span",
-        "cas-mix-share",
-        `${pct(band.lo / total)}–${pct(band.hi / total)}`,
-      ),
-    );
-    wrap.append(row);
-  }
-  wrap.append(el("p", "cas-note", c.noteMix));
-  return wrap;
+
+  return html`<div class="cas-mix">
+    <h4 class="cas-title">${c.mixTitle}</h4>
+    ${MIX.map((band) => {
+      const w = `${(band.central / total) * 100}%`;
+      return html`<div class="cas-mix-row">
+        <span class="cas-mix-label">${c.mix[band.id]}</span>
+        <span class="cas-mix-track"
+          ><span
+            class="cas-mix-fill cas-mix-${band.id}"
+            style="width: ${w}"
+          ></span
+        ></span>
+        <span class="cas-mix-value"
+          >${nf().format(band.lo)}–${nf().format(band.hi)}</span
+        >
+        <span class="cas-mix-share"
+          >${pct(band.lo / total)}–${pct(band.hi / total)}</span
+        >
+      </div>`;
+    })}
+    <p class="cas-note">${c.noteMix}</p>
+  </div>`;
 }
 
 /* ----- severity tables (A and B) ----- */
 
-export function severityTable(
-  rows: readonly SevRow[],
-  caption: string,
-): HTMLElement {
+export function severityTable(rows: readonly SevRow[], caption: string): Node {
   const c = t().casualties;
-  const table = el("table", "cas-table");
-  table.append(el("caption", "cas-caption", caption));
-  table.append(
-    head([
+  return html`<table class="cas-table">
+    <caption class="cas-caption">
+      ${caption}
+    </caption>
+    ${head([
       c.colScope,
       c.colTotal,
       c.colSerious,
       c.colLight,
       c.colLightShare,
       c.colOther,
-    ]),
-  );
-
-  const tbody = el("tbody");
-  for (const row of rows) {
-    const tr = el("tr");
-    tr.append(rowHead(c.scope[row.id] ?? row.id));
-    tr.append(cell(row.total), cell(row.serious), cell(row.light));
-
-    const p = share(row.light, row.total);
-    const td = el("td", "cas-share");
-    if (p === null) td.append(el("span", "cas-absent", "—"));
-    else td.append(el("span", "cas-pct", pct(p)), bar(p));
-    tr.append(td);
-
-    tr.append(cell(row.other));
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
+    ])}
+    <tbody>
+      ${rows.map((row) => {
+        const p = share(row.light, row.total);
+        return html`<tr>
+          ${rowHead(c.scope[row.id] ?? row.id)}${cell(row.total)}${cell(row.serious)}${cell(row.light)}${
+            p === null
+              ? html`<td class="cas-share">
+                  <span class="cas-absent">—</span>
+                </td>`
+              : html`<td class="cas-share">
+                  <span class="cas-pct">${pct(p)}</span>${bar(p)}
+                </td>`
+          }${cell(row.other)}
+        </tr>`;
+      })}
+    </tbody>
+  </table>`;
 }
 
 /* ----- populations: every observation, tagged ----- */
 
-export function populationTable(): HTMLElement {
+export function populationTable(): Node {
   const c = t().casualties;
-  const table = el("table", "cas-table cas-population");
-  table.append(el("caption", "cas-caption", c.capPopulation));
-  table.append(
-    head([
-      c.colScope,
-      c.colPopulation,
-      c.colParticipation,
-      c.colSelection,
-      c.colCount,
-    ]),
-  );
-
-  const tbody = el("tbody");
   const ordered = [...OBSERVATIONS].sort(
     (a, b) =>
       POPULATION_ORDER.indexOf(a.population) -
         POPULATION_ORDER.indexOf(b.population) || a.date.localeCompare(b.date),
   );
-  for (const obs of ordered) {
-    const tr = el("tr");
-    tr.append(rowHead(c.observations[obs.id] ?? obs.id));
-    tr.append(el("td", "cas-kind", c.population[obs.population]));
-    tr.append(el("td", "cas-kind", c.participation[obs.participation]));
-    tr.append(el("td", "cas-kind", c.selection[obs.selection]));
-    tr.append(cell(obs.count));
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
+
+  return html`<table class="cas-table cas-population">
+    <caption class="cas-caption">
+      ${c.capPopulation}
+    </caption>
+    ${head([
+      c.colScope,
+      c.colPopulation,
+      c.colParticipation,
+      c.colSelection,
+      c.colCount,
+    ])}
+    <tbody>
+      ${ordered.map(
+        (obs) =>
+          html`<tr>
+            ${rowHead(c.observations[obs.id] ?? obs.id)}
+            <td class="cas-kind">${c.population[obs.population]}</td>
+            <td class="cas-kind">${c.participation[obs.participation]}</td>
+            <td class="cas-kind">${c.selection[obs.selection]}</td>
+            ${cell(obs.count)}
+          </tr>`,
+      )}
+    </tbody>
+  </table>`;
 }
 
 /* ----- bystanders: the empty table is the finding ----- */
 
-export function bystanderTable(): HTMLElement {
+export function bystanderTable(): Node {
   const c = t().casualties;
-  const table = el("table", "cas-table cas-bystanders");
-  table.append(el("caption", "cas-caption", c.bystanderCaption));
-  table.append(head([c.colQuestion, c.colCount]));
-
-  const tbody = el("tbody");
-  const rows: Array<[string, Cell]> = [
+  const rows: Array<readonly [string, Cell]> = [
     [c.bystanders.documented, BYSTANDER_CELLS.documented],
     [c.bystanders.serious, BYSTANDER_CELLS.serious],
     [c.bystanders.national, BYSTANDER_CELLS.national],
   ];
-  for (const [label, c2] of rows) {
-    const tr = el("tr");
-    tr.append(rowHead(label), cell(c2));
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
+
+  return html`<table class="cas-table cas-bystanders">
+    <caption class="cas-caption">
+      ${c.bystanderCaption}
+    </caption>
+    ${head([c.colQuestion, c.colCount])}
+    <tbody>
+      ${rows.map(
+        ([label, c2]) =>
+          html`<tr>
+            ${rowHead(label)}${cell(c2)}
+          </tr>`,
+      )}
+    </tbody>
+  </table>`;
 }
 
 /* ----- the estimands ----- */
 
-export function estimateTable(): HTMLElement {
+export function estimateTable(): Node {
   const c = t().casualties;
-  const table = el("table", "cas-table cas-estimates");
-  table.append(el("caption", "cas-caption", c.capEstimate));
-  table.append(
-    head([c.colEstimate, c.colRange, c.colMethod, c.colEdges, c.colStatus]),
-  );
-
-  const tbody = el("tbody");
-  for (const e of ESTIMATES) {
-    const copy = c.estimates[e.key];
-    const tr = el("tr", e.status === "gap" ? "cas-reference" : "");
-
-    tr.append(rowHead(copy?.label ?? e.key));
-
-    const v = estimateRange(e);
-    tr.append(el("td", v.cls, v.text));
-    tr.append(el("td", "cas-kind", copy?.method ?? ""));
-    tr.append(
-      el(
-        "td",
-        "cas-kind",
-        fill(c.edgePair, { lo: c.edge[e.loEdge], hi: c.edge[e.hiEdge] }),
-      ),
-    );
-    tr.append(el("td", "cas-kind", c.status[e.status]));
-
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
+  return html`<table class="cas-table cas-estimates">
+    <caption class="cas-caption">
+      ${c.capEstimate}
+    </caption>
+    ${head([c.colEstimate, c.colRange, c.colMethod, c.colEdges, c.colStatus])}
+    <tbody>
+      ${ESTIMATES.map((e) => {
+        const copy = c.estimates[e.key];
+        const v = estimateRange(e);
+        return html`<tr class="${e.status === "gap" ? "cas-reference" : ""}">
+          ${rowHead(copy?.label ?? e.key)}
+          <td class="${v.cls}">${v.text}</td>
+          <td class="cas-kind">${copy?.method ?? ""}</td>
+          <td class="cas-kind">
+            ${fill(c.edgePair, { lo: c.edge[e.loEdge], hi: c.edge[e.hiEdge] })}
+          </td>
+          <td class="cas-kind">${c.status[e.status]}</td>
+        </tr>`;
+      })}
+    </tbody>
+  </table>`;
 }
 
-export function sensitivityTable(): HTMLElement {
+export function sensitivityTable(): Node {
   const c = t().casualties;
-  const table = el("table", "cas-table cas-sensitivity");
-  table.append(el("caption", "cas-caption", c.capSensitivity));
-  table.append(head([c.colRatio, c.colAt17, c.colMovement]));
-
-  const tbody = el("tbody");
-  for (const row of SENSITIVITY) {
-    const tr = el("tr", row.ratio === RATIO.mid ? "cas-reference" : "");
-    tr.append(rowHead(`r = ${row.ratio}`));
-    tr.append(el("td", "cas-num cas-derived", nf().format(row.at17Oct)));
-    tr.append(el("td", "cas-num cas-derived", nf().format(row.movement)));
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
+  return html`<table class="cas-table cas-sensitivity">
+    <caption class="cas-caption">
+      ${c.capSensitivity}
+    </caption>
+    ${head([c.colRatio, c.colAt17, c.colMovement])}
+    <tbody>
+      ${SENSITIVITY.map(
+        (row) =>
+          html`<tr class="${row.ratio === RATIO.mid ? "cas-reference" : ""}">
+            ${rowHead(`r = ${row.ratio}`)}
+            <td class="cas-num cas-derived">${nf().format(row.at17Oct)}</td>
+            <td class="cas-num cas-derived">${nf().format(row.movement)}</td>
+          </tr>`,
+      )}
+    </tbody>
+  </table>`;
 }
 
 /* ----- cause ----- */
 
-export function causeTable(
-  rows: readonly CaseRow[],
-  caption: string,
-): HTMLElement {
+export function causeTable(rows: readonly CaseRow[], caption: string): Node {
   const c = t().casualties;
-  const table = el("table", "cas-table cas-cause");
-  table.append(el("caption", "cas-caption", caption));
-  table.append(head([c.colSide, c.colCircumstance, c.colCount, c.colCases], 2));
-
-  const tbody = el("tbody");
-  for (const row of rows) {
-    const tr = el("tr", row.reference ? "cas-reference" : "");
-    tr.append(rowHead(c.side[row.side]));
-    tr.append(el("td", "cas-kind", c.kind[row.kind]));
-    tr.append(cell(row.count));
-
-    const td = el("td", "cas-cases-cell");
-    if (!row.cases.length) td.append(el("span", "cas-absent", c.noCases));
-    else {
-      const list = el("ul", "cas-case-list");
-      for (const key of row.cases) list.append(el("li", "", c.cases[key]));
-      td.append(list);
-    }
-    tr.append(td);
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
+  return html`<table class="cas-table cas-cause">
+    <caption class="cas-caption">
+      ${caption}
+    </caption>
+    ${head([c.colSide, c.colCircumstance, c.colCount, c.colCases], 2)}
+    <tbody>
+      ${rows.map(
+        (row) =>
+          html`<tr class="${row.reference ? "cas-reference" : ""}">
+            ${rowHead(c.side[row.side])}
+            <td class="cas-kind">${c.kind[row.kind]}</td>
+            ${cell(row.count)}
+            <td class="cas-cases-cell">
+              ${
+                row.cases.length === 0
+                  ? html`<span class="cas-absent">${c.noCases}</span>`
+                  : html`<ul class="cas-case-list">
+                      ${row.cases.map((key) => html`<li>${c.cases[key]}</li>`)}
+                    </ul>`
+              }
+            </td>
+          </tr>`,
+      )}
+    </tbody>
+  </table>`;
 }
 
 /* ----- resolution ----- */
 
-export function resolutionTable(): HTMLElement {
+export function resolutionTable(): Node {
   const c = t().casualties;
-  const table = el("table", "cas-table cas-resolution");
-  table.append(el("caption", "cas-caption", c.capResolution));
-  table.append(head([c.colQuestion, c.colWindow, c.colWeekly], 2));
-
-  const tbody = el("tbody");
-  for (const row of c.resolution) {
-    const tr = el("tr");
-    tr.append(rowHead(row.label), el("td", "", row.window));
-    tr.append(el("td", "cas-num", row.weekly));
-    tbody.append(tr);
-  }
-  table.append(tbody);
-  return table;
+  return html`<table class="cas-table cas-resolution">
+    <caption class="cas-caption">
+      ${c.capResolution}
+    </caption>
+    ${head([c.colQuestion, c.colWindow, c.colWeekly], 2)}
+    <tbody>
+      ${c.resolution.map(
+        (row) =>
+          html`<tr>
+            ${rowHead(row.label)}
+            <td>${row.window}</td>
+            <td class="cas-num">${row.weekly}</td>
+          </tr>`,
+      )}
+    </tbody>
+  </table>`;
 }
 
 /* ----- the ladder (optional block, reused by the method note) ----- */
 
-export function ladderList(): HTMLElement {
+export function ladderList(): Node {
   const c = t().casualties;
-  const list = el("ul", "cas-ladder");
-  for (const rung of LADDER) {
-    const li = el(
-      "li",
-      "",
-      `${rung.mais} — ${c.ladder[rung.id]} (${rung.lo}–${rung.hi})`,
-    );
-    list.append(li);
-  }
-  return list;
+  return html`<ul class="cas-ladder">
+    ${LADDER.map(
+      (rung) =>
+        html`<li>
+          ${`${rung.mais} — ${c.ladder[rung.id]} (${rung.lo}–${rung.hi})`}
+        </li>`,
+    )}
+  </ul>`;
 }
 
 /** Exported for the method note: 150 injured, 3 serious → 2.0 %. */
