@@ -1034,6 +1034,19 @@ canvas:focus-visible {
   font-weight: 700;
   color: var(--ink-1);
 }
+.cas-code {
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+.cas-coding-labels {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.cas-grain-severity .cas-code {
+  opacity: 0.75;
+}
 .cas-bar {
   display: block;
   height: 5px;

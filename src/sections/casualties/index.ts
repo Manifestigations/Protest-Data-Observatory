@@ -11,6 +11,7 @@ import {
   CIVILIAN_PROXY,
   bystanderTable,
   causeTable,
+  codingTable,
   estimateTable,
   headline,
   mixBlock,
@@ -45,6 +46,9 @@ export function mountCasualties(): void {
       severityTable(SEVERITY_LEVELS, c.capLevels),
       label,
     ),
+    subTitle(c.codingTitle),
+    codingTable(),
+    html`<p class="cas-note">${c.noteCoding}</p>`,
     subTitle(c.popTitle),
     populationTable(),
     html`<p class="cas-note">${c.notePopulation}</p>`,
@@ -83,6 +87,7 @@ export function mountCasualties(): void {
     resolutionTable(),
     html`<p class="cas-note">${c.noteWeeks}</p>`,
   ];
+
   if (bHead) mount(bHead, ...bTop);
   if (b) mount(b, ...(bHead ? bRest : [...bTop, ...bRest]));
 }

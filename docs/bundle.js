@@ -12820,6 +12820,346 @@ var STUDENT_WEEKS = WEEKS.map((week, idx) => {
   return out;
 });
 
+// ../Dataset/dist/data/casualties/vocabulary.js
+var LADDER = [
+  {
+    id: "light",
+    mais: "MAIS 1\u20132",
+    lo: 1,
+    hi: 2,
+    native: [
+      {
+        id: "forcesLight",
+        text: "l\xE9g\xE8rement bless\xE9",
+        count: 1167,
+        sources: ["mediapart-crs-blesses-1311"]
+      }
+    ]
+  },
+  {
+    id: "residual",
+    mais: "MAIS 2\u20133, unresolved",
+    lo: 2,
+    hi: 3,
+    unresolved: true,
+    native: [
+      {
+        id: "forcesResidual",
+        text: "not classed light (complement of 1,167 in 1,233)",
+        count: 66,
+        sources: ["mediapart-crs-blesses-1311"]
+      }
+    ]
+  },
+  {
+    id: "serious",
+    mais: "MAIS 3+",
+    lo: 3,
+    hi: 3,
+    native: [
+      {
+        id: "forcesSerious17",
+        text: "7 bless\xE9s graves (all forces, 17 Oct)",
+        count: 7,
+        sources: ["bfmtv-bilan-17oct"]
+      },
+      {
+        id: "civiliansSerious24",
+        text: "3 bless\xE9s graves sur 150 civils (24 Oct)",
+        count: 3,
+        sources: []
+      },
+      {
+        id: "registerOther",
+        text: "\xAB autres blessures graves \xBB (register)",
+        count: 52,
+        sources: ["lemonde-blessures-0511"]
+      }
+    ]
+  },
+  {
+    id: "vision",
+    mais: "MAIS 4",
+    lo: 4,
+    hi: 4,
+    native: [
+      {
+        id: "registerVision",
+        text: "10 \xE9borgn\xE9s",
+        count: 10,
+        sources: ["lemonde-blessures-0511"]
+      }
+    ]
+  },
+  {
+    id: "destruction",
+    mais: "MAIS 2\u20135",
+    lo: 2,
+    hi: 5,
+    native: [
+      {
+        id: "registerAmputation",
+        text: "7 amputations",
+        count: 7,
+        sources: ["lemonde-blessures-0511"]
+      },
+      {
+        id: "registerCraniofacial",
+        text: "9 traumatismes cr\xE2nio-faciaux",
+        count: 9,
+        sources: ["lemonde-blessures-0511"]
+      }
+    ]
+  },
+  {
+    id: "fatal",
+    mais: "MAIS 6",
+    lo: 6,
+    hi: 6,
+    native: [
+      {
+        id: "registerFatal",
+        text: "Christophe M., 59, Paris, 17 Oct",
+        count: 1,
+        sources: ["lemonde-blessures-0511"]
+      }
+    ]
+  }
+];
+
+// ../Dataset/dist/data/casualties/coding.js
+var CODE_SPANS = [
+  /* "Light" is a degree, so the set is every minor injury family: superficial
+     injuries, sprains, minor open wounds, first- and second-degree burns. No
+     member is more likely than another, and nothing here is a probable code. */
+  {
+    id: "crsLight",
+    rung: "light",
+    labels: ["forcesLight"],
+    grain: "severity",
+    icd10: [
+      "S00",
+      "S10",
+      "S20",
+      "S30",
+      "S40",
+      "S50",
+      "S60",
+      "S70",
+      "S80",
+      "S90",
+      "S03",
+      "S13",
+      "S23",
+      "S33",
+      "S43",
+      "S53",
+      "S63",
+      "S73",
+      "S83",
+      "S93",
+      "T14.0",
+      "T14.1"
+    ],
+    ais: [1, 2],
+    regions: [
+      "head",
+      "neck",
+      "thorax",
+      "abdomen",
+      "upperExtremity",
+      "lowerExtremity",
+      "external"
+    ],
+    basis: "editorial",
+    aisEdition: null,
+    assignment: "none"
+  },
+  /* "Not classed light" is a complement, not a category. The file states a
+     share, never an injury, so this span is the whole of the middle. */
+  {
+    id: "crsNotLight",
+    rung: "residual",
+    labels: ["forcesResidual"],
+    grain: "severity",
+    icd10: [
+      "S02",
+      "S06",
+      "S12",
+      "S22",
+      "S32",
+      "S42",
+      "S52",
+      "S62",
+      "S72",
+      "S82",
+      "S92",
+      "T14.2"
+    ],
+    ais: [2, 3],
+    regions: [
+      "head",
+      "neck",
+      "thorax",
+      "abdomen",
+      "spine",
+      "upperExtremity",
+      "lowerExtremity"
+    ],
+    basis: "editorial",
+    aisEdition: null,
+    assignment: "none"
+  },
+  /* Two populations, one semantic: "blessé grave". A severity, so the set is
+     every injury family that reaches AIS 3 — including the ones that reach 5. */
+  {
+    id: "forcesSerious",
+    rung: "serious",
+    labels: ["forcesSerious17", "civiliansSerious24"],
+    grain: "severity",
+    icd10: [
+      "S02",
+      "S05",
+      "S06",
+      "S22",
+      "S26",
+      "S27",
+      "S36",
+      "S42",
+      "S52",
+      "S62",
+      "S72",
+      "S82",
+      "S92"
+    ],
+    ais: [3, 5],
+    regions: [
+      "head",
+      "face",
+      "thorax",
+      "abdomen",
+      "upperExtremity",
+      "lowerExtremity"
+    ],
+    basis: "editorial",
+    aisEdition: null,
+    assignment: "none"
+  },
+  /* The 52. "Autres blessures graves" gives a degree and no organ: this is the
+     widest admissible set in the file, and the clearest statement that the
+     register is a severity register for these cases, not a type register. */
+  {
+    id: "registerOther",
+    rung: "serious",
+    labels: ["registerOther"],
+    grain: "severity",
+    icd10: [
+      "S02",
+      "S05",
+      "S06",
+      "S12",
+      "S22",
+      "S32",
+      "S36",
+      "S42",
+      "S52",
+      "S62",
+      "S72",
+      "S82",
+      "S92",
+      "T14.2"
+    ],
+    ais: [3, 5],
+    regions: [
+      "head",
+      "face",
+      "neck",
+      "thorax",
+      "abdomen",
+      "spine",
+      "upperExtremity",
+      "lowerExtremity"
+    ],
+    basis: "editorial",
+    aisEdition: null,
+    assignment: "none"
+  },
+  /* The three spans that name an injury, and so the only three that could ever
+     take a per-case cost. S05.7 is avulsion of the eye; S05.4–S05.6 are the
+     penetrating wounds that end in enucleation. */
+  {
+    id: "registerVision",
+    rung: "vision",
+    labels: ["registerVision"],
+    grain: "type",
+    icd10: ["S05.4", "S05.5", "S05.6", "S05.7"],
+    ais: [4, 5],
+    regions: ["face"],
+    basis: "editorial",
+    aisEdition: null,
+    assignment: "none"
+  },
+  /* Level decides severity: S68.0 is a thumb, S48 is a shoulder and upper arm.
+     Hence 2–5, and hence the ladder's rung is a range too. */
+  {
+    id: "registerAmputation",
+    rung: "destruction",
+    labels: ["registerAmputation"],
+    grain: "type",
+    icd10: [
+      "S48",
+      "S58",
+      "S68.0",
+      "S68.1",
+      "S68.2",
+      "S68.3",
+      "S68.4",
+      "S78",
+      "S88",
+      "S98.0",
+      "S98.1",
+      "S98.2",
+      "S98.3",
+      "S98.4"
+    ],
+    ais: [2, 5],
+    regions: ["upperExtremity", "lowerExtremity"],
+    basis: "editorial",
+    aisEdition: null,
+    assignment: "none"
+  },
+  {
+    id: "registerCraniofacial",
+    rung: "destruction",
+    labels: ["registerCraniofacial"],
+    grain: "type",
+    icd10: ["S01.4", "S01.5", "S02.1", "S02.3", "S02.4", "S02.7", "S02.8"],
+    ais: [3, 5],
+    regions: ["head", "face"],
+    basis: "editorial",
+    aisEdition: null,
+    assignment: "none"
+  },
+  /* A death is tabulated by external cause, not by injury, and no source states
+     a mechanism for this one — the same absence CASES records as `causeUnknown`.
+     So there is no chapter XIX code to give and no AIS severity to assign. */
+  {
+    id: "registerFatal",
+    rung: "fatal",
+    labels: ["registerFatal"],
+    grain: "severity",
+    icd10: [],
+    external: ["V01\u2013V98"],
+    ais: null,
+    regions: [],
+    basis: "editorial",
+    aisEdition: null,
+    assignment: "none"
+  }
+];
+var labelById = (id) => LADDER.flatMap((rung) => rung.native).find((label) => label.id === id);
+var spansOf = (rung) => CODE_SPANS.filter((span) => span.rung === rung);
+
 // ../Dataset/dist/data/casualties/inputs.js
 var CRS_OCTOBER = {
   /** Médiapart 13 Nov 2026, internal CRS file, October 2026, CRS only. */
@@ -15055,7 +15395,32 @@ var CASUALTY_EN = {
       weekly: "yes"
     },
     { label: "Daily increments", window: "One day", weekly: "yes" }
-  ]
+  ],
+  codingTitle: "How each level is coded",
+  colLabel: "Published label",
+  colIcd: "ICD-10 (admissible)",
+  colAis: "AIS region \u2014 severity",
+  colGrain: "Grain",
+  noCode: "no code \u2014 cause not published",
+  noAis: "AIS does not apply",
+  aisRegion: {
+    head: "Head",
+    face: "Face",
+    neck: "Neck",
+    thorax: "Thorax",
+    abdomen: "Abdomen",
+    spine: "Spine",
+    upperExtremity: "Upper extremity",
+    lowerExtremity: "Lower extremity",
+    external: "External"
+  },
+  grain: {
+    type: "injury type",
+    severity: "severity only"
+  },
+  aisSeverity: (lo2, hi2) => `AIS ${lo2}\u2013${hi2}`,
+  capCoding: "The injuries a published label could stand for, in ICD-10 chapter XIX and on the AIS scale. No record in this dataset carries a diagnosis, so nothing here is assigned: the set for a severity label is wide by construction, and only an injury type has a narrow one.",
+  noteCoding: "AIS scores a single injury, not a person: MAIS is the highest of them, and ISS needs three codes in three body regions, so neither can be computed from this data and neither is shown. \u201CAmputation\u201D is not a severity \u2014 a thumb and an upper arm are different injuries \u2014 which is why that row carries a range. AIS editions do not assign identical severities, so every row here is an editorial alignment with no edition consulted, and none of it is clinical coding. Every range is a constraint: no code inside a set is more likely than another."
 };
 
 // src/copy/en/text.ts
@@ -15801,7 +16166,32 @@ var CASUALTY_FR = {
     },
     { label: "Cumul des forces bless\xE9es", window: "Un jour", weekly: "oui" },
     { label: "Incr\xE9ments quotidiens", window: "Un jour", weekly: "oui" }
-  ]
+  ],
+  codingTitle: "Comment chaque niveau est cod\xE9",
+  colLabel: "Mention publi\xE9e",
+  colIcd: "CIM-10 (admissible)",
+  colAis: "R\xE9gion AIS \u2014 gravit\xE9",
+  colGrain: "Grain",
+  noCode: "aucun code \u2014 cause non publi\xE9e",
+  noAis: "AIS ne s'applique pas",
+  aisRegion: {
+    head: "T\xEAte",
+    face: "Face",
+    neck: "Cou",
+    thorax: "Thorax",
+    abdomen: "Abdomen",
+    spine: "Rachis",
+    upperExtremity: "Membre sup\xE9rieur",
+    lowerExtremity: "Membre inf\xE9rieur",
+    external: "Externe"
+  },
+  grain: {
+    type: "type de l\xE9sion",
+    severity: "gravit\xE9 seule"
+  },
+  aisSeverity: (lo2, hi2) => `AIS ${lo2}\u2013${hi2}`,
+  capCoding: "Les l\xE9sions qu'une mention publi\xE9e peut recouvrir, en CIM-10 chapitre XIX et sur l'\xE9chelle AIS. Aucun enregistrement de ce jeu de donn\xE9es ne porte de diagnostic : rien n'est donc attribu\xE9 ici \u2014 l'ensemble d'une mention de gravit\xE9 est large par construction, et seule une mention de type de l\xE9sion en a un \xE9troit.",
+  noteCoding: "L'AIS note une l\xE9sion, pas une personne : le MAIS est la plus \xE9lev\xE9e d'entre elles, et l'ISS exige trois codes dans trois r\xE9gions du corps, si bien qu'aucun des deux n'est calculable \xE0 partir de ces donn\xE9es et qu'aucun n'est affich\xE9. \xAB Amputation \xBB n'est pas une gravit\xE9 \u2014 un pouce et un bras ne sont pas la m\xEAme l\xE9sion \u2014, d'o\xF9 une plage sur cette ligne. Les \xE9ditions de l'AIS n'attribuent pas des gravit\xE9s identiques : chaque ligne est donc un alignement \xE9ditorial sans \xE9dition consult\xE9e, et rien ici n'est un codage clinique. Chaque plage est une contrainte : aucun code d'un ensemble n'est plus probable qu'un autre."
 };
 
 // src/copy/fr/text.ts
@@ -19806,6 +20196,46 @@ function resolutionTable() {
   </table>`;
 }
 var CIVILIAN_PROXY = pct(CIVILIAN_PROXY_SHARE);
+var spanRow = (span, first, rowSpan) => {
+  const c = t2().casualties;
+  const labels = span.labels.map((id) => labelById(id)).filter((label) => label !== void 0);
+  return html`<tr class="cas-coding-row cas-grain-${span.grain}">
+    ${first ? html`<th scope="rowgroup" rowspan="${rowSpan}" class="cas-scope">
+            ${c.ladder[span.rung]}
+          </th>` : null}
+    <td class="cas-kind">
+      <ul class="cas-coding-labels">
+        ${labels.map(
+    (label) => html`<li>
+              ${label.text}${label.count === void 0 ? "" : ` \u2014 ${nf().format(label.count)}`}
+            </li>`
+  )}
+      </ul>
+    </td>
+    <td class="cas-code">
+      ${span.icd10.length > 0 ? span.icd10.join(", ") : c.noCode}
+    </td>
+    <td class="cas-kind">
+      ${span.ais === null ? c.noAis : `${span.regions.map((r) => c.aisRegion[r]).join(" \xB7 ")} \u2014 ${c.aisSeverity(span.ais[0], span.ais[1])}`}
+    </td>
+    <td class="cas-kind">${c.grain[span.grain]}</td>
+  </tr>`;
+};
+function codingTable() {
+  const c = t2().casualties;
+  return html`<table class="cas-table cas-coding">
+    <caption class="cas-caption">
+      ${c.capCoding}
+    </caption>
+    ${head([c.colScope, c.colLabel, c.colIcd, c.colAis, c.colGrain], 2)}
+    <tbody>
+      ${LADDER.flatMap((rung) => {
+    const spans = spansOf(rung.id);
+    return spans.map((span, i) => spanRow(span, i === 0, spans.length));
+  })}
+    </tbody>
+  </table>`;
+}
 
 // src/sections/casualties/visuals.ts
 var NUM = /\d[\d\s\u00a0\u202f]*(?:[.,]\d+)?/g;
@@ -20015,6 +20445,9 @@ function mountCasualties() {
       severityTable(SEVERITY_LEVELS, c.capLevels),
       label
     ),
+    subTitle(c.codingTitle),
+    codingTable(),
+    html`<p class="cas-note">${c.noteCoding}</p>`,
     subTitle(c.popTitle),
     populationTable(),
     html`<p class="cas-note">${c.notePopulation}</p>`,

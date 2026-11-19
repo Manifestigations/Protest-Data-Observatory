@@ -34,10 +34,18 @@ charge, a hearing — add which side it is attributed to, and, for a far-right
 group, the word the source used and who used it. A register record without that
 attribution cannot be entered.
 
+If you are reporting an injury, add which side the person was on and — when a
+source states it — what the injury is, not just how serious it was. "Blessé
+grave" records a severity; "éborgné", "amputation", "traumatisme
+crânio-facial" record a type. Only the second can be classified, and the site
+never guesses the first.
+
 Also welcome as issues **here**, in this repository:
 
 - a chart that is wrong: a range drawn from a single publisher, an interpolated
   gap that should have stayed empty, a detached point joined to the line;
+- a classification that overreaches: an ICD-10 code shown as if it were a
+  patient's diagnosis, or a severity label given an injury type it never stated;
 - an accessibility problem: tab order, canvas descriptions, contrast,
   black-and-white maps under `prefers-contrast`;
 - French copy that reads like a translation — because it is one.
@@ -96,6 +104,10 @@ that is older than a new `ChargeId` makes `src/copy/legal.ts` fail to compile.
 That error is a pin problem, not a copy problem — check `git submodule status`
 before editing labels.
 
+The same applies to the injury codebook: `CODE_SPANS` and every `NativeLabel`
+id it keys on arrive from `Dataset`. If `src/sections/casualties/tables.ts`
+reports a label id it cannot resolve, the pin is older than the codebook.
+
 ---
 
 ## 3. Editing code
@@ -125,6 +137,8 @@ no `dev:server` script; run `node server.ts` if you want the server alone.
   a single publisher, or a gap that got interpolated, is a chart bug worth
   fixing.
 - `src/charts/trellis/` — the multi-panel engine behind the historical pages.
+- `src/sections/casualties/` — the casualty tables, including the ICD-10 / AIS
+  codebook, and their copy in both locales.
 - `src/core/colors.ts`, `src/charts/palette.ts` — colour and the hollow-point
   rule for detached cells.
 - `src/core/a11y.ts`, `src/site/routes.ts` — tab order, breadcrumbs, page table.
@@ -145,6 +159,9 @@ no `dev:server` script; run `node server.ts` if you want the server alone.
   are the checks.
 - Keep the bundle working without JavaScript for content that is in the HTML
   shells, and keep canvas descriptions in sync when a chart changes.
+- Markup goes through `html` from `src/core/html.ts`. One root element per
+  template, siblings via `mount`, and every interpolation is a text node — a
+  code, a count or a label inserted with `${…}` can never inject markup.
 
 **Labels are total maps, and that is the point.**
 
@@ -177,6 +194,13 @@ are in `src/copy/{en,fr}/costs.ts`, keyed by `CostNoteRef`. Adding a `NoteRef`
 kind means adding a branch in `src/charts/notes.ts`; the switch ends in
 `default: return ""`, so a missing branch fails silently.
 
+**The injury codebook has its own two-locale surface.** `CasualtyCopy` is the
+type of the section's copy object, and its `aisRegion` and `grain` members are
+`Record<AisRegion, string>` and `Record<Grain, string>`. Both are total: a new
+body region or a new grain in `Dataset` will not compile here until every
+locale names it. That is deliberate — an unlabelled region would otherwise
+render as a bare `upperExtremity` on a French page.
+
 ### 3.4 Build and commit
 
 ```bash
@@ -194,6 +218,11 @@ without rebuilding leaves the live site stale.
 build (`sourcemap: dev`), so a one-shot `npm run build` cannot produce them —
 a committed map would silently describe a different bundle from the one being
 served.
+
+A new casualty coding table needs no HTML shell change: `codingTable()` mounts
+into the existing casualties section, which `docs/2026/violence.html` already
+hosts. It does need both locales of the copy and a rebuilt `docs/bundle.js` and
+`docs/styles.css` — the table is generated, not static markup.
 
 Comments:
 
@@ -219,6 +248,12 @@ Comments:
       `src/copy/fr/chart.ts` — a miss renders `actNoteMissing`, silently.
 - [ ] Any new `ChargeId` has a `CHARGE_LABELS` entry; the map is total, so this
       is a compile error if missed.
+- [ ] Any new `AisRegion` or `Grain` member is labelled in both
+      `src/sections/casualties/copy.en.ts` and `copy.fr.ts`.
+- [ ] A new coding span has its `NativeLabel` id and its `CODE_SPANS` entry in
+      `Dataset`, and the submodule pin is bumped.
+- [ ] No ICD-10 code is presented as a diagnosis, and no ISS/NISS/TRISS is
+      computed from a span.
 - [ ] `npm run typecheck`, `npm run lint` and `npm run format:check` pass.
 - [ ] `npm run build` was run; `docs/bundle.js` and `docs/styles.css` committed.
 - [ ] No `.map` file staged.
@@ -238,6 +273,7 @@ charts: keep hollow points after the pagination move
 project structure refactor, pt 2.3 (splitting episodes.ts)
 copy: name the curfew in both locales
 legal: label the three new charges in both locales
+casualties: render the ICD-10 / AIS codebook in both locales
 ```
 
 State data changes explicitly in the **Dataset** repository (`data:`, which

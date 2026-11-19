@@ -54,17 +54,17 @@ report a figure. **One number, one date, one link** is the whole process.
 
 ## What the site contains
 
-| Page                      | File                           | Content                                                 |
-| ------------------------- | ------------------------------ | ------------------------------------------------------- |
-| Home                      | `docs/index.html`              | Landing page, two card groups                           |
-| The Ongoing Revolt · 2026 | `docs/2026.html`               | Group page: turnout, violence, costs                    |
-| 2026 / Turnout            | `docs/2026/turnout.html`       | Crowd size, strikers, blockades, day by day and by week |
-| 2026 / Violence           | `docs/2026/violence.html`      | Arrests, injuries on both sides                         |
-| 2026 / Costs              | `docs/2026/costs.html`         | Damage, cost of policing                                |
-| Historical comparisons    | `docs/historic.html`           | Group page                                              |
-| Historic / Movements      | `docs/historic/movements.html` | One panel per movement                                  |
-| Historic / Series         | `docs/historic/series.html`    | One panel per measure across movements                  |
-| Contribute                | `docs/contribute.html`         | Contributor-facing page                                 |
+| Page                      | File                           | Content                                                                                             |
+| ------------------------- | ------------------------------ | --------------------------------------------------------------------------------------------------- |
+| Home                      | `docs/index.html`              | Landing page, two card groups                                                                       |
+| The Ongoing Revolt · 2026 | `docs/2026.html`               | Group page: turnout, violence, costs                                                                |
+| 2026 / Turnout            | `docs/2026/turnout.html`       | Crowd size, strikers, blockades, day by day and by week                                             |
+| 2026 / Violence           | `docs/2026/violence.html`      | Arrests, injuries on both sides, and the ICD-10 / AIS classification of each published injury label |
+| 2026 / Costs              | `docs/2026/costs.html`         | Damage, cost of policing                                                                            |
+| Historical comparisons    | `docs/historic.html`           | Group page                                                                                          |
+| Historic / Movements      | `docs/historic/movements.html` | One panel per movement                                                                              |
+| Historic / Series         | `docs/historic/series.html`    | One panel per measure across movements                                                              |
+| Contribute                | `docs/contribute.html`         | Contributor-facing page                                                                             |
 
 The page table lives in `src/site/routes.ts` (`PAGES`): one entry per HTML file
 in `docs/`, with title, blurb, parent and cards. `data-page` on the `<html>`
@@ -111,34 +111,34 @@ no virtual DOM, nothing re-renders. `src/core/dom.ts` holds the DOM helpers
 
 ## Repository map
 
-| Path                                                    | What it is                                                                                                                                              | Touch it when                              |
-| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
-| `src/data/facts.ts`                                     | The 2026 observations, keyed by ISO date — **a copy of the Dataset file; edit it in `Dataset`**                                                         | a 2026 number changes                      |
-| `src/data/index.ts`                                     | Entry point for the 2026 layer (a shim): verification record plus re-exports. No logic                                                                  | never — import from it, don't edit it      |
-| `src/data/costs.ts`                                     | Who pays: `PAYER_COSTS`, `COST_UNPRICED` — a **shim** of the Dataset file                                                                               | a cost changes, in `Dataset`               |
-| `src/data/illegal/`                                     | The case-level register — **a shim** of `Dataset:src/data/illegal/`: `ILLEGAL_ACTS`, `NORMATIVE`, `SITTINGS`, `CHARGES`                                 | never here; a record is added in `Dataset` |
-| `src/charts/notes.ts`                                   | `noteText()` for `NoteRef`s, `costNoteText()` for cost notes, `suffixFor()` for markers                                                                 | a note resolves wrongly                    |
-| `src/data/{projections,aggregate,student-weeks}.ts`     | Daily and weekly series **computed** from `facts.ts`                                                                                                    | only the arithmetic behind a series        |
-| `src/data/episodes/*.ts`                                | One file per historical movement (`mai68`, `cpe`, `gilets-jaunes`, `nahel`, `retraites`, `bloquons`, `students`) — copies of Dataset files              | a historical series changes                |
-| `src/data/sources/*.ts`                                 | Source catalogue: publisher, verbatim headline, URL, date, what it is used for                                                                          | you cite anything new                      |
-| `src/data/sources/types.ts`                             | `Source`, `SourceGroup`, `GroupId`, `Mention`                                                                                                           | rarely — adding a new source group         |
-| `src/data/casualties/`                                  | Case-level casualty data, levels, estimates, checks                                                                                                     | casualty figures                           |
-| `src/data/disruptive/`                                  | Disruptive acts: one `ActRow` per (date, category), each with a `unit`                                                                                  | disruptive figures                         |
-| `src/data/{population,policing,helicopters,opinion}.ts` | Denominators, deployments and cost rate, helicopter, poll approval series                                                                               | rarely                                     |
-| `src/data/notes.ts`                                     | Structured note copy, rendered per locale and referenced by `noteRef`                                                                                   | a note needs new wording                   |
-| `src/model/index.ts`                                    | Pure types and definitions: `Metric`, `Flag`, `Band`, `Row`, `Episode`, `isDetached`                                                                    | never casually — everything depends on it  |
-| `src/charts/`                                           | Chart.js setup: specs, datasets, axes, tooltip, plugins (`error-bars`, `hatch`, `connectors`, `clip`, `span-mark`), `trellis/` engine for multi-panel   | drawing changes                            |
-| `src/sections/`                                         | One folder per page area: `kpis`, `summary`, `casualties`, `costs`, `percapita`, `context`, `sources`, `about`, `contribute`, `cards`, plus `chrome.ts` | page structure                             |
-| `src/copy/{en,fr}/` + `src/copy/*.ts`                   | All UI copy, `Bi = { en, fr }`, lookup/format/interpolation helpers                                                                                     | any wording                                |
-| `src/copy/legal.ts`                                     | `CHARGE_LABELS`, side and hearing-mode labels, the presumption caption — keyed by Dataset ids                                                           | a `ChargeId` is added in `Dataset`         |
-| `src/core/`                                             | DOM helpers, the htm binding (`html.ts`), lang switch, theme, colors, a11y, canvas registry                                                             | infrastructure only                        |
-| `src/site/`                                             | `routes.ts` (page table), `media.ts` (hero images)                                                                                                      | adding a page                              |
-| `src/entry/main.ts`                                     | Boot: locale, chrome, then guarded mounts                                                                                                               | wiring a new section                       |
-| `src/styles/index.css`                                  | All CSS, bundled to `docs/styles.css`                                                                                                                   | styling                                    |
-| `scripts/`                                              | `build.ts`, `check-casualties.ts`, `check-comments.ts`                                                                                                  | build/checks                               |
-| `server.ts`                                             | Static dev server for `docs/`                                                                                                                           | rarely                                     |
-| `docs/`                                                 | **Committed build output** + HTML shells + images + transcripts                                                                                         | rebuild after source changes               |
-| `content/`                                              | Long-form notes: `my-analysis.md`, `data-problems.md`, `how-i-made-this.md`                                                                             | prose about method                         |
+| Path                                                    | What it is                                                                                                                                                              | Touch it when                                       |
+| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| `src/data/facts.ts`                                     | The 2026 observations, keyed by ISO date — **a copy of the Dataset file; edit it in `Dataset`**                                                                         | a 2026 number changes                               |
+| `src/data/index.ts`                                     | Entry point for the 2026 layer (a shim): verification record plus re-exports. No logic                                                                                  | never — import from it, don't edit it               |
+| `src/data/costs.ts`                                     | Who pays: `PAYER_COSTS`, `COST_UNPRICED` — a **shim** of the Dataset file                                                                                               | a cost changes, in `Dataset`                        |
+| `src/data/illegal/`                                     | The case-level register — **a shim** of `Dataset:src/data/illegal/`: `ILLEGAL_ACTS`, `NORMATIVE`, `SITTINGS`, `CHARGES`                                                 | never here; a record is added in `Dataset`          |
+| `src/charts/notes.ts`                                   | `noteText()` for `NoteRef`s, `costNoteText()` for cost notes, `suffixFor()` for markers                                                                                 | a note resolves wrongly                             |
+| `src/data/{projections,aggregate,student-weeks}.ts`     | Daily and weekly series **computed** from `facts.ts`                                                                                                                    | only the arithmetic behind a series                 |
+| `src/data/episodes/*.ts`                                | One file per historical movement (`mai68`, `cpe`, `gilets-jaunes`, `nahel`, `retraites`, `bloquons`, `students`) — copies of Dataset files                              | a historical series changes                         |
+| `src/data/sources/*.ts`                                 | Source catalogue: publisher, verbatim headline, URL, date, what it is used for                                                                                          | you cite anything new                               |
+| `src/data/sources/types.ts`                             | `Source`, `SourceGroup`, `GroupId`, `Mention`                                                                                                                           | rarely — adding a new source group                  |
+| `src/data/casualties/`                                  | Case-level casualty data, the severity ladder, estimates, checks — and `CODE_SPANS`, the ICD-10 / AIS codebook behind each published label — all **shims** of `Dataset` | a casualty figure or a classification, in `Dataset` |
+| `src/data/disruptive/`                                  | Disruptive acts: one `ActRow` per (date, category), each with a `unit`                                                                                                  | disruptive figures                                  |
+| `src/data/{population,policing,helicopters,opinion}.ts` | Denominators, deployments and cost rate, helicopter, poll approval series                                                                                               | rarely                                              |
+| `src/data/notes.ts`                                     | Structured note copy, rendered per locale and referenced by `noteRef`                                                                                                   | a note needs new wording                            |
+| `src/model/index.ts`                                    | Pure types and definitions: `Metric`, `Flag`, `Band`, `Row`, `Episode`, `isDetached`                                                                                    | never casually — everything depends on it           |
+| `src/charts/`                                           | Chart.js setup: specs, datasets, axes, tooltip, plugins (`error-bars`, `hatch`, `connectors`, `clip`, `span-mark`), `trellis/` engine for multi-panel                   | drawing changes                                     |
+| `src/sections/`                                         | One folder per page area: `kpis`, `summary`, `casualties`, `costs`, `percapita`, `context`, `sources`, `about`, `contribute`, `cards`, plus `chrome.ts`                 | page structure                                      |
+| `src/copy/{en,fr}/` + `src/copy/*.ts`                   | All UI copy, `Bi = { en, fr }`, lookup/format/interpolation helpers                                                                                                     | any wording                                         |
+| `src/copy/legal.ts`                                     | `CHARGE_LABELS`, side and hearing-mode labels, the presumption caption — keyed by Dataset ids                                                                           | a `ChargeId` is added in `Dataset`                  |
+| `src/core/`                                             | DOM helpers, the htm binding (`html.ts`), lang switch, theme, colors, a11y, canvas registry                                                                             | infrastructure only                                 |
+| `src/site/`                                             | `routes.ts` (page table), `media.ts` (hero images)                                                                                                                      | adding a page                                       |
+| `src/entry/main.ts`                                     | Boot: locale, chrome, then guarded mounts                                                                                                                               | wiring a new section                                |
+| `src/styles/index.css`                                  | All CSS, bundled to `docs/styles.css`                                                                                                                                   | styling                                             |
+| `scripts/`                                              | `build.ts`, `check-casualties.ts`, `check-comments.ts`                                                                                                                  | build/checks                                        |
+| `server.ts`                                             | Static dev server for `docs/`                                                                                                                                           | rarely                                              |
+| `docs/`                                                 | **Committed build output** + HTML shells + images + transcripts                                                                                                         | rebuild after source changes                        |
+| `content/`                                              | Long-form notes: `my-analysis.md`, `data-problems.md`, `how-i-made-this.md`                                                                                             | prose about method                                  |
 
 **The `src/data/` rows are the exception to "edit here".** Those files are a
 checked-in copy of `Manifestigations/Dataset`; the same paths exist there and
@@ -192,6 +192,26 @@ and `both()` helpers from `src/data/sources/record.ts`.
 never drawn on the same axis. `SITTINGS` holds the conditions of a court day —
 rooms and dockets — and is never added to an act.
 
+### Casualty labels carry a codebook, not a diagnosis
+
+The casualties page shows two things about each published injury label: the
+severity it was given, and the injuries it _could_ stand for. The second is
+`CODE_SPANS` in `Dataset:src/data/casualties/coding.ts`, and the distinction is
+load-bearing:
+
+| Field        | Means                                                                                                                                            |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `grain`      | `"type"` when the label names an injury (`amputations`, `éborgnés`), `"severity"` when it names a degree (`légèrement blessé`, `blessés graves`) |
+| `icd10`      | admissible chapter XIX categories — a set, never a single probable code                                                                          |
+| `external`   | chapter XX, where the label has an external cause                                                                                                |
+| `ais`        | the AIS severity range the label is consistent with, or `null`                                                                                   |
+| `assignment` | `"none"`, always. No record here carries a diagnosis                                                                                             |
+
+Of the nine published labels, only four name an injury — 10 eye losses, 7
+amputations, 9 craniofacial traumas, 1 death — and the register's other 52
+serious injuries do not. ISS, NISS and TRISS therefore cannot be computed and
+are never shown.
+
 ---
 
 ## How a number travels
@@ -238,6 +258,10 @@ files** — otherwise the live site keeps serving the old bundle. Never hand-edi
 - **One number, one home.** A figure is authored in `Dataset`; this repository
   displays it. An illegal-act record that links to a figure with `refs` must not
   restate it.
+- **A code is admissible, not assigned.** `CODE_SPANS` describes what a
+  published label could stand for. No page may present an ICD-10 code as a
+  patient's diagnosis, and no severity label may be given an injury type it did
+  not state.
 - **French is written, not translated.** French copy that reads like a
   translation is a bug worth reporting.
 - **Accessibility is part of the data's honesty**: canvas descriptions, tab

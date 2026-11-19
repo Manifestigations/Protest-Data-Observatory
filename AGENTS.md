@@ -112,6 +112,12 @@ run `node server.ts`.
 - 13. **A note never restates a status or a count.** Both are fields. A note
       says who published the figure, when, what was derived from what, and what the
       source does not say.
+- 14. **An ICD-10 code or an AIS ordinal is a codebook entry, not a diagnosis.**
+      `CODE_SPANS` states what a published label _could_ stand for and carries
+      `assignment: "none"` throughout. Never render a code as a patient's, never
+      compute ISS/NISS/TRISS from it, and never attach a per-injury figure to a
+      span whose `grain` is `"severity"` — 52 of the register's 79 are exactly
+      that, and they have no injury type to price.
 
 ## Where things are
 
@@ -123,6 +129,8 @@ run `node server.ts`.
 | Historical episodes (one per movement)                                    | `vendor/dataset/src/data/episodes/{mai68,cpe,gilets-jaunes,nahel,retraites,bloquons,students}.ts`; registry `episodes/index.ts`                                                               |
 | Source catalogue                                                          | `vendor/dataset/src/data/sources/*.ts` — types `types.ts`, helpers `src()`/`both()` in `record.ts`, groups in `groups.ts`, page→source mapping in `page-map.ts`, attribution in `mentions.ts` |
 | Casualty cases/levels/estimates                                           | `vendor/dataset/src/data/casualties/*`                                                                                                                                                        |
+| Casualty injury classification (ICD-10 / AIS codebook)                    | `vendor/dataset/src/data/casualties/coding.ts` — `CODE_SPANS`, `labelById`, `spansOf`, reached through the `src/data/casualties/` shim                                                        |
+| Casualty coding table                                                     | `src/sections/casualties/tables.ts` (`codingTable`); labels in both `src/sections/casualties/copy.{en,fr}.ts`                                                                                 |
 | The illegal-act register: records, counterfactuals, sittings, charges     | `vendor/dataset/src/data/illegal/{acts,norms,tactics,charges,vocabulary,types,index}.ts` — reached through `src/data/illegal/`                                                                |
 | Register labels: sides, charge names, hearing modes, presumption caption  | `src/copy/legal.ts` (`LEGAL_EN`, `LEGAL_FR`, `CHARGE_LABELS`)                                                                                                                                 |
 | Register notes                                                            | `src/copy/{en,fr}/chart.ts` → `actNotes` (keyed by record id), `actNoteMissing`                                                                                                               |
@@ -169,6 +177,17 @@ is a shim.
 locales. The map is `Record<ChargeId, Bi>`, so a new id from `Dataset` does not
 compile until the label exists, and a label for an id that no longer exists is
 also a type error. A label names the offence; it never states a verdict.
+
+**Add an injury classification** — the codebook is **not** here: add the
+`CodeSpan` in `Dataset:src/data/casualties/coding.ts`, add the `NativeLabel` id
+it keys on, then bump the pin. Rendering is local: the labels for `grain`, the
+nine AIS regions and the two "no code" / "no AIS" strings live in
+`src/sections/casualties/copy.en.ts` and `copy.fr.ts`, typed by
+`CasualtyCopy` in `src/copy/types.ts`, so a new `AisRegion` or a new `Grain`
+member is a type error there until both locales name it. `codingTable()` in
+`src/sections/casualties/tables.ts` builds the table with `html`; a cell that
+carries a code is a `string`, never markup. Then `npm run build` and stage
+`docs/bundle.js` and `docs/styles.css`.
 
 **Add a cost note** — the id is `CostNoteRef` in Dataset's `src/data/costs.ts`;
 the wording goes in **both** `src/copy/{en,fr}/costs.ts` under `notes`, keyed by
@@ -222,6 +241,13 @@ header paragraph in `notes.ts` that enumerates the kinds.
 - **The illegal-act register has no page.** The data and both locales of every
   label exist; nothing mounts them. Do not invent a chart for it: a daily count
   of records counts press coverage.
+- **A code in the casualty table is a string, not a link.** `CODE_SPANS.icd10`
+  holds category labels (`S05.7`, `T14.0`), not entities to resolve. Build every
+  cell through `html` interpolation so it becomes a text node — never
+  `innerHTML`, and never a template that half-builds a `<tr>`.
+- **`CODE_SPANS` is a codebook, so a wrong code is a wrong claim about the
+  data, not a styling bug.** If a span's `ais` range and its rung's `mais`
+  disagree, `check:casualties` in `Dataset` is where it fails, not here.
 
 ## Definition of done
 
@@ -231,6 +257,10 @@ updated · every new figure has a verbatim-labelled source **in `Dataset`** · n
 range collapsed, no gap interpolated, no flag relaxed · no shim edited by hand ·
 any new `actNotes` key present in both locales · any new `ChargeId` labelled in
 both locales and no `CHARGE_LABELS` widened to `Partial` · no note restating a
-status or a count · PR body states which figures changed and where in `Dataset`
-they changed. · every cost note id exists in both `src/copy/en/costs.ts` and
-`src/copy/fr/costs.ts` · no `committed` figure added to a `disbursed` one
+status or a count · any new `AisRegion` or `Grain` member labelled in both
+`casualties/copy.{en,fr}.ts` · no ICD-10 code rendered as a diagnosis and no
+ISS/NISS computed from a span · PR body states which figures changed and where
+in `Dataset` they changed. · every cost note id exists in both
+`src/copy/en/costs.ts` and `src/copy/fr/costs.ts` · no `committed` figure added
+to a `disbursed` one
+r

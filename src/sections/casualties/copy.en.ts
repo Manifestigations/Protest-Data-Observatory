@@ -289,4 +289,34 @@ export const CASUALTY_EN: CasualtyCopy = {
     },
     { label: "Daily increments", window: "One day", weekly: "yes" },
   ],
+  codingTitle: "How each level is coded",
+
+  colLabel: "Published label",
+  colIcd: "ICD-10 (admissible)",
+  colAis: "AIS region — severity",
+  colGrain: "Grain",
+  noCode: "no code — cause not published",
+  noAis: "AIS does not apply",
+
+  aisRegion: {
+    head: "Head",
+    face: "Face",
+    neck: "Neck",
+    thorax: "Thorax",
+    abdomen: "Abdomen",
+    spine: "Spine",
+    upperExtremity: "Upper extremity",
+    lowerExtremity: "Lower extremity",
+    external: "External",
+  },
+  grain: {
+    type: "injury type",
+    severity: "severity only",
+  },
+  aisSeverity: (lo, hi) => `AIS ${lo}–${hi}`,
+
+  capCoding:
+    "The injuries a published label could stand for, in ICD-10 chapter XIX and on the AIS scale. No record in this dataset carries a diagnosis, so nothing here is assigned: the set for a severity label is wide by construction, and only an injury type has a narrow one.",
+  noteCoding:
+    "AIS scores a single injury, not a person: MAIS is the highest of them, and ISS needs three codes in three body regions, so neither can be computed from this data and neither is shown. “Amputation” is not a severity — a thumb and an upper arm are different injuries — which is why that row carries a range. AIS editions do not assign identical severities, so every row here is an editorial alignment with no edition consulted, and none of it is clinical coding. Every range is a constraint: no code inside a set is more likely than another.",
 };

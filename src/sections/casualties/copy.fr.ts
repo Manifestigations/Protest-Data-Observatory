@@ -292,4 +292,34 @@ export const CASUALTY_FR: CasualtyCopy = {
     { label: "Cumul des forces blessées", window: "Un jour", weekly: "oui" },
     { label: "Incréments quotidiens", window: "Un jour", weekly: "oui" },
   ],
+  codingTitle: "Comment chaque niveau est codé",
+
+  colLabel: "Mention publiée",
+  colIcd: "CIM-10 (admissible)",
+  colAis: "Région AIS — gravité",
+  colGrain: "Grain",
+  noCode: "aucun code — cause non publiée",
+  noAis: "AIS ne s'applique pas",
+
+  aisRegion: {
+    head: "Tête",
+    face: "Face",
+    neck: "Cou",
+    thorax: "Thorax",
+    abdomen: "Abdomen",
+    spine: "Rachis",
+    upperExtremity: "Membre supérieur",
+    lowerExtremity: "Membre inférieur",
+    external: "Externe",
+  },
+  grain: {
+    type: "type de lésion",
+    severity: "gravité seule",
+  },
+  aisSeverity: (lo, hi) => `AIS ${lo}–${hi}`,
+
+  capCoding:
+    "Les lésions qu'une mention publiée peut recouvrir, en CIM-10 chapitre XIX et sur l'échelle AIS. Aucun enregistrement de ce jeu de données ne porte de diagnostic : rien n'est donc attribué ici — l'ensemble d'une mention de gravité est large par construction, et seule une mention de type de lésion en a un étroit.",
+  noteCoding:
+    "L'AIS note une lésion, pas une personne : le MAIS est la plus élevée d'entre elles, et l'ISS exige trois codes dans trois régions du corps, si bien qu'aucun des deux n'est calculable à partir de ces données et qu'aucun n'est affiché. « Amputation » n'est pas une gravité — un pouce et un bras ne sont pas la même lésion —, d'où une plage sur cette ligne. Les éditions de l'AIS n'attribuent pas des gravités identiques : chaque ligne est donc un alignement éditorial sans édition consultée, et rien ici n'est un codage clinique. Chaque plage est une contrainte : aucun code d'un ensemble n'est plus probable qu'un autre.",
 };

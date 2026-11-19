@@ -9,6 +9,7 @@ import {
   CIVILIAN_PROXY_SHARE,
   ESTIMATES,
   FORCES,
+  labelById,
   LADDER,
   MIX,
   OBSERVATIONS,
@@ -16,9 +17,13 @@ import {
   RATIO,
   SENSITIVITY,
   SERIOUS_MOVEMENT,
+  spansOf,
   THINES,
+  type AisRegion,
   type CaseRow,
   type Cell,
+  type CodeSpan,
+  type NativeLabel,
   type SevRow,
 } from "@manifestigations/dataset";
 import { fill, nf, t } from "../../copy";
@@ -341,3 +346,64 @@ export function ladderList(): Node {
 export const CIVILIAN_PROXY = pct(CIVILIAN_PROXY_SHARE);
 
 export { byId };
+
+/* ----- ICD-10 / AIS codebook ----- */
+
+const spanRow = (span: CodeSpan, first: boolean, rowSpan: number): Node => {
+  const c = t().casualties;
+  const labels = span.labels
+    .map((id) => labelById(id))
+    .filter((label): label is NativeLabel => label !== undefined);
+
+  return html`<tr class="cas-coding-row cas-grain-${span.grain}">
+    ${
+      first
+        ? html`<th scope="rowgroup" rowspan="${rowSpan}" class="cas-scope">
+            ${c.ladder[span.rung]}
+          </th>`
+        : null
+    }
+    <td class="cas-kind">
+      <ul class="cas-coding-labels">
+        ${labels.map(
+          (label) =>
+            html`<li>
+              ${label.text}${
+                label.count === undefined
+                  ? ""
+                  : ` — ${nf().format(label.count)}`
+              }
+            </li>`,
+        )}
+      </ul>
+    </td>
+    <td class="cas-code">
+      ${span.icd10.length > 0 ? span.icd10.join(", ") : c.noCode}
+    </td>
+    <td class="cas-kind">
+      ${
+        span.ais === null
+          ? c.noAis
+          : `${span.regions.map((r: AisRegion) => c.aisRegion[r]).join(" · ")} — ${c.aisSeverity(span.ais[0], span.ais[1])}`
+      }
+    </td>
+    <td class="cas-kind">${c.grain[span.grain]}</td>
+  </tr>`;
+};
+
+export function codingTable(): Node {
+  const c = t().casualties;
+
+  return html`<table class="cas-table cas-coding">
+    <caption class="cas-caption">
+      ${c.capCoding}
+    </caption>
+    ${head([c.colScope, c.colLabel, c.colIcd, c.colAis, c.colGrain], 2)}
+    <tbody>
+      ${LADDER.flatMap((rung) => {
+        const spans = spansOf(rung.id);
+        return spans.map((span, i) => spanRow(span, i === 0, spans.length));
+      })}
+    </tbody>
+  </table>`;
+}
