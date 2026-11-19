@@ -223,6 +223,43 @@ export const CHART_EN: ChartCopy = {
         "Derived, not counted. 1.55% weighted education participation (ministry), used as a proxy for the civil service on the 2,500,000-agent base: 38,750. Education's own rates: 1.60% of teachers, 7.01% of life-schools staff. The ministry's figure covers the metropolitan academies only.",
     },
   },
+  actNotes: {
+    /* ── protesters ─────────────────────────────────────────────────── */
+    "act-2026-10-17-limoges-01":
+      "The Limoges prosecutor opened an attempted-homicide investigation after a protester was left with a serious head injury. The injury is counted once, in the casualty register; this record is its legal reading, not a second victim.",
+    "act-2026-10-17-marseille-01":
+      "Damage reported in Marseille during the 17 October demonstrations. No charge, no proceeding and no figure were published. The record marks that the act was reported; it does not count it.",
+    "act-2026-10-17-lyon-01":
+      "Arson reported in Lyon on 17 October. No published charge or proceeding. The record exists so the act is not lost, not so that it can be added to anything.",
+
+    /* ── police ─────────────────────────────────────────────────────── */
+    "act-2026-09-28-saint-ouen-laumone-01":
+      "A stun grenade fired at close range during a lycée protest. The Interior Ministry suspended stun grenades for the student mobilisations on 7 October, nine days later — a suspension is an administrative decision, not a finding against the officer.",
+    "act-2026-09-30-tours-01":
+      "The date is derived, not reported: the source places the injury 'two days after' 28 September. The only record in this set to have left the enquiry stage — the officer was charged (mis en examen) on 29 October.",
+    "act-2026-10-05-lens-01":
+      "A stun grenade injury at a lycée in Lens. The suspension of stun grenades for student mobilisations followed two days later, and no outright ban has been ordered since. The record concerns the use, not the weapon.",
+    "act-2026-10-17-limoges-02":
+      "A grenade injury in Limoges on 17 October, entered separately from the attempted-homicide case of the same day. The reporting cited does not say whether one projectile caused both injuries: the two records are not a matched pair.",
+    "act-2026-10-24-toulouse-01":
+      "A grenade injury in Toulouse on 24 October, the day far-right groups clashed with protesters in several cities. The record concerns the police projectile, not those clashes — for which this dataset has no side.",
+    "act-2026-10-17-paris-01":
+      "A baton beating filmed at the edge of the Place de la République at about 16:00 on 17 October. The IGPN enquiry is the only proceeding known, and no unit is named in the reporting cited.",
+
+    /* ── counterfactual register ────────────────────────────────────── */
+    "nrm-2026-10-17-paris-orchestra":
+      "Tear gas fired during the orchestra's set at the Place de la République gathering. Tested against the prohibition on indiscriminate attack: the crowd was not a military objective, and no method of direction could have made it one.",
+    "nrm-2026-10-17-paris-gassing":
+      "Mass gassing on 17 October, the day a 59-year-old man died after exposure, per the medical tally. The proportionality test asks whether the expected civilian harm was excessive to the military advantage anticipated — a question no French court will put, hence hypothetical.",
+    "nrm-2026-10-05-lens-grenade":
+      "No instrument in force prohibits stun grenades. The entry asks whether a close-range use causing irreversible injury would breach the rule against weapons of a nature to cause superfluous injury.",
+    "nrm-2026-09-30-tours-lbd":
+      "The LBD 40 is not a prohibited weapon. The question is the use: a defence-ball launcher fired at head height is one documented mechanism of blinding injury in this movement.",
+    "nrm-2026-11-08-tear-gas-as-method":
+      "CS is lawful for domestic riot control and unlawful as a method of warfare. Nothing here alleges the second; the entry marks where the line would fall.",
+  },
+  actNoteMissing:
+    "No note has been written for this record yet — the record stands, its provenance is unstated.",
   deployNotes: {
     "2026-09-28": "deployment estimated",
     "2026-09-29": "deployment estimated",

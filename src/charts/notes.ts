@@ -14,6 +14,9 @@
       a level, not a sum, and "6 days counted" would be the wrong caption for
       it. The obsNotes entry therefore has to read correctly in both a daily
       and a weekly tooltip.
+   3. ACT records carry { k: "act", id }. The text lives in actNotes[id],
+      keyed by the record id, and explains provenance and procedure — never
+      the status, which the row prints from its own field
 
    Nothing here needs to know which context it is in: both resolve through
    the same { k: "obs" } branch.
@@ -35,6 +38,7 @@ import {
   nf,
   RATE,
   t,
+  warnOnce,
   type CostCopy,
   type Flag,
   type NoteRef,
@@ -80,6 +84,9 @@ export function noteText(ref: NoteRef | null | undefined): string {
       return fill(ref.added ? m.cumulativeAdded : m.cumulativeCarried, {
         days: ref.days,
       });
+
+    case "act":
+      return m.actNotes[ref.id] ?? "";
 
     case "week": {
       const p = ref.p;

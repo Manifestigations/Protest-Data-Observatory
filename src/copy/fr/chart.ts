@@ -223,6 +223,43 @@ export const CHART_FR: ChartCopy = {
         "Chiffre dérivé, non compté. 1,55 % de participation pondérée dans l’éducation (ministère), utilisés comme approximation de la fonction publique sur la base de 2 500 000 agents : 38 750. Taux propres à l’éducation : 1,60 % des enseignants, 7,01 % des personnels de vie scolaire. Le chiffre ministériel ne couvre que les académies métropolitaines.",
     },
   },
+  actNotes: {
+    /* ── manifestants ───────────────────────────────────────────────── */
+    "act-2026-10-17-limoges-01":
+      "Le parquet de Limoges a ouvert une enquête pour tentative d'homicide après qu'un manifestant a été grièvement blessé à la tête. La blessure n'est comptée qu'une fois, au registre des victimes ; cette fiche en est la lecture juridique, non une seconde victime.",
+    "act-2026-10-17-marseille-01":
+      "Dégradations signalées à Marseille pendant les manifestations du 17 octobre. Aucune qualification, aucune procédure et aucun chiffre n'ont été publiés. La fiche atteste que le fait a été rapporté ; elle ne le compte pas.",
+    "act-2026-10-17-lyon-01":
+      "Incendie signalé à Lyon le 17 octobre. Aucune qualification ni procédure publiée. La fiche existe pour que l'acte ne disparaisse pas, non pour être additionné à quoi que ce soit.",
+
+    /* ── forces de l'ordre ──────────────────────────────────────────── */
+    "act-2026-09-28-saint-ouen-laumone-01":
+      "Grenade de désencerclement tirée à courte distance lors d'une manifestation lycéenne. Le ministère de l'Intérieur a suspendu les grenades de désencerclement pour les mobilisations lycéennes le 7 octobre, neuf jours plus tard — une suspension est une décision administrative, non une décision sur la responsabilité de l'agent.",
+    "act-2026-09-30-tours-01":
+      "La date est dérivée, non rapportée : la source situe la blessure « deux jours après » le 28 septembre. Seule fiche de cet ensemble à avoir dépassé le stade de l'enquête : l'agent a été mis en examen le 29 octobre.",
+    "act-2026-10-05-lens-01":
+      "Blessure par grenade dans un lycée à Lens. La suspension des grenades de désencerclement pour les mobilisations lycéennes est intervenue deux jours plus tard, sans qu'une interdiction générale ait été prononcée depuis. La fiche porte sur l'usage, non sur l'arme.",
+    "act-2026-10-17-limoges-02":
+      "Blessure par grenade à Limoges le 17 octobre, enregistrée séparément de l'affaire pour tentative d'homicide du même jour. Les sources citées ne disent pas si un même projectile a causé les deux blessures : les deux fiches ne forment pas une paire.",
+    "act-2026-10-24-toulouse-01":
+      "Blessure par grenade à Toulouse le 24 octobre, jour où des groupes d'extrême droite ont affronté des manifestants dans plusieurs villes. La fiche porte sur le projectile policier, non sur ces affrontements, pour lesquels ce jeu de données n'a pas de camp.",
+    "act-2026-10-17-paris-01":
+      "Passage à tabac filmé en marge de la place de la République, vers 16 h, le 17 octobre. L'enquête de l'IGPN est la seule procédure connue, et aucune unité n'est nommée dans les sources citées.",
+
+    /* ── registre hypothétique ──────────────────────────────────────── */
+    "nrm-2026-10-17-paris-orchestra":
+      "Gaz lacrymogène tiré pendant le set de l'orchestre, place de la République. Confronté à l'interdiction des attaques indiscriminées : la foule n'était pas un objectif militaire, et aucune méthode de direction n'aurait pu en faire un.",
+    "nrm-2026-10-17-paris-gassing":
+      "Gazage massif le 17 octobre, jour où un homme de 59 ans est mort après exposition selon le bilan médical. Le test de proportionnalité demande si les dommages civils attendus étaient excessifs au regard de l'avantage militaire escompté — une question qu'aucune juridiction française ne posera, d'où le caractère hypothétique.",
+    "nrm-2026-10-05-lens-grenade":
+      "Aucun instrument en vigueur n'interdit les grenades de désencerclement. La fiche demande si un usage à courte distance causant des lésions irréversibles violerait la règle interdisant les armes de nature à causer des maux superflus.",
+    "nrm-2026-09-30-tours-lbd":
+      "Le LBD 40 n'est pas une arme interdite. La question est celle de l'usage : un tir à hauteur de tête est l'un des mécanismes d'éborgnement documentés dans ce mouvement.",
+    "nrm-2026-11-08-tear-gas-as-method":
+      "Le CS est autorisé pour le maintien de l'ordre intérieur et interdit comme méthode de guerre. Rien ici n'allègue le second : la fiche marque où passerait la frontière.",
+  },
+  actNoteMissing:
+    "Aucune note n'a encore été rédigée pour cette fiche — la fiche existe, sa provenance n'est pas renseignée.",
   deployNotes: {
     "2026-09-28": "dispositif estimé",
     "2026-09-29": "dispositif estimé",
