@@ -42,16 +42,23 @@ So:
   are real, site-specific code. Assume a small file (< 250 B) under `src/copy/`
   is a re-export and open the Dataset original before editing.
 
+**The submodule pin is the join.** `src/copy/types.ts` re-exports
+`@manifestigations/dataset`, so the `ChargeId` union, `ActRecord`, `Sitting`
+and every other data type come from `vendor/dataset` at whatever commit is
+pinned. Two consequences: a data merge in `Dataset` is not live here until the
+pin moves, and a type error naming a `ChargeId` you cannot find anywhere is a
+pin mismatch before it is a copy problem. Check `git submodule status` first.
+
 ## Commands
 
 ```bash
 npm install
 
-npm run build           # one-shot production build → docs/bundle.js + docs/styles.css
-npm run dev             # watch build + spawns server.ts on 127.0.0.1:3000
-npm run typecheck       # tsc --noEmit — always run
-npm run lint            # eslint .
-npm run format:check    # prettier --check .
+npm run build # one-shot production build → docs/bundle.js + docs/styles.css
+npm run dev # watch build + spawns server.ts on 127.0.0.1:3000
+npm run typecheck # tsc --noEmit — always run
+npm run lint # eslint .
+npm run format:check # prettier --check .
 npm run check:comments  # comment/header conventions
 npm run check-baseline
 npm run check-size
@@ -78,18 +85,33 @@ run `node server.ts`.
 4. **Never interpolate a gap.** Absent cell = no published figure.
 5. **`Source.label` is verbatim publisher + headline, never translated.**
    `Source.what` is bilingual. (Both live in Dataset.)
-6. **All user-visible strings are `Bi`.** No hardcoded text in DOM/TS code; no
-   one-language additions. French is authored, not translated from English.
+
+- 6. **All user-visible strings are `Bi`.** No hardcoded text in DOM/TS code; no
+     one-language additions. French is authored, not translated from English.
+
 7. **No new dependencies.** `chart.js` and `htm` (~600 B gzip) are the only
    runtime dependencies. Anything else: ask via issue first.
-8. **`NoteRef` is a reference, not copy.** Wording lives in
-   `src/data/notes.ts`, rendered per locale.
+8. **`NoteRef` is a reference, not copy.** Metric-cell wording lives in
+   `src/data/notes.ts`; chart-series and act/sitting notes live in
+   `src/copy/{en,fr}/chart.ts`; cost notes in `src/copy/{en,fr}/costs.ts`. All
+   rendered per locale.
 9. **A figure is edited in `Dataset`, never here.** See the section above.
 10. **A cost record carries three stages, never two.** `contingent` exists so
     that a statutory maximum is not recorded as money owed. Never add
     `committed` to `disbursed`, never add a `loan` row to a `spending` total,
     never sum a `perPerson` maximum. Render an empty cell as "not published",
     never as 0.
+11. **The illegal-act register is not a series.** `ILLEGAL_ACTS` is a list of
+    cases. No daily aggregate, no conviction rate, no sum of `count` across
+    records — a count of records is not a count of crimes, and a rate over the
+    records that reached court is a survivorship artefact.
+
+- 12. **`CHARGE_LABELS` is total.** It is `Record<ChargeId, Bi>`; never widen it
+      to `Partial`, and never add a fallback string to paper over a missing id. A
+      type error there means the Dataset pin and the labels disagree.
+- 13. **A note never restates a status or a count.** Both are fields. A note
+      says who published the figure, when, what was derived from what, and what the
+      source does not say.
 
 ## Where things are
 
@@ -101,13 +123,17 @@ run `node server.ts`.
 | Historical episodes (one per movement)                                    | `vendor/dataset/src/data/episodes/{mai68,cpe,gilets-jaunes,nahel,retraites,bloquons,students}.ts`; registry `episodes/index.ts`                                                               |
 | Source catalogue                                                          | `vendor/dataset/src/data/sources/*.ts` — types `types.ts`, helpers `src()`/`both()` in `record.ts`, groups in `groups.ts`, page→source mapping in `page-map.ts`, attribution in `mentions.ts` |
 | Casualty cases/levels/estimates                                           | `vendor/dataset/src/data/casualties/*`                                                                                                                                                        |
+| The illegal-act register: records, counterfactuals, sittings, charges     | `vendor/dataset/src/data/illegal/{acts,norms,tactics,charges,vocabulary,types,index}.ts` — reached through `src/data/illegal/`                                                                |
+| Register labels: sides, charge names, hearing modes, presumption caption  | `src/copy/legal.ts` (`LEGAL_EN`, `LEGAL_FR`, `CHARGE_LABELS`)                                                                                                                                 |
+| Register notes                                                            | `src/copy/{en,fr}/chart.ts` → `actNotes` (keyed by record id), `actNoteMissing`                                                                                                               |
 | Note copy (real, edited here)                                             | `src/data/notes.ts`                                                                                                                                                                           |
 | Shim generator — dangerous, see above                                     | `scripts/make-shims.js`                                                                                                                                                                       |
 | Chart specs / datasets / axes / tooltip / plugins                         | `src/charts/{specs,datasets,axes,tooltip,chart-tooltip,mount,shell,series,format,palette,view,helicopter-series}.ts`, `src/charts/plugins/*`                                                  |
 | Multi-panel (trellis) engine                                              | `src/charts/trellis/*`                                                                                                                                                                        |
 | Page sections                                                             | `src/sections/**` — `kpis.ts`, `summary.ts`, `casualties/`, `costs/`, `percapita/`, `context/`, `sources/`, `about/`, `contribute/`, `cards/`, `chrome.ts`, `disclosure.ts`                   |
 | Copy / i18n                                                               | `src/copy/{en,fr}/*.ts`, helpers `index.ts`, `lookup.ts`, `state.ts`, `meta-overrides.ts`; `format.ts`/`interpolate.ts`/`markers.ts`/`types.ts` re-export the shared core                     |
-| DOM / lang / theme / colors / a11y                                        | `src/core/*`; markup `src/core/html.ts`                                                                                                                                                       |     | Page table (`PAGES`, `PageId`, `relHref`, `pageHref`) | `src/site/routes.ts`; hero images `src/site/media.ts` |
+| DOM / lang / theme / colors / a11y                                        | `src/core/*`; markup `src/core/html.ts`                                                                                                                                                       |
+| Page table (`PAGES`, `PageId`, `relHref`, `pageHref`)                     | `src/site/routes.ts`; hero images `src/site/media.ts`                                                                                                                                         |
 | Boot / mount dispatch (`data-page`)                                       | `src/entry/main.ts`                                                                                                                                                                           |
 | CSS                                                                       | `src/styles/index.css`                                                                                                                                                                        |
 | Build / checks                                                            | `scripts/{build,check-casualties,check-comments,check-baseline,check-size}.ts`, `scripts/check-a11y.mjs`                                                                                      |
@@ -120,15 +146,29 @@ run `node server.ts`.
 **Change a 2026 figure** — do it in `Dataset`: `src/data/facts.ts` there
 (`Obs` = `{ low, high, q? }`, point figure ⇒ `low === high`), plus a `Source`,
 plus `npm run typecheck` and `npm run check:casualties` in that repo. Here the
-only follow-up is the shim refresh plus a rebuild. If a cell needs a new
-explanation, the wording is `src/data/notes.ts` in **this** repo, attached via
-`noteRef`.
+only follow-up is the pin bump (`git submodule update --remote vendor/dataset`)
+plus a rebuild. If a cell needs a new explanation, the wording is
+`src/data/notes.ts` in **this** repo, attached via `noteRef`.
 
 **Change a historical series** — same: `Dataset`, `src/data/episodes/<movement>.ts`,
 one `Row` per week (`w` sequential, `from`/`to` ISO). Never edit the shim.
 
 **Add a note** — `src/data/notes.ts` here; referenced by `noteRef` from the
 Dataset cell; must exist in both languages.
+
+**Add an act or sitting note** — `src/copy/{en,fr}/chart.ts`, under `actNotes`,
+keyed by the exact record id from `Dataset` (`act-…` or `sit-…`). Both locales,
+or the missing one renders `actNoteMissing`. The note explains provenance and
+procedure — who published it, when, that a date is derived and from what, what
+the source does not say, which step the case reached. It never restates the
+status (printed from `status`) or the count (printed from `count` or its
+`refs`). The record itself is edited in `Dataset`, never here: `src/data/illegal/`
+is a shim.
+
+**Add or fix a charge label** — `src/copy/legal.ts`, in `CHARGE_LABELS`, both
+locales. The map is `Record<ChargeId, Bi>`, so a new id from `Dataset` does not
+compile until the label exists, and a label for an id that no longer exists is
+also a type error. A label names the offence; it never states a verdict.
 
 **Add a cost note** — the id is `CostNoteRef` in Dataset's `src/data/costs.ts`;
 the wording goes in **both** `src/copy/{en,fr}/costs.ts` under `notes`, keyed by
@@ -151,6 +191,12 @@ htm template is a bug, not a translation.
 "missing chart" or "wrong range" bugs are spec/dataset wiring, not the drawing
 engine. Detached styling comes from `src/core/colors.ts` (`hollow`).
 
+**Add a `NoteRef` kind** — the type is in `src/model/index.ts` (this repo), the
+resolution branch is in `src/charts/notes.ts`, and the wording is wherever the
+strings live (see invariant 8). The switch ends in `default: return ""`, so a
+missing branch fails silently: add the case, the copy for both locales, and the
+header paragraph in `notes.ts` that enumerates the kinds.
+
 ## Known traps
 
 - `docs/bundle.js` is minified in production builds; do not read it to
@@ -165,6 +211,17 @@ engine. Detached styling comes from `src/core/colors.ts` (`hollow`).
 - Do not reformat `src/data/notes.ts` or the Dataset data files: they carry
   hand-written verification comments (`FIX n`, arithmetic cross-checks) that are
   part of the record.
+- **A type error naming a `ChargeId` is a submodule problem until proven
+  otherwise.** `src/copy/types.ts` re-exports the Dataset package, so the union
+  is whatever `vendor/dataset` is pinned at. Run `git submodule status` before
+  touching `CHARGE_LABELS`.
+- **`actNotes` wins over nothing.** `noteText()` returns
+  `m.actNotes[ref.id] ?? m.actNoteMissing` — a stale key is not an error, it is
+  a record id that changed in `Dataset` and a note that now describes nothing.
+  If a note stops appearing, diff the record ids before editing the prose.
+- **The illegal-act register has no page.** The data and both locales of every
+  label exist; nothing mounts them. Do not invent a chart for it: a daily count
+  of records counts press coverage.
 
 ## Definition of done
 
@@ -172,6 +229,8 @@ engine. Detached styling comes from `src/core/colors.ts` (`hollow`).
 `docs/bundle.js` and `docs/styles.css` staged · no `.map` staged · both locales
 updated · every new figure has a verbatim-labelled source **in `Dataset`** · no
 range collapsed, no gap interpolated, no flag relaxed · no shim edited by hand ·
-PR body states which figures changed and where in `Dataset` they changed. ·
-every cost note id exists in both `src/copy/en/costs.ts` and `src/copy/fr/costs.ts`
-r· no `committed` figure added to a `disbursed` one
+any new `actNotes` key present in both locales · any new `ChargeId` labelled in
+both locales and no `CHARGE_LABELS` widened to `Partial` · no note restating a
+status or a count · PR body states which figures changed and where in `Dataset`
+they changed. · every cost note id exists in both `src/copy/en/costs.ts` and
+`src/copy/fr/costs.ts` · no `committed` figure added to a `disbursed` one

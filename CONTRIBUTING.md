@@ -29,6 +29,11 @@ or a plain issue in the **Dataset** repository. Include:
 | The source               | a URL, a report title and page, or outlet and date. Paywalled or PDF is not an obstacle: say so and we will fetch it |
 | Who published it         | and whether it is a **count** or an **estimate** — charts distinguish the two                                        |
 
+If you are reporting something from the illegal-act register — an alleged act, a
+charge, a hearing — add which side it is attributed to, and, for a far-right
+group, the word the source used and who used it. A register record without that
+attribution cannot be entered.
+
 Also welcome as issues **here**, in this repository:
 
 - a chart that is wrong: a range drawn from a single publisher, an interpolated
@@ -80,14 +85,25 @@ The one piece of data-adjacent copy authored **here** is `src/data/notes.ts`:
 the wording of a note attached to a cell by `noteRef`. It must exist in both
 languages, and it is the only file under `src/data/` you may edit.
 
+```bash
+# after a data change has merged in Dataset, move the pin
+git submodule update --remote vendor/dataset
+git add vendor/dataset
+```
+
+A data merge that is not pinned here is not live, and a pinned submodule commit
+that is older than a new `ChargeId` makes `src/copy/legal.ts` fail to compile.
+That error is a pin problem, not a copy problem — check `git submodule status`
+before editing labels.
+
 ---
 
 ## 3. Editing code
 
 The stack, in full: TypeScript, no framework, one esbuild bundle, Chart.js on
-canvas, htm tagged templates bound to real DOM nodes, CSS in one file. All
-pages share one bundle; each page's HTML shell carries `data-page`, and
-`src/entry/main.ts` mounts only that page's sections (every mount is guarded).
+canvas, plain DOM helpers, CSS in one file. All pages share one bundle; each
+page's HTML shell carries `data-page`, and `src/entry/main.ts` mounts only that
+page's sections (every mount is guarded).
 
 ### 3.1 Set up
 
@@ -113,6 +129,8 @@ no `dev:server` script; run `node server.ts` if you want the server alone.
   rule for detached cells.
 - `src/core/a11y.ts`, `src/site/routes.ts` — tab order, breadcrumbs, page table.
 - `src/copy/{en,fr}/` — wording, `Bi = { en, fr }` next to the module using it.
+- `src/copy/legal.ts` — labels for the illegal-act register, keyed by Dataset
+  ids.
 - `src/sections/` — one folder per page area.
 
 ### 3.3 Conventions
@@ -122,16 +140,42 @@ no `dev:server` script; run `node server.ts` if you want the server alone.
 - French is authored, not machine-translated.
 - A chart module imports figures through `src/data/…` (the shims), never a
   literal number.
-- No new dependencies without an issue first. `htm` was accepted on that basis
-  (~600 B gzip, one file, no build-step change); anything bigger needs the
-  issue to state its cost. There is no test framework; `npm run typecheck`,
-  `npm run lint`, the build and `npm run check:size` are the checks.
-- Markup goes through `html` from `src/core/html.ts`. Interpolate, never build
-  a string of tags: `innerHTML` is an ESLint error and htm makes it
-  unnecessary. Text stays in the `{ en, fr }` tables — a French word inside a
-  template is copy that has escaped.
+- No new dependencies without an issue first. There is no test framework;
+  `npm run typecheck`, `npm run lint`, the build and `npm run check:casualties`
+  are the checks.
 - Keep the bundle working without JavaScript for content that is in the HTML
   shells, and keep canvas descriptions in sync when a chart changes.
+
+**Labels are total maps, and that is the point.**
+
+- `CHARGE_LABELS` in `src/copy/legal.ts` is `Record<ChargeId, Bi>`. It is not a
+  `Partial`, and a missing key is a type error, not an inconvenience to be
+  silenced. If the error names ids you have never heard of, the submodule pin is
+  ahead of what you have — see §2.
+- A `ChargeId` is added in `Dataset` (`vocabulary.ts` and `charges.ts`) and is
+  labelled here. One repository without the other does not build.
+- A label names an offence. It never states where the case stands, and it never
+  carries a count: `attroupement` is "Participation in an unlawful assembly
+  after a warning to disperse", not "convicted of unlawful assembly".
+
+**Act and sitting notes** live in `src/copy/{en,fr}/chart.ts` under `actNotes`,
+keyed by the record id from `Dataset`. `noteText()` resolves `{ k: "act", id }`
+there and falls back to `actNoteMissing`, so a missing key renders a sentence
+rather than an empty string.
+
+A note explains **provenance and procedure**: who published it, when, that a
+date is derived and from what, what the source does not say, which step a case
+has reached. It must not restate the `status` or the `count`. Those are fields:
+the row prints them from the record, and a note that repeats them is a second
+home that will contradict the first the day the record moves.
+
+**Three kinds of note, three homes.** Metric-cell notes are structured copy in
+`src/data/notes.ts` (the only file under `src/data/` edited here). Chart-series
+notes (`obsNotes`, `cumulativeAdded`, `cumulativeCarried`, `deployNotes`) and
+the act/sitting notes are string maps in `src/copy/{en,fr}/chart.ts`. Cost notes
+are in `src/copy/{en,fr}/costs.ts`, keyed by `CostNoteRef`. Adding a `NoteRef`
+kind means adding a branch in `src/charts/notes.ts`; the switch ends in
+`default: return ""`, so a missing branch fails silently.
 
 ### 3.4 Build and commit
 
@@ -160,7 +204,6 @@ Comments:
 - A comment states a fact about the code next to it, including limits: a number in prose must match the literal below it, and every arithmetic comment (1,233 − 1,167 = 66) is checkable by hand.
 - Prose is a claim, not a wish. If the code does not do it, the comment is a bug report — file it, don't word it away.
 - Wrap at 80 columns, no trailing whitespace, `colors.ts` not `colours.ts`.
-- htm templates are not reformatted by Prettier: `format:check` will not fix their indentation, so keep one element per line, closing tags aligned, and two inline siblings that must touch on the same line.
 
 ---
 
@@ -172,6 +215,10 @@ Comments:
 - [ ] Flags describe the data, not the drawing.
 - [ ] Gaps left empty; derived cells flagged `e` with the arithmetic in the note.
 - [ ] Any new string exists in both `en` and `fr` (`notes.ts` included).
+- [ ] Any new `actNotes` key exists in both `src/copy/en/chart.ts` and
+      `src/copy/fr/chart.ts` — a miss renders `actNoteMissing`, silently.
+- [ ] Any new `ChargeId` has a `CHARGE_LABELS` entry; the map is total, so this
+      is a compile error if missed.
 - [ ] `npm run typecheck`, `npm run lint` and `npm run format:check` pass.
 - [ ] `npm run build` was run; `docs/bundle.js` and `docs/styles.css` committed.
 - [ ] No `.map` file staged.
@@ -179,8 +226,8 @@ Comments:
       (the prose lives here; the resulting cell change lands in Dataset).
 
 We will not merge: a figure with no source, a silently interpolated gap, a
-translated source label, a flag removed to smooth a line, a hand-edited shim, or
-a source change without the rebuilt bundle.
+translated source label, a flag removed to smooth a line, a hand-edited shim, a
+label that asserts a verdict, or a source change without the rebuilt bundle.
 
 ## Commit messages
 
@@ -190,6 +237,7 @@ Descriptive, often lowercase, sometimes numbered when part of a series:
 charts: keep hollow points after the pagination move
 project structure refactor, pt 2.3 (splitting episodes.ts)
 copy: name the curfew in both locales
+legal: label the three new charges in both locales
 ```
 
 State data changes explicitly in the **Dataset** repository (`data:`, which
