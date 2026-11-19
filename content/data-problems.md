@@ -30,7 +30,34 @@ The policing costs also don't address [opportunity costs](https://en.wikipedia.o
 
 There are no ethnic statistics for either side. In France, collection of ethnic data is illegal; the DPJJ study proxies with nationality and birthplace.
 
---
+---
+
+## Disruptive acts
+
+I have come up with my own rough categorisation of 'disruptive acts', which includes things like school blockades, <i lang="fr">Operation Escargot</i>, acts of sabotage, etc. I am not aware of any common taxonomy for these.
+
+Generally, the low estimate comes from the Interior and Education ministries. The former publish a count of <i lang="fr">actions de voie publique</i> (i.e., public road actions), but only on mobilisation days, and they do not break the figures down further (e.g., toll booth openings and road blockade, which are perfect opposite types of action). The latter count <i lang="fr">establishments</i> blocked or
+closed, which is technically distinct from the number of acts of blockading, but I think the difference is pretty academic.
+
+The high estimates come from the movement action map, which is collaboratively populated and mostly self-reported without verification. As such, the number can be as much as four times higher than the official figure, but I don't know whether this is because some proposed events do not take place, or they fail, or they remain too small for the official figures to count them, or what.
+
+One consequence of this is that the charts give a potentially false impression that weekdays (outside of mobilisation days) are quiet except for school closures. This may be true, but may also be because of lesser individualised coverage of more minor days.
+
+---
+
+## Approval
+
+The different opinion polls use different categories. For example, <i lang="fr">indifférents</i> against <i lang="fr">ne sait pas</i> or <i lang="fr">approuvent</i> against <i lang="fr">soutiennent</i>. Also, they are usually only looking at adults, which means that whilst we can assume that 100% of protestors support the movement, we can't say that they make up a subset of the opinion poll figures because of the very nature of this as a largely youth-led movement.
+
+---
+
+## Comparative Movements
+
+A protest movement is a big, messy, inherently analogue phenomena, each with its own character, history, and local conditions. Making direct comparisons between international movements is very tricky, but I still think there is some value in a rough comparison between durations demands (although my bucketing is not necessarily definitive). But even the start and end dates are fraught with riskL: for example, the Gilets Jaunes movement notionally finished years ago, and yet here we are with people out in hi-vis vests once again and blocking roads.
+
+Also, I could find no published turnout figures for several of the biggest comparative movements, so my chloropleth is artificially limited.
+
+---
 
 ## Historic Data
 

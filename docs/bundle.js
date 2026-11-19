@@ -12273,14 +12273,19 @@ var FACTS = {
          Damages: IFRAP conditional estimate for the 17–18 Oct weekend,
          €244M low / €463M central / €866M high for MATERIAL damage; the
          €294M–€1.1bn variant includes lost turnover and is a different measure.
-         IFRAP excludes marginal order-maintenance and curfew costs. */
+         IFRAP excludes marginal order-maintenance and curfew costs.
+         Sat 17 Oct — "110 → 430 → 441 actions". The band keeps the two settled
+         vintages: 441 as first published, 430 consolidated. 110 is the early
+         count of the day and is not a bound for the final figure. A count of
+         ACTS, not of people: turnout is the cell above. */
   "2026-10-17": {
     turnout: { low: 55e4, high: 8e5 },
     arrests: { low: 2397, high: 2628 },
     forcesInjured: { low: 207, high: 207, q: "e" },
     /* 54 x 13 = 702 — see E8/E10 in casualties/estimate.ts. */
     protesterInjured: { low: 55, high: 702, q: "e" },
-    damagesCost: { low: 244, high: 866, q: "e" }
+    damagesCost: { low: 244, high: 866, q: "e" },
+    disruptiveActs: { low: 430, high: 441 }
   },
   /* Sun 18 Oct — Paris curfew only, 108 interpellations.
      FIX 3 (first pass): the €1.8–5M damage figure is a subset of the
@@ -12314,7 +12319,10 @@ var FACTS = {
     arrests: { low: 1314, high: 1435 },
     forcesInjured: { low: 267, high: 267 },
     protesterInjured: { low: 150, high: 150 },
-    damagesCost: { low: 1e3, high: 1e3, q: "c" }
+    damagesCost: { low: 1e3, high: 1e3, q: "c" },
+    /* "289 actions" in the ministry communiqué of 25 Oct. No organiser
+       count of actions was published, so the band is a point. */
+    disruptiveActs: { low: 289, high: 289 }
   },
   /* Sat 31 Oct — 291 actions → 227 consolidated.
      320,000 ministry / ~500,000 youth organisations; Paris 70,000.
@@ -12325,7 +12333,9 @@ var FACTS = {
     turnout: { low: 32e4, high: 5e5 },
     arrests: { low: 565, high: 779 },
     forcesInjured: { low: 116, high: 159 },
-    damagesCost: { low: 0.4, high: 3.3, q: "e" }
+    damagesCost: { low: 0.4, high: 3.3, q: "e" },
+    /* 291 actions → 227 consolidated, same vintage pattern as arrests. */
+    disruptiveActs: { low: 227, high: 291 }
   },
   "2026-11-02": { blockades: { low: 41, high: 41 } },
   "2026-11-03": { blockades: { low: 48, high: 500 } },
@@ -12342,7 +12352,8 @@ var FACTS = {
     arrests: { low: 448, high: 642 },
     forcesInjured: { low: 53, high: 112 },
     protesterInjured: { low: 18, high: 18, q: "f" },
-    blockades: { low: 81, high: 1e3 }
+    blockades: { low: 81, high: 1e3 },
+    disruptiveActs: { low: 193, high: 193 }
   },
   /* Sat 7 Nov — 141 actions; ~70,000 officers, 25 blindés, 15 water-cannon
      trucks; ~40,000 preventive checks; Caen campus dispersed by 50 CRS.
@@ -12351,7 +12362,8 @@ var FACTS = {
      Security-force casualties acknowledged but no number published. */
   "2026-11-07": {
     turnout: { low: 146e3, high: 25e4 },
-    arrests: { low: 350, high: 360 }
+    arrests: { low: 350, high: 360 },
+    disruptiveActs: { low: 141, high: 141 }
   },
   /* Mon 9 Nov — regional only: Bègles 4, Lyon 8, Strasbourg 5 = 17.
      ~50 Île-de-France schools disrupted with mortar fire; Rennes 2
@@ -12486,6 +12498,7 @@ var DAILY = {
   protesterInjured: projectDaily("protesterInjured"),
   damagesCost: projectDaily("damagesCost"),
   blockades: projectDaily("blockades"),
+  disruptiveActs: projectDaily("disruptiveActs"),
   policing: projectPolicingDaily(),
   policingCumulative: projectPolicingCumulative()
 };
@@ -13355,6 +13368,102 @@ var BLOQUONS_SOURCES = [
   src("figaro-bloquons", "bloquons", "Le Figaro \u2014 direct \xAB Bloquons tout \xBB des 10 et 11 septembre", "https://www.lefigaro.fr/social/direct-bloquons-tout-10-septembre-mouvement-greves-manifestations-perturbations-transports-ecole-20250910", both("the 18 Sep intersyndicale day and the 2 Oct third wave.", "la journ\xE9e intersyndicale du 18 sept. et la troisi\xE8me vague du 2 oct."), "2025-09-10", "2025-09-11")
 ];
 
+// ../Dataset/dist/data/sources/comparative.js
+var COMPARATIVE_SOURCES = [
+  {
+    id: "cmp-wiki-eu-unrest",
+    group: "comparative",
+    label: "Wikipedia \u2014 2026 European unrest",
+    url: "https://en.wikipedia.org/wiki/2026_European_unrest",
+    what: {
+      en: "Dates, arrest and injury counts for the European movements in this layer; a compilation, so every cell taken from it needs its underlying report.",
+      fr: "Dates et bilans d'interpellations et de bless\xE9s pour les mouvements europ\xE9ens ; une compilation, donc chaque cellule doit \xEAtre rattach\xE9e \xE0 sa source d'origine."
+    }
+  },
+  {
+    id: "cmp-wiki-es-housing",
+    group: "comparative",
+    label: "Wikipedia \u2014 2026 Spanish housing protests",
+    url: "https://en.wikipedia.org/wiki/2026_Spanish_housing_protests",
+    what: {
+      en: "The eviction ban, the fund-purchase ban, the \u20AC10bn scheme and the 2 Oct congressional rejection.",
+      fr: "L'interdiction des expulsions, celle des achats par les fonds, le plan de 10 Md\u20AC et le rejet du 2 oct."
+    }
+  },
+  {
+    id: "cmp-guardian-es-strike",
+    group: "comparative",
+    label: "The Guardian \u2014 Spain's first general strike in 14 years",
+    url: "https://www.theguardian.com/world/2026/nov/11/spain-general-strike-housing-costs",
+    date: "2026-11-11",
+    what: {
+      en: "The 11 Nov general strike: union turnout claim, arrests, and the 29 Nov election date.",
+      fr: "La gr\xE8ve g\xE9n\xE9rale du 11 nov. : chiffre syndical, interpellations et date du scrutin du 29 nov."
+    }
+  },
+  {
+    id: "cmp-bbc-rs",
+    group: "comparative",
+    label: "BBC News \u2014 Vu\u010Di\u0107 concedes to student-led movement",
+    url: "https://www.bbc.com/news/articles/cw5yn3xlprpmo",
+    what: {
+      en: "The Serbian election result: 52.7%, 140 of 250 seats, and the concession.",
+      fr: "Le r\xE9sultat serbe : 52,7 %, 140 si\xE8ges sur 250, et la d\xE9faite conc\xE9d\xE9e."
+    }
+  },
+  {
+    id: "cmp-britannica-in",
+    group: "comparative",
+    label: "Britannica \u2014 India's 2026 Gen Z protests explained",
+    url: "https://www.britannica.com/topic/Indias-2026-Gen-Z-Protests-Explained",
+    what: {
+      en: "The NEET leak movement: the minister's resignation, the \u20B910m compensation and the reform task force.",
+      fr: "Le mouvement NEET : d\xE9mission du ministre, indemnisation de 10 M\u20B9 et groupe de r\xE9forme."
+    }
+  },
+  {
+    id: "cmp-wiki-ve",
+    group: "comparative",
+    label: "Wikipedia \u2014 2026 Venezuela protests",
+    url: "https://en.wikipedia.org/wiki/2026_Venezuela_protests",
+    what: {
+      en: "The September and October actions, Machado's return and the hunger strike.",
+      fr: "Les actions de septembre et d'octobre, le retour de Machado et la gr\xE8ve de la faim."
+    }
+  },
+  {
+    id: "cmp-wiki-ph",
+    group: "comparative",
+    label: "Wikipedia \u2014 2025\u20132026 Philippine anti-corruption protests",
+    url: "https://en.wikipedia.org/wiki/2025%E2%80%932026_Philippine_anti-corruption_protests",
+    what: {
+      en: "The flood-control campaign and the institutional resignations it produced.",
+      fr: "La campagne sur les ouvrages hydrauliques et les d\xE9missions qu'elle a provoqu\xE9es."
+    }
+  },
+  {
+    id: "cmp-wiki-ge",
+    group: "comparative",
+    label: "Wikipedia \u2014 2024\u20132026 Georgian protests",
+    url: "https://en.wikipedia.org/wiki/2024%E2%80%932026_Georgian_protests",
+    what: {
+      en: "The Georgian movement's demands, the EU suspension and the political prisoners.",
+      fr: "Les revendications g\xE9orgiennes, la suspension de l'adh\xE9sion \xE0 l'UE et les prisonniers politiques."
+    }
+  },
+  {
+    id: "cmp-guardian-genz",
+    group: "comparative",
+    label: "The Guardian \u2014 Gen Z protests sweeping the world",
+    url: "https://www.theguardian.com/world/2026/nov/06/gen-z-protests-sweeping-the-world",
+    date: "2026-11-06",
+    what: {
+      en: "The cross-country framing, and the Italian movement's stated debt to France.",
+      fr: "Le cadrage international, et la r\xE9f\xE9rence explicite du mouvement italien \xE0 la France."
+    }
+  }
+];
+
 // ../Dataset/dist/data/sources/cost.js
 var COST_SOURCES = [
   /* ------------------------------------------ 2026 — damage and cost */
@@ -13811,6 +13920,14 @@ var GROUPS = [
       en: "Every photograph used as a hero image on this site, with the file page it comes from and the licence it carries. Each card links its credit line here; nothing is reproduced without attribution. The Freedom Press photograph is not a Commons file and carries no open licence.",
       fr: "Chaque photographie utilis\xE9e en image d\u2019en-t\xEAte, avec la page du fichier d\u2019origine et la licence associ\xE9e. La ligne de cr\xE9dit de chaque carte renvoie ici ; rien n\u2019est reproduit sans attribution. La photographie Freedom Press n\u2019est pas un fichier Commons et ne porte aucune licence libre."
     }
+  },
+  {
+    id: "comparative",
+    title: { en: "Comparative movements", fr: "Mouvements de comparaison" },
+    blurb: {
+      en: "Movements outside France that overlap the 2026 autumn: dates, turnout, enforcement and what each won.",
+      fr: "Mouvements hors de France qui recoupent l'automne 2026 : dates, participation, r\xE9pression et gains obtenus."
+    }
   }
 ];
 
@@ -13823,6 +13940,7 @@ var SOURCES = [
   ...GJ_SOURCES,
   ...MAI68_SOURCES,
   ...NAHEL_SOURCES,
+  ...COMPARATIVE_SOURCES,
   ...OFFICIAL_SOURCES,
   ...OVERSEAS_SOURCES,
   ...PRESS_SOURCES,
