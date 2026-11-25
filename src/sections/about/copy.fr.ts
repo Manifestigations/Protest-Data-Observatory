@@ -332,7 +332,7 @@ export const ABOUT_FR: About = [
         kind: "p",
         runs: [
           "Ce projet est hébergé sur ",
-          { link: "GitHub Pages", href: PAGES },
+          { link: "Framagit Pages", href: PAGES },
           ". Vous pouvez consulter le code ",
           { link: "ici", href: REPO },
           ".",

@@ -4,6 +4,6 @@ The charts are rendered using Chart.js. I've made things using this by hand in t
 
 I used MiniMax M3.1 Flash for research and DeepSeek V4.1 Flash for coding—thanks China!
 
-This project is hosted on GitHub Pages. You can view the code [here](https://github.com/Manifestigations/Protest-Data-Observatory).
+This project is hosted on Framagit Pages. You can view the code [here](https://framagit.org/manifestigations/Protest-Data-Observatory).
 
 The first launch of this project is the result of about a week of intense iteration.

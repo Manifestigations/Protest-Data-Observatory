@@ -318,7 +318,7 @@ export const ABOUT_EN: About = [
         kind: "p",
         runs: [
           "This project is hosted on ",
-          { link: "GitHub Pages", href: PAGES },
+          { link: "Framagit Pages", href: PAGES },
           ". You can view the code ",
           { link: "here", href: REPO },
           ".",

@@ -20528,8 +20528,8 @@ var DUAL_POWER = "https://www.youtube.com/watch?v=l6FYgPChuN8";
 var COUNTER_REVOLUTION = "https://mitpress.mit.edu/9781635900163/how-the-world-swung-to-the-right/";
 var LEAKED = "https://www.mediapart.fr/journal/france/131126/crs-blesses-le-fichier-interne-qui-degonfle-le-bilan-du-ministre";
 var BROKEN_WINDOW = "https://en.wikipedia.org/wiki/Parable_of_the_broken_window";
-var PAGES2 = "https://manifestigations.github.io/Protest-Data-Observatory/";
-var REPO = "https://github.com/Manifestigations/Protest-Data-Observatory";
+var PAGES2 = "https://manifestigations.frama.io/Protest-Data-Observatory/";
+var REPO = "https://framagit.org/manifestigations/Protest-Data-Observatory";
 
 // src/sections/about/quote.ts
 var SPOOK = "https://www.youtube.com/watch?v=HG-56GKbPtk&t=3896";
@@ -21331,7 +21331,7 @@ function renderChrome(pageIn) {
 }
 
 // src/sections/contribute/index.ts
-var REPO2 = "https://github.com/Manifestigations/Protest-Data-Observatory";
+var REPO2 = "https://framagit.org/manifestigations/Protest-Data-Observatory";
 var NEW_ISSUE = `${REPO2}/issues/new`;
 var ISSUES = `${REPO2}/issues`;
 var DATA_NOTE = {
@@ -21409,8 +21409,8 @@ var BLOCKS = [
       }
     ],
     note: {
-      en: "Open an issue before a large pull request: settling the data question first usually halves the code.",
-      fr: "Ouvrez un ticket avant une grosse pull request : r\xE9gler la question des donn\xE9es d\u2019abord divise g\xE9n\xE9ralement le code par deux."
+      en: "Open an issue before a large merge request: settling the data question first usually halves the code.",
+      fr: "Ouvrez un ticket avant une grosse merge request : r\xE9gler la question des donn\xE9es d\u2019abord divise g\xE9n\xE9ralement le code par deux."
     },
     actions: [
       {

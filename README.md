@@ -4,7 +4,7 @@ Charts of protest in France: the autumn 2026 movement day by day, and the same
 measures set against six earlier movements (May 68, CPE 2006, Gilets jaunes,
 June 2023, pensions, Bloquons tout 2025).
 
-**Live site:** https://manifestigations.github.io/Protest-Data-Observatory/?lang=en
+**Live site:** https://manifestigations.frama.io/Protest-Data-Observatory/?lang=en
 
 > ⚠️ **Read this before using a number.** The research and the code were
 > produced with LLM assistance and the figures have not been independently
@@ -16,10 +16,10 @@ June 2023, pensions, Bloquons tout 2025).
 
 ## Two repositories
 
-| Repository                                                              | Holds                                                                                                                         | You touch it to                           |
-| ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
-| [Manifestigations/Dataset](https://github.com/Manifestigations/Dataset) | **The data, and the authority over it.** Figures, sources, casualty data, historical series. TypeScript source, no build step | correct or add a number                   |
-| `Manifestigations/Protest-Data-Observatory` (this repo)                 | The site: charts, pages, copy in French and English, the build, the committed output in `docs/`                               | change a chart, a page, a word, the build |
+| Repository                                                                | Holds                                                                                                                         | You touch it to                           |
+| ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| [manifestigations/Dataset](https://framagit.org/manifestigations/Dataset) | **The data, and the authority over it.** Figures, sources, casualty data, historical series. TypeScript source, no build step | correct or add a number                   |
+| `manifestigations/Protest-Data-Observatory` (this repo)                   | The site: charts, pages, copy in French and English, the build, the committed output in `docs/`                               | change a chart, a page, a word, the build |
 
 `Dataset` is the source of truth for every figure. This repository keeps a
 working copy under `src/data/` and `src/model/` so the bundle stays
@@ -33,19 +33,34 @@ The two repositories are deliberately separate so the data can be cited,
 reviewed and reused without the site's code, and so prose about method sits
 next to the numbers it explains.
 
-The pin lives in `vendor/dataset` (a git submodule). A data commit here is not
-live until the pin is bumped and `docs/` rebuilt.
+The data reaches this repository two ways, and they are different mechanisms:
+`vendor/dataset` (a git submodule) supplies the **source** that the shims under
+`src/data/` re-export, and `@manifestigations/dataset` (a package on GitHub
+Packages) supplies the **built types** that `src/copy/types.ts` re-exports. A
+data commit here is not live until the pin is bumped, the dependency is on a
+version that carries it, and `docs/` is rebuilt.
+
+### Where review happens
+
+**framagit.org is canonical.** Issues and merge requests live there, CI runs
+there, and the site is published from there.
+
+`github.com/manifestigations/Protest-Data-Observatory` is an automatic **push
+mirror** of this repository. Do not open pull requests or push commits there:
+the next mirror push overwrites the branch. GitHub is used for one thing only —
+it hosts the `@manifestigations/dataset` package registry, because Framagit
+does not have one.
 
 ---
 
 ## Three ways in
 
-| I want to…                               | Start here                                                                                                  | Skills needed                            |
-| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
-| Report a figure that is wrong or missing | [Open the figure form](https://github.com/Manifestigations/Dataset/issues/new?template=report-a-figure.yml) | none — a free GitHub account             |
-| Correct or add data                      | [Dataset CONTRIBUTING](https://github.com/Manifestigations/Dataset/blob/main/CONTRIBUTING.md)               | edit literal values in a TypeScript file |
-| Change charts, pages, copy or build      | [CONTRIBUTING.md](CONTRIBUTING.md)                                                                          | TypeScript                               |
-| Work in this repo as a coding agent      | [AGENTS.md](AGENTS.md)                                                                                      | —                                        |
+| I want to…                               | Start here                                                                                                         | Skills needed                            |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------- |
+| Report a figure that is wrong or missing | [Open the figure form](https://framagit.org/manifestigations/Dataset/issues/new?issuable_template=report-a-figure) | none — a free Framagit account           |
+| Correct or add data                      | [Dataset CONTRIBUTING](https://framagit.org/manifestigations/Dataset/blob/main/CONTRIBUTING.md)                    | edit literal values in a TypeScript file |
+| Change charts, pages, copy or build      | [CONTRIBUTING.md](CONTRIBUTING.md)                                                                                 | TypeScript                               |
+| Work in this repo as a coding agent      | [AGENTS.md](AGENTS.md)                                                                                             | —                                        |
 
 You do not need to be a programmer, read the code, or install anything to
 report a figure. **One number, one date, one link** is the whole process.
@@ -83,23 +98,37 @@ because a count per day would count press coverage rather than acts.
 
 ## Quick start
 
-Requires **Node ≥ 22.18** (ESM, native TypeScript type stripping).
+Requires **Node ≥ 22.18** (ESM, native TypeScript type stripping) and a GitHub
+credential for the one dependency that is not on the public registry.
 
 ```bash
+# one-time, on your machine: the dataset package is on GitHub Packages
+npm config set //npm.pkg.github.com/:_authToken <classic PAT with read:packages>
+
+git clone --recurse-submodules https://framagit.org/manifestigations/Protest-Data-Observatory.git
+cd Protest-Data-Observatory
 npm install
 
 npm run build # one-shot build → docs/bundle.js + docs/styles.css
 npm run dev # rebuild on save + serve http://127.0.0.1:3000
 npm run typecheck # tsc --noEmit
 npm run lint # eslint .
+npm run format:check # prettier --check .
 npm run check:comments # comment/header conventions
-npm run check:casualties # internal consistency check on the casualty data
 ```
 
 `npm run dev` runs `node scripts/build.ts --watch` and also spawns `server.ts`,
 which serves `docs/` on `127.0.0.1:3000` (`PORT` / `HOST` env vars,
 `Cache-Control: no-store`). There is no `dev:server` script: for two terminals,
 run a watch build and `node server.ts`.
+
+**The credential.** `@manifestigations/dataset` is served from GitHub Packages,
+which requires an access token even though the package is public, and accepts
+only **classic** personal access tokens (fine-grained tokens do not work for
+npm). A token with `read:packages` is enough. Put the `_authToken` line in your
+`~/.npmrc`, never in this repository's `.npmrc` — the committed file carries
+only the scope mapping, so that nobody who lacks a token is blocked from
+installing `chart.js` and `htm`. See [CONTRIBUTING, §3.1](CONTRIBUTING.md#31-set-up).
 
 No framework, no test runner, no bundler config beyond the two esbuild
 configs in `scripts/build.ts`. Runtime dependencies: `chart.js` (canvas) and
@@ -139,9 +168,13 @@ no virtual DOM, nothing re-renders. `src/core/dom.ts` holds the DOM helpers
 | `server.ts`                                             | Static dev server for `docs/`                                                                                                                                           | rarely                                              |
 | `docs/`                                                 | **Committed build output** + HTML shells + images + transcripts                                                                                                         | rebuild after source changes                        |
 | `content/`                                              | Long-form notes: `my-analysis.md`, `data-problems.md`, `how-i-made-this.md`                                                                                             | prose about method                                  |
+| `vendor/dataset`                                        | The `Dataset` submodule at the pinned commit                                                                                                                            | bumped after a data merge, never edited             |
+| `.npmrc`                                                | Scope mapping for `@manifestigations` → GitHub Packages. **No token.**                                                                                                  | the registry changes                                |
+| `.gitlab-ci.yml`                                        | CI: checks, the pin assertion, the Pages publish                                                                                                                        | the pipeline changes                                |
+| `.gitlab/merge_request_templates/`                      | The MR body                                                                                                                                                             | the review checklist changes                        |
 
 **The `src/data/` rows are the exception to "edit here".** Those files are a
-checked-in copy of `Manifestigations/Dataset`; the same paths exist there and
+checked-in copy of `manifestigations/Dataset`; the same paths exist there and
 are the ones under review. `content/data-problems.md` stays in **this**
 repository, because it is prose about method rather than data — but a decision
 recorded in it is applied by a commit in `Dataset`.
@@ -224,8 +257,10 @@ are never shown.
 3. **Note** — if the cell needs explaining, add a `noteRef`; the wording lives
    in `src/data/notes.ts` and is rendered per locale.
 4. **Sync** — the change lands in `Dataset`, then arrives here as its own
-   commit. Never hand-edit the copied data files in this repository as a way of
-   fixing the site.
+   commit: the `vendor/dataset` pin moves, and the `@manifestigations/dataset`
+   version in `package.json` moves with it, because `src/copy/types.ts` types
+   against the built package. Never hand-edit the copied data files in this
+   repository as a way of fixing the site.
 5. **Spec** — charts read these through `src/charts/specs.ts` /
    `datasets.ts`; only touch this if the measure is new.
 6. **Copy** — any new caption, axis label or legend entry is `{ en, fr }` in
@@ -237,11 +272,74 @@ are never shown.
 
 ## Deployment
 
-GitHub Pages serves `docs/` exactly as committed: `docs/bundle.js`,
+Framagit Pages serves `docs/` exactly as committed: `docs/bundle.js`,
 `docs/styles.css`, the HTML shells and the images. There is no CI build step.
 **If you change anything under `src/`, you must rebuild and commit the generated
 files** — otherwise the live site keeps serving the old bundle. Never hand-edit
 `docs/bundle.js` or `docs/styles.css`; edit the source and rebuild.
+
+The publish is one job in `.gitlab-ci.yml`, `deploy-pages`, which declares
+`pages: publish: docs`. GitLab appends the publish path to the job's artifacts
+automatically (since 17.10), so the job needs neither a copy step nor an
+`artifacts:` block of its own. It is deliberately **not** named `pages`: that
+job name is deprecated, and a job is recognised as a Pages job by the `pages`
+keyword, not by its name.
+
+Once per project, in settings:
+
+- a **runner** must be available to the project, or nothing above runs;
+- **Settings → General → Visibility → Pages** must be _Everyone_, otherwise the
+  site 404s even though the job succeeded. A repository-internal Pages site is
+  no use for a public observatory;
+- the hostname is shown under **Deploy → Pages**. Copy it from there rather than
+  constructing it: it is
+  `https://manifestigations.frama.io/Protest-Data-Observatory/`.
+
+`CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH` is the only publish rule, so a merge
+request never deploys.
+
+---
+
+## CI
+
+`.gitlab-ci.yml` runs on merge requests and on the default branch:
+
+| Job              | Runs                                                             | Blocking                  |
+| ---------------- | ---------------------------------------------------------------- | ------------------------- |
+| `typecheck`      | `npm run typecheck`                                              | yes                       |
+| `lint`           | `npm run lint`, `npm run format:check`, `npm run check:comments` | yes                       |
+| `bundle-in-sync` | rebuilds and fails if the committed `docs/` differs              | **no** — advisory, on MRs |
+| `dataset-pin`    | asserts `vendor/dataset` sits on a tag, not a branch tip         | MRs only                  |
+| `deploy-pages`   | publishes `docs/`                                                | default branch only       |
+
+`bundle-in-sync` is advisory because esbuild output is not guaranteed
+byte-identical across environments, and a formatting-only diff must never block
+a data correction. Treat a red run as "you probably forgot to rebuild", not as
+a veto.
+
+**One CI variable is required: `NPM_TOKEN`.**
+
+| Property  | Value                                                                                                    |
+| --------- | -------------------------------------------------------------------------------------------------------- |
+| Type      | a **classic** GitHub personal access token — GitHub Packages does not accept fine-grained tokens for npm |
+| Scope     | `read:packages`                                                                                          |
+| Masked    | **yes**                                                                                                  |
+| Protected | **no**                                                                                                   |
+
+Do not mark it protected. A protected variable is only exposed to pipelines on
+protected branches and tags, so every merge request pipeline — which runs on an
+unprotected source branch — would receive an empty token and fail with `E401`
+before a single check runs.
+
+The committed `.npmrc` holds the scope mapping and no credential:
+
+```
+@manifestigations:registry=https://npm.pkg.github.com
+```
+
+The token is injected in the `.node` anchor with
+`npm config set //npm.pkg.github.com/:_authToken "$NPM_TOKEN"`, which writes to
+the job's `~/.npmrc`. Every job that installs extends that anchor.
 
 ---
 
@@ -281,9 +379,14 @@ files** — otherwise the live site keeps serving the old bundle. Never hand-edi
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for this repository, and the
-[Dataset CONTRIBUTING](https://github.com/Manifestigations/Dataset/blob/main/CONTRIBUTING.md)
+[Dataset CONTRIBUTING](https://framagit.org/manifestigations/Dataset/blob/main/CONTRIBUTING.md)
 for a figure. For anything larger than a data cell or a typo, **open an issue
 first** — settling the data question usually halves the code. Coding agents
 should read [AGENTS.md](AGENTS.md) before editing.
+
+Work arrives as a **merge request against `main` on Framagit**, with
+`.gitlab/merge_request_templates/default.md` as the body. The GitHub project is
+a push mirror; a pull request opened there is overwritten and will not be
+reviewed.
 
 Site copy on contributing, in French: `docs/contribute.html`.

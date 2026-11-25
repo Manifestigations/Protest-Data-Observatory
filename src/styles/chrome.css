@@ -152,7 +152,7 @@
   }
 }
 
-/* ---- GitHub link ----- */
+/* ---- Framagit link ----- */
 /* The path is fill-based; .theme-toggle's icons are stroke-based. Keep the two
    rules separate: a shared `svg { fill: currentColor }` would fill the sun and
    moon into solid blobs. */

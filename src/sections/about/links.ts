@@ -37,6 +37,6 @@ export const BROKEN_WINDOW =
 
 /* ----- this project */
 export const PAGES =
-  "https://manifestigations.github.io/Protest-Data-Observatory/";
+  "https://manifestigations.frama.io/Protest-Data-Observatory/";
 export const REPO =
-  "https://github.com/Manifestigations/Protest-Data-Observatory";
+  "https://framagit.org/manifestigations/Protest-Data-Observatory";

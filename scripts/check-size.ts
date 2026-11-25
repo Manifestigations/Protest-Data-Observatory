@@ -3,7 +3,7 @@
 Visitors are often on phones on flaky connections; the gzipped JS + CSS
 is what they pay on every page. Fails when the total crosses the budget.
 First run: set BUDGET_KB to today's measured total, then ratchet it down;
-never raise it without saying why in the PR. */
+never raise it without saying why in the MR. */
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { gzipSync } from "node:zlib";

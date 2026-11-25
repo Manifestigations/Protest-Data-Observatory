@@ -1,5 +1,5 @@
 /* ── The canonical build ──────────────────────────────────────────────────
-   Emits docs/bundle.js and docs/styles.css (plus maps under --watch). GitHub
+   Emits docs/bundle.js and docs/styles.css (plus maps under --watch). Framagit
    Pages serves docs/ exactly as committed and there is no CI build, so any
    change under src/ must be rebuilt here and staged.
 

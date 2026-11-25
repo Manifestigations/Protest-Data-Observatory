@@ -77,7 +77,6 @@ export const PAYER_TABLE = {
 export const PROTESTOR_EXPOSURE = PAYER_COSTS.filter(
   (r) => r.payer === "protestor" && r.unit === "perPerson",
 );
-d;
 
 /** Commitment per euro of damage, high and low damage scenarios. */
 export const RATIO = {

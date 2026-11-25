@@ -3,22 +3,28 @@
 Two rules cover most of it:
 
 1. **A figure without a source does not go in.** One number, one date, one link.
-2. **Open an issue before a large pull request.** Settling the data question
+2. **Open an issue before a large merge request.** Settling the data question
    first usually halves the code.
 
-French or English, whichever is easier for you. A free GitHub account is the
-only requirement for reporting.
+French or English, whichever is easier for you. A free **Framagit** account is
+the only requirement for reporting.
 
 **Which repository?** The figures live in
-[Manifestigations/Dataset](https://github.com/Manifestigations/Dataset); the
+[manifestigations/Dataset](https://framagit.org/manifestigations/Dataset); the
 charts, pages and copy live here. A number is corrected **there**, never here —
 this repository only re-exports the Dataset files (see §2).
+
+**Where to work.** `framagit.org` is canonical: issues, merge requests, CI and
+the published site. The GitHub project of the same name is an automatic push
+mirror, used only because GitHub hosts the `@manifestigations/dataset` package
+registry. A pull request opened on GitHub is overwritten by the next mirror
+push, so open a merge request here.
 
 ---
 
 ## 1. Reporting a figure (no code, no install)
 
-Use the [figure form](https://github.com/Manifestigations/Dataset/issues/new?template=report-a-figure.yml)
+Use the [figure form](https://framagit.org/manifestigations/Dataset/issues/new?issuable_template=report-a-figure)
 or a plain issue in the **Dataset** repository. Include:
 
 | Field                    | What we need                                                                                                         |
@@ -28,6 +34,9 @@ or a plain issue in the **Dataset** repository. Include:
 | The number as published  | keep the range if the publisher gives one; do not average two publishers for us                                      |
 | The source               | a URL, a report title and page, or outlet and date. Paywalled or PDF is not an obstacle: say so and we will fetch it |
 | Who published it         | and whether it is a **count** or an **estimate** — charts distinguish the two                                        |
+
+The form is a Markdown template, not a web form: Framagit has no equivalent of
+GitHub's YAML issue forms, so the fields above are headings you fill in.
 
 If you are reporting something from the illegal-act register — an alleged act, a
 charge, a hearing — add which side it is attributed to, and, for a far-right
@@ -71,14 +80,14 @@ so the number can be checked without trusting us.
 
 Every file under `src/data/` in this repository except `src/data/notes.ts` is a
 one-line re-export shim into `vendor/dataset/src/data/…`. The figures are
-authored in [Manifestigations/Dataset](https://github.com/Manifestigations/Dataset)
+authored in [manifestigations/Dataset](https://framagit.org/manifestigations/Dataset)
 and reach the site as source imports.
 
 Concretely:
 
 - To change a figure, follow the
-  [Dataset CONTRIBUTING](https://github.com/Manifestigations/Dataset/blob/main/CONTRIBUTING.md)
-  and open the pull request there.
+  [Dataset CONTRIBUTING](https://framagit.org/manifestigations/Dataset/blob/main/CONTRIBUTING.md)
+  and open the merge request there.
 - **Do not edit a shim.** An edit there is overwritten the next time
   `scripts/make-shims.js` runs, and it is invisible to review in the repository
   that owns the data.
@@ -108,6 +117,28 @@ The same applies to the injury codebook: `CODE_SPANS` and every `NativeLabel`
 id it keys on arrive from `Dataset`. If `src/sections/casualties/tables.ts`
 reports a label id it cannot resolve, the pin is older than the codebook.
 
+### The pin and the package are two halves of the same sync
+
+`vendor/dataset` gives the shims their **source**. `@manifestigations/dataset`
+in `package.json` gives `src/copy/types.ts` its **built types** — the `ChargeId`
+union, `ActRecord`, `Sitting`. They can disagree:
+
+| Symptom                                                                | Cause                                                                                          |
+| ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `src/data/…` fails to resolve                                          | `vendor/dataset` is not checked out                                                            |
+| a type error names a `ChargeId` you cannot find                        | the dependency version is older than the vocabulary, or the pin is older than the type package |
+| the build emits types from a different commit than the source you read | the pin and the dependency version were bumped separately                                      |
+
+So a data sync is two lines, both in the same commit:
+
+```bash
+git submodule update --remote vendor/dataset
+npm install @manifestigations/dataset@latest   # then commit package.json + lockfile
+```
+
+The `.gitmodules` URL is relative (`../Dataset.git`), so it resolves against
+your own clone's remote — fork, mirror or canonical — with no edit.
+
 ---
 
 ## 3. Editing code
@@ -120,16 +151,33 @@ page's sections (every mount is guarded).
 ### 3.1 Set up
 
 ```bash
-git clone https://github.com/Manifestigations/Protest-Data-Observatory.git
+git clone --recurse-submodules https://framagit.org/manifestigations/Protest-Data-Observatory.git
 cd Protest-Data-Observatory
-# make vendor/dataset available (the data shims import from it)
+
+# one dependency lives on GitHub Packages, which needs a token even when public.
+# Classic PAT, scope read:packages. Put it in ~/.npmrc, never in the repo.
+npm config set //npm.pkg.github.com/:_authToken <classic PAT>
+
 npm install # Node ≥ 22.18
 npm run dev # watch build + dev server on http://127.0.0.1:3000
 npm run typecheck
 ```
 
+If you cloned without `--recurse-submodules`, run
+`git submodule update --init --recursive` — and if you already cloned before the
+migration, `git submodule sync --recursive` first, then the update. Without
+`vendor/dataset`, nothing under `src/data/` resolves and the build fails on the
+first import.
+
 `npm run dev` runs `scripts/build.ts --watch` and spawns `server.ts`. There is
 no `dev:server` script; run `node server.ts` if you want the server alone.
+
+**Why the token is needed.** `@manifestigations/dataset` is published to GitHub
+Packages, and GitHub requires an access token to install from it even though the
+package is public. Fine-grained tokens are not accepted by the npm registry;
+it must be a classic token with `read:packages`. The repository's `.npmrc`
+deliberately contains only the scope mapping, so that its absence breaks the one
+private-scope dependency rather than every install.
 
 ### 3.2 Good places to start
 
@@ -155,8 +203,8 @@ no `dev:server` script; run `node server.ts` if you want the server alone.
 - A chart module imports figures through `src/data/…` (the shims), never a
   literal number.
 - No new dependencies without an issue first. There is no test framework;
-  `npm run typecheck`, `npm run lint`, the build and `npm run check:casualties`
-  are the checks.
+  `npm run typecheck`, `npm run lint`, `npm run format:check`, the build and
+  is the check.
 - Keep the bundle working without JavaScript for content that is in the HTML
   shells, and keep canvas descriptions in sync when a chart changes.
 - Markup goes through `html` from `src/core/html.ts`. One root element per
@@ -210,9 +258,12 @@ git add src docs/bundle.js docs/styles.css
 git commit -m "charts: keep hollow points after the pagination move"
 ```
 
-`docs/bundle.js` and `docs/styles.css` are **committed artifacts** — GitHub
-Pages serves them as-is and there is no CI build. A PR that changes `src/`
-without rebuilding leaves the live site stale.
+`docs/bundle.js` and `docs/styles.css` are **committed artifacts** — Framagit
+Pages serves them as-is and there is no CI build. A MR that changes `src/`
+without rebuilding leaves the live site stale. The `bundle-in-sync` job rebuilds
+in CI and warns, on merge requests only, and `allow_failure` is on: the warning
+is a reminder, not a gate. Do not read its green tick as a substitute for
+rebuilding before you push.
 
 **Do not commit `docs/*.map`.** Sourcemaps are emitted only by a `--watch`
 build (`sourcemap: dev`), so a one-shot `npm run build` cannot produce them —
@@ -236,10 +287,10 @@ Comments:
 
 ---
 
-## 4. Pull request checklist
+## 4. Merge request checklist
 
 - [ ] No file under `src/data/` edited except `notes.ts`; any figure change
-      links to the Dataset pull request.
+      links to the Dataset merge request.
 - [ ] Ranges are kept as ranges; nothing averaged across publishers.
 - [ ] Flags describe the data, not the drawing.
 - [ ] Gaps left empty; derived cells flagged `e` with the arithmetic in the note.
@@ -252,13 +303,20 @@ Comments:
       `src/sections/casualties/copy.en.ts` and `copy.fr.ts`.
 - [ ] A new coding span has its `NativeLabel` id and its `CODE_SPANS` entry in
       `Dataset`, and the submodule pin is bumped.
+- [ ] If the pin moved, the `@manifestigations/dataset` version in
+      `package.json` matches it, and `package-lock.json` is committed.
 - [ ] No ICD-10 code is presented as a diagnosis, and no ISS/NISS/TRISS is
       computed from a span.
-- [ ] `npm run typecheck`, `npm run lint` and `npm run format:check` pass.
+- [ ] `npm run typecheck`, `npm run lint`, `npm run format:check` and
+      `npm run check:comments` pass.
 - [ ] `npm run build` was run; `docs/bundle.js` and `docs/styles.css` committed.
 - [ ] No `.map` file staged.
 - [ ] `content/data-problems.md` updated if you settled a known data problem
       (the prose lives here; the resulting cell change lands in Dataset).
+
+The same list is in `.gitlab/merge_request_templates/default.md`, so it appears
+in the merge-request body without anyone copying it. CI runs the mechanical
+half; the boxes above are the judgement calls it cannot make.
 
 We will not merge: a figure with no source, a silently interpolated gap, a
 translated source label, a flag removed to smooth a line, a hand-edited shim, a

@@ -5,7 +5,7 @@ import { bi, type Bi } from "../../copy";
 import { byId } from "../../core/dom";
 import { html } from "../../core/html";
 
-const REPO = "https://github.com/Manifestigations/Protest-Data-Observatory";
+const REPO = "https://framagit.org/manifestigations/Protest-Data-Observatory";
 const NEW_ISSUE = `${REPO}/issues/new`;
 const ISSUES = `${REPO}/issues`;
 
@@ -78,8 +78,8 @@ const BLOCKS: readonly Block[] = [
     id: "code",
     title: { en: "Contribute code", fr: "Contribuer au code" },
     lead: {
-      en: "The site is TypeScript with no framework: one esbuild bundle serves every page, the charts are drawn on canvas, and all copy is written as { en, fr } pairs beside the module that uses it. npm run build writes docs/bundle.js and docs/styles.css, which is what GitHub Pages serves.",
-      fr: "Le site est en TypeScript sans framework : un seul bundle esbuild sert toutes les pages, les graphiques sont dessinés sur canvas, et chaque texte existe en { en, fr } à côté du module qui l’utilise. npm run build écrit docs/bundle.js et docs/styles.css, que GitHub Pages sert tels quels.",
+      en: "The site is TypeScript with no framework: one esbuild bundle serves every page, the charts are drawn on canvas, and all copy is written as { en, fr } pairs beside the module that uses it. npm run build writes docs/bundle.js and docs/styles.css, which is what Framagit Pages serves.",
+      fr: "Le site est en TypeScript sans framework : un seul bundle esbuild sert toutes les pages, les graphiques sont dessinés sur canvas, et chaque texte existe en { en, fr } à côté du module qui l’utilise. npm run build écrit docs/bundle.js et docs/styles.css, que Framagit Pages sert tels quels.",
     },
     bullets: [
       {
@@ -100,12 +100,12 @@ const BLOCKS: readonly Block[] = [
       },
     ],
     note: {
-      en: "Open an issue before a large pull request: settling the data question first usually halves the code.",
-      fr: "Ouvrez un ticket avant une grosse pull request : régler la question des données d’abord divise généralement le code par deux.",
+      en: "Open an issue before a large merge request: settling the data question first usually halves the code.",
+      fr: "Ouvrez un ticket avant une grosse merge request : régler la question des données d’abord divise généralement le code par deux.",
     },
     actions: [
       {
-        label: { en: "Repository on GitHub", fr: "Dépôt sur GitHub" },
+        label: { en: "Repository on Framagit", fr: "Dépôt sur Framagit" },
         href: REPO,
       },
     ],

@@ -1,6 +1,6 @@
 /* ── Static dev server for docs/ ──────────────────────────────────────────
    Serves the committed build output on 127.0.0.1:3000 with no-store, so a
-   rebuild shows up on reload. Not used in production: GitHub Pages serves
+   rebuild shows up on reload. Not used in production: Framagit Pages serves
    docs/ directly. GET/HEAD only; every path is resolved and checked to stay
    inside docs/ before anything is read. */
 import { readFile, stat } from "node:fs/promises";
