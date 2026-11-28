@@ -1,0 +1,11 @@
+# pnpm 12 reads project settings from this file; .npmrc is consulted only for
+# registry, auth, TLS and proxy settings. No `packages:` key: this is a
+# single-package repository, and this file exists for the build allowlist.
+
+# pnpm refuses to run dependency build scripts that are not listed here
+# (strictDepBuilds defaults to true). esbuild ships one; without this entry
+# `pnpm install` fails with ERR_PNPM_IGNORED_BUILDS.
+# Packages that need a build and are not listed get added automatically with a
+# placeholder value during install: review each one and set it to true or false.
+allowBuilds:
+  esbuild: true

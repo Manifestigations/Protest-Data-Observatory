@@ -1,6 +1,7 @@
 {
   "name": "Protest Data Observatory",
   "type": "module",
+  "packageManager": "pnpm@12.23.0",
   "scripts": {
     "dev": "node scripts/build.ts --watch",
     "build": "node scripts/build.ts",
@@ -41,11 +42,8 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.73.0"
   },
-  "allowScripts": {
-    "esbuild@0.28.2": true
-  },
   "dependencies": {
-    "@manifestigations/dataset": "^0.1.0",
+    "@manifestigations/dataset": "^0.2.0",
     "chart.js": "^4.6.1",
     "htm": "^3.1.1"
   }

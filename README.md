@@ -98,8 +98,9 @@ because a count per day would count press coverage rather than acts.
 
 ## Quick start
 
-Requires **Node ≥ 22.18** (ESM, native TypeScript type stripping) and a GitHub
-credential for the one dependency that is not on the public registry.
+Requires **Node ≥ 22.18** (ESM, native TypeScript type stripping) and **pnpm
+12.23.0**, pinned in `package.json` as `packageManager` --- `npm install -g pnpm@12.23.0`.
+The `npm config set` above only writes `~/.npmrc`; pnpm reads credentials from that same file.
 
 ```bash
 # one-time, on your machine: the dataset package is on GitHub Packages
@@ -107,17 +108,17 @@ npm config set //npm.pkg.github.com/:_authToken <classic PAT with read:packages>
 
 git clone --recurse-submodules https://framagit.org/manifestigations/Protest-Data-Observatory.git
 cd Protest-Data-Observatory
-npm install
+pnpm install
 
-npm run build # one-shot build → docs/bundle.js + docs/styles.css
-npm run dev # rebuild on save + serve http://127.0.0.1:3000
-npm run typecheck # tsc --noEmit
-npm run lint # eslint .
-npm run format:check # prettier --check .
-npm run check:comments # comment/header conventions
+ppnpm runbuild # one-shot build → docs/bundle.js + docs/styles.css
+ppnpm rundev # rebuild on save + serve http://127.0.0.1:3000
+ppnpm runtypecheck # tsc --noEmit
+ppnpm runlint # eslint .
+ppnpm runformat:check # prettier --check .
+ppnpm runcheck:comments # comment/header conventions
 ```
 
-`npm run dev` runs `node scripts/build.ts --watch` and also spawns `server.ts`,
+`pnpm rundev` runs `node scripts/build.ts --watch` and also spawns `server.ts`,
 which serves `docs/` on `127.0.0.1:3000` (`PORT` / `HOST` env vars,
 `Cache-Control: no-store`). There is no `dev:server` script: for two terminals,
 run a watch build and `node server.ts`.
@@ -265,7 +266,7 @@ are never shown.
    `datasets.ts`; only touch this if the measure is new.
 6. **Copy** — any new caption, axis label or legend entry is `{ en, fr }` in
    `src/copy/`.
-7. **Build** — `npm run build`, commit `docs/bundle.js` and `docs/styles.css`
+7. **Build** — `pnpm runbuild`, commit `docs/bundle.js` and `docs/styles.css`
    along with the source change.
 
 ---
@@ -306,8 +307,8 @@ request never deploys.
 
 | Job              | Runs                                                             | Blocking                  |
 | ---------------- | ---------------------------------------------------------------- | ------------------------- |
-| `typecheck`      | `npm run typecheck`                                              | yes                       |
-| `lint`           | `npm run lint`, `npm run format:check`, `npm run check:comments` | yes                       |
+| `typecheck`      | `pnpm runtypecheck`                                              | yes                       |
+| `lint`           | `pnpm runlint`, `pnpm runformat:check`, `pnpm runcheck:comments` | yes                       |
 | `bundle-in-sync` | rebuilds and fails if the committed `docs/` differs              | **no** — advisory, on MRs |
 | `dataset-pin`    | asserts `vendor/dataset` sits on a tag, not a branch tip         | MRs only                  |
 | `deploy-pages`   | publishes `docs/`                                                | default branch only       |
@@ -337,9 +338,15 @@ The committed `.npmrc` holds the scope mapping and no credential:
 @manifestigations:registry=https://npm.pkg.github.com
 ```
 
-The token is injected in the `.node` anchor with
-`npm config set //npm.pkg.github.com/:_authToken "$NPM_TOKEN"`, which writes to
-the job's `~/.npmrc`. Every job that installs extends that anchor.
+The token is injected in the `.node` anchor by appending it to the job's
+`~/.npmrc`:
+
+`printf '//npm.pkg.github.com/:_authToken=%s\n' "$NPM_TOKEN" >> "$HOME/.npmrc"`
+
+pnpm reads credentials only from `.npmrc`, and it deliberately does not expand
+`${…}` in a project-level `.npmrc`, so the token must land in the job's home
+directory and never in a committed file. Every job that installs extends that
+anchor.
 
 ---
 

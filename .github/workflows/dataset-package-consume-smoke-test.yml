@@ -5,6 +5,7 @@ name: dataset-package-consume-smoke-test
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -13,16 +14,29 @@ jobs:
   quality:
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       packages: read
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
-      - uses: actions/setup-node@v4
+
+      # Reads "packageManager" from package.json and installs that exact pnpm
+      # plus Node 22. It replaces actions/setup-node: the runtime goes on PATH
+      # for the later steps. install: false because the token is not on disk yet.
+      - uses: pnpm/setup@v3
         with:
-          node-version: 26
-          cache: npm
-      - run: npm config set //npm.pkg.github.com/:_authToken "$NODE_AUTH_TOKEN"
+          runtime: node@22
+          cache: true
+          install: false
+
+      # pnpm reads credentials only from .npmrc, and never from a project-level
+      # .npmrc for //-keys, so the token goes to the runner's home directory.
+      - name: Configure GitHub Packages auth
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: npm ci
+        run: printf '//npm.pkg.github.com/:_authToken=%s\n' "$NODE_AUTH_TOKEN" >> "$HOME/.npmrc"
+
+      # The point of the job: a clean install of the published package.
+      - name: Install
+        run: pnpm install --frozen-lockfile

@@ -195,3 +195,6 @@ vite.config.ts.timestamp-*
 .nx/migrate-runs
 
 docs/*.map
+
+# pnpm
+.pnpm-store/

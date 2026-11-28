@@ -18,28 +18,29 @@ stages:
 cache:
   key:
     files:
-      - package-lock.json
+      - pnpm-lock.yaml
   paths:
-    - .npm/
+    - .pnpm-store
 
 .node:
   before_script:
+    - npm install --global pnpm@12.23.0
     - npm config set //npm.pkg.github.com/:_authToken "$NPM_TOKEN"
-    - npm ci --cache .npm --prefer-offline
+    - pnpm install --frozen-lockfile --store-dir .pnpm-store
 
 typecheck:
   extends: .node
   stage: check
   script:
-    - npm run typecheck
+    - pnpm run typecheck
 
 lint:
   extends: .node
   stage: check
   script:
-    - npm run format:check
-    - npm run lint
-    - npm run check:comments
+    - pnpm run format:check
+    - pnpm run lint
+    - pnpm run check:comments
 
 # Advisory: catches "changed src/, forgot to rebuild docs/".
 # allow_failure so a non-deterministic esbuild output can never block an MR.
@@ -48,8 +49,8 @@ bundle-in-sync:
   stage: check
   allow_failure: true
   script:
-    - npm run build
-    - git diff --exit-code -- docs/ || { echo "docs/ is stale, run 'npm run build' and commit the result."; exit 1; }
+    - pnpm run build
+    - git diff --exit-code -- docs/ || { echo "docs/ is stale, run 'pnpm run build' and commit the result."; exit 1; }
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
